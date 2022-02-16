@@ -4,20 +4,15 @@ import '../styles/index.css'
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
 import { remoteLoader } from '@lingui/remote-loader'
-import { ChainId } from '@sushiswap/core-sdk'
 import { Web3ReactProvider } from '@web3-react/core'
 import Dots from 'app/components/Dots'
 import Portals from 'app/components/Portals'
 import { SyncWithRedux } from 'app/components/SyncWithRedux'
 import Web3ReactManager from 'app/components/Web3ReactManager'
-import { ChainSubdomain } from 'app/enums'
 import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploitAlertModal'
-import { getCookie } from 'app/functions'
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
 import DefaultLayout from 'app/layouts/Default'
-import { SUPPORTED_NETWORKS } from 'app/modals/NetworkModal'
-import { useActiveWeb3React } from 'app/services/web3'
 // @ts-ignore TYPE NEEDS FIXING
 import store, { persistor } from 'app/state'
 import ApplicationUpdater from 'app/state/application/updater'
@@ -41,66 +36,6 @@ const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetw
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
-}
-
-const CHAIN_ID_SUBDOMAIN: { [chainId: number]: string } = {
-  [ChainId.ETHEREUM]: ChainSubdomain.ETHEREUM,
-  [ChainId.ROPSTEN]: ChainSubdomain.ROPSTEN,
-  [ChainId.RINKEBY]: ChainSubdomain.RINKEBY,
-  [ChainId.GÖRLI]: ChainSubdomain.GÖRLI,
-  [ChainId.KOVAN]: ChainSubdomain.KOVAN,
-  [ChainId.MATIC]: ChainSubdomain.POLYGON,
-  [ChainId.FANTOM]: ChainSubdomain.FANTOM,
-  [ChainId.XDAI]: ChainSubdomain.GNOSIS,
-  [ChainId.BSC]: ChainSubdomain.BSC,
-  [ChainId.ARBITRUM]: ChainSubdomain.ARBITRUM,
-  [ChainId.AVALANCHE]: ChainSubdomain.AVALANCHE,
-  [ChainId.HECO]: ChainSubdomain.HECO,
-  [ChainId.HARMONY]: ChainSubdomain.HARMONY,
-  [ChainId.OKEX]: ChainSubdomain.OKEX,
-  [ChainId.CELO]: ChainSubdomain.CELO,
-  [ChainId.PALM]: ChainSubdomain.PALM,
-  [ChainId.MOONRIVER]: ChainSubdomain.MOONRIVER,
-  [ChainId.FUSE]: ChainSubdomain.FUSE,
-  [ChainId.TELOS]: ChainSubdomain.TELOS,
-}
-
-function NetworkOrchistrator() {
-  const { chainId, library, account } = useActiveWeb3React()
-  useEffect(() => {
-    ;(async () => {
-      const chainIdFromCookie = Number(getCookie('chain-id'))
-      if (!chainId || !account || chainId === chainIdFromCookie) {
-        return
-      }
-
-      // If chainId does not equal chainIdFromCookie, and we have a chain id subdomain mapping, replace location...
-      if (chainId !== chainIdFromCookie && chainId in CHAIN_ID_SUBDOMAIN) {
-        window.location.replace(window.location.href.replace(/(:\/\/\w+\.)/, `://${CHAIN_ID_SUBDOMAIN[chainId]}.`))
-        return
-      }
-
-      // Otherwise if connected wallet does not match current domain, prompt network switch
-      const params = SUPPORTED_NETWORKS[chainIdFromCookie]
-      try {
-        await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${chainIdFromCookie.toString(16)}` }, account])
-      } catch (switchError) {
-        // This error code indicates that the chain has not been added to MetaMask.
-        // @ts-ignore TYPE NEEDS FIXING
-        if (switchError.code === 4902) {
-          try {
-            await library?.send('wallet_addEthereumChain', [params, account])
-          } catch (addError) {
-            // handle "add" error
-            console.error(`Add chain error ${addError}`)
-          }
-        }
-        console.error(`Switch chain error ${switchError}`)
-        // handle other "switch" errors
-      }
-    })()
-  }, [account, chainId, library])
-  return null
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -199,7 +134,6 @@ function MyApp({ Component, pageProps, fallback, err }) {
         <Web3ReactProvider getLibrary={getLibrary}>
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
-              {/* <NetworkOrchistrator /> */}
               <ReduxProvider store={store}>
                 <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
                   <>
