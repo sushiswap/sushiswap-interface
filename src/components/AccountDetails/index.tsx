@@ -23,6 +23,7 @@ interface AccountDetailsProps {
   pendingTransactions: string[]
   confirmedTransactions: string[]
   ENSName?: string
+  nom?: string
   openOptions: () => void
 }
 
@@ -31,6 +32,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
   pendingTransactions,
   confirmedTransactions,
   ENSName,
+  nom,
   openOptions,
 }) => {
   const { i18n } = useLingui()
@@ -82,7 +84,13 @@ const AccountDetails: FC<AccountDetailsProps> = ({
                 />
               </div>
               <Typography weight={700} variant="lg" className="text-white">
-                {ENSName ? ENSName : account && shortenAddress(account)}
+                {nom && ENSName
+                  ? ENSName + ' (' + nom + ')'
+                  : ENSName
+                  ? ENSName
+                  : nom
+                  ? account && shortenAddress(account) + ' (' + nom + ')'
+                  : account && shortenAddress(account)}
               </Typography>
             </div>
             <div className="flex items-center gap-2 space-x-3">

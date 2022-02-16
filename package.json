@@ -211,5 +211,9 @@
     "not ie 11",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "@ensdomains/ensjs": "^2.0.1",
+    "ethers": "^5.5.4"
+  }
 }

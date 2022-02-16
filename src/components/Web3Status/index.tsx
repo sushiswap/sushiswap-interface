@@ -96,7 +96,7 @@ function Web3StatusInner() {
   const { i18n } = useLingui()
   const { account, connector, library } = useWeb3React()
 
-  const { ENSName } = useENSName(account ?? undefined)
+  const { ENSName, nom } = useENSName(account ?? undefined)
 
   const allTransactions = useAllTransactions()
 
@@ -127,7 +127,7 @@ function Web3StatusInner() {
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <div>{ENSName || shortenAddress(account)}</div>
+            <div>{ENSName ? ENSName : nom ? shortenAddress(account) + ' (' + nom + ')' : shortenAddress(account)}</div>
             <Davatar
               size={20}
               address={account}
@@ -155,8 +155,7 @@ export default function Web3Status() {
   const { active, account } = useWeb3React()
   const contextNetwork = useWeb3React(NetworkContextName)
 
-  const { ENSName } = useENSName(account ?? undefined)
-
+  const { ENSName, nom } = useENSName(account ?? undefined)
   const allTransactions = useAllTransactions()
 
   const sortedRecentTransactions = useMemo(() => {
@@ -174,7 +173,12 @@ export default function Web3Status() {
   return (
     <>
       <Web3StatusInner />
-      <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={pending} confirmedTransactions={confirmed} />
+      <WalletModal
+        ENSName={ENSName ?? undefined}
+        pendingTransactions={pending}
+        confirmedTransactions={confirmed}
+        nom={nom ?? undefined}
+      />
     </>
   )
 }
