@@ -6,7 +6,7 @@ import { NetworkContextName } from 'app/constants'
 import useEagerConnect from 'app/hooks/useEagerConnect'
 import useInactiveListener from 'app/hooks/useInactiveListener'
 import dynamic from 'next/dynamic'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import Loader from '../Loader'
 
@@ -14,7 +14,7 @@ const GnosisManagerNoSSR = dynamic(() => import('./GnosisManager'), {
   ssr: false,
 })
 
-export default function Web3ReactManager({ children }: { children: JSX.Element }) {
+export const Web3ReactManager: FC = ({ children }) => {
   const { i18n } = useLingui()
   const { active } = useWeb3React()
   const { active: networkActive, error: networkError, activate: activateNetwork } = useWeb3React(NetworkContextName)
