@@ -1,8 +1,8 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { ChainSubdomain } from 'app/enums'
-import { getCookie } from 'app/functions'
 import { SUPPORTED_NETWORKS } from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
+import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 
 const CHAIN_ID_SUBDOMAIN: { [chainId: number]: string } = {
@@ -33,10 +33,12 @@ function useNetworkOrchistrator() {
     if (ethereum && ethereum.on) {
       const handleChainChanged = (chainIdHex: string) => {
         const chainId = Number(chainIdHex)
-        const chainIdFromCookie = Number(getCookie('chain-id'))
+        const chainIdFromCookie = Number(Cookies.get('chain-id'))
         // If chainId does not equal chainIdFromCookie, and we have a chain id subdomain mapping, replace location...
         if (chainId !== chainIdFromCookie && chainId in CHAIN_ID_SUBDOMAIN) {
-          window.location.replace(window.location.href.replace(/(:\/\/\w+\.)/, `://${CHAIN_ID_SUBDOMAIN[chainId]}.`))
+          // Remove the cookie to prevent wallet prompt from running while location is reassigned
+          Cookies.remove('chain-id')
+          window.location.assign(window.location.href.replace(/(:\/\/\w+\.)/, `://${CHAIN_ID_SUBDOMAIN[chainId]}.`))
         }
       }
       ethereum.on('chainChanged', handleChainChanged)
@@ -50,13 +52,15 @@ function useNetworkOrchistrator() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const { chainId, library, account, active, error } = useActiveWeb3React()
+  const { chainId, library, account, active } = useActiveWeb3React()
   useEffect(() => {
-    ;(async () => {
-      const chainIdFromCookie = Number(getCookie('chain-id'))
-      if (!chainId || !chainIdFromCookie || !account || !active || error || chainId === chainIdFromCookie) {
-        return
-      }
+    const chainIdFromCookie = Number(Cookies.get('chain-id'))
+
+    if (!chainId || !chainIdFromCookie || !account || chainId === chainIdFromCookie) {
+      return
+    }
+
+    const promptWalletSwitch = async () => {
       const params = SUPPORTED_NETWORKS[chainIdFromCookie]
       try {
         await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${chainIdFromCookie.toString(16)}` }, account])
@@ -74,8 +78,9 @@ function useNetworkOrchistrator() {
         console.error(`Switch chain error ${switchError}`)
         // handle other "switch" errors
       }
-    })()
-  }, [account, chainId, library, active, error])
+    }
+    promptWalletSwitch()
+  }, [account, chainId, library])
 }
 
 export default useNetworkOrchistrator
