@@ -42,15 +42,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ account, hideAccount = false 
                   className="text-high-emphesis flex gap-1 cursor-pointer hover:text-blue-100"
                   weight={700}
                 >
-                  {nom && ENSName
-                    ? ENSName + ' (' + nom + ')'
-                    : ENSName
-                    ? ENSName
-                    : nom
-                    ? shortenAddress(account) + ' (' + nom + ')'
-                    : account
-                    ? shortenAddress(account)
-                    : ''}
+                  {ENSName ? ENSName : nom ? nom : account && shortenAddress(account)}
                   <LinkIcon width={20} />
                 </Typography>
               </a>

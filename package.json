@@ -38,6 +38,7 @@
     "@commitlint/cli": "^13.0.0",
     "@commitlint/config-conventional": "^13.0.0",
     "@davatar/react": "^1.8.1",
+    "@ensdomains/ensjs": "^2.0.1",
     "@ethereumjs/common": "^2.4.0",
     "@ethereumjs/tx": "^3.3.0",
     "@ethersproject/abi": "^5.4.0",
@@ -136,6 +137,7 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-unused-imports": "^1.1.5",
     "eth-permit": "^0.2.1",
+    "ethers": "^5.5.4",
     "fast-json-stable-stringify": "^2.1.0",
     "fuse.js": "^6.4.6",
     "graphql": "^15.5.3",
@@ -211,9 +213,5 @@
     "not ie 11",
     "not dead",
     "not op_mini all"
-  ],
-  "dependencies": {
-    "@ensdomains/ensjs": "^2.0.1",
-    "ethers": "^5.5.4"
-  }
+  ]
 }

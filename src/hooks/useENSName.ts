@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-ignore TYPE NEEDS FIXING
 import ENS from '@ensdomains/ensjs'
 import { isAddress } from '@ethersproject/address'
 import { namehash } from '@ethersproject/hash'
