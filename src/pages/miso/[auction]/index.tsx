@@ -29,7 +29,7 @@ const MisoAuction = () => {
   // Redirect to overview on chainId change
   useRedirectOnChainId('/miso')
 
-  if (error || !isAddress(address as string)) {
+  if ((!loading && error) || !isAddress(address as string)) {
     return <Error statusCode={404} />
   }
 

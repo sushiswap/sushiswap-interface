@@ -126,7 +126,7 @@ export const useAuction = (address?: string, owner?: string) => {
   return useMemo(() => {
     const error = errorDetails || errorInfo
 
-    if (errorDetails || errorInfo) {
+    if (error) {
       return { loading: false, auction: undefined, error }
     }
 
