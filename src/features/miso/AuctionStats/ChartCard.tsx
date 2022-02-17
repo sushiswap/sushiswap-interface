@@ -30,11 +30,13 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
 
       return {
         x: e.blockNumber,
-        y: +cumulativeSum.toString(),
+        y: cumulativeSum.toString(),
       }
     })
 
   useEffect(() => setSelectedBlock(commitments.length - 1), [commitments])
+
+  console.log(parsedAuctionCommitments)
 
   return (
     <div className="flex flex-col bg-[rgba(255,255,255,0.04)] border border-dark-900 rounded gap-5 shadow-2xl shadow-pink-red/5 h-full">
@@ -44,16 +46,16 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
             chartType === ChartType.FundRaised && parsedAuctionCommitments.length ? 'visible' : 'invisible'
           )}
         >
-          <Typography className="text-transparent bg-clip-text bg-gray-400 text-xs">
+          <Typography className="text-xs text-transparent bg-gray-400 bg-clip-text">
             {i18n._(t`Fund Raised`)}
           </Typography>
           {parsedAuctionCommitments[selectedBlock] && (
-            <Typography className="text-transparent bg-clip-text text-gray-200 text-lg">
+            <Typography className="text-lg text-transparent text-gray-200 bg-clip-text">
               {formatBalance(parsedAuctionCommitments[selectedBlock]?.y.toString(), auctionToken?.decimals)}{' '}
               {auction?.commitmentsTotal?.currency.symbol}
             </Typography>
           )}
-          <Typography className="text-transparent bg-clip-text text-xs bg-gray-400">
+          <Typography className="text-xs text-transparent bg-gray-400 bg-clip-text">
             Block #{parsedAuctionCommitments[selectedBlock]?.x}
           </Typography>
         </div>
