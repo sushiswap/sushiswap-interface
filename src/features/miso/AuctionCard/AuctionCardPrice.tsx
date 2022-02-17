@@ -1,4 +1,5 @@
 import { Currency, Price, Token } from '@sushiswap/core-sdk'
+import { formatNumber } from 'app/functions'
 import useInterval from 'app/hooks/useInterval'
 import { FC, useState } from 'react'
 
@@ -18,7 +19,7 @@ const AuctionCardPrice: FC<{ auction: Auction }> = ({ auction, children }) => {
   if (price) {
     return (
       <>
-        {price?.toSignificant(6)} {price?.quoteCurrency.symbol}
+        {formatNumber(price?.toSignificant(6))} {price?.quoteCurrency.symbol}
       </>
     )
   }

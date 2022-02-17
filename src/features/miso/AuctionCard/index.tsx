@@ -19,7 +19,7 @@ import {
   AuctionStatusById,
   AuctionTitleByTemplateId,
 } from 'app/features/miso/context/utils'
-import { classNames } from 'app/functions'
+import { classNames, formatNumber } from 'app/functions'
 import { cloudinaryLoader } from 'app/functions/cloudinary'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -37,7 +37,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
 
   const content = (
     <div
-      className="border border-dark-800 hover:border-dark-600 bg-cover cursor-pointer rounded overflow-hidden shadow-md"
+      className="overflow-hidden bg-cover border rounded shadow-md cursor-pointer border-dark-800 hover:border-dark-600"
       {...(auction.auctionDocuments.icon && {
         style: {
           backgroundImage: `url("${cloudinaryLoader({ src: auction.auctionDocuments.icon, width: 48 })}")`,
@@ -147,7 +147,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
               />
             </div>
             <Typography variant="xs" weight={700}>
-              {auction.tokenPrice?.toSignificant(6)} {auction.tokenPrice?.quoteCurrency.symbol}
+              {formatNumber(auction.tokenPrice?.toSignificant(6))} {auction.tokenPrice?.quoteCurrency.symbol}
             </Typography>
           </div>
           <div className="flex flex-col gap-0.5">
@@ -155,7 +155,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
               {i18n._(t`Amount for sale`)}
             </Typography>
             <Typography variant="xs" weight={700}>
-              {auction.totalTokens?.toSignificant(6)} {auction.totalTokens?.currency.symbol}
+              {formatNumber(auction.totalTokens?.toSignificant(6))} {auction.totalTokens?.currency.symbol}
             </Typography>
           </div>
         </div>
