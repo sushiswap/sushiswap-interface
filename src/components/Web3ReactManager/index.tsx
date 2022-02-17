@@ -5,6 +5,7 @@ import { network } from 'app/config/wallets'
 import { NetworkContextName } from 'app/constants'
 import useEagerConnect from 'app/hooks/useEagerConnect'
 import useInactiveListener from 'app/hooks/useInactiveListener'
+import useNetworkOrchistrator from 'app/hooks/useNetworkOrchistrator'
 import dynamic from 'next/dynamic'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -22,9 +23,7 @@ export const Web3ReactManager: FC = ({ children }) => {
   // try to eagerly connect to an injected provider, if it exists and has granted access already
   const triedEager = useEagerConnect()
 
-  // const getChainIdFromCooker = useMemo(() => Number(getCookie('chain-id')), [])
-
-  // useNetworkOrchistrator()
+  useNetworkOrchistrator()
 
   // after eagerly trying injected, if the network connect ever isn't active or in an error state, activate itd
   useEffect(() => {
