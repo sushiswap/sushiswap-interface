@@ -1,4 +1,6 @@
+import { isAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
+import Error from 'app/components/Error'
 import { Feature } from 'app/enums'
 import AuctionClaimer from 'app/features/miso/AuctionClaimer'
 import AuctionCommitter from 'app/features/miso/AuctionCommitter'
@@ -22,10 +24,14 @@ const MisoAuction = () => {
   const { account } = useActiveWeb3React()
   const router = useRouter()
   const { auction: address } = router.query
-  const { auction, loading } = useAuction(address as string, account ?? AddressZero)
+  const { auction, loading, error } = useAuction(address as string, account ?? AddressZero)
 
   // Redirect to overview on chainId change
   useRedirectOnChainId('/miso')
+
+  if (error || !isAddress(address as string)) {
+    return <Error statusCode={404} />
+  }
 
   return (
     <AuctionContext auction={auction} loading={loading}>

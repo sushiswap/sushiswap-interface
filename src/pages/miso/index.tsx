@@ -42,9 +42,7 @@ const Miso = () => {
               {i18n._(t`Miso`)}
             </Typography>
             <Typography weight={700}>
-              {i18n._(
-                t`Use with caution, this is experimental and permissionless by nature, so due dilligence is required.`
-              )}
+              {i18n._(t`Use with caution, this is experimental and permissionless. Due dilligence is required.`)}
             </Typography>
           </div>
           {(chainId === ChainId.HARMONY || chainId === ChainId.KOVAN) && (

@@ -57,6 +57,7 @@ export const useAuctionHelperInfo = (auctionAddress?: string, marketTemplateId?:
       marketInfo: marketInfo?.[0],
       auctionInfo: auctionInfo?.[0],
       loading: results.some((el) => el.loading),
+      error: results.some((el) => el.error),
     }
   }
 
@@ -65,6 +66,7 @@ export const useAuctionHelperInfo = (auctionAddress?: string, marketTemplateId?:
     marketInfo: undefined,
     auctionInfo: undefined,
     loading: results.some((el) => el.loading),
+    error: results.some((el) => el.error),
   }
 }
 
@@ -99,6 +101,7 @@ export const useAuctionDetails = (auctionAddress?: string) => {
       pointListAddress: pointList?.[0],
       auctionLauncherAddress: auctionLauncherAddress?.[0],
       loading: results.some((el) => el.loading),
+      error: results.some((el) => el.error),
     }
   }
 
@@ -107,6 +110,7 @@ export const useAuctionDetails = (auctionAddress?: string) => {
     pointListAddress: undefined,
     auctionLauncherAddress: undefined,
     loading: results.some((el) => el.loading),
+    error: results.some((el) => el.error),
   }
 }
 

@@ -108,6 +108,7 @@ export const useAuction = (address?: string, owner?: string) => {
     pointListAddress,
     auctionLauncherAddress,
     loading: loadingDetails,
+    error: errorDetails,
   } = useAuctionDetails(address)
 
   const auctionEnded = useAuctionEnded(address, marketTemplateId)
@@ -119,12 +120,27 @@ export const useAuction = (address?: string, owner?: string) => {
     marketInfo,
     auctionInfo,
     loading: loadingInfo,
+    error: errorInfo,
   } = useAuctionHelperInfo(address, marketTemplateId, owner ?? AddressZero)
 
   return useMemo(() => {
-    if (loadingDetails || loadingInfo) return { loading: true, auction: undefined }
-    if (!blockTimestamp || !chainId || !marketTemplateId || !auctionInfo || !auctionDocuments)
-      return { loading: false, auction: undefined }
+    const error = errorDetails || errorInfo
+
+    if (errorDetails || errorInfo) {
+      return { loading: false, auction: undefined, error }
+    }
+
+    if (
+      loadingDetails ||
+      loadingInfo ||
+      !blockTimestamp ||
+      !chainId ||
+      !marketTemplateId ||
+      !auctionInfo ||
+      !auctionDocuments
+    ) {
+      return { loading: true, auction: undefined, error }
+    }
 
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
@@ -150,6 +166,7 @@ export const useAuction = (address?: string, owner?: string) => {
         pointListAddress,
         status: getStatusByTimestamp(blockTimestamp, auctionInfo, auctionEnded),
       }),
+      error,
     }
   }, [
     auctionDocuments,
@@ -157,6 +174,8 @@ export const useAuction = (address?: string, owner?: string) => {
     auctionInfo,
     blockTimestamp,
     chainId,
+    errorDetails,
+    errorInfo,
     launcherInfo,
     loadingDetails,
     loadingInfo,
