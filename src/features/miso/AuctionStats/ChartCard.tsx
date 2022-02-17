@@ -49,7 +49,7 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
           </Typography>
           {parsedAuctionCommitments[selectedBlock] && (
             <Typography className="text-lg text-transparent text-gray-200 bg-clip-text">
-              {formatBalance(parsedAuctionCommitments[selectedBlock]?.y.toString(), auctionToken?.decimals)}{' '}
+              {formatBalance(parsedAuctionCommitments[selectedBlock]?.y, auctionToken?.decimals)}{' '}
               {auction?.commitmentsTotal?.currency.symbol}
             </Typography>
           )}
