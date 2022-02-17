@@ -84,13 +84,6 @@ const AccountDetails: FC<AccountDetailsProps> = ({
                 />
               </div>
               <Typography weight={700} variant="lg" className="text-white">
-                {/* {nom && ENSName
-                  ? ENSName + ' (' + nom + ')'
-                  : ENSName
-                  ? ENSName
-                  : nom
-                  ? account && shortenAddress(account) + ' (' + nom + ')'
-                  : account && shortenAddress(account)} */}
                 {ENSName ? ENSName : nom ? nom : account && shortenAddress(account)}
               </Typography>
             </div>
