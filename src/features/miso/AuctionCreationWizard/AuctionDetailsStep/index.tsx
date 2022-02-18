@@ -31,17 +31,17 @@ const AuctionDetailsStep: FC = () => {
       icon: <CrowdsaleIcon height={83} width={83} />,
       value: AuctionTemplate.CROWDSALE,
       label: templateIdToLabel(AuctionTemplate.CROWDSALE),
-      description: i18n._(
-        t`A set amount of tokens are divided amongst all the contributors to the Market event, weighted according to their contribution to the pool.`
-      ),
-      note: i18n._(t`Great for projects looking to ensure that everyone taking part is rewarded`),
+      description: i18n._(t`A fixed price and a fixed set of tokens.`),
+      note: i18n._(t`Great when the token price is already known or has been decided on previously`),
     },
     {
       icon: <BatchAuctionIcon height={83} width={83} />,
       value: AuctionTemplate.BATCH_AUCTION,
       label: templateIdToLabel(AuctionTemplate.BATCH_AUCTION),
-      description: i18n._(t`A fixed price and a fixed set of tokens.`),
-      note: i18n._(t`Great when the token price is already known or has been decided on previously`),
+      description: i18n._(
+        t`A set amount of tokens are divided amongst all the contributors to the Market event, weighted according to their contribution to the pool.`
+      ),
+      note: i18n._(t`Great for projects looking to ensure that everyone taking part is rewarded`),
     },
   ]
 

@@ -22,11 +22,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { atom, useSetRecoilState } from 'recoil'
 
 import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
-import { useConstantProductPoolsPermutations } from './useConstantProductPools'
+import { useGetAllExistedPools } from './useConstantProductPools'
 
 export function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (PoolUnion | Pair)[] {
   const currencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
-  const constantProductPools = useConstantProductPoolsPermutations(currencyCombinations)
+  const constantProductPools = useGetAllExistedPools(currencyCombinations)
+  //const constantProductPools = useConstantProductPoolsPermutations(currencyCombinations)
   const allPairs = useV2Pairs(currencyCombinations)
   const pools = useMemo(() => [...constantProductPools, ...allPairs], [allPairs, constantProductPools])
   return useMemo(

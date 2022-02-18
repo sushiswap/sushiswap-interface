@@ -58,7 +58,7 @@ function useKashiApproveCallback(): [
     setKashiPermit(undefined)
   }, [account, chainId])
 
-  const masterContract = chainId && KASHI_ADDRESS[chainId]
+  const masterContract = chainId ? KASHI_ADDRESS[chainId] : undefined
 
   const pendingApproval = useKashiApprovalPending()
   const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)

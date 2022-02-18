@@ -17,18 +17,15 @@ import {
 import Typography from 'app/components/Typography'
 import AuctionDocumentsSkeleton from 'app/features/miso/AuctionDocuments/AuctionDocumentsSkeleton'
 import AuctionIcon from 'app/features/miso/AuctionIcon'
-import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionContext } from 'app/features/miso/context/AuctionContext'
 import { AuctionTitleByTemplateId } from 'app/features/miso/context/utils'
 import React, { FC } from 'react'
 
-interface AuctionDocumentsProps {
-  auction?: Auction
-}
-
-const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
+const AuctionDocuments: FC = () => {
   const { i18n } = useLingui()
+  const { auction, loading } = useAuctionContext()
 
-  if (!auction) return <AuctionDocumentsSkeleton />
+  if (loading || !auction) return <AuctionDocumentsSkeleton />
 
   const info = ['website', 'whitepaper', 'docs']
   const documents = auction.auctionDocuments

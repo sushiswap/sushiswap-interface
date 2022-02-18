@@ -47,7 +47,7 @@ const KashiDeposit = ({ pair, header }) => {
   const [kashiApprovalState, approveKashiFallback, kashiPermit, onApproveKashi, onCook] = useKashiApproveCallback()
   const [tokenApprovalState, onApproveToken] = useApproveCallback(
     parsedDepositValue,
-    chainId && BENTOBOX_ADDRESS[chainId]
+    chainId ? BENTOBOX_ADDRESS[chainId] : undefined
   )
 
   const onDeposit = useCallback(

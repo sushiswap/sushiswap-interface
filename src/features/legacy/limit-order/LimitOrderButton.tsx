@@ -32,7 +32,7 @@ const LimitOrderButton: FC<LimitOrderButton> = ({ trade, parsedAmounts }) => {
   const error = useLimitOrderDerivedInputError({ trade })
   const { deposit } = useLimitOrderExecute()
   const bentoboxContract = useBentoBoxContract()
-  const masterContractAddress = chainId && STOP_LIMIT_ORDER_ADDRESS[chainId]
+  const masterContractAddress = chainId ? STOP_LIMIT_ORDER_ADDRESS[chainId] : undefined
   const [permitError, setPermitError] = useState(false)
 
   const _deposit = useCallback(

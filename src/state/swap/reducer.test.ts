@@ -30,7 +30,7 @@ describe('swap reducer', () => {
         [Field.INPUT]: { currencyId: '' },
         typedValue: '',
         independentField: Field.INPUT,
-        recipient: null,
+        recipient: undefined,
       })
     })
   })
