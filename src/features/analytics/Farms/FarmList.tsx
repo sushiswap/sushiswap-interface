@@ -31,7 +31,9 @@ type FarmListNameProps = {
 
 type Reward = {
   icon: string
-  token: string
+  currency: {
+    symbol: string
+  }
   rewardPerDay: number
 }
 
@@ -74,7 +76,7 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
                   height="30px"
                   className="rounded-full"
                   layout="fixed"
-                  alt={reward.token}
+                  alt={reward.currency.symbol}
                 />
               )}
             </div>
@@ -131,7 +133,7 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
         ),
         align: 'right',
         // @ts-ignore TYPE NEEDS FIXING
-        sortType: (rowA, rowB, id, desc) => {
+        sortType: (rowA, rowB) => {
           if (rowA.original.apr.annual > rowB.original.apr.annual) return 1
           if (rowB.original.apr.annual > rowA.original.apr.annual) return -1
           return 0
