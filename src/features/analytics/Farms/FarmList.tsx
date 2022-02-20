@@ -125,8 +125,8 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
             ) : (
               <div className="font-normal text-green">{'>10,000%'}</div>
             )}
-            &nbsp;/ {props.value.monthly > 10000 ? '>10,000%' : formatPercent(props.value.monthly * 100)}
-            &nbsp;/ {props.value.daily > 10000 ? '>10,000%' : formatPercent(props.value.daily * 100)}
+            &nbsp;/ {props.value.monthly > 10000 ? '>10,000%' : formatPercent(props.value.monthly)}
+            &nbsp;/ {props.value.daily > 10000 ? '>10,000%' : formatPercent(props.value.daily)}
           </div>
         ),
         align: 'right',

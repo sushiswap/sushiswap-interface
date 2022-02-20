@@ -123,8 +123,8 @@ export default function Dashboard(): JSX.Element {
           rewards: farm.rewards,
           liquidity: farm.tvl,
           apr: {
-            daily: (farm.roiPerYear / 365) * 100,
-            monthly: (farm.roiPerYear / 12) * 100,
+            daily: farm.roiPerDay * 100,
+            monthly: farm.roiPerMonth * 100,
             annual: farm.roiPerYear * 100,
           },
         }))
