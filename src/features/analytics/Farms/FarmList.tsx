@@ -85,7 +85,7 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
             const decimals = 6 - String(reward?.rewardPerDay?.toFixed(0)).length
             return (
               <div key={i} className="text-base whitespace-nowrap">
-                {reward?.rewardPerDay?.toFixed(decimals > 0 ? decimals : 0)} {reward.token}
+                {reward?.rewardPerDay?.toFixed(decimals > 0 ? decimals : 0)} {reward.currency.symbol}
               </div>
             )
           })}
@@ -98,7 +98,7 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
 export default function FarmList({ pools }: FarmListProps): JSX.Element {
   const defaultSortBy = React.useMemo(
     () => ({
-      id: 'apr',
+      id: 'liquidity',
       desc: true,
     }),
     []
@@ -131,7 +131,12 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
         ),
         align: 'right',
         // @ts-ignore TYPE NEEDS FIXING
-        sortType: (a, b) => a.original.apr.annual - b.original.apr.annual,
+        sortType: (rowA, rowB, id, desc) => {
+          if (rowA.original.apr.annual > rowB.original.apr.annual) return 1
+          if (rowB.original.apr.annual > rowA.original.apr.annual) return -1
+          return 0
+        },
+        //sortType: (a, b) => a.original.apr.annual - b.original.apr.annual,
       },
       {
         Header: 'TVL',
