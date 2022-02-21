@@ -58,6 +58,8 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
   const isMetaMask = library?.provider?.isMetaMask
   const isCbWallet = useIsCoinbaseWallet()
 
+  const shouldRenderAddTokenButton = currencyToAdd && (isMetaMask || isCbWallet);
+
   const walletName = useMemo(() => {
     if (isMetaMask) return 'MetaMask'
     if (isCbWallet) return 'Coinbase Wallet'
@@ -82,7 +84,7 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
         )}
       </HeadlessUiModal.BorderedContent>
 
-      {currencyToAdd && (isMetaMask || isCbWallet) && (
+      {shouldRenderAddTokenButton && (
         <Button color="blue" onClick={!success ? addToken : onDismiss}>
           <Typography variant="sm" weight={700}>
             {!success ? i18n._(t`Add ${currencyToAdd.symbol} to ${walletName}`) : i18n._(t`Dismiss`)}
