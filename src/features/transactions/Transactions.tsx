@@ -9,8 +9,9 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
+import { useTridentTransactions } from 'app/services/graph/hooks/pools'
 import { useLegacyTransactions } from 'app/services/graph/hooks/transactions/legacy'
-import { useTridentTransactions } from 'app/services/graph/hooks/transactions/trident'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC } from 'react'
 // @ts-ignore TYPE NEEDS FIXING
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
@@ -26,8 +27,18 @@ export const LegacyTransactions: FC<{ pairs: string[] }> = ({ pairs }) => {
 }
 
 export const TridentTransactions: FC<{ poolAddress?: string }> = ({ poolAddress }) => {
-  const { transactions, error, loading } = useTridentTransactions(poolAddress)
-  return <_Transactions transactions={transactions} error={error} loading={loading} />
+  const { chainId } = useActiveWeb3React()
+
+  const {
+    data,
+    error,
+    isValidating: loading,
+  } = useTridentTransactions({
+    chainId,
+    variables: { poolAddress: poolAddress?.toLowerCase() },
+    shouldFetch: !!poolAddress,
+  })
+  return <_Transactions transactions={data ?? []} error={error} loading={loading} />
 }
 
 const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loading }) => {

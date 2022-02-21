@@ -52,10 +52,10 @@ const ClassicSingleMode: FC = () => {
       onChange={(val: string) => dispatch(setRemovePercentageAmount(val))}
       variant="outlined"
     >
-      <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
-      <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
-      <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
       <ToggleButtonGroup.Button value="25">25%</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
     </ToggleButtonGroup>
   )
 
@@ -98,7 +98,7 @@ const ClassicSingleMode: FC = () => {
                   liquidityValue.map((amount, index) => <ListPanel.CurrencyAmountItem amount={amount} key={index} />),
                 ]}
                 footer={
-                  <div className="flex justify-between items-center px-4 py-5 gap-3">
+                  <div className="flex items-center justify-between gap-3 px-4 py-5">
                     <PercentInput
                       value={percentageAmount}
                       onUserInput={(val) => dispatch(setRemovePercentageAmount(val))}
