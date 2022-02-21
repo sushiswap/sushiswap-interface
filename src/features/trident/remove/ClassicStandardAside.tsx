@@ -67,7 +67,7 @@ const ClassicStandardAside = () => {
       </div>
       {!outputToWallet && receiveNative && (
         <Alert
-          className="p-0 bg-transparent"
+          className="bg-transparent"
           dismissable={false}
           type="error"
           message={i18n._(

@@ -97,7 +97,7 @@ const WalletSwitch: FC<
       variant="xs"
       weight={700}
       component="span"
-      className={classNames(disabled ? 'pointer-events-none opacity-40' : '', 'flex items-center gap-2')}
+      className={classNames(disabled ? 'pointer-events-none opacity-40' : '', 'flex items-center gap-2 !justify-end')}
     >
       {label}
       <Typography

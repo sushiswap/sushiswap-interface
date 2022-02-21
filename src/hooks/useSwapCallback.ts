@@ -540,19 +540,13 @@ export function useSwapCallback(
     // @ts-ignore TYPE NEEDS FIXING
     EIP_1559_ACTIVATION_BLOCK[chainId] == undefined ? false : blockNumber >= EIP_1559_ACTIVATION_BLOCK[chainId]
 
-  const swapCalls = useSwapCallArguments(
-    trade,
-    allowedSlippage,
-    recipientAddressOrName,
-    signatureData,
-    tridentTradeContext
-  )
-
-  const addTransaction = useTransactionAdder()
-
   const { address: recipientAddress } = useENS(recipientAddressOrName)
 
-  const recipient = recipientAddressOrName === null ? account : recipientAddress
+  const recipient = recipientAddressOrName ? recipientAddress ?? undefined : account ?? undefined
+
+  const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipient, signatureData, tridentTradeContext)
+
+  const addTransaction = useTransactionAdder()
 
   return useMemo(() => {
     if (!trade || !library || !account || !chainId) {

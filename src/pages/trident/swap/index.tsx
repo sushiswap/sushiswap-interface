@@ -94,6 +94,7 @@ const Swap = () => {
 
   const handleDismiss = useCallback(() => {
     dispatch(setTridentSwapState({ ...tridentSwapState, showReview: false, error: undefined }))
+    setTxHash(undefined)
   }, [dispatch, tridentSwapState])
 
   return (
