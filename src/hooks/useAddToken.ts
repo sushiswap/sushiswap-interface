@@ -3,18 +3,18 @@ import { getCurrencyLogoUrls } from 'app/components/CurrencyLogo/CurrencyLogo'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useState } from 'react'
 
-export default function useAddTokenToMetaMask(currencyToAdd: Currency | undefined): {
+export default function useAddToken(currencyToAdd: Currency | undefined): {
   addToken: () => void
   success: boolean | undefined
 } {
-  const { chainId, library } = useActiveWeb3React()
+  const { library } = useActiveWeb3React()
 
   const token: Token | undefined = currencyToAdd?.wrapped
 
   const [success, setSuccess] = useState<boolean | undefined>()
 
   const addToken = useCallback(() => {
-    if (library && library.provider.isMetaMask && library.provider.request && token) {
+    if (library && library.provider.request && token) {
       library.provider
         .request({
           method: 'wallet_watchAsset',
