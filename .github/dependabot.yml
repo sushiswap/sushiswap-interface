@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
     commit-message:
       # Prefix all commit messages with "npm"
       prefix: 'token list'
