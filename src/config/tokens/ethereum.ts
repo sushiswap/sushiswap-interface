@@ -166,3 +166,5 @@ export const SPELL = new Token(
   'Spell Token'
 )
 export const ICE = new Token(ChainId.ETHEREUM, '0xf16e81dce15B08F326220742020379B855B87DF9', 18, 'ICE', 'IceToken')
+export const AGEUR = new Token(ChainId.ETHEREUM, '0x1a7e4e63778B4f12a199C062f3eFdD288afCBce8', 18, 'agEUR', 'agEUR')
+export const ANGLE = new Token(ChainId.ETHEREUM, '0x31429d1856aD1377A8A0079410B297e1a9e214c2', 18, 'ANGLE', 'ANGLE')
