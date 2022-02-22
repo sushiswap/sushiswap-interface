@@ -49,6 +49,14 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobile: true,
     mobileOnly: true,
   },
+  Tally: {
+    connector: injectedTally,
+    name: 'Tally',
+    iconName: 'tally.png',
+    description: 'Login using Tally hosted wallet',
+    href: null,
+    color: '#E8831D',
+  },
   WALLET_CONNECT: {
     connector: async () => {
       const WalletConnectConnector = (await import('@web3-react/walletconnect-connector')).WalletConnectConnector
@@ -192,13 +200,5 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Login using Clover hosted wallet',
     href: null,
     color: '#269964',
-  },
-  Tally: {
-    connector: injectedTally,
-    name: 'Tally',
-    iconName: 'tally.png',
-    description: 'Login using Tally hosted wallet',
-    href: null,
-    color: '#E8831D',
   },
 }
