@@ -9,6 +9,7 @@ import {
   getPoolHourBuckets,
   getPoolKpis,
   getTridentPools,
+  getTridentPoolTransactions,
   PoolBucket,
   TridentPool,
 } from '../fetchers/pools'
@@ -171,6 +172,19 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
             }
           }),
   }
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export function useTridentTransactions({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
+  const _variables = {
+    ...variables,
+  }
+
+  return useSWR(
+    shouldFetch && !!chainId ? ['trident-transactions', chainId, stringify(_variables)] : null,
+    () => getTridentPoolTransactions(chainId, _variables),
+    swrConfig
+  )
 }
 
 export const useGetAllTridentPools = () => {

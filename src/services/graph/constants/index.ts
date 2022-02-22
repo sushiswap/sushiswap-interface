@@ -23,7 +23,7 @@ export const GRAPH_HOST = {
 }
 
 export const TRIDENT = {
-  [ChainId.KOVAN]: 'matthewlilley/trident',
+  [ChainId.KOVAN]: 'sushiswap/trident',
   [ChainId.OKEX]: 'https://graph.kkt.one/node',
   [ChainId.ARBITRUM]: THE_GRAPH,
   [ChainId.MOONRIVER]: THE_GRAPH,

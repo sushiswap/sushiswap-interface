@@ -10,10 +10,11 @@ import {
   poolKpisQuery,
 } from 'app/services/graph/queries'
 
+import { TridentTransactionRawData, tridentTransactionsRawDataFormatter } from '../hooks/transactions/trident'
 import { pager } from './pager'
 
 // @ts-ignore TYPE NEEDS FIXING
-export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
+export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables: {} = undefined) =>
   // @ts-ignore TYPE NEEDS FIXING
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${TRIDENT[chainId]}`, query, variables)
 
@@ -136,10 +137,9 @@ export const getPoolDayBuckets = async (chainId: ChainId = ChainId.ETHEREUM, var
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getTridentPoolTransactions = async (poolAddress) => {
-  return await pager('https://api.thegraph.com/subgraphs/name/sushiswap/trident', getSwapsForPoolQuery, {
-    poolAddress: poolAddress.toLowerCase(),
-  })
+export const getTridentPoolTransactions = async (chainId: ChainId = ChainId.ETHEREUM, variables) => {
+  const result = (await fetcher(chainId, getSwapsForPoolQuery, variables)).swaps as TridentTransactionRawData[]
+  return tridentTransactionsRawDataFormatter(result || [])
 }
 
 export interface PoolKpiQueryResult {
