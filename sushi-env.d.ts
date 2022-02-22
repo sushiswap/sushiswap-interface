@@ -12,7 +12,8 @@ declare global {
     walletLinkExtension?: any
     ethereum?: {
       isCoinbaseWallet?: true
-      isMetaMask?: true
+      isMetaMask?: boolean
+      isTally?: boolean
       on?: (...args: any[]) => void
       removeListener?: (...args: any[]) => void
       removeAllListeners?: (...args: any[]) => void

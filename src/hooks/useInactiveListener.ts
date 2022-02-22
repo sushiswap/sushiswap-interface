@@ -1,7 +1,7 @@
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 import { useEffect } from 'react'
 
-import { injected } from '../config/wallets'
+import { injectedMetaMask, injectedTally } from '../config/wallets'
 
 /**
  * Use for network and injected - logs user in
@@ -16,17 +16,29 @@ function useInactiveListener(suppress = false) {
     if (ethereum && ethereum.on && !active && !error && !suppress) {
       const handleChainChanged = () => {
         // eat errors
-        activate(injected, undefined, true).catch((error) => {
-          console.error('Failed to activate after chain changed', error)
-        })
+        if (ethereum.isTally) {
+          activate(injectedTally, undefined, true).catch((error) => {
+            console.error('Failed to activate after chain changed', error)
+          })
+        } else if (ethereum.isMetaMask) {
+          activate(injectedMetaMask, undefined, true).catch((error) => {
+            console.error('Failed to activate after chain changed', error)
+          })
+        }
       }
 
       const handleAccountsChanged = (accounts: string[]) => {
         if (accounts.length > 0) {
           // eat errors
-          activate(injected, undefined, true).catch((error) => {
-            console.error('Failed to activate after accounts changed', error)
-          })
+          if (ethereum.isTally) {
+            activate(injectedTally, undefined, true).catch((error) => {
+              console.error('Failed to activate after accounts changed', error)
+            })
+          } else if (ethereum.isMetaMask) {
+            activate(injectedMetaMask, undefined, true).catch((error) => {
+              console.error('Failed to activate after accounts changed', error)
+            })
+          }
         }
       }
 

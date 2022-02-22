@@ -6,7 +6,7 @@ import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
-import { injected, SUPPORTED_WALLETS } from 'config/wallets'
+import { injectedMetaMask, SUPPORTED_WALLETS } from 'config/wallets'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 
@@ -58,7 +58,7 @@ const PendingView: FC<PendingView> = ({ id, connector, error = false, setPending
       {Object.keys(SUPPORTED_WALLETS).map((_key) => {
         const option = SUPPORTED_WALLETS[_key]
         if (id === _key) {
-          if (option.connector === injected) {
+          if (option.connector === injectedMetaMask) {
             if (isMetamask && option.name !== 'MetaMask') {
               return null
             }

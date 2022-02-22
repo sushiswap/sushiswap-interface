@@ -2,7 +2,7 @@ import Davatar from '@davatar/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { HeadlessUiModal } from 'app/components/Modal'
-import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
+import { injectedMetaMask, SUPPORTED_WALLETS } from 'app/config/wallets'
 import { getExplorerLink } from 'app/functions/explorer'
 import { shortenAddress } from 'app/functions/format'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -43,7 +43,8 @@ const AccountDetails: FC<AccountDetailsProps> = ({
     const name = Object.keys(SUPPORTED_WALLETS)
       .filter(
         (k) =>
-          SUPPORTED_WALLETS[k].connector === connector && (connector !== injected || isMetaMask === (k === 'METAMASK'))
+          SUPPORTED_WALLETS[k].connector === connector &&
+          (connector !== injectedMetaMask || isMetaMask === (k === 'METAMASK'))
       )
       .map((k) => SUPPORTED_WALLETS[k].name)[0]
     return (
