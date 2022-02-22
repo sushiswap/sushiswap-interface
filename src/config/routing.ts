@@ -225,6 +225,7 @@ export const ADDITIONAL_BASES: {
     [ETHEREUM.WOOFY.address]: [ETHEREUM.YFI],
     [ETHEREUM.SPANK.address]: [ETHEREUM.RAI],
     [ETHEREUM.DOLA.address]: [ETHEREUM.INV],
+    [ETHEREUM.AGEUR.address]: [ETHEREUM.ANGLE],
   },
   [ChainId.MATIC]: {
     [MATIC.FRAX.address]: [MATIC.FXS],
