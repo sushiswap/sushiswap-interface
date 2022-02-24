@@ -28,7 +28,7 @@ export type Menu = MenuItem[]
 type UseMenu = () => Menu
 const useMenu: UseMenu = () => {
   const { i18n } = useLingui()
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
 
   return useMemo(() => {
     if (!chainId) return []
@@ -237,15 +237,17 @@ const useMenu: UseMenu = () => {
       mainItems.push(analyticsMenu)
     }
 
-    mainItems.push({
-      key: 'balances',
-      title: i18n._(t`Portfolio`),
-      link: '/portfolio',
-      icon: <WalletIcon width={20} />,
-    })
+    if (account) {
+      mainItems.push({
+        key: 'balances',
+        title: i18n._(t`Portfolio`),
+        link: '/portfolio',
+        icon: <WalletIcon width={20} />,
+      })
+    }
 
     return mainItems.filter((el) => Object.keys(el).length > 0)
-  }, [chainId, i18n])
+  }, [account, chainId, i18n])
 }
 
 export default useMenu
