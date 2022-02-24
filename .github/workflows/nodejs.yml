@@ -1,0 +1,45 @@
+name: nodejs
+on:
+  push:
+     paths:
+      - "**/**"
+      - "!**/*.md/**"
+
+env:
+  CI: ''
+  COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+  PULL_NUMBER: ${{ github.event.pull_request.number }}
+  RUN_ID: ${{ github.run_id }}
+  FORCE_COLOR: 2
+  NEXT_TELEMETRY_DISABLED: 1
+  NODE_ENV: production
+
+
+jobs:
+  pipeline:
+    name: Node ${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['14.x']
+        os: ['ubuntu-latest']
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'yarn'
+
+      - name: Install npm dependencies
+        run: yarn install
+        id: install
+
+      - name: Run build
+        run: yarn run build
+        id: build
