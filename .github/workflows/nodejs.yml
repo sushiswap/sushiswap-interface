@@ -1,6 +1,6 @@
 name: nodejs
 on:
-  push:
+  pull_request:
      paths:
       - "**/**"
       - "!**/*.md/**"
@@ -34,7 +34,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-          cache: 'yarn'
 
       - name: Install npm dependencies
         run: yarn install
