@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit'
 import { ChainId } from '@sushiswap/core-sdk'
+import { PrivateTxStatus } from 'app/entities/SushiGuard'
 
 export interface SerializableTransactionReceipt {
   to: string
@@ -32,3 +33,8 @@ export const checkedTransaction = createAction<{
   hash: string
   blockNumber: number
 }>('transactions/checkedTransaction')
+export const updatePrivateTxStatus = createAction<{
+  chainId: ChainId
+  hash: string
+  status: PrivateTxStatus
+}>('transactions/updatePrivateTxStatus')
