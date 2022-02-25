@@ -9,6 +9,7 @@ import { NETWORK_LABEL } from 'app/config/networks'
 import TransactionList from 'app/features/user/TransactionList'
 import { getExplorerLink } from 'app/functions/explorer'
 import { shortenAddress } from 'app/functions/format'
+import { isTxPending } from 'app/functions/transactions'
 import useENSName from 'app/hooks/useENSName'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch } from 'app/state/hooks'
@@ -41,7 +42,7 @@ export default function Me() {
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
 
-  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter((tx) => isTxPending(tx)).map((tx) => tx.hash)
   const confirmed = sortedRecentTransactions.filter((tx) => tx.receipt).map((tx) => tx.hash)
 
   const clearAllTransactionsCallback = useCallback(() => {

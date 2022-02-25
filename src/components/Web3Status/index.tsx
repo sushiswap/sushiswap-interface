@@ -7,6 +7,7 @@ import { useWeb3React } from '@web3-react/core'
 import { injected } from 'app/config/wallets'
 import { NetworkContextName } from 'app/constants'
 import { shortenAddress } from 'app/functions'
+import { isTxPending } from 'app/functions/transactions'
 import useENSName from 'app/hooks/useENSName'
 import WalletModal from 'app/modals/WalletModal'
 import { useWalletModalToggle } from 'app/state/application/hooks'
@@ -105,7 +106,7 @@ function Web3StatusInner() {
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
 
-  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter((tx) => isTxPending(tx)).map((tx) => tx.hash)
 
   const hasPendingTransactions = !!pending.length
 
