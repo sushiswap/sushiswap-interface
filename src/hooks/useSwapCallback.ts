@@ -47,6 +47,7 @@ import { setSushiRelayChallenge } from 'app/state/swap/actions'
 import { useSwapState } from 'app/state/swap/hooks'
 import { TransactionResponseLight, useTransactionAdder } from 'app/state/transactions/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
+import { fetchJsonRpc } from 'lib/jsonrpc'
 import { useMemo } from 'react'
 
 import { SUSHIGUARD_RELAY } from '../config/sushiguard'
@@ -731,7 +732,7 @@ export function useSwapCallback(
 
               dispatch(setSushiRelayChallenge(txToSign))
 
-              if (!library.provider.request) throw Error('SushiGuard: UNSUPPORTED_PROVIDER_REQUEST')
+              if (!library.provider.request) throw new Error('SushiGuard: UNSUPPORTED_PROVIDER_REQUEST')
               return library.provider
                 .request({ method: 'eth_sign', params: [account, txToSign] })
                 .then((signature: SignatureLike) => {
@@ -743,34 +744,13 @@ export function useSwapCallback(
                 })
             })
             .then((signedTx: string) => {
-              const body = JSON.stringify({
-                jsonrpc: '2.0',
-                id: new Date().getTime(),
+              if (!SUSHIGUARD_RELAY[chainId]) throw new Error('SushiGuard: RELAY_URL_NOT_AVAILABLE')
+              return fetchJsonRpc(SUSHIGUARD_RELAY[chainId] ?? '', {
                 method: 'eth_sendRawTransaction',
                 params: [signedTx],
-              })
-
-              if (!SUSHIGUARD_RELAY[chainId]) throw Error('SushiGuard: RELAY_URL_NOT_AVAILABLE')
-              return fetch(SUSHIGUARD_RELAY[chainId] ?? '', {
-                method: 'POST',
-                body,
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              }).then((res: Response) => {
-                // Handle success
-                if (res.status === 200) {
-                  return res.json().then((json) => {
-                    // But first check if there are some errors present and throw accordingly
-                    if (json.error) throw json.error
-
-                    // Otherwise return a TransactionResponseLight object
-                    return { hash: json.result } as TransactionResponseLight
-                  })
-                }
-
-                // Generic error
-                if (res.status !== 200) throw Error(res.statusText)
+              }).then((res) => {
+                if (res.error) throw res.error
+                return { hash: res.result } as TransactionResponseLight
               })
             })
             .finally(() => {
