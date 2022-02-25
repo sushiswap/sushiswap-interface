@@ -31,7 +31,9 @@ const useCurrenciesFromURL = (): {
       tokens = [router.query.tokens?.[1], router.query.tokens?.[0]]
     } else {
       tokens = [
+        // @ts-ignore TYPE NEEDS FIXING
         currencyB?.isNative ? nativeSymbol : currencyB?.wrapped.address,
+        // @ts-ignore TYPE NEEDS FIXING
         currencyA?.isNative ? nativeSymbol : currencyA?.wrapped.address,
       ]
     }
@@ -64,7 +66,9 @@ const useCurrenciesFromURL = (): {
       // @ts-ignore TYPE NEEDS FIXING
       const nativeSymbol = NATIVE[chainId].symbol
       let tokens: string[] = [
+        // @ts-ignore TYPE NEEDS FIXING
         currencyA?.isNative ? nativeSymbol : currencyA?.wrapped.address,
+        // @ts-ignore TYPE NEEDS FIXING
         currencyB?.isNative ? nativeSymbol : currencyB?.wrapped.address,
       ]
 
@@ -78,11 +82,14 @@ const useCurrenciesFromURL = (): {
 
         // @ts-ignore TYPE NEEDS FIXING
         const newToken = cur.isNative ? NATIVE[chainId].symbol : cur.wrapped.address
+        // @ts-ignore TYPE NEEDS FIXING
         if (tokens.includes(newToken)) return // return if token already selected
+        // @ts-ignore TYPE NEEDS FIXING
         tokens[index] = newToken
       }
 
       if (!router.query?.tokens) {
+        // @ts-ignore TYPE NEEDS FIXING
         tokens[index] =
           index === 1
             ? cur.isNative
