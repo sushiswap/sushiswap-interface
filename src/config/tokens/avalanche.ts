@@ -47,3 +47,6 @@ export const WMEMO = new Token(
   'WMEMO',
   'Wrapped MEMO'
 )
+
+export const FRAX = new Token(ChainId.AVALANCHE, '0xD24C2Ad096400B6FBcd2ad8B24E7acBc21A1da64', 18, 'FRAX', 'Frax')
+export const FXS = new Token(ChainId.AVALANCHE, '0x214DB107654fF987AD859F34125307783fC8e387', 18, 'FXS', 'Frax Share')

@@ -32,3 +32,5 @@ export const DAI = new Token(
   'Dai Stablecoin'
 )
 export const UST = new Token(ChainId.MOONBEAM, '0x085416975fe14C2A731a97eC38B9bF8135231F62', 18, 'UST', 'TerraUSD')
+export const FRAX = new Token(ChainId.MOONBEAM, '0x322E86852e492a7Ee17f28a78c663da38FB33bfb', 18, 'FRAX', 'Frax')
+export const FXS = new Token(ChainId.MOONBEAM, '0x2CC0A9D8047A5011dEfe85328a6f26968C8aaA1C', 18, 'FXS', 'Frax Share')
