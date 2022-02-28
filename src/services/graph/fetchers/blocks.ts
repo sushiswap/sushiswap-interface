@@ -19,6 +19,7 @@ export const BLOCKS = {
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-blocks',
   [ChainId.FUSE]: 'sushiswap/fuse-blocks',
   [ChainId.KOVAN]: 'blocklytics/kovan-blocks',
+  [ChainId.MOONBEAM]: 'sushiswap/moonbeam-blocks',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
