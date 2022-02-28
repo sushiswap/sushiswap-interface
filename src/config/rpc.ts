@@ -30,6 +30,7 @@ const RPC = {
   [ChainId.CELO]: 'https://forno.celo.org',
   [ChainId.MOONRIVER]: 'https://rpc.moonriver.moonbeam.network',
   [ChainId.TELOS]: 'https://mainnet.telos.net/evm',
+  [ChainId.MOONBEAM]: 'https://rpc.api.moonbeam.network',
 }
 
 export default RPC

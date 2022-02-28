@@ -11,6 +11,7 @@ import * as FUSE from './tokens/fuse'
 import * as HARMONY from './tokens/harmony'
 import * as HECO from './tokens/heco'
 import * as MATIC from './tokens/matic'
+import * as MOONBEAM from './tokens/moonbeam'
 import * as MOONRIVER from './tokens/moonriver'
 import * as OKEX from './tokens/okex'
 import * as PALM from './tokens/palm'
@@ -71,6 +72,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.PALM]: [WNATIVE[ChainId.PALM]],
   [ChainId.FUSE]: [WNATIVE[ChainId.FUSE]],
   [ChainId.TELOS]: [WNATIVE[ChainId.TELOS]],
+  [ChainId.MOONBEAM]: [WNATIVE[ChainId.MOONBEAM]],
 }
 
 // used to construct intermediary pairs for trading
@@ -193,6 +195,14 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
   [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
   [ChainId.TELOS]: [...WRAPPED_NATIVE_ONLY[ChainId.TELOS], TELOS.USDC, TELOS.USDT, TELOS.WETH, TELOS.WBTC],
+  [ChainId.MOONBEAM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MOONBEAM],
+    MOONBEAM.USDC,
+    MOONBEAM.USDT,
+    MOONBEAM.UST,
+    MOONBEAM.WETH,
+    MOONBEAM.WBTC,
+  ],
 }
 
 export const ADDITIONAL_BASES: {
@@ -516,6 +526,14 @@ export const COMMON_BASES: ChainTokenList = {
     // @ts-ignore TYPE NEEDS FIXING
     TELOS.USDT,
   ],
+  [ChainId.MOONBEAM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MOONBEAM],
+    MOONBEAM.USDC,
+    MOONBEAM.USDT,
+    MOONBEAM.UST,
+    MOONBEAM.WETH,
+    MOONBEAM.WBTC,
+  ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -621,6 +639,14 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
   [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
   [ChainId.TELOS]: [...WRAPPED_NATIVE_ONLY[ChainId.TELOS], TELOS.USDC, TELOS.USDT, TELOS.WETH, TELOS.WBTC],
+  [ChainId.MOONBEAM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MOONBEAM],
+    MOONBEAM.USDC,
+    MOONBEAM.USDT,
+    MOONBEAM.UST,
+    MOONBEAM.WETH,
+    MOONBEAM.WBTC,
+  ],
 }
 
 export const PINNED_PAIRS: {
