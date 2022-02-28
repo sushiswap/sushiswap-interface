@@ -45,7 +45,7 @@ const Miso = () => {
               {i18n._(t`Use with caution, this is experimental and permissionless. Due dilligence is required.`)}
             </Typography>
           </div>
-          {(chainId === ChainId.HARMONY || chainId === ChainId.KOVAN) && (
+          {(chainId === ChainId.HARMONY || chainId === ChainId.KOVAN || chainId === ChainId.MOONBEAM) && (
             <div className="flex items-center gap-4">
               <div>
                 <Link href="/miso/auction" passHref={true}>

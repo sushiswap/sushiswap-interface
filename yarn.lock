@@ -2884,10 +2884,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/miso-sdk/-/miso-sdk-1.0.0-canary.49.tgz#7c4e42a866b6cb01f0ce58e017f60b1c853b8134"
   integrity sha512-+uVnpUD+upx+unYdZdnIKzbuq/g1z/baravCcZKUVs21OGVAMSJpZ0lqmoyBWV/oQgcvIkPa02ynF816uo48Ew==
 
-"@sushiswap/miso@1.0.0-canary.40":
-  version "1.0.0-canary.40"
-  resolved "https://registry.yarnpkg.com/@sushiswap/miso/-/miso-1.0.0-canary.40.tgz#9bc94823c5711c81f64cb4081a95da0ba435139e"
-  integrity sha512-nO+S8TIIP4VkXgC0vdXVAqr+DqOpAe4V1eltCvsIi84fWwFs3f9Kdk2rC6QLxLpMfOGlD/I8/MdQ0mf+DfHFHg==
+"@sushiswap/miso@1.0.0-canary.42":
+  version "1.0.0-canary.42"
+  resolved "https://registry.yarnpkg.com/@sushiswap/miso/-/miso-1.0.0-canary.42.tgz#b40aa96f2eb529b5c03a687cb731217450f57777"
+  integrity sha512-7eC5lrNoJ6xAPPU83HycBItL6IQ9KqvxBK6hiwhHOGIZPze9MmWIPi1P7IGRzeXjlEldwkP6CrcvlSiZ+xE7CA==
 
 "@sushiswap/sdk@^5.0.0-canary.109":
   version "5.0.0-canary.116"
