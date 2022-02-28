@@ -29,7 +29,7 @@ import { useTokens } from 'app/hooks/Tokens'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useBentoStrategies, useClones } from 'app/services/graph'
 import { useActiveWeb3React, useQueryFilter } from 'app/services/web3'
-import { NEVER_RELOAD, useSingleCallResult } from 'app/state/multicall/hooks'
+import { useSingleCallResult } from 'app/state/multicall/hooks'
 import { useMemo } from 'react'
 
 import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
@@ -138,7 +138,7 @@ export function useKashiMediumRiskLendingPairs(
   const boringHelperContract = useBoringHelperContract()
   const tokens = useKashiTokens()
   const args = useMemo(() => [account ? account : AddressZero, addresses], [account, addresses])
-  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args, NEVER_RELOAD)
+  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args)
   const { rebases } = useBentoRebases(Object.values(tokens))
 
   // TODO: for skeleton loading

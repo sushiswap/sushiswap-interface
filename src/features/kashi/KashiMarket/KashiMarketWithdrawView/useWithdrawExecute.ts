@@ -3,23 +3,25 @@ import { Signature } from '@ethersproject/bytes'
 import { TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, KASHI_ADDRESS, Rebase } from '@sushiswap/core-sdk'
 import KashiCooker from 'app/entities/KashiCooker'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket'
+import { minimum, toShare } from 'app/functions'
 import { useBentoBoxContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 
-export interface DepositExecutePayload {
-  depositAmount?: CurrencyAmount<Currency>
-  spendFromWallet: boolean
+export interface WithdrawExecutePayload {
+  withdrawAmount?: CurrencyAmount<Currency>
+  receiveToWallet: boolean
   permit?: Signature
+  removeMax: boolean
 }
 
-type UseDepositExecute = () => (x: DepositExecutePayload) => Promise<TransactionResponse | undefined>
+type UseWithdrawExecute = () => (x: WithdrawExecutePayload) => Promise<TransactionResponse | undefined>
 
-export const useDepositExecute: UseDepositExecute = () => {
+export const useWithdrawExecute: UseWithdrawExecute = () => {
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
   const { account, library, chainId } = useActiveWeb3React()
@@ -28,8 +30,8 @@ export const useDepositExecute: UseDepositExecute = () => {
   const masterContract = chainId && KASHI_ADDRESS[chainId]
 
   return useCallback(
-    async ({ depositAmount, spendFromWallet, permit }) => {
-      if (!account || !library || !chainId || !masterContract || !bentoBoxContract || !depositAmount) {
+    async ({ withdrawAmount, receiveToWallet, permit, removeMax = false }) => {
+      if (!account || !library || !chainId || !masterContract || !bentoBoxContract || !withdrawAmount) {
         console.error('Dependencies unavailable')
         return
       }
@@ -47,17 +49,22 @@ export const useDepositExecute: UseDepositExecute = () => {
         })
       }
 
-      const deadBalance = await bentoBoxContract.balanceOf(
-        market.asset.token.address,
-        '0x000000000000000000000000000000000000dead'
-      )
+      const fraction = removeMax
+        ? minimum(market.userAssetFraction.toString(), market.maxAssetAvailableFraction.toString())
+        : toShare(
+            {
+              base: market.currentTotalAsset.base,
+              elastic: JSBI.BigInt(market.currentAllAssets.toString()),
+            } as Rebase,
+            BigNumber.from(withdrawAmount.quotient.toString())
+          )
 
-      cooker.addAsset(BigNumber.from(depositAmount.quotient.toString()), !spendFromWallet, deadBalance.isZero())
+      cooker.removeAsset(fraction, !receiveToWallet)
       const result = await cooker.cook()
 
       if (result.success) {
         addTransaction(result.tx, {
-          summary: i18n._(t`Deposit ${depositAmount.toSignificant(6)} ${depositAmount.currency.symbol}`),
+          summary: i18n._(t`Withdraw ${withdrawAmount.toSignificant(6)} ${withdrawAmount.currency.symbol}`),
         })
 
         return result.tx

@@ -45,7 +45,6 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
   const bentoboxContract = useBentoBoxContract()
   const masterContractAddress = chainId && KASHI_ADDRESS[chainId]
   const [open, setOpen] = useState(false)
-  const attemptingTxn = false
 
   const totalAvailableToBorrow = borrowAmount
     ? CurrencyAmount.fromRawAmount(borrowAmount.currency, market.totalAssetAmount)
@@ -95,10 +94,10 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
         onPermitError={() => setPermitError(true)}
       >
         {({ approved, loading }) => {
-          const disabled = !!error || !approved || loading || attemptingTxn
+          const disabled = !!error || !approved || loading
           return (
             <Button
-              loading={loading || attemptingTxn}
+              loading={loading}
               color={borrowAmount?.equalTo(ZERO) ? 'blue' : 'gradient'}
               disabled={disabled}
               onClick={() => setOpen(true)}

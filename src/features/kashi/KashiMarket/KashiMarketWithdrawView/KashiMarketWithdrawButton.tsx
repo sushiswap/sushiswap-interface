@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, KASHI_ADDRESS, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import { KashiMarketDepositReviewModal, useKashiMarket } from 'app/features/kashi/KashiMarket'
+import { KashiMarketWithdrawReviewModal, useKashiMarket } from 'app/features/kashi/KashiMarket'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { unwrappedToken } from 'app/functions'
 import { useBentoBoxContract } from 'app/hooks'
@@ -12,17 +12,22 @@ import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, useState } from 'react'
 
-export interface KashiMarketDepositButtonProps {
-  spendFromWallet: boolean
-  depositAmount?: CurrencyAmount<Currency>
+export interface KashiMarketWithdrawButtonProps {
+  receiveToWallet: boolean
+  withdrawAmount?: CurrencyAmount<Currency>
+  removeMax: boolean
 }
 
-export const KashiMarketDepositButton: FC<KashiMarketDepositButtonProps> = ({ spendFromWallet, depositAmount }) => {
+export const KashiMarketWithdrawButton: FC<KashiMarketWithdrawButtonProps> = ({
+  receiveToWallet,
+  withdrawAmount,
+  removeMax,
+}) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
   const { chainId } = useActiveWeb3React()
-  const balance = useBentoOrWalletBalance(account ?? undefined, unwrappedToken(market.asset.token), spendFromWallet)
+  const balance = useBentoOrWalletBalance(account ?? undefined, unwrappedToken(market.asset.token), receiveToWallet)
   const [permit, setPermit] = useState<Signature>()
   const [permitError, setPermitError] = useState<boolean>()
   const bentoboxContract = useBentoBoxContract()
@@ -31,15 +36,15 @@ export const KashiMarketDepositButton: FC<KashiMarketDepositButtonProps> = ({ sp
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
-    : !depositAmount?.greaterThan(ZERO)
+    : !withdrawAmount?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
     : !balance
     ? i18n._(t`Loading balance`)
-    : depositAmount?.greaterThan(balance)
+    : withdrawAmount?.greaterThan(balance)
     ? i18n._(t`Insufficient balance`)
     : ''
 
-  const buttonText = error ? error : depositAmount?.greaterThan(ZERO) ? i18n._(t`Deposit`) : ''
+  const buttonText = error ? error : withdrawAmount?.greaterThan(ZERO) ? i18n._(t`Withdraw`) : ''
 
   return (
     <>
@@ -51,8 +56,8 @@ export const KashiMarketDepositButton: FC<KashiMarketDepositButtonProps> = ({ sp
         </Typography>
       )}
       <TridentApproveGate
-        spendFromWallet={spendFromWallet}
-        inputAmounts={[depositAmount]}
+        spendFromWallet={receiveToWallet}
+        inputAmounts={[withdrawAmount]}
         tokenApproveOn={bentoboxContract?.address}
         masterContractAddress={masterContractAddress}
         withPermit={true}
@@ -75,11 +80,12 @@ export const KashiMarketDepositButton: FC<KashiMarketDepositButtonProps> = ({ sp
           )
         }}
       </TridentApproveGate>
-      <KashiMarketDepositReviewModal
+      <KashiMarketWithdrawReviewModal
         open={open}
         onDismiss={() => setOpen(false)}
-        spendFromWallet={spendFromWallet}
-        depositAmount={depositAmount}
+        receiveToWallet={receiveToWallet}
+        withdrawAmount={withdrawAmount}
+        removeMax={removeMax}
       />
     </>
   )

@@ -6,38 +6,38 @@ import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { HeadlessUiModal } from 'app/components/Modal'
 import SubmittedModalContent from 'app/components/Modal/SubmittedModalContent'
 import Typography from 'app/components/Typography'
-import { KashiMarketView, useDepositExecute } from 'app/features/kashi/KashiMarket'
+import { KashiMarketView, KashiMarketWithdrawButtonProps, useWithdrawExecute } from 'app/features/kashi/KashiMarket'
 import { KashiMarketLentDetailsView } from 'app/features/kashi/KashiMarket/KashiMarketLentDetailsView'
 import React, { FC, useCallback, useState } from 'react'
 
-import { KashiMarketDepositButtonProps } from './KashiMarketDepositButton'
-
-interface KashiMarketDepositReviewModal extends KashiMarketDepositButtonProps {
+interface KashiMarketWithdrawReviewModal extends KashiMarketWithdrawButtonProps {
   open: boolean
   onDismiss(): void
   permit?: Signature
 }
 
-export const KashiMarketDepositReviewModal: FC<KashiMarketDepositReviewModal> = ({
-  depositAmount,
-  spendFromWallet,
+export const KashiMarketWithdrawReviewModal: FC<KashiMarketWithdrawReviewModal> = ({
+  withdrawAmount,
+  receiveToWallet,
   open,
   onDismiss,
   permit,
+  removeMax,
 }) => {
   const { i18n } = useLingui()
   const [txHash, setTxHash] = useState<string>()
   const [attemptingTxn, setAttemptingTxn] = useState(false)
-  const execute = useDepositExecute()
+  const execute = useWithdrawExecute()
 
   const _execute = useCallback(async () => {
     setAttemptingTxn(true)
 
     try {
       const tx = await execute({
-        depositAmount,
-        spendFromWallet,
+        withdrawAmount,
+        receiveToWallet,
         permit,
+        removeMax,
       })
 
       if (tx?.hash) {
@@ -46,7 +46,7 @@ export const KashiMarketDepositReviewModal: FC<KashiMarketDepositReviewModal> = 
     } finally {
       setAttemptingTxn(false)
     }
-  }, [depositAmount, execute, permit, spendFromWallet])
+  }, [execute, permit, receiveToWallet, removeMax, withdrawAmount])
 
   return (
     <HeadlessUiModal.Controlled
@@ -57,29 +57,29 @@ export const KashiMarketDepositReviewModal: FC<KashiMarketDepositReviewModal> = 
     >
       {!txHash ? (
         <div className="flex flex-col gap-4">
-          <HeadlessUiModal.Header header={i18n._(t`Confirm Deposit`)} onClose={onDismiss} />
+          <HeadlessUiModal.Header header={i18n._(t`Confirm Withdraw`)} onClose={onDismiss} />
           <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/40 !border-dark-700">
             <div className="flex flex-col gap-2">
               <Typography variant="xs" className="text-secondary">
-                {i18n._(t`Depositing`)}
+                {i18n._(t`Withdrawing`)}
               </Typography>
               <div className="inline-flex gap-2">
-                <CurrencyLogo currency={depositAmount?.currency} size={20} />
+                <CurrencyLogo currency={withdrawAmount?.currency} size={20} />
                 <b>
-                  {depositAmount?.toSignificant(6)} {depositAmount?.currency.symbol}
+                  {withdrawAmount?.toSignificant(6)} {withdrawAmount?.currency.symbol}
                 </b>
               </div>
             </div>
           </HeadlessUiModal.BorderedContent>
-          <KashiMarketLentDetailsView view={KashiMarketView.DEPOSIT} lentAmount={depositAmount} />
+          <KashiMarketLentDetailsView view={KashiMarketView.WITHDRAW} lentAmount={withdrawAmount} />
           <Button loading={attemptingTxn} color="gradient" disabled={attemptingTxn} onClick={_execute}>
-            {i18n._(t`Confirm Deposit`)}
+            {i18n._(t`Confirm Withdraw`)}
           </Button>
         </div>
       ) : (
         <SubmittedModalContent
           header={i18n._(t`Success!`)}
-          subheader={i18n._(t`Success! Deposit Submitted`)}
+          subheader={i18n._(t`Success! Withdraw Submitted`)}
           txHash={txHash}
           onDismiss={onDismiss}
         />

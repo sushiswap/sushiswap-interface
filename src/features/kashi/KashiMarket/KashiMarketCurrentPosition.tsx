@@ -5,12 +5,12 @@ import GradientDot from 'app/components/GradientDot'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
-import { unwrappedToken } from 'app/functions'
+import { classNames, unwrappedToken } from 'app/functions'
 import React, { FC } from 'react'
 
 interface KashiMarketCurrentPosition {
-  setCollateralAmount(x: string): void
-  setBorrowAmount(x: string): void
+  setCollateralAmount?(x: string): void
+  setBorrowAmount?(x: string): void
 }
 
 export const KashiMarketCurrentPosition: FC<KashiMarketCurrentPosition> = ({
@@ -35,8 +35,8 @@ export const KashiMarketCurrentPosition: FC<KashiMarketCurrentPosition> = ({
         <Typography
           weight={700}
           variant="sm"
-          className="text-high-emphesis cursor-pointer"
-          onClick={() => setCollateralAmount(currentCollateral.toExact())}
+          className={classNames(setCollateralAmount ? 'cursor-pointer' : '', 'text-high-emphesis')}
+          onClick={() => setCollateralAmount && setCollateralAmount(currentCollateral.toExact())}
         >
           {currentCollateral.toSignificant(6)}
           <Typography weight={700} variant="xs" className="text-secondary" component="span">
@@ -52,8 +52,8 @@ export const KashiMarketCurrentPosition: FC<KashiMarketCurrentPosition> = ({
         <Typography
           weight={700}
           variant="sm"
-          className="text-high-emphesis cursor-pointer"
-          onClick={() => setBorrowAmount(currentBorrow.toExact())}
+          className={classNames(setBorrowAmount ? 'cursor-pointer' : '', 'text-high-emphesis')}
+          onClick={() => setBorrowAmount && setBorrowAmount(currentBorrow.toExact())}
         >
           {currentBorrow.toSignificant(6)}
           <Typography weight={700} variant="xs" className="text-secondary" component="span">

@@ -48,7 +48,6 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
   const bentoboxContract = useBentoBoxContract()
   const masterContractAddress = chainId && KASHI_ADDRESS[chainId]
   const [open, setOpen] = useState(false)
-  const attemptingTxn = false
 
   const totalAvailableToRemove = removeAmount
     ? CurrencyAmount.fromRawAmount(removeAmount.currency, market.totalCollateralAmount)
@@ -120,10 +119,10 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
         onPermitError={() => setPermitError(true)}
       >
         {({ approved, loading }) => {
-          const disabled = !!error || !approved || loading || attemptingTxn || warnings.filter((el) => !!el).length > 0
+          const disabled = !!error || !approved || loading || warnings.filter((el) => !!el).length > 0
           return (
             <Button
-              loading={loading || attemptingTxn}
+              loading={loading}
               color="gradient"
               disabled={disabled}
               onClick={() => setOpen(true)}
