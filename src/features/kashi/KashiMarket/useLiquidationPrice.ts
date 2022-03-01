@@ -45,6 +45,8 @@ export const useLiquidationPrice: UseLiquidationPrice = ({
       ? currentBorrowedAmount[reduce ? 'subtract' : 'add'](borrowAmount)
       : currentBorrowedAmount
 
+    if (totalBorrowed.equalTo(ZERO)) return 'None'
+
     const liquidationPrice =
       totalBorrowed && totalCollateral && totalBorrowed.greaterThan(ZERO)
         ? new Price({ baseAmount: totalBorrowed, quoteAmount: totalCollateral.multiply(LTV.invert()) })
@@ -67,6 +69,7 @@ export const useLiquidationPrice: UseLiquidationPrice = ({
           totalCollateral?.currency.symbol
         }`
   } catch (e) {
+    console.log(e)
     return 'Instant liquidation'
   }
 }

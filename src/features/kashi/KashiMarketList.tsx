@@ -1,6 +1,7 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Loader from 'app/components/Loader'
 import Search from 'app/components/Search'
 import Typography from 'app/components/Typography'
 import KashiMarketListItem from 'app/features/kashi/KashiMarketListItem'
@@ -9,7 +10,7 @@ import { classNames } from 'app/functions'
 import { useFuse } from 'app/hooks'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { FC, memo } from 'react'
+import React, { FC, memo, ReactNode } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 import { KashiMediumRiskLendingPair } from './KashiMediumRiskLendingPair'
@@ -36,7 +37,7 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
     data: markets,
     options: {
       keys: ['asset.token.symbol', 'collateral.token.symbol'],
-      threshold: 0,
+      threshold: 0.2,
       shouldSort: false,
       useExtendedSearch: false,
     },
@@ -101,12 +102,13 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
         <InfiniteScroll
           dataLength={numDisplayed}
           next={() => setNumDisplayed(numDisplayed + 5)}
-          hasMore={true}
-          loader={null}
+          hasMore={numDisplayed <= result.length}
+          loader={<Loader />}
         >
-          {result.slice(0, numDisplayed).map((market, index) => (
-            <KashiMarketListItem market={market} chainId={chainId || 1} key={index} i18n={i18n} />
-          ))}
+          {result.slice(0, numDisplayed).reduce<ReactNode[]>((acc, market, index) => {
+            if (market) acc.push(<KashiMarketListItem market={market} chainId={chainId || 1} key={index} i18n={i18n} />)
+            return acc
+          }, [])}
         </InfiniteScroll>
       </div>
     </div>

@@ -81,7 +81,7 @@ export const KashiMarketRepayView: FC = () => {
           <Typography
             variant="sm"
             className="text-secondary text-right"
-            onClick={() => removeHandler(currentCollateral.toSignificant(6), true)}
+            onClick={() => removeHandler(currentCollateral.toExact(), true)}
           >
             Max Withdraw: {currentCollateral.toSignificant(6)}
           </Typography>
@@ -109,7 +109,7 @@ export const KashiMarketRepayView: FC = () => {
             <Typography
               variant="sm"
               className="text-secondary text-right"
-              onClick={() => repayHandler(currentBorrowed.toSignificant(6), true)}
+              onClick={() => repayHandler(currentBorrowed.toExact(), true)}
             >
               Max Repay: {currentBorrowed.toSignificant(6)}
             </Typography>

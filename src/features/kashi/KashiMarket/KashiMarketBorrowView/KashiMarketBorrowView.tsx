@@ -136,11 +136,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
         onChange={setBorrowAmount}
         currencies={[]}
         balancePanel={({ onChange }) => (
-          <Typography
-            variant="sm"
-            className="text-secondary text-right"
-            onClick={() => onChange(maxBorrow?.toSignificant(6))}
-          >
+          <Typography variant="sm" className="text-secondary text-right" onClick={() => onChange(maxBorrow?.toExact())}>
             Max Borrow: {maxBorrow?.toSignificant(6)}
           </Typography>
         )}
