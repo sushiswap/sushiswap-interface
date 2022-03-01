@@ -85,7 +85,7 @@
     "@sushiswap/sdk": "^5.0.0-canary.109",
     "@sushiswap/tines": "1.0.0-canary.58",
     "@sushiswap/trident": "^1.0.0-canary.30",
-    "@sushiswap/trident-sdk": "1.0.0-canary.85",
+    "@sushiswap/trident-sdk": "1.0.0-canary.87",
     "@tailwindcss/jit": "^0.1.18",
     "@testing-library/jest-dom": "^5.14.0",
     "@testing-library/react": "^12.1.0",
