@@ -39,6 +39,7 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
+  const asset = unwrappedToken(market.asset.token)
   const collateral = unwrappedToken(market.collateral.token)
 
   const { chainId } = useActiveWeb3React()
@@ -86,10 +87,10 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
       i18n._(
         t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click 'Approve BentoBox' again for approving using the fallback method`
       ),
-    collateral &&
-      !repayFromWallet &&
+    asset &&
+      repayFromWallet &&
       repayMax &&
-      `You cannot MAX repay ${collateral.symbol} directly from your wallet. Please deposit your ${collateral.symbol} into the BentoBox first, then repay. Because your debt is slowly accrueing interest we can't predict how much it will be once your transaction gets mined.`,
+      `You cannot MAX repay ${asset.symbol} directly from your wallet. Please deposit your ${asset.symbol} into the BentoBox first, then repay. Because your debt is slowly accruing interest we can't predict how much it will be once your transaction gets mined.`,
     removeAmount?.greaterThan(CurrencyAmount.fromRawAmount(collateral, market.userCollateralAmount.toString())),
   ]
 

@@ -34,6 +34,7 @@ interface SwapAssetPanel {
   priceImpactCss?: string
   disabled?: boolean
   balancePanel?: (x: Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange' | 'spendFromWallet'>) => React.ReactNode
+  hideInput?: boolean
 }
 
 const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAssetPanel>(
@@ -53,6 +54,7 @@ const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAsse
       disabled,
       currencies,
       balancePanel,
+      hideInput,
     },
     ref
   ) => {
@@ -74,29 +76,31 @@ const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAsse
           walletToggle,
           spendFromWallet,
         })}
-        <div className="flex gap-1 justify-between items-baseline px-1.5">
-          <InputPanel
-            {...{
-              ref,
-              selected,
-              error,
-              currency,
-              currencies,
-              value,
-              onChange,
-              disabled,
-              onSelect,
-              priceImpact,
-              priceImpactCss,
-              spendFromWallet,
-            }}
-          />
-          {balancePanel ? (
-            balancePanel({ disabled, currency, onChange, spendFromWallet })
-          ) : (
-            <BalancePanel {...{ disabled, currency, onChange, spendFromWallet }} />
-          )}
-        </div>
+        {!hideInput && (
+          <div className="flex gap-1 justify-between items-baseline px-1.5">
+            <InputPanel
+              {...{
+                ref,
+                selected,
+                error,
+                currency,
+                currencies,
+                value,
+                onChange,
+                disabled,
+                onSelect,
+                priceImpact,
+                priceImpactCss,
+                spendFromWallet,
+              }}
+            />
+            {balancePanel ? (
+              balancePanel({ disabled, currency, onChange, spendFromWallet })
+            ) : (
+              <BalancePanel {...{ disabled, currency, onChange, spendFromWallet }} />
+            )}
+          </div>
+        )}
       </div>
     )
   }
@@ -228,8 +232,8 @@ const SwapAssetPanelHeader: FC<
   Pick<
     SwapAssetPanel,
     'currency' | 'currencies' | 'onSelect' | 'walletToggle' | 'spendFromWallet' | 'disabled' | 'onChange' | 'value'
-  > & { label: string; id?: string }
-> = ({ label, walletToggle, currency, onSelect, spendFromWallet, id, currencies }) => {
+  > & { label: string; id?: string; selectLabel?: string }
+> = ({ label, selectLabel, walletToggle, currency, onSelect, spendFromWallet, id, currencies }) => {
   const { i18n } = useLingui()
   const hideSearchModal = Array.isArray(currencies) && currencies.length === 0
 
@@ -254,7 +258,7 @@ const SwapAssetPanelHeader: FC<
     </div>
   ) : (
     <Button color="blue" variant="filled" size="sm" id={id} className="!rounded-full !px-2 !py-0 !h-[32px] !pl-3">
-      {i18n._(t`Select a Token`)}
+      {selectLabel || i18n._(t`Select a Token`)}
       <ChevronDownIcon width={18} />
     </Button>
   )

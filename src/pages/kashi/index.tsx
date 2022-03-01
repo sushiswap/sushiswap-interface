@@ -6,6 +6,7 @@ import { useKashiMediumRiskLendingPairs, useKashiPairAddresses } from 'app/featu
 import KashiMarketList from 'app/features/kashi/KashiMarketList'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useActiveWeb3React } from 'app/services/web3'
+import Link from 'next/link'
 import React, { FC } from 'react'
 
 const KashiPage: FC = () => {
@@ -26,15 +27,11 @@ const KashiPage: FC = () => {
           </Typography>
         </div>
         <div className="flex gap-3">
-          <Button id="btn-create-new-pool" size="sm">
-            <a
-              href="https://docs.google.com/document/d/19bL55ZTjKtxlom2CpVo6K8jL1e-OZ13y6y9AQgw_qT4"
-              target="_blank"
-              rel="noreferrer"
-            >
+          <Link href="/kashi/create" passHref={true}>
+            <Button id="btn-create-new-pool" size="sm">
               {i18n._(t`Create Kashi Market`)}
-            </a>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </TridentHeader>
       <TridentBody>
