@@ -166,18 +166,13 @@ export class KashiMediumRiskLendingPair {
    * The overall health of the lending pair
    */
   public get marketHealth(): JSBI {
-    if (
-      JSBI.equal(this.currentBorrowAmount, ZERO) ||
-      JSBI.equal(maximum(this.exchangeRate, this.spotExchangeRate, this.oracleExchangeRate), ZERO)
-    ) {
+    const maximumRate = maximum(this.exchangeRate, this.spotExchangeRate, this.oracleExchangeRate)
+    if (JSBI.equal(this.currentBorrowAmount, ZERO) || JSBI.equal(maximumRate, ZERO)) {
       return ZERO
     }
     return JSBI.divide(
       JSBI.multiply(
-        JSBI.divide(
-          JSBI.multiply(this.totalCollateralAmount, JSBI.BigInt(1e18)),
-          maximum(this.exchangeRate, this.spotExchangeRate, this.oracleExchangeRate)
-        ),
+        JSBI.divide(JSBI.multiply(this.totalCollateralAmount, JSBI.BigInt(1e18)), maximumRate),
         JSBI.BigInt(1e18)
       ),
       this.currentBorrowAmount

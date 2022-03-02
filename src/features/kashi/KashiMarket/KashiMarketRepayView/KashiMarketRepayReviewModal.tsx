@@ -130,23 +130,24 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
               <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/40 !border-dark-700">
                 <div className="flex flex-col gap-2">
                   <Typography variant="xs" className="text-secondary">
-                    {i18n._(t`Repaying`)}
+                    {i18n._(t`And removing`)}
                   </Typography>
-                  <div className="inline-flex gap-2">
+                  <div className="inline-flex items-center gap-2">
                     <CurrencyLogo currency={market.collateral.token} size={20} />
                     <b>
-                      {removeAmount?.toSignificant(6)} {removeAmount?.currency.symbol}
+                      {removeAmount?.greaterThan(0) ? removeAmount?.toSignificant(6) : '0'}{' '}
+                      {removeAmount?.currency.symbol}
                     </b>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
                   <Typography variant="xs" className="text-secondary">
-                    {i18n._(t`And removing`)}
+                    {i18n._(t`Repaying`)}
                   </Typography>
-                  <div className="inline-flex gap-2">
+                  <div className="inline-flex items-center gap-2">
                     <CurrencyLogo currency={market.asset.token} size={20} />
                     <b>
-                      {repayAmount?.toSignificant(6)} {repayAmount?.currency.symbol}
+                      {repayAmount?.greaterThan(0) ? repayAmount?.toSignificant(6) : '0'} {repayAmount?.currency.symbol}
                     </b>
                   </div>
                 </div>
