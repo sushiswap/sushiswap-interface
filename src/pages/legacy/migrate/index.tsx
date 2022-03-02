@@ -77,7 +77,7 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
         <Input.Numeric
           className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-pink"
           value={state.amount}
-          onUserInput={(val) => state.setAmount(val)}
+          onUserInput={(val: string) => state.setAmount(val)}
         />
         <Button
           variant="outlined"

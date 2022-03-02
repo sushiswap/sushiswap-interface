@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import NumericalInput from 'app/components/Input/Numeric'
+import Input from 'app/components/Input'
 import Typography from 'app/components/Typography'
 import AuctionTimer from 'app/features/miso/AuctionTimer'
 import CommitReviewModal from 'app/features/miso/CommitReviewModal'
@@ -60,9 +60,9 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
   if (notWhitelisted) error = i18n._(t`Not whitelisted`)
 
   return (
-    <div className="mt-6 relative">
+    <div className="relative mt-6">
       <div className="flex flex-col gap-3">
-        <div className="flex justify-between items-baseline">
+        <div className="flex items-baseline justify-between">
           <Typography weight={700} className="text-high-emphesis">
             {i18n._(t`Participate`)}
           </Typography>
@@ -78,16 +78,16 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
         </div>
         <div className="flex rounded bg-dark-900 px-4 py-2.5 gap-4 items-center">
           <CurrencyLogo currency={auction.paymentToken} size={42} className="!rounded-full overflow-hidden" />
-          <div className="flex items-baseline gap-2 flex-grow">
+          <div className="flex items-baseline flex-grow gap-2">
             <Typography variant="lg" weight={700} className="text-high-emphesis">
               {auction.paymentToken.symbol}
             </Typography>
             <Typography variant="lg" weight={700} className="text-high-emphesis">
-              <NumericalInput
+              <Input.Numeric
                 value={value || ''}
-                onUserInput={(val) => setValue(val)}
+                onUserInput={(val: string) => setValue(val)}
                 placeholder="0.00"
-                className="bg-transparent text-inherit w-full"
+                className="w-full bg-transparent text-inherit"
                 autoFocus
               />
             </Typography>
@@ -124,7 +124,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
                     {error ? error : i18n._(t`Commit`)}
                   </Typography>
                   {whitelist && (
-                    <div className="flex gap-1 items-baseline rounded px-2">
+                    <div className="flex items-baseline gap-1 px-2 rounded">
                       <Typography
                         variant="xs"
                         className={classNames(overSpend ? 'text-red' : 'text-white')}

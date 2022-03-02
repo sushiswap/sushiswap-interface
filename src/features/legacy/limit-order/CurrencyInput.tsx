@@ -46,7 +46,7 @@ const CurrencyInput: FC<CurrencyInputProps> = ({
         <Input.Numeric
           id={id}
           value={value}
-          onUserInput={(val) => {
+          onUserInput={(val: string) => {
             onUserInput(val)
           }}
         />
