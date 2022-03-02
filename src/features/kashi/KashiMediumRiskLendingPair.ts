@@ -1,14 +1,8 @@
 import { toAmount, toShare } from '@sushiswap/bentobox-sdk'
 import { JSBI, maximum, minimum, Rebase, toElastic, Token, ZERO } from '@sushiswap/core-sdk'
-import {
-  accrue,
-  AccrueInfo,
-  accrueTotalAssetWithFee,
-  computePairAddress,
-  interestAccrue,
-  takeFee,
-} from '@sushiswap/kashi-sdk'
+import { accrue, AccrueInfo, computePairAddress, interestAccrue, takeFee } from '@sushiswap/kashi-sdk'
 
+import { accrueTotalAssetWithFee } from './functions'
 import { Oracle } from './oracles'
 
 export class KashiMediumRiskLendingPair {
@@ -164,6 +158,7 @@ export class KashiMediumRiskLendingPair {
    * The maximum amount of assets available for withdrawal or borrow in shares
    */
   public get maxAssetAvailableFraction(): JSBI {
+    if (JSBI.equal(this.currentAllAssets, ZERO)) return ZERO
     return JSBI.divide(JSBI.multiply(this.maxAssetAvailable, this.currentTotalAsset.base), this.currentAllAssets)
   }
 
@@ -171,6 +166,12 @@ export class KashiMediumRiskLendingPair {
    * The overall health of the lending pair
    */
   public get marketHealth(): JSBI {
+    if (
+      JSBI.equal(this.currentBorrowAmount, ZERO) ||
+      JSBI.equal(maximum(this.exchangeRate, this.spotExchangeRate, this.oracleExchangeRate), ZERO)
+    ) {
+      return ZERO
+    }
     return JSBI.divide(
       JSBI.multiply(
         JSBI.divide(
@@ -187,9 +188,8 @@ export class KashiMediumRiskLendingPair {
    * The current utilization in %
    */
   public get utilization(): JSBI {
-    return JSBI.greaterThan(this.currentAllAssets, ZERO)
-      ? JSBI.divide(JSBI.multiply(JSBI.BigInt(1e18), this.currentBorrowAmount), this.currentAllAssets)
-      : ZERO
+    if (JSBI.equal(this.currentAllAssets, ZERO)) return ZERO
+    return JSBI.divide(JSBI.multiply(JSBI.BigInt(1e18), this.currentBorrowAmount), this.currentAllAssets)
   }
 
   /**
@@ -217,6 +217,7 @@ export class KashiMediumRiskLendingPair {
    * The user's amount of assets (stable, doesn't accrue)
    */
   public get currentUserAssetAmount(): JSBI {
+    if (JSBI.equal(this.totalAsset.base, ZERO)) return ZERO
     return JSBI.divide(JSBI.multiply(this.userAssetFraction, this.currentAllAssets), this.totalAsset.base)
   }
 
@@ -224,7 +225,7 @@ export class KashiMediumRiskLendingPair {
    * The user's amount borrowed right now
    */
   public get currentUserBorrowAmount(): JSBI {
-    if (JSBI.equal(this.userBorrowPart, ZERO)) return ZERO
+    if (JSBI.equal(this.totalBorrow.base, ZERO)) return ZERO
     return JSBI.divide(JSBI.multiply(this.userBorrowPart, this.currentBorrowAmount), this.totalBorrow.base)
   }
 
@@ -232,6 +233,7 @@ export class KashiMediumRiskLendingPair {
    * The user's amount of assets that are currently lent
    */
   public get currentUserLentAmount(): JSBI {
+    if (JSBI.equal(this.totalAsset.base, ZERO)) return ZERO
     return JSBI.divide(JSBI.multiply(this.userAssetFraction, this.currentBorrowAmount), this.totalAsset.base)
   }
 
@@ -239,6 +241,7 @@ export class KashiMediumRiskLendingPair {
    * Value of protocol fees
    */
   public get feesEarned(): JSBI {
+    if (JSBI.equal(this.totalAsset.base, ZERO)) return ZERO
     return JSBI.divide(JSBI.multiply(this.accrueInfo.feesEarnedFraction, this.currentAllAssets), this.totalAsset.base)
   }
 
@@ -288,9 +291,8 @@ export class KashiMediumRiskLendingPair {
    * The user's position's health
    */
   public get health(): JSBI {
-    return JSBI.greaterThan(this.maxBorrowable.minimum, ZERO)
-      ? JSBI.divide(JSBI.multiply(this.currentUserBorrowAmount, JSBI.BigInt(1e18)), this.maxBorrowable.minimum)
-      : ZERO
+    if (JSBI.equal(this.maxBorrowable.minimum, ZERO)) return ZERO
+    return JSBI.divide(JSBI.multiply(this.currentUserBorrowAmount, JSBI.BigInt(1e18)), this.maxBorrowable.minimum)
   }
 }
 
