@@ -84,20 +84,21 @@ export function useKashiTokens(): { [address: string]: Token } {
 export function useKashiPairAddresses(): string[] {
   const bentoBoxContract = useBentoBoxContract()
   const { chainId } = useActiveWeb3React()
-  const useEvents = Boolean(
-    chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM
+  const useEvents = useMemo(
+    () => Boolean(chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM),
+    [chainId]
   )
   const tokens = useKashiTokens()
-  const events = useQueryFilter({
+  const { data: events } = useQueryFilter({
     chainId,
     contract: bentoBoxContract,
     event: chainId && bentoBoxContract && bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
     shouldFetch: chainId && useEvents && featureEnabled(Feature.KASHI, chainId),
   })
   const clones = useClones({ chainId, shouldFetch: !useEvents })
-  return (
-    (
-      useEvents
+  return useMemo(
+    () =>
+      (useEvents
         ? events?.map((event) => ({
             address:
               // @ts-ignore TYPE NEEDS FIXING
@@ -106,27 +107,28 @@ export function useKashiPairAddresses(): string[] {
             data: event.args.data,
           }))
         : clones
-    )
-      // @ts-ignore TYPE NEEDS FIXING
-      ?.reduce((previousValue, currentValue) => {
-        try {
-          const [collateral, asset, oracle, oracleData] = defaultAbiCoder.decode(
-            ['address', 'address', 'address', 'bytes'],
-            currentValue.data
-          )
-          if (
-            BLACKLISTED_TOKENS.includes(collateral) ||
-            BLACKLISTED_TOKENS.includes(asset) ||
-            BLACKLISTED_ORACLES.includes(oracle) ||
-            !validateChainlinkOracleData(chainId, tokens[collateral], tokens[asset], oracleData)
-          ) {
+      )
+        // @ts-ignore TYPE NEEDS FIXING
+        ?.reduce((previousValue, currentValue) => {
+          try {
+            const [collateral, asset, oracle, oracleData] = defaultAbiCoder.decode(
+              ['address', 'address', 'address', 'bytes'],
+              currentValue.data
+            )
+            if (
+              BLACKLISTED_TOKENS.includes(collateral) ||
+              BLACKLISTED_TOKENS.includes(asset) ||
+              BLACKLISTED_ORACLES.includes(oracle) ||
+              !validateChainlinkOracleData(chainId, tokens[collateral], tokens[asset], oracleData)
+            ) {
+              return previousValue
+            }
+            return [...previousValue, currentValue.address]
+          } catch (error) {
             return previousValue
           }
-          return [...previousValue, currentValue.address]
-        } catch (error) {
-          return previousValue
-        }
-      }, [])
+        }, []),
+    [chainId, clones, events, tokens, useEvents]
   )
 }
 
@@ -138,7 +140,7 @@ export function useKashiMediumRiskLendingPairs(
   const boringHelperContract = useBoringHelperContract()
   const tokens = useKashiTokens()
   const args = useMemo(() => [account ? account : AddressZero, addresses], [account, addresses])
-  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args)
+  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args, { blocksPerFetch: Infinity })
   const { rebases } = useBentoRebases(Object.values(tokens))
 
   // TODO: for skeleton loading

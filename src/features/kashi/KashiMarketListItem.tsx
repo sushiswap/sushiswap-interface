@@ -4,7 +4,8 @@ import { ChainId, CurrencyAmount, Percent } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features/trident/constants'
-import { classNames, formatNumber, formatPercent } from 'app/functions'
+import { classNames, currencyFormatter, formatNumber, formatPercent } from 'app/functions'
+import { useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
 import Link from 'next/link'
 import React, { FC, memo } from 'react'
 
@@ -16,7 +17,7 @@ interface KashiMarketListItem {
   i18n: I18n
 }
 
-const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => {
+const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, chainId, i18n }) => {
   const asset = market.asset.token
   const collateral = market.collateral.token
 
@@ -26,13 +27,13 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
   const currentBorrowAmount = asset ? CurrencyAmount.fromRawAmount(asset, market.currentBorrowAmount) : undefined
   // @ts-ignore
   const totalAssetAmount = asset ? CurrencyAmount.fromRawAmount(asset, market.totalAssetAmount) : undefined
-  //
-  // const { value: currentAllAssetsUSD, loading: currentAllAssetsUSDLoading } =
-  //   useUSDCValueWithLoadingIndicator(currentAllAssets)
-  // const { value: currentBorrowAmountUSD, loading: currentBorrowAmountUSDLoading } =
-  //   useUSDCValueWithLoadingIndicator(currentBorrowAmount)
-  // const { value: totalAssetAmountUSD, loading: totalAssetAmountLoading } =
-  //   useUSDCValueWithLoadingIndicator(totalAssetAmount)
+
+  const { value: currentAllAssetsUSD, loading: currentAllAssetsUSDLoading } =
+    useUSDCValueWithLoadingIndicator(currentAllAssets)
+  const { value: currentBorrowAmountUSD, loading: currentBorrowAmountUSDLoading } =
+    useUSDCValueWithLoadingIndicator(currentBorrowAmount)
+  const { value: totalAssetAmountUSD, loading: totalAssetAmountLoading } =
+    useUSDCValueWithLoadingIndicator(totalAssetAmount)
 
   // @ts-ignore
   const currentSupplyAPR = new Percent(market.currentSupplyAPR, 1e18)
@@ -60,9 +61,9 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
             {formatNumber(currentAllAssets?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
           <Typography variant="xs" className="text-low-emphesis">
-            {/*{currentAllAssetsUSD && !currentAllAssetsUSDLoading*/}
-            {/*  ? currencyFormatter.format(Number(currentAllAssetsUSD?.toExact()))*/}
-            {/*  : '-'}*/}
+            {currentAllAssetsUSD && !currentAllAssetsUSDLoading
+              ? currencyFormatter.format(Number(currentAllAssetsUSD?.toExact()))
+              : '-'}
           </Typography>
         </div>
         <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(2, 6))}>
@@ -70,9 +71,9 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
             {formatNumber(currentBorrowAmount?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
           <Typography variant="xs" className="text-low-emphesis">
-            {/*{currentBorrowAmountUSD && !currentBorrowAmountUSDLoading*/}
-            {/*  ? currencyFormatter.format(Number(currentBorrowAmountUSD?.toExact()))*/}
-            {/*  : '-'}*/}
+            {currentBorrowAmountUSD && !currentBorrowAmountUSDLoading
+              ? currencyFormatter.format(Number(currentBorrowAmountUSD?.toExact()))
+              : '-'}
           </Typography>
         </div>
         <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(3, 6))}>
@@ -80,9 +81,9 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
             {formatNumber(totalAssetAmount?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
           <Typography variant="xs" className="text-low-emphesis">
-            {/*{totalAssetAmountUSD && !totalAssetAmountLoading*/}
-            {/*  ? currencyFormatter.format(Number(totalAssetAmountUSD?.toExact()))*/}
-            {/*  : '-'}*/}
+            {totalAssetAmountUSD && !totalAssetAmountLoading
+              ? currencyFormatter.format(Number(totalAssetAmountUSD?.toExact()))
+              : '-'}
           </Typography>
         </div>
         <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(4, 6))}>
