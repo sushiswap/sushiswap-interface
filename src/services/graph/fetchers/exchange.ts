@@ -32,6 +32,7 @@ export const EXCHANGE = {
   [ChainId.OKEX]: 'okex-exchange/oec',
   [ChainId.HECO]: 'heco-exchange/heco',
   [ChainId.FUSE]: 'sushiswap/fuse-exchange',
+  [ChainId.MOONBEAM]: 'sushiswap/moonbeam-exchange',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -104,6 +105,13 @@ export const getNativePrice = async (chainId = ChainId.ETHEREUM, variables = und
 
 export const getEthPrice = async (variables = undefined) => {
   return getNativePrice(ChainId.ETHEREUM, variables)
+}
+
+export const getGlimmerPrice = async (variables = {}) => {
+  return getTokenPrice(ChainId.MOONBEAM, tokenPriceQuery, {
+    id: '0xacc15dc74880c9944775448304b263d191c6077f',
+    ...variables,
+  })
 }
 
 export const getYggPrice = async (variables = {}) => {

@@ -9,7 +9,6 @@ export const WETH = new Token(
   'WETH',
   'Wrapped Ether'
 )
-export const FRAX = new Token(ChainId.MOONRIVER, '0x1A93B23281CC1CDE4C4741353F3064709A16197d', 18, 'FRAX', 'Frax')
 export const MIM = new Token(
   ChainId.MOONRIVER,
   '0x0caE51e1032e8461f4806e26332c030E34De3aDb',
@@ -25,3 +24,5 @@ export const BTC = new Token(
   'Wrapped Bitcoin'
 )
 export const ROME = new Token(ChainId.MOONRIVER, '0x4a436073552044D5f2f49B176853ad3Ad473d9d6', 9, 'ROME', 'Rome')
+export const FRAX = new Token(ChainId.MOONBEAM, '0x1A93B23281CC1CDE4C4741353F3064709A16197d', 18, 'FRAX', 'Frax')
+export const FXS = new Token(ChainId.MOONBEAM, '0x6f1D1Ee50846Fcbc3de91723E61cb68CFa6D0E98', 18, 'FXS', 'Frax Share')

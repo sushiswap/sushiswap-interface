@@ -11,7 +11,8 @@ import React from 'react'
 const Portfolio = () => {
   const { i18n } = useLingui()
 
-  const account = useAccountInUrl('/portfolio')
+  const account = useAccountInUrl('/')
+
   if (!account) return
 
   return (

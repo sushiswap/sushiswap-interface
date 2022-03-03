@@ -17,3 +17,5 @@ export const WETH = new Token(
   'WETH',
   'Wrapped Ether'
 )
+export const FRAX = new Token(ChainId.HARMONY, '0xFa7191D292d5633f702B0bd7E3E3BcCC0e633200', 18, 'FRAX', 'Frax')
+export const FXS = new Token(ChainId.HARMONY, '0x0767D8E1b05eFA8d6A301a65b324B6b66A1CC14c', 18, 'FXS', 'Frax Share')

@@ -27,6 +27,7 @@ const PoolContext: FC = ({ children }) => {
   const { account } = useActiveWeb3React()
   const { currencies, twap, fee } = useCurrenciesFromURL()
   const poolWithState = useConstantProductPool(currencies[0], currencies[1], fee, twap)
+  console.log(poolWithState)
   const totalSupply = useTotalSupply(poolWithState?.pool?.liquidityToken)
   const poolBalance = useTokenBalance(account ?? undefined, poolWithState?.pool?.liquidityToken)
   const { rebases, loading: rebasesLoading } = useBentoRebases([

@@ -254,28 +254,28 @@ export function useTridentMigrationContract() {
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   // @ts-ignore TYPE NEEDS FIXING
-  const router = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.TridentRouter
+  const router = TRIDENT[chainId]?.[0]?.contracts.TridentRouter
   return useContract(router?.address, router?.abi, withSignerIfPossible)
 }
 
 export function useMasterDeployerContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   // @ts-ignore TYPE NEEDS FIXING
-  const masterDeployer = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MasterDeployer
+  const masterDeployer = TRIDENT[chainId]?.[0]?.contracts.MasterDeployer
   return useContract(masterDeployer?.address, masterDeployer?.abi, withSignerIfPossible)
 }
 
 export function useConstantProductPoolFactory(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   // @ts-ignore TYPE NEEDS FIXING
-  const factory = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.ConstantProductPoolFactory
+  const factory = TRIDENT[chainId]?.[0]?.contracts.ConstantProductPoolFactory
   return useContract(factory?.address, factory?.abi, withSignerIfPossible)
 }
 
 export function useStablePoolFactory(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   // @ts-ignore TYPE NEEDS FIXING
-  const factory = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HybridPoolFactory
+  const factory = TRIDENT[chainId]?.[0]?.contracts.HybridPoolFactory
   return useContract(factory?.address, factory?.abi, withSignerIfPossible)
 }
 
