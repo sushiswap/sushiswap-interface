@@ -1,7 +1,7 @@
 import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, KASHI_ADDRESS, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, KASHI_ADDRESS, TradeType, WNATIVE_ADDRESS, ZERO } from '@sushiswap/core-sdk'
 import { Trade as LegacyTrade } from '@sushiswap/core-sdk/dist/entities/Trade'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
@@ -87,7 +87,8 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
       i18n._(
         t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click 'Approve BentoBox' again for approving using the fallback method`
       ),
-    asset &&
+    chainId &&
+      asset.wrapped.address === WNATIVE_ADDRESS[chainId] &&
       repayFromWallet &&
       repayMax &&
       `You cannot MAX repay ${asset.symbol} directly from your wallet. Please deposit your ${asset.symbol} into the BentoBox first, then repay. Because your debt is slowly accruing interest we can't predict how much it will be once your transaction gets mined.`,
