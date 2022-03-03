@@ -63,7 +63,7 @@ export const KashiMarketRepayView: FC = () => {
       <SwapAssetPanel
         disabled={closePosition}
         error={removeAmountCurrencyAmount?.greaterThan(market.userCollateralAmount)}
-        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Withdraw`)} />}
+        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Remove`)} />}
         walletToggle={(props) => (
           <SwapAssetPanel.Switch
             {...props}
@@ -80,7 +80,7 @@ export const KashiMarketRepayView: FC = () => {
         balancePanel={() => (
           <Typography
             variant="sm"
-            className="text-secondary text-right"
+            className="text-right text-secondary"
             onClick={() => removeHandler(currentCollateral.toExact(), true)}
           >
             Max Withdraw: {currentCollateral.toSignificant(6)}
@@ -108,7 +108,7 @@ export const KashiMarketRepayView: FC = () => {
           balancePanel={() => (
             <Typography
               variant="sm"
-              className="text-secondary text-right"
+              className="text-right text-secondary"
               onClick={() => repayHandler(currentBorrowed.toExact(), true)}
             >
               Max Repay: {currentBorrowed.toSignificant(6)}
