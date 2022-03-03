@@ -3,7 +3,6 @@ import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CurrencyAmount, Fraction, JSBI, ZERO } from '@sushiswap/core-sdk'
-import Typography from 'app/components/Typography'
 import {
   KashiMarketBorrowButton,
   KashiMarketBorrowLeverageView,
@@ -135,11 +134,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
         value={borrowAmount}
         onChange={setBorrowAmount}
         currencies={[]}
-        balancePanel={({ onChange }) => (
-          <Typography variant="sm" className="text-secondary text-right" onClick={() => onChange(maxBorrow?.toExact())}>
-            Max Borrow: {maxBorrow?.toSignificant(6)}
-          </Typography>
-        )}
+        balancePanel={() => <></>}
       />
       {collateralAmountCurrencyAmount?.greaterThan(ZERO) && (
         <KashiMarketBorrowLeverageView

@@ -3,7 +3,7 @@ import { ChevronDownIcon } from '@heroicons/react/outline'
 import { ArrowSmRightIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Fraction, Percent } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Percent } from '@sushiswap/core-sdk'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Tooltip from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
@@ -45,6 +45,7 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
     market.userCollateralAmount
   )
 
+  console.log(collateralAmount?.quotient.toString(), borrowAmount?.quotient.toString())
   const newCollateralAmount =
     collateralAmount &&
     CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount)[
@@ -60,6 +61,27 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
   return (
     <div className="flex flex-col divide-y divide-dark-850">
       <div className="flex flex-col gap-1 pb-2">
+        {(collateralAmount || borrowAmount) && (
+          <div className="flex justify-between gap-4">
+            <Typography variant="xs">{i18n._(t`Position Health`)}</Typography>
+            <div className="flex gap-1">
+              <Typography variant="xs" className="text-right text-secondary">
+                {new Percent(market.health, 1e18).toSignificant(6)}%
+              </Typography>
+              <ArrowSmRightIcon width={14} className="text-secondary" />
+              <Typography variant="xs" className="text-right">
+                {new Percent(
+                  market.simulatedHealth(
+                    borrowAmount?.quotient || JSBI.BigInt(0),
+                    collateralAmount?.quotient || JSBI.BigInt(0)
+                  ),
+                  1e18
+                ).toSignificant(6)}
+                %
+              </Typography>
+            </div>
+          </div>
+        )}
         <div className="flex justify-between gap-4">
           <Typography variant="xs">{i18n._(t`APR (annualized)`)}</Typography>
           <Typography variant="xs" className="text-right">
@@ -131,34 +153,38 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
         </div>
       </div>
       <div className="flex flex-col gap-1 pt-2">
-        <div className="flex justify-between gap-4">
-          <Typography variant="xs" className="text-secondary">
-            {i18n._(t`Total collateral`)}
-          </Typography>
-          <div className="flex gap-1">
-            <Typography variant="xs" className="text-right text-secondary">
-              {collateralPosition.toSignificant(6)} {market.collateral.token.symbol}
+        {collateralAmount && (
+          <div className="flex justify-between gap-4">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`Total collateral`)}
             </Typography>
-            <ArrowSmRightIcon width={14} className="text-secondary" />
-            <Typography variant="xs" className="text-right">
-              {newCollateralAmount?.toSignificant(6)} {market.collateral.token.symbol}
-            </Typography>
+            <div className="flex gap-1">
+              <Typography variant="xs" className="text-right text-secondary">
+                {collateralPosition.toSignificant(6)} {market.collateral.token.symbol}
+              </Typography>
+              <ArrowSmRightIcon width={14} className="text-secondary" />
+              <Typography variant="xs" className="text-right">
+                {newCollateralAmount?.toSignificant(6)} {market.collateral.token.symbol}
+              </Typography>
+            </div>
           </div>
-        </div>
-        <div className="flex justify-between gap-4">
-          <Typography variant="xs" className="text-secondary">
-            {i18n._(t`Total borrowed`)}
-          </Typography>
-          <div className="flex gap-1">
-            <Typography variant="xs" className="text-right text-secondary">
-              {borrowPosition?.toSignificant(6)} {market.asset.token.symbol}
+        )}
+        {borrowAmount && (
+          <div className="flex justify-between gap-4">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`Total borrowed`)}
             </Typography>
-            <ArrowSmRightIcon width={14} className="text-secondary" />
-            <Typography variant="xs" className="text-right">
-              {newBorrowAmount?.toSignificant(6)} {market.asset.token.symbol}
-            </Typography>
+            <div className="flex gap-1">
+              <Typography variant="xs" className="text-right text-secondary">
+                {borrowPosition?.toSignificant(6)} {market.asset.token.symbol}
+              </Typography>
+              <ArrowSmRightIcon width={14} className="text-secondary" />
+              <Typography variant="xs" className="text-right">
+                {newBorrowAmount?.toSignificant(6)} {market.asset.token.symbol}
+              </Typography>
+            </div>
           </div>
-        </div>
+        )}
         <div className="flex justify-between gap-4">
           <Typography variant="xs" className="text-secondary">
             {i18n._(t`Oracle`)}
