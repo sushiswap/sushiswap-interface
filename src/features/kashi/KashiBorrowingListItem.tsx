@@ -9,7 +9,7 @@ import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features
 import { classNames, currencyFormatter, formatNumber, formatPercent } from 'app/functions'
 import { useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
 import { useRouter } from 'next/router'
-import React, { FC, memo, useState } from 'react'
+import React, { FC, memo, useMemo, useState } from 'react'
 
 import { LTV } from './constants'
 
@@ -24,12 +24,18 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
   const collateral = market.collateral.token
 
   // @ts-ignore
-  const userCollateralAmount = CurrencyAmount.fromRawAmount(collateral, market.userCollateralAmount)
+  const userCollateralAmount = useMemo(
+    () => CurrencyAmount.fromRawAmount(collateral, market.userCollateralAmount),
+    [collateral, market.userCollateralAmount]
+  )
   const { value: userCollateralAmountUSD, loading: userCollateralAmountUSDLoading } =
     useUSDCValueWithLoadingIndicator(userCollateralAmount)
 
   // @ts-ignore
-  const currentUserBorrowAmount = CurrencyAmount.fromRawAmount(asset, market.currentUserBorrowAmount)
+  const currentUserBorrowAmount = useMemo(
+    () => CurrencyAmount.fromRawAmount(asset, market.currentUserBorrowAmount),
+    [asset, market.currentUserBorrowAmount]
+  )
   const { value: currentUserBorrowAmountUSD, loading: currentUserBorrowAmountUSDLoading } =
     useUSDCValueWithLoadingIndicator(currentUserBorrowAmount)
 

@@ -39,12 +39,14 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
     () => tryParseAmount(borrowAmount || '0', asset) ?? (asset ? CurrencyAmount.fromRawAmount(asset, '0') : undefined),
     [asset, borrowAmount]
   )
+
   const collateralAmountCurrencyAmount = useMemo(
     () =>
       tryParseAmount(collateralAmount || '0', collateral) ??
       (collateral ? CurrencyAmount.fromRawAmount(collateral, '0') : undefined),
     [collateral, collateralAmount]
   )
+
   const { maxBorrow, priceImpact } = useMaxBorrow({
     leveraged: leverage,
     borrowAmount: borrowAmountCurrencyAmount,

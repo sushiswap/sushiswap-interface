@@ -40,12 +40,14 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
     unwrappedToken(market.asset.token),
     market.currentUserBorrowAmount
   )
+
   const collateralPosition = CurrencyAmount.fromRawAmount(
     unwrappedToken(market.collateral.token),
     market.userCollateralAmount
   )
 
   console.log(collateralAmount?.quotient.toString(), borrowAmount?.quotient.toString())
+
   const newCollateralAmount =
     collateralAmount &&
     CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount)[
@@ -224,9 +226,9 @@ export const KashiMarketDetailsView: FC<KashiMarketDetailsView> = ({
             'shadow-inner flex flex-col gap-2 py-2 rounded px-2 border border-dark-700 transition hover:border-dark-700'
           )}
         >
-          <div className="flex justify-between gap-2 items-center pl-1">
-            <div className="flex gap-3 items-center">
-              <Typography variant="xs" weight={700} className="flex -ml-1 gap-2">
+          <div className="flex items-center justify-between gap-2 pl-1">
+            <div className="flex items-center gap-3">
+              <Typography variant="xs" weight={700} className="flex gap-2 -ml-1">
                 <QuestionHelper
                   text={
                     <div className="flex flex-col gap-2">
@@ -250,7 +252,7 @@ export const KashiMarketDetailsView: FC<KashiMarketDetailsView> = ({
                   onClick={() => setInvert((prev) => !prev)}
                   variant="xs"
                   weight={700}
-                  className="cursor-pointer hover:text-high-emphesis rounded py-1 rounded-full"
+                  className="py-1 rounded rounded-full cursor-pointer hover:text-high-emphesis"
                 >
                   {liquidationPrice}
                 </Typography>
@@ -258,7 +260,7 @@ export const KashiMarketDetailsView: FC<KashiMarketDetailsView> = ({
             </div>
 
             <Disclosure.Button as={Fragment}>
-              <div className="flex flex-grow items-center justify-end p-1 cursor-pointer rounded">
+              <div className="flex items-center justify-end flex-grow p-1 rounded cursor-pointer">
                 <ChevronDownIcon
                   width={20}
                   className={classNames(open ? 'transform rotate-180' : '', 'transition hover:text-white')}

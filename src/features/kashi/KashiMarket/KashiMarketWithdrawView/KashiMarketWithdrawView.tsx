@@ -50,7 +50,7 @@ export const KashiMarketWithdrawView: FC = () => {
         balancePanel={({ onChange }) => (
           <Typography
             variant="sm"
-            className="text-secondary text-right"
+            className="text-right text-secondary"
             onClick={() => {
               onChange(currentLent?.toExact())
               setRemoveMax(true)
