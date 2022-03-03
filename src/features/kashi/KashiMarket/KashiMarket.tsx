@@ -4,7 +4,6 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import ToggleButtonGroup from 'app/components/ToggleButton'
 import Typography from 'app/components/Typography'
 import {
-  KashiMarketActions,
   KashiMarketBorrowView,
   KashiMarketDepositView,
   KashiMarketRepayView,
@@ -29,53 +28,50 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
   return (
     <SwapLayoutCard>
       <div className="flex flex-col w-full gap-4">
-        <div className="flex gap-2">
-          <ToggleButtonGroup
-            size="sm"
-            value={view}
-            onChange={setView}
-            variant="filled"
-            className="flex flex-grow bg-dark-800"
-          >
-            <ToggleButtonGroup.Button value={KashiMarketView.BORROW}>
-              {i18n._(t`Borrow`)}
-              <QuestionHelper
-                gap={false}
-                text={
-                  <div className="flex flex-col gap-2">
-                    <Typography variant="xs">
-                      {i18n._(t`Gain exposure to tokens without reducing your assets.`)}
-                    </Typography>
-                    <Typography variant="xs">
-                      {i18n._(
-                        t`Leverage will enable you to take short positions against assets and earn from downside movements.`
-                      )}
-                    </Typography>
-                  </div>
-                }
-              />
-            </ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={KashiMarketView.REPAY}>{i18n._(t`Repay`)}</ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={KashiMarketView.DEPOSIT}>
-              {i18n._(t`Deposit`)}
-              <QuestionHelper
-                gap={false}
-                text={
-                  <div className="flex flex-col gap-2">
-                    <Typography variant="xs">
-                      {i18n._(t`Have assets you want to earn additional interest on?`)}
-                    </Typography>
-                    <Typography variant="xs">
-                      {i18n._(t`Lend them in isolated markets and earn interest from borrowers.`)}
-                    </Typography>
-                  </div>
-                }
-              />
-            </ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={KashiMarketView.WITHDRAW}>{i18n._(t`Withdraw`)}</ToggleButtonGroup.Button>
-          </ToggleButtonGroup>
-          <KashiMarketActions />
-        </div>
+        <ToggleButtonGroup
+          size="sm"
+          value={view}
+          onChange={setView}
+          variant="filled"
+          className="flex flex-grow bg-dark-800"
+        >
+          <ToggleButtonGroup.Button value={KashiMarketView.BORROW}>
+            {i18n._(t`Borrow`)}
+            <QuestionHelper
+              gap={false}
+              text={
+                <div className="flex flex-col gap-2">
+                  <Typography variant="xs">
+                    {i18n._(t`Gain exposure to tokens without reducing your assets.`)}
+                  </Typography>
+                  <Typography variant="xs">
+                    {i18n._(
+                      t`Leverage will enable you to take short positions against assets and earn from downside movements.`
+                    )}
+                  </Typography>
+                </div>
+              }
+            />
+          </ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={KashiMarketView.REPAY}>{i18n._(t`Repay`)}</ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={KashiMarketView.DEPOSIT}>
+            {i18n._(t`Deposit`)}
+            <QuestionHelper
+              gap={false}
+              text={
+                <div className="flex flex-col gap-2">
+                  <Typography variant="xs">
+                    {i18n._(t`Have assets you want to earn additional interest on?`)}
+                  </Typography>
+                  <Typography variant="xs">
+                    {i18n._(t`Lend them in isolated markets and earn interest from borrowers.`)}
+                  </Typography>
+                </div>
+              }
+            />
+          </ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={KashiMarketView.WITHDRAW}>{i18n._(t`Withdraw`)}</ToggleButtonGroup.Button>
+        </ToggleButtonGroup>
         {view === KashiMarketView.BORROW && <KashiMarketBorrowView />}
         {view === KashiMarketView.REPAY && <KashiMarketRepayView />}
         {view === KashiMarketView.DEPOSIT && <KashiMarketDepositView />}

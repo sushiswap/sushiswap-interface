@@ -3,17 +3,19 @@ import { DotsVerticalIcon } from '@heroicons/react/solid'
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { JSBI, Percent } from '@sushiswap/core-sdk'
-import { ACTION_ACCRUE } from '@sushiswap/kashi-sdk'
+import { ACTION_ACCRUE, KashiMediumRiskLendingPair } from '@sushiswap/kashi-sdk'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import { KashiCooker } from 'app/entities'
-import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
 import { ZERO } from 'app/functions'
 import useKashiApproveCallback from 'app/hooks/useKashiApproveCallback'
 import React, { FC, Fragment, useCallback, useMemo } from 'react'
 
-export const KashiMarketActions: FC = () => {
-  const { market } = useKashiMarket()
+interface KashiMarketActions {
+  market: KashiMediumRiskLendingPair
+}
+
+export const KashiMarketActions: FC<KashiMarketActions> = ({ market }) => {
   const [, , , , onCook] = useKashiApproveCallback()
 
   const onUpdatePrice = useCallback(async (cooker: KashiCooker) => {
@@ -36,7 +38,7 @@ export const KashiMarketActions: FC = () => {
     <Menu as="div">
       <div>
         <Menu.Button>
-          <div className="rounded-full hover:bg-dark-700 flex items-center justify-center p-3 cursor-pointer hover:text-white">
+          <div className="rounded-full flex items-center justify-center p-2 cursor-pointer hover:text-white">
             <DotsVerticalIcon width={18} height={18} />
           </div>
         </Menu.Button>
@@ -52,9 +54,14 @@ export const KashiMarketActions: FC = () => {
       >
         <Menu.Items
           static
-          className="shadow-md absolute max-h-[240px] overflow-auto border mt-2 divide-y rounded focus:outline-none border-dark-600 bg-dark-700 divide-dark-600"
+          className="shadow-md absolute max-h-[240px] overflow-auto border mt-2 divide-y rounded focus:outline-none border-dark-700 bg-dark-800 divide-dark-700"
         >
-          <Menu.Item onClick={() => onCook(market, onAccrue)}>
+          <Menu.Item
+            onClick={(e) => {
+              e.preventDefault()
+              onCook(market, onAccrue)
+            }}
+          >
             <Typography variant="sm" weight={700} className="flex px-3 py-2 cursor-pointer hover:bg-dark-900/40">
               {i18n._(t`Accrue`)}
               <QuestionHelper
@@ -68,7 +75,12 @@ export const KashiMarketActions: FC = () => {
               />
             </Typography>
           </Menu.Item>
-          <Menu.Item onClick={() => onCook(market, onUpdatePrice)}>
+          <Menu.Item
+            onClick={(e) => {
+              e.preventDefault()
+              onCook(market, onUpdatePrice)
+            }}
+          >
             <Typography variant="sm" weight={700} className="flex px-3 py-2 cursor-pointer hover:bg-dark-900/40">
               {i18n._(t`Update Price`)}
               <QuestionHelper

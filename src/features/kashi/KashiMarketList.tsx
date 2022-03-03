@@ -75,13 +75,13 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
               {i18n._(t`Total Borrowed`)}
             </Typography>
           </div>
-          <div className={classNames(TABLE_TR_TH_CLASSNAME(3, 6))}>
-            <Typography variant="sm" weight={700}>
-              {i18n._(t`Available`)}
-            </Typography>
-          </div>
+          {/*<div className={classNames(TABLE_TR_TH_CLASSNAME(3, 6))}>*/}
+          {/*  <Typography variant="sm" weight={700}>*/}
+          {/*    {i18n._(t`Available`)}*/}
+          {/*  </Typography>*/}
+          {/*</div>*/}
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(4, 6))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(3, 6))}
             // onClick={() => requestSort('roiPerYear')}
           >
             <Typography variant="sm" weight={700}>
@@ -90,11 +90,20 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
             {/*<SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'roiPerYear'} />*/}
           </div>
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(5, 6))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(4, 6))}
             // onClick={() => requestSort('roiPerYear')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Borrow APR`)}
+            </Typography>
+            {/*<SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'roiPerYear'} />*/}
+          </div>
+          <div
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(5, 6))}
+            // onClick={() => requestSort('roiPerYear')}
+          >
+            <Typography variant="sm" weight={700}>
+              {i18n._(t`Actions`)}
             </Typography>
             {/*<SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'roiPerYear'} />*/}
           </div>

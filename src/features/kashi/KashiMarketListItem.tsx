@@ -3,6 +3,7 @@ import { t } from '@lingui/macro'
 import { ChainId, CurrencyAmount, Percent } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
+import { KashiMarketActions } from 'app/features/kashi/KashiMarket'
 import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features/trident/constants'
 import { classNames, currencyFormatter, formatNumber, formatPercent } from 'app/functions'
 import { useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
@@ -76,17 +77,17 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, chainId, i1
               : '-'}
           </Typography>
         </div>
+        {/*<div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(3, 6))}>*/}
+        {/*  <Typography weight={700} className="text-high-emphesis">*/}
+        {/*    {formatNumber(totalAssetAmount?.toSignificant(6))} {market.asset.token.symbol}*/}
+        {/*  </Typography>*/}
+        {/*  <Typography variant="xs" className="text-low-emphesis">*/}
+        {/*    {totalAssetAmountUSD && !totalAssetAmountLoading*/}
+        {/*      ? currencyFormatter.format(Number(totalAssetAmountUSD?.toExact()))*/}
+        {/*      : '-'}*/}
+        {/*  </Typography>*/}
+        {/*</div>*/}
         <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(3, 6))}>
-          <Typography weight={700} className="text-high-emphesis">
-            {formatNumber(totalAssetAmount?.toSignificant(6))} {market.asset.token.symbol}
-          </Typography>
-          <Typography variant="xs" className="text-low-emphesis">
-            {totalAssetAmountUSD && !totalAssetAmountLoading
-              ? currencyFormatter.format(Number(totalAssetAmountUSD?.toExact()))
-              : '-'}
-          </Typography>
-        </div>
-        <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(4, 6))}>
           <Typography weight={700} className="text-high-emphesis">
             {formatPercent(currentSupplyAPR.toFixed(2))}
           </Typography>
@@ -94,13 +95,16 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, chainId, i1
             {i18n._(t`annualized`)}
           </Typography>
         </div>
-        <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(5, 6))}>
+        <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(4, 6))}>
           <Typography weight={700} className="text-high-emphesis">
             {formatPercent(currentInterestPerYear.toFixed(2))}
           </Typography>
           <Typography variant="xs" className="text-low-emphesis">
             {i18n._(t`annualized`)}
           </Typography>
+        </div>
+        <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(5, 6))}>
+          <KashiMarketActions market={market} />
         </div>
       </div>
     </Link>
