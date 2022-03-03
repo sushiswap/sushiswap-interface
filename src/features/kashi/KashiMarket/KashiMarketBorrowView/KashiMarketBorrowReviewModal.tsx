@@ -27,6 +27,7 @@ export const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
   open,
   onDismiss,
   view,
+  priceImpact,
 }) => {
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
@@ -97,7 +98,13 @@ export const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
               </div>
             </div>
           </HeadlessUiModal.BorderedContent>
-          <KashiMarketDetailsView view={view} collateralAmount={collateralAmount} borrowAmount={borrowAmount} />
+          <KashiMarketDetailsView
+            priceImpact={priceImpact}
+            trade={trade}
+            view={view}
+            collateralAmount={collateralAmount}
+            borrowAmount={borrowAmount}
+          />
           <Button loading={attemptingTxn} color="gradient" disabled={attemptingTxn} onClick={_execute}>
             {i18n._(t`Confirm Borrow`)}
           </Button>
