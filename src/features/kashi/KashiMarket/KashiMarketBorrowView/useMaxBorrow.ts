@@ -1,4 +1,5 @@
-import { Currency, CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { Trade as LegacyTrade } from '@sushiswap/core-sdk/dist/entities/Trade'
 import { LTV, PADDING } from 'app/features/kashi/constants'
 import KashiMediumRiskLendingPair from 'app/features/kashi/KashiMediumRiskLendingPair'
 import { computeRealizedLPFeePercent, e10 } from 'app/functions'
@@ -17,6 +18,7 @@ interface UseMaxBorrowPayload {
 type UseMaxBorrow = (x: UseMaxBorrowPayload) => {
   maxBorrow?: CurrencyAmount<Currency>
   priceImpact?: Percent
+  trade?: LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT>
 }
 
 export const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrowAmount, market }) => {
@@ -34,6 +36,7 @@ export const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrow
     return {
       maxBorrow: undefined,
       priceImpact: undefined,
+      trade: undefined,
     }
   }
 
@@ -68,5 +71,6 @@ export const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrow
         : CurrencyAmount.fromRawAmount(borrowAmount.currency, borrowableMinimumPadded.quotient)
       : CurrencyAmount.fromRawAmount(borrowAmount.currency, '0'),
     priceImpact,
+    trade: trade ?? undefined,
   }
 }
