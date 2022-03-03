@@ -282,6 +282,62 @@ export class KashiMediumRiskLendingPair {
     }
   }
 
+  public simulatedMaxBorrowable(borrowAmount: JSBI, collateralAmount: JSBI) {
+    const max = {
+      oracle: JSBI.greaterThan(this.oracleExchangeRate, ZERO)
+        ? JSBI.divide(
+            JSBI.multiply(
+              JSBI.add(this.userCollateralAmount, collateralAmount),
+              JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))
+            ),
+            this.oracleExchangeRate
+          )
+        : ZERO,
+      spot: JSBI.greaterThan(this.spotExchangeRate, ZERO)
+        ? JSBI.divide(
+            JSBI.multiply(
+              JSBI.add(this.userCollateralAmount, collateralAmount),
+              JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))
+            ),
+            this.spotExchangeRate
+          )
+        : ZERO,
+      stored: JSBI.greaterThan(this.exchangeRate, ZERO)
+        ? JSBI.divide(
+            JSBI.multiply(
+              JSBI.add(this.userCollateralAmount, collateralAmount),
+              JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))
+            ),
+            this.exchangeRate
+          )
+        : ZERO,
+    }
+
+    const min = minimum(...Object.values(max))
+
+    const safe = JSBI.subtract(
+      JSBI.divide(JSBI.multiply(min, JSBI.BigInt(95)), JSBI.BigInt(100)),
+      JSBI.add(this.currentUserBorrowAmount, borrowAmount)
+    )
+
+    const possible = minimum(safe, this.maxAssetAvailable)
+
+    return {
+      ...max,
+      minimum: min,
+      safe,
+      possible,
+    }
+  }
+
+  public simulatedHealth(borrowAmount: JSBI, collateralAmount: JSBI): JSBI {
+    if (JSBI.equal(this.simulatedMaxBorrowable(borrowAmount, collateralAmount).minimum, ZERO)) return ZERO
+    return JSBI.divide(
+      JSBI.multiply(JSBI.add(this.currentUserBorrowAmount, borrowAmount), JSBI.BigInt(1e18)),
+      this.simulatedMaxBorrowable(borrowAmount, collateralAmount).minimum
+    )
+  }
+
   /**
    * The user's position's health
    */
