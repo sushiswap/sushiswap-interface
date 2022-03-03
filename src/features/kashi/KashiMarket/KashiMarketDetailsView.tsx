@@ -3,7 +3,8 @@ import { ChevronDownIcon } from '@heroicons/react/outline'
 import { ArrowSmRightIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Fraction, JSBI, Percent } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Percent, TradeType } from '@sushiswap/core-sdk'
+import { Trade as LegacyTrade } from '@sushiswap/core-sdk/dist/entities/Trade'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Tooltip from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
@@ -11,6 +12,8 @@ import { KashiMarketView, useKashiMarket, useLiquidationPrice } from 'app/featur
 import { classNames, formatPercent, unwrappedToken } from 'app/functions'
 import { useBentoStrategies } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppSelector } from 'app/state/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import React, { FC, Fragment, useState } from 'react'
 
 interface KashiMarketDetailsView {
@@ -19,9 +22,11 @@ interface KashiMarketDetailsView {
   priceImpact?: Percent
   multiplier?: Fraction
   view: KashiMarketView
+  trade?: LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT>
 }
 
 export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
+  trade,
   priceImpact,
   collateralAmount,
   borrowAmount,
@@ -35,6 +40,7 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
     variables: { where: { token: market.collateral.token.address.toLowerCase() } },
   })
   const strategy = strategies?.[0]
+  const allowedSlippage = useAppSelector(selectSlippage)
 
   const borrowPosition = CurrencyAmount.fromRawAmount(
     unwrappedToken(market.asset.token),
@@ -45,8 +51,6 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
     unwrappedToken(market.collateral.token),
     market.userCollateralAmount
   )
-
-  console.log(collateralAmount?.quotient.toString(), borrowAmount?.quotient.toString())
 
   const newCollateralAmount =
     collateralAmount &&
@@ -75,7 +79,10 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
                 {new Percent(
                   market.simulatedHealth(
                     borrowAmount?.quotient || JSBI.BigInt(0),
-                    collateralAmount?.quotient || JSBI.BigInt(0)
+                    JSBI.add(
+                      collateralAmount?.quotient || JSBI.BigInt(0),
+                      trade?.minimumAmountOut(allowedSlippage).quotient || JSBI.BigInt(0)
+                    )
                   ),
                   1e18
                 ).toSignificant(6)}
@@ -206,6 +213,7 @@ export const KashiMarketDetailsView: FC<KashiMarketDetailsView> = ({
   borrowAmount,
   multiplier,
   view,
+  trade,
 }) => {
   const { i18n } = useLingui()
   const [invert, setInvert] = useState(true)
@@ -277,6 +285,7 @@ export const KashiMarketDetailsView: FC<KashiMarketDetailsView> = ({
           >
             <Disclosure.Panel static className="px-1 pt-2">
               <KashiMarketDetailsContentView
+                trade={trade}
                 priceImpact={priceImpact}
                 collateralAmount={collateralAmount}
                 borrowAmount={borrowAmount}

@@ -46,8 +46,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
       (collateral ? CurrencyAmount.fromRawAmount(collateral, '0') : undefined),
     [collateral, collateralAmount]
   )
-
-  const { maxBorrow, priceImpact } = useMaxBorrow({
+  const { maxBorrow, priceImpact, trade } = useMaxBorrow({
     leveraged: leverage,
     borrowAmount: borrowAmountCurrencyAmount,
     collateralAmount: collateralAmountCurrencyAmount,
@@ -150,6 +149,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
         />
       )}
       <KashiMarketDetailsView
+        trade={trade}
         priceImpact={leverage ? priceImpact : undefined}
         borrowAmount={borrowAmountCurrencyAmount}
         collateralAmount={collateralAmountCurrencyAmount}
@@ -157,6 +157,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
         view={KashiMarketView.BORROW}
       />
       <KashiMarketBorrowButton
+        priceImpact={leverage ? priceImpact : undefined}
         borrowAmount={borrowAmountCurrencyAmount}
         collateralAmount={collateralAmountCurrencyAmount}
         spendFromWallet={spendFromWallet}

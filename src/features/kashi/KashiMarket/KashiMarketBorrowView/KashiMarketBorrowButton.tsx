@@ -1,7 +1,7 @@
 import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, KASHI_ADDRESS, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, KASHI_ADDRESS, Percent, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import {
@@ -20,6 +20,7 @@ import React, { FC, useState } from 'react'
 export interface KashiMarketBorrowButtonProps extends Omit<BorrowExecutePayload, 'permit' | 'trade'> {
   view: KashiMarketView
   maxBorrow?: CurrencyAmount<Currency>
+  priceImpact?: Percent
 }
 
 export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
@@ -30,6 +31,7 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
   collateralAmount,
   maxBorrow,
   view,
+  priceImpact,
 }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
@@ -118,6 +120,7 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
         collateralAmount={collateralAmount}
         borrowAmount={borrowAmount}
         view={view}
+        priceImpact={priceImpact}
       />
     </>
   )
