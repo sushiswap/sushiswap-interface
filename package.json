@@ -39,17 +39,17 @@
     "@commitlint/config-conventional": "^13.0.0",
     "@davatar/react": "^1.8.1",
     "@ethereumjs/common": "^2.4.0",
-    "@ethereumjs/tx": "^3.3.0",
-    "@ethersproject/abi": "^5.4.0",
-    "@ethersproject/abstract-provider": "^5.4.0",
-    "@ethersproject/address": "^5.4.0",
-    "@ethersproject/bignumber": "^5.4.0",
+    "@ethereumjs/tx": "^3.5.0",
+    "@ethersproject/abi": "^5.5.0",
+    "@ethersproject/abstract-provider": "^5.5.1",
+    "@ethersproject/address": "^5.5.0",
+    "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.4.0",
     "@ethersproject/constants": "^5.4.0",
     "@ethersproject/contracts": "^5.4.0",
     "@ethersproject/hash": "^5.4.0",
     "@ethersproject/keccak256": "^5.4.0",
-    "@ethersproject/providers": "^5.4.0",
+    "@ethersproject/providers": "^5.5.3",
     "@ethersproject/strings": "^5.4.0",
     "@ethersproject/units": "^5.4.0",
     "@fontsource/dm-sans": "^4.5.0",
@@ -68,7 +68,7 @@
     "@popperjs/core": "^2.10.0",
     "@ramp-network/ramp-instant-sdk": "^2.5.0",
     "@react-hook/window-scroll": "^1.3.0",
-    "@reduxjs/toolkit": "^1.7.1",
+    "@reduxjs/toolkit": "^1.8.0",
     "@sentry/browser": "^6.15.0",
     "@sentry/nextjs": "^6.13.0",
     "@sentry/tracing": "^6.15.0",
@@ -118,8 +118,8 @@
     "@web3-react/portis-connector": "^6.2.9",
     "@web3-react/torus-connector": "^6.2.9",
     "@web3-react/types": "^6.0.7",
-    "@web3-react/walletconnect-connector": "7.0.2-alpha.0",
-    "@web3-react/walletlink-connector": "^6.2.11",
+    "@web3-react/walletconnect-connector": "6.2.13",
+    "@web3-react/walletlink-connector": "^6.2.13",
     "@welldone-software/why-did-you-render": "^6.2.3",
     "autoprefixer": "^10.3.1",
     "babel-jest": "^27.2.0",
@@ -152,7 +152,7 @@
     "lottie-react": "2.1.0",
     "madge": "^5.0.1",
     "millify": "^4.0.0",
-    "next": "^12.0.3",
+    "next": "12.1.0",
     "next-pwa": "^5.4.1",
     "next-unused": "^0.0.6",
     "node-vibrant": "3.1.6",
@@ -174,7 +174,7 @@
     "react-hook-form": "^7.22.1",
     "react-infinite-scroll-component": "^6.1.0",
     "react-popper": "^2.2.5",
-    "react-redux": "^7.2.4",
+    "react-redux": "^7.2.6",
     "react-responsive": "^9.0.0-beta.4",
     "react-table": "^7.7.0",
     "react-test-renderer": "^17.0.2",
@@ -183,7 +183,7 @@
     "react-window": "^1.8.6",
     "react-window-infinite-loader": "^1.0.7",
     "recoil": "^0.4.1",
-    "redux": "^4.1.0",
+    "redux": "^4.1.2",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "serve": "^12.0.0",
@@ -206,10 +206,19 @@
       "src/pages"
     ]
   },
-  "browserslist": [
-    ">0.3%",
-    "not ie 11",
-    "not dead",
-    "not op_mini all"
-  ]
+	"browserslist": {
+		"production": [
+			">0.3%",
+			"not dead",
+			"not op_mini all",
+			"not IE > 0",
+			"not samsung 4",
+			"not and_uc 12.12"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 edge version"
+		]
+	}
 }
