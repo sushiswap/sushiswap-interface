@@ -140,6 +140,7 @@ const ClassicStandardMode: FC = () => {
               <TridentApproveGate
                 inputAmounts={[slpAmountToRemove]}
                 tokenApproveOn={router?.address}
+                masterContractAddress={router?.address}
                 withPermit={true}
                 permit={bentoPermit}
                 onPermit={(permit) => dispatch(setRemoveBentoPermit(permit))}

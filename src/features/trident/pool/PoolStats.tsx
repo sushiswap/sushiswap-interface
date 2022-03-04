@@ -15,6 +15,8 @@ const PoolStats: FC<PoolStatsProps> = () => {
   const { chainId } = useActiveWeb3React()
   const isDesktop = useDesktopMediaQuery()
   const { poolWithState } = usePoolContext()
+
+  console.log(poolWithState?.pool?.liquidityToken?.address.toLowerCase())
   const { data: stats } = useRollingPoolStats({
     chainId,
     variables: { where: { id: poolWithState?.pool?.liquidityToken?.address.toLowerCase() } },

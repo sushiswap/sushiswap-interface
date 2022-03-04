@@ -92,6 +92,7 @@ export function useMiniChefFarms({ chainId, swrConfig = undefined }: useFarmsPro
       ChainId.MOONRIVER,
       ChainId.FUSE,
       ChainId.FANTOM,
+      ChainId.MOONBEAM,
     ].includes(chainId)
   const { data } = useSWR(
     shouldFetch ? ['miniChefFarms', chainId] : null,

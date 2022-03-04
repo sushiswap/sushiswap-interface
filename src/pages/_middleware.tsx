@@ -22,6 +22,7 @@ const SUBDOMAIN_CHAIN_ID: { [subdomain: string]: string } = {
   [ChainSubdomain.MOONRIVER]: '1285',
   [ChainSubdomain.FUSE]: '122',
   [ChainSubdomain.TELOS]: '40',
+  [ChainSubdomain.MOONBEAM]: '1284',
 }
 
 const DEFAULT_CHAIN_ID = '1'
