@@ -157,7 +157,7 @@ export interface PoolKpi {
   feesUSD: number
   volume: number
   volumeUSD: number
-  liquidity: number
+  liquidity: string
   liquidityUSD: number
   transactionCount: number
 }
@@ -168,7 +168,7 @@ const formatKpis = (kpis: PoolKpiQueryResult[]): PoolKpi[] =>
     feesUSD: Number(feesUSD),
     volume: Number(volume),
     volumeUSD: Number(volumeUSD),
-    liquidity: Number(liquidity),
+    liquidity,
     liquidityUSD: Number(liquidityUSD),
     transactionCount: Number(transactionCount),
   }))

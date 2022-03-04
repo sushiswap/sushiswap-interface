@@ -51,6 +51,7 @@ export const NETWORK_ICON = {
   [ChainId.MOONRIVER]: Moonriver,
   [ChainId.FUSE]: Fuse,
   [ChainId.TELOS]: Telos,
+  [ChainId.MOONBEAM]: Moonbeam,
 }
 
 export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
@@ -82,4 +83,5 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
   [ChainId.MOONRIVER]: 'Moonriver',
   [ChainId.FUSE]: 'Fuse',
   [ChainId.TELOS]: 'Telos EVM',
+  [ChainId.MOONBEAM]: 'Moonbeam',
 }
