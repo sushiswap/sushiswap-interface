@@ -47,6 +47,7 @@ const PERMITTABLE_TOKENS: {
       name: 'Dai Stablecoin',
       version: '1',
     },
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[1].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
   },
   [4]: {
@@ -55,9 +56,11 @@ const PERMITTABLE_TOKENS: {
       name: 'Dai Stablecoin',
       version: '1',
     },
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[4].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
   },
   [3]: {
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[3].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
     ['0x07865c6E87B9F70255377e024ace6630C1Eaa37F']: {
       type: PermitType.AMOUNT,
@@ -66,9 +69,11 @@ const PERMITTABLE_TOKENS: {
     },
   },
   [5]: {
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[5].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
   },
   [42]: {
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[42].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
   },
 }
@@ -149,6 +154,7 @@ export function useERC20Permit(
   const isArgentWallet = useIsArgentWallet()
   const nonceInputs = useMemo(() => [account ?? undefined], [account])
   const tokenNonceState = useSingleCallResult(eip2612Contract, 'nonces', nonceInputs)
+
   const permitInfo =
     overridePermitInfo ?? (chainId && tokenAddress ? PERMITTABLE_TOKENS[chainId]?.[tokenAddress] : undefined)
 
@@ -259,16 +265,16 @@ export function useERC20Permit(
       },
     }
   }, [
+    isArgentWallet,
     currencyAmount,
     eip2612Contract,
     account,
     chainId,
-    isArgentWallet,
     transactionDeadline,
     library,
-    tokenNonceState.loading,
     tokenNonceState.valid,
     tokenNonceState.result,
+    tokenNonceState.loading,
     tokenAddress,
     spender,
     permitInfo,
@@ -289,17 +295,19 @@ export function useV2LiquidityTokenPermit(
   return useERC20Permit(liquidityAmount, spender, REMOVE_V2_LIQUIDITY_PERMIT_INFO)
 }
 
-const REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO: PermitInfo = {
-  version: '1',
-  name: 'Sushi LP Token',
-  type: PermitType.AMOUNT,
-}
-
 export function useTridentLiquidityTokenPermit(liquidityAmount?: CurrencyAmount<Token>, spender?: string) {
+  const eip2612Contract = useEIP2612Contract(liquidityAmount?.currency.address)
+  const name = useSingleCallResult(eip2612Contract, 'name')
+  const parsedName = useMemo<string | undefined>(() => (name?.result?.length ? name?.result[0] : undefined), [name])
+
   return useERC20Permit(
     liquidityAmount ? CurrencyAmount.fromRawAmount(liquidityAmount.currency, MaxUint256) : undefined,
     spender,
-    REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO
+    {
+      version: '1',
+      name: parsedName ?? '',
+      type: PermitType.AMOUNT,
+    }
   )
 }
 

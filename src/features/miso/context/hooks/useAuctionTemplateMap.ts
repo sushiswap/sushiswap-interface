@@ -25,13 +25,21 @@ const useAuctionTemplateMap = () => {
     if (!chainId) return undefined
 
     return {
+      // @ts-ignore TYPE NEEDS FIXING
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.Crowdsale.address]: AuctionTemplate.CROWDSALE,
+      // @ts-ignore TYPE NEEDS FIXING
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.DutchAuction.address]: AuctionTemplate.DUTCH_AUCTION,
+      // @ts-ignore TYPE NEEDS FIXING
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.BatchAuction.address]: AuctionTemplate.BATCH_AUCTION,
+      // @ts-ignore TYPE NEEDS FIXING
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HyperbolicAuction.address]: AuctionTemplate.HYPERBOLIC_AUCTION,
+      // @ts-ignore TYPE NEEDS FIXING
       [AuctionTemplate.CROWDSALE]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.Crowdsale,
+      // @ts-ignore TYPE NEEDS FIXING
       [AuctionTemplate.DUTCH_AUCTION]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.DutchAuction,
+      // @ts-ignore TYPE NEEDS FIXING
       [AuctionTemplate.BATCH_AUCTION]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.BatchAuction,
+      // @ts-ignore TYPE NEEDS FIXING
       [AuctionTemplate.HYPERBOLIC_AUCTION]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HyperbolicAuction,
     }
   }, [chainId])

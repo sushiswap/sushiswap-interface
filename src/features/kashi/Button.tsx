@@ -30,7 +30,7 @@ export function KashiApproveButton({ content, color }: any): any {
       )}
 
       {showApprove && (
-        <Button color={color} onClick={onApprove} className="mb-4">
+        <Button color={color} onClick={onApprove} className="mb-4" fullWidth={true}>
           {i18n._(t`Approve Kashi`)}
         </Button>
       )}
@@ -45,7 +45,7 @@ export function TokenApproveButton({ children, value, token, needed, color }: an
   const { chainId } = useActiveWeb3React()
   const [approvalState, approve] = useApproveCallback(
     tryParseAmount(value, token),
-    chainId && BENTOBOX_ADDRESS[chainId]
+    chainId ? BENTOBOX_ADDRESS[chainId] : undefined
   )
 
   const showApprove =
@@ -57,7 +57,7 @@ export function TokenApproveButton({ children, value, token, needed, color }: an
     (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
   return showApprove ? (
-    <Button color={color} onClick={approve} className="mb-4">
+    <Button color={color} onClick={approve} className="mb-4" fullWidth={true}>
       {approvalState === ApprovalState.PENDING ? (
         <Dots>{`Approving ${token.symbol}`}</Dots>
       ) : (

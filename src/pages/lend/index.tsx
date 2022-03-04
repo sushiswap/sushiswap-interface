@@ -8,6 +8,7 @@ import { Feature } from 'app/enums'
 import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
 import ListHeaderWithSort from 'app/features/kashi/ListHeaderWithSort'
 import MarketHeader from 'app/features/kashi/MarketHeader'
+import { useKashiLendPositions } from 'app/features/portfolio/AssetBalances/kashi/hooks'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
@@ -23,17 +24,16 @@ export default function Lend() {
   const { i18n } = useLingui()
 
   const addresses = useKashiPairAddresses()
+
+  // @ts-ignore TYPE NEEDS FIXING
   const pairs = useKashiPairs(addresses)
 
-  const positions = useSearchAndSort(
-    pairs.filter((pair) => pair.userAssetFraction.gt(0)),
-    { keys: ['search'], threshold: 0.1 },
-    { key: 'currentUserAssetAmount.usdValue', direction: 'descending' }
-  )
+  const positions = useKashiLendPositions(pairs)
+
   const data = useSearchAndSort(
     pairs,
     { keys: ['search'], threshold: 0.1 },
-    { key: 'currentSupplyAPR.value', direction: 'descending' }
+    { key: 'currentSupplyAPR.valueWithStrategy', direction: 'descending' }
   )
 
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(data.items)
@@ -45,6 +45,16 @@ export default function Lend() {
         <meta
           key="description"
           name="description"
+          content="Kashi is a lending and margin trading platform, built upon BentoBox, which allows for anyone to create customized and gas-efficient markets for lending, borrowing, and collateralizing a variety of DeFi tokens, stable coins, and synthetic assets."
+        />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content="Kashi is a lending and margin trading platform, built upon BentoBox, which allows for anyone to create customized and gas-efficient markets for lending, borrowing, and collateralizing a variety of DeFi tokens, stable coins, and synthetic assets."
+        />
+        <meta
+          key="og:description"
+          property="og:description"
           content="Kashi is a lending and margin trading platform, built upon BentoBox, which allows for anyone to create customized and gas-efficient markets for lending, borrowing, and collateralizing a variety of DeFi tokens, stable coins, and synthetic assets."
         />
       </Head>
@@ -163,6 +173,7 @@ export default function Lend() {
   )
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 const LendEntry = ({ pair, userPosition = false }) => {
   return (
     <Link href={'/lend/' + pair.address}>
@@ -232,6 +243,7 @@ const LendEntry = ({ pair, userPosition = false }) => {
 
 Lend.Provider = RecoilRoot
 
+// @ts-ignore TYPE NEEDS FIXING
 const LendLayout = ({ children }) => {
   const { i18n } = useLingui()
   return (

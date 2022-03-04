@@ -97,6 +97,15 @@ export interface RawMarketInfo {
   isAdmin: boolean
 }
 
+export interface RawLauncherInfo {
+  lockTime: BigNumber
+  locktime: number
+  unlock: BigNumber
+  liquidityPercent: BigNumber
+  launched: boolean
+  liquidityAdded: BigNumber
+}
+
 export interface Auction {
   addr: string
   endTime: BigNumber

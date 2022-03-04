@@ -6,7 +6,9 @@ import { LegendOrdinal } from '@visx/legend'
 import { MarkerArrow, MarkerCross, MarkerLine, MarkerX } from '@visx/marker'
 import { PatternLines } from '@visx/pattern'
 import { scaleLinear, scaleOrdinal, scaleTime } from '@visx/scale'
+// @ts-ignore TYPE NEEDS FIXING
 import { extent } from 'd3-array'
+// @ts-ignore TYPE NEEDS FIXING
 import { timeFormat, timeParse } from 'd3-time-format'
 import millify from 'millify'
 import { useMemo, useState } from 'react'
@@ -14,7 +16,9 @@ import React from 'react'
 
 import Curve from './Curve'
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getX = (data) => new Date(data.date)
+// @ts-ignore TYPE NEEDS FIXING
 export const getY = (data) => data.value
 
 const brushMargin = { top: 10, bottom: 15, left: 50, right: 20 }
@@ -32,6 +36,7 @@ const parseDate = timeParse('%Y-%m-%d')
 
 const format = timeFormat('%b %d')
 
+// @ts-ignore TYPE NEEDS FIXING
 const formatDate = (date) => format(parseDate(date))
 
 const axisColor = 'currentColor'
@@ -57,25 +62,33 @@ const purple3 = '#a44afe'
 
 const Curves = ({
   compact = false,
+  // @ts-ignore TYPE NEEDS FIXING
   width,
+  // @ts-ignore TYPE NEEDS FIXING
   height,
   margin = { top: 64, right: 32, bottom: 16, left: 64 },
+  // @ts-ignore TYPE NEEDS FIXING
   data,
   title = undefined,
   labels = undefined,
   note = undefined,
   colors = [purple1, purple2, purple3],
 }) => {
+  // @ts-ignore TYPE NEEDS FIXING
   const allData = data.reduce((previousValue, currentValue) => previousValue.concat(currentValue), [])
 
   const [filteredData, setFilteredData] = useState(
+    // @ts-ignore TYPE NEEDS FIXING
     data.map((curve) => curve.slice(curve.length - 30, curve.length - 1))
   )
 
+  // @ts-ignore TYPE NEEDS FIXING
   const onBrushChange = (domain) => {
     if (!domain) return
     const { x0, x1, y0, y1 } = domain
+    // @ts-ignore TYPE NEEDS FIXING
     const stockCopy = data.map((d) =>
+      // @ts-ignore TYPE NEEDS FIXING
       d.filter((s) => {
         const x = getX(s).getTime()
         const y = getY(s)
@@ -103,6 +116,7 @@ const Curves = ({
       scaleTime({
         range: [0, xMax],
         domain: extent(
+          // @ts-ignore TYPE NEEDS FIXING
           filteredData.reduce((previousValue, currentValue) => previousValue.concat(currentValue), []),
           getX
         ),
@@ -117,12 +131,16 @@ const Curves = ({
         domain: [
           Math.min(
             ...filteredData
+              // @ts-ignore TYPE NEEDS FIXING
               .reduce((previousValue, currentValue) => previousValue.concat(currentValue), [])
+              // @ts-ignore TYPE NEEDS FIXING
               .map((d) => getY(d))
           ),
           Math.max(
             ...filteredData
+              // @ts-ignore TYPE NEEDS FIXING
               .reduce((previousValue, currentValue) => previousValue.concat(currentValue), [])
+              // @ts-ignore TYPE NEEDS FIXING
               .map((d) => getY(d))
           ),
         ],
@@ -146,6 +164,7 @@ const Curves = ({
     () =>
       scaleLinear({
         range: [yBrushMax, 0],
+        // @ts-ignore TYPE NEEDS FIXING
         domain: [Math.min(...allData.map((d) => getY(d))), Math.max(...allData.map((d) => getY(d)))],
         nice: true,
       }),
@@ -191,6 +210,7 @@ const Curves = ({
             top: margin.top / 2 - 10,
           }}
         >
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           <LegendOrdinal scale={scaleOrdinal({ domain: [title] })} direction="row" labelMargin="0 15px 0 0" />
         </div>
       )}
@@ -203,6 +223,7 @@ const Curves = ({
             right: margin.right,
           }}
         >
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           <LegendOrdinal scale={scaleOrdinal({ domain: [note] })} direction="row" labelMargin="0 4px 0 0" />
         </div>
       )}
@@ -232,6 +253,7 @@ const Curves = ({
         />
         <Group top={margin.top} left={margin.left}>
           {width > 8 &&
+            // @ts-ignore TYPE NEEDS FIXING
             filteredData.map((curve, i) => {
               const even = i % 2 === 0
               let markerStart = even ? 'url(#marker-cross)' : 'url(#marker-x)'
@@ -267,13 +289,21 @@ const Curves = ({
                     hideLeftAxis
                     data={curve}
                     width={width}
+                    // @ts-ignore TYPE NEEDS FIXING
                     xScale={xScale}
+                    // @ts-ignore TYPE NEEDS FIXING
                     yScale={yScale}
+                    //@ts-ignore TYPE NEEDS FIXING
                     stroke={colors[i]}
+                    // @ts-ignore TYPE NEEDS FIXING
                     strokeWidth={2}
+                    // @ts-ignore TYPE NEEDS FIXING
                     strokeOpacity={1}
+                    // @ts-ignore TYPE NEEDS FIXING
                     markerMid="url(#marker-circle)"
+                    // @ts-ignore TYPE NEEDS FIXING
                     markerStart={markerStart}
+                    // @ts-ignore TYPE NEEDS FIXING
                     markerEnd={markerEnd}
                   />
                 </Group>
@@ -298,6 +328,7 @@ const Curves = ({
         </Group>
 
         <Group top={topChartHeight + topChartBottomMargin + margin.top} left={brushMargin.left}>
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {data.map((brushData, i) => {
             const even = i % 2 === 0
             let markerStart = even ? 'url(#marker-cross)' : 'url(#marker-x)'
@@ -305,15 +336,21 @@ const Curves = ({
             const markerEnd = even ? 'url(#marker-arrow)' : 'url(#marker-arrow-odd)'
             return (
               <Curve
+                // @ts-ignore TYPE NEEDS FIXING
                 stroke={colors[i]}
+                // @ts-ignore TYPE NEEDS FIXING
                 strokeWidth={2}
+                // @ts-ignore TYPE NEEDS FIXING
                 strokeOpacity={1}
                 hideBottomAxis
                 hideLeftAxis
                 data={brushData}
                 width={width}
+                // @ts-ignore TYPE NEEDS FIXING
                 yMax={yBrushMax}
+                // @ts-ignore TYPE NEEDS FIXING
                 xScale={brushXScale}
+                // @ts-ignore TYPE NEEDS FIXING
                 yScale={brushYScale}
                 key={i}
               />

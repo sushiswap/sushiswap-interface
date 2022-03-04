@@ -1,6 +1,5 @@
 const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
-
 const linguiConfig = require('./lingui.config.js')
 const defaultTheme = require('tailwindcss/defaultTheme')
 
@@ -20,6 +19,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const { withSentryConfig } = require('@sentry/nextjs')
 
+// @ts-check
+
+/**
+ * @type {import('next').NextConfig}
+ **/
 const nextConfig = {
   webpack: (config) => {
     config.module.rules = [
@@ -44,7 +48,8 @@ const nextConfig = {
     disable: process.env.NODE_ENV === 'development',
   },
   images: {
-    domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
+    loader: 'cloudinary',
+    path: 'https://res.cloudinary.com/sushi-cdn/image/fetch/',
   },
   async redirects() {
     return [
@@ -110,14 +115,6 @@ const nextConfig = {
         source: '/me',
         destination: '/user',
       },
-      {
-        source: '/balances',
-        destination: '/trident/balances/wallet',
-      },
-      {
-        source: '/trident/balances',
-        destination: '/trident/balances/wallet',
-      },
     ]
   },
   i18n: {
@@ -150,8 +147,7 @@ const SentryWebpackPluginOptions = {
   // recommended:
   //   release, url, org, project, authToken, configFile, stripPrefix,
   //   urlPrefix, include, ignore
-
-  silent: true, // Suppresses all logs
+  // silent: true, // Suppresses all logs
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options.
 }

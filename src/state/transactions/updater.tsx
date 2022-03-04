@@ -5,6 +5,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { updateBlockNumber } from 'app/state/application/actions'
 import { useAddPopup, useBlockNumber } from 'app/state/application/hooks'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { selectTransactions } from 'app/state/transactions/selectors'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 
@@ -47,9 +48,9 @@ export default function Updater(): null {
   const lastBlockNumber = useBlockNumber()
 
   const dispatch = useAppDispatch()
-  const state = useAppSelector((state) => state.transactions)
+  const state = useAppSelector(selectTransactions)
 
-  const transactions = useMemo(() => (chainId ? state[chainId] ?? {} : {}), [chainId, state])
+  const transactions = useMemo(() => (chainId ? state[chainId as ChainId] ?? {} : {}), [chainId, state])
 
   // show popup on confirm
   const addPopup = useAddPopup()
@@ -119,6 +120,7 @@ export default function Updater(): null {
               }
 
               if (receipt.status === 0) {
+                // @ts-ignore TYPE NEEDS FIXING
                 sendRevertTransactionLog(hash, routeInfo)
               }
             } else {

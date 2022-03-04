@@ -22,23 +22,29 @@ const BLOCKCHAIN = {
   [ChainId.XDAI]: 'xdai',
   [ChainId.ARBITRUM]: 'arbitrum',
   [ChainId.AVALANCHE]: 'avalanche',
+  [ChainId.MOONBEAM]: 'moonbeam',
+  [ChainId.HARDHAT]: 'hardhat',
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getCurrencyLogoUrls = (currency): string[] => {
   const urls: string[] = []
 
   if (currency.chainId in BLOCKCHAIN) {
     urls.push(
+      // @ts-ignore TYPE NEEDS FIXING
       `https://raw.githubusercontent.com/sushiswap/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
         currency.address
       }.jpg`
     )
     urls.push(
+      // @ts-ignore TYPE NEEDS FIXING
       `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
         currency.address
       }/logo.png`
     )
     urls.push(
+      // @ts-ignore TYPE NEEDS FIXING
       `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
         currency.address
       }/logo.png`
@@ -54,7 +60,7 @@ const FantomLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token
 const HarmonyLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/one.jpg'
 const HecoLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/heco.jpg'
 const MaticLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/polygon.jpg'
-const MoonbeamLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/eth.jpg'
+const MoonbeamLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/moonbeam.jpg'
 const OKExLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/okt.jpg'
 const xDaiLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/xdai.jpg'
 const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/celo.jpg'
@@ -93,6 +99,8 @@ const LOGO: Record<ChainId, string> = {
   [ChainId.MOONRIVER]: MovrLogo,
   [ChainId.FUSE]: FuseLogo,
   [ChainId.TELOS]: TelosLogo,
+  [ChainId.HARDHAT]: EthereumLogo,
+  [ChainId.MOONBEAM]: MoonbeamLogo,
 }
 
 export interface CurrencyLogoProps {
@@ -109,6 +117,7 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({ currency, size = '
 
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative || currency?.equals(WNATIVE[currency.chainId])) {
+      // @ts-ignore TYPE NEEDS FIXING
       return [LOGO[currency.chainId], UNKNOWN_ICON]
     }
 

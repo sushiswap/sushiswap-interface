@@ -1,4 +1,7 @@
 import { Block } from '@ethersproject/abstract-provider'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Zero } from '@ethersproject/constants'
+import { Formatter } from '@ethersproject/providers'
 import { ChainId } from '@sushiswap/core-sdk'
 import useDebounce from 'app/hooks/useDebounce'
 import useIsWindowVisible from 'app/hooks/useIsWindowVisible'
@@ -11,6 +14,38 @@ import { updateBlockNumber, updateBlockTimestamp, updateChainId } from './action
 export default function Updater(): null {
   const { library, chainId, account } = useActiveWeb3React()
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (chainId === ChainId.CELO) {
+      // @ts-ignore TYPE NEEDS FIXING
+      const originalBlockFormatter = library.formatter._block
+      // @ts-ignore TYPE NEEDS FIXING
+      library.formatter._block = (value, format) => {
+        return originalBlockFormatter(
+          {
+            gasLimit: Zero,
+            ...value,
+          },
+          format
+        )
+      }
+    }
+    return () => {
+      if (chainId === ChainId.CELO) {
+        // @ts-ignore TYPE NEEDS FIXING
+        library.formatter._block = (value: any, format: any): Block => {
+          if (value.author != null && value.miner == null) {
+            value.miner = value.author
+          }
+          // The difficulty may need to come from _difficulty in recursed blocks
+          const difficulty = value._difficulty != null ? value._difficulty : value.difficulty
+          const result = Formatter.check(format, value)
+          result._difficulty = difficulty == null ? null : BigNumber.from(difficulty)
+          return result
+        }
+      }
+    }
+  }, [chainId, library])
 
   const windowVisible = useIsWindowVisible()
 
@@ -32,7 +67,9 @@ export default function Updater(): null {
             return { chainId, blockNumber: block.number, blockTimestamp: block.timestamp }
           return {
             chainId,
+            // @ts-ignore TYPE NEEDS FIXING
             blockNumber: Math.max(block.number, state.blockNumber),
+            // @ts-ignore TYPE NEEDS FIXING
             blockTimestamp: Math.max(block.timestamp, state.blockTimestamp),
           }
         }
@@ -42,7 +79,13 @@ export default function Updater(): null {
     [chainId, setState]
   )
 
-  const onBlock = useCallback((number) => library.getBlock(number).then(blockCallback), [blockCallback, library])
+  const onBlock = useCallback(
+    (number) => {
+      // @ts-ignore TYPE NEEDS FIXING
+      return library.getBlock(number).then(blockCallback)
+    },
+    [blockCallback, library]
+  )
 
   // attach/detach listeners
   useEffect(() => {
@@ -74,6 +117,7 @@ export default function Updater(): null {
   }, [windowVisible, dispatch, debouncedState.blockTimestamp, debouncedState.chainId])
 
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     dispatch(updateChainId({ chainId: debouncedState.chainId in ChainId ? debouncedState.chainId ?? null : null }))
   }, [dispatch, debouncedState.chainId])
 

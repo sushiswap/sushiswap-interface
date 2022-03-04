@@ -4,18 +4,19 @@ import { ILiquidityInfo } from '../../interfaces/ILiquidityInfo'
 import { AppPage } from '../AppPage'
 
 export class RemoveLiquidityPage extends AppPage {
-  protected BackToPoolsButtonSelector: string = '#btn-withdraw-success-back'
-  protected ModalConfirmWithdrawButtonSelector: string = '#btn-modal-confirm-withdrawal'
-  protected ReviewAndConfirmButtonSelector: string = '#btn-confirm-remove-liquidity'
+  private TxStatusDivSelector: string = 'div-tx-status'
+  private BackToPoolsButtonSelector: string = '#btn-withdraw-success-back'
+  private ModalConfirmWithdrawButtonSelector: string = '#btn-modal-confirm-withdrawal'
+  private ReviewAndConfirmButtonSelector: string = '#btn-confirm-remove-liquidity'
 
-  protected ApproveButtonSelector: string = '#btn-approve'
-  protected FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-withdraw'
-  protected RemovePercentSelector: string = '#radio-option-'
+  private ApproveButtonSelector: string = '#btn-approve'
+  private FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-withdraw'
+  private RemovePercentSelector: string = '#radio-option-'
 
-  protected WithdrawToSelector: string = '#txt-withdraw-to'
-  protected CheckOutputToWalletSelector: string = '#chk-output-to-wallet'
+  private WithdrawToSelector: string = '#txt-withdraw-to'
+  private CheckOutputToWalletSelector: string = '#chk-output-to-wallet'
 
-  protected EstimatedOutputTextSelector: string = '-min-liquidity-output'
+  private EstimatedOutputTextSelector: string = '-min-liquidity-output'
 
   public async removeLiquidity(percent: number, outputToWallet: boolean, fixedRatio: boolean = false): Promise<void> {
     await this.setRemovePercent(percent)
@@ -46,9 +47,8 @@ export class RemoveLiquidityPage extends AppPage {
     await this.Page.waitForSelector(selector)
 
     const assetAEstimatedOutputDiv = await this.Page.$(selector)
-    const estimatedOutputString = (await (
-      await assetAEstimatedOutputDiv.getProperty('textContent')
-    ).jsonValue()) as string
+    const estimatedOutputString = (await // @ts-ignore TYPE NEEDS FIXING
+    (await assetAEstimatedOutputDiv.getProperty('textContent')).jsonValue()) as string
 
     return parseFloat(estimatedOutputString)
   }
@@ -75,16 +75,17 @@ export class RemoveLiquidityPage extends AppPage {
     }
 
     const reviewConfirmButton = await this.Page.waitForSelector(this.ReviewAndConfirmButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await reviewConfirmButton.click()
     await this.Page.waitForTimeout(500)
 
     const modalConfirmWithdrawButton = await this.Page.waitForSelector(this.ModalConfirmWithdrawButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await modalConfirmWithdrawButton.click()
 
     await this.confirmMetamaskTransaction()
 
-    const backToPoolsButton = await this.Page.waitForSelector(this.BackToPoolsButtonSelector)
-    await backToPoolsButton.click()
+    await this.Page.waitForXPath(`//div[@id='${this.TxStatusDivSelector}' and contains(., 'Success')]`)
 
     await this.blockingWait(5)
   }
@@ -95,6 +96,7 @@ export class RemoveLiquidityPage extends AppPage {
     const withdrawTo = await this.Page.evaluate((el) => el.textContent, withdrawToElement)
 
     const outputSelector = await this.Page.waitForSelector(this.CheckOutputToWalletSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     const outputSelectorButton = (await outputSelector.$x('..'))[0]
 
     if (withdrawToWallet && withdrawTo.toLowerCase() !== 'wallet') {
@@ -107,6 +109,7 @@ export class RemoveLiquidityPage extends AppPage {
   public async setRemovePercent(percent: number): Promise<void> {
     await this.blockingWait(1, true)
     const percentSelectionButton = await this.Page.waitForSelector(this.RemovePercentSelector + percent.toString())
+    // @ts-ignore TYPE NEEDS FIXING
     await percentSelectionButton.click()
   }
 
@@ -114,6 +117,7 @@ export class RemoveLiquidityPage extends AppPage {
     await this.Page.waitForSelector(this.FixedRatioCheckboxSelector)
     const fixedRateCheckbox = await this.Page.$(this.FixedRatioCheckboxSelector)
 
+    // @ts-ignore TYPE NEEDS FIXING
     return fixedRateCheckbox
   }
 

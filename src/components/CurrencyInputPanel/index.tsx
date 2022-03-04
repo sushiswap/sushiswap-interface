@@ -140,23 +140,20 @@ export default function CurrencyInputPanel({
           <div
             className={classNames(
               'flex items-center w-full space-x-3 rounded bg-dark-900 focus:bg-dark-700 p-3 sm:w-3/5'
-              // showMaxButton && selectedCurrencyBalance && 'px-3'
             )}
           >
             <>
               {showMaxButton && selectedCurrencyBalance && (
-                <Button
-                  onClick={onMax}
-                  size="xs"
-                  className="text-xs font-medium bg-transparent border rounded-full hover:bg-primary border-low-emphesis text-secondary whitespace-nowrap"
-                >
+                <Button variant="outlined" color="blue" onClick={onMax} size="xs">
                   {i18n._(t`Max`)}
                 </Button>
               )}
               <Input.Numeric
                 id="token-amount-input"
+                // @ts-ignore TYPE NEEDS FIXING
                 value={value}
                 onUserInput={(val) => {
+                  // @ts-ignore TYPE NEEDS FIXING
                   onUserInput(val)
                 }}
               />
@@ -179,15 +176,14 @@ export default function CurrencyInputPanel({
         )}
       </div>
       {!disableCurrencySelect && onCurrencySelect && (
-        <CurrencySearchModal
-          isOpen={modalOpen}
+        <CurrencySearchModal.Controlled
+          open={modalOpen}
           onDismiss={handleDismissSearch}
           onCurrencySelect={onCurrencySelect}
-          selectedCurrency={currency}
-          otherSelectedCurrency={otherCurrency}
+          selectedCurrency={currency ?? undefined}
+          otherSelectedCurrency={otherCurrency ?? undefined}
           showCommonBases={showCommonBases}
           allowManageTokenList={allowManageTokenList}
-          hideBalance={hideBalance}
           showSearch={showSearch}
         />
       )}

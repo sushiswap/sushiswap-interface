@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { LockClosedIcon } from '@heroicons/react/outline'
 import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
@@ -18,7 +19,7 @@ import {
   AuctionStatusById,
   AuctionTitleByTemplateId,
 } from 'app/features/miso/context/utils'
-import { classNames } from 'app/functions'
+import { classNames, formatNumber } from 'app/functions'
 import { cloudinaryLoader } from 'app/functions/cloudinary'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -36,17 +37,17 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
 
   const content = (
     <div
-      className="bg-cover cursor-pointer rounded bg-dark-900 overflow-hidden transition-all shadow-md hover:translate-y-[-3px] hover:shadow-xl hover:shadow-pink/5"
+      className="overflow-hidden bg-cover border rounded shadow-md cursor-pointer border-dark-800 hover:border-dark-600"
       {...(auction.auctionDocuments.icon && {
         style: {
           backgroundImage: `url("${cloudinaryLoader({ src: auction.auctionDocuments.icon, width: 48 })}")`,
         },
       })}
     >
-      <div className="flex flex-col gap-3 bg-dark-900/95 backdrop-blur-[10px] filter">
-        <div className="flex justify-between items-center pl-3 pr-3 pt-3">
+      <div className="bg-dark-900 relative flex flex-col gap-3 z-[10]">
+        <div className="flex items-center justify-between pt-3 pl-3 pr-3">
           <div className="flex gap-2">
-            {auction.pointListAddress.length > 0 && (
+            {auction.pointListAddress !== AddressZero && (
               <div className="flex gap-1.5 items-center">
                 <LockClosedIcon width={14} />
                 <Typography variant="xxs" weight={700} className="text-secondary">
@@ -96,21 +97,23 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
             <Typography variant="sm" weight={700} className="text-secondary">
               {auction.auctionToken.symbol}
             </Typography>
-            <Typography variant="h3" weight={700} className="text-high-emphesis truncate">
+            <Typography variant="h3" weight={700} className="truncate text-high-emphesis">
               {auction.auctionToken.name}
             </Typography>
           </div>
         </div>
 
-        <div className="flex justify-between bg-dark-800 p-3 items-center ">
+        <div className={classNames('flex items-center justify-between p-3 bg-dark-800')}>
           <div className="flex items-center">
             <div className="flex gap-3">
               <AuctionIcon auctionTemplate={auction.template} width={18} height={14} />
               <Typography variant="xs" weight={700}>
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {AuctionTitleByTemplateId(i18n)[auction.template]}
               </Typography>
             </div>
             <QuestionHelper
+              // @ts-ignore TYPE NEEDS FIXING
               text={AuctionHelperTextByTemplateId(i18n)[auction.template]}
               icon={<SolidQuestionMarkCircleIcon width={12} height={12} />}
             />
@@ -134,52 +137,48 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
         <div className="flex justify-between px-3">
           <div className="flex flex-col gap-0.5">
             <div className="flex items-center">
-              <Typography variant="xxs" weight={700} className="uppercase text-dark-400">
+              <Typography variant="xxs" weight={700} className="uppercase text-secondary">
                 {i18n._(t`Current Token Price`)}
               </Typography>
               <QuestionHelper
+                // @ts-ignore TYPE NEEDS FIXING
                 text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}
-                icon={
-                  <SolidQuestionMarkCircleIcon
-                    width={10}
-                    height={10}
-                    className="text-secondary mb-[2px] text-dark-400"
-                  />
-                }
+                icon={<SolidQuestionMarkCircleIcon width={10} height={10} className="text-secondary mb-[2px]" />}
               />
             </div>
             <Typography variant="xs" weight={700}>
-              {auction.tokenPrice?.toSignificant(6)} {auction.tokenPrice?.quoteCurrency.symbol}
+              {formatNumber(auction.tokenPrice?.toSignificant(6))} {auction.tokenPrice?.quoteCurrency.symbol}
             </Typography>
           </div>
           <div className="flex flex-col gap-0.5">
-            <Typography variant="xxs" weight={700} className="uppercase text-dark-400">
+            <Typography variant="xxs" weight={700} className="uppercase text-secondary">
               {i18n._(t`Amount for sale`)}
             </Typography>
             <Typography variant="xs" weight={700}>
-              {auction.totalTokens?.toSignificant(6)} {auction.totalTokens?.currency.symbol}
+              {formatNumber(auction.totalTokens?.toSignificant(6))} {auction.totalTokens?.currency.symbol}
             </Typography>
           </div>
         </div>
         <div className="flex flex-col">
           <AuctionChart auction={auction} prices={false} showPriceIndicator={false} />
-          <div className="flex flex-col px-3 py-2 px-4 bg-dark-800 flex-grow divide-y divide-dark-700">
+          <div className={classNames('flex flex-col flex-grow px-3 px-4 py-2 divide-y bg-dark-800 divide-dark-700')}>
             <div className="flex justify-between gap-0.5 py-2">
               <div className="flex items-center">
                 <Typography variant="xs" weight={700} className="text-high-emphesis">
                   {i18n._(t`Auction Price`)}
                 </Typography>
                 <QuestionHelper
+                  // @ts-ignore TYPE NEEDS FIXING
                   text={AuctionHelperTextByTemplateId(i18n)[auction.template]}
                   icon={<SolidQuestionMarkCircleIcon width={12} height={12} />}
                 />
               </div>
-              <div className="flex items-center relative">
+              <div className="relative flex items-center">
                 <div className="!w-4 !h-4 absolute -left-7 -top-2">
                   <CurrencyLogo
                     currency={auction.paymentToken}
                     size={32}
-                    className="rounded-full transform scale-[0.5]"
+                    className="!rounded-full overflow-hidden transform scale-[0.5]"
                   />
                 </div>
                 <Typography variant="xs" weight={700} className="text-high-emphesis">

@@ -24,7 +24,7 @@ const AuctionAdminFormWhitelistSection: FC<AuctionAdminFormWhitelistSectionProps
         <Form.Section.Header
           header={i18n._(t`Whitelisting`)}
           subheader={i18n._(
-            t`Auctions are open by default. You can add a smart contract with approval logic to your auction. This will restrict users participating in your auction if enabled. Please refer to our developer documentation and sample list in our Github Repo.`
+            t`Auctions are open by default. You can add a smart contract with approval logic to your auction. This will restrict users participating in your auction if enabled. Please refer to our developer documentation and sample list in our GitHub Repo.`
           )}
         />
       }

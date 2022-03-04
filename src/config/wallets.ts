@@ -46,6 +46,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: null,
     color: '#E8831D',
   },
+  METAMASK_MOBILE: {
+    name: 'MetaMask',
+    iconName: 'metamask.png',
+    description: 'Open in MetaMask app.',
+    href: 'https://metamask.app.link/dapp/app.sushi.com',
+    color: '#E8831D',
+    mobile: true,
+    mobileOnly: true,
+  },
   WALLET_CONNECT: {
     connector: async () => {
       const WalletConnectConnector = (await import('@web3-react/walletconnect-connector')).WalletConnectConnector

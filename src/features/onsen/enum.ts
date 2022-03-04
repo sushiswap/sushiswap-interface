@@ -15,3 +15,10 @@ export enum PairType {
   SWAP,
   KASHI,
 }
+
+export enum OnsenModalView {
+  Liquidity,
+  Staking,
+  Position,
+  AddLiquidityConfirm,
+}

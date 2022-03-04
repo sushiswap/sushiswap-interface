@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
@@ -9,10 +10,10 @@ import { AuctionStatus } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
 import NetworkGuard from 'app/guards/Network'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
+import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-
 const queryToAuctionStatus = {
   live: AuctionStatus.LIVE,
   upcoming: AuctionStatus.UPCOMING,
@@ -22,6 +23,8 @@ const queryToAuctionStatus = {
 const Miso = () => {
   const { i18n } = useLingui()
   const { query } = useRouter()
+  const { chainId } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   const auctions = useAuctions(queryToAuctionStatus[query?.status as string] ?? AuctionStatus.LIVE)
 
   const tabs = [
@@ -32,28 +35,27 @@ const Miso = () => {
 
   return (
     <>
-      <MisoHeader className="bg-miso-bowl bg-cover">
-        <div className="flex justify-between lg:flex-row flex-col gap-8">
+      <MisoHeader>
+        <div className="flex flex-col justify-between gap-8 lg:flex-row">
           <div className="flex flex-col">
             <Typography variant="hero" weight={700} className="text-white">
-              {i18n._(t`Chef's Edition`)}
+              {i18n._(t`Miso`)}
             </Typography>
             <Typography weight={700}>
-              {i18n._(t`These auctions are meticulously chosen by the Sushi Samurais, serving the best MISO for you.`)}
+              {i18n._(t`Use with caution, this is experimental and permissionless. Due dilligence is required.`)}
             </Typography>
           </div>
-          <div className="flex gap-4 items-center">
-            <div>
-              <Link href="/miso/auction" passHref={true}>
-                <Button
-                  color="blue"
-                  className="rounded-full bg-gradient-to-r from-pink-red via-pink to-red text-white transition hover:scale-[1.05]"
-                >
-                  {i18n._(t`Create Auction`)}
-                </Button>
-              </Link>
+          {(chainId === ChainId.HARMONY || chainId === ChainId.KOVAN || chainId === ChainId.MOONBEAM) && (
+            <div className="flex items-center gap-4">
+              <div>
+                <Link href="/miso/auction" passHref={true}>
+                  <Button color="blue" className="rounded-full">
+                    {i18n._(t`Create Auction`)}
+                  </Button>
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </MisoHeader>
       <MisoBody>
@@ -65,10 +67,11 @@ const Miso = () => {
             >
               {tabs.map((tab) => (
                 <Link href={`/miso?status=${tab.link}`} key={tab.key} passHref={true}>
-                  <div className="space-y-2 cursor-pointer h-full">
+                  <div className="h-full space-y-2 cursor-pointer">
                     <Typography
                       weight={700}
                       className={classNames(
+                        // @ts-ignore TYPE NEEDS FIXING
                         tab.key === (queryToAuctionStatus[query?.status as string] || AuctionStatus.LIVE)
                           ? 'bg-gradient-to-r from-red to-pink bg-clip-text text-transparent'
                           : '',
@@ -79,6 +82,7 @@ const Miso = () => {
                     </Typography>
                     <div
                       className={classNames(
+                        // @ts-ignore TYPE NEEDS FIXING
                         tab.key === queryToAuctionStatus[query?.status as string]
                           ? 'relative bg-gradient-to-r from-red to-pink h-[3px] w-full'
                           : ''
@@ -93,7 +97,7 @@ const Miso = () => {
             <Typography variant="lg" weight={700} className="text-high-emphesis">
               {auctions?.length} Results
             </Typography>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {auctions?.map((auction, index) => {
                 return <AuctionCard auction={auction} key={index} />
               })}

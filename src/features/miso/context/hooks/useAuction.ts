@@ -1,7 +1,12 @@
+import { AddressZero } from '@ethersproject/constants'
 import { Token } from '@sushiswap/core-sdk'
 import { useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
 import { useAuctionEnded } from 'app/features/miso/context/hooks/useAuctionEnded'
-import { useAuctionDetails, useAuctionHelperInfo } from 'app/features/miso/context/hooks/useAuctionInfo'
+import {
+  useAuctionDetails,
+  useAuctionHelperInfo,
+  useAuctionLauncherDetails,
+} from 'app/features/miso/context/hooks/useAuctionInfo'
 import { useAuctionMarketTemplateIds } from 'app/features/miso/context/hooks/useAuctionMarketTemplateIds'
 import { useAuctionPointLists } from 'app/features/miso/context/hooks/useAuctionPointList'
 import { useAuctionRawInfos } from 'app/features/miso/context/hooks/useAuctionRawInfo'
@@ -43,7 +48,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
           return acc
         }
 
-        if (template && auctionInfo && paymentToken && auctionDocs && pointListAddress) {
+        if (template && auctionInfo && paymentToken && auctionDocs && pointListAddress && blockTimestamp) {
           acc.push(
             new Auction({
               template,
@@ -55,8 +60,10 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
                 el.tokenInfo.name
               ),
               paymentToken,
+              liquidityToken: undefined, // for performance reasons since this hook is only used on overview screen
               auctionInfo,
               marketInfo,
+              launcherInfo: undefined, // for performance reasons since this hook is only used on overview screen
               auctionDocuments: auctionDocs,
               pointListAddress,
               status: getStatusByTimestamp(blockTimestamp, auctionInfo),
@@ -83,6 +90,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
     auctionInfos,
     auctionTemplateIds,
     auctions,
+    blockTimestamp,
     chainId,
     owner,
     pointListAddresses,
@@ -93,26 +101,51 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
 
 export const useAuction = (address?: string, owner?: string) => {
   const { chainId } = useActiveWeb3React()
-  const { marketTemplateId, pointListAddress, loading: loadingDetails } = useAuctionDetails(address)
-  const auctionEnded = useAuctionEnded(address, marketTemplateId)
   const blockTimestamp = useBlockTimestamp()
+
+  const {
+    marketTemplateId,
+    pointListAddress,
+    auctionLauncherAddress,
+    loading: loadingDetails,
+    error: errorDetails,
+  } = useAuctionDetails(address)
+
+  const auctionEnded = useAuctionEnded(address, marketTemplateId)
+
+  const { launcherInfo, lpTokenAddress } = useAuctionLauncherDetails(auctionLauncherAddress)
 
   const {
     auctionDocuments,
     marketInfo,
     auctionInfo,
     loading: loadingInfo,
-  } = useAuctionHelperInfo(address, marketTemplateId, owner ?? undefined)
+    error: errorInfo,
+  } = useAuctionHelperInfo(address, marketTemplateId, owner ?? AddressZero)
 
   return useMemo(() => {
-    if (!chainId || !marketTemplateId || !auctionInfo || !auctionDocuments)
-      return { loading: loadingDetails || loadingInfo, auction: undefined }
+    const error = errorDetails || errorInfo
+
+    if (error) {
+      return { loading: false, auction: undefined, error }
+    }
+
+    if (
+      loadingDetails ||
+      loadingInfo ||
+      !blockTimestamp ||
+      !chainId ||
+      !marketTemplateId ||
+      !auctionInfo ||
+      !auctionDocuments
+    ) {
+      return { loading: true, auction: undefined, error }
+    }
+
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
-    if (owner && !marketInfo?.isAdmin) return { loading: loadingDetails || loadingInfo, auction: undefined }
-
     return {
-      loading: loadingDetails || loadingInfo,
+      loading: false,
       auction: new Auction({
         template: marketTemplateId.toNumber(),
         auctionToken: new Token(
@@ -122,13 +155,18 @@ export const useAuction = (address?: string, owner?: string) => {
           auctionInfo.tokenInfo.symbol,
           auctionInfo.tokenInfo.name
         ),
+        liquidityToken: lpTokenAddress
+          ? new Token(chainId, lpTokenAddress, 18, 'SLP', 'Sushiswap LP Token')
+          : undefined,
         paymentToken,
         auctionInfo,
         marketInfo,
+        launcherInfo,
         auctionDocuments,
         pointListAddress,
         status: getStatusByTimestamp(blockTimestamp, auctionInfo, auctionEnded),
       }),
+      error,
     }
   }, [
     auctionDocuments,
@@ -136,11 +174,14 @@ export const useAuction = (address?: string, owner?: string) => {
     auctionInfo,
     blockTimestamp,
     chainId,
+    errorDetails,
+    errorInfo,
+    launcherInfo,
     loadingDetails,
     loadingInfo,
+    lpTokenAddress,
     marketInfo,
     marketTemplateId,
-    owner,
     pointListAddress,
   ])
 }

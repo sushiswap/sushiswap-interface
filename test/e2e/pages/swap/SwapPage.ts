@@ -1,44 +1,58 @@
-import { ElementHandle } from 'puppeteer'
+import { Dappeteer } from '@chainsafe/dappeteer'
+import { ElementHandle, Page } from 'puppeteer'
 
 import { SwapType } from '../../enums/SwapType'
 import { AppPage } from '../AppPage'
+import { CurrencySelectComponent } from '../shared/CurrencySelectComponent'
 
 export class SwapPage extends AppPage {
+  protected Route: string = '/trident/swap'
+
+  // Components
+  private CurrencySelectModal: CurrencySelectComponent
+
+  constructor(page: Page, metamask: Dappeteer, baseUrl: string) {
+    super(page, metamask, baseUrl)
+
+    this.CurrencySelectModal = new CurrencySelectComponent(page)
+  }
+
   // Main swap panel selectors
-  protected TokenInputSelector: string = '.swap-panel-input input'
-  protected PayFromWalletSelector: string = '.chk-pay-from-wallet'
-  protected ReceiveToWalletSelector: string = '.chk-receive-to-wallet'
-  protected SwapButtonSelector: string = '#swap-button'
-  protected WrapButtonSelector: string = '#wrap-button'
-  protected UseMaxButtonSelector: string = '.btn-max'
-  protected BalanceLabelSelector: string = '.text-balance'
-  protected SwitchCurrenciesButtonSelector: string = '#btn-switch-currencies'
-  protected InvertRateButtonSelector: string = '#btn-invert-rate'
+  private TokenInputSelector: string = '.swap-panel-input input'
+  private PayFromWalletSelector: string = '.chk-pay-from-wallet'
+  private ReceiveToWalletSelector: string = '.chk-receive-to-wallet'
+  private SwapButtonSelector: string = '#swap-button'
+  private WrapButtonSelector: string = '#wrap-button'
+  private UseMaxButtonSelector: string = '.btn-max'
+  private BalanceLabelSelector: string = '#text-balance-'
+  private SwitchCurrenciesButtonSelector: string = '#btn-switch-currencies'
+
+  // Swap rate selectors
+  private ExchangeRateButtonSelector: string = '#btn-exchange-rate'
 
   // Swap review modal selectors
-  protected ConfirmSwapButtonSelector: string = '#review-swap-button'
-  protected SwapSuccessIconSelector: string = '#swap-success-icon'
+  private ConfirmSwapButtonSelector: string = '#confirm-swap-or-send'
+  private TxSubmittedSelector: string = '#text-transaction-submitted'
 
-  // Token selector & currency select dialog selectors
-  protected InTokenButtonSelector: string = '#asset-select-trigger-0'
-  protected OutTokenButtonSelector: string = '#asset-select-trigger-1'
-  protected SelectTokenInputSelector: string = '#txt-select-token'
-  protected AllCurrenciesListSelector: string = '#all-currencies-list'
-  protected SelectTokenResultsSelector: string = '#all-currencies-'
+  // Token selector &
+  private InTokenButtonSelector: string = '#asset-select-trigger-0'
+  private OutTokenButtonSelector: string = '#asset-select-trigger-1'
 
   // Tx settings
-  protected TxSettingsButtonSelector: string = '#btn-transaction-settings'
-  protected SlippageInputSelector: string = '#text-slippage'
-  protected ExpertModeToggleSelector: string = '#toggle-expert-mode-button'
+  private TxSettingsButtonSelector: string = '#btn-transaction-settings'
+  private SlippageInputSelector: string = '#text-slippage'
+  private ExpertModeToggleSelector: string = '#toggle-expert-mode-button'
 
   //Confirm expert Mode Modal
-  protected ConfirmExpertModeSelector: string = '#confirm-expert-mode'
+  private ConfirmExpertModeSelector: string = '#confirm-expert-mode'
 
   // Add recipient
-  protected AddRecipientButtonSelector: string = '#btn-add-recipient'
-  protected RecipientInputSelector: string = '#recipient-input'
+  private AddRecipientButtonSelector: string = '#btn-add-recipient'
+  private RecipientInputSelector: string = '#recipient-input'
 
-  protected ApproveButtonSelector: string = '#btn-approve'
+  private ApproveButtonSelector: string = '#btn-approve'
+
+  private TradeTypeSelector: string = '#trade-type'
 
   public async swapTokens(
     inTokenSymbol: string,
@@ -47,8 +61,8 @@ export class SwapPage extends AppPage {
     payFromWallet: boolean,
     receiveToWallet: boolean
   ): Promise<void> {
-    await this.selectInputToken(inTokenSymbol)
-    await this.selectOutputToken(outTokenSymbol)
+    await this.setInputToken(inTokenSymbol)
+    await this.setOutputToken(outTokenSymbol)
     await this.setAmountIn(inTokenAmount)
 
     const isPayFromWalletChecked = await this.isSwitchChecked(this.PayFromWalletSelector)
@@ -70,135 +84,77 @@ export class SwapPage extends AppPage {
     await this.confirmSwap(inTokenSymbol, outTokenSymbol)
   }
 
-  public async confirmSwap(inTokenSymbol: string, outTokenSymbol: string): Promise<void> {
-    await this.blockingWait(1)
+  // Swap Rate Component
+  public async getExchangeRate(): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(this.ExchangeRateButtonSelector)
+    const rate = await this.Page.$(this.ExchangeRateButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    const rateText = (await (await rate.getProperty('textContent')).jsonValue()) as string
+    return rateText
+  }
 
-    const swapType: SwapType = this.getSwapType(inTokenSymbol, outTokenSymbol)
+  // Swap Asset Panel
+  public async setInputToken(tokenSymbol: string): Promise<void> {
+    await this.blockingWait(1, true)
 
-    switch (swapType) {
-      case SwapType.Wrap:
-      case SwapType.Unwrap:
-        const wrapButon = await this.Page.waitForSelector(this.WrapButtonSelector)
-        await wrapButon.click()
-
-        await this.blockingWait(1)
-        break
-
-      case SwapType.Normal:
-      default:
-        const swapButon = await this.Page.waitForSelector(this.SwapButtonSelector)
-        await swapButon.click()
-
-        await this.blockingWait(1)
-        const confirmSwapButton = await this.Page.waitForSelector(this.ConfirmSwapButtonSelector)
-        await confirmSwapButton.click()
-        break
+    const selectedInToken = await this.getSelectedInputToken()
+    if (selectedInToken === tokenSymbol) {
+      return
     }
 
-    await this.confirmMetamaskTransaction()
-
-    if (swapType === SwapType.Normal) {
-      await this.Page.waitForSelector(this.SwapSuccessIconSelector)
-    }
+    const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    await inputTokenButton.click()
+    await this.selectToken(tokenSymbol)
   }
 
-  public async addRecipient(recipient: string): Promise<void> {
+  public async setOutputToken(tokenSymbol: string): Promise<void> {
     await this.blockingWait(1, true)
 
-    const addRecipientButton = await this.Page.waitForSelector(this.AddRecipientButtonSelector)
-    addRecipientButton.click()
-
-    const recipientInput = await this.Page.waitForSelector(this.RecipientInputSelector)
-    await recipientInput.type(recipient)
-  }
-
-  public async getRecipient(): Promise<string> {
-    await this.blockingWait(1, true)
-
-    let recipientInputBox: ElementHandle<Element>
-    recipientInputBox = await this.Page.$(this.RecipientInputSelector)
-
-    if (!recipientInputBox) {
-      return ''
+    const selectedOutToken = await this.getSelectedOutputToken()
+    if (selectedOutToken === tokenSymbol) {
+      return
     }
 
-    const recipient = (await (await recipientInputBox.getProperty('value')).jsonValue()) as string
-    return recipient
+    const outputTokenButton = await this.Page.waitForSelector(this.OutTokenButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    await outputTokenButton.click()
+    await this.selectToken(tokenSymbol)
   }
 
-  public async toggleExpertMode(): Promise<void> {
-    await this.blockingWait(1, true)
-
-    const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
-    await TxSettingsButtonSelector.click()
-
-    const expertModeToggle = await this.Page.waitForSelector(this.ExpertModeToggleSelector)
-    await expertModeToggle.click()
-
-    const confirmExpertModeButton = await this.Page.$(this.ConfirmExpertModeSelector)
-    if (confirmExpertModeButton) {
-      await confirmExpertModeButton.click()
-    }
-  }
-
-  public async setSlippage(slippage: string): Promise<void> {
-    await this.blockingWait(1, true)
-
-    const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
-    await TxSettingsButtonSelector.click()
-
-    const slippageInput = await this.Page.waitForSelector(this.SlippageInputSelector)
-
-    await slippageInput.click({ clickCount: 3 })
-    await slippageInput.type(slippage)
-
-    await TxSettingsButtonSelector.click()
-  }
-
-  public async getSlippage(): Promise<string> {
-    await this.blockingWait(1, true)
-
-    const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
-    await TxSettingsButtonSelector.click()
-
-    await this.Page.waitForSelector(this.SlippageInputSelector)
-
-    const slippageInputTextBox = await this.Page.$(this.SlippageInputSelector)
-    const slippage = (await (await slippageInputTextBox.getProperty('value')).jsonValue()) as string
-    return slippage
+  private async selectToken(tokenSymbol: string): Promise<void> {
+    await this.CurrencySelectModal.selectToken(tokenSymbol)
   }
 
   public async setAmountIn(inTokenAmount: string): Promise<void> {
     await this.Page.waitForTimeout(500)
     const tokenAmountInput = await this.Page.waitForSelector(this.TokenInputSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await tokenAmountInput.type(inTokenAmount)
   }
 
-  public async getSelectedInputToken(): Promise<string> {
-    return await this.getSelectedToken(this.InTokenButtonSelector)
-  }
-
-  public async getSelectedOutputToken(): Promise<string> {
-    return await this.getSelectedToken(this.OutTokenButtonSelector)
-  }
-
-  private async getSelectedToken(selector: string): Promise<string> {
+  public async getInputTokenAmount(): Promise<string> {
     await this.blockingWait(1, true)
-    await this.Page.waitForSelector(selector)
-    const tokenButton = await this.Page.$(selector)
-    const selectedToken = (await (await tokenButton.getProperty('textContent')).jsonValue()) as string
-    return selectedToken
+    await this.Page.waitForSelector(this.TokenInputSelector)
+    const tokenInput = await this.Page.$(this.TokenInputSelector)
+
+    // @ts-ignore TYPE NEEDS FIXING
+    const inTokenAmount = (await (await tokenInput.getProperty('value')).jsonValue()) as string
+    return inTokenAmount
+  }
+
+  public async getMinOutputAmount(): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(this.TokenInputSelector)
+    const tokenOutput = await this.Page.$$(this.TokenInputSelector)
+
+    const outTokenAmount = (await (await tokenOutput[1].getProperty('value')).jsonValue()) as string
+    return outTokenAmount
   }
 
   public async setPayFromWallet(payFromWallet: boolean): Promise<void> {
-    await this.blockingWait(3, true)
-    const isPayFromWalletChecked = await this.isSwitchChecked(this.PayFromWalletSelector)
-    const payFromWalletSwitch = await this.getSwitchElement(this.PayFromWalletSelector)
-    if (payFromWallet && !isPayFromWalletChecked) {
-      await payFromWalletSwitch.click()
-    } else if (!payFromWallet && isPayFromWalletChecked) {
-      await payFromWalletSwitch.click()
-    }
+    await this.setFunding(payFromWallet, this.PayFromWalletSelector)
   }
 
   public async setReceiveToWallet(receiveToWallet: boolean): Promise<void> {
@@ -216,9 +172,168 @@ export class SwapPage extends AppPage {
     }
   }
 
+  public async getSelectedInputToken(): Promise<string> {
+    return await this.getSelectedToken(this.InTokenButtonSelector)
+  }
+
+  public async getSelectedOutputToken(): Promise<string> {
+    return await this.getSelectedToken(this.OutTokenButtonSelector)
+  }
+
+  private async getSelectedToken(selector: string): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(selector)
+    const tokenButton = await this.Page.$(selector)
+    // @ts-ignore TYPE NEEDS FIXING
+    const selectedToken = (await (await tokenButton.getProperty('textContent')).jsonValue()) as string
+    return selectedToken
+  }
+
+  public async getInputTokenBalance(): Promise<string> {
+    await this.blockingWait(3, true)
+    await this.Page.waitForSelector(this.InTokenButtonSelector)
+    const inputTokenLabel = await this.Page.$(this.InTokenButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    const inToken = (await (await inputTokenLabel.getProperty('textContent')).jsonValue()) as string
+
+    const balanceLabel = await this.Page.waitForSelector(`#text-balance-${inToken}`)
+    // @ts-ignore TYPE NEEDS FIXING
+    const inTokenBalance = (await (await balanceLabel.getProperty('textContent')).jsonValue()) as string
+
+    return inTokenBalance
+  }
+
+  public async getTokenBalance(tokenSymbol: string, fromWallet: boolean = true): Promise<number> {
+    await this.blockingWait(1, true)
+
+    await this.setInputToken(tokenSymbol)
+    await this.setPayFromWallet(fromWallet)
+
+    const balance = await this.getInputTokenBalance()
+
+    return parseFloat(balance)
+  }
+
+  // Swap Review Component
+  public async confirmSwap(inTokenSymbol: string, outTokenSymbol: string): Promise<void> {
+    await this.blockingWait(1)
+
+    const swapType: SwapType = this.getSwapType(inTokenSymbol, outTokenSymbol)
+
+    switch (swapType) {
+      case SwapType.Wrap:
+      case SwapType.Unwrap:
+        const wrapButon = await this.Page.waitForSelector(this.WrapButtonSelector)
+        // @ts-ignore TYPE NEEDS FIXING
+        await wrapButon.click()
+
+        await this.blockingWait(1)
+        break
+
+      case SwapType.Normal:
+      default:
+        const swapButon = await this.Page.waitForSelector(this.SwapButtonSelector)
+        // @ts-ignore TYPE NEEDS FIXING
+        await swapButon.click()
+
+        await this.blockingWait(1)
+        const confirmSwapButton = await this.Page.waitForSelector(this.ConfirmSwapButtonSelector)
+        // @ts-ignore TYPE NEEDS FIXING
+        await confirmSwapButton.click()
+        break
+    }
+
+    await this.confirmMetamaskTransaction()
+
+    if (swapType === SwapType.Normal) {
+      await this.Page.waitForSelector(this.TxSubmittedSelector)
+      await this.blockingWait(5) // wait for tx
+    }
+  }
+
+  // Settings Tab
+  public async toggleExpertMode(): Promise<void> {
+    await this.blockingWait(1, true)
+
+    const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    await TxSettingsButtonSelector.click()
+
+    const expertModeToggle = await this.Page.waitForSelector(this.ExpertModeToggleSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    await expertModeToggle.click()
+
+    const confirmExpertModeButton = await this.Page.$(this.ConfirmExpertModeSelector)
+    if (confirmExpertModeButton) {
+      await confirmExpertModeButton.click()
+    }
+  }
+
+  public async setSlippage(slippage: string): Promise<void> {
+    await this.blockingWait(1, true)
+
+    const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    await TxSettingsButtonSelector.click()
+
+    const slippageInput = await this.Page.waitForSelector(this.SlippageInputSelector)
+
+    // @ts-ignore TYPE NEEDS FIXING
+    await slippageInput.click({ clickCount: 3 })
+    // @ts-ignore TYPE NEEDS FIXING
+    await slippageInput.type(slippage)
+
+    // @ts-ignore TYPE NEEDS FIXING
+    await TxSettingsButtonSelector.click()
+  }
+
+  public async getSlippage(): Promise<string> {
+    await this.blockingWait(1, true)
+
+    const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    await TxSettingsButtonSelector.click()
+
+    await this.Page.waitForSelector(this.SlippageInputSelector)
+
+    const slippageInputTextBox = await this.Page.$(this.SlippageInputSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    const slippage = (await (await slippageInputTextBox.getProperty('value')).jsonValue()) as string
+    return slippage
+  }
+
+  // Recipient Panel
+  public async setRecipient(recipient: string): Promise<void> {
+    await this.blockingWait(1, true)
+
+    const addRecipientButton = await this.Page.waitForSelector(this.AddRecipientButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    addRecipientButton.click()
+
+    const recipientInput = await this.Page.waitForSelector(this.RecipientInputSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    await recipientInput.type(recipient)
+  }
+
+  public async getRecipient(): Promise<string> {
+    await this.blockingWait(1, true)
+
+    let recipientInputBox: ElementHandle<Element>
+    // @ts-ignore TYPE NEEDS FIXING
+    recipientInputBox = await this.Page.$(this.RecipientInputSelector)
+
+    if (!recipientInputBox) {
+      return ''
+    }
+
+    const recipient = (await (await recipientInputBox.getProperty('value')).jsonValue()) as string
+    return recipient
+  }
+
   public async clickSwitchCurrenciesButton(): Promise<void> {
     await this.blockingWait(1, true)
     const switchCurrenciesButton = await this.Page.waitForSelector(this.SwitchCurrenciesButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await switchCurrenciesButton.click()
     await this.blockingWait(1, true)
   }
@@ -229,6 +344,7 @@ export class SwapPage extends AppPage {
     await this.Page.waitForSelector(this.SwapButtonSelector)
     const swapButton = await this.Page.$(this.SwapButtonSelector)
 
+    // @ts-ignore TYPE NEEDS FIXING
     const swapButtonText = (await (await swapButton.getProperty('textContent')).jsonValue()) as string
     return swapButtonText
   }
@@ -241,65 +357,17 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
   }
 
-  public async getInputTokenBalance(): Promise<string> {
-    await this.blockingWait(1, true)
-    const balanceLabels = await this.Page.$$(this.BalanceLabelSelector)
-    const inputTokenBalanceLabel = balanceLabels[1]
-
-    const inTokenAmount = (await (await inputTokenBalanceLabel.getProperty('textContent')).jsonValue()) as string
-    return inTokenAmount
-  }
-
-  public async getInputTokenAmount(): Promise<string> {
-    await this.blockingWait(1, true)
-    await this.Page.waitForSelector(this.TokenInputSelector)
-    const tokenInput = await this.Page.$(this.TokenInputSelector)
-
-    const inTokenAmount = (await (await tokenInput.getProperty('value')).jsonValue()) as string
-    return inTokenAmount
-  }
-
-  public async getOutputTokenAmount(): Promise<string> {
-    await this.blockingWait(1, true)
-    await this.Page.waitForSelector(this.TokenInputSelector)
-    const tokenOutput = await this.Page.$$(this.TokenInputSelector)
-
-    const outTokenAmount = (await (await tokenOutput[1].getProperty('value')).jsonValue()) as string
-    return outTokenAmount
-  }
-
-  public async selectInputToken(tokenSymbol: string): Promise<void> {
-    await this.blockingWait(1, true)
-    const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
-    await inputTokenButton.click()
-    await this.selectToken(tokenSymbol)
-  }
-
-  public async selectOutputToken(tokenSymbol: string): Promise<void> {
-    await this.blockingWait(1, true)
-    const outputTokenButton = await this.Page.waitForSelector(this.OutTokenButtonSelector)
-    await outputTokenButton.click()
-    await this.selectToken(tokenSymbol)
-  }
-
   public async clickInvertRateButton(): Promise<void> {
     await this.blockingWait(1, true)
-    const invertRateButton = await this.Page.waitForSelector(this.InvertRateButtonSelector)
+    const invertRateButton = await this.Page.waitForSelector(this.ExchangeRateButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await invertRateButton.click()
-  }
-
-  public async getRate(): Promise<string> {
-    await this.blockingWait(1, true)
-    await this.Page.waitForSelector(this.InvertRateButtonSelector)
-    const rate = await this.Page.$(this.InvertRateButtonSelector)
-    const rateText = (await (await rate.getProperty('textContent')).jsonValue()) as string
-    return rateText
   }
 
   public async getBentoBalance(tokenSymbol: string): Promise<string> {
     await this.blockingWait(1, true)
     await this.Page.bringToFront()
-    await this.selectInputToken(tokenSymbol)
+    await this.setInputToken(tokenSymbol)
 
     await this.setPayFromWallet(false)
 
@@ -311,7 +379,7 @@ export class SwapPage extends AppPage {
   public async getWalletBalance(tokenSymbol: string): Promise<string> {
     await this.blockingWait(1, true)
     await this.Page.bringToFront()
-    await this.selectInputToken(tokenSymbol)
+    await this.setInputToken(tokenSymbol)
 
     await this.setPayFromWallet(true)
 
@@ -329,29 +397,12 @@ export class SwapPage extends AppPage {
   public async approveToken(): Promise<void> {
     await this.blockingWait(1, true)
     const approveButton = await this.Page.waitForSelector(this.ApproveButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await approveButton.click()
     await this.Metamask.confirmTransaction()
     await this.Metamask.page.waitForTimeout(1000)
     await this.bringToFront()
     await this.blockingWait(5, true)
-  }
-
-  private async selectToken(tokenSymbol: string): Promise<void> {
-    await this.Page.waitForSelector(this.AllCurrenciesListSelector)
-    await this.blockingWait(3)
-
-    const nativeTokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
-    if (nativeTokenButton) {
-      await this.blockingWait(2)
-      await nativeTokenButton.click()
-    } else {
-      const selectTokenInput = await this.Page.waitForSelector(this.SelectTokenInputSelector)
-      selectTokenInput.type(tokenSymbol)
-      await this.blockingWait(2)
-
-      const tokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
-      await tokenButton.click()
-    }
   }
 
   private getSwapType(inTokenSymbol: string, outTokenSymbol: string): SwapType {
@@ -362,5 +413,14 @@ export class SwapPage extends AppPage {
     } else {
       return SwapType.Normal
     }
+  }
+
+  public async getTradeType(): Promise<string> {
+    await this.Page.waitForSelector(this.TradeTypeSelector)
+
+    const tradeTypeInput = await this.Page.$(this.TradeTypeSelector)
+    // @ts-ignore TYPE NEEDS FIXING
+    const tradeType = (await (await tradeTypeInput.getProperty('textContent')).jsonValue()) as string
+    return tradeType.toLowerCase()
   }
 }

@@ -1,6 +1,7 @@
 import { useActiveWeb3React } from 'app/services/web3'
-import { AppDispatch, AppState } from 'app/state'
+import { AppState } from 'app/state'
 import { addPopup, ApplicationModal, PopupContent, removePopup, setOpenModal } from 'app/state/application/actions'
+import { useAppDispatch } from 'app/state/hooks'
 import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -23,17 +24,17 @@ export function useModalOpen(modal: ApplicationModal): boolean {
 
 export function useToggleModal(modal: ApplicationModal): () => void {
   const open = useModalOpen(modal)
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   return useCallback(() => dispatch(setOpenModal(open ? null : modal)), [dispatch, modal, open])
 }
 
 export function useOpenModal(modal: ApplicationModal): () => void {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   return useCallback(() => dispatch(setOpenModal(modal)), [dispatch, modal])
 }
 
 export function useCloseModals(): () => void {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   return useCallback(() => dispatch(setOpenModal(null)), [dispatch])
 }
 
@@ -95,6 +96,7 @@ export function useRemovePopup(): (key: string) => void {
 // get the list of active popups
 export function useActivePopups(): AppState['application']['popupList'] {
   const list = useSelector((state: AppState) => state.application.popupList)
+  // @ts-ignore TYPE NEEDS FIXING
   return useMemo(() => list.filter((item) => item.show), [list])
 }
 

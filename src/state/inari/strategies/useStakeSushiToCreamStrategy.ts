@@ -47,11 +47,13 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
   const { zapIn, inputValue } = useDerivedInariState()
   const zenkoContract = useZenkoContract()
   const inariContract = useInariContract()
+  // @ts-ignore TYPE NEEDS FIXING
   const balances = useTokenBalances(account, [SUSHI[ChainId.ETHEREUM], CRXSUSHI])
   const cTokenAmountRef = useRef<CurrencyAmount<Token>>(null)
   const approveAmount = useMemo(() => (zapIn ? inputValue : cTokenAmountRef.current), [inputValue, zapIn])
 
   // Override approveCallback for this strategy as we need to approve CRXSUSHI on zapOut
+  // @ts-ignore TYPE NEEDS FIXING
   const approveCallback = useApproveCallback(approveAmount, inariContract?.address)
   const general = useMemo(() => GENERAL(i18n), [i18n])
   const { execute, setBalances, ...baseStrategy } = useBaseStrategy({
@@ -75,12 +77,14 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
   const preExecute = useCallback(
     async (val: CurrencyAmount<Token>) => {
       if (zapIn) return execute(val)
+      // @ts-ignore TYPE NEEDS FIXING
       return execute(await toCTokenAmount(val))
     },
     [execute, toCTokenAmount, zapIn]
   )
 
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     toCTokenAmount(inputValue).then((val) => (cTokenAmountRef.current = val))
   }, [inputValue, toCTokenAmount])
 
@@ -94,6 +98,7 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
         balances[CRXSUSHI.address].toFixed().toBigNumber(CRXSUSHI.decimals).toString()
       )
       setBalances({
+        // @ts-ignore TYPE NEEDS FIXING
         inputTokenBalance: balances[SUSHI[ChainId.ETHEREUM].address],
         outputTokenBalance: CurrencyAmount.fromRawAmount(XSUSHI, bal.toString()),
       })
@@ -102,6 +107,7 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
     main()
   }, [balances, setBalances, zenkoContract])
 
+  // @ts-ignore TYPE NEEDS FIXING
   return useMemo(
     () => ({
       ...baseStrategy,

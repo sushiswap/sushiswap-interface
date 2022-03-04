@@ -18,11 +18,13 @@ export const useAuctionEdit = (
 
   const liquidityLauncherContract = useContract(
     address,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PostAuctionLauncher.abi : undefined
   )
 
   const pointListContract = useContract(
     listAddress,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PointList.abi : undefined
   )
 
@@ -51,6 +53,7 @@ export const useAuctionEdit = (
 
         return tx
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         console.error('set document error:', e.message)
       }
     },
@@ -66,6 +69,7 @@ export const useAuctionEdit = (
 
       return tx
     } catch (e) {
+      // @ts-ignore TYPE NEEDS FIXING
       console.error('cancel auction error:', e.message)
     }
   }, [addTransaction, auctionContract])
@@ -109,6 +113,7 @@ export const useAuctionEdit = (
         addTransaction(tx, { summary: 'Set permission list' })
         return tx
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         console.error('set permission list error: ', e.message)
       }
     },
@@ -124,6 +129,7 @@ export const useAuctionEdit = (
         addTransaction(tx, { summary: status ? 'Enable permission list' : 'Disable permission list' })
         return tx
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         console.error('set permission list status error:', e.message)
       }
     },
@@ -139,6 +145,7 @@ export const useAuctionEdit = (
         addTransaction(tx, { summary: 'Set point list' })
         return tx
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         console.error('set point list error:', e.message)
       }
     },

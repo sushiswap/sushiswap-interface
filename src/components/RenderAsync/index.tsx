@@ -6,6 +6,7 @@ interface RenderAsyncProps<ObjectType> {
   loader: ReactNode
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 function RenderAsync<ObjectType extends RenderAsyncProps<ObjectType>>({ children, promise, loader }) {
   const [data, setData] = useState()
 

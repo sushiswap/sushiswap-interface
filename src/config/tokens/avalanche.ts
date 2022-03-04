@@ -39,3 +39,14 @@ export const SPELL = new Token(
   'Spell Token'
 )
 export const TIME = new Token(ChainId.AVALANCHE, '0xb54f16fB19478766A268F172C9480f8da1a7c9C3', 9, 'TIME', 'Time')
+
+export const WMEMO = new Token(
+  ChainId.AVALANCHE,
+  '0x0da67235dD5787D67955420C84ca1cEcd4E5Bb3b',
+  18,
+  'WMEMO',
+  'Wrapped MEMO'
+)
+
+export const FRAX = new Token(ChainId.AVALANCHE, '0xD24C2Ad096400B6FBcd2ad8B24E7acBc21A1da64', 18, 'FRAX', 'Frax')
+export const FXS = new Token(ChainId.AVALANCHE, '0x214DB107654fF987AD859F34125307783fC8e387', 18, 'FXS', 'Frax Share')

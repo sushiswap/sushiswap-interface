@@ -58,6 +58,7 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss: 
           await tx.wait()
         }
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         setError(e.error?.message)
       } finally {
         setPending(false)
@@ -68,6 +69,7 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss: 
 
   // Subscribe to creation event to get created token ID
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     subscribe('MarketCreated', (owner, address, marketTemplate, { transactionHash }) => {
       if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
         setAuctionAddress(address)
@@ -99,6 +101,7 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss: 
       {!txHash ? (
         <HeadlessUIModal.Body className="lg:max-w-lg lg:min-w-lg">
           <HeadlessUIModal.Header
+            onClose={onDismiss}
             header={i18n._(t`Create Auction`)}
             subheader={i18n._(t`Please review your entered details thoroughly.`)}
           />

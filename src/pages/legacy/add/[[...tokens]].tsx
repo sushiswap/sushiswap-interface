@@ -2,9 +2,9 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, currencyEquals, Percent, WNATIVE } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, currencyEquals, WNATIVE } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
-import Button, { ButtonError } from 'app/components/Button'
+import Button from 'app/components/Button'
 import { AutoColumn } from 'app/components/Column'
 import Container from 'app/components/Container'
 import CurrencyInputPanel from 'app/components/CurrencyInputPanel'
@@ -17,7 +17,6 @@ import { AutoRow, RowBetween } from 'app/components/Row'
 import Web3Connect from 'app/components/Web3Connect'
 import { ZERO_PERCENT } from 'app/constants'
 import { ConfirmAddModalBottom } from 'app/features/legacy/liquidity/ConfirmAddModalBottom'
-import LiquidityHeader from 'app/features/legacy/liquidity/LiquidityHeader'
 import LiquidityPrice from 'app/features/legacy/liquidity/LiquidityPrice'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
 import ExchangeHeader from 'app/features/trade/Header'
@@ -31,18 +30,19 @@ import useTransactionDeadline from 'app/hooks/useTransactionDeadline'
 import { PairState } from 'app/hooks/useV2Pairs'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'app/services/web3'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useWalletModalToggle } from 'app/state/application/hooks'
+import { useAppSelector } from 'app/state/hooks'
 import { Field } from 'app/state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'app/state/mint/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useCallback, useState } from 'react'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
-
-const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 export default function Add() {
   const { i18n } = useLingui()
@@ -90,9 +90,7 @@ export default function Add() {
   // txn values
   const deadline = useTransactionDeadline() // custom from users settings
 
-  // const [allowedSlippage] = useUserSlippageTolerance(); // custom from users
-
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
+  const allowedSlippage = useAppSelector(selectSlippage)
 
   const [txHash, setTxHash] = useState<string>('')
 
@@ -136,7 +134,7 @@ export default function Add() {
 
     const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
 
-    console.log({ parsedAmountA, parsedAmountB, currencyA, currencyB, deadline })
+    // console.log({ parsedAmountA, parsedAmountB, currencyA, currencyB, deadline })
 
     if (!parsedAmountA || !parsedAmountB || !currencyA || !currencyB || !deadline) {
       return
@@ -209,56 +207,54 @@ export default function Add() {
       .catch((error) => {
         setAttemptingTxn(false)
         // we only care if the error is something _other_ than the user rejected the tx
-        if (error?.code !== 4001) {
+        if (error?.code !== USER_REJECTED_TX) {
           console.error(error)
         }
       })
   }
 
-  const modalHeader = () => {
-    return noLiquidity ? (
-      <div className="pb-4">
-        <div className="flex items-center justify-start gap-3">
-          <div className="text-2xl font-bold text-high-emphesis">
-            {currencies[Field.CURRENCY_A]?.symbol + '/' + currencies[Field.CURRENCY_B]?.symbol}
-          </div>
+  const ModalHeader = noLiquidity ? (
+    <div className="pb-4">
+      <div className="flex items-center justify-start gap-3">
+        <div className="text-2xl font-bold text-high-emphesis">
+          {currencies[Field.CURRENCY_A]?.symbol + '/' + currencies[Field.CURRENCY_B]?.symbol}
+        </div>
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
+        <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} size={48} />
+      </div>
+    </div>
+  ) : (
+    <div className="pb-4">
+      <div className="flex items-center justify-start gap-3">
+        <div className="text-xl font-bold md:text-3xl text-high-emphesis">{liquidityMinted?.toSignificant(6)}</div>
+        <div className="grid grid-flow-col gap-2">
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} size={48} />
         </div>
       </div>
-    ) : (
-      <div className="pb-4">
-        <div className="flex items-center justify-start gap-3">
-          <div className="text-xl font-bold md:text-3xl text-high-emphesis">{liquidityMinted?.toSignificant(6)}</div>
-          <div className="grid grid-flow-col gap-2">
-            <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} size={48} />
-          </div>
-        </div>
-        <div className="text-lg font-medium md:text-2xl text-high-emphesis">
-          {currencies[Field.CURRENCY_A]?.symbol}/{currencies[Field.CURRENCY_B]?.symbol}
-          &nbsp;{i18n._(t`Pool Tokens`)}
-        </div>
-        <div className="pt-3 text-xs italic text-secondary">
-          {i18n._(t`Output is estimated. If the price changes by more than ${allowedSlippage.toSignificant(
-            4
-          )}% your transaction
-            will revert.`)}
-        </div>
+      <div className="text-lg font-medium md:text-2xl text-high-emphesis">
+        {currencies[Field.CURRENCY_A]?.symbol}/{currencies[Field.CURRENCY_B]?.symbol}
+        &nbsp;{i18n._(t`Pool Tokens`)}
       </div>
-    )
-  }
+      <div className="pt-3 text-xs italic text-secondary">
+        {i18n._(t`Output is estimated. If the price changes by more than ${allowedSlippage.toSignificant(
+          4
+        )}% your transaction
+            will revert.`)}
+      </div>
+    </div>
+  )
 
-  const modalBottom = () => {
-    return (
-      <ConfirmAddModalBottom
-        price={price}
-        currencies={currencies}
-        parsedAmounts={parsedAmounts}
-        noLiquidity={noLiquidity}
-        onAdd={onAdd}
-        poolTokenPercentage={poolTokenPercentage}
-      />
-    )
-  }
+  const ModalBottom = (
+    <ConfirmAddModalBottom
+      price={price}
+      currencies={currencies}
+      parsedAmounts={parsedAmounts}
+      noLiquidity={noLiquidity}
+      onAdd={onAdd}
+      poolTokenPercentage={poolTokenPercentage}
+    />
+  )
 
   const pendingText = i18n._(
     t`Supplying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${
@@ -315,6 +311,16 @@ export default function Add() {
         <meta
           key="description"
           name="description"
+          content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
+        />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
+        />
+        <meta
+          key="og:description"
+          property="og:description"
           content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
         />
       </Head>
@@ -383,20 +389,20 @@ export default function Add() {
               onDismiss={handleDismissConfirmation}
               attemptingTxn={attemptingTxn}
               hash={txHash}
-              content={() => (
+              content={
                 <ConfirmationModalContent
                   title={noLiquidity ? i18n._(t`You are creating a pool`) : i18n._(t`You will receive`)}
                   onDismiss={handleDismissConfirmation}
-                  topContent={modalHeader}
-                  bottomContent={modalBottom}
+                  topContent={ModalHeader}
+                  bottomContent={ModalBottom}
                 />
-              )}
+              }
               pendingText={pendingText}
             />
             <div className="flex flex-col space-y-4">
-              {pair && pairState !== PairState.INVALID && (
+              {/* {pair && pairState !== PairState.INVALID && (
                 <LiquidityHeader input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
-              )}
+              )} */}
 
               <div>
                 <CurrencyInputPanel
@@ -501,17 +507,21 @@ export default function Add() {
                     }
 
                     {approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED && (
-                      <ButtonError
+                      <Button
+                        color={
+                          !isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]
+                            ? 'red'
+                            : 'blue'
+                        }
                         onClick={() => {
                           isExpertMode ? onAdd() : setShowConfirm(true)
                         }}
                         disabled={
                           !isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED
                         }
-                        error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
                       >
                         {error ?? i18n._(t`Confirm Adding Liquidity`)}
-                      </ButtonError>
+                      </Button>
                     )}
                   </AutoColumn>
                 )
@@ -523,10 +533,7 @@ export default function Add() {
                 <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
               ) : null
             ) : (
-              <UnsupportedCurrencyFooter
-                show={addIsUnsupported}
-                currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]}
-              />
+              <UnsupportedCurrencyFooter currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]} />
             )}
           </div>
         </DoubleGlowShadow>

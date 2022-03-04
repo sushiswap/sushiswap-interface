@@ -1,17 +1,14 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import loadingCircle from 'animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
-import Typography from 'app/components/Typography'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
 import { selectTridentSwap } from 'app/features/trident/swap/swapSlice'
 import { useBentoBox, useBentoBoxContract, useWETH9Contract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppSelector } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 
 import TridentApproveGate from '../TridentApproveGate'
@@ -40,9 +37,11 @@ const WrapButton: FC = () => {
       return addTransaction(txReceipt, {
         summary: parsedAmounts?.[0]?.currency.isNative
           ? i18n._(
+              // @ts-ignore TYPE NEEDS FIXING
               t`Wrap ${parsedAmounts?.[0].toSignificant(6)} ${NATIVE[chainId].symbol} to ${WNATIVE[chainId].symbol}`
             )
           : i18n._(
+              // @ts-ignore TYPE NEEDS FIXING
               t`Unwrap ${parsedAmounts?.[0].toSignificant(6)} ${WNATIVE[chainId].symbol} to ${NATIVE[chainId].symbol}`
             ),
       })
@@ -82,23 +81,8 @@ const WrapButton: FC = () => {
 
         return (
           <div className="flex">
-            <Button
-              id="wrap-button"
-              className="h-[48px]"
-              {...(loading && {
-                startIcon: (
-                  <div className="w-4 h-4 mr-1">
-                    <Lottie animationData={loadingCircle} autoplay loop />
-                  </div>
-                ),
-              })}
-              color="gradient"
-              disabled={disabled}
-              onClick={execute}
-            >
-              <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
-                {buttonText}
-              </Typography>
+            <Button fullWidth id="wrap-button" loading={loading} color="gradient" disabled={disabled} onClick={execute}>
+              {buttonText}
             </Button>
           </div>
         )

@@ -1,32 +1,39 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import loadingCircle from 'animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
-import Typography from 'app/components/Typography'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
-import { selectTridentSwap, setShowReview } from 'app/features/trident/swap/swapSlice'
+import { selectTridentSwap, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
-import Lottie from 'lottie-react'
-import React, { FC } from 'react'
+import { TradeUnion } from 'app/types'
+import React, { FC, useCallback } from 'react'
 
 import TridentApproveGate from '../TridentApproveGate'
 
-const SwapButton: FC = () => {
+interface SwapButton {
+  onClick(x: TradeUnion): void
+}
+
+const SwapButton: FC<SwapButton> = ({ onClick }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
-  const { attemptingTxn } = useAppSelector(selectTridentSwap)
+  const tridentSwapState = useAppSelector(selectTridentSwap)
+  const { attemptingTxn } = tridentSwapState
   const router = useTridentRouterContract()
   const bentoBox = useBentoBoxContract()
-  const { parsedAmounts, error } = useDerivedTridentSwapContext()
+  const { parsedAmounts, error, trade } = useDerivedTridentSwapContext()
+
+  const handleClick = useCallback(() => {
+    if (trade) onClick(trade)
+    dispatch(setTridentSwapState({ ...tridentSwapState, showReview: true }))
+  }, [dispatch, onClick, trade, tridentSwapState])
 
   return (
     <TridentApproveGate
       inputAmounts={[parsedAmounts?.[0]]}
       tokenApproveOn={bentoBox?.address}
       masterContractAddress={router?.address}
-      withPermit={true}
     >
       {({ approved, loading }) => {
         const disabled = !!error || !approved || loading || attemptingTxn
@@ -43,22 +50,14 @@ const SwapButton: FC = () => {
         return (
           <div className="flex">
             <Button
+              fullWidth
               id="swap-button"
-              className="h-[48px]"
-              {...(loading && {
-                startIcon: (
-                  <div className="w-4 h-4 mr-1">
-                    <Lottie animationData={loadingCircle} autoplay loop />
-                  </div>
-                ),
-              })}
+              loading={loading}
               color="gradient"
               disabled={disabled}
-              onClick={() => dispatch(setShowReview(true))}
+              onClick={handleClick}
             >
-              <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
-                {buttonText}
-              </Typography>
+              {buttonText}
             </Button>
           </div>
         )

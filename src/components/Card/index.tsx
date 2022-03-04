@@ -1,6 +1,7 @@
 import { classNames } from 'app/functions/styling'
 import React, { FC } from 'react'
 
+// @ts-ignore TYPE NEEDS FIXING
 function Header({ className, children }) {
   return (
     <div className={classNames('flex items-center rounded-t px-4 sm:px-8 py-4 sm:py-6', className)}>{children}</div>

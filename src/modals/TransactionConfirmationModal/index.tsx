@@ -2,19 +2,16 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, Currency } from '@sushiswap/core-sdk'
 import loadingRollingCircle from 'app/animation/loading-rolling-circle.json'
+import receiptPrinting from 'app/animation/receipt-printing.json'
 import Button from 'app/components/Button'
-import CloseIcon from 'app/components/CloseIcon'
 import ExternalLink from 'app/components/ExternalLink'
-import Image from 'app/components/Image'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import ModalHeader from 'app/components/ModalHeader'
-import { RowFixed } from 'app/components/Row'
+import Typography from 'app/components/Typography'
 import { getExplorerLink } from 'app/functions'
 import useAddTokenToMetaMask from 'app/hooks/useAddTokenToMetaMask'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
-import { AlertTriangle, ArrowUpCircle } from 'react-feather'
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void
@@ -24,18 +21,17 @@ interface ConfirmationPendingContentProps {
 export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({ onDismiss, pendingText }) => {
   const { i18n } = useLingui()
   return (
-    <div className="p-6">
-      <div className="flex justify-end">
-        <CloseIcon onClick={onDismiss} />
-      </div>
-      <div className="w-24 pb-4 m-auto">
-        <Lottie animationData={loadingRollingCircle} autoplay loop />
-      </div>
-      <div className="flex flex-col items-center justify-center gap-3">
-        <div className="text-xl font-bold text-high-emphesis">{i18n._(t`Waiting for Confirmation`)}</div>
-        <div className="font-bold">{pendingText}</div>
-        <div className="text-sm font-bold text-secondary">{i18n._(t`Confirm this transaction in your wallet`)}</div>
-      </div>
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.Header header={i18n._(t`Confirm transaction`)} onClose={onDismiss} />
+      <HeadlessUiModal.BorderedContent className="flex flex-col items-center justify-center gap-1">
+        <div className="w-16 py-8 m-auto">
+          <Lottie animationData={loadingRollingCircle} autoplay loop />
+        </div>
+        <Typography variant="lg" weight={700} className="text-white">
+          {pendingText}
+        </Typography>
+        <Typography variant="sm">{i18n._(t`Confirm this transaction in your wallet`)}</Typography>
+      </HeadlessUiModal.BorderedContent>
     </div>
   )
 }
@@ -58,45 +54,31 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
   const { library } = useActiveWeb3React()
   const { addToken, success } = useAddTokenToMetaMask(currencyToAdd)
   return (
-    <div className="p-6">
-      <div className="flex justify-end">
-        <CloseIcon onClick={onDismiss} />
-      </div>
-      <div className="w-24 pb-4 m-auto">
-        <ArrowUpCircle strokeWidth={0.5} size={90} className="text-blue" />
-      </div>
-      <div className="flex flex-col items-center justify-center gap-1">
-        <div className="text-xl font-bold">{i18n._(t`Transaction Submitted`)}</div>
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.Header header={i18n._(t`Transaction submitted`)} onClose={onDismiss} />
+      <HeadlessUiModal.BorderedContent className="flex flex-col items-center justify-center gap-1">
+        <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
+          <Lottie animationData={receiptPrinting} autoplay loop={false} />
+        </div>
+        <Typography id="text-transaction-submitted" variant="sm" weight={700} className="text-white">
+          {i18n._(t`Transaction Submitted`)}
+        </Typography>
         {chainId && hash && (
           <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>
-            <div className="font-bold text-blue">View on explorer</div>
+            <Typography variant="xs" weight={700} className="outline-none text-blue">
+              {i18n._(t`View on explorer`)}
+            </Typography>
           </ExternalLink>
         )}
-        {currencyToAdd && library?.provider?.isMetaMask && (
-          <Button color="gradient" onClick={addToken} className="w-auto mt-4">
-            {!success ? (
-              <RowFixed className="mx-auto space-x-2">
-                <span>{i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`)}</span>
-                <Image
-                  src="/images/wallets/metamask.png"
-                  alt={i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`)}
-                  width={24}
-                  height={24}
-                  className="ml-1"
-                />
-              </RowFixed>
-            ) : (
-              <RowFixed>
-                {i18n._(t`Added`)} {currencyToAdd.symbol}
-                {/* <CheckCircle className="ml-1.5 text-2xl text-green" size="16px" /> */}
-              </RowFixed>
-            )}
-          </Button>
-        )}
-        {/* <Button color="gradient" onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
-          Close
-        </Button> */}
-      </div>
+      </HeadlessUiModal.BorderedContent>
+
+      {currencyToAdd && library?.provider?.isMetaMask && (
+        <Button color="blue" onClick={!success ? addToken : onDismiss}>
+          <Typography variant="sm" weight={700}>
+            {!success ? i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`) : i18n._(t`Dismiss`)}
+          </Typography>
+        </Button>
+      )}
     </div>
   )
 }
@@ -104,8 +86,8 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
 interface ConfirmationModelContentProps {
   title: string
   onDismiss: () => void
-  topContent: () => React.ReactNode
-  bottomContent: () => React.ReactNode
+  topContent?: React.ReactNode
+  bottomContent?: React.ReactNode
 }
 
 export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
@@ -115,10 +97,10 @@ export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
   topContent,
 }) => {
   return (
-    <div className="grid gap-4 p-6">
-      <ModalHeader title={title} onClose={onDismiss} />
-      {topContent()}
-      {bottomContent()}
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.Header header={title} onClose={onDismiss} />
+      {topContent}
+      {bottomContent}
     </div>
   )
 }
@@ -132,22 +114,19 @@ export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({ mess
   const { i18n } = useLingui()
 
   return (
-    <div className="grid gap-6 p-6">
-      <div>
-        <div className="flex justify-between">
-          <div className="text-lg font-medium text-high-emphesis">{i18n._(t`Error`)}</div>
-          <CloseIcon onClick={onDismiss} />
-        </div>
-        <div className="flex flex-col items-center justify-center gap-3">
-          <AlertTriangle className="text-red" style={{ strokeWidth: 1.5 }} size={64} />
-          <div className="font-bold text-red">{message}</div>
-        </div>
-      </div>
-      <div>
-        <Button color="gradient" size="lg" onClick={onDismiss}>
-          Dismiss
-        </Button>
-      </div>
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.Header header={i18n._(t`Transaction Rejected`)} onClose={onDismiss} />
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-1 text-center">
+        <Typography variant="lg" weight={700} className="text-pink-red" component="span">
+          {i18n._(t`Oops!`)}
+        </Typography>
+        <Typography variant="sm" weight={700} className="text-primary" component="span">
+          {message}
+        </Typography>
+      </HeadlessUiModal.BorderedContent>
+      <Button color="blue" onClick={onDismiss}>
+        {i18n._(t`Dismiss`)}
+      </Button>
     </div>
   )
 }
@@ -155,11 +134,11 @@ export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({ mess
 interface ConfirmationModalProps {
   isOpen: boolean
   onDismiss: () => void
-  hash: string | undefined
-  content: () => React.ReactNode
+  hash?: string
+  content: React.ReactNode
   attemptingTxn: boolean
   pendingText: string
-  currencyToAdd?: Currency | undefined
+  currencyToAdd?: Currency
 }
 
 const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
@@ -172,12 +151,10 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
   currencyToAdd,
 }) => {
   const { chainId } = useActiveWeb3React()
+  if (!chainId) return <></>
 
-  if (!chainId) return null
-
-  // confirmation screen
   return (
-    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss}>
+    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss} maxWidth="md" unmount={false}>
       {attemptingTxn ? (
         <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} />
       ) : hash ? (
@@ -188,7 +165,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
           currencyToAdd={currencyToAdd}
         />
       ) : (
-        content()
+        content
       )}
     </HeadlessUiModal.Controlled>
   )

@@ -24,12 +24,18 @@ const useTokenTemplateMap = () => {
     if (!chainId) return undefined
 
     return {
+      // @ts-ignore TYPE NEEDS FIXING
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.FixedToken.address]: TokenType.FIXED,
+      // @ts-ignore TYPE NEEDS FIXING
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.SushiToken.address]: TokenType.SUSHI,
+      // @ts-ignore TYPE NEEDS FIXING
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MintableToken.address]: TokenType.MINTABLE,
-      [TokenType.FIXED]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.FixedToken.address,
-      [TokenType.SUSHI]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.SushiToken.address,
-      [TokenType.MINTABLE]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MintableToken.address,
+      // @ts-ignore TYPE NEEDS FIXING
+      [TokenType.FIXED]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.FixedToken,
+      // @ts-ignore TYPE NEEDS FIXING
+      [TokenType.SUSHI]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.SushiToken,
+      // @ts-ignore TYPE NEEDS FIXING
+      [TokenType.MINTABLE]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MintableToken,
     }
   }, [chainId])
 

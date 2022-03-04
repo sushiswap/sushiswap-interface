@@ -9,6 +9,7 @@ import {
   getPoolHourBuckets,
   getPoolKpis,
   getTridentPools,
+  getTridentPoolTransactions,
   PoolBucket,
   TridentPool,
 } from '../fetchers/pools'
@@ -56,6 +57,7 @@ export function usePoolDayBuckets({
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function usePoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
   return useSWR(
     shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, variables] : null,
@@ -64,6 +66,7 @@ export function usePoolKpis({ chainId, variables, shouldFetch = true, swrConfig 
   )
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useOneDayPoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
   const oneDayBlock = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const _variables = {
@@ -78,6 +81,7 @@ export function useOneDayPoolKpis({ chainId, variables, shouldFetch = true, swrC
   )
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useTwoDayPoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
   const twoDayBlock = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
   const _variables = {
@@ -92,6 +96,7 @@ export function useTwoDayPoolKpis({ chainId, variables, shouldFetch = true, swrC
   )
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useRollingPoolStats({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
   const {
     data: poolKpis,
@@ -167,6 +172,19 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
             }
           }),
   }
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export function useTridentTransactions({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
+  const _variables = {
+    ...variables,
+  }
+
+  return useSWR(
+    shouldFetch && !!chainId ? ['trident-transactions', chainId, stringify(_variables)] : null,
+    () => getTridentPoolTransactions(chainId, _variables),
+    swrConfig
+  )
 }
 
 export const useGetAllTridentPools = () => {

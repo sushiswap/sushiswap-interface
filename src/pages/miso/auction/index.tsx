@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
-import AuctionCreationForm from 'app/features/miso/AuctionCreationForm'
+import AuctionCreationWizard from 'app/features/miso/AuctionCreationWizard'
 import NetworkGuard from 'app/guards/Network'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import Link from 'next/link'
@@ -27,7 +27,6 @@ const Auction = () => {
           <div>
             <Button
               color="blue"
-              variant="outlined"
               size="sm"
               className="rounded-full !pl-2 !py-1.5"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
@@ -50,7 +49,7 @@ const Auction = () => {
         </div>
       </MisoHeader>
       <MisoBody>
-        <AuctionCreationForm />
+        <AuctionCreationWizard />
       </MisoBody>
     </>
   )

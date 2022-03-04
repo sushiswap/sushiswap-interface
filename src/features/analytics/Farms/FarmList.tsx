@@ -31,7 +31,9 @@ type FarmListNameProps = {
 
 type Reward = {
   icon: string
-  token: string
+  currency: {
+    symbol: string
+  }
   rewardPerDay: number
 }
 
@@ -45,7 +47,9 @@ function FarmListName({ pair }: FarmListNameProps): JSX.Element {
         <DoubleCurrencyLogo
           className="-space-x-3"
           logoClassName="rounded-full"
+          // @ts-ignore TYPE NEEDS FIXING
           currency0={token0}
+          // @ts-ignore TYPE NEEDS FIXING
           currency1={token1}
           size={40}
         />
@@ -72,7 +76,7 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
                   height="30px"
                   className="rounded-full"
                   layout="fixed"
-                  alt={reward.token}
+                  alt={reward.currency.symbol}
                 />
               )}
             </div>
@@ -83,7 +87,7 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
             const decimals = 6 - String(reward?.rewardPerDay?.toFixed(0)).length
             return (
               <div key={i} className="text-base whitespace-nowrap">
-                {reward?.rewardPerDay?.toFixed(decimals > 0 ? decimals : 0)} {reward.token}
+                {reward?.rewardPerDay?.toFixed(decimals > 0 ? decimals : 0)} {reward.currency.symbol}
               </div>
             )
           })}
@@ -96,7 +100,7 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
 export default function FarmList({ pools }: FarmListProps): JSX.Element {
   const defaultSortBy = React.useMemo(
     () => ({
-      id: 'apr',
+      id: 'liquidity',
       desc: true,
     }),
     []
@@ -107,6 +111,7 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
       {
         Header: 'Pool Name',
         accessor: 'pair',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => <FarmListName pair={props.value} />,
         disableSortBy: true,
         align: 'left',
@@ -114,6 +119,7 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
       {
         Header: 'Annual / Monthly / Daily APR',
         accessor: 'apr',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => (
           <div className="inline-flex flex-row font-medium">
             {props.value.annual < 10000 ? (
@@ -121,16 +127,23 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
             ) : (
               <div className="font-normal text-green">{'>10,000%'}</div>
             )}
-            &nbsp;/ {props.value.monthly > 10000 ? '>10,000%' : formatPercent(props.value.monthly * 100)}
-            &nbsp;/ {props.value.daily > 10000 ? '>10,000%' : formatPercent(props.value.daily * 100)}
+            &nbsp;/ {props.value.monthly > 10000 ? '>10,000%' : formatPercent(props.value.monthly)}
+            &nbsp;/ {props.value.daily > 10000 ? '>10,000%' : formatPercent(props.value.daily)}
           </div>
         ),
         align: 'right',
-        sortType: (a, b) => a.original.apr.annual - b.original.apr.annual,
+        // @ts-ignore TYPE NEEDS FIXING
+        sortType: (rowA, rowB) => {
+          if (rowA.original.apr.annual > rowB.original.apr.annual) return 1
+          if (rowB.original.apr.annual > rowA.original.apr.annual) return -1
+          return 0
+        },
+        //sortType: (a, b) => a.original.apr.annual - b.original.apr.annual,
       },
       {
         Header: 'TVL',
         accessor: 'liquidity',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => (
           <div className="text-base font-medium text-primary">{formatNumber(props.value, true, false)}</div>
         ),
@@ -139,6 +152,7 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
       {
         Header: 'Daily Rewards',
         accessor: 'rewards',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => <Rewards rewards={props.value} />,
         disableSortBy: true,
         align: 'right',

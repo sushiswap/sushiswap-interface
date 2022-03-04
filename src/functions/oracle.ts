@@ -7,12 +7,14 @@ import { IOracle } from 'app/interfaces'
 
 import { e10 } from './math'
 
+// @ts-ignore TYPE NEEDS FIXING
 export function getOracle(chainId: ChainId, address: string, data: string): IOracle {
   if (address.toLowerCase() === CHAINLINK_ORACLE_ADDRESS[chainId].toLowerCase()) {
     return new ChainlinkOracle(chainId, address, data)
   }
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collateral, asset, data) {
   const mapping = CHAINLINK_PRICE_FEED_MAP[chainId]
   if (!mapping) {
@@ -25,7 +27,7 @@ export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collater
   if (params[0] !== AddressZero) {
     if (!mapping![params[0]]) {
       // 'One of the Chainlink oracles used is not configured in this UI.'
-      console.log('One of the Chainlink oracles used is not configured in this UI.', { collateral, asset })
+      console.debug('One of the Chainlink oracles used is not configured in this UI.', { collateral, asset })
       return false
     } else {
       decimals -= 18 - mapping![params[0]].decimals
@@ -36,6 +38,7 @@ export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collater
   if (params[1] !== AddressZero) {
     if (!mapping![params[1]]) {
       // 'One of the Chainlink oracles used is not configured in this UI.'
+      console.debug('One of the Chainlink oracles used is not configured in this UI.', collateral, asset)
       return false
     } else {
       decimals -= mapping![params[1]].decimals
@@ -46,7 +49,7 @@ export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collater
         to = mapping![params[1]].from
       } else {
         // "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link."
-        console.log(
+        console.debug(
           "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.",
           collateral,
           asset
@@ -61,7 +64,7 @@ export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collater
     const divider = e10(decimals - needed)
     if (!divider.eq(params[2])) {
       // 'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.'
-      console.log(
+      console.debug(
         'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.',
         collateral,
         asset
@@ -72,7 +75,7 @@ export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collater
     }
   } else {
     // "The Chainlink oracles configured don't match the pair tokens."
-    console.log("The Chainlink oracles configured don't match the pair tokens.", collateral, asset)
+    console.debug("The Chainlink oracles configured don't match the pair tokens.", collateral, asset)
     return false
   }
 }

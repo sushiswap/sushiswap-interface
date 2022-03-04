@@ -19,30 +19,29 @@ const FixedRatioExplanationModal: FC = () => {
   )
 
   const content = (
-    <div className="flex flex-col h-full p-5 gap-8 bg-dark-900 lg:max-w-lg lg:p-8">
-      <div className="flex flex-col flex-grow gap-8">
-        <div className="flex flex-col gap-6">
-          <Typography variant="lg" weight={700} className="text-high-emphesis">
-            {i18n._(
-              t`Balanced Mode is an optional UI setting to maintain the traditional style of equal-value adds and removes.`
-            )}
-          </Typography>
-          <Typography variant="sm" weight={400} className="text-high-emphesis">
-            {i18n._(t`Previously, adding and removing liquidity had to be done with equal amounts of all assets. With the Trident
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.Header header={i18n._(t`Fixed ratio`)} onClose={() => setOpen(false)} />
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-3">
+        <Typography variant="sm" className="text-high-emphesis">
+          {i18n._(
+            t`Balanced Mode is an optional UI setting to maintain the traditional style of equal-value adds and removes.`
+          )}
+        </Typography>
+        <Typography variant="sm" weight={400} className="text-high-emphesis">
+          {i18n._(t`Previously, adding and removing liquidity had to be done with equal amounts of all assets. With the Trident
             update, this is no longer mandatory.`)}
-          </Typography>
-        </div>
-      </div>
-      <div className="flex flex-col self-end gap-3">
-        <Typography weight={400} className="text-blue">
+        </Typography>
+      </HeadlessUiModal.BorderedContent>
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-2">
+        <Typography variant="sm" weight={700} className="text-white">
           {i18n._(t`Why use Balance Mode?`)}
         </Typography>
-        <Typography weight={400} className="text-high-emphesis">
+        <Typography variant="sm" weight={400} className="text-high-emphesis">
           {i18n._(
             t`Lower price impacts. The closer to equilibrium you interact with a pool, the lower price impact there is on your investment.`
           )}
         </Typography>
-      </div>
+      </HeadlessUiModal.BorderedContent>
     </div>
   )
 

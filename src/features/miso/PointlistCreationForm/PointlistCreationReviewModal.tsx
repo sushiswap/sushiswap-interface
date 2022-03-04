@@ -29,6 +29,7 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
   const [listAddress, setListAddress] = useState<string>()
   const [txHash, setTxHash] = useState<string>()
   const [pending, setPending] = useState(false)
+  // @ts-ignore TYPE NEEDS FIXING
   const token = useToken(data.paymentTokenAddress) ?? NATIVE[chainId || 1]
   const [error, setError] = useState<string>()
 
@@ -73,6 +74,7 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
           await tx.wait()
         }
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         setError(e.error?.message)
       } finally {
         setPending(false)
@@ -83,6 +85,7 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
 
   // Subscribe to creation event to get created pointlist ID
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     subscribe('PointListDeployed', (operator, address, pointList, owner, { transactionHash }) => {
       if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
         setListAddress(address)
@@ -99,6 +102,7 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
       {!txHash ? (
         <HeadlessUIModal.Body>
           <HeadlessUIModal.Header
+            onClose={onDismiss}
             header={i18n._(t`Create Permission List`)}
             subheader={i18n._(t`Please review your entered details thoroughly.`)}
           />

@@ -5,6 +5,7 @@ import useSWR from 'swr'
 
 const getChains = (url = 'https://chainid.network/chains.json') => fetch(url).then((res) => res.json())
 
+// @ts-ignore TYPE NEEDS FIXING
 export default function Status({ fallbackData }) {
   const res = useSWR('https://chainid.network/chains.json', getChains, { fallbackData })
   const { data } = res
@@ -13,12 +14,15 @@ export default function Status({ fallbackData }) {
       <Head>
         <title>Chains | Sushi</title>
         <meta key="description" name="description" content="Chains..." />
+        <meta key="twitter:description" name="twitter:description" content="Chains..." />
+        <meta key="og:description" property="og:description" content="Chains..." />
       </Head>
       <div className="w-full max-w-6xl mx-auto">
         <Typography component="h1" variant="h1" className="w-full mb-4">
           Chains
         </Typography>
         <div className="grid items-start justify-start grid-cols-2 gap-3 mx-auto ">
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {data.map((chain, key) => {
             return (
               <div key={key} className="h-full p-1 rounded bg-dark-900 text-primary">

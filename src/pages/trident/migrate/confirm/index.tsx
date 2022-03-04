@@ -22,13 +22,13 @@ const ConfirmMigration = () => {
         <title>{i18n._(t`Confirm Migration | Sushi`)}</title>
       </Head>
       <DebugObserver />
-      <TridentHeader pattern="bg-binary-pattern" className="!gap-2">
+      <TridentHeader pattern="bg-binary" className="!gap-2">
         <div>
           <Button
             color="blue"
             variant="outlined"
             size="xs"
-            onClick={() => router.push('/trident/migrate')}
+            onClick={() => router.replace('/trident/migrate')}
             className="flex-none h-6 pl-0 pr-3 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
@@ -52,11 +52,6 @@ const ConfirmMigration = () => {
 }
 
 ConfirmMigration.Guard = NetworkGuard(Feature.TRIDENT)
-ConfirmMigration.Layout = (props) => (
-  <TridentLayout
-    {...props}
-    breadcrumbs={[{ label: 'Pools' }, { label: 'Migrate Liquidity', link: '/trident/migrate' }, { label: 'Confirm' }]}
-  />
-)
+ConfirmMigration.Layout = TridentLayout
 
 export default ConfirmMigration

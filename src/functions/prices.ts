@@ -1,4 +1,5 @@
 import { ChainId, Currency, CurrencyAmount, JSBI, Percent, Trade, TradeType } from '@sushiswap/core-sdk'
+import { TradeUnion } from 'app/types'
 
 import {
   ALLOWED_PRICE_IMPACT_HIGH,
@@ -33,7 +34,7 @@ export function formatExecutionPrice(
 }
 
 // computes realized lp fee as a percent
-export function computeRealizedLPFeePercent(trade: Trade<Currency, Currency, TradeType>): Percent {
+export function computeRealizedLPFeePercent(trade: TradeUnion): Percent | undefined {
   let percent: Percent
   if (trade instanceof Trade) {
     // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
@@ -44,9 +45,11 @@ export function computeRealizedLPFeePercent(trade: Trade<Currency, Currency, Tra
         ONE_HUNDRED_PERCENT
       )
     )
+
+    return new Percent(percent.numerator, percent.denominator)
   }
 
-  return new Percent(percent.numerator, percent.denominator)
+  return undefined
 }
 
 // computes price breakdown for the trade
@@ -57,6 +60,7 @@ export function computeRealizedLPFeeAmount(
     const realizedLPFee = computeRealizedLPFeePercent(trade)
 
     // the amount of the input that accrues to LPs
+    // @ts-ignore TYPE NEEDS FIXING
     return CurrencyAmount.fromRawAmount(trade.inputAmount.currency, trade.inputAmount.multiply(realizedLPFee).quotient)
   }
 

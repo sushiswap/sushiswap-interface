@@ -17,7 +17,6 @@ function getNested(theObject: any, path: string, separator = '.') {
 
 const useSortableData = (items: any, config: any = null) => {
   const [sortConfig, setSortConfig] = useState(config)
-
   const sortedItems = useMemo(() => {
     if (items && items.length > 0) {
       const sortableItems = [...items]
@@ -25,6 +24,7 @@ const useSortableData = (items: any, config: any = null) => {
         sortableItems.sort((a, b) => {
           const aValue = getNested(a, sortConfig.key)
           const bValue = getNested(b, sortConfig.key)
+
           if (aValue instanceof BigNumber && bValue instanceof BigNumber) {
             if (aValue.lt(bValue)) {
               return sortConfig.direction === 'ascending' ? -1 : 1

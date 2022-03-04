@@ -3,11 +3,9 @@ on:
   push:
     branches:
       - master
-      - canary
   pull_request:
     branches:
       - master
-      - canary
     types: [closed]
 
 jobs:
@@ -19,16 +17,25 @@ jobs:
       - name: Checkout current repository
         uses: actions/checkout@v2
 
-      - name: Setup node
+      - name: Use Node.js 14
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: '14'
 
-      - name: Install Yarn
-        run: npm install yarn --global
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
-      - name: Install packages
-        run: yarn
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Installing dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Checkout sushiswap/translations repository
         uses: actions/checkout@v2
@@ -46,7 +53,7 @@ jobs:
         run: rm -rf locale/*.js
 
       - name: Push translation files to translation repo
-        uses: cpina/github-action-push-to-another-repository@main
+        uses: cpina/github-action-push-to-another-repository@v1.4.1
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:

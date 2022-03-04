@@ -17,6 +17,7 @@ const Popups: FC = () => {
           urlWarningActive ? 'top-[108px]' : 'top-[88px]'
         }`}
       >
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         {activePopups.map((item) => (
           <PopupItem key={item.key} content={item.content} popKey={item.key} removeAfterMs={item.removeAfterMs} />
         ))}
@@ -29,6 +30,7 @@ const Popups: FC = () => {
           {activePopups // reverse so new items up front
             .slice(0)
             .reverse()
+            // @ts-ignore TYPE NEEDS FIXING
             .map((item) => (
               <PopupItem key={item.key} content={item.content} popKey={item.key} removeAfterMs={item.removeAfterMs} />
             ))}

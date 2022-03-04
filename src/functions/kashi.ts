@@ -106,9 +106,13 @@ export function addBorrowFee(amount: BigNumber): BigNumber {
 }
 
 export function getFraction({
+  // @ts-ignore TYPE NEEDS FIXING
   totalAssetBase,
+  // @ts-ignore TYPE NEEDS FIXING
   totalAssetElastic,
+  // @ts-ignore TYPE NEEDS FIXING
   totalBorrowElastic,
+  // @ts-ignore TYPE NEEDS FIXING
   token0: { totalSupplyBase, totalSupplyElastic },
 }) {
   return totalAssetBase / (Number(totalAssetElastic) + (totalBorrowElastic * totalSupplyBase) / totalSupplyElastic)

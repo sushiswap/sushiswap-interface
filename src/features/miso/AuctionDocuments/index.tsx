@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { DocumentTextIcon, GlobeIcon, LockClosedIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -16,25 +17,22 @@ import {
 import Typography from 'app/components/Typography'
 import AuctionDocumentsSkeleton from 'app/features/miso/AuctionDocuments/AuctionDocumentsSkeleton'
 import AuctionIcon from 'app/features/miso/AuctionIcon'
-import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionContext } from 'app/features/miso/context/AuctionContext'
 import { AuctionTitleByTemplateId } from 'app/features/miso/context/utils'
 import React, { FC } from 'react'
 
-interface AuctionDocumentsProps {
-  auction?: Auction
-}
-
-const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
+const AuctionDocuments: FC = () => {
   const { i18n } = useLingui()
+  const { auction, loading } = useAuctionContext()
 
-  if (!auction) return <AuctionDocumentsSkeleton />
+  if (loading || !auction) return <AuctionDocumentsSkeleton />
 
   const info = ['website', 'whitepaper', 'docs']
   const documents = auction.auctionDocuments
 
   return (
     <>
-      <div className="flex gap-4 items-center">
+      <div className="flex items-center gap-4">
         {auction.auctionDocuments.category ? (
           <Chip label={auction.auctionDocuments.category} color="blue" />
         ) : (
@@ -43,11 +41,12 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
         <div className="flex gap-1.5">
           <AuctionIcon auctionTemplate={auction.template} width={18} />
           <Typography variant="sm" weight={700} className="text-secondary">
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {AuctionTitleByTemplateId(i18n)[auction.template]}
           </Typography>
         </div>
 
-        {auction.pointListAddress?.length > 0 && (
+        {auction.pointListAddress !== AddressZero && (
           <div className="flex gap-1.5">
             <LockClosedIcon width={18} />
             <Typography variant="sm" weight={700} className="text-secondary">
@@ -70,6 +69,7 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
           {i18n._(t`Technical Information`)}
         </Typography>
         <div className="flex gap-4">
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {info.filter((el) => !!documents?.[el]).length === 0 && (
             <Typography variant="sm" className="italic">
               {i18n._(t`No documents provided`)}
@@ -111,7 +111,8 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
         <Typography variant="sm" weight={700} className="text-low-emphesis">
           {i18n._(t`Socials`)}
         </Typography>
-        <div className="flex gap-5 items-center">
+        <div className="flex items-center gap-5">
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {info.filter((el) => !!documents?.[el]).length === 0 && (
             <Typography variant="sm" className="italic">
               {i18n._(t`No socials provided`)}

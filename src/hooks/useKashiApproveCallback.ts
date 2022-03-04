@@ -3,6 +3,7 @@ import { AddressZero, HashZero } from '@ethersproject/constants'
 import { KASHI_ADDRESS } from '@sushiswap/core-sdk'
 import KashiCooker, { signMasterContractApproval } from 'app/entities/KashiCooker'
 import { useActiveWeb3React } from 'app/services/web3'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { setKashiApprovalPending } from 'app/state/application/actions'
 import { useKashiApprovalPending } from 'app/state/application/hooks'
 import { useBentoMasterContractAllowed } from 'app/state/bentobox/hooks'
@@ -57,7 +58,7 @@ function useKashiApproveCallback(): [
     setKashiPermit(undefined)
   }, [account, chainId])
 
-  const masterContract = chainId && KASHI_ADDRESS[chainId]
+  const masterContract = chainId ? KASHI_ADDRESS[chainId] : undefined
 
   const pendingApproval = useKashiApprovalPending()
   const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)
@@ -113,7 +114,8 @@ function useKashiApproveCallback(): [
       }
     } catch (e) {
       return {
-        outcome: e.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
+        // @ts-ignore TYPE NEEDS FIXING
+        outcome: e.code === USER_REJECTED_TX ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
       }
     }
   }, [approvalState, account, library, chainId, bentoBoxContract, masterContract])

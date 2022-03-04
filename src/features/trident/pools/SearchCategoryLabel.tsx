@@ -1,22 +1,23 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import { selectTridentPools } from 'app/features/trident/pools/poolsSlice'
+import { useAppSelector } from 'app/state/hooks'
 import Image from 'next/image'
 import React, { FC } from 'react'
-import { useRecoilValue } from 'recoil'
-
-import rssSVG from '../../../../public/rss.svg'
-import { searchQueryAtom } from './context/atoms'
 
 export const SearchCategoryLabel: FC = () => {
-  const searchQuery = useRecoilValue(searchQueryAtom)
+  const { i18n } = useLingui()
+  const { searchQuery } = useAppSelector(selectTridentPools)
 
   return (
-    <div className="py-2 flex flex-row justify-between items-center">
+    <div className="flex flex-row items-center justify-between px-2 py-2">
       <Typography variant="base" className="text-high-emphesis" weight={700}>
-        {searchQuery ? `Search results for '${searchQuery}'` : 'Top Liquidity Pools'}
+        {searchQuery ? i18n._(t`Search results for '${searchQuery}'`) : i18n._(t`Top Liquidity Pools`)}
       </Typography>
       <div className="flex gap-1">
-        <Image layout="fixed" src={rssSVG} alt="rss icon" />
-        <div className="text-xs text-secondary">*Pairs with this symbol have a TWAP oracle.</div>
+        <Image src={'https://app.sushi.com/images/rss.svg'} width={16} height={16} alt="rss icon" />
+        <div className="text-xs text-secondary">{i18n._(t`*Pairs with this symbol have a TWAP oracle.`)}</div>
       </div>
     </div>
   )

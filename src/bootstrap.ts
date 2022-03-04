@@ -69,7 +69,7 @@ Sentry.init({
 
   // Alternatively, use `process.env.npm_package_version` for a dynamic release version
   // if your build tool supports it.
-  release: 'trident-interface@1.0.0',
+  release: 'sushiswap-interface@1.0.0',
   integrations: [new Integrations.BrowserTracing()],
 
   // Set tracesSampleRate to 1.0 to capture 100%

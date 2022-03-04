@@ -2,7 +2,7 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import { hexConcat, hexlify } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
-import { Percent, SUSHISWAP_MULTISWAPPER_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
+import { SUSHISWAP_MULTISWAPPER_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import KashiCooker from 'app/entities/KashiCooker'
 import { TransactionReview } from 'app/entities/TransactionReview'
@@ -14,12 +14,14 @@ import { computeRealizedLPFeePercent, warningSeverity } from 'app/functions/pric
 import { useCurrency } from 'app/hooks/Tokens'
 import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
+import { useAppSelector } from 'app/state/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useMemo, useState } from 'react'
 
 import { KashiApproveButton, TokenApproveButton } from './Button'
-import { ExchangeRateCheckBox, SwapCheckbox } from './Checkbox'
+import { SwapCheckbox } from './Checkbox'
 import SmartNumberInput from './SmartNumberInput'
 import TradeReview from './TradeReview'
 import TransactionReviewView from './TransactionReview'
@@ -28,8 +30,6 @@ import WarningsView from './WarningsList'
 interface BorrowProps {
   pair: any
 }
-
-const DEFAULT_BORROW_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 const DEFAULT_UPDATE_ORACLE = true
 
@@ -49,22 +49,22 @@ export default function Borrow({ pair }: BorrowProps) {
   const collateralToken = useCurrency(pair.collateral.address) || undefined
 
   // Calculated
+  // @ts-ignore TYPE NEEDS FIXING
   const assetNative = WNATIVE[chainId].address === pair.collateral.address
 
+  // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useETHBalances(assetNative ? [account] : [])
 
   const collateralBalance = useBentoCollateral
     ? pair.collateral.bentoBalance
     : assetNative
-    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    ? // @ts-ignore TYPE NEEDS FIXING
+      BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.collateral.balance
 
   const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
 
-  // Swap
-  // const [allowedSlippage] = useUserSlippageTolerance(); // 10 = 0.1%
-
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_BORROW_SLIPPAGE_TOLERANCE) // custom from users
+  const allowedSlippage = useAppSelector(selectSlippage)
 
   const parsedAmount = tryParseAmount(borrowValue, assetToken)
 
@@ -74,7 +74,9 @@ export default function Borrow({ pair }: BorrowProps) {
     if (!foundTrade) return { realizedLPFee: undefined, priceImpact: undefined }
 
     const realizedLpFeePercent = computeRealizedLPFeePercent(foundTrade)
+    // @ts-ignore TYPE NEEDS FIXING
     const realizedLPFee = foundTrade.inputAmount.multiply(realizedLpFeePercent)
+    // @ts-ignore TYPE NEEDS FIXING
     const priceImpact = foundTrade.priceImpact.subtract(realizedLpFeePercent)
     return { priceImpact, realizedLPFee }
   }, [foundTrade])
@@ -400,7 +402,7 @@ export default function Borrow({ pair }: BorrowProps) {
 
       {collateralValueSet && (
         <>
-          <div className="mb-4">
+          <div className="flex mb-4">
             {['0.25', '0.5', '0.75', '1', '1.25', '1.5', '1.75', '2.0'].map((multipler, i) => (
               <Button
                 variant="outlined"
@@ -454,7 +456,7 @@ export default function Borrow({ pair }: BorrowProps) {
         color="pink"
         content={(onCook: any) => (
           <TokenApproveButton value={collateralValue} token={collateralToken} needed={!useBentoCollateral}>
-            <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled}>
+            <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled} fullWidth={true}>
               {actionName}
             </Button>
           </TokenApproveButton>

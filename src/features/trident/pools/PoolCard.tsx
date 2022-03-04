@@ -1,30 +1,26 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { PoolType } from '@sushiswap/tines'
 import { ConstantProductPool } from '@sushiswap/trident-sdk'
 import Chip from 'app/components/Chip'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions/styling'
+import { PoolWithState } from 'app/types'
 import Link from 'next/link'
 import React, { FC } from 'react'
 
-import { POOL_TYPES } from '../constants'
-import { PoolAtomType } from '../types'
-
 interface PoolCardProps {
-  pool: PoolAtomType
+  poolWithState: PoolWithState<ConstantProductPool>
   link: string
 }
 
-const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
+const PoolCard: FC<PoolCardProps> = ({ poolWithState, link }) => {
   const { i18n } = useLingui()
-  const { pool } = poolProp
+  const { pool } = poolWithState
 
-  const currencies = [pool?.token0, pool?.token1]
+  if (!pool) return <></>
 
-  // TODO ramin: add other types
-  const poolType = pool instanceof ConstantProductPool ? PoolType.ConstantProduct : undefined
+  const currencies = [pool.token0, pool.token1]
 
   // TODO ramin: remove
   const isFarm = true
@@ -35,7 +31,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
       <div className="flex items-center justify-between p-3">
         <div className="flex items-center gap-2">
           <CurrencyLogoArray currencies={currencies} size={30} dense maxLogos={4} />
-          <Chip label={POOL_TYPES[poolType].label} color={POOL_TYPES[poolType].color} />
+          <Chip label={i18n._(t`Classic`)} color="default" />
         </div>
         <div className="flex gap-1.5 items-baseline">
           <Typography className={isFarm ? '' : 'text-secondary'} variant="sm" weight={400}>
@@ -90,11 +86,11 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
     return (
       <Link
         href={{
-          pathname: `/trident/pool/classic`,
+          pathname: `/trident/pool`,
           query: {
             tokens: pool.assets.map((el) => el.address),
             fee: pool.fee,
-            twap: pool instanceof ConstantProductPool ? pool.twap : undefined,
+            twap: pool.twap,
           },
         }}
       >

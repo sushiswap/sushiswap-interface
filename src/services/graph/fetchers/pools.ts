@@ -10,9 +10,12 @@ import {
   poolKpisQuery,
 } from 'app/services/graph/queries'
 
+import { TridentTransactionRawData, tridentTransactionsRawDataFormatter } from '../hooks/transactions/trident'
 import { pager } from './pager'
 
-export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
+// @ts-ignore TYPE NEEDS FIXING
+export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables: {} = undefined) =>
+  // @ts-ignore TYPE NEEDS FIXING
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${TRIDENT[chainId]}`, query, variables)
 
 const gqlPoolTypeMap: Record<string, PoolType> = {
@@ -83,8 +86,10 @@ interface TridentPoolQueryResult {
 
 export const getTridentPools = async (
   chainId: ChainId = ChainId.ETHEREUM,
+  // @ts-ignore TYPE NEEDS FIXING
   variables: {} = undefined
 ): Promise<TridentPool[]> => {
+  // @ts-ignore TYPE NEEDS FIXING
   const result: TridentPoolQueryResult = await fetcher(chainId, getTridentPoolsQuery, variables)
   return formatPools(chainId, result)
 }
@@ -115,6 +120,7 @@ const formatBuckets = (buckets: PoolBucketQueryResult[]): PoolBucket[] =>
     transactionCount: Number(bucket.transactionCount),
   }))
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getPoolHourBuckets = async (chainId: ChainId = ChainId.ETHEREUM, variables): Promise<PoolBucket[]> => {
   const result: PoolBucketQueryResult[] = Object.values(
     await fetcher(chainId, poolHourSnapshotsQuery, variables)
@@ -122,6 +128,7 @@ export const getPoolHourBuckets = async (chainId: ChainId = ChainId.ETHEREUM, va
   return formatBuckets(result)
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getPoolDayBuckets = async (chainId: ChainId = ChainId.ETHEREUM, variables): Promise<PoolBucket[]> => {
   const result: PoolBucketQueryResult[] = Object.values(
     await fetcher(chainId, poolDaySnapshotsQuery, variables)
@@ -129,10 +136,10 @@ export const getPoolDayBuckets = async (chainId: ChainId = ChainId.ETHEREUM, var
   return formatBuckets(result)
 }
 
-export const getTridentPoolTransactions = async (poolAddress) => {
-  return await pager('https://api.thegraph.com/subgraphs/name/sushiswap/trident', getSwapsForPoolQuery, {
-    poolAddress: poolAddress.toLowerCase(),
-  })
+// @ts-ignore TYPE NEEDS FIXING
+export const getTridentPoolTransactions = async (chainId: ChainId = ChainId.ETHEREUM, variables) => {
+  const result = (await fetcher(chainId, getSwapsForPoolQuery, variables)).swaps as TridentTransactionRawData[]
+  return tridentTransactionsRawDataFormatter(result || [])
 }
 
 export interface PoolKpiQueryResult {
@@ -150,7 +157,7 @@ export interface PoolKpi {
   feesUSD: number
   volume: number
   volumeUSD: number
-  liquidity: number
+  liquidity: string
   liquidityUSD: number
   transactionCount: number
 }
@@ -161,11 +168,12 @@ const formatKpis = (kpis: PoolKpiQueryResult[]): PoolKpi[] =>
     feesUSD: Number(feesUSD),
     volume: Number(volume),
     volumeUSD: Number(volumeUSD),
-    liquidity: Number(liquidity),
+    liquidity,
     liquidityUSD: Number(liquidityUSD),
     transactionCount: Number(transactionCount),
   }))
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getPoolKpis = async (chainId: ChainId = ChainId.ETHEREUM, variables): Promise<PoolKpi[]> => {
   const result: PoolKpiQueryResult[] = Object.values(
     await fetcher(chainId, poolKpisQuery, variables)

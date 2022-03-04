@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
 import Back from 'app/components/Back'
 import Button from 'app/components/Button'
 import Container from 'app/components/Container'
@@ -50,6 +51,7 @@ export default function Me() {
 
   const { data, error }: SWRResponse<any, Error> = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/address/${account}/stacks/sushiswap/acts/?&key=ckey_cba3674f2ce5450f9d5dd290589&swaps=true&quote-currency=usd`,
+    // @ts-ignore TYPE NEEDS FIXING
     (url) =>
       fetch(url)
         .then((r) => r.json())
@@ -64,6 +66,8 @@ export default function Me() {
       <Head>
         <title>My SUSHI | Sushi</title>
         <meta key="description" name="description" content="My SUSHI" />
+        <meta key="twitter:description" name="twitter:description" content="My SUSHI" />
+        <meta key="og:description" property="og:description" content="My SUSHI" />
       </Head>
       <div className="p-4 mb-3 space-y-3">
         <Back />
@@ -120,9 +124,9 @@ export default function Me() {
       <div className="w-full max-w-2xl p-4 rounded bg-dark-900">
         <div className="flex flex-col items-center justify-between mb-3 sm:flex-row">
           <Typography component="h2" variant="lg" className="font-medium text-high-emphesis">
-            {i18n._(t`Transaction History ${chainId && NETWORK_LABEL[chainId]}`)}
+            {i18n._(t`Transaction History ${chainId && NETWORK_LABEL[chainId as ChainId]}`)}
           </Typography>
-          <Button variant="link" onClick={clearAllTransactionsCallback}>
+          <Button variant="empty" color="blue" onClick={clearAllTransactionsCallback}>
             <span className="text-sm">{i18n._(t`Clear History`)}</span>
           </Button>
         </div>

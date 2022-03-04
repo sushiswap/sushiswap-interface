@@ -8,31 +8,33 @@ import {
   findMultiRouteExactOut,
   findSingleRouteExactIn,
   findSingleRouteExactOut,
+  PoolState,
   Trade,
 } from '@sushiswap/trident-sdk'
 import { PoolUnion } from 'app/features/trident/types'
 import { toShareCurrencyAmount } from 'app/functions'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
-import { ConstantProductPoolState } from 'app/hooks/useConstantProductPools'
 import { PairState, useV2Pairs } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
+import { TradeUnion } from 'app/types'
 import { useEffect, useMemo, useState } from 'react'
 import { atom, useSetRecoilState } from 'recoil'
 
 import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
-import { useConstantProductPoolsPermutations } from './useConstantProductPools'
+import { useGetAllExistedPools } from './useConstantProductPools'
 
 export function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (PoolUnion | Pair)[] {
   const currencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
-  const constantProductPools = useConstantProductPoolsPermutations(currencyCombinations)
+  const constantProductPools = useGetAllExistedPools(currencyCombinations)
+  //const constantProductPools = useConstantProductPoolsPermutations(currencyCombinations)
   const allPairs = useV2Pairs(currencyCombinations)
   const pools = useMemo(() => [...constantProductPools, ...allPairs], [allPairs, constantProductPools])
   return useMemo(
     () => [
       ...Object.values(
         pools.reduce<(PoolUnion | Pair)[]>((acc, result) => {
-          if (!Array.isArray(result) && result.state === ConstantProductPoolState.EXISTS && result.pool) {
+          if (!Array.isArray(result) && result.state === PoolState.EXISTS && result.pool) {
             acc.push(result.pool)
           }
 
@@ -49,9 +51,7 @@ export function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (
 }
 
 export type UseBestTridentTradeOutput = {
-  trade?:
-    | Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
-    | LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
+  trade?: TradeUnion
   priceImpact?: number
 }
 

@@ -5,6 +5,7 @@ import { classNames } from 'app/functions'
 import useInterval from 'app/hooks/useIntervalTransaction'
 import useTextWidth from 'app/hooks/useTextWidth'
 import { FC, useState } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 import { PriceIndicator } from './PriceIndicator'
@@ -40,13 +41,14 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices, showPr
 
   const bottomHeight = 60
   const paddingX = 28
-  const paddingY = 60
+  const paddingY = showPriceIndicator ? 60 : 28
   const topPadding = 20
   const minHeight = prices ? 'min-h-[234px]' : 'min-h-[94px]'
 
   return (
     <div className={classNames('relative w-full h-full', minHeight)}>
       <AutoSizer>
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         {({ width, height }) => {
           const remainingHeight = prices ? height - bottomHeight : height
           const currentX = paddingX + (width - 2 * paddingX) * progression

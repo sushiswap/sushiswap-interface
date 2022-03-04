@@ -5,17 +5,13 @@ import { ZERO } from '@sushiswap/core-sdk'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import AuctionStatsSkeleton from 'app/features/miso/AuctionStats/AuctionStatsSkeleton'
-import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionContext } from 'app/features/miso/context/AuctionContext'
 import { AuctionPriceHelperTextByTemplateId } from 'app/features/miso/context/utils'
 import { classNames } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC } from 'react'
 
 import { ChartCard } from './ChartCard'
-
-interface AuctionStatsProps {
-  auction?: Auction
-}
 
 const AuctionStat: FC<{ label: any; value?: any; className?: string }> = ({ label, value, className }) => {
   return (
@@ -30,11 +26,12 @@ const AuctionStat: FC<{ label: any; value?: any; className?: string }> = ({ labe
   )
 }
 
-const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
+const AuctionStats: FC = () => {
   const { i18n } = useLingui()
+  const { auction, loading } = useAuctionContext()
   const { account } = useActiveWeb3React()
 
-  if (!auction) return <AuctionStatsSkeleton />
+  if (loading || !auction) return <AuctionStatsSkeleton />
 
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -70,6 +67,7 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
             <div className="flex items-center justify-end">
               {i18n._(t`Current Token Price`)}
               <QuestionHelper
+                // @ts-ignore TYPE NEEDS FIXING
                 text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}
                 icon={<SolidQuestionMarkCircleIcon width={12} height={12} className="text-secondary" />}
               />

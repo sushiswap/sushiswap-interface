@@ -1,25 +1,15 @@
+import Background, { BackgroundVariant } from 'app/components/Background'
 import Container, { MaxWidth } from 'app/components/Container'
+import Footer from 'app/components/Footer'
 import Header from 'app/components/Header'
 import Main from 'app/components/Main'
 import Popups from 'app/components/Popups'
-import { BreadcrumbItem } from 'app/features/trident/Breadcrumb'
 import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 
-const HEADER_HEIGHT = 64
-
-type HeaderBackground =
-  | 'bg-bars-pattern'
-  | 'bg-binary-pattern'
-  | 'bg-bubble-pattern'
-  | 'bg-dots-pattern'
-  | 'bg-x-times-y-is-k'
-  | 'bg-wavy-pattern'
-  | 'bg-chevron-pattern'
-
 interface TridentHeaderProps {
   className?: string
-  pattern?: HeaderBackground
+  pattern?: BackgroundVariant
   maxWidth?: MaxWidth
   condensed?: boolean
 }
@@ -32,10 +22,11 @@ export const TridentHeader: FC<TridentHeaderProps> = ({
   condensed,
 }) => {
   return (
-    <header className={classNames('relative w-full bg-opacity-80 flex flex-col items-center')}>
+    <header className="relative w-full flex flex-col justify-center items-center">
+      <Background variant={pattern} />
       <Container
         maxWidth={maxWidth}
-        className={classNames('flex flex-col gap-5 z-[1] p-5 lg:p-10', condensed && 'py-5', className)}
+        className={classNames('flex flex-col gap-5 z-[1] p-6 lg:py-10', condensed && 'py-5', className)}
       >
         {children}
       </Container>
@@ -51,29 +42,23 @@ interface TridentBodyProps {
 export const TridentBody: FC<TridentBodyProps> = ({ children, className, maxWidth = '7xl' }) => {
   return (
     <Main>
-      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-10 p-5 lg:p-10 z-[1]', className)}>
+      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-10 z-[1] p-6 lg:py-10', className)}>
         {children}
       </Container>
     </Main>
   )
 }
 
-interface TridentLayoutProps {
-  breadcrumbs?: BreadcrumbItem[]
-}
-
-const TridentLayout: FC<TridentLayoutProps> = ({ children = [], breadcrumbs = [] }) => {
+const TridentLayout: FC = ({ children = [] }) => {
   return (
-    <>
-      <Header height={HEADER_HEIGHT} />
-      {/*<Breadcrumb breadcrumbs={breadcrumbs} />*/}
-      <Container maxWidth="7xl" className="mx-auto">
-        <div className="flex flex-col items-center w-full h-screen">
-          <div className="bg-dark-1000 w-full flex-grow flex flex-col">{children}</div>
-          <Popups />
-        </div>
-      </Container>
-    </>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <div className="flex flex-col items-center w-full flex flex-grow">
+        <div className="w-full flex-grow flex flex-col">{children}</div>
+        <Popups />
+      </div>
+      <Footer />
+    </div>
   )
 }
 

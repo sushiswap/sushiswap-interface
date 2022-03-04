@@ -45,8 +45,11 @@ export default function useTokensAnalytics() {
 
   return useMemo(
     () =>
+      // @ts-ignore TYPE NEEDS FIXING
       (loadState === 'loaded' ? tokens : tokensInitial)?.map((token) => {
+        // @ts-ignore TYPE NEEDS FIXING
         const token1d = (loadState === 'loaded' ? tokens1d : tokens1dInitial)?.find((p) => token.id === p.id) ?? token
+        // @ts-ignore TYPE NEEDS FIXING
         const token1w = (loadState === 'loaded' ? tokens1w : tokens1wInitial)?.find((p) => token.id === p.id) ?? token
 
         return {
@@ -64,6 +67,7 @@ export default function useTokensAnalytics() {
           graph: token.dayData
             .slice(0)
             .reverse()
+            // @ts-ignore TYPE NEEDS FIXING
             .map((day, i) => ({ x: i, y: Number(day.priceUSD) })),
         }
       }),

@@ -11,7 +11,10 @@ import {
   getCvxPrice,
   getDayData,
   getFactory,
+  getFantomPrice,
   getFusePrice,
+  getGlimmerPrice,
+  getGnoPrice,
   getLiquidityPositions,
   getMagicPrice,
   getMaticPrice,
@@ -25,7 +28,6 @@ import {
   getPicklePrice,
   getRulerPrice,
   getSpellPrice,
-  getStakePrice,
   getSushiPrice,
   getTokenDayData,
   getTokenPairs,
@@ -44,6 +46,7 @@ export function useFactory({
 }: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['factory', chainId, stringify(variables)] : null,
+    // @ts-ignore TYPE NEEDS FIXING
     () => getFactory(chainId, variables),
     swrConfig
   )
@@ -58,6 +61,7 @@ export function useNativePrice({
 }: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['nativePrice', chainId, stringify(variables)] : null,
+    // @ts-ignore TYPE NEEDS FIXING
     () => getNativePrice(chainId, variables),
     swrConfig
   )
@@ -65,26 +69,39 @@ export function useNativePrice({
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useEthPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { data } = useSWR(['ethPrice'], () => getNativePrice(variables), swrConfig)
   return data
 }
 
-export function useStakePrice(swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['stakePrice'], () => getStakePrice(), swrConfig)
+// @ts-ignore TYPE NEEDS FIXING
+export function useGnoPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.XDAI
+  const { data } = useSWR(shouldFetch ? 'gnoPrice' : null, () => getGnoPrice(), swrConfig)
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
+export function useGlimmerPrice(swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR('glimmerPrice', () => getGlimmerPrice(), swrConfig)
+  return data
+}
+
+// @ts-ignore TYPE NEEDS FIXING
 export function useSpellPrice(swrConfig: SWRConfiguration = undefined) {
   const { data } = useSWR('spellPrice', () => getSpellPrice(), swrConfig)
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useOnePrice(swrConfig: SWRConfiguration = undefined) {
   const { data } = useSWR(['onePrice'], () => getOnePrice(), swrConfig)
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useCeloPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.CELO
@@ -92,6 +109,15 @@ export function useCeloPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
+export function useFantomPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.FANTOM
+  const { data } = useSWR(shouldFetch ? 'fantomPrice' : null, () => getFantomPrice(), swrConfig)
+  return data
+}
+
+// @ts-ignore TYPE NEEDS FIXING
 export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.MOONRIVER
@@ -99,6 +125,7 @@ export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useYggPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
@@ -106,6 +133,7 @@ export function useYggPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useRulerPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
@@ -113,12 +141,14 @@ export function useRulerPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useTruPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const { data } = useSWR(chainId && chainId === ChainId.ETHEREUM ? ['truPrice'] : null, () => getTruPrice(), swrConfig)
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useAlcxPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
@@ -126,6 +156,7 @@ export function useAlcxPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useCvxPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
@@ -133,6 +164,7 @@ export function useCvxPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function usePicklePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
@@ -140,6 +172,7 @@ export function usePicklePrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useMphPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
@@ -147,21 +180,25 @@ export function useMphPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useAvaxPrice(swrConfig: SWRConfiguration = undefined) {
   const { data } = useSWR(['avaxPrice'], () => getAvaxPrice(), swrConfig)
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
   const { data } = useSWR(['maticPrice'], () => getMaticPrice(), swrConfig)
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useSushiPrice(swrConfig: SWRConfiguration = undefined) {
   const { data } = useSWR(['sushiPrice'], () => getSushiPrice(), swrConfig)
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId
@@ -169,13 +206,15 @@ export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useFusePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId
+  const shouldFetch = chainId && chainId === ChainId.FUSE
   const { data } = useSWR(shouldFetch ? 'fusePrice' : null, () => getFusePrice(), swrConfig)
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useMagicPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ARBITRUM
@@ -183,6 +222,7 @@ export function useMagicPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useBundle(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const { data } = useSWR(chainId ? [chainId, ethPriceQuery, stringify(variables)] : null, () => getBundle(), swrConfig)
@@ -211,6 +251,7 @@ export function useSushiPairs({
 }: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['sushiPairs', chainId, stringify(variables)] : null,
+    // @ts-ignore TYPE NEEDS FIXING
     (_, chainId) => getPairs(chainId, variables),
     swrConfig
   )
@@ -247,6 +288,7 @@ export function usePairDayData({
 
 export function useTokenDayData(
   { chainId, variables, shouldFetch = true }: GraphProps,
+  // @ts-ignore TYPE NEEDS FIXING
   swrConfig: SWRConfiguration = undefined
 ) {
   const { data } = useSWR(
@@ -260,6 +302,7 @@ export function useTokenDayData(
 export function useDayData({ chainId, variables, shouldFetch = true, swrConfig = undefined }: GraphProps) {
   const { data } = useSWR(
     shouldFetch && !!chainId ? ['dayData', chainId, stringify(variables)] : null,
+    // @ts-ignore TYPE NEEDS FIXING
     (_, chainId) => getDayData(chainId, variables),
     swrConfig
   )
@@ -274,6 +317,7 @@ export function useTokenPairs({
 }: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['tokenPairs', chainId, stringify(variables)] : null,
+    // @ts-ignore TYPE NEEDS FIXING
     (_, chainId) => getTokenPairs(chainId, variables),
     swrConfig
   )

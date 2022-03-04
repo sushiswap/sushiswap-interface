@@ -26,29 +26,32 @@ export default function BentoBox(): JSX.Element {
   const tokens1d = useTokens({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
   const tokens1w = useTokens({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
-  console.log({ tokens1d, tokens1w })
-
   // Creating map to easily reference TokenId -> Token
   const tokenIdToPrice = useMemo<
     Map<string, { derivedETH: number; volumeUSD: number; dayData: Array<{ priceUSD: number }> }>
   >(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     return new Map(tokens?.map((token) => [token.id, token]))
   }, [tokens])
 
   const token1dIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     return new Map(tokens1d?.map((token) => [token.id, token]))
   }, [tokens1d])
 
   const token1wIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     return new Map(tokens1w?.map((token) => [token.id, token]))
   }, [tokens1w])
 
+  // @ts-ignore TYPE NEEDS FIXING
   const bentoBox = useBentoBox({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
 
   // Combine Bento Box Tokens with Token data from exchange
   const bentoBoxTokensFormatted = useMemo<Array<any>>(
     () =>
       (bentoBox?.tokens || [])
+        // @ts-ignore TYPE NEEDS FIXING
         .map(({ id, totalSupplyElastic, decimals, symbol, name }) => {
           const token = tokenIdToPrice.get(id)
           const token1d = token1dIdToPrice.get(id)
@@ -102,12 +105,7 @@ export default function BentoBox(): JSX.Element {
             <div className="text-3xl font-bold text-high-emphesis">Bento Box</div>
             <div className="">Click on the column name to sort tokens by price or liquidity.</div>
           </div>
-          <Search
-            term={term}
-            search={search}
-            inputProps={{ className: 'placeholder-primary bg-opacity-50 w-full py-3 pl-4 pr-14 rounded bg-dark-900' }}
-            className="border shadow-2xl border-dark-800"
-          />
+          <Search term={term} search={search} />
         </div>
       </Background>
       <div className="py-6 space-y-4 lg:px-14">

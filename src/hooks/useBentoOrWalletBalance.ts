@@ -9,12 +9,13 @@ export const useBentoOrWalletBalances = (
   fromWallet?: (boolean | undefined)[]
 ) => {
   const tokenAddresses = useMemo(
+    // @ts-ignore TYPE NEEDS FIXING
     () => (currencies.every((el) => el) ? currencies.map((el: Currency) => el.wrapped.address) : undefined),
     [currencies]
   )
 
   const balance = useCurrencyBalances(account, currencies)
-  const bentoBalance = useBentoBalancesV2(tokenAddresses)
+  const { data: bentoBalance } = useBentoBalancesV2(tokenAddresses)
 
   return useMemo(() => {
     if (!currencies.every((el) => !!el) || !bentoBalance) {

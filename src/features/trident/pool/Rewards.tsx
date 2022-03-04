@@ -1,24 +1,21 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, SUSHI } from '@sushiswap/core-sdk'
-import { useActiveWeb3React } from 'app/services/web3'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import ListPanel from 'app/components/ListPanel'
 import Typography from 'app/components/Typography'
 import { tryParseAmount } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC } from 'react'
-import { useRecoilValue } from 'recoil'
-
-import { poolAtom } from '../context/atoms'
 
 const Rewards: FC = () => {
   const { chainId } = useActiveWeb3React()
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
-  const { pool } = useRecoilValue(poolAtom)
 
   // TODO ramin:
+  // @ts-ignore TYPE NEEDS FIXING
   const rewardCurrency = SUSHI[chainId]
 
   return (
@@ -50,7 +47,7 @@ const Rewards: FC = () => {
                 key={0}
                 left={
                   <div className="flex flex-row gap-4 items-center">
-                    <CurrencyLogo size={30} currency={rewardCurrency} className="rounded-full" />
+                    <CurrencyLogo size={30} currency={rewardCurrency} className="!rounded-full" />
                     <Typography weight={700} className="text-high-emphesis">
                       {rewardCurrency?.symbol}
                     </Typography>

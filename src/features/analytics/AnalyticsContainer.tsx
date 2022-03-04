@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Container from '../../components/Container'
 import Sidebar from '../../components/Sidebar'
 
+// @ts-ignore TYPE NEEDS FIXING
 export default function AnalyticsContainer({ children }): JSX.Element {
   return (
     <>

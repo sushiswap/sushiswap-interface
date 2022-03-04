@@ -39,3 +39,6 @@ export const gOHM = new Token(
 )
 
 export const MAGIC = new Token(ChainId.ARBITRUM, '0x539bdE0d7Dbd336b79148AA742883198BBF60342', 18, 'MAGIC', 'MAGIC')
+
+export const FRAX = new Token(ChainId.ARBITRUM, '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F', 18, 'FRAX', 'Frax')
+export const FXS = new Token(ChainId.ARBITRUM, '0x9d2F299715D94d8A7E6F5eaa8E654E8c74a988A7', 18, 'FXS', 'Frax Share')

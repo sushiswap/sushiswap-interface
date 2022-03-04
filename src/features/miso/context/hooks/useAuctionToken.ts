@@ -11,7 +11,9 @@ const useAuctionToken = () => {
   const { account, chainId } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const contract = useContract(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOTokenFactory.address : undefined,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOTokenFactory.abi : undefined
   )
 

@@ -93,19 +93,21 @@ const useLPTokensState = () => {
           [ChainId.ETHEREUM]: [
             `https://api.covalenthq.com/v1/${ChainId.ETHEREUM}/address/${String(
               account
-            ).toLowerCase()}/stacks/uniswap_v2/balances/?page-size=1000&key=ckey_cba3674f2ce5450f9d5dd290589`,
+            ).toLowerCase()}/stacks/uniswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589&page-size=1000`,
           ],
           [ChainId.BSC]: [
             `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
               account
-            ).toLowerCase()}/stacks/pancakeswap/balances/?page-size=1000&?key=ckey_cba3674f2ce5450f9d5dd290589`,
+            ).toLowerCase()}/stacks/pancakeswap/balances/?key=ckey_cba3674f2ce5450f9d5dd290589&page-size=1000`,
             `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
               account
-            ).toLowerCase()}/stacks/pancakeswap_v2/balances/?page-size=1000&?key=ckey_cba3674f2ce5450f9d5dd290589`,
+            ).toLowerCase()}/stacks/pancakeswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589&page-size=1000`,
           ],
         }
 
         const responses: any = await Promise.all(requests[chainId].map((request: any) => fetch(request)))
+
+        console.log({ responses })
 
         let userLP = []
 
@@ -122,12 +124,12 @@ const useLPTokensState = () => {
           const { data: dataV2 } = await responses[1].json()
 
           userLP = [
-            ...dataV1?.['pancakeswap']?.balances
-              ?.filter((balance: any) => balance.pool_token.balance !== '0')
-              .map((balance: any) => ({
-                ...balance,
-                version: 'v1',
-              })),
+            // ...dataV1?.['pancakeswap']?.balances
+            //   ?.filter((balance: any) => balance.pool_token.balance !== '0')
+            //   .map((balance: any) => ({
+            //     ...balance,
+            //     version: 'v1',
+            //   })),
             ...dataV2?.['pancakeswap']?.balances
               ?.filter((balance: any) => balance.pool_token.balance !== '0')
               .map((balance: any) => ({
