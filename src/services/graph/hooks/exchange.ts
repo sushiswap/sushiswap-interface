@@ -13,6 +13,7 @@ import {
   getFactory,
   getFantomPrice,
   getFusePrice,
+  getGlimmerPrice,
   getGnoPrice,
   getLiquidityPositions,
   getMagicPrice,
@@ -79,6 +80,12 @@ export function useGnoPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.XDAI
   const { data } = useSWR(shouldFetch ? 'gnoPrice' : null, () => getGnoPrice(), swrConfig)
+  return data
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export function useGlimmerPrice(swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR('glimmerPrice', () => getGlimmerPrice(), swrConfig)
   return data
 }
 

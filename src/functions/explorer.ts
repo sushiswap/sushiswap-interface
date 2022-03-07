@@ -74,6 +74,16 @@ const explorers = {
         return `${link}/${type}/${data}`
     }
   },
+  moonbeam: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}`
+      case 'token':
+        return `${link}/tokens/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
 }
 interface ChainObject {
   [chainId: number]: {
@@ -190,6 +200,10 @@ const chains: ChainObject = {
   [ChainId.TELOS]: {
     link: 'https://rpc1.us.telos.net/v2/explore/evm',
     builder: explorers.telos,
+  },
+  [ChainId.MOONBEAM]: {
+    link: 'https://moonbeam.moonscan.io',
+    builder: explorers.moonbeam,
   },
 }
 

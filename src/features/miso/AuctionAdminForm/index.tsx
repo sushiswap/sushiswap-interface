@@ -145,7 +145,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
   ]
 
   return (
-    <div className="flex flex-col lg:flex-row gap-10">
+    <div className="flex flex-col gap-10 lg:flex-row">
       <div className="flex flex-col gap-10">
         <Form {...methods} onSubmit={methods.handleSubmit(onSubmit)}>
           <Form.Card>
@@ -219,7 +219,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   placeholder="https://example.com/image.jpg"
                   label={i18n._(t`Mobile Banner`)}
                   helperText={i18n._(
-                    t`Mobile banner must be smaller than 250kB, this is to keep page load optimized. Desktop banner dimensions preferably 768x196 or a similar ratio`
+                    t`Mobile banner must be smaller than 250kB, this is to keep page load optimized. Desktop banner dimensions preferably 768x360 or a similar ratio`
                   )}
                 />
               </div>
@@ -264,7 +264,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                 <Form.TextAreaField
                   rows={6}
                   name="bannedWarning"
-                  placeholder="The content contained in this website does not constitute an offer or sale of securities in or into the United States, or to or for the account or benefit of U.S. persons, or in any other jurisdictions where it is unlawful to do so. Transfer of BIT tokens may be subject to legal restrictions under applicable laws. Under no circumstances shall BIT tokens be reoffered, resold or transferred within the United States or to, or for the account or benefit of, U.S. persons, except pursuant to an exemption from, or in a transaction not subject to, the registration requirements of the U.S. Securities Act of 1933, as amended."
+                  placeholder={`The content contained in this website does not constitute an offer or sale of securities in or into the United States, or to or for the account or benefit of U.S. persons, or in any other jurisdictions where it is unlawful to do so. Transfer of ${auction.auctionToken.symbol} tokens may be subject to legal restrictions under applicable laws. Under no circumstances shall ${auction.auctionToken.symbol} tokens be reoffered, resold or transferred within the United States or to, or for the account or benefit of, U.S. persons, except pursuant to an exemption from, or in a transaction not subject to, the registration requirements of the U.S. Securities Act of 1933, as amended.`}
                   label={i18n._(t`Warning Message`)}
                   helperText={
                     methods.getValues('bannedWarning')

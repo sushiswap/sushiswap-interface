@@ -1,9 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
-import AssetBalances from 'app/features/account/AssetBalances/AssetBalances'
 import { useLendPositionAmounts } from 'app/features/account/AssetBalances/kashi/hooks'
 import { useBasicTableConfig } from 'app/features/account/AssetBalances/useBasicTableConfig'
+import AssetBalances from 'app/features/portfolio/AssetBalances/AssetBalances'
 import { useRouter } from 'next/router'
 import React from 'react'
 

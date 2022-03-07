@@ -50,7 +50,7 @@ const features: FeatureMap = {
     Feature.LIMIT_ORDERS,
   ],
   [ChainId.MATIC_TESTNET]: [Feature.AMM],
-  [ChainId.HARMONY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
+  [ChainId.HARMONY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.MISO],
   [ChainId.HARMONY_TESTNET]: [Feature.AMM],
   [ChainId.AVALANCHE]: [Feature.AMM, Feature.BENTOBOX, Feature.KASHI, Feature.LIMIT_ORDERS, Feature.ANALYTICS],
   [ChainId.AVALANCHE_TESTNET]: [Feature.AMM],
@@ -61,6 +61,7 @@ const features: FeatureMap = {
   [ChainId.CELO]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
   [ChainId.ARBITRUM]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
   [ChainId.FUSE]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
+  [ChainId.MOONBEAM]: [Feature.AMM, Feature.MISO, Feature.LIQUIDITY_MINING],
 }
 
 export default features

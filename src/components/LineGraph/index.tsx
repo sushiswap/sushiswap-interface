@@ -12,7 +12,7 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 interface LineGraphProps {
   data: {
     x: number
-    y: number
+    y: string
   }[]
   stroke?:
     | {
@@ -42,6 +42,7 @@ const Graph: FC<GraphProps> = ({ data, stroke, strokeWidth, width, height, setSe
   const xScale = useMemo(
     () =>
       scaleLinear<number>({
+        // @ts-ignore
         domain: [Math.min(data[0].x, data[data.length - 1].x), Math.max(data[0].x, data[data.length - 1].x)],
         range: [10, width - 10],
       }),
@@ -51,6 +52,7 @@ const Graph: FC<GraphProps> = ({ data, stroke, strokeWidth, width, height, setSe
   const yScale = useMemo(() => {
     const y = data.map((el) => el.y)
     return scaleLinear<number>({
+      // @ts-ignore
       domain: [Math.max.apply(Math, y), Math.min.apply(Math, y)],
       range: [10, height - 10],
     })
@@ -104,7 +106,9 @@ const Graph: FC<GraphProps> = ({ data, stroke, strokeWidth, width, height, setSe
         )}
         <LinePath
           data={data}
+          // @ts-ignore
           x={(d) => xScale(d.x) ?? 0}
+          // @ts-ignore
           y={(d) => yScale(d.y) ?? 0}
           // @ts-ignore TYPE NEEDS FIXING
           stroke={'solid' in stroke ? stroke.solid : "url('#gradient')"}

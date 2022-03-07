@@ -1,6 +1,5 @@
 const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
-
 const linguiConfig = require('./lingui.config.js')
 const defaultTheme = require('tailwindcss/defaultTheme')
 
@@ -45,8 +44,7 @@ const nextConfig = {
   reactStrictMode: true,
   pwa: {
     dest: 'public',
-    // runtimeCaching,
-    dynamicStartUrlRedirect: '/swap',
+    runtimeCaching,
     disable: process.env.NODE_ENV === 'development',
   },
   images: {

@@ -3,16 +3,13 @@ import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
 import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
-import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionContext } from 'app/features/miso/context/AuctionContext'
 import useAuctionEdit from 'app/features/miso/context/hooks/useAuctionEdit'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 
-interface AuctionFinalizeModalProps {
-  auction?: Auction
-}
-
-const AuctionFinalizeModal: FC<AuctionFinalizeModalProps> = ({ auction }) => {
+const AuctionFinalizeModal: FC = () => {
   const { i18n } = useLingui()
+  const { auction } = useAuctionContext()
   const { finalizeAuction } = useAuctionEdit(
     auction?.auctionInfo.addr,
     auction?.template,

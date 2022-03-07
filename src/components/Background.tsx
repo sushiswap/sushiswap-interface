@@ -21,7 +21,7 @@ export interface Background {
   variant?: BackgroundVariant
 }
 
-const IMAGE_URL = {
+const VARIANTS = {
   'bg-bars': {
     type: ImageType.REPEAT,
     url: 'https://app.sushi.com/images/trident/bars-pattern.png',
@@ -59,7 +59,9 @@ const IMAGE_URL = {
 const Background: FC<Background> = ({ variant }) => {
   if (!variant) return <div className="absolute inset-0 bg-dark-900/30" />
 
-  if (IMAGE_URL[variant].type === ImageType.REPEAT) {
+  const { type, url } = VARIANTS[variant]
+
+  if (type === ImageType.REPEAT) {
     return (
       <div className={classNames('absolute inset-0 flex flex-col items-center bg-dark-900/30')}>
         <div className={classNames('absolute inset-0 w-full h-full z-0 opacity-10', variant)} />
@@ -67,16 +69,7 @@ const Background: FC<Background> = ({ variant }) => {
     )
   }
 
-  return (
-    <Image
-      alt="background image"
-      src={IMAGE_URL[variant].url}
-      objectFit="cover"
-      objectPosition="center"
-      layout="fill"
-      priority
-    />
-  )
+  return <Image alt="background image" src={url} objectFit="cover" objectPosition="center" layout="fill" priority />
 }
 
 export default Background

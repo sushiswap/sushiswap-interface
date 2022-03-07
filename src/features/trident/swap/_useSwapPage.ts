@@ -34,7 +34,7 @@ export const _useSwapPage = () => {
     () =>
       currencyA &&
       currencyB &&
-      chainId &&
+      !!chainId &&
       ((currencyA?.isNative && WNATIVE[chainId].address === currencyB?.wrapped.address) ||
         (currencyB?.isNative && WNATIVE[chainId].address === currencyA?.wrapped.address)),
     [chainId, currencyA, currencyB]
