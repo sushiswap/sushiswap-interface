@@ -26,6 +26,9 @@ const Context = createContext<PoolContext | undefined>(undefined)
 const PoolContext: FC = ({ children }) => {
   const { account } = useActiveWeb3React()
   const { currencies, twap, fee } = useCurrenciesFromURL()
+
+  console.log({ currencies })
+
   const poolWithState = useConstantProductPool(currencies[0], currencies[1], fee, twap)
   console.log(poolWithState)
   const totalSupply = useTotalSupply(poolWithState?.pool?.liquidityToken)
