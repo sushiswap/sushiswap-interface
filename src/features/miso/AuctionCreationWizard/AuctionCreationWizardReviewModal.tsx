@@ -10,8 +10,8 @@ import { AuctionCreationWizardInputFormatted } from 'app/features/miso/AuctionCr
 import useAuctionCreate from 'app/features/miso/context/hooks/useAuctionCreate'
 import useAuctionTemplateMap from 'app/features/miso/context/hooks/useAuctionTemplateMap'
 import useTokenTemplateMap from 'app/features/miso/context/hooks/useTokenTemplateMap'
-import { AuctionTemplate } from 'app/features/miso/context/types'
-import { getExplorerLink } from 'app/functions'
+import { AuctionTemplate, TokenSetup } from 'app/features/miso/context/types'
+import { getExplorerLink, shortenAddress } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import { useRouter } from 'next/router'
@@ -123,34 +123,47 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
               <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
                 {tokenTemplateIdToLabel(data.tokenType)}
               </Typography>
-              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`Token Name`)}
-              </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
-                {data.tokenName}
-              </Typography>
-              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`Token Symbol`)}
-              </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
-                {data.tokenSymbol}
-              </Typography>
-              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`Auction Type`)}
-              </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
-                {templateIdToLabel(data.auctionType)}
-              </Typography>
-              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`Total Supply`)}
-              </Typography>
-              <Typography
-                weight={700}
-                variant="sm"
-                className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
-              >
-                {data.tokenSupply.toSignificant(6)} {data.tokenSupply.currency.symbol}
-              </Typography>
+              {data.tokenSetupType === TokenSetup.CREATE ? (
+                <>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Token Name`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                    {data.tokenName}
+                  </Typography>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Token Symbol`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                    {data.tokenSymbol}
+                  </Typography>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Auction Type`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                    {templateIdToLabel(data.auctionType)}
+                  </Typography>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Total Supply`)}
+                  </Typography>
+                  <Typography
+                    weight={700}
+                    variant="sm"
+                    className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
+                  >
+                    {data.tokenSupply?.toSignificant(6)} {data.tokenSupply?.currency.symbol}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Token Address`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                    {data.tokenAddress && shortenAddress(data.tokenAddress)}
+                  </Typography>
+                </>
+              )}
               <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
                 {i18n._(t`Tokens for sale`)}
               </Typography>

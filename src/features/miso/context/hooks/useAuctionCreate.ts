@@ -1,6 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
-import { CHAIN_KEY } from '@sushiswap/core-sdk'
+import { CHAIN_KEY, Percent } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { AuctionCreationFormInputFormatted } from 'app/features/miso/AuctionCreationForm'
 import { AuctionCreationWizardInputFormatted } from 'app/features/miso/AuctionCreationWizard'
@@ -8,7 +8,7 @@ import { NATIVE_PAYMENT_TOKEN } from 'app/features/miso/context/constants'
 import useAuctionTemplateMap from 'app/features/miso/context/hooks/useAuctionTemplateMap'
 import { useLiquidityLauncherTemplateMap } from 'app/features/miso/context/hooks/useLiquidityLauncherTemplateMap'
 import useTokenTemplateMap from 'app/features/miso/context/hooks/useTokenTemplateMap'
-import { AuctionTemplate, LiquidityLauncherTemplate } from 'app/features/miso/context/types'
+import { AuctionTemplate, LiquidityLauncherTemplate, TokenSetup } from 'app/features/miso/context/types'
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
@@ -249,8 +249,19 @@ const useAuctionCreate = () => {
       const tokenTemplateId = await tokenFactory.getTemplateId(tokenFactoryAddress)
       const launcherTemplateId = await launcherFactory.getTemplateId(listFactoryAddress)
       const tokenFactoryData = defaultAbiCoder.encode(
-        ['uint256', 'string', 'string', 'uint256'],
-        [tokenTemplateId, data.tokenName, data.tokenSymbol, data.tokenSupply.quotient.toString()]
+        ['bool', 'address', 'uint256', 'string', 'string', 'uint256'],
+        [
+          data.tokenSetupType === TokenSetup.PROVIDE,
+          data.tokenSetupType === TokenSetup.PROVIDE ? data.tokenAddress : '0x0',
+          tokenTemplateId,
+          data.tokenName,
+          data.tokenSymbol,
+          data.tokenSetupType === TokenSetup.PROVIDE
+            ? data.tokenAmount
+                .add(data.tokenAmount.multiply(new Percent(data.liqPercentage, 10000)))
+                .quotient.toString()
+            : data.tokenSupply?.quotient.toString(),
+        ]
       )
       const marketFactoryData = defaultAbiCoder.encode(
         ['uint256', 'bytes'],
