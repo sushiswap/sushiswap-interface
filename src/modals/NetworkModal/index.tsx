@@ -195,6 +195,17 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
     blockExplorerUrls: ['https://explorer.palm.io'],
   },
+  [ChainId.MOONBEAM]: {
+    chainId: '0x504',
+    chainName: 'Moonbeam',
+    nativeCurrency: {
+      name: 'Glimmer',
+      symbol: 'GLMR',
+      decimals: 18,
+    },
+    rpcUrls: ['https://rpc.api.moonbeam.network'],
+    blockExplorerUrls: ['https://moonbeam.moonscan.io'],
+  },
 }
 
 const NetworkModal: FC = () => {
@@ -215,6 +226,7 @@ const NetworkModal: FC = () => {
             ChainId.MATIC,
             ChainId.ARBITRUM,
             ChainId.AVALANCHE,
+            ChainId.MOONBEAM,
             ChainId.MOONRIVER,
             ChainId.FANTOM,
             ChainId.BSC,

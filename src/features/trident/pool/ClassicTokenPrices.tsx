@@ -8,7 +8,7 @@ const ClassicTokenPrices: FC = () => {
   const { poolWithState } = usePoolContext()
 
   return (
-    <div className="lg:grid grid-cols-1 lg:grid-cols-2 gap-2 space-y-2 lg:space-y-0">
+    <div className="grid-cols-1 gap-2 space-y-2 lg:grid lg:grid-cols-2 lg:space-y-0">
       <ListPanel
         items={[
           <div key={0} className="flex items-center w-full px-3 py-2 space-x-2 bg-dark-900">

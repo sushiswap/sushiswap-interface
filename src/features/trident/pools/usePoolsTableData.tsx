@@ -22,7 +22,7 @@ export interface DiscoverPoolsTableColumn {
 
 export const usePoolsTableData = () => {
   const { chainId } = useActiveWeb3React()
-  const { data, error, isValidating } = useGetAllTridentPools()
+  const { data, error, isValidating } = useGetAllTridentPools({ chainId })
 
   const columns: DiscoverPoolsTableColumn[] = useMemo(() => {
     return [
@@ -70,7 +70,7 @@ export const usePoolsTableData = () => {
         Cell: ({ row }) => {
           const { data: stats } = useRollingPoolStats({
             chainId,
-            variables: { where: { id_in: data?.map((el) => el.address.toLowerCase()) } },
+            variables: { where: { id_in: data?.map((el: any) => el.address.toLowerCase()) } },
             shouldFetch: !!chainId && !!data,
           })
 

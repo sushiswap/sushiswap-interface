@@ -20,12 +20,10 @@ export const GRAPH_HOST = {
   [ChainId.TELOS]: THE_GRAPH,
   [ChainId.KOVAN]: THE_GRAPH,
   [ChainId.FUSE]: THE_GRAPH,
+  [ChainId.MOONBEAM]: THE_GRAPH,
 }
 
 export const TRIDENT = {
-  [ChainId.KOVAN]: 'matthewlilley/trident',
-  [ChainId.OKEX]: 'https://graph.kkt.one/node',
-  [ChainId.ARBITRUM]: THE_GRAPH,
-  [ChainId.MOONRIVER]: THE_GRAPH,
-  [ChainId.FUSE]: THE_GRAPH,
+  [ChainId.MATIC]: 'sushiswap/trident-polygon',
+  [ChainId.KOVAN]: 'sushiswap/trident-kovan',
 }

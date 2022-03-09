@@ -10,10 +10,11 @@ import {
   poolKpisQuery,
 } from 'app/services/graph/queries'
 
+import { TridentTransactionRawData, tridentTransactionsRawDataFormatter } from '../hooks/transactions/trident'
 import { pager } from './pager'
 
 // @ts-ignore TYPE NEEDS FIXING
-export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
+export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables: {} = undefined) =>
   // @ts-ignore TYPE NEEDS FIXING
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${TRIDENT[chainId]}`, query, variables)
 
@@ -36,23 +37,25 @@ export interface TridentPool {
   twapEnabled: boolean
 }
 
-const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult): TridentPool[] =>
+const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult, allowedAssets: string[]): TridentPool[] =>
   Object.entries(pools)
-    .filter(([, assets]) => assets.length)
+    .filter(([, pools]) => pools.length)
     .flatMap(([poolType, poolList]: [string, TridentPoolData[]]) =>
-      poolList.map(({ kpi, assets, swapFee, twapEnabled, id }) => ({
-        address: id,
-        type: gqlPoolTypeMap[poolType],
-        volumeUSD: Number(kpi.volumeUSD),
-        liquidityUSD: Number(kpi.liquidityUSD),
-        apy: '12.34', // TODO: Needs subgraph support
-        transactionCount: Number(kpi.transactionCount),
-        assets: assets.map(
-          ({ token }) => new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)
-        ),
-        swapFee: Number(swapFee),
-        twapEnabled,
-      }))
+      poolList
+        .filter(({ assets }) => assets.every((asset: any) => allowedAssets.includes(asset.token.id)))
+        .map(({ kpi, assets, swapFee, twapEnabled, id }) => ({
+          address: id,
+          type: gqlPoolTypeMap[poolType],
+          volumeUSD: Number(kpi.volumeUSD),
+          liquidityUSD: Number(kpi.liquidityUSD),
+          apy: '12.34', // TODO: Needs subgraph support
+          transactionCount: Number(kpi.transactionCount),
+          assets: assets.map(
+            ({ token }) => new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)
+          ),
+          swapFee: Number(swapFee),
+          twapEnabled,
+        }))
     )
 
 export interface TridentPoolData {
@@ -83,14 +86,19 @@ interface TridentPoolQueryResult {
   indexPools: TridentPoolData[]
 }
 
-export const getTridentPools = async (
-  chainId: ChainId = ChainId.ETHEREUM,
+export const getTridentPools = async ({
+  chainId = ChainId.ETHEREUM,
   // @ts-ignore TYPE NEEDS FIXING
-  variables: {} = undefined
-): Promise<TridentPool[]> => {
+  variables = undefined,
+  allowedAssets = [],
+}: {
+  chainId?: ChainId
+  variables?: {}
+  allowedAssets?: string[]
+}): Promise<TridentPool[]> => {
   // @ts-ignore TYPE NEEDS FIXING
   const result: TridentPoolQueryResult = await fetcher(chainId, getTridentPoolsQuery, variables)
-  return formatPools(chainId, result)
+  return formatPools(chainId, result, allowedAssets)
 }
 
 interface PoolBucketQueryResult {
@@ -136,10 +144,9 @@ export const getPoolDayBuckets = async (chainId: ChainId = ChainId.ETHEREUM, var
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getTridentPoolTransactions = async (poolAddress) => {
-  return await pager('https://api.thegraph.com/subgraphs/name/sushiswap/trident', getSwapsForPoolQuery, {
-    poolAddress: poolAddress.toLowerCase(),
-  })
+export const getTridentPoolTransactions = async (chainId: ChainId = ChainId.ETHEREUM, variables) => {
+  const result = (await fetcher(chainId, getSwapsForPoolQuery, variables)).swaps as TridentTransactionRawData[]
+  return tridentTransactionsRawDataFormatter(result || [])
 }
 
 export interface PoolKpiQueryResult {
@@ -157,7 +164,7 @@ export interface PoolKpi {
   feesUSD: number
   volume: number
   volumeUSD: number
-  liquidity: number
+  liquidity: string
   liquidityUSD: number
   transactionCount: number
 }
@@ -168,7 +175,7 @@ const formatKpis = (kpis: PoolKpiQueryResult[]): PoolKpi[] =>
     feesUSD: Number(feesUSD),
     volume: Number(volume),
     volumeUSD: Number(volumeUSD),
-    liquidity: Number(liquidity),
+    liquidity,
     liquidityUSD: Number(liquidityUSD),
     transactionCount: Number(transactionCount),
   }))

@@ -1,6 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { default as constantProductPoolArtifact } from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
+import { default as constantProductPoolArtifact } from '@sushiswap/trident/artifacts/contracts/pool/constant-product/ConstantProductPool.sol/ConstantProductPool.json'
 import { computeConstantProductPoolAddress, ConstantProductPool, Fee, PoolState } from '@sushiswap/trident-sdk'
 import { enumToArray } from 'app/functions/array/enumToArray'
 import { useConstantProductPoolFactory } from 'app/hooks/useContract'
@@ -151,6 +151,14 @@ export function useConstantProductPools(pools: PoolInput[]): PoolWithState<Const
   const poolsAddresses = useMemo(
     () =>
       pools.reduce<(string | undefined)[]>((acc, [tokenA, tokenB, fee, twap]) => {
+        // console.log({
+        //   factoryAddress: constantProductPoolFactory?.address,
+        //   tokenA: tokenA?.wrapped,
+        //   tokenB: tokenB?.wrapped,
+        //   fee,
+        //   twap,
+        // })
+
         const address =
           tokenA &&
           tokenB &&

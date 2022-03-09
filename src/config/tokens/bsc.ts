@@ -15,3 +15,5 @@ export const MIM = new Token(
 )
 export const ICE = new Token(ChainId.BSC, '0xf16e81dce15B08F326220742020379B855B87DF9', 18, 'ICE', 'IceToken')
 export const SPELL = new Token(ChainId.BSC, '0x9Fe28D11ce29E340B7124C493F59607cbAB9ce48', 18, 'SPELL', 'SpellToken')
+export const FRAX = new Token(ChainId.BSC, '0x90C97F71E18723b0Cf0dfa30ee176Ab653E89F40', 18, 'FRAX', 'Frax')
+export const FXS = new Token(ChainId.BSC, '0xe48A3d7d0Bc88d552f730B62c006bC925eadB9eE', 18, 'FXS', 'Frax Share')

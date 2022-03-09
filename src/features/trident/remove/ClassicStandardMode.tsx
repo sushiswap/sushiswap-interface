@@ -88,10 +88,10 @@ const ClassicStandardMode: FC = () => {
       variant="outlined"
       id={`blamanam`}
     >
-      <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
-      <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
-      <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
       <ToggleButtonGroup.Button value="25">25%</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
     </ToggleButtonGroup>
   )
 
@@ -140,6 +140,7 @@ const ClassicStandardMode: FC = () => {
               <TridentApproveGate
                 inputAmounts={[slpAmountToRemove]}
                 tokenApproveOn={router?.address}
+                masterContractAddress={router?.address}
                 withPermit={true}
                 permit={bentoPermit}
                 onPermit={(permit) => dispatch(setRemoveBentoPermit(permit))}

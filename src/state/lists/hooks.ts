@@ -80,6 +80,7 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     1285: { ...map1[1285], ...map2[1285] }, // moonriver
     122: { ...map1[122], ...map2[122] }, // fuse
     40: { ...map1[40], ...map2[40] }, // telos
+    1284: { ...map1[1284], ...map2[1284] }, // moonbeam
   }
 }
 

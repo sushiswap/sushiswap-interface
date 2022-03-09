@@ -11,7 +11,8 @@ import React from 'react'
 const Portfolio = () => {
   const { i18n } = useLingui()
 
-  const account = useAccountInUrl('/portfolio')
+  const account = useAccountInUrl('/')
+
   if (!account) return
 
   return (
@@ -27,7 +28,7 @@ const Portfolio = () => {
       <TridentHeader pattern="bg-chevron">
         <HeaderDropdown account={account} />
       </TridentHeader>
-      <TridentBody className="flex flex-col gap-10 lg:grid grid-cols-2 lg:gap-4">
+      <TridentBody className="flex flex-col grid-cols-2 gap-10 lg:grid lg:gap-4">
         {/*<KashiLent account={account} />*/}
         {/*<KashiCollateral account={account} />*/}
         <WalletBalances account={account} />

@@ -37,7 +37,7 @@ const ClassicSingleAside = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <div className="flex flex-col p-10 rounded bg-dark-1000 shadow-lg gap-8">
+    <div className="flex flex-col gap-8 p-10 rounded shadow-lg bg-dark-1000">
       <div className="flex flex-col gap-3">
         <Typography variant="h3" className="text-high-emphesis">
           {i18n._(t`Zap Mode`)}
@@ -48,7 +48,7 @@ const ClassicSingleAside = () => {
           )}
         </Typography>
       </div>
-      <div className="bg-dark-900 rounded p-5 flex justify-between mb-2">
+      <div className="flex justify-between p-5 mb-2 rounded bg-dark-900">
         <div className="flex items-center gap-2">
           <Typography variant="sm">{i18n._(t`Withdraw to:`)}</Typography>
           <Typography variant="sm" className="text-high-emphesis" weight={700}>
@@ -60,12 +60,12 @@ const ClassicSingleAside = () => {
           checked={outputToWallet}
           onChange={() => dispatch(setRemoveOutputToWallet(!outputToWallet))}
           checkedIcon={
-            <div className="text-dark-700 flex justify-center items-center h-full w-full">
+            <div className="flex items-center justify-center w-full h-full text-dark-700">
               <WalletIcon width={16} height={14} />
             </div>
           }
           uncheckedIcon={
-            <div className="text-dark-700 flex justify-center items-center h-full w-full">
+            <div className="flex items-center justify-center w-full h-full text-dark-700">
               <BentoboxIcon width={16} height={16} />
             </div>
           }
@@ -73,7 +73,7 @@ const ClassicSingleAside = () => {
       </div>
       {!outputToWallet && zapCurrency?.isNative && (
         <Alert
-          className="bg-transparent p-0"
+          className="bg-transparent"
           dismissable={false}
           type="error"
           message={i18n._(
@@ -88,7 +88,7 @@ const ClassicSingleAside = () => {
         <Typography variant="lg" weight={700} className="text-high-emphesis">
           {i18n._(t`You'll Receive (at least):`)}
         </Typography>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div className="flex gap-1.5 items-center">
             <CurrencyLogo currency={minOutputAmount?.currency} size={20} />
             <Typography variant="sm" weight={700} className="text-high-emphesis">

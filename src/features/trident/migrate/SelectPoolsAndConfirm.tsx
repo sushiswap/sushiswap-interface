@@ -37,9 +37,10 @@ export const SelectPoolsAndConfirm: FC = () => {
   if (selectedMigrations.length === 0) router.replace('/trident/migrate')
   const leftToSelect = useAppSelector(selectLeftToChoose)
 
-  const { data, error, isValidating } = useGetAllTridentPools()
-
   const { account, chainId } = useActiveWeb3React()
+
+  const { data, error, isValidating } = useGetAllTridentPools({ chainId })
+
   const lpTokenAmounts = useTokenBalances(
     account ?? undefined,
     selectedMigrations.map((m) => m.v2Pair.liquidityToken)
@@ -52,7 +53,7 @@ export const SelectPoolsAndConfirm: FC = () => {
     <div>
       <MigrationTransactionModal />
 
-      <div className="flex gap-3 items-center">
+      <div className="flex items-center gap-3">
         <Typography variant="h3" className="text-high-emphesis" weight={700}>
           {leftToSelect === 0 ? i18n._(t`All set ✅`) : i18n._(t`Pools left to select: ${leftToSelect}`)}
         </Typography>
@@ -74,7 +75,7 @@ export const SelectPoolsAndConfirm: FC = () => {
           </div>
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-6 gap-3 mt-10">
+      <div className="grid grid-cols-1 gap-3 mt-10 md:grid-cols-2 lg:grid-cols-3 md:gap-6">
         {leftToSelect !== 0 ? (
           <Button disabled={true}>{i18n._(t`Pools left to select: ${leftToSelect}`)}</Button>
         ) : (
@@ -105,7 +106,7 @@ export const SelectPoolsAndConfirm: FC = () => {
           </TridentApproveGate>
         )}
         <div
-          className="cursor-pointer text-blue text-center md:text-left md:mt-3"
+          className="text-center cursor-pointer text-blue md:text-left md:mt-3"
           onClick={() => router.replace('/trident/migrate')}
         >
           {i18n._(t`← Previous Step`)}

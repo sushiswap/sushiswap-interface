@@ -22,6 +22,7 @@ const SUBDOMAIN_CHAIN_ID: { [subdomain: string]: string } = {
   [ChainSubdomain.MOONRIVER]: '1285',
   [ChainSubdomain.FUSE]: '122',
   [ChainSubdomain.TELOS]: '40',
+  [ChainSubdomain.MOONBEAM]: '1284',
 }
 
 const DEFAULT_CHAIN_ID = '1'
@@ -43,7 +44,8 @@ export function middleware(req: NextRequest) {
   // set the `cookie`
   res.cookie(
     'chain-id',
-    subdomain && subdomain in SUBDOMAIN_CHAIN_ID ? SUBDOMAIN_CHAIN_ID[subdomain] : DEFAULT_CHAIN_ID
+    subdomain && subdomain in SUBDOMAIN_CHAIN_ID ? SUBDOMAIN_CHAIN_ID[subdomain] : DEFAULT_CHAIN_ID,
+    { sameSite: 'none', secure: true }
   )
 
   // return the res
