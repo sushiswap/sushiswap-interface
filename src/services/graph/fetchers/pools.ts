@@ -37,23 +37,25 @@ export interface TridentPool {
   twapEnabled: boolean
 }
 
-const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult): TridentPool[] =>
+const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult, allowedAssets: string[]): TridentPool[] =>
   Object.entries(pools)
-    .filter(([, assets]) => assets.length)
+    .filter(([, pools]) => pools.length)
     .flatMap(([poolType, poolList]: [string, TridentPoolData[]]) =>
-      poolList.map(({ kpi, assets, swapFee, twapEnabled, id }) => ({
-        address: id,
-        type: gqlPoolTypeMap[poolType],
-        volumeUSD: Number(kpi.volumeUSD),
-        liquidityUSD: Number(kpi.liquidityUSD),
-        apy: '12.34', // TODO: Needs subgraph support
-        transactionCount: Number(kpi.transactionCount),
-        assets: assets.map(
-          ({ token }) => new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)
-        ),
-        swapFee: Number(swapFee),
-        twapEnabled,
-      }))
+      poolList
+        .filter(({ assets }) => assets.every((asset: any) => allowedAssets.includes(asset.token.id)))
+        .map(({ kpi, assets, swapFee, twapEnabled, id }) => ({
+          address: id,
+          type: gqlPoolTypeMap[poolType],
+          volumeUSD: Number(kpi.volumeUSD),
+          liquidityUSD: Number(kpi.liquidityUSD),
+          apy: '12.34', // TODO: Needs subgraph support
+          transactionCount: Number(kpi.transactionCount),
+          assets: assets.map(
+            ({ token }) => new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)
+          ),
+          swapFee: Number(swapFee),
+          twapEnabled,
+        }))
     )
 
 export interface TridentPoolData {
@@ -84,14 +86,19 @@ interface TridentPoolQueryResult {
   indexPools: TridentPoolData[]
 }
 
-export const getTridentPools = async (
-  chainId: ChainId = ChainId.ETHEREUM,
+export const getTridentPools = async ({
+  chainId = ChainId.ETHEREUM,
   // @ts-ignore TYPE NEEDS FIXING
-  variables: {} = undefined
-): Promise<TridentPool[]> => {
+  variables = undefined,
+  allowedAssets = [],
+}: {
+  chainId?: ChainId
+  variables?: {}
+  allowedAssets?: string[]
+}): Promise<TridentPool[]> => {
   // @ts-ignore TYPE NEEDS FIXING
   const result: TridentPoolQueryResult = await fetcher(chainId, getTridentPoolsQuery, variables)
-  return formatPools(chainId, result)
+  return formatPools(chainId, result, allowedAssets)
 }
 
 interface PoolBucketQueryResult {

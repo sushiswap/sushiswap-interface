@@ -151,6 +151,14 @@ export function useConstantProductPools(pools: PoolInput[]): PoolWithState<Const
   const poolsAddresses = useMemo(
     () =>
       pools.reduce<(string | undefined)[]>((acc, [tokenA, tokenB, fee, twap]) => {
+        // console.log({
+        //   factoryAddress: constantProductPoolFactory?.address,
+        //   tokenA: tokenA?.wrapped,
+        //   tokenB: tokenB?.wrapped,
+        //   fee,
+        //   twap,
+        // })
+
         const address =
           tokenA &&
           tokenB &&
