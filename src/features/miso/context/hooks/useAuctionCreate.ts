@@ -272,16 +272,6 @@ const useAuctionCreate = () => {
         [launcherTemplateId, data.liqPercentage, data.liqLockTime]
       )
 
-      console.log(
-        recipeContract.address,
-        recipeContract.interface.encodeFunctionData('prepareMiso', [
-          tokenFactoryData,
-          data.accounts,
-          data.amounts,
-          marketFactoryData,
-          launcherFactoryData,
-        ])
-      )
       const tx = await recipeContract.prepareMiso(
         tokenFactoryData,
         data.accounts,
