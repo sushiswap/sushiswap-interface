@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { DebugObserver } from 'app/components/DebugObserver'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import { AvailableToMigrate } from 'app/features/trident/migrate/AvailableToMigrate'
@@ -17,7 +16,6 @@ const MigrateLiquidity = () => {
       <Head>
         <title>{i18n._(t`Migrate Liquidity | Sushi`)}</title>
       </Head>
-      <DebugObserver />
       <TridentHeader pattern="bg-binary" className="!gap-2">
         <Typography variant="h2" className="text-high-emphesis" weight={700}>
           {i18n._(t`Migrate Liquidity`)}
