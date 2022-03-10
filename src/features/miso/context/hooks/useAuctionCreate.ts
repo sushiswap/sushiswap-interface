@@ -252,10 +252,10 @@ const useAuctionCreate = () => {
         ['bool', 'address', 'uint256', 'string', 'string', 'uint256'],
         [
           data.tokenSetupType === TokenSetup.PROVIDE,
-          data.tokenSetupType === TokenSetup.PROVIDE ? data.tokenAddress : '0x0',
+          data.tokenSetupType === TokenSetup.PROVIDE ? data.tokenAddress : AddressZero,
           tokenTemplateId,
-          data.tokenName,
-          data.tokenSymbol,
+          data.tokenSetupType === TokenSetup.PROVIDE ? '0x0' : data.tokenName,
+          data.tokenSetupType === TokenSetup.PROVIDE ? '0x0' : data.tokenSymbol,
           data.tokenSetupType === TokenSetup.PROVIDE
             ? data.tokenAmount
                 .add(data.tokenAmount.multiply(new Percent(data.liqPercentage, 10000)))
@@ -272,6 +272,16 @@ const useAuctionCreate = () => {
         [launcherTemplateId, data.liqPercentage, data.liqLockTime]
       )
 
+      console.log(
+        recipeContract.address,
+        recipeContract.interface.encodeFunctionData('prepareMiso', [
+          tokenFactoryData,
+          data.accounts,
+          data.amounts,
+          marketFactoryData,
+          launcherFactoryData,
+        ])
+      )
       const tx = await recipeContract.prepareMiso(
         tokenFactoryData,
         data.accounts,
