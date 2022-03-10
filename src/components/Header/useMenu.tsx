@@ -2,7 +2,7 @@ import { GlobeIcon, SwitchVerticalIcon, TrendingUpIcon } from '@heroicons/react/
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { SUSHI_ADDRESS } from '@sushiswap/core-sdk'
-import { PoolIcon, RocketIcon, WalletIcon } from 'app/components/Icon'
+import { RocketIcon, WalletIcon } from 'app/components/Icon'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -33,39 +33,23 @@ const useMenu: UseMenu = () => {
   return useMemo(() => {
     if (!chainId) return []
 
-    // By default show just a swap button
-    let tradeMenu: MenuItem = {
-      key: 'swap',
-      title: i18n._(t`Swap`),
-      link: '/swap',
-      icon: <SwitchVerticalIcon width={20} />,
-    }
+    const menu: Menu = []
 
-    // If limit orders is enabled, replace swap button with a submenu under trade
-    if (featureEnabled(Feature.LIMIT_ORDERS, chainId)) {
-      tradeMenu = {
-        key: 'trade',
-        title: i18n._(t`Trade`),
-        icon: <SwitchVerticalIcon width={20} />,
-        items: [
-          {
-            key: 'swap',
-            title: i18n._(t`Swap`),
-            link: '/swap',
-          },
-          {
-            key: 'limit',
-            title: i18n._(t`Limit order`),
-            link: '/limit-order',
-          },
-        ],
-      }
-    }
-
-    const poolMenu = [
+    const legacyItems = [
       {
-        key: 'browse',
-        title: i18n._(t`Browse`),
+        key: 'swap',
+        title: i18n._(t`Swap`),
+        link: '/swap',
+      },
+      {
+        key: 'limit',
+        title: i18n._(t`Limit order`),
+        link: '/limit-order',
+        disabled: !featureEnabled(Feature.LIMIT_ORDERS, chainId),
+      },
+      {
+        key: 'pool',
+        title: i18n._(t`Pool`),
         link: '/pool',
       },
       {
@@ -79,19 +63,52 @@ const useMenu: UseMenu = () => {
       //   link: '/remove',
       // },
       {
+        key: 'migrate',
+        title: i18n._(t`Migrate`),
+        link: '/migrate',
+        disabled: !featureEnabled(Feature.MIGRATE, chainId),
+      },
+      {
         key: 'import',
         title: i18n._(t`Import`),
         link: '/find',
       },
     ]
 
-    if (featureEnabled(Feature.MIGRATE, chainId)) {
-      poolMenu.push({
-        key: 'migrate',
-        title: i18n._(t`Migrate`),
-        link: '/migrate',
+    if (featureEnabled(Feature.TRIDENT, chainId)) {
+      menu.push({
+        key: 'trident',
+        title: i18n._(t`Trident`),
+        icon: <SwitchVerticalIcon width={20} />,
+        items: [
+          {
+            key: 'trident-swap',
+            title: i18n._(t`Swap`),
+            link: '/trident/swap',
+          },
+          {
+            key: 'trident-pools',
+            title: i18n._(t`Pools`),
+            link: '/trident/pools',
+          },
+          {
+            key: 'trident-create',
+            title: i18n._(t`Create Pool`),
+            link: '/trident/create',
+          },
+        ],
       })
     }
+
+    // By default show just a swap button
+    let legacy: MenuItem = {
+      key: 'legacy',
+      title: i18n._(t`Legacy`),
+      icon: <SwitchVerticalIcon width={20} />,
+      items: legacyItems.filter((item) => !item?.disabled),
+    }
+
+    menu.push(legacy)
 
     const exploreMenu: MenuItemLeaf[] = []
     if (featureEnabled(Feature.VESTING, chainId)) {
@@ -118,23 +135,14 @@ const useMenu: UseMenu = () => {
       })
     }
 
-    const mainItems: Menu = [tradeMenu]
-
-    if (poolMenu.length > 0)
-      mainItems.push({
-        key: 'pool',
-        title: i18n._(t`Pool`),
-        items: poolMenu,
-        icon: <PoolIcon width={20} />,
-      })
-
-    if (exploreMenu.length > 0)
-      mainItems.push({
+    if (exploreMenu.length > 0) {
+      menu.push({
         key: 'explore',
         title: i18n._(t`Explore`),
         items: exploreMenu,
         icon: <GlobeIcon width={20} />,
       })
+    }
 
     if (featureEnabled(Feature.LIQUIDITY_MINING, chainId)) {
       const farmItems = {
@@ -154,11 +162,11 @@ const useMenu: UseMenu = () => {
           },
         ],
       }
-      mainItems.push(farmItems)
+      menu.push(farmItems)
     }
 
     if (featureEnabled(Feature.KASHI, chainId)) {
-      mainItems.push({
+      menu.push({
         key: 'lending',
         title: i18n._(t`Lending`),
         icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
@@ -178,7 +186,7 @@ const useMenu: UseMenu = () => {
     }
 
     if (featureEnabled(Feature.MISO, chainId)) {
-      mainItems.push({
+      menu.push({
         key: 'launchpad',
         title: i18n._(t`Launchpad`),
         icon: <RocketIcon width={20} />,
@@ -234,11 +242,11 @@ const useMenu: UseMenu = () => {
     }
 
     if (featureEnabled(Feature.ANALYTICS, chainId)) {
-      mainItems.push(analyticsMenu)
+      menu.push(analyticsMenu)
     }
 
     if (account) {
-      mainItems.push({
+      menu.push({
         key: 'balances',
         title: i18n._(t`Portfolio`),
         link: `/portfolio/${account}`,
@@ -246,7 +254,7 @@ const useMenu: UseMenu = () => {
       })
     }
 
-    return mainItems.filter((el) => Object.keys(el).length > 0)
+    return menu.filter((el) => Object.keys(el).length > 0)
   }, [account, chainId, i18n])
 }
 
