@@ -1,6 +1,6 @@
 import { getAddress } from '@ethersproject/address'
 import { ChainId, Currency, NATIVE, SUSHI, Token } from '@sushiswap/core-sdk'
-import { ARBITRUM_TOKENS, MATIC_TOKENS, XDAI_TOKENS } from 'app/config/tokens'
+import { ARBITRUM_TOKENS, XDAI_TOKENS } from 'app/config/tokens'
 import { Feature } from 'app/enums'
 import { Chef, PairType } from 'app/features/onsen/enum'
 import { usePositions } from 'app/features/onsen/hooks'
@@ -293,14 +293,14 @@ export default function useFarmRewards() {
             rewardPrice: spellPrice,
           }
         }
-        if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
+        /*if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
           rewards[1] = {
             currency: ARBITRUM_TOKENS.gOHM,
             rewardPerBlock,
             rewardPerDay,
             rewardPrice: ohmPrice,
           }
-        }
+        }*/
         if (chainId === ChainId.ARBITRUM && ['13'].includes(pool.id)) {
           rewards[1] = {
             currency: ARBITRUM_TOKENS.MAGIC,
@@ -309,7 +309,7 @@ export default function useFarmRewards() {
             rewardPrice: magicPrice,
           }
         }
-        if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {
+        /*if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {
           const rewardTokenPerSecond = 0.00000462962963
           const rewardTokenPerBlock = rewardTokenPerSecond * averageBlockTime
           const rewardTokenPerDay = 0.4
@@ -318,6 +318,27 @@ export default function useFarmRewards() {
             rewardPerBlock: rewardTokenPerBlock,
             rewardPerDay: rewardTokenPerDay,
             rewardPrice: ohmPrice,
+          }
+        }*/
+        if (chainId === ChainId.MATIC) {
+          const rewardPerSecond =
+            pool.rewarder.totalAllocPoint === '0'
+              ? pool.rewarder.rewardPerSecond / 10 ** pool.rewardToken.decimals
+              : ((pool.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+          const rewardPerBlock = rewardPerSecond * averageBlockTime
+          const rewardPerDay = rewardPerBlock * blocksPerDay
+          const rewardPrice = pool.rewardToken.derivedETH * ethPrice
+          rewards[1] = {
+            currency: new Token(
+              chainId,
+              getAddress(pool.rewardToken.id),
+              Number(pool.rewardToken.decimals),
+              pool.rewardToken.symbol,
+              pool.rewardToken.name
+            ),
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice,
           }
         }
       } else if (pool.chef === Chef.OLD_FARMS) {

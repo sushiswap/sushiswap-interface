@@ -23,6 +23,7 @@ export const miniChefPoolsQuery = gql`
         id
         rewardToken
         rewardPerSecond
+        totalAllocPoint
       }
       allocPoint
       lastRewardTime

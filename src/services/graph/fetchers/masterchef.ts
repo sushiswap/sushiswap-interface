@@ -14,7 +14,7 @@ import {
 import { request } from 'graphql-request'
 
 export const MINICHEF = {
-  [ChainId.MATIC]: 'sushiswap/matic-minichef',
+  [ChainId.MATIC]: 'jiro-ono/minichef-staging-updates',
   [ChainId.XDAI]: 'sushiswap/xdai-minichef',
   [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
   [ChainId.ARBITRUM]: 'matthewlilley/arbitrum-minichef',
@@ -111,7 +111,20 @@ export const getOldMiniChefFarms = async (chainId = ChainId.ETHEREUM) => {
 
 export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const { pools } = await miniChef(miniChefPoolsQuery, chainId, variables)
-  return pools
+
+  const tokens = await getTokenSubset(chainId, {
+    // @ts-ignore TYPE NEEDS FIXING
+    tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
+  })
+
+  // @ts-ignore TYPE NEEDS FIXING
+  return pools.map((pool) => ({
+    ...pool,
+    rewardToken: {
+      // @ts-ignore TYPE NEEDS FIXING
+      ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+    },
+  }))
 }
 
 export const getMiniChefPairAddreses = async (chainId = ChainId.ETHEREUM) => {
