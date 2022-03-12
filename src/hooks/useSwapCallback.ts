@@ -165,6 +165,7 @@ function getExactInputParams(
   receiveToWallet: boolean = true
 ): ExactInputParams {
   const routeLegs = multiRoute.legs.length
+
   let paths: Path[] = []
 
   for (let legIndex = 0; legIndex < routeLegs; ++legIndex) {
@@ -175,7 +176,7 @@ function getExactInputParams(
         pool: multiRoute.legs[legIndex].poolAddress,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, receiveToWallet]
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, legIndex === routeLegs && receiveToWallet]
         ),
       }
       paths.push(path)
@@ -184,12 +185,14 @@ function getExactInputParams(
         pool: multiRoute.legs[legIndex].poolAddress,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, receiveToWallet]
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, legIndex === routeLegs && receiveToWallet]
         ),
       }
       paths.push(path)
     }
   }
+
+  console.log('slippage?', { amountOut: multiRoute.amountOut, slippage })
 
   let inputParams: ExactInputParams = {
     tokenIn: inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[0].tokenFrom.address,
@@ -340,6 +343,7 @@ export function useSwapCallArguments(
   const tridentRouterContract = useTridentRouterContract()
 
   const argentWalletContract = useArgentWalletContract()
+
   const { rebase } = useBentoRebase(trade?.inputAmount.currency)
 
   return useMemo<SwapCall[]>(() => {
