@@ -184,8 +184,8 @@ export function useToken(tokenAddress?: string | null): Token | undefined | null
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
   const { chainId } = useActiveWeb3React()
 
-  // @ts-ignore TYPE NEEDS FIXING
-  const isETH = currencyId?.toUpperCase() === NATIVE[chainId].symbol
+  // Since this is used throughout the app, cant change this to NATIVE[chainId]?.symbol
+  const isETH = currencyId?.toUpperCase() === 'ETH'
 
   // @ts-ignore TYPE NEEDS FIXING
   const isDual = [ChainId.CELO].includes(chainId)

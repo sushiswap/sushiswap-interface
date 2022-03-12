@@ -5,6 +5,11 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 
+const getToken = (urlToken: string | undefined, chainId: ChainId | undefined) => {
+  if (!urlToken || !chainId) return undefined
+  return [NATIVE[chainId].symbol, 'ETH'].includes(urlToken) ? 'ETH' : urlToken
+}
+
 const useCurrenciesFromURL = (): {
   currencies: (Currency | undefined)[]
   switchCurrencies: () => Promise<void>
@@ -14,9 +19,11 @@ const useCurrenciesFromURL = (): {
 } => {
   const { chainId } = useActiveWeb3React()
   const router = useRouter()
-  // @ts-ignore TYPE NEEDS FIXING
-  const currencyA = useCurrency(router.query.tokens?.[0]) || (chainId && NATIVE[chainId]) || undefined
-  const currencyB = useCurrency(router.query.tokens?.[1]) || (chainId && SUSHI[chainId as ChainId]) || undefined
+
+  const currencyA =
+    useCurrency(getToken(router.query.tokens?.[0], chainId)) || (chainId && NATIVE[chainId]) || undefined
+  const currencyB =
+    useCurrency(getToken(router.query.tokens?.[1], chainId)) || (chainId && SUSHI[chainId as ChainId]) || undefined
 
   const fee = Number(router.query.fee ?? Fee.DEFAULT)
   const twap = router.query.twap !== 'false'
