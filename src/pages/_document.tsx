@@ -9,6 +9,7 @@ export default function Document() {
   return (
     <Html>
       <Head>
+        <title>{APP_NAME}</title>
         <meta name="application-name" content={APP_NAME} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
