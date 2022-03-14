@@ -7,7 +7,6 @@ import { remoteLoader } from '@lingui/remote-loader'
 import { Web3ReactProvider } from '@web3-react/core'
 import Dots from 'app/components/Dots'
 import Portals from 'app/components/Portals'
-import { SyncWithRedux } from 'app/components/SyncWithRedux'
 import Web3ReactManager from 'app/components/Web3ReactManager'
 import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploitAlertModal'
 import getLibrary from 'app/functions/getLibrary'
@@ -27,7 +26,6 @@ import { useRouter } from 'next/router'
 import Script from 'next/script'
 import React, { Fragment, useEffect } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
-import { RecoilRoot } from 'recoil'
 import { PersistGate } from 'redux-persist/integration/react'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
@@ -141,22 +139,19 @@ function MyApp({ Component, pageProps, fallback, err }) {
                     <UserUpdater />
                     <ApplicationUpdater />
                     <MulticallUpdater />
-                  </>
-                  <RecoilRoot>
-                    <SyncWithRedux />
-                    <Provider>
-                      <Layout>
-                        <Guard>
-                          {/* TODO: Added alert Jan 25. Delete component after a few months. */}
-                          <MultichainExploitAlertModal />
-                          {/*@ts-ignore TYPE NEEDS FIXING*/}
-                          <Component {...pageProps} err={err} />
-                        </Guard>
-                        <Portals />
-                      </Layout>
-                    </Provider>
                     <TransactionUpdater />
-                  </RecoilRoot>
+                  </>
+                  <Provider>
+                    <Layout>
+                      <Guard>
+                        {/* TODO: Added alert Jan 25. Delete component after a few months. */}
+                        <MultichainExploitAlertModal />
+                        {/*@ts-ignore TYPE NEEDS FIXING*/}
+                        <Component {...pageProps} err={err} />
+                      </Guard>
+                      <Portals />
+                    </Layout>
+                  </Provider>
                 </PersistGate>
               </ReduxProvider>
             </Web3ReactManager>
