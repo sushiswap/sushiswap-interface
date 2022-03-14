@@ -60,6 +60,7 @@ const Swap = () => {
   const [confirmTrade, setConfirmTrade] = useState<TradeUnion>()
   const swapIsUnsupported = useIsSwapUnsupported(currencies[0], currencies[1])
   const allowedSlippage = useSwapSlippageTolerance(trade)
+  const [executeError, setExecuteError] = useState<string>()
 
   const _spendFromWallet = tradeVersion === TradeVersion.V2TRADE ? true : spendFromWallet
   const _receiveToWallet = tradeVersion === TradeVersion.V2TRADE ? true : receiveToWallet
@@ -79,7 +80,6 @@ const Swap = () => {
     if (!callback) return
     dispatch(setAttemptingTxn(true))
 
-    let error
     let { value, typedField } = tridentSwapState
     try {
       const txHash = await callback()
@@ -89,10 +89,10 @@ const Swap = () => {
       typedField = TypedField.A
     } catch (e) {
       // @ts-ignore TYPE NEEDS FIXING
-      error = e.message
+      setExecuteError(e.message)
     }
 
-    dispatch(setTridentSwapState({ ...tridentSwapState, value, typedField, error, attemptingTxn: false }))
+    dispatch(setTridentSwapState({ ...tridentSwapState, value, typedField, attemptingTxn: false }))
   }, [callback, dispatch, tridentSwapState])
 
   const handleDismiss = useCallback(() => {
@@ -208,7 +208,7 @@ const Swap = () => {
           )}
           {isWrap ? <WrapButton /> : <SwapButton onClick={(trade) => setConfirmTrade(trade)} />}
         </DerivedTradeContext.Provider>
-        {expertMode && error ? <SwapCallbackError error={error} /> : null}
+        {expertMode && executeError ? <SwapCallbackError error={executeError} /> : null}
         {swapIsUnsupported ? <UnsupportedCurrencyFooter currencies={[currencies[0], currencies[1]]} /> : null}
       </div>
       <ConfirmSwapModal
