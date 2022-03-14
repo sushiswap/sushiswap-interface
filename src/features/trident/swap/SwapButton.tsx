@@ -1,10 +1,11 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Trade as LegacyTrade } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
 import { selectTridentSwap, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
-import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
+import { useBentoBoxContract, useRouterContract, useTridentRouterContract } from 'app/hooks'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { TradeUnion } from 'app/types'
 import React, { FC, useCallback } from 'react'
@@ -21,6 +22,9 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
   const tridentSwapState = useAppSelector(selectTridentSwap)
   const { attemptingTxn } = tridentSwapState
   const router = useTridentRouterContract()
+
+  const legacyRouterContract = useRouterContract()
+
   const bentoBox = useBentoBoxContract()
   const { parsedAmounts, error, trade } = useDerivedTridentSwapContext()
 
@@ -29,11 +33,13 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
     dispatch(setTridentSwapState({ ...tridentSwapState, showReview: true }))
   }, [dispatch, onClick, trade, tridentSwapState])
 
+  const isLegacy = trade instanceof LegacyTrade
+
   return (
     <TridentApproveGate
       inputAmounts={[parsedAmounts?.[0]]}
-      tokenApproveOn={bentoBox?.address}
-      masterContractAddress={router?.address}
+      tokenApproveOn={!isLegacy ? bentoBox?.address : legacyRouterContract?.address}
+      masterContractAddress={!isLegacy ? router?.address : undefined}
     >
       {({ approved, loading }) => {
         const disabled = !!error || !approved || loading || attemptingTxn
