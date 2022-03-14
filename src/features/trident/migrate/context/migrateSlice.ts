@@ -7,6 +7,7 @@ import { AppState } from 'app/state'
 
 export enum MigrationSource {
   SUSHI_V2 = 'Sushi v2',
+  QUICKSWAP = 'QuickSwap',
 }
 
 export interface v2Migration {
