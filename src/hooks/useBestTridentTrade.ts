@@ -245,7 +245,6 @@ export function useBestTridentTrade(
     otherCurrency,
     currencyInRebase,
     currencyOutRebase,
-    setRoutingInfo,
     tradeType,
   ])
 }
