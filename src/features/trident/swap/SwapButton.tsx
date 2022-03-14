@@ -57,9 +57,13 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
       inputAmounts={[parsedAmounts?.[0]]}
       tokenApproveOn={!isLegacy ? bentoBox?.address : legacyRouterContract?.address}
       masterContractAddress={!isLegacy ? router?.address : undefined}
-      withPermit={true}
-      permit={bentoPermit}
-      onPermit={(permit) => dispatch(setBentoPermit(permit))}
+      {...(!isLegacy
+        ? {
+            withPermit: true,
+            permit: bentoPermit,
+            onPermit: (permit) => dispatch(setBentoPermit(permit)),
+          }
+        : { withPermit: false })}
     >
       {({ approved, loading }) => {
         const disabled = !!error || !approved || loading || attemptingTxn || priceImpactSeverity > 3
