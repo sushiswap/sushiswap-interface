@@ -1,3 +1,4 @@
+import { Transition } from '@headlessui/react'
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -57,9 +58,11 @@ const Swap = () => {
   const { address } = useENS(recipient)
   const [txHash, setTxHash] = useState<string>()
   const [confirmTrade, setConfirmTrade] = useState<TradeUnion>()
-
   const swapIsUnsupported = useIsSwapUnsupported(currencies[0], currencies[1])
   const allowedSlippage = useSwapSlippageTolerance(trade)
+
+  const _spendFromWallet = tradeVersion === TradeVersion.V2TRADE ? true : spendFromWallet
+  const _receiveToWallet = tradeVersion === TradeVersion.V2TRADE ? true : receiveToWallet
 
   const handleArrowsClick = useCallback(async () => {
     dispatch(setTridentSwapState({ ...tridentSwapState, value: '', typedField: TypedField.A }))
@@ -67,8 +70,8 @@ const Swap = () => {
   }, [dispatch, switchCurrencies, tridentSwapState])
 
   const { callback, error: cbError } = useSwapCallback(trade, allowedSlippage, address ?? undefined, null, {
-    receiveToWallet,
-    fromWallet: spendFromWallet,
+    receiveToWallet: _receiveToWallet,
+    fromWallet: _spendFromWallet,
     parsedAmounts,
   })
 
@@ -97,8 +100,6 @@ const Swap = () => {
     setTxHash(undefined)
   }, [dispatch, tridentSwapState])
 
-  const errorMessage = error ?? swapStateError ?? cbError ?? undefined
-
   return (
     <SwapLayoutCard>
       <div className="px-2">
@@ -109,16 +110,25 @@ const Swap = () => {
           error={typedField === TypedField.A && !!error && !!formattedAmounts[0]}
           header={(props) => <SwapAssetPanel.Header {...props} id={`asset-select-trigger-${TypedField.A}`} />}
           walletToggle={(props) => (
-            <SwapAssetPanel.Switch
-              {...props}
-              disabled={tradeVersion === TradeVersion.V2TRADE}
-              label={i18n._(t`Pay from`)}
-              onChange={(spendFromWallet) => dispatch(setSpendFromWallet(spendFromWallet))}
-              id="chk-pay-from-wallet"
-            />
+            <Transition
+              show={!trade || tradeVersion === TradeVersion.V3TRADE}
+              enter="transition duration-100 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-100 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <SwapAssetPanel.Switch
+                {...props}
+                label={i18n._(t`Pay from`)}
+                onChange={(spendFromWallet) => dispatch(setSpendFromWallet(spendFromWallet))}
+                id="chk-pay-from-wallet"
+              />
+            </Transition>
           )}
           selected={typedField === TypedField.A}
-          spendFromWallet={spendFromWallet}
+          spendFromWallet={_spendFromWallet}
           currency={currencies[0]}
           value={formattedAmounts[0]}
           onChange={(value) =>
@@ -139,16 +149,25 @@ const Swap = () => {
           error={typedField === TypedField.B && !!error && !!formattedAmounts[0]}
           header={(props) => <SwapAssetPanel.Header {...props} id={`asset-select-trigger-${TypedField.B}`} />}
           walletToggle={(props) => (
-            <SwapAssetPanel.Switch
-              {...props}
-              disabled={tradeVersion === TradeVersion.V2TRADE}
-              label={i18n._(t`Receive to`)}
-              onChange={(receiveToWallet) => dispatch(setReceiveToWallet(receiveToWallet))}
-              id="chk-receive-to-wallet"
-            />
+            <Transition
+              show={!trade || tradeVersion === TradeVersion.V3TRADE}
+              enter="transition duration-100 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-100 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <SwapAssetPanel.Switch
+                {...props}
+                label={i18n._(t`Receive to`)}
+                onChange={(receiveToWallet) => dispatch(setReceiveToWallet(receiveToWallet))}
+                id="chk-receive-to-wallet"
+              />
+            </Transition>
           )}
           selected={typedField === TypedField.B}
-          spendFromWallet={receiveToWallet}
+          spendFromWallet={_receiveToWallet}
           currency={currencies[1]}
           value={formattedAmounts[1]}
           onChange={(value) => {
@@ -189,7 +208,7 @@ const Swap = () => {
           )}
           {isWrap ? <WrapButton /> : <SwapButton onClick={(trade) => setConfirmTrade(trade)} />}
         </DerivedTradeContext.Provider>
-        {expertMode && errorMessage ? <SwapCallbackError error={errorMessage} /> : null}
+        {expertMode && error ? <SwapCallbackError error={error} /> : null}
         {swapIsUnsupported ? <UnsupportedCurrencyFooter currencies={[currencies[0], currencies[1]]} /> : null}
       </div>
       <ConfirmSwapModal
