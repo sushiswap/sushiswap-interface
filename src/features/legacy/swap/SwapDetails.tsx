@@ -3,6 +3,7 @@ import { ChevronDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Route, TradeVersion } from '@sushiswap/core-sdk'
+import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
 import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
@@ -49,7 +50,13 @@ const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient
               />
             </div>
             <Disclosure.Button as={Fragment}>
-              <div className="flex flex-grow items-center justify-end p-1 cursor-pointer rounded">
+              <div className="flex gap-2 flex-grow items-center justify-end p-1 cursor-pointer rounded">
+                <Chip
+                  size="sm"
+                  id="trade-type"
+                  label={getTradeVersion(trade) === TradeVersion.V2TRADE ? 'Legacy' : 'Trident'}
+                  color={getTradeVersion(trade) === TradeVersion.V2TRADE ? 'blue' : 'green'}
+                />
                 <ChevronDownIcon
                   width={20}
                   className={classNames(open ? 'transform rotate-180' : '', 'transition hover:text-white')}
