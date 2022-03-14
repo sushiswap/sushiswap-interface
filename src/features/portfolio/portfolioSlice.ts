@@ -19,8 +19,14 @@ export const portfolioSlice = createSlice({
   name: 'portfolioSlice',
   initialState,
   reducers: {
-    setBalancesActiveModal: (state, action: PayloadAction<ActiveModal | undefined>) => {
-      state.activeModal = action.payload
+    setBalancesActiveModal: (
+      state,
+      action: PayloadAction<{ activeModal: ActiveModal | undefined; modalOpen?: boolean }>
+    ) => {
+      state.activeModal = action.payload.activeModal
+      if (action.payload.modalOpen !== undefined) {
+        state.modalOpen = action.payload.modalOpen
+      }
     },
     setBalancesState: (state, action: PayloadAction<Pick<BalancesState, 'currency' | 'activeModal'>>) => {
       state.currency = action.payload.currency
