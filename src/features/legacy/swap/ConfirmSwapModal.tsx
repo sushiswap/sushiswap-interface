@@ -1,6 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent } from '@sushiswap/core-sdk'
+import { Percent, TradeVersion } from '@sushiswap/core-sdk'
+import { toAmountCurrencyAmount } from 'app/functions'
+import { getTradeVersion } from 'app/functions/getTradeVersion'
+import useBentoRebases from 'app/hooks/useBentoRebases'
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
   TransactionErrorContent,
@@ -54,14 +57,47 @@ const ConfirmSwapModal: FC<ConfirmSwapModal> = ({
   txHash,
 }) => {
   const { i18n } = useLingui()
+  const { rebases, loading } = useBentoRebases([trade?.inputAmount.currency, trade?.outputAmount.currency])
   const showAcceptChanges = useMemo(
     () => Boolean(trade && originalTrade && tradeMeaningfullyDiffers(trade, originalTrade)),
     [originalTrade, trade]
   )
 
-  const pendingText = `Swapping ${trade?.inputAmount?.toSignificant(6)} ${
-    trade?.inputAmount?.currency?.symbol
-  } for ${trade?.outputAmount?.toSignificant(6)} ${trade?.outputAmount?.currency?.symbol}`
+  const [inputAmount, outputAmount, maximumAmountIn, minimumAmountOut] = useMemo(() => {
+    if (getTradeVersion(trade) === TradeVersion.V2TRADE)
+      return [
+        trade?.inputAmount,
+        trade?.outputAmount,
+        trade?.maximumAmountIn(allowedSlippage),
+        trade?.minimumAmountOut(allowedSlippage),
+      ]
+
+    if (loading) return [undefined, undefined, undefined, undefined]
+
+    const rebaseInput = trade?.inputAmount.currency.wrapped.address
+      ? rebases[trade.inputAmount.currency.wrapped.address]
+      : undefined
+    const rebaseOutput = trade?.outputAmount.currency.wrapped.address
+      ? rebases[trade.outputAmount.currency.wrapped.address]
+      : undefined
+
+    return [
+      trade?.inputAmount && !!rebaseInput ? toAmountCurrencyAmount(rebaseInput, trade.inputAmount.wrapped) : undefined,
+      trade?.outputAmount && !!rebaseOutput
+        ? toAmountCurrencyAmount(rebaseOutput, trade.outputAmount.wrapped)
+        : undefined,
+      trade?.maximumAmountIn(allowedSlippage) && !!rebaseInput
+        ? toAmountCurrencyAmount(rebaseInput, trade?.maximumAmountIn(allowedSlippage).wrapped)
+        : undefined,
+      trade?.minimumAmountOut(allowedSlippage) && !!rebaseOutput
+        ? toAmountCurrencyAmount(rebaseOutput, trade?.minimumAmountOut(allowedSlippage).wrapped)
+        : undefined,
+    ]
+  }, [allowedSlippage, loading, rebases, trade])
+
+  const pendingText = `Swapping ${inputAmount?.toSignificant(6)} ${
+    inputAmount?.currency?.symbol
+  } for ${outputAmount?.toSignificant(6)} ${outputAmount?.currency?.symbol}`
 
   return (
     <TransactionConfirmationModal
@@ -79,10 +115,13 @@ const ConfirmSwapModal: FC<ConfirmSwapModal> = ({
             topContent={
               <SwapModalHeader
                 trade={trade}
-                allowedSlippage={allowedSlippage}
                 recipient={recipient}
                 showAcceptChanges={showAcceptChanges}
                 onAcceptChanges={onAcceptChanges}
+                inputAmount={inputAmount}
+                outputAmount={outputAmount}
+                maximumAmountIn={maximumAmountIn}
+                minimumAmountOut={minimumAmountOut}
               />
             }
             bottomContent={

@@ -1,11 +1,12 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Trade as LegacyTrade } from '@sushiswap/core-sdk'
+import { TradeVersion } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
-import { selectTridentSwap, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
+import { selectTridentSwap, setBentoPermit, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
 import { computeFiatValuePriceImpact, warningSeverity } from 'app/functions'
+import { getTradeVersion } from 'app/functions/getTradeVersion'
 import { useBentoBoxContract, useRouterContract, useTridentRouterContract } from 'app/hooks'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
@@ -23,7 +24,7 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   const tridentSwapState = useAppSelector(selectTridentSwap)
-  const { attemptingTxn } = tridentSwapState
+  const { attemptingTxn, bentoPermit } = tridentSwapState
   const { parsedAmounts, error, trade } = useDerivedTridentSwapContext()
   const router = useTridentRouterContract()
   const legacyRouterContract = useRouterContract()
@@ -49,13 +50,16 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
     dispatch(setTridentSwapState({ ...tridentSwapState, showReview: true }))
   }, [dispatch, onClick, trade, tridentSwapState])
 
-  const isLegacy = trade instanceof LegacyTrade
+  const isLegacy = getTradeVersion(trade) === TradeVersion.V2TRADE
 
   return (
     <TridentApproveGate
       inputAmounts={[parsedAmounts?.[0]]}
       tokenApproveOn={!isLegacy ? bentoBox?.address : legacyRouterContract?.address}
       masterContractAddress={!isLegacy ? router?.address : undefined}
+      withPermit={true}
+      permit={bentoPermit}
+      onPermit={(permit) => dispatch(setBentoPermit(permit))}
     >
       {({ approved, loading }) => {
         const disabled = !!error || !approved || loading || attemptingTxn || priceImpactSeverity > 3

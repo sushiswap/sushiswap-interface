@@ -18,6 +18,7 @@ import SwapButton from 'app/features/trident/swap/SwapButton'
 import {
   selectTridentSwap,
   setAttemptingTxn,
+  setBentoPermit,
   setReceiveToWallet,
   setRecipient,
   setSpendFromWallet,
@@ -54,6 +55,7 @@ const Swap = () => {
     attemptingTxn,
     showReview,
     error: swapStateError,
+    bentoPermit,
   } = tridentSwapState
   const { address } = useENS(recipient)
   const [txHash, setTxHash] = useState<string>()
@@ -74,6 +76,8 @@ const Swap = () => {
     receiveToWallet: _receiveToWallet,
     fromWallet: _spendFromWallet,
     parsedAmounts,
+    bentoPermit,
+    resetBentoPermit: () => dispatch(setBentoPermit(undefined)),
   })
 
   const execute = useCallback(async () => {
