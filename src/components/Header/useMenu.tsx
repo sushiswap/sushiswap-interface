@@ -93,8 +93,13 @@ const useMenu: UseMenu = () => {
           },
           {
             key: 'trident-create',
-            title: i18n._(t`Create Pool`),
+            title: i18n._(t`Create`),
             link: '/trident/create',
+          },
+          {
+            key: 'trident-migrate',
+            title: i18n._(t`Migrate`),
+            link: '/trident/migrate',
           },
         ],
       })
