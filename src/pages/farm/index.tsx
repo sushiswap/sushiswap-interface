@@ -71,7 +71,7 @@ export default function Farm(): JSX.Element {
         <div className="flex gap-3">
           <Button id="btn-create-new-pool" size="sm">
             <a
-              href="https://docs.google.com/document/d/19bL55ZTjKtxlom2CpVo6K8jL1e-OZ13y6y9AQgw_qT4"
+              href="https://docs.google.com/document/d/1VcdrqAn1sR8Wa0BSSU-jAl68CfoECR62LCzIyzUpZ_U"
               target="_blank"
               rel="noreferrer"
             >
