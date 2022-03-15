@@ -38,8 +38,6 @@ export default function useFarmRewards() {
   // @ts-ignore TYPE NEEDS FIXING
   const positions = usePositions(chainId)
 
-  // console.log({ positions })
-
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
   // @ts-ignore TYPE NEEDS FIXING
@@ -203,7 +201,7 @@ export default function useFarmRewards() {
           }
           rewards[1] = reward
         }
-      } else if (pool.chef === Chef.MINICHEF) {
+      } else if (pool.chef === Chef.MINICHEF && chainId !== ChainId.MATIC) {
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
@@ -293,14 +291,14 @@ export default function useFarmRewards() {
             rewardPrice: spellPrice,
           }
         }
-        /*if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
+        if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
           rewards[1] = {
             currency: ARBITRUM_TOKENS.gOHM,
             rewardPerBlock,
             rewardPerDay,
             rewardPrice: ohmPrice,
           }
-        }*/
+        }
         if (chainId === ChainId.ARBITRUM && ['13'].includes(pool.id)) {
           rewards[1] = {
             currency: ARBITRUM_TOKENS.MAGIC,
@@ -320,26 +318,25 @@ export default function useFarmRewards() {
             rewardPrice: ohmPrice,
           }
         }*/
-        if (chainId === ChainId.MATIC) {
-          const rewardPerSecond =
-            pool.rewarder.totalAllocPoint === '0'
-              ? pool.rewarder.rewardPerSecond / 10 ** pool.rewardToken.decimals
-              : ((pool.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
-          const rewardPerBlock = rewardPerSecond * averageBlockTime
-          const rewardPerDay = rewardPerBlock * blocksPerDay
-          const rewardPrice = pool.rewardToken.derivedETH * ethPrice
-          rewards[1] = {
-            currency: new Token(
-              chainId,
-              getAddress(pool.rewardToken.id),
-              Number(pool.rewardToken.decimals),
-              pool.rewardToken.symbol,
-              pool.rewardToken.name
-            ),
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice,
-          }
+      } else if (chainId === ChainId.MATIC) {
+        const rewardPerSecond =
+          pool.rewarder.totalAllocPoint === '0'
+            ? pool.rewarder.rewardPerSecond / 10 ** pool.rewardToken.decimals
+            : ((pool.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+        const rewardPerBlock = rewardPerSecond * averageBlockTime
+        const rewardPerDay = rewardPerBlock * blocksPerDay
+        const rewardPrice = pool.rewardToken.derivedETH * ethPrice
+        rewards[1] = {
+          currency: new Token(
+            chainId,
+            getAddress(pool.rewardToken.id),
+            Number(pool.rewardToken.decimals),
+            pool.rewardToken.symbol,
+            pool.rewardToken.name
+          ),
+          rewardPerBlock,
+          rewardPerDay,
+          rewardPrice,
         }
       } else if (pool.chef === Chef.OLD_FARMS) {
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
