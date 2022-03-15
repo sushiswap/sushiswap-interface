@@ -36,12 +36,12 @@ const nextConfig = {
 
     return config
   },
-  experimental: { 
-    optimizeCss: true 
-  },
+  // experimental: {
+  //   concurrentFeatures: true,
+  //   serverComponents: true,
+  // },
   swcMinify: false,
   reactStrictMode: true,
-  poweredByHeader: false,
   pwa: {
     dest: 'public',
     runtimeCaching,
