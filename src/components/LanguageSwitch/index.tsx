@@ -26,6 +26,7 @@ const LANG_TO_COUNTRY: Record<string, string> = {
   es: 'Español',
   tr: 'Türkçe',
   el: 'ελληνικά',
+  pl: 'Polskie',
 }
 
 export default function LangSwitcher() {

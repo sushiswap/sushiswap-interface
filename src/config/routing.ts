@@ -259,6 +259,7 @@ export const ADDITIONAL_BASES: {
   [ChainId.ARBITRUM]: {
     [ARBITRUM.FRAX.address]: [ARBITRUM.FXS],
     [ARBITRUM.FXS.address]: [ARBITRUM.FRAX],
+    [ARBITRUM.FLUID.address]: [ARBITRUM.DUSD],
   },
   [ChainId.MOONRIVER]: {
     [MOONRIVER.FRAX.address]: [MOONRIVER.FXS],

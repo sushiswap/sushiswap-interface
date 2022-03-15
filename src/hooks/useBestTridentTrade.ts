@@ -188,12 +188,15 @@ export function useBestTridentTrade(
           if (legacyRoute.status === RouteStatus.Success) {
             const priceImpact = legacyRoute.priceImpact
             // setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
-            return {
-              trade: LegacyTrade.exactIn(
-                convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
-                amountSpecified
-              ),
-              priceImpact,
+            const route = convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut)
+
+            try {
+              return {
+                trade: LegacyTrade.exactIn(route, amountSpecified),
+                priceImpact,
+              }
+            } catch (error) {
+              return { trade: undefined, priceImpact: undefined }
             }
           }
         }
@@ -241,12 +244,14 @@ export function useBestTridentTrade(
           if (legacyRoute.status === RouteStatus.Success) {
             const priceImpact = legacyRoute.priceImpact
             // setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
-            return {
-              trade: LegacyTrade.exactOut(
-                convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
-                amountSpecified
-              ),
-              priceImpact,
+            const route = convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut)
+            try {
+              return {
+                trade: LegacyTrade.exactOut(route, amountSpecified),
+                priceImpact,
+              }
+            } catch (error) {
+              return { trade: undefined, priceImpact: undefined }
             }
           }
         }
