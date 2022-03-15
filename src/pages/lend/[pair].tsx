@@ -11,8 +11,8 @@ import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
 import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import Layout from 'app/layouts/Kashi'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React from 'react'
 
 export default function Pair() {
@@ -27,20 +27,12 @@ export default function Pair() {
 
   return (
     <PairLayout>
-      <Head>
-        {/*@ts-ignore TYPE NEEDS FIXING*/}
-        <title>Lend {pair.asset.tokenInfo.symbol} | Sushi</title>
-        {/*@ts-ignore TYPE NEEDS FIXING*/}
-        <meta key="description" name="description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
-        <meta
-          key="twitter:description"
-          name="twitter:description"
-          /*@ts-ignore TYPE NEEDS FIXING*/
-          content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`}
-        />
-        {/*@ts-ignore TYPE NEEDS FIXING*/}
-        <meta key="og:description" property="og:description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
-      </Head>
+      <NextSeo
+        // @ts-ignore
+        title={`Lend ${pair.asset.tokenInfo.symbol}`}
+        // @ts-ignore
+        description={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`}
+      />
       <Card
         className="bg-dark-900"
         header={

@@ -24,9 +24,12 @@ import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
+import { DefaultSeo } from 'next-seo'
 import React, { Fragment, useEffect } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+
+import SEO from '../config/seo'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
@@ -147,6 +150,7 @@ function MyApp({ Component, pageProps, fallback, err }) {
                         {/* TODO: Added alert Jan 25. Delete component after a few months. */}
                         <MultichainExploitAlertModal />
                         {/*@ts-ignore TYPE NEEDS FIXING*/}
+                        <DefaultSeo {...SEO} />
                         <Component {...pageProps} err={err} />
                       </Guard>
                       <Portals />

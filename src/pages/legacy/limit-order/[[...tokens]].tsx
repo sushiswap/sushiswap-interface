@@ -28,6 +28,7 @@ import useLimitOrderDerivedCurrencies, {
   useLimitOrderState,
 } from 'app/state/limit-order/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
+import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
 
 const LimitOrder = () => {
@@ -85,6 +86,7 @@ const LimitOrder = () => {
 
   return (
     <>
+      <NextSeo title="Limit Order" />
       <SwapLayoutCard>
         <LimitOrderApprovalCheck />
         <div className="px-2">

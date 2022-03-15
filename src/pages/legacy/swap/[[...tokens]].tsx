@@ -31,6 +31,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { Field, setRecipient } from 'app/state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'app/state/swap/hooks'
 import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
+import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
 
@@ -349,6 +350,7 @@ const Swap = ({ banners }) => {
 
   return (
     <>
+      <NextSeo title="Swap" />
       <ConfirmSwapModal
         isOpen={showConfirm}
         trade={trade}
@@ -389,7 +391,7 @@ const Swap = ({ banners }) => {
             onChange={handleTypeInput}
             onSelect={handleInputSelect}
           />
-          <div className="flex justify-center -mt-6 -mb-6 z-0">
+          <div className="z-0 flex justify-center -mt-6 -mb-6">
             <div
               role="button"
               className="p-1.5 rounded-full bg-dark-800 border shadow-md border-dark-700 hover:border-dark-600"
@@ -427,7 +429,7 @@ const Swap = ({ banners }) => {
           )}
 
           {trade && routeNotFound && userHasSpecifiedInputOutput && (
-            <Typography variant="xs" className="text-center py-2">
+            <Typography variant="xs" className="py-2 text-center">
               {i18n._(t`Insufficient liquidity for this trade.`)}{' '}
               {singleHopOnly && i18n._(t`Try enabling multi-hop trades`)}
             </Typography>
