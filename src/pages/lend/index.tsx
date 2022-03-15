@@ -18,7 +18,6 @@ import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { RecoilRoot } from 'recoil'
 
 export default function Lend() {
   const { i18n } = useLingui()
@@ -240,8 +239,6 @@ const LendEntry = ({ pair, userPosition = false }) => {
     </Link>
   )
 }
-
-Lend.Provider = RecoilRoot
 
 // @ts-ignore TYPE NEEDS FIXING
 const LendLayout = ({ children }) => {

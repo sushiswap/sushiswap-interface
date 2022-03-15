@@ -2,7 +2,6 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
-import { DebugObserver } from 'app/components/DebugObserver'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import { SelectPoolsAndConfirm } from 'app/features/trident/migrate/SelectPoolsAndConfirm'
@@ -21,7 +20,6 @@ const ConfirmMigration = () => {
       <Head>
         <title>{i18n._(t`Confirm Migration | Sushi`)}</title>
       </Head>
-      <DebugObserver />
       <TridentHeader pattern="bg-binary" className="!gap-2">
         <div>
           <Button

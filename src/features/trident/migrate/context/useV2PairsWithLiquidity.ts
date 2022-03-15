@@ -18,6 +18,9 @@ export const useV2PairsWithLiquidity = (): V2PairsWithLiquidity => {
   const { account } = useActiveWeb3React()
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
+
+  // 0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32
+
   const tokenPairsWithLiquidityTokens = useMemo(
     () =>
       trackedTokenPairs.map((tokens) => ({

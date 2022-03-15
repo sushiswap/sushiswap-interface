@@ -78,15 +78,17 @@ export const useCreatePoolExecute: UseCreatePoolExecute = () => {
           value,
         })
 
-        await tx.wait()
+        if (tx?.hash) {
+          addTransaction(tx, {
+            summary: i18n._(
+              t`Create pool and add liquidity for tokens ${assets[0].currency!!.symbol} and ${
+                assets[1].currency!!.symbol
+              }`
+            ),
+          })
 
-        addTransaction(tx, {
-          summary: i18n._(
-            t`Create pool and add liquidity for tokens ${assets[0].currency!!.symbol} and ${
-              assets[1].currency!!.symbol
-            }`
-          ),
-        })
+          await tx.wait()
+        }
 
         dispatch(setCreateAttemptingTxn(false))
 

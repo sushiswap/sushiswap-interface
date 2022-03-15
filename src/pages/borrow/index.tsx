@@ -18,7 +18,6 @@ import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { RecoilRoot } from 'recoil'
 
 export default function Borrow() {
   const { i18n } = useLingui()
@@ -293,8 +292,6 @@ export default function Borrow() {
     </BorrowLayout>
   )
 }
-
-Borrow.Provider = RecoilRoot
 
 // @ts-ignore TYPE NEEDS FIXING
 const BorrowLayout = ({ children }) => {

@@ -14,9 +14,17 @@ import { TridentTransactionRawData, tridentTransactionsRawDataFormatter } from '
 import { pager } from './pager'
 
 // @ts-ignore TYPE NEEDS FIXING
-export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables: {} = undefined) =>
+export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables: {} = undefined) => {
+  if (chainId === ChainId.KOVAN) {
+    return pager(
+      `https://api.thegraph.com/subgraphs/id/QmPoTrAgjC8f7kq5AU1cyknGvqZUQVjubdnH3idYP6EaP8`,
+      query,
+      variables
+    )
+  }
   // @ts-ignore TYPE NEEDS FIXING
-  pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${TRIDENT[chainId]}`, query, variables)
+  return pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${TRIDENT[chainId]}`, query, variables)
+}
 
 const gqlPoolTypeMap: Record<string, PoolType> = {
   concentratedLiquidityPools: PoolType.ConcentratedLiquidity,

@@ -1,3 +1,4 @@
+import { Signature } from '@ethersproject/bytes'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppState } from 'app/state'
 
@@ -15,6 +16,7 @@ export interface SwapState {
   attemptingTxn: boolean
   showReview: boolean
   error?: string
+  bentoPermit?: Signature
 }
 
 const initialState: SwapState = {
@@ -26,6 +28,7 @@ const initialState: SwapState = {
   attemptingTxn: false,
   showReview: false,
   error: undefined,
+  bentoPermit: undefined,
 }
 
 export const swapSlice = createSlice({
@@ -57,6 +60,9 @@ export const swapSlice = createSlice({
     setError: (state, action: PayloadAction<string>) => {
       state.error = action.payload
     },
+    setBentoPermit: (state, action: PayloadAction<Signature | undefined>) => {
+      state.bentoPermit = action.payload
+    },
   },
 })
 
@@ -67,6 +73,7 @@ export const {
   setSpendFromWallet,
   setReceiveToWallet,
   setTridentSwapState,
+  setBentoPermit,
 } = swapSlice.actions
 
 type selectTridentSwap = (state: AppState) => SwapState

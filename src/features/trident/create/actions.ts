@@ -31,6 +31,7 @@ const addLiquidityAction = ({
     }
   })
   const [tokenA, tokenB] = sortTokens(assets)
+
   return router?.interface?.encodeFunctionData('addLiquidity', [
     liquidityInput,
     computeConstantProductPoolAddress({
