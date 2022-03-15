@@ -20,12 +20,15 @@ import {
   PoolState,
   Trade,
 } from '@sushiswap/trident-sdk'
+import { selectTridentSwap } from 'app/features/trident/swap/swapSlice'
 import { PoolUnion } from 'app/features/trident/types'
 import { toAmountJSBI, toShareCurrencyAmount } from 'app/functions'
+import { compareTrades, RouteKind } from 'app/functions/compareTrades'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { PairState, useV2Pairs } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
+import { useAppSelector } from 'app/state/hooks'
 import { TradeUnion } from 'app/types'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -105,6 +108,9 @@ export function useBestTridentTrade(
 
   const allowedPools = useAllCommonPools(currencyIn, currencyOut)
 
+  const tridentSwapState = useAppSelector(selectTridentSwap)
+  const { spendFromWallet, receiveToWallet } = tridentSwapState
+
   useEffect(() => {
     if (!library) return
 
@@ -157,11 +163,19 @@ export function useBestTridentTrade(
           gasPrice
         )
 
-        const tridentAmountOutput = BigNumber.from(
+        const tridentAmountOutput = parseInt(
           toAmountJSBI(currencyOutRebase, JSBI.BigInt(tridentRoute.amountOutBN.toString())).toString()
         )
 
-        if (tridentAmountOutput.gt(legacyRoute.amountOutBN)) {
+        const bestTrade = compareTrades(
+          tridentRoute,
+          tridentAmountOutput,
+          legacyRoute,
+          spendFromWallet,
+          receiveToWallet
+        )
+
+        if (bestTrade == RouteKind.Trident) {
           if (tridentRoute.status === RouteStatus.Success) {
             const priceImpact = tridentRoute.priceImpact
             // setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
@@ -202,11 +216,19 @@ export function useBestTridentTrade(
           gasPrice
         )
 
-        const tridentAmountOutput = BigNumber.from(
+        const tridentAmountOutput = parseInt(
           toAmountJSBI(currencyOutRebase, JSBI.BigInt(tridentRoute.amountOut.toString())).toString()
         )
 
-        if (tridentAmountOutput.lt(legacyRoute.amountInBN)) {
+        const bestTrade = compareTrades(
+          tridentRoute,
+          tridentAmountOutput,
+          legacyRoute,
+          spendFromWallet,
+          receiveToWallet
+        )
+
+        if (bestTrade == RouteKind.Trident) {
           if (tridentRoute.status === RouteStatus.Success) {
             const priceImpact = tridentRoute.priceImpact
             // setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
@@ -246,5 +268,7 @@ export function useBestTridentTrade(
     currencyInRebase,
     currencyOutRebase,
     tradeType,
+    receiveToWallet,
+    spendFromWallet,
   ])
 }
