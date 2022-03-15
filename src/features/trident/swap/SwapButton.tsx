@@ -18,9 +18,10 @@ import TridentApproveGate from '../TridentApproveGate'
 
 interface SwapButton {
   onClick(x: TradeUnion): void
+  spendFromWallet: boolean
 }
 
-const SwapButton: FC<SwapButton> = ({ onClick }) => {
+const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   const tridentSwapState = useAppSelector(selectTridentSwap)
@@ -55,7 +56,7 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
   return (
     <TridentApproveGate
       inputAmounts={[parsedAmounts?.[0]]}
-      tokenApproveOn={!isLegacy ? bentoBox?.address : legacyRouterContract?.address}
+      tokenApproveOn={spendFromWallet ? (!isLegacy ? bentoBox?.address : legacyRouterContract?.address) : undefined}
       masterContractAddress={!isLegacy ? router?.address : undefined}
       {...(!isLegacy
         ? {
