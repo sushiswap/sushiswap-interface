@@ -62,7 +62,7 @@ const Component: FC<ComponentProps> = ({
   selectedCurrency,
   otherSelectedCurrency,
   currencyList,
-  showCommonBases = false,
+  showCommonBases = true,
   includeNativeCurrency = true,
   allowManageTokenList = true,
   showSearch = true,

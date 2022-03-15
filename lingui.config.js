@@ -30,6 +30,7 @@ module.exports = {
     'hi',
     'tr',
     'el',
+    'pl',
   ],
   orderBy: 'messageId',
   pseudoLocale: '',
