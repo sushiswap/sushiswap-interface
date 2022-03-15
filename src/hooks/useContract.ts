@@ -22,7 +22,10 @@ import {
 } from '@sushiswap/core-sdk'
 import { LIMIT_ORDER_HELPER_ADDRESS, STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
+import { PoolType } from '@sushiswap/tines'
+import ConstantProductPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/constant-product/ConstantProductPool.sol/ConstantProductPool.json'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
+import { Pool } from '@sushiswap/trident-sdk'
 import { OLD_FARMS } from 'app/config/farms'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
@@ -60,6 +63,7 @@ import UNI_FACTORY_ABI from 'app/constants/abis/uniswap-v2-factory.json'
 import IUniswapV2PairABI from 'app/constants/abis/uniswap-v2-pair.json'
 import WETH9_ABI from 'app/constants/abis/weth.json'
 import ZENKO_ABI from 'app/constants/abis/zenko.json'
+import { poolEntityMapper } from 'app/features/trident/poolEntityMapper'
 import { getContract } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
@@ -250,6 +254,16 @@ export function useTridentMigrationContract() {
     chainId ? (TRIDENT as any)[chainId][0].contracts.TridentSushiRollCP.address : undefined,
     chainId ? (TRIDENT as any)[chainId][0].contracts.TridentSushiRollCP.abi : undefined
   )
+}
+
+export function useTridentPoolContract(pool?: Pool, withSignerIfPossible?: boolean) {
+  let artifact
+  if (pool && poolEntityMapper(pool) === PoolType.ConstantProduct) artifact = ConstantProductPoolArtifact
+  if (pool && poolEntityMapper(pool) !== PoolType.ConstantProduct) {
+    throw new Error('Implement new pool type')
+  }
+
+  return useContract(pool?.liquidityToken.address ?? undefined, artifact?.abi, withSignerIfPossible)
 }
 
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
