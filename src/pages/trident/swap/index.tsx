@@ -140,7 +140,7 @@ const Swap = () => {
           }
           onSelect={(currency) => setURLCurrency(currency, 0)}
         />
-        <div className="flex justify-center -mt-6 -mb-6 z-0">
+        <div className="z-0 flex justify-center -mt-6 -mb-6">
           <div
             role="button"
             className="p-1.5 rounded-full bg-dark-800 border shadow-md border-dark-700 hover:border-dark-600"
@@ -206,7 +206,7 @@ const Swap = () => {
             />
           )}
           {trade && !trade?.route && parsedAmounts[0]?.greaterThan(ZERO) && (
-            <Typography variant="xs" className="text-center py-2">
+            <Typography variant="xs" className="py-2 text-center">
               {i18n._(t`Insufficient liquidity for this trade.`)}{' '}
             </Typography>
           )}

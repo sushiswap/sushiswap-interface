@@ -14,7 +14,6 @@ import Layout from 'app/layouts/Kashi'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { RecoilRoot } from 'recoil'
 
 export default function Pair() {
   useRedirectOnChainId('/lend')
@@ -149,8 +148,6 @@ export default function Pair() {
     </PairLayout>
   )
 }
-
-Pair.Provider = RecoilRoot
 
 // @ts-ignore TYPE NEEDS FIXING
 const PairLayout = ({ children }) => {
