@@ -1,4 +1,4 @@
-name: nodejs
+name: pipeline
 
 on: ['push']
 
