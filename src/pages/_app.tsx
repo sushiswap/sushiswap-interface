@@ -134,7 +134,6 @@ function MyApp({ Component, pageProps, fallback, err }) {
         <Web3ReactProvider getLibrary={getLibrary}>
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
-              {/*@ts-ignore TYPE NEEDS FIXING*/}
               <ReduxProvider store={store}>
                 <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
                   <>

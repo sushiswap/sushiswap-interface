@@ -1,5 +1,5 @@
 import { Currency } from '@sushiswap/core-sdk'
-import { selectBalancesCurrency } from 'app/features/account/portfolioSlice'
+import { selectBalancesCurrency } from 'app/features/portfolio/portfolioSlice'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useSelector } from 'react-redux'
 

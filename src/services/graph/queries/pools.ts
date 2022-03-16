@@ -80,14 +80,13 @@ export const getSwapsForPoolQuery = gql`
       }
       recipient
       tokenIn {
-        metaData {
-          symbol
+        symbol
+        price {
+          derivedUSD
         }
       }
       tokenOut {
-        metaData {
-          symbol
-        }
+        symbol
       }
     }
   }

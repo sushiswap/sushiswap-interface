@@ -47,7 +47,7 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
   const [permit, setPermit] = useState<Signature>()
   const [permitError, setPermitError] = useState<boolean>()
   const bentoboxContract = useBentoBoxContract()
-  const masterContractAddress = chainId && KASHI_ADDRESS[chainId]
+  const masterContractAddress = chainId ? KASHI_ADDRESS[chainId] : undefined
   const [open, setOpen] = useState(false)
 
   const totalAvailableToRemove = removeAmount

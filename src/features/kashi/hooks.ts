@@ -93,7 +93,7 @@ export function useKashiPairAddresses(): string[] {
     chainId,
     contract: bentoBoxContract,
     event: chainId && bentoBoxContract && bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
-    shouldFetch: chainId && useEvents && featureEnabled(Feature.KASHI, chainId),
+    shouldFetch: Boolean(chainId && useEvents && featureEnabled(Feature.KASHI, chainId)),
   })
   const clones = useClones({ chainId, shouldFetch: !useEvents })
   return useMemo(
@@ -193,8 +193,13 @@ export function useKashiMediumRiskLendingPair(
   return useKashiMediumRiskLendingPairs(account, [getAddress(address)])[0]
 }
 
-export function useKashiPairs(addresses: string[] = []): KashiMarket[] {
-  const { chainId, account } = useActiveWeb3React()
+export const useKashiPairs = (addresses: string[] = []) => {
+  const { account } = useActiveWeb3React()
+  return useKashiPairsForAccount(account, addresses)
+}
+
+export function useKashiPairsForAccount(account: string | null | undefined, addresses: string[] = []) {
+  const { chainId } = useActiveWeb3React()
 
   const boringHelperContract = useBoringHelperContract()
 

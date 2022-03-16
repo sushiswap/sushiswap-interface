@@ -69,6 +69,7 @@ export default function Table<T>({
       // @ts-ignore TYPE NEEDS FIXING
       data,
       defaultCanSort: false,
+      autoResetSortBy: false,
       initialState: {
         hiddenColumns: columnsHideable,
         // @ts-ignore TYPE NEEDS FIXING

@@ -1,8 +1,10 @@
 import { getAddress } from '@ethersproject/address'
 import { ChainId, Currency, NATIVE, SUSHI, Token } from '@sushiswap/core-sdk'
 import { ARBITRUM_TOKENS, MATIC_TOKENS, XDAI_TOKENS } from 'app/config/tokens'
+import { Feature } from 'app/enums'
 import { Chef, PairType } from 'app/features/onsen/enum'
 import { usePositions } from 'app/features/onsen/hooks'
+import { featureEnabled } from 'app/functions'
 import { aprToApy } from 'app/functions/convert'
 import {
   useAverageBlockTime,
@@ -11,6 +13,7 @@ import {
   useFantomPrice,
   useFarms,
   useFusePrice,
+  useGlimmerPrice,
   useGnoPrice,
   useKashiPairs,
   useMagicPrice,
@@ -68,7 +71,7 @@ export default function useFarmRewards() {
   const kashiPairs = useKashiPairs({
     chainId,
     variables: { where: { id_in: farmAddresses.map(toLower) } },
-    shouldFetch: !!farmAddresses,
+    shouldFetch: !!chainId && !!farmAddresses && featureEnabled(Feature.KASHI, chainId),
   })
 
   const averageBlockTime = useAverageBlockTime({ chainId })
@@ -89,6 +92,7 @@ export default function useFarmRewards() {
     ohmPrice,
     fusePrice,
     magicPrice,
+    glimmerPrice,
   ] = [
     useSushiPrice(),
     useEthPrice(),
@@ -102,6 +106,7 @@ export default function useFarmRewards() {
     useOhmPrice(),
     useFusePrice(),
     useMagicPrice(),
+    useGlimmerPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -254,6 +259,12 @@ export default function useFarmRewards() {
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: fantomPrice,
+          },
+          [ChainId.MOONBEAM]: {
+            currency: NATIVE[ChainId.MOONBEAM],
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: glimmerPrice,
           },
         }
 

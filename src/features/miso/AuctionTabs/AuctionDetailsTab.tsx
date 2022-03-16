@@ -36,18 +36,19 @@ const AuctionDetailsTab: FC<AuctionDetailsTabProps> = ({ auction, active }) => {
   return (
     <div className={classNames(active ? 'block' : 'hidden', 'grid grid-cols-2 gap-6')}>
       <AuctionDetailsTabStat
-        label={i18n._(t`Liquidity Locked Until`)}
+        label={i18n._(t`Liquidity Locked For`)}
         value={
           auction.launcherInfo
-            ? new Date(Number(auction.launcherInfo.unlock.mul(1000))).toLocaleString('en-uS', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                timeZone: 'UTC',
-              })
-            : i18n._(t`No liquidity locked`)
+            ? `${auction.launcherInfo?.locktime / 86400} ${i18n._(t`Days`)}`
+            : // new Date(Number(auction.launcherInfo.unlock.mul(1000))).toLocaleString('en-uS', {
+              //     year: 'numeric',
+              //     month: 'long',
+              //     day: 'numeric',
+              //     hour: 'numeric',
+              //     minute: 'numeric',
+              //     timeZone: 'UTC',
+              //   })
+              i18n._(t`No liquidity locked`)
         }
       />
       <AuctionDetailsTabStat

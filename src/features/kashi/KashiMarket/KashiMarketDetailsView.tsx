@@ -52,8 +52,6 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
     market.userCollateralAmount
   )
 
-  console.log(collateralAmount?.quotient.toString(), borrowAmount?.quotient.toString())
-
   const newCollateralAmount =
     collateralAmount &&
     CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount)[

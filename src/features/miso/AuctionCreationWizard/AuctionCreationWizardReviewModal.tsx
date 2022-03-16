@@ -14,6 +14,7 @@ import { AuctionTemplate } from 'app/features/miso/context/types'
 import { getExplorerLink } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
+import { useRouter } from 'next/router'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 
 interface AuctionCreationWizardReviewModalProps {
@@ -29,6 +30,7 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
 }) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
+  const router = useRouter()
   const [txHash, setTxHash] = useState<string>()
   const [pending, setPending] = useState<boolean>(false)
   const [auctionAddress, setAuctionAddress] = useState<string>()
@@ -80,13 +82,14 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
     subscribe('MarketCreated', (owner, address, marketTemplate, { transactionHash }) => {
       if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
         setAuctionAddress(address)
+        router.push(`/miso/${address}`)
       }
     })
 
     return () => {
       unsubscribe('MarketCreated', () => console.log('unsubscribed'))
     }
-  }, [subscribe, txHash, unsubscribe])
+  }, [router, subscribe, txHash, unsubscribe])
 
   if (!data) return <></>
 

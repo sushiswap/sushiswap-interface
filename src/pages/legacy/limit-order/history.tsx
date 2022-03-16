@@ -18,7 +18,7 @@ function OpenOrdersPage() {
   const { chainId, account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { pending } = useLimitOrders()
-  const masterContract = chainId && STOP_LIMIT_ORDER_ADDRESS[chainId]
+  const masterContract = chainId ? STOP_LIMIT_ORDER_ADDRESS[chainId] : undefined
   const allowed = useBentoMasterContractAllowed(masterContract, account ?? undefined)
 
   return (

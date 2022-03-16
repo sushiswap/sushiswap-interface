@@ -39,20 +39,17 @@ const Miso = () => {
         <div className="flex flex-col justify-between gap-8 lg:flex-row">
           <div className="flex flex-col">
             <Typography variant="hero" weight={700} className="text-white">
-              {i18n._(t`Chef's Edition`)}
+              {i18n._(t`Miso`)}
             </Typography>
             <Typography weight={700}>
-              {i18n._(t`These auctions are meticulously chosen by the Sushi Samurais, serving the best MISO for you.`)}
+              {i18n._(t`Use with caution, this is experimental and permissionless. Due dilligence is required.`)}
             </Typography>
           </div>
-          {chainId === ChainId.HARMONY && (
+          {(chainId === ChainId.HARMONY || chainId === ChainId.KOVAN || chainId === ChainId.MOONBEAM) && (
             <div className="flex items-center gap-4">
               <div>
                 <Link href="/miso/auction" passHref={true}>
-                  <Button
-                    color="blue"
-                    className="rounded-full bg-gradient-to-r from-pink-red via-pink to-red text-white transition hover:scale-[1.05]"
-                  >
+                  <Button color="blue" className="rounded-full">
                     {i18n._(t`Create Auction`)}
                   </Button>
                 </Link>

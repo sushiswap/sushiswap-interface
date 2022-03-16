@@ -1,13 +1,13 @@
 import { HeadlessUiModal } from 'app/components/Modal'
-import ActionView from 'app/features/account/ActionsModal/ActionView'
-import DepositView from 'app/features/account/ActionsModal/DepositView'
-import WithdrawView from 'app/features/account/ActionsModal/WithdrawView'
+import ActionView from 'app/features/portfolio/ActionsModal/ActionView'
+import DepositView from 'app/features/portfolio/ActionsModal/DepositView'
+import WithdrawView from 'app/features/portfolio/ActionsModal/WithdrawView'
 import {
   selectTridentBalances,
   setBalancesActiveModal,
   setBalancesModalOpen,
   setBalancesState,
-} from 'app/features/account/portfolioSlice'
+} from 'app/features/portfolio/portfolioSlice'
 import { ActiveModal } from 'app/features/trident/types'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC, useCallback } from 'react'
