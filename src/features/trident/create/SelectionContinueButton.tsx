@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
+import Dots from 'app/components/Dots'
 import { selectTridentCreate, setCreateBentoPermit, setCreateShowReview } from 'app/features/trident/create/createSlice'
 import {
   useCreatePoolDerivedCurrencyAmounts,
@@ -39,15 +40,17 @@ export const SelectionContinueButton: FC = () => {
             onClick={() => !error && dispatch(setCreateShowReview(true))}
             loading={loading}
           >
-            {error
-              ? error
-              : attemptingTxn
-              ? i18n._(t`Transaction pending`)
-              : loading
-              ? i18n._(t`Loading`)
-              : !approved
-              ? i18n._(t`Approve to continue`)
-              : i18n._(t`Review & Confirm`)}
+            {error ? (
+              error
+            ) : attemptingTxn ? (
+              <Dots>{i18n._(t`Transaction pending`)}</Dots>
+            ) : loading ? (
+              <Dots>{i18n._(t`Loading`)}</Dots>
+            ) : !approved ? (
+              i18n._(t`Approve to continue`)
+            ) : (
+              i18n._(t`Review & Confirm`)
+            )}
           </Button>
         )}
       </TridentApproveGate>
