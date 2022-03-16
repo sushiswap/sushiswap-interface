@@ -163,16 +163,29 @@ export class KashiMediumRiskLendingPair {
   }
 
   /**
+   * The 'mimimum' exchange rate
+   */
+  public get minimumExchangeRate(): JSBI {
+    return minimum(this.exchangeRate, this.spotExchangeRate, this.oracleExchangeRate)
+  }
+
+  /**
+   * The 'maximum' exchange rate
+   */
+  public get maximumExchangeRate(): JSBI {
+    return maximum(this.exchangeRate, this.spotExchangeRate, this.oracleExchangeRate)
+  }
+
+  /**
    * The overall health of the lending pair
    */
   public get marketHealth(): JSBI {
-    const maximumRate = maximum(this.exchangeRate, this.spotExchangeRate, this.oracleExchangeRate)
-    if (JSBI.equal(this.currentBorrowAmount, ZERO) || JSBI.equal(maximumRate, ZERO)) {
+    if (JSBI.equal(this.currentBorrowAmount, ZERO) || JSBI.equal(this.maximumExchangeRate, ZERO)) {
       return ZERO
     }
     return JSBI.divide(
       JSBI.multiply(
-        JSBI.divide(JSBI.multiply(this.totalCollateralAmount, JSBI.BigInt(1e18)), maximumRate),
+        JSBI.divide(JSBI.multiply(this.totalCollateralAmount, JSBI.BigInt(1e18)), this.maximumExchangeRate),
         JSBI.BigInt(1e18)
       ),
       this.currentBorrowAmount
@@ -318,20 +331,23 @@ export class KashiMediumRiskLendingPair {
     }
   }
 
-  public simulatedHealth(borrowAmount: JSBI = JSBI.BigInt(0), collateralAmount: JSBI = JSBI.BigInt(0)): JSBI {
-    const { minimum } = this.simulatedMaxBorrowable(borrowAmount, collateralAmount)
-
-    if (JSBI.equal(minimum, ZERO)) return ZERO
-
-    return JSBI.divide(JSBI.multiply(borrowAmount, JSBI.BigInt(1e18)), minimum)
-  }
-
   /**
    * The user's position's health
    */
   public get health(): JSBI {
     if (JSBI.equal(this.maxBorrowable.minimum, ZERO)) return ZERO
     return JSBI.divide(JSBI.multiply(this.currentUserBorrowAmount, JSBI.BigInt(1e18)), this.maxBorrowable.minimum)
+  }
+
+  /**
+   * The recomputed health based on new borrow and/or collateral.
+   */
+  public simulatedHealth(borrowAmount: JSBI = JSBI.BigInt(0), collateralAmount: JSBI = JSBI.BigInt(0)): JSBI {
+    const { minimum } = this.simulatedMaxBorrowable(borrowAmount, collateralAmount)
+
+    if (JSBI.equal(minimum, ZERO)) return ZERO
+
+    return JSBI.divide(JSBI.multiply(borrowAmount, JSBI.BigInt(1e18)), minimum)
   }
 }
 
