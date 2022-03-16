@@ -164,7 +164,6 @@ export const getPoolDayBuckets = async (chainId: ChainId = ChainId.ETHEREUM, var
 // @ts-ignore TYPE NEEDS FIXING
 export const getTridentPoolTransactions = async (chainId: ChainId = ChainId.ETHEREUM, variables) => {
   const result = await fetcher<TridentTransactionRawData>(chainId, getTransactionsForPoolQuery, variables)
-  console.log(result)
   return tridentTransactionsRawDataFormatter(result)
 }
 
