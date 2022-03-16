@@ -93,56 +93,57 @@ export const KashiMarketRepayView: FC = () => {
   return (
     <div className="flex flex-col gap-3">
       <KashiMarketCurrentPosition setBorrowAmount={setRemoveAmount} setCollateralAmount={setRemoveAmount} />
+
       <SwapAssetPanel
         disabled={closePosition}
-        error={removeAmountCurrencyAmount?.greaterThan(market.userCollateralAmount)}
-        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Remove`)} />}
+        error={repayAmountCurrencyAmount?.greaterThan(market.currentUserBorrowAmount)}
+        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Repay`)} />}
         walletToggle={(props) => (
           <SwapAssetPanel.Switch
-            {...props}
             id={`switch-classic-withdraw-from-0}`}
-            label={i18n._(t`Receive in`)}
-            onChange={() => setRemoveToWallet((prev) => !prev)}
+            {...props}
+            label={i18n._(t`Repay from`)}
+            onChange={() => setRepayFromWallet((prev) => !prev)}
           />
         )}
-        spendFromWallet={removeToWallet}
-        currency={removeToken}
-        value={removeAmount}
-        onChange={(val) => removeHandler(val, false)}
+        spendFromWallet={repayFromWallet}
+        currency={repayToken}
+        value={repayAmount}
+        onChange={setRepayAmount}
         balancePanel={() => (
           <Typography
             variant="sm"
             className="text-right text-secondary whitespace-nowrap"
-            onClick={() => removeHandler(maxRemoveCollateral.toExact(), true)}
+            onClick={() => repayHandler(currentBorrowed.toExact(), true)}
           >
-            Max Withdraw: {currentCollateral.toSignificant(6)}
+            Max Repay: {currentBorrowed.toSignificant(6)}
           </Typography>
         )}
       />
       <div className="flex flex-col gap-2 -mt-1.5">
         <SwapAssetPanel
           disabled={closePosition}
-          error={repayAmountCurrencyAmount?.greaterThan(market.currentUserBorrowAmount)}
-          header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Repay`)} />}
+          error={removeAmountCurrencyAmount?.greaterThan(market.userCollateralAmount)}
+          header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Remove`)} />}
           walletToggle={(props) => (
             <SwapAssetPanel.Switch
-              id={`switch-classic-withdraw-from-0}`}
               {...props}
-              label={i18n._(t`Repay from`)}
-              onChange={() => setRepayFromWallet((prev) => !prev)}
+              id={`switch-classic-withdraw-from-0}`}
+              label={i18n._(t`Receive in`)}
+              onChange={() => setRemoveToWallet((prev) => !prev)}
             />
           )}
-          spendFromWallet={repayFromWallet}
-          currency={repayToken}
-          value={repayAmount}
-          onChange={setRepayAmount}
+          spendFromWallet={removeToWallet}
+          currency={removeToken}
+          value={removeAmount}
+          onChange={(val) => removeHandler(val, false)}
           balancePanel={() => (
             <Typography
               variant="sm"
               className="text-right text-secondary whitespace-nowrap"
-              onClick={() => repayHandler(currentBorrowed.toExact(), true)}
+              onClick={() => removeHandler(maxRemoveCollateral.toExact(), true)}
             >
-              Max Repay: {currentBorrowed.toSignificant(6)}
+              Max Withdraw: {currentCollateral.toSignificant(6)}
             </Typography>
           )}
         />
