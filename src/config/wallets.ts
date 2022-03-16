@@ -12,10 +12,13 @@ export const network = new NetworkConnector({
   urls: RPC,
 })
 
-export const injected = new InjectedConnector({
+export const injectedMetaMask = new InjectedConnector({
   supportedChainIds,
 })
 
+export const injectedTally = new InjectedConnector({
+  supportedChainIds: [1],
+})
 export interface WalletInfo {
   connector?: (() => Promise<AbstractConnector>) | AbstractConnector
   name: string
@@ -29,17 +32,8 @@ export interface WalletInfo {
 }
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
-  INJECTED: {
-    connector: injected,
-    name: 'Injected',
-    iconName: 'injected.svg',
-    description: 'Injected web3 provider.',
-    href: null,
-    color: '#010101',
-    primary: true,
-  },
   METAMASK: {
-    connector: injected,
+    connector: injectedMetaMask,
     name: 'MetaMask',
     iconName: 'metamask.png',
     description: 'Easy-to-use browser extension.',
@@ -54,6 +48,14 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#E8831D',
     mobile: true,
     mobileOnly: true,
+  },
+  Tally: {
+    connector: injectedTally,
+    name: 'Tally',
+    iconName: 'tally.png',
+    description: 'Login using Tally hosted wallet',
+    href: null,
+    color: '#E8831D',
   },
   WALLET_CONNECT: {
     connector: async () => {

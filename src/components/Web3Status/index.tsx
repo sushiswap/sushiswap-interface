@@ -4,7 +4,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
-import { injected } from 'app/config/wallets'
+import { injectedMetaMask, injectedTally } from 'app/config/wallets'
 import { NetworkContextName } from 'app/constants'
 import { shortenAddress } from 'app/functions'
 import useENSName from 'app/hooks/useENSName'
@@ -25,7 +25,7 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 
 // eslint-disable-next-line react/prop-types
 function StatusIcon({ connector }: { connector: AbstractConnector; account: string; provider: Web3Provider }) {
-  if (connector === injected) {
+  if (connector === injectedMetaMask) {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image
@@ -86,6 +86,12 @@ function StatusIcon({ connector }: { connector: AbstractConnector; account: stri
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="https://app.sushi.com/images/wallets/clover.svg" alt={'Clover'} width="16px" height="16px" />
+      </div>
+    )
+  } else if (connector === injectedTally) {
+    return (
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+        <Image src="https://app.sushi.com/images/wallets/tally.svg" alt={'Tally'} width="16px" height="16px" />
       </div>
     )
   }

@@ -8,7 +8,7 @@ import Button from 'app/components/Button'
 import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
+import { injectedMetaMask, SUPPORTED_WALLETS } from 'app/config/wallets'
 import { OVERLAY_READY } from 'app/entities/connectors/FortmaticConnector'
 import usePrevious from 'app/hooks/usePrevious'
 import { ApplicationModal } from 'app/state/application/actions'
@@ -151,7 +151,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
       }
 
       // overwrite injected when needed
-      if (option.connector === injected) {
+      if (option.connector === injectedMetaMask) {
         // don't show injected if there's no injected provider
         if (!(window.web3 || window.ethereum)) {
           if (option.name === 'MetaMask') {
