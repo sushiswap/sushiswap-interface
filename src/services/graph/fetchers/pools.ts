@@ -4,7 +4,7 @@ import { PoolType } from '@sushiswap/tines'
 import { Fee } from '@sushiswap/trident-sdk'
 import { GRAPH_HOST, TRIDENT } from 'app/services/graph/constants'
 import {
-  getSwapsForPoolQuery,
+  getTransactionsForPoolQuery,
   getTridentPoolsQuery,
   poolDaySnapshotsQuery,
   poolHourSnapshotsQuery,
@@ -15,7 +15,7 @@ import { TridentTransactionRawData, tridentTransactionsRawDataFormatter } from '
 import { pager } from './pager'
 
 // @ts-ignore TYPE NEEDS FIXING
-export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables: {} = undefined) => {
+export const fetcher = async <T>(chainId = ChainId.ETHEREUM, query, variables: {} = undefined): Promise<T> => {
   if (chainId === ChainId.KOVAN) {
     return pager(
       `https://api.thegraph.com/subgraphs/id/QmPoTrAgjC8f7kq5AU1cyknGvqZUQVjubdnH3idYP6EaP8`,
@@ -163,8 +163,9 @@ export const getPoolDayBuckets = async (chainId: ChainId = ChainId.ETHEREUM, var
 
 // @ts-ignore TYPE NEEDS FIXING
 export const getTridentPoolTransactions = async (chainId: ChainId = ChainId.ETHEREUM, variables) => {
-  const result = (await fetcher(chainId, getSwapsForPoolQuery, variables)).swaps as TridentTransactionRawData[]
-  return tridentTransactionsRawDataFormatter(result || [])
+  const result = await fetcher<TridentTransactionRawData>(chainId, getTransactionsForPoolQuery, variables)
+  console.log(result)
+  return tridentTransactionsRawDataFormatter(result)
 }
 
 export interface PoolKpiQueryResult {
