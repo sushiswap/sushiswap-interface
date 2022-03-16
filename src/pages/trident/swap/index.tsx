@@ -210,7 +210,11 @@ const Swap = () => {
               {i18n._(t`Insufficient liquidity for this trade.`)}{' '}
             </Typography>
           )}
-          {isWrap ? <WrapButton /> : <SwapButton onClick={(trade) => setConfirmTrade(trade)} />}
+          {isWrap ? (
+            <WrapButton />
+          ) : (
+            <SwapButton onClick={(trade) => setConfirmTrade(trade)} spendFromWallet={_spendFromWallet} />
+          )}
         </DerivedTradeContext.Provider>
         {expertMode && executeError ? <SwapCallbackError error={executeError} /> : null}
         {swapIsUnsupported ? <UnsupportedCurrencyFooter currencies={[currencies[0], currencies[1]]} /> : null}

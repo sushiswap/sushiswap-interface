@@ -165,21 +165,22 @@ const TridentApproveGate = ({
           </Button>
         )}
 
-      {inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {
-        if (!amount?.currency.isNative && amount?.greaterThan(ZERO)) {
-          acc.push(
-            <TokenApproveButton
-              id={`btn-approve`}
-              inputAmount={amount}
-              key={index}
-              onStateChange={setStatus}
-              tokenApproveOn={tokenApproveOn}
-              onSLPPermit={onSLPPermit}
-            />
-          )
-        }
-        return acc
-      }, [])}
+      {tokenApproveOn &&
+        inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {
+          if (!amount?.currency.isNative && amount?.greaterThan(ZERO)) {
+            acc.push(
+              <TokenApproveButton
+                id={`btn-approve`}
+                inputAmount={amount}
+                key={index}
+                onStateChange={setStatus}
+                tokenApproveOn={tokenApproveOn}
+                onSLPPermit={onSLPPermit}
+              />
+            )
+          }
+          return acc
+        }, [])}
 
       {!account ? (
         <Button color="gradient" onClick={toggleWalletModal}>
