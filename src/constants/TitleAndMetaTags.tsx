@@ -1,3 +1,4 @@
+/*eslint sort-imports: ["error", { "ignoreMemberSort": true }]*/
 /**
 * @file TitleAndMetaTags
 * @summary Meta tags and SEO configuration 
