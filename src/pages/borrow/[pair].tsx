@@ -16,10 +16,9 @@ import { useToken } from 'app/hooks/Tokens'
 import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import { useV2Pair } from 'app/hooks/useV2Pairs'
 import Layout from 'app/layouts/Kashi'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React from 'react'
-import { RecoilRoot } from 'recoil'
 
 export default function Pair() {
   useRedirectOnChainId('/borrow')
@@ -33,28 +32,12 @@ export default function Pair() {
 
   return (
     <PairLayout>
-      <Head>
-        {/*@ts-ignore TYPE NEEDS FIXING*/}
-        <title>{i18n._(t`Borrow ${pair?.asset?.symbol}-${pair?.collateral?.symbol}`)} | Sushi</title>
-        <meta
-          key="description"
-          name="description"
-          /* @ts-ignore TYPE NEEDS FIXING */
-          content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
-        />
-        <meta
-          key="twitter:description"
-          name="twitter:description"
-          /* @ts-ignore TYPE NEEDS FIXING */
-          content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
-        />
-        <meta
-          key="og:description"
-          property="og:description"
-          /* @ts-ignore TYPE NEEDS FIXING */
-          content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
-        />
-      </Head>
+      <NextSeo
+        // @ts-ignore TYPE NEEDS FIXING
+        title={`Borrow ${pair?.asset?.symbol}`}
+        // @ts-ignore TYPE NEEDS FIXING
+        description={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
+      />
       <Card
         className="h-full bg-dark-900"
         header={
@@ -166,8 +149,6 @@ export default function Pair() {
     </PairLayout>
   )
 }
-
-Pair.Provider = RecoilRoot
 
 // @ts-ignore TYPE NEEDS FIXING
 const PairLayout = ({ children }) => {

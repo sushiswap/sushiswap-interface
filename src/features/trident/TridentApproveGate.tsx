@@ -167,7 +167,7 @@ const TridentApproveGate = ({
           </Button>
         )}
 
-      {spendFromWallet &&
+      {tokenApproveOn &&
         inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {
           if (!amount?.currency.isNative && amount?.greaterThan(ZERO)) {
             acc.push(

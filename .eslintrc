@@ -5,10 +5,7 @@
   "rules": {
     "react/display-name": "off",
     "react-hooks/exhaustive-deps": [
-      "warn",
-      {
-        "additionalHooks": "useRecoilCallback|useRecoilTransaction_UNSTABLE"
-      }
+      "warn"
     ],
     "@typescript-eslint/no-unused-vars": "off",
     "simple-import-sort/exports": "error",

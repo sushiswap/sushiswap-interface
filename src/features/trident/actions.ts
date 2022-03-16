@@ -43,7 +43,7 @@ export const batchAction = <T = any>({ contract, actions = [] }: Batch): string 
 
   // Call batch function with valid actions
   if (validated.length > 1) {
-    return contract.interface.encodeFunctionData('batch', [validated])
+    return contract.interface.encodeFunctionData('multicall', [validated])
   }
 }
 
@@ -167,5 +167,5 @@ export interface ApproveSLPActionProps {
 export const approveSLPAction = ({ router, signatureData }: ApproveSLPActionProps) => {
   if (!signatureData) return undefined
   const { tokenAddress, amount, deadline, v, r, s } = signatureData
-  return router.interface.encodeFunctionData('permitThis', [tokenAddress, amount, deadline, v, r, s])
+  return router.interface.encodeFunctionData('selfPermit', [tokenAddress, amount, deadline, v, r, s])
 }

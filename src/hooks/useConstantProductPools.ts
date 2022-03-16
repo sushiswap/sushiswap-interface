@@ -32,8 +32,8 @@ export function useGetAllExistedPools(
         // @ts-ignore
         let addr2 = c2.address as string | undefined
         if (addr1 !== undefined && addr2 !== undefined) {
-          if (addr1 > addr2) [addr1, addr2] = [addr2, addr1]
-          pairsMap.set(addr1 + addr2, [c1, c2] as [Token, Token])
+          if (addr1 < addr2) pairsMap.set(addr1 + addr2, [c1, c2] as [Token, Token])
+          else pairsMap.set(addr2 + addr1, [c2, c1] as [Token, Token])
         }
       }
     })
@@ -50,6 +50,12 @@ export function useGetAllExistedPools(
       .filter(([_n, length]) => length)
       .map(([i, length]) => [pairsUniqueAddr[i][0], pairsUniqueAddr[i][1], 0, length])
   }, [callStatePoolsCount, pairsUniqueAddr])
+  const pairsUniqueProcessed = useMemo(() => {
+    return callStatePoolsCount
+      .map((s, i) => [i, s.result ? parseInt(s.result.count.toString()) : 0] as [number, number])
+      .filter(([_n, length]) => length)
+      .map(([i, length]) => [pairsUnique[i][0], pairsUnique[i][1]])
+  }, [callStatePoolsCount, pairsUnique])
 
   const callStatePools = useSingleContractMultipleData(
     constantProductPoolFactory,
@@ -64,13 +70,13 @@ export function useGetAllExistedPools(
         s.result.pairPools.forEach((address: string) =>
           pools.push({
             address,
-            token0: pairsUnique[i][0],
-            token1: pairsUnique[i][1],
+            token0: pairsUniqueProcessed[i][0] as Token,
+            token1: pairsUniqueProcessed[i][1] as Token,
           })
         )
     })
     return pools
-  }, [callStatePools, pairsUnique])
+  }, [callStatePools, pairsUniqueProcessed])
   const poolsAddresses = useMemo(() => pools.map((p) => p.address), [pools])
 
   const resultsReserves = useMultipleContractSingleData(poolsAddresses, POOL_INTERFACE, 'getReserves')
@@ -151,6 +157,14 @@ export function useConstantProductPools(pools: PoolInput[]): PoolWithState<Const
   const poolsAddresses = useMemo(
     () =>
       pools.reduce<(string | undefined)[]>((acc, [tokenA, tokenB, fee, twap]) => {
+        // console.log({
+        //   factoryAddress: constantProductPoolFactory?.address,
+        //   tokenA: tokenA?.wrapped,
+        //   tokenB: tokenB?.wrapped,
+        //   fee,
+        //   twap,
+        // })
+
         const address =
           tokenA &&
           tokenB &&

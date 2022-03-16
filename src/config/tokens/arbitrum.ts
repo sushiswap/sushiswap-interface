@@ -38,6 +38,16 @@ export const gOHM = new Token(
   'Governance OHM'
 )
 
+export const DUSD = new Token(
+  ChainId.ARBITRUM,
+  '0xF0B5cEeFc89684889e5F7e0A7775Bd100FcD3709',
+  6,
+  'DUSD',
+  'DigitalDollar'
+)
+
+export const FLUID = new Token(ChainId.ARBITRUM, '0x876Ec6bE52486Eeec06bc06434f3E629D695c6bA', 18, 'FLUID', 'FluidFi')
+
 export const MAGIC = new Token(ChainId.ARBITRUM, '0x539bdE0d7Dbd336b79148AA742883198BBF60342', 18, 'MAGIC', 'MAGIC')
 
 export const FRAX = new Token(ChainId.ARBITRUM, '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F', 18, 'FRAX', 'Frax')

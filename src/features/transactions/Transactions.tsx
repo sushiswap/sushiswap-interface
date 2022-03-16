@@ -38,6 +38,7 @@ export const TridentTransactions: FC<{ poolAddress?: string }> = ({ poolAddress 
     variables: { poolAddress: poolAddress?.toLowerCase() },
     shouldFetch: !!poolAddress,
   })
+
   return <_Transactions transactions={data ?? []} error={error} loading={loading} />
 }
 

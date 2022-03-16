@@ -4,7 +4,6 @@ import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { isAddress, toAmountCurrencyAmount } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useBentoBoxContract } from 'app/hooks/useContract'
-import { useBentoUserTokens } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { OptionalMethodInputs, useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
 import { useMemo } from 'react'
@@ -46,32 +45,10 @@ export const useBentoBalancesV2ForAccount = (
   tokenAddresses?: string[]
 ): { data: CurrencyAmount<Token>[]; loading: boolean } => {
   const { chainId } = useActiveWeb3React()
-  const {
-    error,
-    data,
-    isValidating: loading,
-  } = useBentoUserTokens({
-    chainId,
-    shouldFetch: !!chainId && !!account,
-    variables: { user: account?.toLowerCase() },
-  })
-  const { data: userTokensFallback, loading: fallbackLoading } = useBentoBalancesSubGraph({
-    shouldFetch: !!error,
+  return useBentoBalancesWeb3({
+    shouldFetch: !!chainId,
     tokenAddresses,
   })
-
-  if (!error && !!data) {
-    if (tokenAddresses) {
-      return {
-        data: data.filter((el) => tokenAddresses.includes(el.currency.wrapped.address)),
-        loading: false,
-      }
-    }
-
-    return { data, loading } || { data: [], loading: false }
-  }
-
-  return { data: userTokensFallback, loading: fallbackLoading } || { data: [], loading: false }
 }
 
 export const useBentoShareForAccount = (account: string | undefined, token: string | undefined) => {
@@ -96,7 +73,7 @@ export const useBentoBalanceV2 = (
   }
 }
 
-export const useBentoBalancesSubGraph = ({
+export const useBentoBalancesWeb3 = ({
   shouldFetch = true,
   tokenAddresses,
 }: {

@@ -69,6 +69,76 @@ export const poolDaySnapshotsQuery = gql`
   }
 `
 
+export const getTransactionsForPoolQuery = gql`
+  query poolTransactionsQuery($poolAddress: String!) {
+    mints: mints(where: { pool: $poolAddress }) {
+      id
+      token0 {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      token1 {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      amount0
+      amount1
+      transaction {
+        timestamp
+      }
+      sender
+      recipient
+      origin
+      logIndex
+    }
+    burns: burns(where: { pool: $poolAddress }) {
+      id
+      token0 {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      token1 {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      transaction {
+        timestamp
+      }
+      amount0
+      amount1
+      sender
+      recipient
+      origin
+      logIndex
+    }
+    swaps: swaps(where: { pool: $poolAddress }) {
+      amountIn
+      amountOut
+      transaction {
+        timestamp
+      }
+      recipient
+      tokenIn {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      tokenOut {
+        symbol
+      }
+    }
+  }
+`
+
 /* Need support for amountUSD */
 export const getSwapsForPoolQuery = gql`
   query poolSwapQuery($poolAddress: String!) {

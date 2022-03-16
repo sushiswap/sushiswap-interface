@@ -1,6 +1,6 @@
 import { aprToApy, formatNumber, formatPercent } from 'app/functions'
+import { useAllTokens } from 'app/hooks/Tokens'
 import { useOneDayBlock, useTwoDayBlock } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
 import stringify from 'fast-json-stable-stringify'
 import useSWR from 'swr'
 
@@ -23,7 +23,7 @@ export function useTridentPools({
 }: GraphProps): TridentPool[] {
   const { data } = useSWR(
     shouldFetch && !!chainId ? ['trident-pools', chainId, variables] : null,
-    () => getTridentPools(chainId, variables),
+    () => getTridentPools({ chainId, variables }),
     swrConfig
   )
   return data
@@ -133,9 +133,8 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
     isValidating: poolKpisIsValidating || oneDayPoolKpisIsValidating || twoDayPoolKpisIsValidating,
     error: poolKpisError || oneDayPoolKpisError || twoDayPoolKpisError,
     data:
-      !poolKpis || !oneDayPoolKpis || !twoDayPoolKpis
-        ? []
-        : oneDayPoolKpis.map((el, i) => {
+      poolKpis && oneDayPoolKpis && twoDayPoolKpis
+        ? oneDayPoolKpis.map((el, i) => {
             return {
               volume: formatNumber(poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD, true, false),
               volume24hChange:
@@ -170,24 +169,31 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
                 3650
               ),
             }
-          }),
+          })
+        : [],
   }
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useTridentTransactions({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
-  const _variables = {
-    ...variables,
-  }
-
   return useSWR(
-    shouldFetch && !!chainId ? ['trident-transactions', chainId, stringify(_variables)] : null,
-    () => getTridentPoolTransactions(chainId, _variables),
+    shouldFetch && !!chainId ? ['trident-transactions', chainId, stringify(variables)] : null,
+    () => getTridentPoolTransactions(chainId, variables),
     swrConfig
   )
 }
 
-export const useGetAllTridentPools = () => {
-  const { chainId } = useActiveWeb3React()
-  return useSWR(['getAllTridentPools', chainId], () => getTridentPools(chainId))
+export const useGetAllTridentPools = ({
+  chainId,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps) => {
+  const tokens = useAllTokens()
+  // const allowedAssets = useMemo(() => Object.keys(tokens).map((address) => address.toLowerCase()), [tokens])
+  return useSWR(
+    shouldFetch ? ['getAllTridentPools', chainId] : null,
+    () => getTridentPools({ chainId, tokens }),
+    swrConfig
+  )
 }
