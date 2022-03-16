@@ -1,30 +1,19 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Loader from 'app/components/Loader'
 import Search from 'app/components/Search'
+import SortIcon from 'app/components/SortIcon'
 import Typography from 'app/components/Typography'
 import KashiMarketListItem from 'app/features/kashi/KashiMarketListItem'
 import { TABLE_TR_TH_CLASSNAME, TABLE_WRAPPER_DIV_CLASSNAME } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
-import { useFuse } from 'app/hooks'
+import { useFuse, useSortableData } from 'app/hooks'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, memo, ReactNode } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 import { KashiMediumRiskLendingPair } from './KashiMediumRiskLendingPair'
-
-const SortIcon: FC<{ id?: string; direction?: 'ascending' | 'descending'; active: boolean }> = ({
-  id,
-  active,
-  direction,
-}) => {
-  if (!id || !direction || !active) return <></>
-  if (direction === 'ascending') return <ChevronUpIcon width={12} height={12} />
-  if (direction === 'descending') return <ChevronDownIcon width={12} height={12} />
-  return <></>
-}
 
 interface KashiMarketList {
   markets: KashiMediumRiskLendingPair[]
@@ -33,7 +22,11 @@ interface KashiMarketList {
 const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { result, term, search } = useFuse<KashiMediumRiskLendingPair>({
+  const {
+    result: pairs,
+    term,
+    search,
+  } = useFuse<KashiMediumRiskLendingPair>({
     data: markets,
     options: {
       keys: ['asset.token.symbol', 'collateral.token.symbol'],
@@ -42,8 +35,12 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
       useExtendedSearch: false,
     },
   })
+  const { items, requestSort, sortConfig } = useSortableData(pairs, {
+    key: 'currentAllAssets',
+    direction: 'descending',
+  })
 
-  const [numDisplayed, setNumDisplayed] = useInfiniteScroll(result)
+  const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
 
   return (
     <div className="flex flex-col w-full gap-6">
@@ -63,17 +60,29 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
           </div>
           <div
             className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(1, 6))}
-            // onClick={() => requestSort('tvl')}
+            onClick={() => requestSort('currentAllAssets')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Market Size`)}
             </Typography>
-            {/*<SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'tvl'} />*/}
+            <SortIcon
+              id={sortConfig.key}
+              direction={sortConfig.direction}
+              active={sortConfig.key === 'currentAllAssets'}
+            />
           </div>
-          <div className={classNames(TABLE_TR_TH_CLASSNAME(2, 6))}>
+          <div
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(2, 6))}
+            onClick={() => requestSort('currentBorrowAmount')}
+          >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Total Borrowed`)}
             </Typography>
+            <SortIcon
+              id={sortConfig.key}
+              direction={sortConfig.direction}
+              active={sortConfig.key === 'currentBorrowAmount'}
+            />
           </div>
           {/*<div className={classNames(TABLE_TR_TH_CLASSNAME(3, 6))}>*/}
           {/*  <Typography variant="sm" weight={700}>*/}
@@ -82,39 +91,45 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
           {/*</div>*/}
           <div
             className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(3, 6))}
-            // onClick={() => requestSort('roiPerYear')}
+            onClick={() => requestSort('currentSupplyAPR')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Deposit APR`)}
             </Typography>
-            {/*<SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'roiPerYear'} />*/}
+            <SortIcon
+              id={sortConfig.key}
+              direction={sortConfig.direction}
+              active={sortConfig.key === 'currentSupplyAPR'}
+            />
           </div>
           <div
             className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(4, 6))}
-            // onClick={() => requestSort('roiPerYear')}
+            onClick={() => requestSort('currentInterestPerYear')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Borrow APR`)}
             </Typography>
-            {/*<SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'roiPerYear'} />*/}
+            <SortIcon
+              id={sortConfig.key}
+              direction={sortConfig.direction}
+              active={sortConfig.key === 'currentInterestPerYear'}
+            />
           </div>
           <div
             className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(5, 6))}
-            // onClick={() => requestSort('roiPerYear')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Actions`)}
             </Typography>
-            {/*<SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'roiPerYear'} />*/}
           </div>
         </div>
         <InfiniteScroll
           dataLength={numDisplayed}
           next={() => setNumDisplayed(numDisplayed + 5)}
-          hasMore={numDisplayed <= result.length}
+          hasMore={numDisplayed <= items.length}
           loader={<Loader />}
         >
-          {result.slice(0, numDisplayed).reduce<ReactNode[]>((acc, market, index) => {
+          {items.slice(0, numDisplayed).reduce<ReactNode[]>((acc, market, index) => {
             if (market) acc.push(<KashiMarketListItem market={market} chainId={chainId || 1} key={index} i18n={i18n} />)
             return acc
           }, [])}

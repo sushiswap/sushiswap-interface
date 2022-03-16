@@ -31,14 +31,17 @@ export const KashiMarketActions: FC<KashiMarketActions> = ({ market }) => {
   const priceChange = useMemo(() => {
     const currentPrice = JSBI.divide(market.exchangeRate, JSBI.BigInt(1e18))
     const oraclePrice = JSBI.divide(market.oracleExchangeRate, JSBI.BigInt(1e18))
-    return new Percent(JSBI.subtract(currentPrice, oraclePrice), oraclePrice)?.toSignificant(2)
+
+    return JSBI.greaterThan(oraclePrice, JSBI.BigInt(0))
+      ? new Percent(JSBI.subtract(currentPrice, oraclePrice), oraclePrice)?.toSignificant(2)
+      : '-'
   }, [market])
 
   return (
     <Menu as="div">
       <div>
         <Menu.Button>
-          <div className="rounded-full flex items-center justify-center p-2 cursor-pointer hover:text-white">
+          <div className="flex items-center justify-center p-2 rounded-full cursor-pointer hover:text-white">
             <DotsVerticalIcon width={18} height={18} />
           </div>
         </Menu.Button>

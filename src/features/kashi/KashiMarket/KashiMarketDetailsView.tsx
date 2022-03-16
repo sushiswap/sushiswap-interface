@@ -52,14 +52,8 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
     market.userCollateralAmount
   )
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
   console.log(collateralAmount?.quotient.toString(), borrowAmount?.quotient.toString())
 
-=======
->>>>>>> origin/refactor-kashi
->>>>>>> origin/refactor-kashi
   const newCollateralAmount =
     collateralAmount &&
     CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount)[

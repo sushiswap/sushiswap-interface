@@ -27,6 +27,22 @@ const KashiPage: FC = () => {
           </Typography>
         </div>
         <div className="flex gap-3">
+          {account && (
+            <>
+              <Link href={`/account/${account}/lending`} passHref={true}>
+                <Button id="btn-create-new-pool" size="sm">
+                  {i18n._(t`Lending`)}
+                </Button>
+              </Link>
+
+              <Link href={`/account/${account}/borrowing`} passHref={true}>
+                <Button id="btn-create-new-pool" size="sm">
+                  {i18n._(t`Borrowing`)}
+                </Button>
+              </Link>
+            </>
+          )}
+
           <Link href="/kashi/create" passHref={true}>
             <Button id="btn-create-new-pool" size="sm">
               {i18n._(t`Create Kashi Market`)}

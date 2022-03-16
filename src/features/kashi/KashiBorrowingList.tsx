@@ -1,8 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import SortIcon from 'app/components/SortIcon'
 import Typography from 'app/components/Typography'
 import { TABLE_TR_TH_CLASSNAME, TABLE_WRAPPER_DIV_CLASSNAME } from 'app/features/trident/constants'
 import { classNames } from 'app/functions/styling'
+import { useSortableData } from 'app/hooks'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -16,7 +18,11 @@ export const KashiBorrowingList = () => {
   const router = useRouter()
   const account = router.query.address as string
   const positions = useKashiMediumRiskBorrowingPositions(account)
-  const [numDisplayed, setNumDisplayed] = useInfiniteScroll(positions)
+  const { items, requestSort, sortConfig } = useSortableData(positions, {
+    key: 'currentInterestPerYear',
+    direction: 'descending',
+  })
+  const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
   return (
     <div className="flex flex-col w-full gap-3">
       <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME)}>
@@ -49,17 +55,25 @@ export const KashiBorrowingList = () => {
           </div>
           <div
             className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(4, 6))}
+            onClick={() => requestSort('health')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Health`)}
             </Typography>
+            <SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'health'} />
           </div>
           <div
             className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(5, 6))}
+            onClick={() => requestSort('currentInterestPerYear')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Borrow APR`)}
             </Typography>
+            <SortIcon
+              id={sortConfig.key}
+              direction={sortConfig.direction}
+              active={sortConfig.key === 'currentInterestPerYear'}
+            />
           </div>
         </div>
         <InfiniteScroll
@@ -68,7 +82,7 @@ export const KashiBorrowingList = () => {
           hasMore={true}
           loader={null}
         >
-          {positions.slice(0, numDisplayed).map((market, index) => (
+          {items.slice(0, numDisplayed).map((market, index) => (
             <KashiBorrowingListItem market={market} key={index} />
           ))}
         </InfiniteScroll>
