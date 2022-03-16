@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount } from '@sushiswap/core-sdk'
+import { CurrencyAmount, JSBI, maximum, ZERO } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import {
   KashiMarketDetailsView,
@@ -35,6 +35,39 @@ export const KashiMarketRepayView: FC = () => {
     unwrappedToken(market.collateral.token),
     market.userCollateralAmount
   )
+
+  const nextUserBorrowAmount = JSBI.subtract(
+    market.currentUserBorrowAmount,
+    repayAmountCurrencyAmount ? repayAmountCurrencyAmount?.quotient : JSBI.BigInt(0)
+  )
+
+  const nextMinCollateralOracle = JSBI.divide(
+    JSBI.multiply(nextUserBorrowAmount, market.oracleExchangeRate),
+    JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))
+  )
+
+  const nextMinCollateralSpot = JSBI.divide(
+    JSBI.multiply(nextUserBorrowAmount, market.spotExchangeRate),
+    JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))
+  )
+
+  const nextMinCollateralStored = JSBI.divide(
+    JSBI.multiply(nextUserBorrowAmount, market.exchangeRate),
+    JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))
+  )
+
+  const nextMinCollateralMinimum = maximum(nextMinCollateralOracle, nextMinCollateralSpot, nextMinCollateralStored)
+
+  const nextMaxRemoveCollateral = maximum(
+    JSBI.subtract(
+      market.userCollateralAmount,
+      JSBI.divide(JSBI.multiply(nextMinCollateralMinimum, JSBI.BigInt(100)), JSBI.BigInt(75))
+    ),
+    ZERO
+  )
+
+  const maxRemoveCollateral = CurrencyAmount.fromRawAmount(market.collateral.token, nextMaxRemoveCollateral)
+
   const currentBorrowed = CurrencyAmount.fromRawAmount(
     unwrappedToken(market.asset.token),
     market.currentUserBorrowAmount
@@ -76,12 +109,11 @@ export const KashiMarketRepayView: FC = () => {
         currency={removeToken}
         value={removeAmount}
         onChange={(val) => removeHandler(val, false)}
-        currencies={[]}
         balancePanel={() => (
           <Typography
             variant="sm"
-            className="text-right text-secondary"
-            onClick={() => removeHandler(currentCollateral.toExact(), true)}
+            className="text-right text-secondary whitespace-nowrap"
+            onClick={() => removeHandler(maxRemoveCollateral.toExact(), true)}
           >
             Max Withdraw: {currentCollateral.toSignificant(6)}
           </Typography>
@@ -104,11 +136,10 @@ export const KashiMarketRepayView: FC = () => {
           currency={repayToken}
           value={repayAmount}
           onChange={setRepayAmount}
-          currencies={[]}
           balancePanel={() => (
             <Typography
               variant="sm"
-              className="text-right text-secondary"
+              className="text-right text-secondary whitespace-nowrap"
               onClick={() => repayHandler(currentBorrowed.toExact(), true)}
             >
               Max Repay: {currentBorrowed.toSignificant(6)}
@@ -140,6 +171,8 @@ export const KashiMarketRepayView: FC = () => {
         view={KashiMarketView.REPAY}
         repayMax={repayMax}
         removeMax={removeMax}
+        nextMinCollateralMinimum={nextMinCollateralMinimum}
+        nextMaxRemoveCollateral={nextMaxRemoveCollateral}
       />
     </div>
   )

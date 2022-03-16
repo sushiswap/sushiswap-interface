@@ -52,17 +52,22 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
     market.userCollateralAmount
   )
 
+  const extraCollateral = CurrencyAmount.fromRawAmount(
+    unwrappedToken(market.collateral.token),
+    trade ? trade.minimumAmountOut(allowedSlippage).quotient : JSBI.BigInt(0)
+  )
+
   const newCollateralAmount =
     collateralAmount &&
     CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount)[
       view === KashiMarketView.BORROW ? 'add' : 'subtract'
-    ](collateralAmount)
+    ](collateralAmount.add(extraCollateral))
 
-  const newBorrowAmount =
-    borrowAmount &&
-    CurrencyAmount.fromRawAmount(borrowAmount.currency, market.currentUserBorrowAmount)[
-      view === KashiMarketView.BORROW ? 'add' : 'subtract'
-    ](borrowAmount)
+  const newBorrowAmount = borrowAmount
+    ? CurrencyAmount.fromRawAmount(borrowAmount.currency, market.currentUserBorrowAmount)[
+        view === KashiMarketView.BORROW ? 'add' : 'subtract'
+      ](borrowAmount)
+    : CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserBorrowAmount)
 
   return (
     <div className="flex flex-col divide-y divide-dark-850">
@@ -77,13 +82,7 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
               <ArrowSmRightIcon width={14} className="text-secondary" />
               <Typography variant="xs" className="text-right">
                 {new Percent(
-                  market.simulatedHealth(
-                    borrowAmount?.quotient || JSBI.BigInt(0),
-                    JSBI.add(
-                      collateralAmount?.quotient || JSBI.BigInt(0),
-                      trade?.minimumAmountOut(allowedSlippage).quotient || JSBI.BigInt(0)
-                    )
-                  ),
+                  market.simulatedHealth(newBorrowAmount?.quotient, newCollateralAmount?.quotient),
                   1e18
                 ).toSignificant(6)}
                 %

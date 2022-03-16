@@ -1,10 +1,20 @@
 import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, KASHI_ADDRESS, TradeType, WNATIVE_ADDRESS, ZERO } from '@sushiswap/core-sdk'
+import {
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  KASHI_ADDRESS,
+  maximum,
+  TradeType,
+  WNATIVE_ADDRESS,
+  ZERO,
+} from '@sushiswap/core-sdk'
 import { Trade as LegacyTrade } from '@sushiswap/core-sdk/dist/entities/Trade'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
+import { Warning, Warnings } from 'app/entities/Warnings'
 import { KashiMarketRepayReviewModal, KashiMarketView, useKashiMarket } from 'app/features/kashi/KashiMarket'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { unwrappedToken } from 'app/functions'
@@ -25,7 +35,9 @@ export interface KashiMarketRepayButtonProps {
   removeMax: boolean
 }
 
-export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
+export const KashiMarketRepayButton: FC<
+  KashiMarketRepayButtonProps & { nextMaxRemoveCollateral: JSBI; nextMinCollateralMinimum: JSBI }
+> = ({
   closePosition,
   repayFromWallet,
   removeToWallet,
@@ -35,6 +47,8 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
   view,
   repayMax,
   removeMax,
+  nextMaxRemoveCollateral,
+  nextMinCollateralMinimum,
 }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
@@ -43,9 +57,9 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
   const collateral = unwrappedToken(market.collateral.token)
 
   const { chainId } = useActiveWeb3React()
-  const balance = useBentoOrWalletBalance(account ?? undefined, collateral, repayFromWallet)
+  const balance = useBentoOrWalletBalance(account ?? undefined, asset, repayFromWallet)
   const [permit, setPermit] = useState<Signature>()
-  const [permitError, setPermitError] = useState<boolean>()
+  const [permitError, setPermitError] = useState<boolean>(false)
   const bentoboxContract = useBentoBoxContract()
   const masterContractAddress = chainId ? KASHI_ADDRESS[chainId] : undefined
   const [open, setOpen] = useState(false)
@@ -82,18 +96,40 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
     ? i18n._(t`Repay Debt`)
     : ''
 
-  const warnings = [
-    permitError &&
+  const warnings = new Warnings()
+  warnings
+    .addError(
+      Boolean(chainId && asset.wrapped.address === WNATIVE_ADDRESS[chainId] && repayFromWallet && repayMax),
+      `You cannot MAX repay ${asset.symbol} directly from your wallet. Please deposit your ${asset.symbol} into the BentoBox first, then repay. Because your debt is slowly accruing interest we can't predict how much it will be once your transaction gets mined.`
+    )
+    .addError(
+      permitError,
       i18n._(
         t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click 'Approve BentoBox' again for approving using the fallback method`
+      )
+    )
+    .addError(
+      Boolean(repayAmount && JSBI.greaterThan(repayAmount.quotient, market.currentUserBorrowAmount)),
+      "You can't repay more than you owe. To fully repay, please click the 'max' button.",
+      new Warning(
+        Boolean(balance && repayAmount && balance.lessThan(repayAmount)),
+        `Please make sure your ${
+          !repayFromWallet ? 'BentoBox' : 'wallet'
+        } balance is sufficient to repay and then try again.`,
+        true
+      )
+    )
+    .addError(
+      Boolean(
+        removeAmount &&
+          removeAmount?.greaterThan(maximum(JSBI.subtract(market.userCollateralAmount, nextMinCollateralMinimum), ZERO))
       ),
-    chainId &&
-      asset.wrapped.address === WNATIVE_ADDRESS[chainId] &&
-      repayFromWallet &&
-      repayMax &&
-      `You cannot MAX repay ${asset.symbol} directly from your wallet. Please deposit your ${asset.symbol} into the BentoBox first, then repay. Because your debt is slowly accruing interest we can't predict how much it will be once your transaction gets mined.`,
-    removeAmount?.greaterThan(CurrencyAmount.fromRawAmount(collateral, market.userCollateralAmount.toString())),
-  ]
+      'Removing this much collateral would put you into insolvency.',
+      new Warning(
+        Boolean(removeAmount && removeAmount?.greaterThan(nextMaxRemoveCollateral)),
+        'Removing this much collateral would put you very close to insolvency.'
+      )
+    )
 
   return (
     <>
@@ -105,7 +141,7 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
               className="p-4 text-center border rounded border-yellow/40 text-yellow"
               key={index}
             >
-              {cur}
+              {cur.message}
             </Typography>
           )
         return acc
@@ -121,7 +157,7 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
         onPermitError={() => setPermitError(true)}
       >
         {({ approved, loading }) => {
-          const disabled = !!error || !approved || loading || warnings.filter((el) => !!el).length > 0
+          const disabled = !!error || !approved || loading || warnings.some((warning) => warning.breaking)
           return (
             <Button
               loading={loading}
