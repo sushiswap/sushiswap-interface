@@ -2,7 +2,6 @@ import { aprToApy, formatNumber, formatPercent } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useOneDayBlock, useTwoDayBlock } from 'app/services/graph'
 import stringify from 'fast-json-stable-stringify'
-import { useMemo } from 'react'
 import useSWR from 'swr'
 
 import {
@@ -191,10 +190,10 @@ export const useGetAllTridentPools = ({
   swrConfig = undefined,
 }: GraphProps) => {
   const tokens = useAllTokens()
-  const allowedAssets = useMemo(() => Object.keys(tokens).map((address) => address.toLowerCase()), [tokens])
+  // const allowedAssets = useMemo(() => Object.keys(tokens).map((address) => address.toLowerCase()), [tokens])
   return useSWR(
     shouldFetch ? ['getAllTridentPools', chainId] : null,
-    () => getTridentPools({ chainId, allowedAssets }),
+    () => getTridentPools({ chainId, tokens }),
     swrConfig
   )
 }
