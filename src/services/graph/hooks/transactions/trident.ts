@@ -28,7 +28,7 @@ export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionR
       outgoingAmt: `${formatNumber(tx.amountOut)} ${tx.tokenOut.symbol}`,
       time: formatDateAgo(new Date(Number(tx.transaction.timestamp) * 1000)),
       value: formatNumber(Number(tx.amountIn) * Number(tx.tokenIn.price.derivedUSD), true),
-      type: `Swap ${tx.tokenOut.symbol} for ${tx.tokenIn.symbol}`,
+      type: `Swap ${tx.tokenIn.symbol} for ${tx.tokenOut.symbol}`,
     }
   })
 }
