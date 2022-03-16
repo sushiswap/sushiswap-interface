@@ -1,7 +1,14 @@
+/**
+* Sushi Dashboard
+* 
+* @const Dashboard
+* @return dashboard-page
+*/
+
 import Container from "app/components/Container";
-import { useEffect, useState } from "react";
-import { TitleAndMetaTags } from "app/constants/TitleAndMetaTags";
 import Head from "next/head";
+import { TitleAndMetaTags } from "app/constants/TitleAndMetaTags";
+
 
 const Dashboard = () => {
   return (
