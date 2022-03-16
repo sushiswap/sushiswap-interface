@@ -30,9 +30,10 @@ interface WalletModal {
   pendingTransactions: string[] // hashes of pending
   confirmedTransactions: string[] // hashes of confirmed
   ENSName?: string
+  nom?: string
 }
 
-const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactions, ENSName }) => {
+const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactions, ENSName, nom }) => {
   const { active, account, connector, activate, error, deactivate } = useWeb3React()
   const { i18n } = useLingui()
   const [walletView, setWalletView] = useState(WALLET_VIEWS.ACCOUNT)
@@ -227,6 +228,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
           pendingTransactions={pendingTransactions}
           confirmedTransactions={confirmedTransactions}
           ENSName={ENSName}
+          nom={nom}
           openOptions={() => setWalletView(WALLET_VIEWS.OPTIONS)}
         />
       ) : (
