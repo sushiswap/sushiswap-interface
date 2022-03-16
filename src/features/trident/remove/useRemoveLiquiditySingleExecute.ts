@@ -86,11 +86,12 @@ export const useRemoveLiquiditySingleExecute = () => {
           value: '0x0',
         })
 
-        await tx.wait()
-
-        addTransaction(tx, {
-          summary: i18n._(t`Remove ${slpAmountToRemove?.toSignificant(3)} ${slpAmountToRemove?.currency.symbol}`),
-        })
+        if (tx?.hash) {
+          addTransaction(tx, {
+            summary: i18n._(t`Remove ${slpAmountToRemove?.toSignificant(3)} ${slpAmountToRemove?.currency.symbol}`),
+          })
+          await tx.wait()
+        }
 
         dispatch(setRemoveAttemptingTxn(false))
 

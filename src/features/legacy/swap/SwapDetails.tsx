@@ -2,7 +2,8 @@ import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Route, TradeVersion } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Route, TradeVersion } from '@sushiswap/core-sdk'
+import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
 import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
@@ -23,9 +24,21 @@ interface SwapDetails {
   recipient?: string
   trade?: TradeUnion
   className?: string
+  inputAmount?: CurrencyAmount<Currency>
+  outputAmount?: CurrencyAmount<Currency>
+  minimumAmountOut?: CurrencyAmount<Currency>
 }
 
-const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient, trade, className }) => {
+const SwapDetails: FC<SwapDetails> = ({
+  inputCurrency,
+  outputCurrency,
+  recipient,
+  trade,
+  inputAmount,
+  outputAmount,
+  minimumAmountOut,
+  className,
+}) => {
   const [inverted, setInverted] = useState(false)
 
   return (
@@ -49,7 +62,13 @@ const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient
               />
             </div>
             <Disclosure.Button as={Fragment}>
-              <div className="flex flex-grow items-center justify-end p-1 cursor-pointer rounded">
+              <div className="flex gap-2 flex-grow items-center justify-end p-1 cursor-pointer rounded">
+                <Chip
+                  size="sm"
+                  id="trade-type"
+                  label={getTradeVersion(trade) === TradeVersion.V2TRADE ? 'Legacy' : 'Trident'}
+                  color={getTradeVersion(trade) === TradeVersion.V2TRADE ? 'blue' : 'green'}
+                />
                 <ChevronDownIcon
                   width={20}
                   className={classNames(open ? 'transform rotate-180' : '', 'transition hover:text-white')}
@@ -65,7 +84,13 @@ const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient
             unmount={false}
           >
             <Disclosure.Panel static className="px-1 pt-2">
-              <SwapDetailsContent trade={trade} recipient={recipient} />
+              <SwapDetailsContent
+                trade={trade}
+                recipient={recipient}
+                inputAmount={inputAmount}
+                outputAmount={outputAmount}
+                minimumAmountOut={minimumAmountOut}
+              />
             </Disclosure.Panel>
           </Transition>
         </div>
@@ -74,10 +99,10 @@ const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient
   )
 }
 
-const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient }) => {
+const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, outputAmount, minimumAmountOut }) => {
   const { i18n } = useLingui()
   const allowedSlippage = useSwapSlippageTolerance(trade)
-  const minReceived = trade?.minimumAmountOut(allowedSlippage)
+  const minReceived = minimumAmountOut || trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
 
   let path
@@ -85,13 +110,16 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient }) => {
     path = (trade.route as Route<Currency, Currency>).path
   }
 
+  const _outputAmount = outputAmount || trade?.outputAmount
+  const _inputAmount = inputAmount || trade?.inputAmount
+
   return (
     <div className="flex flex-col divide-y divide-dark-850">
       <div className="flex flex-col gap-1 pb-2">
         <div className="flex justify-between gap-4">
           <Typography variant="xs">{i18n._(t`Expected Output`)}</Typography>
           <Typography weight={700} variant="xs" className="text-right">
-            {trade?.outputAmount?.toSignificant(6)} {trade?.outputAmount?.currency.symbol}
+            {_outputAmount?.toSignificant(6)} {_outputAmount?.currency.symbol}
           </Typography>
         </div>
         <div className="flex justify-between gap-4">

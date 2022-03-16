@@ -13,7 +13,9 @@ import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React from 'react'
+
 const queryToAuctionStatus = {
   live: AuctionStatus.LIVE,
   upcoming: AuctionStatus.UPCOMING,
@@ -35,6 +37,7 @@ const Miso = () => {
 
   return (
     <>
+      <NextSeo title="MISO" />
       <MisoHeader>
         <div className="flex flex-col justify-between gap-8 lg:flex-row">
           <div className="flex flex-col">

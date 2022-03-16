@@ -13,6 +13,7 @@ import useFuse from 'app/hooks/useFuse'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React from 'react'
 
 export default function Farm(): JSX.Element {
@@ -59,6 +60,7 @@ export default function Farm(): JSX.Element {
 
   return (
     <>
+      <NextSeo title="Farm" description="Farm SUSHI" />
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
         <div>
           <Typography variant="h2" className="text-high-emphesis" weight={700}>
@@ -71,7 +73,7 @@ export default function Farm(): JSX.Element {
         <div className="flex gap-3">
           <Button id="btn-create-new-pool" size="sm">
             <a
-              href="https://docs.google.com/document/d/19bL55ZTjKtxlom2CpVo6K8jL1e-OZ13y6y9AQgw_qT4"
+              href="https://docs.google.com/document/d/1VcdrqAn1sR8Wa0BSSU-jAl68CfoECR62LCzIyzUpZ_U"
               target="_blank"
               rel="noreferrer"
             >
@@ -82,13 +84,13 @@ export default function Farm(): JSX.Element {
       </TridentHeader>
       <TridentBody>
         <div className="flex flex-col w-full gap-6">
-          <div className="flex flex-col sm:flex-row justify-between gap-4 items-center">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <Search search={search} term={term} />
             <OnsenFilter />
           </div>
           <FarmList farms={result} term={term} />
           {chainId && chainId === ChainId.CELO && (
-            <Typography variant="xs" weight={700} className="text-secondary italic text-center">
+            <Typography variant="xs" weight={700} className="italic text-center text-secondary">
               {i18n._(t`Users can now bridge back to Celo using a new version of Optics.`)}{' '}
               <ExternalLink
                 color="blue"

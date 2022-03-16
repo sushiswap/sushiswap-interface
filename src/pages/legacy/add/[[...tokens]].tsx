@@ -38,8 +38,8 @@ import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'app/sta
 import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React, { useCallback, useState } from 'react'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -306,24 +306,7 @@ export default function Add() {
   // )
   return (
     <>
-      <Head>
-        <title>Add Liquidity | Sushi</title>
-        <meta
-          key="description"
-          name="description"
-          content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
-        />
-        <meta
-          key="twitter:description"
-          name="twitter:description"
-          content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
-        />
-        <meta
-          key="og:description"
-          property="og:description"
-          content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
-        />
-      </Head>
+      <NextSeo title={`Add Liquidity`} />
 
       <Container id="add-liquidity-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
         <div className="flex items-center justify-between px-4 mb-5">

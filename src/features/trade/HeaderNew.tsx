@@ -23,9 +23,10 @@ const getQuery = (input?: Currency, output?: Currency) => {
 interface HeaderNewProps {
   inputCurrency?: Currency
   outputCurrency?: Currency
+  trident?: boolean
 }
 
-const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency }) => {
+const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency, trident = false }) => {
   const { i18n } = useLingui()
   const { asPath } = useRouter()
   const isLimitOrder = asPath.startsWith('/limit-order')
@@ -36,7 +37,7 @@ const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency }) => {
         <NavLink
           activeClassName="text-high-emphesis"
           href={{
-            pathname: '/swap',
+            pathname: trident ? '/trident/swap' : '/swap',
             query: getQuery(inputCurrency, outputCurrency),
           }}
         >
@@ -58,7 +59,7 @@ const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency }) => {
       </div>
       <div className="flex gap-4">
         {isLimitOrder && <MyOrders />}
-        <Settings className="!w-6 !h-6" />
+        <Settings className="!w-6 !h-6" trident={trident} />
       </div>
     </div>
   )

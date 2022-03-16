@@ -1,11 +1,18 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Fraction } from '@sushiswap/core-sdk'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
+import { usePoolContext } from 'app/features/trident/PoolContext'
+import { useTridentPoolContract } from 'app/hooks'
+import { useSingleCallResult } from 'app/state/multicall/hooks'
 import React, { FC } from 'react'
 
 const TransactionDetailsExplanationModal: FC = ({ children }) => {
   const { i18n } = useLingui()
+  const { poolWithState } = usePoolContext()
+  const contract = useTridentPoolContract(poolWithState?.pool)
+  const { result } = useSingleCallResult(contract, 'barFee')
 
   return (
     <HeadlessUiModal trigger={children}>
@@ -36,18 +43,30 @@ const TransactionDetailsExplanationModal: FC = ({ children }) => {
             </div>
           </HeadlessUiModal.BorderedContent>
           <HeadlessUiModal.BorderedContent className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Typography weight={700} variant="sm" className="text-high-emphesis">
-                {i18n._(t`Liquidity Provider Fee`)}
-              </Typography>
-              <Typography variant="sm">{i18n._(t`0.25% of each swap goes to liquidity providers.`)}</Typography>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography weight={700} variant="sm" className="text-high-emphesis">
-                {i18n._(t`xSUSHI Fee`)}
-              </Typography>
-              <Typography variant="sm">{i18n._(t`0.055% of each swap goes to xSUSHI holders.`)} </Typography>
-            </div>
+            {poolWithState?.pool?.fee && (
+              <div className="flex flex-col gap-2">
+                <Typography weight={700} variant="sm" className="text-high-emphesis">
+                  {i18n._(t`Liquidity Provider Fee`)}
+                </Typography>
+                <Typography variant="sm">
+                  {i18n._(
+                    t`${new Fraction(poolWithState?.pool?.fee.toString(), 100).toSignificant(
+                      2
+                    )}% of each swap goes to liquidity providers.`
+                  )}
+                </Typography>
+              </div>
+            )}
+            {result && Array.isArray(result) && result.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <Typography weight={700} variant="sm" className="text-high-emphesis">
+                  {i18n._(t`xSUSHI Fee`)}
+                </Typography>
+                <Typography variant="sm">
+                  {i18n._(t`${new Fraction(result[0], 100).toSignificant(2)}% of each swap goes to xSUSHI holders.`)}{' '}
+                </Typography>
+              </div>
+            )}
             <div className="flex flex-col gap-2">
               <Typography weight={700} variant="sm" className="text-high-emphesis">
                 {i18n._(t`Estimated network Fee`)}
