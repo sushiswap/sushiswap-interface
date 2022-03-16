@@ -18,7 +18,7 @@ import TridentApproveGate from '../TridentApproveGate'
 
 interface SwapButton {
   onClick(x: TradeUnion): void
-  spendFromWallet: boolean
+  spendFromWallet?: boolean
 }
 
 const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
