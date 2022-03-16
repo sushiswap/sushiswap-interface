@@ -16,7 +16,7 @@ import KashiLendingListItem from './KashiLendingListItem'
 export const KashiLendingList = () => {
   const { i18n } = useLingui()
   const router = useRouter()
-  const account = router.query.address as string
+  const account = router.query.account as string
   const positions = useKashiMediumRiskLendingPositions(account)
   const { items, requestSort, sortConfig } = useSortableData(positions, {
     key: 'currentSupplyAPR',
