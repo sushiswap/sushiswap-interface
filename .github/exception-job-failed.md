@@ -1,5 +1,5 @@
 ---
-title: '[EXCEPTION]: Workflow Job Failed'
+title: '[ALERT]: Workflow Security Triggered'
 assignees: 'sambacha'
 labels: 'bug'
 ---
