@@ -3,7 +3,7 @@ import { ChevronDownIcon } from '@heroicons/react/outline'
 import { ArrowSmRightIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Percent } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Tooltip from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
@@ -29,6 +29,7 @@ export const KashiMarketLentDetailsContentView: FC<KashiMarketLentDetailsView> =
   const strategy = strategies?.[0]
 
   const lentPosition = CurrencyAmount.fromRawAmount(unwrappedToken(market.asset.token), market.currentUserAssetAmount)
+
   const newLentPosition =
     lentAmount &&
     CurrencyAmount.fromRawAmount(lentAmount.currency, market.currentUserAssetAmount)[
@@ -45,12 +46,15 @@ export const KashiMarketLentDetailsContentView: FC<KashiMarketLentDetailsView> =
           </Typography>
         </div>
 
-        <div className="flex justify-between gap-4">
-          <Typography variant="xs">{i18n._(t`Health`)}</Typography>
-          <Typography variant="xs" className="text-right">
-            {new Percent(market.marketHealth, 1e18).toFixed(6)}%
-          </Typography>
-        </div>
+        {JSBI.greaterThan(market.utilization, ZERO) && (
+          <div className="flex justify-between gap-4">
+            <Typography variant="xs">{i18n._(t`Health`)}</Typography>
+            <Typography variant="xs" className="text-right">
+              {new Percent(market.marketHealth, 1e18).toFixed(6)}%
+            </Typography>
+          </div>
+        )}
+
         <div className="flex justify-between gap-4">
           <Typography variant="xs" className="flex items-center">
             {i18n._(t`BentoBox strategy`)}
@@ -147,8 +151,8 @@ export const KashiMarketLentDetailsView: FC<KashiMarketLentDetailsView> = ({ len
             'shadow-inner flex flex-col gap-2 py-2 rounded px-2 border border-dark-700 transition hover:border-dark-700'
           )}
         >
-          <div className="flex justify-between gap-2 items-center pl-1">
-            <div className="flex gap-3 items-center">
+          <div className="flex items-center justify-between gap-2 pl-1">
+            <div className="flex items-center gap-3">
               <Typography variant="xs" weight={700}>
                 {i18n._(t`Deposited`)}
               </Typography>
@@ -164,7 +168,7 @@ export const KashiMarketLentDetailsView: FC<KashiMarketLentDetailsView> = ({ len
             </div>
 
             <Disclosure.Button as={Fragment}>
-              <div className="flex flex-grow items-center justify-end p-1 cursor-pointer rounded">
+              <div className="flex items-center justify-end flex-grow p-1 rounded cursor-pointer">
                 <ChevronDownIcon
                   width={20}
                   className={classNames(open ? 'transform rotate-180' : '', 'transition hover:text-white')}
