@@ -90,7 +90,7 @@ export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionR
     outgoingAmt: `${formatNumber(tx.amount1)} ${tx.token1.symbol}`,
     time: formatDateAgo(new Date(Number(tx.transaction.timestamp) * 1000)),
     value: formatNumber(
-      Number(tx.token0) * Number(tx.token0.price.derivedUSD) + Number(tx.token1) * Number(tx.token1.price.derivedUSD),
+      Number(tx.amount0) * Number(tx.token0.price.derivedUSD) + Number(tx.amount1) * Number(tx.token1.price.derivedUSD),
       true
     ),
     type: `Mint ${tx.token0.symbol} and ${tx.token1.symbol}`,
