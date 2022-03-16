@@ -1,6 +1,6 @@
 ---
 title: '[EXCEPTION]: Workflow Job Failed'
-assignees: '0xjanitor'
+assignees: 'sambacha'
 labels: 'bug'
 ---
 
