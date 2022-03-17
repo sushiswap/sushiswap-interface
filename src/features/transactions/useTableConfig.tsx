@@ -1,4 +1,4 @@
-import { getExplorerLink } from 'app/functions'
+import { formatDateAgo, getExplorerLink } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { useMemo } from 'react'
 
@@ -44,6 +44,10 @@ export const useTableConfig = (transactions?: Transactions[]) => {
       {
         Header: 'Time',
         accessor: 'time',
+        // @ts-ignore TYPE NEEDS FIXING
+        Cell: (props) => {
+          return formatDateAgo(new Date(Number(props.cell.value) * 1000))
+        },
       },
     ],
     [chainId]
