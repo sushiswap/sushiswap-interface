@@ -88,6 +88,7 @@ export const getTransactionsForPoolQuery = gql`
       amount0
       amount1
       transaction {
+        id
         timestamp
       }
       sender
@@ -110,6 +111,7 @@ export const getTransactionsForPoolQuery = gql`
         }
       }
       transaction {
+        id
         timestamp
       }
       amount0
@@ -123,6 +125,7 @@ export const getTransactionsForPoolQuery = gql`
       amountIn
       amountOut
       transaction {
+        id
         timestamp
       }
       recipient

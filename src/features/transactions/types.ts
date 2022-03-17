@@ -24,6 +24,7 @@ export interface TableInstance {
 }
 
 export interface Transactions {
+  txHash?: string
   address: string
   incomingAmt: string
   outgoingAmt: string

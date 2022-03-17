@@ -153,11 +153,11 @@ const LimitOrder = () => {
           limitPrice={!!rate ? rate : trade?.executionPrice}
         />
       </SwapLayoutCard>
-      <Typography variant="xs" className="px-10 mt-5 italic text-center text-low-emphesis">
+      <Typography variant="xs" className="px-10 mt-5 text-center text-low-emphesis">
         {i18n._(t`Limit orders use funds from BentoBox, to create a limit order depositing into BentoBox is required.`)}
       </Typography>
-      <Typography variant="xxs" className="px-10 mt-5 italic text-center text-low-emphesis">
-        <Typography variant="xxs" weight={700} component="span">
+      <Typography variant="xs" className="px-10 mt-5 text-center text-low-emphesis">
+        <Typography variant="xs" weight={700} component="span">
           Tip
         </Typography>
         :{' '}
