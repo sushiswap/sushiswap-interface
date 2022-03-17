@@ -50,7 +50,7 @@ export default function Farm(): JSX.Element {
 
   const options = {
     keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol'],
-    threshold: 0.4,
+    threshold: 0,
   }
 
   const { result, term, search } = useFuse({
