@@ -18,6 +18,7 @@ export interface Mint {
   amount0: string
   amount1: string
   transaction: {
+    id: string
     timestamp: string
   }
   sender: string
@@ -42,6 +43,7 @@ export interface Burn {
   amount0: string
   amount1: string
   transaction: {
+    id: string
     timestamp: string
   }
   sender: string
@@ -56,6 +58,7 @@ export interface Swap {
   // amountUSD: string // - Waiting on subgraph support
   transaction: {
     timestamp: string
+    id: string
   }
   recipient: string
   tokenIn: {
@@ -77,6 +80,7 @@ export interface TridentTransactionRawData {
 
 export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionRawData): Transactions[] {
   const swaps = rawData.swaps.map((tx) => ({
+    txHash: tx.transaction.id,
     address: tx.recipient,
     incomingAmt: `${formatNumber(tx.amountIn)} ${tx.tokenIn.symbol}`,
     outgoingAmt: `${formatNumber(tx.amountOut)} ${tx.tokenOut.symbol}`,
@@ -85,6 +89,7 @@ export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionR
     type: `Swap ${tx.tokenIn.symbol} for ${tx.tokenOut.symbol}`,
   }))
   const mints = rawData.mints.map((tx) => ({
+    txHash: tx.transaction.id,
     address: tx.recipient,
     incomingAmt: `${formatNumber(tx.amount0)} ${tx.token0.symbol}`,
     outgoingAmt: `${formatNumber(tx.amount1)} ${tx.token1.symbol}`,
@@ -97,6 +102,7 @@ export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionR
   }))
 
   const burns = rawData.burns.map((tx) => ({
+    txHash: tx.transaction.id,
     address: tx.recipient,
     incomingAmt: `${formatNumber(tx.amount0)} ${tx.token0.symbol}`,
     outgoingAmt: `${formatNumber(tx.amount1)} ${tx.token1.symbol}`,
