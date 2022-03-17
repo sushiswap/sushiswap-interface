@@ -327,7 +327,7 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
           </HeadlessUIModal.Content>
           <HeadlessUIModal.Actions>
             <HeadlessUIModal.Action onClick={onDismiss}>{i18n._(t`Cancel`)}</HeadlessUIModal.Action>
-            {approvalState !== ApprovalState.APPROVED && (
+            {approvalState !== ApprovalState.APPROVED && data.tokenSetupType === TokenSetup.PROVIDE && (
               <HeadlessUIModal.Action
                 main={true}
                 disabled={approvalState === ApprovalState.PENDING || pending}
@@ -345,7 +345,9 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
             )}
             <HeadlessUIModal.Action
               main={true}
-              disabled={approvalState !== ApprovalState.APPROVED || pending}
+              disabled={
+                (data.tokenSetupType === TokenSetup.PROVIDE && approvalState !== ApprovalState.APPROVED) || pending
+              }
               {...(pending && {
                 startIcon: (
                   <div className="w-4 h-4 mr-1">
