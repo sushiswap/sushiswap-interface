@@ -9,7 +9,6 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
-import { formatDateAgo } from 'app/functions'
 import { useTridentTransactions } from 'app/services/graph/hooks/pools'
 import { useLegacyTransactions } from 'app/services/graph/hooks/transactions/legacy'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -65,13 +64,6 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
     // @ts-ignore TYPE NEEDS FIXING
   } = useTable(config, useSortBy, usePagination, useFlexLayout)
 
-  const formatCell = (cell: any) => {
-    if (cell.column.Header === 'Time') {
-      return formatDateAgo(new Date(Number(cell.value) * 1000))
-    }
-    return cell.render('Cell')
-  }
-
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3">
@@ -123,7 +115,7 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
                   {row.cells.map((cell, i) => {
                     return (
                       <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>
-                        {formatCell(cell)}
+                        {cell.render('Cell')}
                       </td>
                     )
                   })}
