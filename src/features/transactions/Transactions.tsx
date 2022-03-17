@@ -9,6 +9,7 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
+import { formatDateAgo } from 'app/functions'
 import { useTridentTransactions } from 'app/services/graph/hooks/pools'
 import { useLegacyTransactions } from 'app/services/graph/hooks/transactions/legacy'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -113,9 +114,11 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
                 <tr {...row.getRowProps()} key={i} className={TABLE_TBODY_TR_CLASSNAME}>
                   {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {row.cells.map((cell, i) => {
+                    // if (cell.)Array<Row<D>>;
+                    
                     return (
                       <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>
-                        {cell.render('Cell')}
+                        {cell.column.Header === 'Time' ? formatDateAgo(new Date(Number(cell.value) * 1000)) : cell.render('Cell')}
                       </td>
                     )
                   })}
