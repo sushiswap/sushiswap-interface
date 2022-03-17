@@ -90,7 +90,14 @@ const Component: FC<NetworkGuardProps> = ({ children, feature, asModal = true })
     </div>
   )
 
-  if (!asModal) return content
+  if (!asModal) {
+    // @ts-ignore TYPE NEEDS FIXING
+    if (!!account && !features[chainId].includes(feature)) {
+      return content
+    }
+
+    return <>{children}</>
+  }
 
   return (
     <>
@@ -110,7 +117,11 @@ const Component: FC<NetworkGuardProps> = ({ children, feature, asModal = true })
 type NetworkGuard = (feature: Feature, renderChildren?: boolean) => FC
 const NetworkGuard: NetworkGuard = (feature: Feature, renderChildren = true) => {
   if (!renderChildren) {
-    return () => <Component feature={feature} asModal={false} />
+    return ({ children }) => (
+      <Component feature={feature} asModal={false}>
+        {children}
+      </Component>
+    )
   }
 
   return ({ children }) => <Component feature={feature}>{children}</Component>
