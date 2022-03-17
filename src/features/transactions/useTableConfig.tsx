@@ -8,7 +8,7 @@ import { Transactions } from './types'
 
 export const useTableConfig = (transactions?: Transactions[]) => {
   const { chainId } = useActiveWeb3React()
-  console.log(transactions)
+
   const TransactionColumns = useMemo(
     () => [
       {
