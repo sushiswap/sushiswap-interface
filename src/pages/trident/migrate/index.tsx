@@ -1,23 +1,18 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { DebugObserver } from 'app/components/DebugObserver'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import { AvailableToMigrate } from 'app/features/trident/migrate/AvailableToMigrate'
 import NetworkGuard from 'app/guards/Network'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
-import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 import React from 'react'
-
 const MigrateLiquidity = () => {
   const { i18n } = useLingui()
 
   return (
     <>
-      <Head>
-        <title>{i18n._(t`Migrate Liquidity | Sushi`)}</title>
-      </Head>
-      <DebugObserver />
+      <NextSeo title={`Migrate`} />
       <TridentHeader pattern="bg-binary" className="!gap-2">
         <Typography variant="h2" className="text-high-emphesis" weight={700}>
           {i18n._(t`Migrate Liquidity`)}

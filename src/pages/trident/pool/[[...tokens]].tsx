@@ -16,7 +16,6 @@ import NetworkGuard from 'app/guards/Network'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
 import React from 'react'
-
 const Pool = () => {
   const { i18n } = useLingui()
   const _linkButtons = <ClassicLinkButtons />

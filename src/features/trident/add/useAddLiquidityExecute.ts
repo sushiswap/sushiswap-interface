@@ -96,17 +96,19 @@ export const useAddLiquidityExecute: UseAddLiquidityExecute = () => {
           value,
         })
 
-        await tx.wait()
+        if (tx?.hash) {
+          addTransaction(tx, {
+            summary: i18n._(
+              t`Add ${parsedAmountA?.toSignificant(3)} ${
+                parsedAmountA?.currency.symbol
+              } and ${parsedAmountB?.toSignificant(3)} ${parsedAmountB?.currency.symbol} into ${pool.token0.symbol}/${
+                pool.token1.symbol
+              }`
+            ),
+          })
 
-        addTransaction(tx, {
-          summary: i18n._(
-            t`Add ${parsedAmountA?.toSignificant(3)} ${
-              parsedAmountA?.currency.symbol
-            } and ${parsedAmountB?.toSignificant(3)} ${parsedAmountB?.currency.symbol} into ${pool.token0.symbol}/${
-              pool.token1.symbol
-            }`
-          ),
-        })
+          await tx.wait()
+        }
 
         dispatch(setAddAttemptingTxn(false))
 

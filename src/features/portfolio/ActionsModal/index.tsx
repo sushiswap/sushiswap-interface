@@ -32,16 +32,16 @@ const ActionsModal: FC = () => {
     >
       {activeModal === ActiveModal.DEPOSIT ? (
         <DepositView
-          onBack={() => dispatch(setBalancesActiveModal(ActiveModal.MENU))}
-          onClose={() => dispatch(setBalancesActiveModal(undefined))}
+          onBack={() => dispatch(setBalancesActiveModal({ activeModal: ActiveModal.MENU }))}
+          onClose={() => dispatch(setBalancesActiveModal({ activeModal: undefined, modalOpen: false }))}
         />
       ) : activeModal === ActiveModal.WITHDRAW ? (
         <WithdrawView
-          onBack={() => dispatch(setBalancesActiveModal(ActiveModal.MENU))}
-          onClose={() => dispatch(setBalancesActiveModal(undefined))}
+          onBack={() => dispatch(setBalancesActiveModal({ activeModal: ActiveModal.MENU }))}
+          onClose={() => dispatch(setBalancesActiveModal({ activeModal: undefined, modalOpen: false }))}
         />
       ) : (
-        <ActionView onClose={() => dispatch(setBalancesActiveModal(undefined))} />
+        <ActionView onClose={() => dispatch(setBalancesActiveModal({ activeModal: undefined, modalOpen: false }))} />
       )}
     </HeadlessUiModal.Controlled>
   )

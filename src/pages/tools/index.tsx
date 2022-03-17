@@ -4,10 +4,9 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Container from 'app/components/Container'
 import Typography from 'app/components/Typography'
-import Head from 'next/head'
 import Link from 'next/link'
+import { NextSeo } from 'next-seo'
 import { useMemo } from 'react'
-
 const TOOLS = (i18n: I18n) => [
   {
     id: 1,
@@ -29,12 +28,7 @@ export default function Tools() {
 
   return (
     <Container id="tools-page" className="py-4 space-y-4 md:py-8 lg:py-12" maxWidth="xl">
-      <Head>
-        <title>Tools | Sushi</title>
-        <meta key="description" name="description" content="SushiSwap tools..." />
-        <meta key="twitter:description" name="twitter:description" content="SushiSwap tools..." />
-        <meta key="og:description" property="og:description" content="SushiSwap tools..." />
-      </Head>
+      <NextSeo title={`Tools`} />
       <Typography variant="h1" component="h1">
         Tools
       </Typography>

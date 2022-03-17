@@ -1,5 +1,14 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { ChainId, Currency, CurrencyAmount, Pair, Trade as LegacyTrade, TradeType, WNATIVE } from '@sushiswap/core-sdk'
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  Pair,
+  Trade as LegacyTrade,
+  TradeType,
+  WNATIVE,
+} from '@sushiswap/core-sdk'
 import { MultiRoute, RouteStatus } from '@sushiswap/tines'
 import {
   ConstantProductPool,
@@ -12,22 +21,22 @@ import {
   Trade,
 } from '@sushiswap/trident-sdk'
 import { PoolUnion } from 'app/features/trident/types'
-import { toShareCurrencyAmount } from 'app/functions'
+import { toAmountJSBI, toShareCurrencyAmount } from 'app/functions'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { PairState, useV2Pairs } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
 import { TradeUnion } from 'app/types'
 import { useEffect, useMemo, useState } from 'react'
-import { atom, useSetRecoilState } from 'recoil'
 
+// import { atom, useSetRecoilState } from 'recoil'
 import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
 import { useGetAllExistedPools } from './useConstantProductPools'
 
 export function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (PoolUnion | Pair)[] {
   const currencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
   const constantProductPools = useGetAllExistedPools(currencyCombinations)
-  //const constantProductPools = useConstantProductPoolsPermutations(currencyCombinations)
+  // const constantProductPools = useConstantProductPoolsPermutations(currencyCombinations)
   const allPairs = useV2Pairs(currencyCombinations)
   const pools = useMemo(() => [...constantProductPools, ...allPairs], [allPairs, constantProductPools])
   return useMemo(
@@ -62,10 +71,10 @@ export type RoutingInfo = {
   route?: MultiRoute
 }
 
-export const routingInfo = atom<RoutingInfo | undefined>({
-  key: 'routingInfo',
-  default: undefined,
-})
+// export const routingInfo = atom<RoutingInfo | undefined>({
+//   key: 'routingInfo',
+//   default: undefined,
+// })
 
 /**
  * Returns best trident trade for a desired swap.
@@ -82,13 +91,18 @@ export function useBestTridentTrade(
 ): UseBestTridentTradeOutput {
   const { chainId, library } = useActiveWeb3React()
   const blockNumber = useBlockNumber()
-  const setRoutingInfo = useSetRecoilState(routingInfo)
-  const { rebase } = useBentoRebase(amountSpecified?.currency)
+  // const setRoutingInfo = useSetRecoilState(routingInfo)
+
   const [gasPrice, setGasPrice] = useState<number>()
+
   const [currencyIn, currencyOut] = useMemo(
     () => (tradeType === TradeType.EXACT_INPUT ? [mainCurrency, otherCurrency] : [otherCurrency, mainCurrency]),
     [tradeType, mainCurrency, otherCurrency]
   )
+
+  const { rebase: currencyInRebase } = useBentoRebase(currencyIn)
+  const { rebase: currencyOutRebase } = useBentoRebase(currencyOut)
+
   const allowedPools = useAllCommonPools(currencyIn, currencyOut)
 
   useEffect(() => {
@@ -113,12 +127,13 @@ export function useBestTridentTrade(
       chainId &&
       amountSpecified &&
       otherCurrency &&
-      rebase &&
+      currencyInRebase &&
+      currencyOutRebase &&
       allowedPools.length > 0
     ) {
       const shareSpecified = CurrencyAmount.fromRawAmount(
         amountSpecified.currency,
-        toShareCurrencyAmount(rebase, amountSpecified.wrapped).quotient.toString()
+        toShareCurrencyAmount(currencyInRebase, amountSpecified.wrapped).quotient.toString()
       )
       const tridentPools = allowedPools.filter((pool) => pool instanceof ConstantProductPool) as ConstantProductPool[]
       const legacyPools = allowedPools.filter((pair) => pair instanceof Pair) as Pair[]
@@ -142,10 +157,14 @@ export function useBestTridentTrade(
           gasPrice
         )
 
-        if (tridentRoute.amountOutBN.gt(legacyRoute.amountOutBN)) {
+        const tridentAmountOutput = BigNumber.from(
+          toAmountJSBI(currencyOutRebase, JSBI.BigInt(tridentRoute.amountOutBN.toString())).toString()
+        )
+
+        if (tridentAmountOutput.gt(legacyRoute.amountOutBN)) {
           if (tridentRoute.status === RouteStatus.Success) {
             const priceImpact = tridentRoute.priceImpact
-            setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
+            // setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
             return {
               trade: Trade.bestTradeExactIn(tridentRoute, shareSpecified, currencyOut),
               priceImpact,
@@ -154,13 +173,16 @@ export function useBestTridentTrade(
         } else {
           if (legacyRoute.status === RouteStatus.Success) {
             const priceImpact = legacyRoute.priceImpact
-            setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
-            return {
-              trade: LegacyTrade.exactIn(
-                convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
-                amountSpecified
-              ),
-              priceImpact,
+            // setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
+            const route = convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut)
+
+            try {
+              return {
+                trade: LegacyTrade.exactIn(route, amountSpecified),
+                priceImpact,
+              }
+            } catch (error) {
+              return { trade: undefined, priceImpact: undefined }
             }
           }
         }
@@ -183,10 +205,14 @@ export function useBestTridentTrade(
           gasPrice
         )
 
-        if (tridentRoute.amountInBN.lt(legacyRoute.amountInBN)) {
+        const tridentAmountOutput = BigNumber.from(
+          toAmountJSBI(currencyOutRebase, JSBI.BigInt(tridentRoute.amountOut.toString())).toString()
+        )
+
+        if (tridentAmountOutput.lt(legacyRoute.amountInBN)) {
           if (tridentRoute.status === RouteStatus.Success) {
             const priceImpact = tridentRoute.priceImpact
-            setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
+            // setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
             return {
               trade: Trade.bestTradeExactOut(tridentRoute, currencyIn, shareSpecified),
               priceImpact,
@@ -195,13 +221,15 @@ export function useBestTridentTrade(
         } else {
           if (legacyRoute.status === RouteStatus.Success) {
             const priceImpact = legacyRoute.priceImpact
-            setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
-            return {
-              trade: LegacyTrade.exactOut(
-                convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
-                amountSpecified
-              ),
-              priceImpact,
+            // setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
+            const route = convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut)
+            try {
+              return {
+                trade: LegacyTrade.exactOut(route, amountSpecified),
+                priceImpact,
+              }
+            } catch (error) {
+              return { trade: undefined, priceImpact: undefined }
             }
           }
         }
@@ -220,8 +248,8 @@ export function useBestTridentTrade(
     currencyOut,
     gasPrice,
     otherCurrency,
-    rebase,
-    setRoutingInfo,
+    currencyInRebase,
+    currencyOutRebase,
     tradeType,
   ])
 }

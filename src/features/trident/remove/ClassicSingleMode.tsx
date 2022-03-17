@@ -51,11 +51,21 @@ const ClassicSingleMode: FC = () => {
       value={percentageAmount}
       onChange={(val: string) => dispatch(setRemovePercentageAmount(val))}
       variant="outlined"
+      size="sm"
+      className="!bg-dark-900 rounded border border-dark-800 h-9"
     >
-      <ToggleButtonGroup.Button value="25">25%</ToggleButtonGroup.Button>
-      <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
-      <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
-      <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="25" className="px-6">
+        25%
+      </ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="50" className="px-6">
+        50%
+      </ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="75" className="px-6">
+        75%
+      </ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="100" className="px-6">
+        Max
+      </ToggleButtonGroup.Button>
     </ToggleButtonGroup>
   )
 
@@ -84,7 +94,7 @@ const ClassicSingleMode: FC = () => {
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
                   {i18n._(t`Amount to Remove:`)}
                 </Typography>
-                <div className="flex-1 hidden lg:block">{toggleButtonGroup}</div>
+                <div className="hidden lg:block">{toggleButtonGroup}</div>
               </div>
               <ListPanel
                 header={

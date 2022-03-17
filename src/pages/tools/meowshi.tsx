@@ -13,8 +13,8 @@ import { e10 } from 'app/functions'
 import NetworkGuard from 'app/guards/Network'
 import useMeowshiPerXSushi from 'app/hooks/useMeowshiPerXSushi'
 import useSushiPerXSushi from 'app/hooks/useXSushiPerSushi'
-import Head from 'next/head'
 import Image from 'next/image'
+import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 export enum Field {
@@ -134,12 +134,7 @@ export default function Meowshi() {
 
   return (
     <Container id="meowshi-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
-      <Head>
-        <title>Meowshi | Sushi</title>
-        <meta key="description" name="description" content="SushiSwap Meowshi..." />
-        <meta key="twitter:description" name="twitter:description" content="SushiSwap Meowshi..." />
-        <meta key="og:description" property="og:description" content="SushiSwap Meowshi..." />
-      </Head>
+      <NextSeo title={`Meowshi`} />
 
       <div className="z-0 relative mb-[-38px] md:mb-[-54px] ml-0 md:ml-4 flex justify-between gap-6 items-center">
         <div className="min-w-[168px] hidden md:block">

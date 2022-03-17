@@ -30,7 +30,7 @@ export const AvailableToMigrate: FC = () => {
   return (
     <div>
       <div className="flex flex-col gap-3">
-        <div className="flex gap-3 items-center">
+        <div className="flex items-center gap-3">
           <Typography variant="h3" className="text-high-emphesis" weight={700}>
             {i18n._(t`Available to Migrate`)}
           </Typography>
@@ -64,7 +64,7 @@ export const AvailableToMigrate: FC = () => {
             })}
           </div>
           <Button
-            className="mt-6 w-full md:w-96 self-center"
+            className="self-center w-full mt-6 md:w-96"
             color={selectedMigrations.length ? 'gradient' : 'gray'}
             disabled={Boolean(!selectedMigrations.length)}
             onClick={() => router.push('/trident/migrate/confirm')}

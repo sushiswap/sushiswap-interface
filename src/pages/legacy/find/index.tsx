@@ -17,9 +17,9 @@ import { PairState, useV2Pair } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
 import { usePairAdder } from 'app/state/user/hooks'
 import { useTokenBalance } from 'app/state/wallet/hooks'
-import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Plus } from 'react-feather'
 
@@ -78,12 +78,7 @@ export default function PoolFinder() {
 
   return (
     <Container id="find-pool-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
-      <Head>
-        <title>{i18n._(t`Find Pool`)} | Sushi</title>
-        <meta key="description" name="description" content="Find pool" />
-        <meta key="twitter:description" name="twitter:description" content="Find pool" />
-        <meta key="og:description" property="og:description" content="Find pool" />
-      </Head>
+      <NextSeo title={`Find Pool`} />
       <div className="p-4 mb-3 space-y-3">
         <Back />
 
