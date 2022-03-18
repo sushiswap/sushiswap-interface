@@ -55,20 +55,22 @@ function Web3StatusInner() {
             <Loader stroke="white" />
           </div>
         ) : (
-          <div className="flex items-center gap-2">
-            <div className="flex gap-3 px-2 py-5 text-sm font-bold leading-5 rounded cursor-pointer select-none hover:text-white"></div>
-
+          <div className="relative flex items-center gap-2 cursor-pointer pointer-events-auto">
             <Davatar
               size={24}
               address={account}
               defaultComponent={
                 <Image src="https://app.sushi.com/images/chef.svg" alt="Sushi Chef" width={20} height={20} />
               }
-              style={{ borderRadius: 5 }}
+              style={{ borderRadius: 9999, pointerEvents: 'none', position: 'absolute', left: 0 }}
               provider={library}
             />
 
-            <Typography weight={700} variant="sm" className="px-2 py-5 font-bold hover:text-white">
+            <Typography
+              weight={700}
+              variant="sm"
+              className="py-5 pl-8 pr-2 font-bold rounded-full text-inherit hover:text-white"
+            >
               {ENSName || shortenAddress(account)}
             </Typography>
           </div>

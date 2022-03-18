@@ -123,7 +123,7 @@ const useMenu: UseMenu = () => {
         items: [
           {
             key: 'farm',
-            title: i18n._(t`Onsen`),
+            title: i18n._(t`Onsen Menu`),
             link: '/farm',
           },
           {
@@ -176,8 +176,6 @@ const useMenu: UseMenu = () => {
       })
     }
 
-    const exploreMenu: MenuItemLeaf[] = []
-
     if (featureEnabled(Feature.STAKING, chainId)) {
       menu.push({
         key: 'stake',
@@ -185,6 +183,8 @@ const useMenu: UseMenu = () => {
         link: '/stake',
       })
     }
+
+    const exploreMenu: MenuItemLeaf[] = []
 
     if (featureEnabled(Feature.MEOWSHI, chainId)) {
       exploreMenu.push({

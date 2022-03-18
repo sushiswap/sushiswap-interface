@@ -36,7 +36,7 @@ const Desktop: FC = () => {
                 })}
               </div>
               <div className="flex items-center justify-end gap-2">
-                <div className="flex items-center w-auto text-sm font-bold shadow cursor-pointer pointer-events-auto select-none whitespace-nowrap">
+                <div className="flex items-center w-auto shadow select-none whitespace-nowrap">
                   <Web3Status />
                   <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
                     {userEthBalance?.toSignificant(4)} {NATIVE[chainId || 1].symbol}
