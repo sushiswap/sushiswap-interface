@@ -47,8 +47,6 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
     [collateral, collateralAmount]
   )
 
-  console.log({ collateralAmountCurrencyAmount: collateralAmountCurrencyAmount?.quotient.toString() })
-
   const { maxBorrow, priceImpact, trade } = useMaxBorrow({
     leveraged: leverage,
     borrowAmount: borrowAmountCurrencyAmount,

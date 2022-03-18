@@ -2,7 +2,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { DotsVerticalIcon } from '@heroicons/react/solid'
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import { JSBI, Percent } from '@sushiswap/core-sdk'
+import { JSBI, maximum, Percent } from '@sushiswap/core-sdk'
 import { ACTION_ACCRUE, KashiMediumRiskLendingPair } from '@sushiswap/kashi-sdk'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
@@ -29,12 +29,8 @@ export const KashiMarketActions: FC<KashiMarketActions> = ({ market }) => {
   }, [])
 
   const priceChange = useMemo(() => {
-    const currentPrice = JSBI.divide(market.exchangeRate, JSBI.BigInt(1e18))
-    const oraclePrice = JSBI.divide(market.oracleExchangeRate, JSBI.BigInt(1e18))
-
-    return JSBI.greaterThan(oraclePrice, JSBI.BigInt(0))
-      ? new Percent(JSBI.subtract(currentPrice, oraclePrice), oraclePrice)?.toSignificant(2)
-      : '-'
+    const difference = maximum(JSBI.subtract(market.exchangeRate, market.oracleExchangeRate), JSBI.BigInt(0))
+    return new Percent(difference, market.exchangeRate).toFixed(2)
   }, [market])
 
   return (
