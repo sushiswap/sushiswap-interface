@@ -78,9 +78,12 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
         </Typography>
       </div>
 
-      <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(2, 6))}>
+      <div className={classNames('flex flex-col !items-end !justify-center', TABLE_TBODY_TD_CLASSNAME(2, 6))}>
         <Typography weight={700} className="text-high-emphesis">
           {formatNumber(liquidationPrice.invert().toSignificant(6))} {asset.symbol}
+        </Typography>
+        <Typography variant="xs" className="text-low-emphesis">
+          {collateral.symbol}
         </Typography>
       </div>
 
