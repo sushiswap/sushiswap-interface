@@ -19,7 +19,7 @@ const KashiPage: FC = () => {
             {i18n._(t`Kashi Markets`)}
           </Typography>
           <Typography variant="sm" weight={400}>
-            {i18n._(t`Earn fees and rewards by depositing and staking your tokens to the platform.`)}
+            {i18n._(t`Lend and borrow assets in Kashi isolated risk markets`)}
           </Typography>
         </div>
         <div className="flex gap-3">
