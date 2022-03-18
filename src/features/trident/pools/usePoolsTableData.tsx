@@ -81,20 +81,16 @@ export const usePoolsTableData = () => {
             variables: { block: oneDayBlock, id: data?.[props.row.id].address },
           })
 
-          return (
-            <span>
-              {formatPercent(
-                // @ts-ignore TYPE NEEDS FIXING
-                (Math.max(0, data?.[props.row.id]?.volumeUSD - poolKpi?.volumeUSD) *
-                  // @ts-ignore TYPE NEEDS FIXING
-                  (data?.[props.row.id]?.swapFee / 10000) *
-                  365 *
-                  100) /
-                  // @ts-ignore TYPE NEEDS FIXING
-                  data?.[props.row.id]?.liquidityUSD
-              )}
-            </span>
-          )
+          const percent = // @ts-ignore TYPE NEEDS FIXING
+            (Math.max(0, data?.[props.row.id]?.volumeUSD - poolKpi?.volumeUSD) *
+              // @ts-ignore TYPE NEEDS FIXING
+              (data?.[props.row.id]?.swapFee / 10000) *
+              365 *
+              100) /
+            // @ts-ignore TYPE NEEDS FIXING
+            data?.[props.row.id]?.liquidityUSD
+
+          return <span>{formatPercent(percent, 'NEW')}</span>
         },
       },
       // {

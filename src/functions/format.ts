@@ -55,11 +55,11 @@ export const decimalFormatter = new Intl.NumberFormat('en-US', {
 })
 
 // @ts-ignore TYPE NEEDS FIXING
-export function formatPercent(percentString) {
+export function formatPercent(percentString, fallback = '-') {
   const percent = parseFloat(percentString)
 
   if (!percent) {
-    return '-'
+    return fallback
   }
 
   if (percent === Infinity || percent === 0) {
