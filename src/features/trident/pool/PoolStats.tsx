@@ -71,7 +71,7 @@ const PoolStats: FC<PoolStatsProps> = () => {
               )}
             >
               {/*@ts-ignore TYPE NEEDS FIXING*/}
-              {formatPercent(stats?.[0]?.[change])}
+              {formatPercent(stats?.[0]?.[change], 'NEW')}
             </Typography>
           </div>
         </div>
