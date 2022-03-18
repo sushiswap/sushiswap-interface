@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { Menu, Transition } from '@headlessui/react'
 import { DotsVerticalIcon } from '@heroicons/react/solid'
 import { i18n } from '@lingui/core'
@@ -18,7 +19,7 @@ export const KashiMarketActions: FC<KashiMarketActions> = ({ market }) => {
   const [, , , , onCook] = useKashiApproveCallback()
 
   const onUpdatePrice = useCallback(async (cooker: KashiCooker) => {
-    cooker.updateExchangeRate(false, 0, 0)
+    cooker.updateExchangeRate(false, BigNumber.from(0), BigNumber.from(0))
     return i18n._(t`Update Price`)
   }, [])
 
