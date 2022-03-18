@@ -378,14 +378,7 @@ const Swap = ({ banners }) => {
         <div className="flex flex-col gap-3">
           <SwapAssetPanel
             spendFromWallet={true}
-            header={(props) => (
-              <SwapAssetPanel.Header
-                {...props}
-                label={
-                  independentField === Field.OUTPUT && !showWrap ? i18n._(t`Swap from (est.):`) : i18n._(t`Swap from:`)
-                }
-              />
-            )}
+            header={SwapAssetPanel.Header}
             currency={currencies[Field.INPUT]}
             value={formattedAmounts[Field.INPUT]}
             onChange={handleTypeInput}
@@ -405,12 +398,7 @@ const Swap = ({ banners }) => {
           </div>
           <SwapAssetPanel
             spendFromWallet={true}
-            header={(props) => (
-              <SwapAssetPanel.Header
-                {...props}
-                label={independentField === Field.INPUT && !showWrap ? i18n._(t`Swap to (est.):`) : i18n._(t`Swap to:`)}
-              />
-            )}
+            header={SwapAssetPanel.Header}
             currency={currencies[Field.OUTPUT]}
             value={formattedAmounts[Field.OUTPUT]}
             onChange={handleTypeOutput}

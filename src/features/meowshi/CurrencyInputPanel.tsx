@@ -76,7 +76,7 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
                   id="token-amount-input"
                   // @ts-ignore TYPE NEEDS FIXING
                   value={fields[field]}
-                  onUserInput={(val) => handleInput(val, field)}
+                  onUserInput={(val: string) => handleInput(val, field)}
                 />
               </div>
               {inputUSDCValue && (

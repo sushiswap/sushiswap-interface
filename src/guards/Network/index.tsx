@@ -40,12 +40,12 @@ const Component: FC<NetworkGuardProps> = ({ children, feature }) => {
     <>
       <HeadlessUIModal.Controlled
         // @ts-ignore TYPE NEEDS FIXING
-        isOpen={!!account && !features[chainId].includes(feature)}
+        isOpen={!!account && !features[chainId]?.includes(feature)}
         onDismiss={() => null}
         transparent={true}
       >
-        <div className="flex flex-col gap-7 justify-center p-4 mt-10 lg:mt-0">
-          <Typography variant="h1" className="max-w-2xl text-white text-center" weight={700}>
+        <div className="flex flex-col justify-center p-4 mt-10 gap-7 lg:mt-0">
+          <Typography variant="h1" className="max-w-2xl text-center text-white" weight={700}>
             {/*@ts-ignore TYPE NEEDS FIXING*/}
             {i18n._(t`Roll it back - this feature is not yet supported on ${NETWORK_LABEL[chainId]}.`)}
           </Typography>
@@ -59,10 +59,10 @@ const Component: FC<NetworkGuardProps> = ({ children, feature }) => {
           <Typography className="uppercase text-white text-center text-lg tracking-[.2rem]" weight={700}>
             {i18n._(t`Available Networks`)}
           </Typography>
-          <div className="flex gap-5 md:gap-10 justify-center">
+          <div className="flex justify-center gap-5 md:gap-10">
             {supportedNetworks.map((key: string, idx: number) => (
               <button
-                className="text-primary hover:text-white flex items-center flex-col gap-2 justify-start"
+                className="flex flex-col items-center justify-start gap-2 text-primary hover:text-white"
                 key={idx}
                 onClick={() => {
                   // @ts-ignore TYPE NEEDS FIXING

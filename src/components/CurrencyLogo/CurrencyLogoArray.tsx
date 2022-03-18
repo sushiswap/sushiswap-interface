@@ -1,11 +1,11 @@
-import { Currency } from '@sushiswap/core-sdk'
+import { Currency, Token } from '@sushiswap/core-sdk'
 import React, { FC } from 'react'
 
 import Typography from '../Typography'
 import CurrencyLogo, { CurrencyLogoProps } from './CurrencyLogo'
 
 interface CurrencyLogosProps extends Omit<CurrencyLogoProps, 'currency' | 'size'> {
-  currencies: Currency[]
+  currencies: (Currency | Token)[]
   dense?: boolean
   maxLogos?: number
   size?: number

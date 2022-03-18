@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Search as SearchIcon } from 'react-feather'
 
 interface Search {
-  term: string
+  term?: string
   search(value: string): void
 }
 

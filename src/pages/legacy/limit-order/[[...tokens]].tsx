@@ -101,7 +101,7 @@ const LimitOrder = () => {
         <div className="flex flex-col gap-3">
           <SwapAssetPanel
             error={false}
-            header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You pay`)} />}
+            header={SwapAssetPanel.Header}
             walletToggle={(props) => (
               <SwapAssetPanel.Switch
                 id={`switch-classic-withdraw-from-0}`}
@@ -133,7 +133,7 @@ const LimitOrder = () => {
           </div>
           <SwapAssetPanel
             error={false}
-            header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You receive`)} />}
+            header={SwapAssetPanel.Header}
             selected={true}
             currency={outputCurrency}
             value={(typedField === Field.OUTPUT ? typedValue : parsedAmounts?.outputAmount?.toSignificant(6)) || ''}

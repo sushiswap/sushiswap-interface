@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { JSBI } from '@sushiswap/core-sdk'
 import { useMemo, useState } from 'react'
 
 function getNested(theObject: any, path: string, separator = '.') {
@@ -30,6 +31,14 @@ const useSortableData = (items: any, config: any = null) => {
               return sortConfig.direction === 'ascending' ? -1 : 1
             }
             if (aValue.gt(bValue)) {
+              return sortConfig.direction === 'ascending' ? 1 : -1
+            }
+          }
+          if (aValue instanceof JSBI && bValue instanceof JSBI) {
+            if (JSBI.lessThan(aValue, bValue)) {
+              return sortConfig.direction === 'ascending' ? -1 : 1
+            }
+            if (JSBI.greaterThan(aValue, bValue)) {
               return sortConfig.direction === 'ascending' ? 1 : -1
             }
           } else if (aValue === Infinity) {

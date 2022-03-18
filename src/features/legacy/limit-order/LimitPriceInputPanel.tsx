@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Price, Trade, TradeType } from '@sushiswap/core-sdk'
-import NumericalInput from 'app/components/Input/Numeric'
+import Input from 'app/components/Input'
 import Typography from 'app/components/Typography'
 import { useAppDispatch } from 'app/state/hooks'
 import { LimitPrice, setLimitOrderInvertState, setLimitPrice } from 'app/state/limit-order/actions'
@@ -26,8 +26,8 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade, limitPrice }) =
         {i18n._(t`Rate`)}
       </Typography>
       <div className="flex justify-between items-baseline bg-dark-900 rounded px-4 py-1.5 border border-dark-700 hover:border-dark-600">
-        <Typography weight={700} variant="lg" className="flex gap-3 flex-grow items-baseline relative overflow-hidden">
-          <NumericalInput
+        <Typography weight={700} variant="lg" className="relative flex items-baseline flex-grow gap-3 overflow-hidden">
+          <Input.Numeric
             disabled={disabled}
             className="leading-[32px] focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
             placeholder={trade ? trade.executionPrice.toSignificant(6) : '0.0'}
@@ -36,7 +36,7 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade, limitPrice }) =
               (limitPriceString === LimitPrice.CURRENT ? trade?.executionPrice.toSignificant(6) : limitPriceString) ||
               ''
             }
-            onUserInput={(value) => dispatch(setLimitPrice(value))}
+            onUserInput={(value: string) => dispatch(setLimitPrice(value))}
           />
         </Typography>
         <Typography
