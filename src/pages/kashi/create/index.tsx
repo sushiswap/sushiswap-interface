@@ -1,60 +1,36 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
+import { Menu, Transition } from '@headlessui/react'
+import { ChevronDownIcon, SwitchVerticalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
-import Card from 'app/components/Card'
 import Container from 'app/components/Container'
-import CurrencyInputPanel from 'app/components/CurrencyInputPanel'
+import Typography from 'app/components/Typography'
 import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
 import { Feature } from 'app/enums'
+import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import { e10 } from 'app/functions/math'
 import NetworkGuard from 'app/guards/Network'
 import { useBentoBoxContract } from 'app/hooks/useContract'
-import Layout from 'app/layouts/Kashi'
+import { SwapLayoutCard } from 'app/layouts/SwapLayout'
 import { useActiveWeb3React } from 'app/services/web3'
 import { Field } from 'app/state/create/actions'
 import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from 'app/state/create/hook'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { useCallback } from 'react'
-
-export type ChainlinkToken = {
-  symbol: string
-  name: string
-  address: string
-  decimals: number
-}
+import React, { Fragment, useCallback } from 'react'
 
 export default function Create() {
+  const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
-
   const bentoBoxContract = useBentoBoxContract()
-
   const addTransaction = useTransactionAdder()
-
   const router = useRouter()
-
-  const { independentField, typedValue } = useCreateState()
+  const { typedValue } = useCreateState()
   const { onSwitchTokens, onCurrencySelection, onUserInput } = useCreateActionHandlers()
-
   const { currencies, inputError } = useDerivedCreateInfo()
-
-  const handleCollateralSelect = useCallback(
-    (collateralCurrency) => {
-      onCurrencySelection(Field.COLLATERAL, collateralCurrency)
-    },
-    [onCurrencySelection]
-  )
-
-  const handleAssetSelect = useCallback(
-    (assetCurrency) => {
-      onCurrencySelection(Field.ASSET, assetCurrency)
-    },
-    [onCurrencySelection]
-  )
 
   const both = Boolean(currencies[Field.COLLATERAL] && currencies[Field.ASSET])
 
@@ -188,84 +164,100 @@ export default function Create() {
   }
 
   return (
-    <CreateLayout>
-      <Head>
-        <title>Create Lending Pair | Kashi by Sushi</title>
-        <meta key="description" name="description" content="Create Lending Pair on Kashi by Sushi" />
-        <meta key="twitter:description" name="twitter:description" content="Create Lending Pair on Kashi by Sushi" />
-        <meta key="og:description" property="og:description" content="Create Lending Pair on Kashi by Sushi" />
-      </Head>
-      <Card
-        className="h-full bg-dark-900"
-        header={
-          <Card.Header className="bg-dark-800">
-            <div className="text-3xl text-high-emphesis leading-48px">Create a Market</div>
-          </Card.Header>
-        }
-      >
-        <Container maxWidth="full" className="space-y-6">
-          <div className="grid grid-cols-1 grid-rows-2 gap-4 md:grid-rows-1 md:grid-cols-2">
-            <CurrencyInputPanel
-              label="Collateral"
-              showMaxButton={false}
-              hideBalance={true}
-              hideInput={true}
-              currency={currencies[Field.COLLATERAL]}
-              onCurrencySelect={handleCollateralSelect}
-              otherCurrency={currencies[Field.ASSET]}
-              showCommonBases={false}
-              allowManageTokenList={false}
-              showSearch={false}
-              id="kashi-currency-collateral"
-            />
-
-            <CurrencyInputPanel
-              label="Asset"
-              showMaxButton={false}
-              hideBalance={true}
-              hideInput={true}
+    <Container maxWidth="lg" className="py-4 md:py-12 lg:py-[120px] px-2">
+      <SwapLayoutCard>
+        <div className="flex flex-col w-full gap-4">
+          <div className="flex flex-col gap-2">
+            <Typography variant="lg" weight={700} className="text-high-emphesis">
+              {i18n._(t`Create Market`)}
+            </Typography>
+            <Typography variant="sm" className="text-secondary">
+              {i18n._(
+                t`Please select two tokens to be used as asset and collateral respectively that this market will consist of. When creating a market, you have to provide some asset tokens.`
+              )}
+            </Typography>
+          </div>
+          <div className="flex flex-col flex-grow gap-1">
+            <Typography variant="sm" className="flex items-center">
+              {i18n._(t`Asset`)}
+            </Typography>
+            <SwapAssetPanel
+              error={false}
+              header={(props) => <SwapAssetPanel.Header {...props} selectLabel={i18n._(t`Select Asset`)} />}
+              selected={true}
               currency={currencies[Field.ASSET]}
-              onCurrencySelect={handleAssetSelect}
-              otherCurrency={currencies[Field.COLLATERAL]}
-              showCommonBases={false}
-              allowManageTokenList={false}
-              showSearch={false}
-              id="kashi-currency-asset"
+              value={typedValue}
+              onChange={(amount) => onUserInput(Field.ASSET, amount || '')}
+              onSelect={(currency) => onCurrencySelection(Field.ASSET, currency)}
             />
           </div>
-
-          <Button
-            color="gradient"
-            className="w-full px-4 py-3 text-base rounded text-high-emphesis"
-            onClick={() => handleCreate()}
-            disabled={!both}
-          >
-            {inputError || 'Create'}
-          </Button>
-        </Container>
-      </Card>
-    </CreateLayout>
-  )
-}
-
-// @ts-ignore TYPE NEEDS FIXING
-const CreateLayout = ({ children }) => {
-  const { i18n } = useLingui()
-  return (
-    <Layout
-      left={
-        <Card
-          className="h-full bg-dark-900"
-          backgroundImage="/images/kashi/deposit.png"
-          title={i18n._(t`Create a new Kashi Market`)}
-          description={i18n._(
-            t`If you want to supply to a market that is not listed yet, you can use this tool to create a new pair.`
-          )}
-        />
-      }
-    >
-      {children}
-    </Layout>
+          <div className="flex justify-center relative lg:mt-[-10px] lg:mb-[-30px]">
+            <div onClick={onSwitchTokens} className="rounded-full hover:text-white p-1.5 cursor-pointer">
+              <SwitchVerticalIcon width={12} height={12} />
+            </div>
+          </div>
+          <div className="flex flex-col flex-grow gap-1">
+            <Typography variant="sm" className="flex items-center">
+              {i18n._(t`Collateral`)}
+            </Typography>
+            <SwapAssetPanel
+              error={false}
+              header={(props) => <SwapAssetPanel.Header {...props} selectLabel={i18n._(t`Select Collateral`)} />}
+              selected={true}
+              currency={currencies[Field.COLLATERAL]}
+              value={typedValue}
+              onChange={(amount) => onUserInput(Field.COLLATERAL, amount || '')}
+              onSelect={(currency) => onCurrencySelection(Field.COLLATERAL, currency)}
+              hideInput={true}
+            />
+          </div>
+          <div className="flex flex-col flex-grow gap-1">
+            <Typography variant="sm" className="flex items-center">
+              {i18n._(t`Oracle`)}
+            </Typography>
+            <div className="opacity-40 pointer-events-none flex items-center justify-between h-full px-4 py-2 border rounded bg-dark-900 border-dark-700 hover:border-dark-600">
+              <Menu as="div" className="relative inline-block w-full text-left">
+                <Menu.Button className="w-full" disabled>
+                  <div className="flex flex-row items-center justify-between">
+                    <Typography weight={700} variant="sm">
+                      ChainLink
+                    </Typography>
+                    <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
+                  </div>
+                </Menu.Button>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items
+                    static
+                    className="absolute z-10 w-full mt-2 overflow-auto border rounded shadow-lg bg-dark-900 border-dark-700 hover:border-dark-600"
+                  >
+                    <Menu.Item>
+                      <Typography
+                        variant="sm"
+                        weight={700}
+                        className="text-primary px-3 py-2 cursor-pointer hover:bg-dark-900/40"
+                      >
+                        ChainLink
+                      </Typography>
+                    </Menu.Item>
+                  </Menu.Items>
+                </Transition>
+              </Menu>
+            </div>
+          </div>
+        </div>
+        <Button color="gradient" onClick={() => handleCreate()} disabled={!both}>
+          {inputError || i18n._(t`Create Market`)}
+        </Button>
+      </SwapLayoutCard>
+    </Container>
   )
 }
 

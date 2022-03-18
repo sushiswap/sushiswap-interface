@@ -107,8 +107,6 @@ const useLPTokensState = () => {
 
         const responses: any = await Promise.all(requests[chainId].map((request: any) => fetch(request)))
 
-        console.log({ responses })
-
         let userLP = []
 
         if (chainId === ChainId.ETHEREUM) {

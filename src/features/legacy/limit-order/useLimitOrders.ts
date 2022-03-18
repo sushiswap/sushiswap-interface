@@ -29,6 +29,9 @@ const viewFetcher = (url: string, account: string, chainId: number, pendingPage:
   return fetch(url, {
     method: 'POST',
     body: JSON.stringify({ address: account, chainId, page, pendingPage }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
     .then((r) => r.json())
     .then((j) => j.data)

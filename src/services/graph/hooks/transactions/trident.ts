@@ -1,5 +1,5 @@
 import { Transactions } from 'app/features/transactions/types'
-import { formatDateAgo, formatNumber } from 'app/functions'
+import { formatNumber } from 'app/functions'
 
 export interface Mint {
   id: string
@@ -18,6 +18,7 @@ export interface Mint {
   amount0: string
   amount1: string
   transaction: {
+    id: string
     timestamp: string
   }
   sender: string
@@ -42,6 +43,7 @@ export interface Burn {
   amount0: string
   amount1: string
   transaction: {
+    id: string
     timestamp: string
   }
   sender: string
@@ -56,6 +58,7 @@ export interface Swap {
   // amountUSD: string // - Waiting on subgraph support
   transaction: {
     timestamp: string
+    id: string
   }
   recipient: string
   tokenIn: {
@@ -77,18 +80,20 @@ export interface TridentTransactionRawData {
 
 export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionRawData): Transactions[] {
   const swaps = rawData.swaps.map((tx) => ({
+    txHash: tx.transaction.id,
     address: tx.recipient,
     incomingAmt: `${formatNumber(tx.amountIn)} ${tx.tokenIn.symbol}`,
     outgoingAmt: `${formatNumber(tx.amountOut)} ${tx.tokenOut.symbol}`,
-    time: formatDateAgo(new Date(Number(tx.transaction.timestamp) * 1000)),
+    time: tx.transaction.timestamp,
     value: formatNumber(Number(tx.amountIn) * Number(tx.tokenIn.price.derivedUSD), true),
     type: `Swap ${tx.tokenIn.symbol} for ${tx.tokenOut.symbol}`,
   }))
   const mints = rawData.mints.map((tx) => ({
+    txHash: tx.transaction.id,
     address: tx.recipient,
     incomingAmt: `${formatNumber(tx.amount0)} ${tx.token0.symbol}`,
     outgoingAmt: `${formatNumber(tx.amount1)} ${tx.token1.symbol}`,
-    time: formatDateAgo(new Date(Number(tx.transaction.timestamp) * 1000)),
+    time: tx.transaction.timestamp,
     value: formatNumber(
       Number(tx.amount0) * Number(tx.token0.price.derivedUSD) + Number(tx.amount1) * Number(tx.token1.price.derivedUSD),
       true
@@ -97,10 +102,11 @@ export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionR
   }))
 
   const burns = rawData.burns.map((tx) => ({
+    txHash: tx.transaction.id,
     address: tx.recipient,
     incomingAmt: `${formatNumber(tx.amount0)} ${tx.token0.symbol}`,
     outgoingAmt: `${formatNumber(tx.amount1)} ${tx.token1.symbol}`,
-    time: formatDateAgo(new Date(Number(tx.transaction.timestamp) * 1000)),
+    time: tx.transaction.timestamp,
     value: formatNumber(
       Number(tx.token0) * Number(tx.token0.price.derivedUSD) + Number(tx.token1) * Number(tx.token1.price.derivedUSD),
       true

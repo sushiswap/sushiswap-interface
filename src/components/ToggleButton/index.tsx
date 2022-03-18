@@ -40,8 +40,11 @@ const ToggleButtonGroup: ToggleButtonGroup<Props> = ({
   ...props
 }) => {
   return (
-    // @ts-ignore TYPE NEEDS FIXING
-    <HeadlessRadioGroup {...props} className={classNames(className, `flex bg-dark-1000/40`, VARIANTS[variant].group)}>
+    <HeadlessRadioGroup
+      {...props}
+      // @ts-ignore TYPE NEEDS FIXING
+      className={classNames(className, `flex bg-dark-1000/40 rounded-full`, VARIANTS[variant].group)}
+    >
       {Children.map(children, (child) => {
         if (isValidElement(child)) {
           return cloneElement(child, {

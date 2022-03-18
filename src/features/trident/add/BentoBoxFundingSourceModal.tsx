@@ -27,7 +27,12 @@ const BentoBoxFundingSourceModal: FC = () => {
           <HeadlessUiModal.Header header={i18n._(t`Bentobox`)} onClose={() => setOpen(false)} />
           <div className="flex justify-center gap-4">
             <div className="relative shadow-pink-glow">
-              <Image src="https://app.sushi.com/images/bentobox/logo.png" width={160} height={120} alt="BentoBox Logo" />
+              <Image
+                src="https://app.sushi.com/images/bentobox/logo.png"
+                width={160}
+                height={120}
+                alt="BentoBox Logo"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <Typography variant="lg" weight={700} className="text-center text-high-emphesis">
@@ -88,6 +93,12 @@ const BentoBoxFundingSourceModal: FC = () => {
                 </div>
               </div>
             </div>
+            <Typography variant="xs" className="px-10 mt-5 text-center text-low-emphesis">
+              <Typography variant="xs" weight={700} component="span">
+                Tip
+              </Typography>
+              : {i18n._(t`BentoBox to BentoBox swaps are up to 50% cheaper than normal swaps`)}
+            </Typography>
           </HeadlessUiModal.BorderedContent>
         </div>
       )}

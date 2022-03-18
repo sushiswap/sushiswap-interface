@@ -6,10 +6,10 @@ export interface CreateState {
   readonly independentField: Field
   readonly typedValue: string
   readonly [Field.COLLATERAL]: {
-    readonly currencyId: string | undefined
+    readonly currencyId?: string
   }
   readonly [Field.ASSET]: {
-    readonly currencyId: string | undefined
+    readonly currencyId?: string
   }
 }
 

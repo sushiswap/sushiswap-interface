@@ -85,6 +85,7 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(
 )
 
 interface TridentApproveGateCommonProps {
+  spendFromWallet?: boolean
   inputAmounts: (CurrencyAmount<Currency> | undefined)[]
   children: ({ approved, loading }: { approved: boolean; loading: boolean; permit?: BentoPermit }) => ReactNode
   tokenApproveOn?: string
@@ -110,6 +111,7 @@ type TridentApproveGatePropsWithPermit = TridentApproveGateCommonProps & {
 type TridentApproveGateType = TridentApproveGatePropsNoPermit | TridentApproveGatePropsWithPermit
 
 const TridentApproveGate = ({
+  spendFromWallet = true,
   inputAmounts,
   tokenApproveOn,
   children,
@@ -136,7 +138,7 @@ const TridentApproveGate = ({
     (withPermit ? approvalState === BentoApprovalState.UNKNOWN : false)
 
   const approved =
-    Object.values(status).every((el) => el === ApprovalState.APPROVED) &&
+    (Object.values(status).every((el) => el === ApprovalState.APPROVED) || !spendFromWallet) &&
     (withPermit ? approvalState === BentoApprovalState.APPROVED : true)
 
   // If we have a permitError, use the approveCallback as a fallback

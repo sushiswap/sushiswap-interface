@@ -64,10 +64,8 @@ export const BalancesSum: FC<{ account: string }> = ({ account }) => {
   const { i18n } = useLingui()
   const { data: walletBalances, loading: wLoading } = useWalletBalances(account)
   const { data: bentoBalances, loading: bLoading } = useBentoBalancesV2ForAccount(account)
-  // const { borrowed, collateral, lent } = useKashiPositions(account)
 
   const allAssets = useMemo(() => {
-    // const combined = [...walletBalances, ...bentoBalances, ...collateral, ...lent]
     const combined = [...walletBalances, ...bentoBalances]
     return {
       total: combined.length,
@@ -76,7 +74,7 @@ export const BalancesSum: FC<{ account: string }> = ({ account }) => {
   }, [bentoBalances, walletBalances])
 
   return (
-    <div className="flex lg:flex-row flex-col gap-10 justify-between lg:items-end w-full">
+    <div className="flex flex-col justify-between w-full gap-10 lg:flex-row lg:items-end">
       <div className="flex gap-10">
         <_BalancesSum
           assetAmounts={allAssets.balances}

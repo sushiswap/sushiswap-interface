@@ -105,134 +105,142 @@ const Swap = () => {
   }, [dispatch, tridentSwapState])
 
   return (
-    <SwapLayoutCard>
-      <div className="px-2">
-        <HeaderNew inputCurrency={currencies[0]} outputCurrency={currencies[1]} trident={true} />
-      </div>
-      <div className="flex flex-col gap-3">
-        <SwapAssetPanel
-          error={typedField === TypedField.A && !!error && !!formattedAmounts[0]}
-          header={(props) => <SwapAssetPanel.Header {...props} id={`asset-select-trigger-${TypedField.A}`} />}
-          walletToggle={(props) => (
-            <Transition
-              show={!trade || tradeVersion === TradeVersion.V3TRADE}
-              enter="transition duration-100 ease-out"
-              enterFrom="transform scale-95 opacity-0"
-              enterTo="transform scale-100 opacity-100"
-              leave="transition duration-100 ease-out"
-              leaveFrom="transform scale-100 opacity-100"
-              leaveTo="transform scale-95 opacity-0"
-            >
-              <SwapAssetPanel.Switch
-                {...props}
-                label={i18n._(t`Pay from`)}
-                onChange={(spendFromWallet) => dispatch(setSpendFromWallet(spendFromWallet))}
-                id="chk-pay-from-wallet"
-              />
-            </Transition>
-          )}
-          selected={typedField === TypedField.A}
-          spendFromWallet={_spendFromWallet}
-          currency={currencies[0]}
-          value={formattedAmounts[0]}
-          onChange={(value) =>
-            dispatch(setTridentSwapState({ ...tridentSwapState, value: value || '', typedField: TypedField.A }))
-          }
-          onSelect={(currency) => setURLCurrency(currency, 0)}
-        />
-        <div className="z-0 flex justify-center -mt-6 -mb-6">
-          <div
-            role="button"
-            className="p-1.5 rounded-full bg-dark-800 border shadow-md border-dark-700 hover:border-dark-600"
-            onClick={handleArrowsClick}
-          >
-            <ArrowDownIcon width={14} className="text-high-emphesis hover:text-white" />
-          </div>
+    <>
+      <SwapLayoutCard>
+        <div className="px-2">
+          <HeaderNew inputCurrency={currencies[0]} outputCurrency={currencies[1]} trident={true} />
         </div>
-        <SwapAssetPanel
-          error={typedField === TypedField.B && !!error && !!formattedAmounts[0]}
-          header={(props) => <SwapAssetPanel.Header {...props} id={`asset-select-trigger-${TypedField.B}`} />}
-          walletToggle={(props) => (
-            <Transition
-              show={!trade || tradeVersion === TradeVersion.V3TRADE}
-              enter="transition duration-100 ease-out"
-              enterFrom="transform scale-95 opacity-0"
-              enterTo="transform scale-100 opacity-100"
-              leave="transition duration-100 ease-out"
-              leaveFrom="transform scale-100 opacity-100"
-              leaveTo="transform scale-95 opacity-0"
+        <div className="flex flex-col gap-3">
+          <SwapAssetPanel
+            error={typedField === TypedField.A && !!error && !!formattedAmounts[0]}
+            header={(props) => <SwapAssetPanel.Header {...props} id={`asset-select-trigger-${TypedField.A}`} />}
+            walletToggle={(props) => (
+              <Transition
+                show={!trade || tradeVersion === TradeVersion.V3TRADE}
+                enter="transition duration-100 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-100 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+              >
+                <SwapAssetPanel.Switch
+                  {...props}
+                  label={i18n._(t`Pay from`)}
+                  onChange={(spendFromWallet) => dispatch(setSpendFromWallet(spendFromWallet))}
+                  id="chk-pay-from-wallet"
+                />
+              </Transition>
+            )}
+            selected={typedField === TypedField.A}
+            spendFromWallet={_spendFromWallet}
+            currency={currencies[0]}
+            value={formattedAmounts[0]}
+            onChange={(value) =>
+              dispatch(setTridentSwapState({ ...tridentSwapState, value: value || '', typedField: TypedField.A }))
+            }
+            onSelect={(currency) => setURLCurrency(currency, 0)}
+          />
+          <div className="z-0 flex justify-center -mt-6 -mb-6">
+            <div
+              role="button"
+              className="p-1.5 rounded-full bg-dark-800 border shadow-md border-dark-700 hover:border-dark-600"
+              onClick={handleArrowsClick}
             >
-              <SwapAssetPanel.Switch
-                {...props}
-                label={i18n._(t`Receive to`)}
-                onChange={(receiveToWallet) => dispatch(setReceiveToWallet(receiveToWallet))}
-                id="chk-receive-to-wallet"
+              <ArrowDownIcon width={14} className="text-high-emphesis hover:text-white" />
+            </div>
+          </div>
+          <SwapAssetPanel
+            error={typedField === TypedField.B && !!error && !!formattedAmounts[0]}
+            header={(props) => <SwapAssetPanel.Header {...props} id={`asset-select-trigger-${TypedField.B}`} />}
+            walletToggle={(props) => (
+              <Transition
+                show={!trade || tradeVersion === TradeVersion.V3TRADE}
+                enter="transition duration-100 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-100 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+              >
+                <SwapAssetPanel.Switch
+                  {...props}
+                  label={i18n._(t`Receive to`)}
+                  onChange={(receiveToWallet) => dispatch(setReceiveToWallet(receiveToWallet))}
+                  id="chk-receive-to-wallet"
+                />
+              </Transition>
+            )}
+            selected={typedField === TypedField.B}
+            spendFromWallet={_receiveToWallet}
+            currency={currencies[1]}
+            value={formattedAmounts[1]}
+            onChange={(value) => {
+              // Change typedField to TypedField.B once exactOut is available
+              dispatch(setTridentSwapState({ ...tridentSwapState, value: value || '', typedField: TypedField.A }))
+            }}
+            onSelect={(currency) => setURLCurrency(currency, 1)}
+            priceImpact={priceImpact}
+            // Remove when exactOut works
+            disabled={true}
+          />
+          <DerivedTradeContext.Provider
+            value={useMemo(
+              () => ({
+                formattedAmounts,
+                trade,
+                priceImpact,
+                error: error ?? swapStateError ?? cbError ?? undefined,
+                isWrap,
+                parsedAmounts,
+              }),
+              [cbError, error, formattedAmounts, isWrap, parsedAmounts, priceImpact, swapStateError, trade]
+            )}
+          >
+            {expertMode && <RecipientField recipient={recipient} action={setRecipient} />}
+            {Boolean(trade) && (
+              <SwapDetails
+                inputCurrency={currencies[0]}
+                outputCurrency={currencies[1]}
+                trade={trade}
+                recipient={recipient ?? undefined}
               />
-            </Transition>
-          )}
-          selected={typedField === TypedField.B}
-          spendFromWallet={_receiveToWallet}
-          currency={currencies[1]}
-          value={formattedAmounts[1]}
-          onChange={(value) => {
-            // Change typedField to TypedField.B once exactOut is available
-            dispatch(setTridentSwapState({ ...tridentSwapState, value: value || '', typedField: TypedField.A }))
-          }}
-          onSelect={(currency) => setURLCurrency(currency, 1)}
-          priceImpact={priceImpact}
-          // Remove when exactOut works
-          disabled={true}
+            )}
+            {trade && !trade?.route && parsedAmounts[0]?.greaterThan(ZERO) && (
+              <Typography variant="xs" className="py-2 text-center">
+                {i18n._(t`Insufficient liquidity for this trade.`)}{' '}
+              </Typography>
+            )}
+            {isWrap ? (
+              <WrapButton />
+            ) : (
+              <SwapButton onClick={(trade) => setConfirmTrade(trade)} spendFromWallet={_spendFromWallet} />
+            )}
+          </DerivedTradeContext.Provider>
+          {expertMode && executeError ? <SwapCallbackError error={executeError} /> : null}
+          {swapIsUnsupported ? <UnsupportedCurrencyFooter currencies={[currencies[0], currencies[1]]} /> : null}
+        </div>
+        <ConfirmSwapModal
+          isOpen={showReview}
+          trade={trade}
+          originalTrade={confirmTrade}
+          onAcceptChanges={() => setConfirmTrade(trade)}
+          attemptingTxn={attemptingTxn}
+          txHash={txHash}
+          recipient={recipient}
+          allowedSlippage={allowedSlippage}
+          onConfirm={execute}
+          swapErrorMessage={swapStateError}
+          onDismiss={handleDismiss}
         />
-        <DerivedTradeContext.Provider
-          value={useMemo(
-            () => ({
-              formattedAmounts,
-              trade,
-              priceImpact,
-              error: error ?? swapStateError ?? cbError ?? undefined,
-              isWrap,
-              parsedAmounts,
-            }),
-            [cbError, error, formattedAmounts, isWrap, parsedAmounts, priceImpact, swapStateError, trade]
-          )}
-        >
-          {expertMode && <RecipientField recipient={recipient} action={setRecipient} />}
-          {Boolean(trade) && (
-            <SwapDetails
-              inputCurrency={currencies[0]}
-              outputCurrency={currencies[1]}
-              trade={trade}
-              recipient={recipient ?? undefined}
-            />
-          )}
-          {trade && !trade?.route && parsedAmounts[0]?.greaterThan(ZERO) && (
-            <Typography variant="xs" className="py-2 text-center">
-              {i18n._(t`Insufficient liquidity for this trade.`)}{' '}
-            </Typography>
-          )}
-          {isWrap ? (
-            <WrapButton />
-          ) : (
-            <SwapButton onClick={(trade) => setConfirmTrade(trade)} spendFromWallet={_spendFromWallet} />
-          )}
-        </DerivedTradeContext.Provider>
-        {expertMode && executeError ? <SwapCallbackError error={executeError} /> : null}
-        {swapIsUnsupported ? <UnsupportedCurrencyFooter currencies={[currencies[0], currencies[1]]} /> : null}
-      </div>
-      <ConfirmSwapModal
-        isOpen={showReview}
-        trade={trade}
-        originalTrade={confirmTrade}
-        onAcceptChanges={() => setConfirmTrade(trade)}
-        attemptingTxn={attemptingTxn}
-        txHash={txHash}
-        recipient={recipient}
-        allowedSlippage={allowedSlippage}
-        onConfirm={execute}
-        swapErrorMessage={swapStateError}
-        onDismiss={handleDismiss}
-      />
-    </SwapLayoutCard>
+      </SwapLayoutCard>
+      <Typography variant="xs" className="px-10 mt-5 text-center text-low-emphesis">
+        <Typography variant="xs" weight={700} component="span">
+          Tip
+        </Typography>
+        : {i18n._(t`BentoBox to BentoBox swaps are up to 50% cheaper than normal swaps`)}
+      </Typography>
+    </>
   )
 }
 

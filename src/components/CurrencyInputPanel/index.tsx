@@ -152,7 +152,7 @@ export default function CurrencyInputPanel({
                 id="token-amount-input"
                 // @ts-ignore TYPE NEEDS FIXING
                 value={value}
-                onUserInput={(val) => {
+                onUserInput={(val: string) => {
                   // @ts-ignore TYPE NEEDS FIXING
                   onUserInput(val)
                 }}

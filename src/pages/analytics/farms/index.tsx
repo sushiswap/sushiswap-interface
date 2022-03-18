@@ -61,6 +61,7 @@ export default function Farms(): JSX.Element {
         </div>
       </Background>
       <div className="px-4 pt-4 lg:px-14">
+        {/* @ts-ignore */}
         <FarmList pools={farmsSearched} />
       </div>
     </AnalyticsContainer>

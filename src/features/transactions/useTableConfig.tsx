@@ -1,3 +1,5 @@
+import { formatDateAgo, getExplorerLink } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { useMemo } from 'react'
 
 import ExternalLink from '../../components/ExternalLink'
@@ -5,6 +7,8 @@ import { shortenAddress } from './table-utils'
 import { Transactions } from './types'
 
 export const useTableConfig = (transactions?: Transactions[]) => {
+  const { chainId } = useActiveWeb3React()
+
   const TransactionColumns = useMemo(
     () => [
       {
@@ -26,12 +30,12 @@ export const useTableConfig = (transactions?: Transactions[]) => {
         accessor: 'outgoingAmt',
       },
       {
-        Header: 'To',
-        accessor: 'address',
+        Header: 'Transaction',
+        accessor: 'txHash',
         // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
           return (
-            <ExternalLink color="blue" href={`https://etherscan.io/address/${props.cell.value}`}>
+            <ExternalLink color="blue" href={getExplorerLink(chainId || 1, props.cell.value, 'transaction')}>
               {shortenAddress(props.cell.value)}
             </ExternalLink>
           )
@@ -40,9 +44,13 @@ export const useTableConfig = (transactions?: Transactions[]) => {
       {
         Header: 'Time',
         accessor: 'time',
+        // @ts-ignore TYPE NEEDS FIXING
+        Cell: (props) => {
+          return formatDateAgo(new Date(Number(props.cell.value) * 1000))
+        },
       },
     ],
-    []
+    [chainId]
   )
 
   const defaultColumn = React.useMemo(() => ({ minWidth: 0 }), [])
@@ -54,7 +62,7 @@ export const useTableConfig = (transactions?: Transactions[]) => {
         data: transactions,
         defaultColumn,
         initialState: {
-          sortBy: [{ id: 'time', type: 'datetime', desc: false }],
+          sortBy: [{ id: 'time', type: 'datetime', desc: true }],
         },
       },
     }),

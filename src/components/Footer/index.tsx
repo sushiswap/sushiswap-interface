@@ -52,7 +52,7 @@ const Footer = () => {
               {i18n._(t`Products`)}
             </Typography>
             <Link
-              href={featureEnabled(Feature.TRIDENT, chainId || 1) ? '/trident/pools' : '/legacy/pools'}
+              href={featureEnabled(Feature.TRIDENT, chainId || 1) ? '/trident/pools' : '/legacy/pool'}
               passHref={true}
             >
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">

@@ -172,19 +172,19 @@ const useMenu: UseMenu = () => {
 
     if (featureEnabled(Feature.KASHI, chainId)) {
       menu.push({
-        key: 'lending',
-        title: i18n._(t`Lending`),
+        key: 'kashi',
+        title: i18n._(t`Kashi`),
         icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
         items: [
           {
             key: 'lend',
             title: i18n._(t`Lend`),
-            link: '/lend',
+            link: '/kashi?view=lend',
           },
           {
             key: 'borrow',
             title: i18n._(t`Borrow`),
-            link: '/borrow',
+            link: '/kashi?view=borrow',
           },
         ],
       })
@@ -192,8 +192,8 @@ const useMenu: UseMenu = () => {
 
     if (featureEnabled(Feature.MISO, chainId)) {
       menu.push({
-        key: 'launchpad',
-        title: i18n._(t`Launchpad`),
+        key: 'miso',
+        title: i18n._(t`MISO`),
         icon: <RocketIcon width={20} />,
         items: [
           {
