@@ -172,22 +172,27 @@ const useMenu: UseMenu = () => {
 
     if (featureEnabled(Feature.KASHI, chainId)) {
       menu.push({
-        key: 'lending',
-        title: i18n._(t`Lending`),
-        icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
-        items: [
-          {
-            key: 'lend',
-            title: i18n._(t`Lend`),
-            link: '/lend',
-          },
-          {
-            key: 'borrow',
-            title: i18n._(t`Borrow`),
-            link: '/borrow',
-          },
-        ],
+        key: 'kashi',
+        title: i18n._(t`Kashi`),
+        link: '/kashi',
       })
+      // menu.push({
+      //   key: 'lending',
+      //   title: i18n._(t`Lending`),
+      //   icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
+      //   items: [
+      //     {
+      //       key: 'lend',
+      //       title: i18n._(t`Lend`),
+      //       link: '/lend',
+      //     },
+      //     {
+      //       key: 'borrow',
+      //       title: i18n._(t`Borrow`),
+      //       link: '/borrow',
+      //     },
+      //   ],
+      // })
     }
 
     if (featureEnabled(Feature.MISO, chainId)) {
