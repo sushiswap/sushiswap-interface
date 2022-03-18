@@ -2,7 +2,6 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import { useKashiMediumRiskLendingPairs, useKashiPairAddresses } from 'app/features/kashi/hooks'
 import KashiMarketList from 'app/features/kashi/KashiMarketList'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -12,9 +11,6 @@ import React, { FC } from 'react'
 const KashiPage: FC = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const addresses = useKashiPairAddresses()
-  const markets = useKashiMediumRiskLendingPairs(account, addresses)
-
   return (
     <>
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
@@ -51,7 +47,7 @@ const KashiPage: FC = () => {
         </div>
       </TridentHeader>
       <TridentBody>
-        <KashiMarketList markets={markets} />
+        <KashiMarketList />
       </TridentBody>
     </>
   )

@@ -13,14 +13,15 @@ import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, memo, ReactNode } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
+import { useKashiMediumRiskLendingPairs, useKashiPairAddresses } from './hooks'
 import { KashiMediumRiskLendingPair } from './KashiMediumRiskLendingPair'
 
-interface KashiMarketList {
-  markets: KashiMediumRiskLendingPair[]
-}
+interface KashiMarketList {}
 
-const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
-  const { chainId } = useActiveWeb3React()
+const KashiMarketList: FC<KashiMarketList> = () => {
+  const { account, chainId } = useActiveWeb3React()
+  const addresses = useKashiPairAddresses()
+  const markets = useKashiMediumRiskLendingPairs(account, addresses)
   const { i18n } = useLingui()
   const {
     result: pairs,
@@ -48,9 +49,9 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
         <Search search={(val) => search(val.toUpperCase())} term={term} />
       </div>
       <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME)}>
-        <div className="grid grid-cols-6 min-w-[768px]">
+        <div className="grid grid-cols-7 min-w-[768px]">
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer', TABLE_TR_TH_CLASSNAME(0, 6))}
+            className={classNames('flex gap-1 items-center cursor-pointer', TABLE_TR_TH_CLASSNAME(0, 7))}
             // onClick={() => requestSort('pair.token0.symbol')}
           >
             <Typography variant="sm" weight={700}>
@@ -59,11 +60,11 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
             {/*<SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'symbol'} />*/}
           </div>
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(1, 6))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(1, 7))}
             onClick={() => requestSort('currentAllAssets')}
           >
             <Typography variant="sm" weight={700}>
-              {i18n._(t`Market Size`)}
+              {i18n._(t`TVL`)}
             </Typography>
             <SortIcon
               id={sortConfig.key}
@@ -72,7 +73,7 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
             />
           </div>
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(2, 6))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(2, 7))}
             onClick={() => requestSort('currentBorrowAmount')}
           >
             <Typography variant="sm" weight={700}>
@@ -84,13 +85,9 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
               active={sortConfig.key === 'currentBorrowAmount'}
             />
           </div>
-          {/*<div className={classNames(TABLE_TR_TH_CLASSNAME(3, 6))}>*/}
-          {/*  <Typography variant="sm" weight={700}>*/}
-          {/*    {i18n._(t`Available`)}*/}
-          {/*  </Typography>*/}
-          {/*</div>*/}
+
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(3, 6))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(3, 7))}
             onClick={() => requestSort('currentSupplyAPR')}
           >
             <Typography variant="sm" weight={700}>
@@ -102,8 +99,20 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
               active={sortConfig.key === 'currentSupplyAPR'}
             />
           </div>
+
+          <div className={classNames(TABLE_TR_TH_CLASSNAME(4, 7))} onClick={() => requestSort('totalAssetAmount')}>
+            <Typography variant="sm" weight={700}>
+              {i18n._(t`Available`)}
+            </Typography>
+            <SortIcon
+              id={sortConfig.key}
+              direction={sortConfig.direction}
+              active={sortConfig.key === 'totalAssetAmount'}
+            />
+          </div>
+
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(4, 6))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(5, 7))}
             onClick={() => requestSort('currentInterestPerYear')}
           >
             <Typography variant="sm" weight={700}>
@@ -116,7 +125,7 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
             />
           </div>
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(5, 6))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(6, 7))}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Actions`)}
@@ -125,12 +134,12 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
         </div>
         <InfiniteScroll
           dataLength={numDisplayed}
-          next={() => setNumDisplayed(numDisplayed + 5)}
+          next={() => setNumDisplayed(numDisplayed + 10)}
           hasMore={numDisplayed <= items.length}
           loader={<Loader />}
         >
           {items.slice(0, numDisplayed).reduce<ReactNode[]>((acc, market, index) => {
-            if (market) acc.push(<KashiMarketListItem market={market} chainId={chainId || 1} key={index} i18n={i18n} />)
+            if (market) acc.push(<KashiMarketListItem market={market} key={index} i18n={i18n} />)
             return acc
           }, [])}
         </InfiniteScroll>
