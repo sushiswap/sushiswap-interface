@@ -2,16 +2,15 @@ import { NATIVE } from '@sushiswap/core-sdk'
 import Container from 'app/components/Container'
 import { NAV_CLASS } from 'app/components/Header/styles'
 import useMenu from 'app/components/Header/useMenu'
-import LanguageSwitch from 'app/components/LanguageSwitch'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
 import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
-import Link from 'next/link'
 import React, { FC } from 'react'
 
+import Typography from '../Typography'
 import { NavigationItem } from './NavigationItem'
 
 const HEADER_HEIGHT = 64
@@ -37,26 +36,17 @@ const Desktop: FC = () => {
                 })}
               </div>
               <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center w-auto text-sm font-bold shadow cursor-pointer pointer-events-auto select-none whitespace-nowrap">
+                  <Web3Status />
+                  <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
+                    {userEthBalance?.toSignificant(4)} {NATIVE[chainId || 1].symbol}
+                  </Typography>
+                </div>
                 {library && (library.provider.isMetaMask || isCoinbaseWallet) && (
                   <div className="hidden sm:inline-block">
                     <Web3Network />
                   </div>
                 )}
-
-                <div className="flex items-center w-auto text-sm font-bold border-2 rounded shadow cursor-pointer pointer-events-auto select-none border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap">
-                  {account && chainId && userEthBalance && (
-                    <Link href={`/portfolio/${account}`} passHref={true}>
-                      <a className="hidden px-3 text-high-emphesis text-bold md:block">
-                        {/*@ts-ignore*/}
-                        {userEthBalance?.toSignificant(4)} {NATIVE[chainId || 1].symbol}
-                      </a>
-                    </Link>
-                  )}
-                  <Web3Status />
-                </div>
-                <div className="hidden lg:flex">
-                  <LanguageSwitch />
-                </div>
               </div>
             </div>
           </Container>

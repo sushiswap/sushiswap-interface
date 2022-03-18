@@ -115,40 +115,6 @@ const useMenu: UseMenu = () => {
 
     menu.push(legacy)
 
-    const exploreMenu: MenuItemLeaf[] = []
-    if (featureEnabled(Feature.VESTING, chainId)) {
-      exploreMenu.push({
-        key: 'stake',
-        title: i18n._(t`xSUSHI`),
-        link: '/stake',
-      })
-    }
-
-    if (featureEnabled(Feature.MEOWSHI, chainId)) {
-      exploreMenu.push({
-        key: 'meowshi',
-        title: i18n._(t`Meowshi`),
-        link: '/tools/meowshi',
-      })
-    }
-
-    if (featureEnabled(Feature.MEOWSHI, chainId)) {
-      exploreMenu.push({
-        key: 'yield',
-        title: i18n._(t`Yield Strategies`),
-        link: '/tools/inari',
-      })
-    }
-
-    if (exploreMenu.length > 0) {
-      menu.push({
-        key: 'explore',
-        title: i18n._(t`Explore`),
-        items: exploreMenu,
-        icon: <GlobeIcon width={20} />,
-      })
-    }
-
     if (featureEnabled(Feature.LIQUIDITY_MINING, chainId)) {
       const farmItems = {
         key: 'farm',
@@ -156,14 +122,14 @@ const useMenu: UseMenu = () => {
         icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
         items: [
           {
-            key: 'your-farms',
-            title: i18n._(t`Your Farms`),
-            link: '/farm?filter=portfolio',
+            key: 'farm',
+            title: i18n._(t`Onsen`),
+            link: '/farm',
           },
           {
-            key: 'all-farms',
-            title: i18n._(t`All Farms`),
-            link: '/farm',
+            key: 'my-farms',
+            title: i18n._(t`My Farms`),
+            link: '/farm?filter=portfolio',
           },
         ],
       }
@@ -210,6 +176,41 @@ const useMenu: UseMenu = () => {
       })
     }
 
+    const exploreMenu: MenuItemLeaf[] = []
+
+    if (featureEnabled(Feature.STAKING, chainId)) {
+      menu.push({
+        key: 'stake',
+        title: i18n._(t`Stake`),
+        link: '/stake',
+      })
+    }
+
+    if (featureEnabled(Feature.MEOWSHI, chainId)) {
+      exploreMenu.push({
+        key: 'meowshi',
+        title: i18n._(t`Meowshi`),
+        link: '/tools/meowshi',
+      })
+    }
+
+    if (featureEnabled(Feature.MEOWSHI, chainId)) {
+      exploreMenu.push({
+        key: 'yield',
+        title: i18n._(t`Yield Strategies`),
+        link: '/tools/inari',
+      })
+    }
+
+    if (exploreMenu.length > 0) {
+      menu.push({
+        key: 'explore',
+        title: i18n._(t`Explore`),
+        items: exploreMenu,
+        icon: <GlobeIcon width={20} />,
+      })
+    }
+
     let analyticsMenu: MenuItem = {
       key: 'analytics',
       title: i18n._(t`Analytics`),
@@ -252,7 +253,7 @@ const useMenu: UseMenu = () => {
 
     if (account) {
       menu.push({
-        key: 'balances',
+        key: 'portfolio',
         title: i18n._(t`Portfolio`),
         link: `/portfolio/${account}`,
         icon: <WalletIcon width={20} />,
