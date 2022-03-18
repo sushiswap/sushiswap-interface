@@ -52,7 +52,7 @@ const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAsse
       priceImpact,
       priceImpactCss,
       disabled,
-      currencies = [],
+      currencies,
       balancePanel,
       hideInput,
     },
