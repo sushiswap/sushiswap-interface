@@ -176,15 +176,15 @@ const useMenu: UseMenu = () => {
       })
     }
 
+    const exploreMenu: MenuItemLeaf[] = []
+
     if (featureEnabled(Feature.STAKING, chainId)) {
-      menu.push({
-        key: 'stake',
-        title: i18n._(t`Stake`),
+      exploreMenu.push({
+        key: 'sushi-bar',
+        title: i18n._(t`Sushi Bar`),
         link: '/stake',
       })
     }
-
-    const exploreMenu: MenuItemLeaf[] = []
 
     if (featureEnabled(Feature.MEOWSHI, chainId)) {
       exploreMenu.push({
