@@ -27,13 +27,13 @@ const KashiPage: FC = () => {
             <>
               <Link href={`/account/${account}/lending`} passHref={true}>
                 <Button id="btn-create-new-pool" size="sm">
-                  {i18n._(t`Lending`)}
+                  {i18n._(t`My Lending`)}
                 </Button>
               </Link>
 
               <Link href={`/account/${account}/borrowing`} passHref={true}>
                 <Button id="btn-create-new-pool" size="sm">
-                  {i18n._(t`Borrowing`)}
+                  {i18n._(t`My Borrowing`)}
                 </Button>
               </Link>
             </>
@@ -41,7 +41,7 @@ const KashiPage: FC = () => {
 
           <Link href="/kashi/create" passHref={true}>
             <Button id="btn-create-new-pool" size="sm">
-              {i18n._(t`Create Kashi Market`)}
+              {i18n._(t`Create Market`)}
             </Button>
           </Link>
         </div>
