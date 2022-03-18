@@ -167,7 +167,7 @@ export const bentoBoxQuery = gql`
 `
 
 export const bentoStrategiesQuery = gql`
-  query bentoStrategies($first: Int = 1000, $firstHarvests: Int = 3, $block: Block_height, $where: Strategy_filter!) {
+  query bentoStrategies($first: Int = 1000, $firstHarvests: Int = 3, $block: Block_height, $where: Strategy_filter) {
     strategies(first: $first, block: $block, where: $where) {
       token {
         id
