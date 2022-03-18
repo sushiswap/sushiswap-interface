@@ -68,7 +68,10 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
         </div>
         <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(1, 7))}>
           <Typography weight={700} className="text-high-emphesis">
-            {formatNumber(currentAllAssets?.toSignificant(6))} {market.asset.token.symbol}
+            {formatNumber(currentAllAssets?.toSignificant(6))}
+          </Typography>
+          <Typography variant="xs" className="text-low-emphesis">
+            {market.asset.token.symbol}
           </Typography>
           {/* <Typography variant="xs" className="text-low-emphesis">
             {currentAllAssetsUSD && !currentAllAssetsUSDLoading
@@ -78,7 +81,10 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
         </div>
         <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(2, 7))}>
           <Typography weight={700} className="text-high-emphesis">
-            {formatNumber(currentBorrowAmount?.toSignificant(6))} {market.asset.token.symbol}
+            {formatNumber(currentBorrowAmount?.toSignificant(6))}
+          </Typography>
+          <Typography variant="xs" className="text-low-emphesis">
+            {market.asset.token.symbol}
           </Typography>
           {/* <Typography variant="xs" className="text-low-emphesis">
             {currentBorrowAmountUSD && !currentBorrowAmountUSDLoading
@@ -98,7 +104,10 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
 
         <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(4, 7))}>
           <Typography weight={700} className="text-high-emphesis">
-            {formatNumber(totalAssetAmount?.toSignificant(6))} {market.asset.token.symbol}
+            {formatNumber(totalAssetAmount?.toSignificant(6))}
+          </Typography>
+          <Typography variant="xs" className="text-low-emphesis">
+            {market.asset.token.symbol}
           </Typography>
           {/* <Typography variant="xs" className="text-low-emphesis">
             {totalAssetAmountUSD && !totalAssetAmountLoading
