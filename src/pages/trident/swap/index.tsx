@@ -182,7 +182,7 @@ const Swap = () => {
             onSelect={(currency) => setURLCurrency(currency, 1)}
             priceImpact={priceImpact}
             // Remove when exactOut works
-            disabled={true}
+            inputDisabled={true}
           />
           <DerivedTradeContext.Provider
             value={useMemo(
