@@ -98,6 +98,7 @@ export function useTwoDayPoolKpis({ chainId, variables, shouldFetch = true, swrC
 export function useRollingPoolStats({ chainId, variables, shouldFetch = true, swrConfig = undefined }: GraphProps) {
   const oneDayBlock = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const twoDayBlock = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+
   const {
     data: poolKpis,
     isValidating: poolKpisIsValidating,
@@ -172,10 +173,14 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
                   (oneDayPoolKpis?.[i]?.transactionCount - twoDayPoolKpis?.[i]?.transactionCount)) *
                   100 -
                 100,
-              apy: aprToApy(
-                ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) / poolKpis?.[i]?.liquidityUSD) * 100,
-                3650
-              ),
+              apy:
+                (Math.max(0, poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) * 365 * 100) /
+                poolKpis?.[i]?.liquidityUSD,
+
+              // apy: aprToApy(
+              //   ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) / poolKpis?.[i]?.liquidityUSD) * 100,
+              //   3650
+              // ),
             }
           })
         : [],
