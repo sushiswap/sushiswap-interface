@@ -189,6 +189,20 @@ export const getTridentPositionsQuery = gql`
   }
 `
 
+export const poolKpiQuery = gql`
+  query poolKpiQuery($id: String!, $block: Block_height, $where: PoolKpi_filter) {
+    poolKpi(id: $id, block: $block, where: $where) {
+      fees
+      feesUSD
+      volume
+      volumeUSD
+      liquidity
+      liquidityUSD
+      transactionCount
+    }
+  }
+`
+
 export const poolKpisQuery = gql`
   query poolKpisQuery($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolKpi_filter) {
     poolKpis(first: $first, skip: $skip, block: $block, where: $where) {

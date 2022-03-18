@@ -1,10 +1,9 @@
 import { PoolType } from '@sushiswap/tines'
-import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import { formatNumber, formatPercent } from 'app/functions/format'
+import { useOneDayBlock } from 'app/services/graph'
 import { TridentPool } from 'app/services/graph/fetchers/pools'
-import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
-import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
+import { useGetAllTridentPools, usePoolKpi } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { ReactNode, useMemo } from 'react'
 
@@ -62,32 +61,60 @@ export const usePoolsTableData = () => {
         // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => <span>{formatNumber(props.value, true)}</span>,
       },
+
+      {
+        Header: 'Volume',
+        accessor: 'volumeUSD',
+        maxWidth: 100,
+        // @ts-ignore TYPE NEEDS FIXING
+        Cell: (props) => <span>{formatNumber(props.value, true)}</span>,
+      },
       {
         Header: 'APY',
         accessor: 'apy',
         maxWidth: 100,
         // @ts-ignore TYPE NEEDS FIXING
-        Cell: ({ row }) => {
-          const { data: stats } = useRollingPoolStats({
+        Cell: (props) => {
+          // const { data: stats } = useRollingPoolStats({
+          //   chainId,
+          //   variables: { where: { id_in: data?.map((el: any) => el.address.toLowerCase()) } },
+          //   shouldFetch: !!chainId && !!data,
+          // })
+          // return <span>{formatPercent(stats?.[row.id]?.apy)}</span>
+
+          const oneDayBlock = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+          const { data: poolKpi } = usePoolKpi({
             chainId,
-            variables: { where: { id_in: data?.map((el: any) => el.address.toLowerCase()) } },
-            shouldFetch: !!chainId && !!data,
+            variables: { block: oneDayBlock, id: data?.[props.row.id].address },
           })
 
-          return <span>{formatPercent(stats?.[row.id]?.apy)}</span>
+          return (
+            <span>
+              {formatPercent(
+                // @ts-ignore TYPE NEEDS FIXING
+                (Math.max(0, data?.[props.row.id]?.volumeUSD - poolKpi?.volumeUSD) *
+                  // @ts-ignore TYPE NEEDS FIXING
+                  (data?.[props.row.id]?.swapFee / 10000) *
+                  365 *
+                  100) /
+                  // @ts-ignore TYPE NEEDS FIXING
+                  data?.[props.row.id]?.liquidityUSD
+              )}
+            </span>
+          )
         },
       },
-      {
-        Header: 'Actions',
-        accessor: 'actions',
-        maxWidth: 100,
-        Cell: () => (
-          /* Entire row is clickable, hence button does not need link */
-          <Button color="blue" size="sm" variant="empty">
-            Invest
-          </Button>
-        ),
-      },
+      // {
+      //   Header: 'Actions',
+      //   accessor: 'actions',
+      //   maxWidth: 100,
+      //   Cell: () => (
+      //     /* Entire row is clickable, hence button does not need link */
+      //     <Button color="blue" size="sm" variant="empty">
+      //       Invest
+      //     </Button>
+      //   ),
+      // },
     ]
   }, [chainId, data])
 

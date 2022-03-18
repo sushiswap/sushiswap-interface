@@ -8,6 +8,7 @@ import {
   getTridentPoolsQuery,
   poolDaySnapshotsQuery,
   poolHourSnapshotsQuery,
+  poolKpiQuery,
   poolKpisQuery,
 } from 'app/services/graph/queries'
 
@@ -182,26 +183,36 @@ export interface PoolKpi {
   feesUSD: number
   volume: number
   volumeUSD: number
-  liquidity: string
+  liquidity: number
   liquidityUSD: number
   transactionCount: number
 }
 
-const formatKpis = (kpis: PoolKpiQueryResult[]): PoolKpi[] =>
-  kpis.map(({ fees, feesUSD, volume, volumeUSD, liquidity, liquidityUSD, transactionCount }) => ({
-    fees: Number(fees),
-    feesUSD: Number(feesUSD),
-    volume: Number(volume),
-    volumeUSD: Number(volumeUSD),
-    liquidity,
-    liquidityUSD: Number(liquidityUSD),
-    transactionCount: Number(transactionCount),
-  }))
+const formatKpi = ({
+  fees,
+  feesUSD,
+  volume,
+  volumeUSD,
+  liquidity,
+  liquidityUSD,
+  transactionCount,
+}: PoolKpiQueryResult) => ({
+  fees: Number(fees),
+  feesUSD: Number(feesUSD),
+  volume: Number(volume),
+  volumeUSD: Number(volumeUSD),
+  liquidity: Number(liquidity),
+  liquidityUSD: Number(liquidityUSD),
+  transactionCount: Number(transactionCount),
+})
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getPoolKpis = async (chainId: ChainId = ChainId.ETHEREUM, variables): Promise<PoolKpi[]> => {
-  const result: PoolKpiQueryResult[] = Object.values(
-    await fetcher(chainId, poolKpisQuery, variables)
-  )?.[0] as PoolKpiQueryResult[]
-  return formatKpis(result)
+export const getPoolKpis = async (chainId: ChainId = ChainId.ETHEREUM, variables = {}): Promise<PoolKpi[]> => {
+  const result = Object.values(await fetcher(chainId, poolKpisQuery, variables))?.[0] as PoolKpiQueryResult[]
+  return result.map(formatKpi)
+}
+
+export const getPoolKpi = async (chainId: ChainId = ChainId.ETHEREUM, variables = {}): Promise<PoolKpi> => {
+  const result = Object.values(await fetcher(chainId, poolKpiQuery, variables))?.[0] as PoolKpiQueryResult
+  return formatKpi(result)
 }
