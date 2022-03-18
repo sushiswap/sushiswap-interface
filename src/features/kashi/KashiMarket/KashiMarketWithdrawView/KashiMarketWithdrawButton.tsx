@@ -40,8 +40,6 @@ export const KashiMarketWithdrawButton: FC<KashiMarketWithdrawButtonProps> = ({
     ? i18n._(t`Enter an amount`)
     : !balance
     ? i18n._(t`Loading balance`)
-    : withdrawAmount?.greaterThan(balance)
-    ? i18n._(t`Insufficient balance`)
     : ''
 
   const buttonText = error ? error : withdrawAmount?.greaterThan(ZERO) ? i18n._(t`Withdraw`) : ''
