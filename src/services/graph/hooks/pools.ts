@@ -1,4 +1,4 @@
-import { formatNumber, formatPercent } from 'app/functions'
+import { aprToApy, formatNumber, formatPercent } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useOneDayBlock, useTwoDayBlock } from 'app/services/graph'
 import stringify from 'fast-json-stable-stringify'
@@ -135,7 +135,15 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
     error: poolKpisError || oneDayPoolKpisError || twoDayPoolKpisError,
     data:
       poolKpis && oneDayPoolKpis && twoDayPoolKpis
-        ? oneDayPoolKpis.map((oneDayPoolKpi: any, i: number) => {
+        ? oneDayPoolKpis.map((el: any, i: number) => {
+            console.log({
+              kpi: poolKpis?.[i],
+              kpi2: oneDayPoolKpis?.[i],
+              apy: aprToApy(
+                ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) / poolKpis?.[i]?.liquidityUSD) * 100,
+                3650
+              ),
+            })
             return {
               volume: formatNumber(poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD, true, false),
               volume24hChange:
@@ -168,11 +176,6 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
               apy:
                 (Math.max(0, poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) * 365 * 100) /
                 poolKpis?.[i]?.liquidityUSD,
-
-              // apy: aprToApy(
-              //   ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) / poolKpis?.[i]?.liquidityUSD) * 100,
-              //   3650
-              // ),
             }
           })
         : [],
