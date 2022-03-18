@@ -94,7 +94,7 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
             onClick={() => requestSort('currentSupplyAPR')}
           >
             <Typography variant="sm" weight={700}>
-              {i18n._(t`Deposit APR`)}
+              {i18n._(t`Supply APR`)}
             </Typography>
             <SortIcon
               id={sortConfig.key}
