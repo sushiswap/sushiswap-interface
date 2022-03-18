@@ -1,7 +1,8 @@
 import { parseUnits } from '@ethersproject/units'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, JSBI } from '@sushiswap/core-sdk'
+import { CHAIN_KEY, CurrencyAmount, JSBI, Percent } from '@sushiswap/core-sdk'
+import MISO from '@sushiswap/miso/exports/all.json'
 import LoadingCircle from 'app/animation/loading-circle.json'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
@@ -10,12 +11,13 @@ import { AuctionCreationWizardInputFormatted } from 'app/features/miso/AuctionCr
 import useAuctionCreate from 'app/features/miso/context/hooks/useAuctionCreate'
 import useAuctionTemplateMap from 'app/features/miso/context/hooks/useAuctionTemplateMap'
 import useTokenTemplateMap from 'app/features/miso/context/hooks/useTokenTemplateMap'
-import { AuctionTemplate } from 'app/features/miso/context/types'
-import { getExplorerLink } from 'app/functions'
+import { AuctionTemplate, TokenSetup } from 'app/features/miso/context/types'
+import { getExplorerLink, shortenAddress } from 'app/functions'
+import { ApprovalState, useApproveCallback, useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import { useRouter } from 'next/router'
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 interface AuctionCreationWizardReviewModalProps {
   open: boolean
@@ -38,6 +40,18 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
   const { templateIdToLabel: tokenTemplateIdToLabel } = useTokenTemplateMap()
   const { templateIdToLabel } = useAuctionTemplateMap()
   const { initWizard, subscribe, unsubscribe } = useAuctionCreate()
+  const recipeContract = useContract(
+    // @ts-ignore TYPE NEEDS FIXING
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.AuctionCreation.address : undefined,
+    // @ts-ignore TYPE NEEDS FIXING
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.AuctionCreation.abi : undefined
+  )
+
+  const approveAmount = useMemo(
+    () => (data ? data.tokenAmount.add(data.tokenAmount.multiply(new Percent(data.liqPercentage, 10000))) : undefined),
+    [data]
+  )
+  const [approvalState, approve] = useApproveCallback(approveAmount, recipeContract?.address)
 
   const reset = useCallback(() => {
     if (!pending) {
@@ -123,34 +137,47 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
               <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
                 {tokenTemplateIdToLabel(data.tokenType)}
               </Typography>
-              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`Token Name`)}
-              </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
-                {data.tokenName}
-              </Typography>
-              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`Token Symbol`)}
-              </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
-                {data.tokenSymbol}
-              </Typography>
-              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`Auction Type`)}
-              </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
-                {templateIdToLabel(data.auctionType)}
-              </Typography>
-              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`Total Supply`)}
-              </Typography>
-              <Typography
-                weight={700}
-                variant="sm"
-                className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
-              >
-                {data.tokenSupply.toSignificant(6)} {data.tokenSupply.currency.symbol}
-              </Typography>
+              {data.tokenSetupType === TokenSetup.CREATE ? (
+                <>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Token Name`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                    {data.tokenName}
+                  </Typography>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Token Symbol`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                    {data.tokenSymbol}
+                  </Typography>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Auction Type`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                    {templateIdToLabel(data.auctionType)}
+                  </Typography>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Total Supply`)}
+                  </Typography>
+                  <Typography
+                    weight={700}
+                    variant="sm"
+                    className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
+                  >
+                    {data.tokenSupply?.toSignificant(6)} {data.tokenSupply?.currency.symbol}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Token Address`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                    {data.tokenAddress && shortenAddress(data.tokenAddress)}
+                  </Typography>
+                </>
+              )}
               <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
                 {i18n._(t`Tokens for sale`)}
               </Typography>
@@ -300,8 +327,27 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
           </HeadlessUIModal.Content>
           <HeadlessUIModal.Actions>
             <HeadlessUIModal.Action onClick={onDismiss}>{i18n._(t`Cancel`)}</HeadlessUIModal.Action>
+            {approvalState !== ApprovalState.APPROVED && data.tokenSetupType === TokenSetup.PROVIDE && (
+              <HeadlessUIModal.Action
+                main={true}
+                disabled={approvalState === ApprovalState.PENDING || pending}
+                {...((approvalState === ApprovalState.PENDING || pending) && {
+                  startIcon: (
+                    <div className="w-4 h-4 mr-1">
+                      <Lottie animationData={LoadingCircle} autoplay loop />
+                    </div>
+                  ),
+                })}
+                onClick={approve}
+              >
+                {i18n._(t`Approve`)}
+              </HeadlessUIModal.Action>
+            )}
             <HeadlessUIModal.Action
               main={true}
+              disabled={
+                (data.tokenSetupType === TokenSetup.PROVIDE && approvalState !== ApprovalState.APPROVED) || pending
+              }
               {...(pending && {
                 startIcon: (
                   <div className="w-4 h-4 mr-1">
@@ -309,7 +355,6 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
                   </div>
                 ),
               })}
-              disabled={pending}
               onClick={() => execute(data)}
             >
               {i18n._(t`Create Auction`)}

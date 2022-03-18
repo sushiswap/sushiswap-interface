@@ -1,10 +1,10 @@
-import { AddressZero } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
 import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, Token } from '@sushiswap/core-sdk'
 import {
   AuctionCreationWizardInput,
   AuctionCreationWizardInputFormatted,
 } from 'app/features/miso/AuctionCreationWizard/index'
+import { TokenSetup } from 'app/features/miso/context/types'
 import { toWei } from 'web3-utils'
 
 export const getPriceEntity = (price: string, auctionToken: Token, paymentToken: Currency) => {
@@ -21,12 +21,10 @@ export const getPriceEntity = (price: string, auctionToken: Token, paymentToken:
 
 export const formatCreationFormData = (
   data: AuctionCreationWizardInput,
-  paymentCurrency: Currency
+  paymentCurrency: Currency,
+  auctionToken: Token
 ): AuctionCreationWizardInputFormatted => {
-  const { tokenSymbol, tokenName, startDate, endDate, liqPercentage, whitelistAddresses, liqLockTime } = data
-
-  // This token is just for formatting numbers hence the AddressZero
-  const auctionToken = new Token(1, AddressZero, 18, tokenSymbol, tokenName)
+  const { startDate, endDate, liqPercentage, whitelistAddresses, liqLockTime } = data
 
   const [accounts, amounts] = whitelistAddresses.reduce<[string[], string[]]>(
     (acc, cur) => {
@@ -53,10 +51,13 @@ export const formatCreationFormData = (
     auctionToken,
     JSBI.BigInt(parseUnits(data.tokenAmount.toString(), auctionToken.decimals).toString())
   )
-  const tokenSupply = CurrencyAmount.fromRawAmount(
-    auctionToken,
-    JSBI.BigInt(parseUnits(data.tokenSupply.toString(), auctionToken.decimals).toString())
-  )
+  const tokenSupply =
+    data.tokenSetupType === TokenSetup.CREATE && data.tokenSupply
+      ? CurrencyAmount.fromRawAmount(
+          auctionToken,
+          JSBI.BigInt(parseUnits(data.tokenSupply.toString(), auctionToken.decimals).toString())
+        )
+      : undefined
   const minimumTarget =
     fixedPrice && tokenAmount && data.minimumTarget
       ? fixedPrice.quote(tokenAmount).multiply(new Percent(data.minimumTarget, '100'))

@@ -56,6 +56,6 @@ const Auction = () => {
 }
 
 Auction.Layout = MisoLayout
-Auction.Guard = NetworkGuard(Feature.MISO)
+Auction.Guard = NetworkGuard(Feature.MISO, false)
 
 export default Auction

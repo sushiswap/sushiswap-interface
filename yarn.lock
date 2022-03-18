@@ -2895,15 +2895,15 @@
     eip-712 "^0.4.0"
     isomorphic-unfetch "^3.0.0"
 
-"@sushiswap/miso-sdk@1.0.0-canary.60":
-  version "1.0.0-canary.60"
-  resolved "https://registry.yarnpkg.com/@sushiswap/miso-sdk/-/miso-sdk-1.0.0-canary.60.tgz#a3f3d993ae841bb37f5e6878ccb88023821cfb97"
-  integrity sha512-2+C4TA3izjUAdahS/kSb8Zou1OSrr6/IuWRBEUWqYGLrRiMwee4cxWC8Qa17Y+E/5UgFPZIPKivfV33A/vP/EQ==
+"@sushiswap/miso-sdk@1.0.0-canary.62":
+  version "1.0.0-canary.62"
+  resolved "https://registry.yarnpkg.com/@sushiswap/miso-sdk/-/miso-sdk-1.0.0-canary.62.tgz#1534e2904c0479ba7abc58e854bca2efaf32a961"
+  integrity sha512-DdngmjSjlUglda6/LxgCyvBWODczn533JYc/UlzrVXzZo3D4PEAnl6L7HFOLMme1IKts2olTPpH5iDuY2PWcbA==
 
-"@sushiswap/miso@1.0.0-canary.42":
-  version "1.0.0-canary.42"
-  resolved "https://registry.yarnpkg.com/@sushiswap/miso/-/miso-1.0.0-canary.42.tgz#b40aa96f2eb529b5c03a687cb731217450f57777"
-  integrity sha512-7eC5lrNoJ6xAPPU83HycBItL6IQ9KqvxBK6hiwhHOGIZPze9MmWIPi1P7IGRzeXjlEldwkP6CrcvlSiZ+xE7CA==
+"@sushiswap/miso@1.0.0-canary.45":
+  version "1.0.0-canary.45"
+  resolved "https://registry.yarnpkg.com/@sushiswap/miso/-/miso-1.0.0-canary.45.tgz#4d256b23150426ebf3756f63f47802316f8c9ddd"
+  integrity sha512-LtNP5CPnANHhVWoOSt90tAgWVetPOsWqAa88xdFCJfKbrmCSlUfTm6GZRFB1Ya7zNVNDDVMnOMKg4SekEZnAYA==
 
 "@sushiswap/sdk@^5.0.0-canary.109":
   version "5.0.0-canary.116"
