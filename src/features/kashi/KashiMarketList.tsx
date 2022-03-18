@@ -77,7 +77,7 @@ const KashiMarketList: FC<KashiMarketList> = () => {
             onClick={() => requestSort('currentBorrowAmount')}
           >
             <Typography variant="sm" weight={700}>
-              {i18n._(t`Total Borrowed`)}
+              {i18n._(t`Borrowed`)}
             </Typography>
             <SortIcon
               id={sortConfig.key}
