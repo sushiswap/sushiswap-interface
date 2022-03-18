@@ -23,7 +23,8 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
   const currentAllAssets = useMemo(() => CurrencyAmount.fromRawAmount(asset, market.currentAllAssets), [asset, market])
 
   // @ts-ignore
-  const { value: currentAllAssetsUSD, loading: currentAllAssetsUSDLoading } = useUSDCValueWithLoadingIndicator()
+  const { value: currentAllAssetsUSD, loading: currentAllAssetsUSDLoading } =
+    useUSDCValueWithLoadingIndicator(currentAllAssets)
 
   // @ts-ignore
   const currentBorrowAmount = useMemo(
@@ -38,6 +39,7 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
     () => CurrencyAmount.fromRawAmount(asset, market.currentUserAssetAmount),
     [asset, market]
   )
+
   const { value: currentUserAssetAmountUSD, loading: currentUserAssetAmountUSDLoading } =
     useUSDCValueWithLoadingIndicator(currentUserAssetAmount)
 
@@ -75,16 +77,6 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
       </div>
       <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(2, 6))}>
         <Typography weight={700} className="text-high-emphesis">
-          {formatNumber(currentAllAssets.toSignificant(6))} {market.asset.token.symbol}
-        </Typography>
-        <Typography variant="xs" className="text-low-emphesis">
-          {currentAllAssetsUSD && !currentAllAssetsUSDLoading
-            ? currencyFormatter.format(Number(currentAllAssetsUSD?.toExact()))
-            : '-'}
-        </Typography>
-      </div>
-      <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(3, 6))}>
-        <Typography weight={700} className="text-high-emphesis">
           {formatNumber(currentBorrowAmount.toSignificant(6))} {market.asset.token.symbol}
         </Typography>
         <Typography variant="xs" className="text-low-emphesis">
@@ -93,6 +85,17 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
             : '-'}
         </Typography>
       </div>
+      <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(3, 6))}>
+        <Typography weight={700} className="text-high-emphesis">
+          {formatNumber(currentAllAssets.toSignificant(6))} {market.asset.token.symbol}
+        </Typography>
+        <Typography variant="xs" className="text-low-emphesis">
+          {currentAllAssetsUSD && !currentAllAssetsUSDLoading
+            ? currencyFormatter.format(Number(currentAllAssetsUSD?.toExact()))
+            : '-'}
+        </Typography>
+      </div>
+
       <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(4, 6))}>
         <Typography weight={700} className="flex items-center text-high-emphesis">
           {formatPercent(utilization.toFixed(2))} <GradientDot percent={utilization.invert().toFixed(2)} />
