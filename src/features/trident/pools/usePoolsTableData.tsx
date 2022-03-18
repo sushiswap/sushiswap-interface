@@ -75,13 +75,6 @@ export const usePoolsTableData = () => {
         maxWidth: 100,
         // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
-          // const { data: stats } = useRollingPoolStats({
-          //   chainId,
-          //   variables: { where: { id_in: data?.map((el: any) => el.address.toLowerCase()) } },
-          //   shouldFetch: !!chainId && !!data,
-          // })
-          // return <span>{formatPercent(stats?.[row.id]?.apy)}</span>
-
           const oneDayBlock = useOneDayBlock({ chainId, shouldFetch: !!chainId })
           const { data: poolKpi } = usePoolKpi({
             chainId,
@@ -92,11 +85,7 @@ export const usePoolsTableData = () => {
             <span>
               {formatPercent(
                 // @ts-ignore TYPE NEEDS FIXING
-                (Math.max(0, data?.[props.row.id]?.volumeUSD - poolKpi?.volumeUSD) *
-                  // @ts-ignore TYPE NEEDS FIXING
-                  (data?.[props.row.id]?.swapFee / 10000) *
-                  365 *
-                  100) /
+                (Math.max(0, data?.[props.row.id]?.feesUSD - poolKpi?.feesUSD) * 365 * 100) /
                   // @ts-ignore TYPE NEEDS FIXING
                   data?.[props.row.id]?.liquidityUSD
               )}

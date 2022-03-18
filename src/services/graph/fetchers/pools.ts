@@ -208,11 +208,15 @@ const formatKpi = ({
 
 // @ts-ignore TYPE NEEDS FIXING
 export const getPoolKpis = async (chainId: ChainId = ChainId.ETHEREUM, variables = {}): Promise<PoolKpi[]> => {
-  const result = Object.values(await fetcher(chainId, poolKpisQuery, variables))?.[0] as PoolKpiQueryResult[]
+  const result: PoolKpiQueryResult[] = Object.values(
+    await fetcher(chainId, poolKpisQuery, variables)
+  )?.[0] as PoolKpiQueryResult[]
   return result.map(formatKpi)
 }
 
 export const getPoolKpi = async (chainId: ChainId = ChainId.ETHEREUM, variables = {}): Promise<PoolKpi> => {
-  const result = Object.values(await fetcher(chainId, poolKpiQuery, variables))?.[0] as PoolKpiQueryResult
+  const result: PoolKpiQueryResult = Object.values(
+    await fetcher(chainId, poolKpiQuery, variables)
+  )?.[0] as PoolKpiQueryResult
   return formatKpi(result)
 }
