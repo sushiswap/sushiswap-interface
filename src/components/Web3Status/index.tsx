@@ -69,9 +69,9 @@ function Web3StatusInner() {
             <Typography
               weight={700}
               variant="sm"
-              className="py-5 pl-10 pr-2 font-bold uppercase rounded-full text-inherit hover:text-white"
+              className="py-5 pl-10 pr-2 font-bold rounded-full text-inherit hover:text-white"
             >
-              {ENSName || shortenAddress(account)}
+              {ENSName ? ENSName.toUpperCase() : shortenAddress(account)}
             </Typography>
           </div>
         )}
