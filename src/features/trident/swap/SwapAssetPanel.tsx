@@ -32,6 +32,7 @@ interface SwapAssetPanel {
   selected?: boolean
   priceImpact?: Percent
   priceImpactCss?: string
+  inputDisabled?: boolean
   disabled?: boolean
   balancePanel?: (x: Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange' | 'spendFromWallet'>) => React.ReactNode
   hideInput?: boolean
@@ -52,6 +53,7 @@ const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAsse
       priceImpact,
       priceImpactCss,
       disabled,
+      inputDisabled,
       currencies,
       balancePanel,
       hideInput,
@@ -87,7 +89,7 @@ const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAsse
                 currencies,
                 value,
                 onChange,
-                disabled,
+                inputDisabled,
                 onSelect,
                 priceImpact,
                 priceImpactCss,
@@ -146,10 +148,10 @@ const WalletSwitch: FC<
 }
 
 const InputPanel: FC<
-  Pick<SwapAssetPanel, 'currency' | 'value' | 'onChange' | 'disabled' | 'priceImpact'> & {
+  Pick<SwapAssetPanel, 'currency' | 'value' | 'onChange' | 'priceImpact' | 'inputDisabled'> & {
     priceImpactCss?: string
   }
-> = forwardRef(({ currency, value, onChange, disabled, priceImpact, priceImpactCss }, ref) => {
+> = forwardRef(({ currency, value, onChange, inputDisabled, priceImpact, priceImpactCss }, ref) => {
   const usdcValue = useUSDCValue(tryParseAmount(value || '1', currency))
   const span = useRef<HTMLSpanElement | null>(null)
   const [width, setWidth] = useState(0)
@@ -174,7 +176,7 @@ const InputPanel: FC<
     <Typography weight={700} variant="h3" className="relative flex items-baseline flex-grow gap-3 overflow-hidden">
       <NumericalInput
         ref={ref}
-        disabled={disabled}
+        disabled={inputDisabled}
         value={value || ''}
         onUserInput={onChange}
         placeholder="0.00"
