@@ -49,7 +49,7 @@ export const KashiMarketWithdrawView: FC = () => {
         )}
         spendFromWallet={receiveToWallet}
         currency={assetToken}
-        value={withdrawAmount}
+        value={withdrawAmountCurrencyAmount?.toSignificant(6)}
         onChange={(val) => {
           setWithdrawAmount(val)
           setRemoveMax(false)
