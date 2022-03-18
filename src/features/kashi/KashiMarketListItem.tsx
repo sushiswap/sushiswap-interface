@@ -66,7 +66,7 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
             </Typography>
           </div>
         </div>
-        <div className={classNames('flex flex-col !items-end !justify-center', TABLE_TBODY_TD_CLASSNAME(1, 7))}>
+        <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(1, 7))}>
           <Typography weight={700} className="text-high-emphesis">
             {formatNumber(currentAllAssets?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
@@ -76,7 +76,7 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
               : '-'}
           </Typography> */}
         </div>
-        <div className={classNames('flex flex-col !items-end !justify-center', TABLE_TBODY_TD_CLASSNAME(2, 7))}>
+        <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(2, 7))}>
           <Typography weight={700} className="text-high-emphesis">
             {formatNumber(currentBorrowAmount?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
@@ -96,7 +96,7 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
           </Typography>
         </div>
 
-        <div className={classNames('flex flex-col !items-end !justify-center', TABLE_TBODY_TD_CLASSNAME(4, 7))}>
+        <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(4, 7))}>
           <Typography weight={700} className="text-high-emphesis">
             {formatNumber(totalAssetAmount?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
