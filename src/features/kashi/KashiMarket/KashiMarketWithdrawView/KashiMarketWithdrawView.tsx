@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount } from '@sushiswap/core-sdk'
+import { CurrencyAmount, minimum } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import {
   KashiMarketCurrentLentPosition,
@@ -10,7 +10,7 @@ import {
 } from 'app/features/kashi/KashiMarket'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import { tryParseAmount, unwrappedToken } from 'app/functions'
-import React, { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 
 import { KashiMarketLentDetailsView } from '../KashiMarketLentDetailsView'
 
@@ -23,7 +23,15 @@ export const KashiMarketWithdrawView: FC = () => {
 
   const assetToken = unwrappedToken(market.asset.token)
   const withdrawAmountCurrencyAmount = tryParseAmount(withdrawAmount, assetToken)
-  const currentLent = CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserAssetAmount)
+
+  const max = useMemo(
+    () =>
+      CurrencyAmount.fromRawAmount(
+        market.asset.token,
+        minimum(market.maxAssetAvailable, market.currentUserAssetAmount)
+      ),
+    [market.asset.token, market.currentUserAssetAmount, market.maxAssetAvailable]
+  )
 
   return (
     <div className="flex flex-col gap-3">
@@ -46,17 +54,16 @@ export const KashiMarketWithdrawView: FC = () => {
           setWithdrawAmount(val)
           setRemoveMax(false)
         }}
-        currencies={[]}
         balancePanel={({ onChange }) => (
           <Typography
             variant="sm"
             className="text-right text-secondary"
             onClick={() => {
-              onChange(currentLent?.toExact())
+              onChange(max?.toExact())
               setRemoveMax(true)
             }}
           >
-            Max: {currentLent?.toSignificant(6)}
+            Max: {max?.toSignificant(6)}
           </Typography>
         )}
       />
