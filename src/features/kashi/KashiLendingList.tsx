@@ -26,14 +26,14 @@ export const KashiLendingList = () => {
   return (
     <div className="flex flex-col w-full gap-3">
       <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME)}>
-        <div className="grid grid-cols-7 min-w-[768px]">
-          <div className={classNames('flex gap-1 items-center cursor-pointer', TABLE_TR_TH_CLASSNAME(0, 7))}>
+        <div className="grid grid-cols-6 min-w-[768px]">
+          <div className={classNames('flex gap-1 items-center cursor-pointer', TABLE_TR_TH_CLASSNAME(0, 6))}>
             <Typography variant="sm" weight={700}>
               {i18n._(t`Asset / Collateral`)}
             </Typography>
           </div>
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(1, 7))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(1, 6))}
           >
             <Typography variant="sm" weight={700} onClick={() => requestSort('currentUserAssetAmount')}>
               {i18n._(t`Supplied`)}
@@ -44,21 +44,9 @@ export const KashiLendingList = () => {
               active={sortConfig.key === 'currentUserAssetAmount'}
             />
           </div>
-          <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(2, 7))}
-          >
-            <Typography variant="sm" weight={700} onClick={() => requestSort('currentAllAssets')}>
-              {i18n._(t`Market Size`)}
-            </Typography>
-            <SortIcon
-              id={sortConfig.key}
-              direction={sortConfig.direction}
-              active={sortConfig.key === 'currentAllAssets'}
-            />
-          </div>
-          <div className={classNames(TABLE_TR_TH_CLASSNAME(3, 7))} onClick={() => requestSort('currentBorrowAmount')}>
+          <div className={classNames(TABLE_TR_TH_CLASSNAME(2, 6))} onClick={() => requestSort('currentBorrowAmount')}>
             <Typography variant="sm" weight={700}>
-              {i18n._(t`Total Borrowed`)}
+              {i18n._(t`Borrowed`)}
             </Typography>
             <SortIcon
               id={sortConfig.key}
@@ -66,7 +54,7 @@ export const KashiLendingList = () => {
               active={sortConfig.key === 'currentBorrowAmount'}
             />
           </div>
-          <div className={classNames(TABLE_TR_TH_CLASSNAME(4, 7))} onClick={() => requestSort('totalAssetAmount')}>
+          <div className={classNames(TABLE_TR_TH_CLASSNAME(3, 6))} onClick={() => requestSort('totalAssetAmount')}>
             <Typography variant="sm" weight={700}>
               {i18n._(t`Available`)}
             </Typography>
@@ -77,7 +65,7 @@ export const KashiLendingList = () => {
             />
           </div>
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(5, 7))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(4, 6))}
             onClick={() => requestSort('utilization')}
           >
             <Typography variant="sm" weight={700}>
@@ -86,7 +74,7 @@ export const KashiLendingList = () => {
             <SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'utilization'} />
           </div>
           <div
-            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(6, 7))}
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(5, 6))}
             onClick={() => requestSort('currentSupplyAPR')}
           >
             <Typography variant="sm" weight={700}>

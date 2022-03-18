@@ -167,7 +167,7 @@ export function useKashiMediumRiskLendingPairs(
   const boringHelperContract = useBoringHelperContract()
   const tokens = useKashiTokens()
   const args = useMemo(() => [account ? account : AddressZero, addresses], [account, addresses])
-  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args, { blocksPerFetch: 10 })
+  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args)
   const { rebases } = useBentoRebases(useMemo(() => Object.values(tokens), [tokens]))
 
   // TODO: for skeleton loading
