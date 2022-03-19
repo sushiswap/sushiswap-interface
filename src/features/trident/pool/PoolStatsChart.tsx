@@ -35,6 +35,7 @@ const PoolStatsChart = () => {
   const isDesktop = useDesktopMediaQuery()
   const { chainId } = useActiveWeb3React()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Volume)
+  // TODO: Move this back up in a couple weeks...
   const [chartRange, setChartRange] = useState<ChartRange>(ChartRange['1W'])
   const { poolWithState } = usePoolContext()
 
