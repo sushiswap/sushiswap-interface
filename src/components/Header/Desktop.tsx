@@ -38,8 +38,6 @@ const Desktop: FC = () => {
               </div>
 
               <div className="flex items-center justify-end w-auto shadow select-none whitespace-nowrap">
-                <Web3Status />
-
                 {account && chainId && (
                   <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
                     {userEthBalance ? (
@@ -55,6 +53,8 @@ const Desktop: FC = () => {
                     <Web3Network />
                   </div>
                 )}
+
+                <Web3Status />
 
                 {/* <svg
                   xmlns="http://www.w3.org/2000/svg"

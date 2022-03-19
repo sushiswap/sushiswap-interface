@@ -56,6 +56,14 @@ function Web3StatusInner() {
           </div>
         ) : (
           <div className="relative flex items-center gap-2 cursor-pointer pointer-events-auto">
+            <Typography
+              weight={700}
+              variant="sm"
+              className="px-2 py-5 font-bold rounded-full text-inherit hover:text-white"
+            >
+              {ENSName ? ENSName.toUpperCase() : shortenAddress(account)}
+            </Typography>
+
             <Davatar
               size={24}
               address={account}
@@ -70,14 +78,6 @@ function Web3StatusInner() {
               }
               provider={library}
             />
-
-            <Typography
-              weight={700}
-              variant="sm"
-              className="px-2 py-5 font-bold rounded-full text-inherit hover:text-white"
-            >
-              {ENSName ? ENSName.toUpperCase() : shortenAddress(account)}
-            </Typography>
           </div>
         )}
         {/* {!hasPendingTransactions && connector && (
