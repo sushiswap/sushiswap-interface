@@ -6,7 +6,8 @@ import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import React from 'react'
 
 const LiquidityPosition = () => {
-  const account = useAccountInUrl('/portfolio')
+  const account = useAccountInUrl('/')
+
   if (!account) return
 
   return (

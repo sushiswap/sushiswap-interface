@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useWeb3ReactManager } from '@web3-react/core/dist/manager'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
 import { useCompletedOrdersTableConfig } from 'app/features/legacy/limit-order/useCompletedOrdersTableConfig'
@@ -18,6 +19,7 @@ import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
+  const { account } = useWeb3ReactManager()
   const { completed } = useLimitOrders()
   const { config } = useCompletedOrdersTableConfig({ orders: completed.data })
 
@@ -97,7 +99,7 @@ const CompletedOrders: FC = () => {
               >
                 <Typography variant="xs" className="italic text-center text-low-emphesis">
                   Funds will be received in your{' '}
-                  <Link href="/portfolio" passHref={true}>
+                  <Link href={`/account/${account}`} passHref={true}>
                     <Typography variant="xs" className="text-blue" component="span">
                       BentoBox
                     </Typography>

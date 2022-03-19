@@ -40,7 +40,7 @@ export const AvailableToMigrate: FC = () => {
         {account && pairs.length === 0 && !loading && (
           <>
             <div>{i18n._(t`You have no pools available for migration`)}</div>
-            <Button className="w-max" size="sm" onClick={() => router.push('/portfolio')}>
+            <Button className="w-max" size="sm" onClick={() => router.push(`/account/${account}`)}>
               {i18n._(t`Go to your wallet`)}
             </Button>
           </>
