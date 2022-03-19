@@ -238,63 +238,71 @@ const NetworkModal: FC = () => {
             ChainId.OKEX,
             ChainId.HECO,
             ChainId.PALM,
-          ].map((key: ChainId, i: number) => {
-            if (chainId === key) {
+          ]
+            .sort((key) => (chainId === key ? -1 : 0))
+            .map((key: ChainId, i: number) => {
+              if (chainId === key) {
+                return (
+                  <div
+                    key={i}
+                    className="bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-purple cursor-default"
+                  >
+                    <Image
+                      // @ts-ignore TYPE NEEDS FIXING
+                      src={NETWORK_ICON[key]}
+                      alt="Switch Network"
+                      className="rounded-full"
+                      width="32px"
+                      height="32px"
+                    />
+                    <Typography weight={700} className="text-high-emphesis">
+                      {NETWORK_LABEL[key]}
+                    </Typography>
+                  </div>
+                )
+              }
               return (
-                <div
+                <button
                   key={i}
-                  className="bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-purple cursor-default"
+                  onClick={async () => {
+                    console.debug(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
+                    toggleNetworkModal()
+                    const params = SUPPORTED_NETWORKS[key]
+                    try {
+                      await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
+                    } catch (switchError) {
+                      // This error code indicates that the chain has not been added to MetaMask.
+                      // @ts-ignore TYPE NEEDS FIXING
+                      if (switchError.code === 4902) {
+                        try {
+                          await library?.send('wallet_addEthereumChain', [params, account])
+                        } catch (addError) {
+                          // handle "add" error
+                          console.error(`Add chain error ${addError}`)
+                        }
+                      }
+                      console.error(`Switch chain error ${switchError}`)
+                      // handle other "switch" errors
+                    }
+                  }}
+                  className={classNames(
+                    'bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-dark-700 hover:border-blue'
+                  )}
                 >
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   <Image
-                    // @ts-ignore TYPE NEEDS FIXING
                     src={NETWORK_ICON[key]}
                     alt="Switch Network"
-                    className="rounded-md"
+                    className="rounded-full"
                     width="32px"
                     height="32px"
                   />
                   <Typography weight={700} className="text-high-emphesis">
                     {NETWORK_LABEL[key]}
                   </Typography>
-                </div>
+                </button>
               )
-            }
-            return (
-              <button
-                key={i}
-                onClick={async () => {
-                  console.debug(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
-                  toggleNetworkModal()
-                  const params = SUPPORTED_NETWORKS[key]
-                  try {
-                    await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
-                  } catch (switchError) {
-                    // This error code indicates that the chain has not been added to MetaMask.
-                    // @ts-ignore TYPE NEEDS FIXING
-                    if (switchError.code === 4902) {
-                      try {
-                        await library?.send('wallet_addEthereumChain', [params, account])
-                      } catch (addError) {
-                        // handle "add" error
-                        console.error(`Add chain error ${addError}`)
-                      }
-                    }
-                    console.error(`Switch chain error ${switchError}`)
-                    // handle other "switch" errors
-                  }
-                }}
-                className={classNames(
-                  'bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-dark-700 hover:border-blue'
-                )}
-              >
-                {/*@ts-ignore TYPE NEEDS FIXING*/}
-                <Image src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md" width="32px" height="32px" />
-                <Typography weight={700} className="text-high-emphesis">
-                  {NETWORK_LABEL[key]}
-                </Typography>
-              </button>
-            )
-          })}
+            })}
         </div>
       </div>
     </HeadlessUiModal.Controlled>

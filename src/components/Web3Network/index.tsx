@@ -19,7 +19,7 @@ function Web3Network(): JSX.Element | null {
     >
       <div className="grid items-center grid-flow-col justify-center h-[36px] w-[36px] text-sm rounded pointer-events-auto auto-cols-max text-secondary">
         {/*@ts-ignore TYPE NEEDS FIXING*/}
-        <Image src={NETWORK_ICON[chainId]} alt="Switch Network" className="rounded-md" width="24px" height="24px" />
+        <Image src={NETWORK_ICON[chainId]} alt="Switch Network" className="rounded-full" width="24px" height="24px" />
       </div>
       <NetworkModel />
     </div>
