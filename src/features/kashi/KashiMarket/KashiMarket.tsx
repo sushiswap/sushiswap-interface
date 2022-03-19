@@ -10,20 +10,23 @@ import {
   KashiMarketWithdrawView,
 } from 'app/features/kashi/KashiMarket'
 import { SwapLayoutCard } from 'app/layouts/SwapLayout'
+import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
 
 interface KashiMarketProps {}
 
 export enum KashiMarketView {
-  DEPOSIT,
-  WITHDRAW,
-  BORROW,
-  REPAY,
+  DEPOSIT = 'deposit',
+  WITHDRAW = 'withdraw',
+  BORROW = 'borrow',
+  REPAY = 'repay',
 }
 
 export const KashiMarket: FC<KashiMarketProps> = () => {
   const { i18n } = useLingui()
-  const [view, setView] = useState<KashiMarketView>(KashiMarketView.BORROW)
+  const router = useRouter()
+
+  const [view, setView] = useState((router.query.view as string) || KashiMarketView.BORROW)
 
   return (
     <SwapLayoutCard>
