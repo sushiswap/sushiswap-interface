@@ -45,6 +45,8 @@ const PoolStats: FC<PoolStatsProps> = () => {
     },
   ]
 
+  console.log({ stats })
+
   return (
     <div className="flex flex-col gap-3 lg:grid lg:grid-cols-4">
       {items.map(({ label, value, change }, index) => (
@@ -71,7 +73,7 @@ const PoolStats: FC<PoolStatsProps> = () => {
               )}
             >
               {/*@ts-ignore TYPE NEEDS FIXING*/}
-              {formatPercent(stats?.[0]?.[change], 'NEW')}
+              {formatPercent(stats?.[0]?.[change])}
             </Typography>
           </div>
         </div>

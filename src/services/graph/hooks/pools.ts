@@ -133,44 +133,66 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
   return {
     isValidating: poolKpisIsValidating || oneDayPoolKpisIsValidating || twoDayPoolKpisIsValidating,
     error: poolKpisError || oneDayPoolKpisError || twoDayPoolKpisError,
-    data:
-      poolKpis && oneDayPoolKpis && twoDayPoolKpis
-        ? oneDayPoolKpis.map((el: any, i: number) => {
-            return {
-              volume: formatNumber(poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD, true, false),
-              volume24hChange:
-                ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) /
-                  (oneDayPoolKpis?.[i]?.volumeUSD - twoDayPoolKpis?.[i]?.volumeUSD)) *
-                  100 -
-                100,
-              fees: formatNumber(poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD, true, false),
-              fees24hChange:
-                ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) /
-                  (oneDayPoolKpis?.[i]?.feesUSD - twoDayPoolKpis?.[i]?.feesUSD)) *
-                  100 -
-                100,
-              liquidity: formatPercent(
-                ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) / poolKpis?.[i]?.liquidityUSD) * 100
-              ),
-              liquidity24hChange:
-                ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) /
-                  poolKpis?.[i]?.liquidityUSD /
-                  ((oneDayPoolKpis?.[i]?.volumeUSD - twoDayPoolKpis?.[i]?.volumeUSD) /
-                    oneDayPoolKpis?.[i]?.liquidityUSD)) *
-                  100 -
-                100,
-              transactions: poolKpis?.[i]?.transactionCount - oneDayPoolKpis?.[i]?.transactionCount,
-              transactions24hChange:
-                ((poolKpis?.[i]?.transactionCount - oneDayPoolKpis?.[i]?.transactionCount) /
-                  (oneDayPoolKpis?.[i]?.transactionCount - twoDayPoolKpis?.[i]?.transactionCount)) *
-                  100 -
-                100,
-              apy:
-                (Math.max(0, poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) * 365 * 100) /
-                poolKpis?.[i]?.liquidityUSD,
-            }
-          })
-        : [],
+    data: poolKpis?.map((poolKpi: any) => {
+      const oneDayPoolKpi = oneDayPoolKpis?.find((oneDayPoolKpi: any) => oneDayPoolKpi.id === poolKpi.id)
+      const twoDayPoolKpi = twoDayPoolKpis?.find((twoDayPoolKpi: any) => twoDayPoolKpi.id === poolKpi.id)
+
+      const volume = formatNumber(
+        oneDayPoolKpi?.volumeUSD ? poolKpi.volumeUSD - oneDayPoolKpi.volumeUSD : poolKpi.volumeUSD,
+        true,
+        false
+      )
+
+      const volume24hChange =
+        ((poolKpi?.volumeUSD - oneDayPoolKpi?.volumeUSD) / (oneDayPoolKpi?.volumeUSD - twoDayPoolKpi?.volumeUSD)) *
+          100 -
+        100
+
+      const fees = formatNumber(
+        oneDayPoolKpi ? poolKpi?.feesUSD - oneDayPoolKpi?.feesUSD : poolKpi?.feesUSD,
+        true,
+        false
+      )
+
+      const fees24hChange =
+        ((poolKpi?.feesUSD - oneDayPoolKpi?.feesUSD) / (oneDayPoolKpi?.feesUSD - twoDayPoolKpi?.feesUSD)) * 100 - 100
+
+      const liquidity = formatPercent(
+        ((oneDayPoolKpi ? poolKpi?.volumeUSD - oneDayPoolKpi?.volumeUSD : poolKpi?.volumeUSD) / poolKpi?.liquidityUSD) *
+          100
+      )
+
+      const transactions = oneDayPoolKpi
+        ? poolKpi.transactionCount - oneDayPoolKpi.transactionCount
+        : poolKpi.transactionCount
+
+      const apy =
+        poolKpi.liquidityUSD > 0
+          ? (Math.max(0, oneDayPoolKpi ? poolKpi?.feesUSD - oneDayPoolKpi?.feesUSD : poolKpi?.feesUSD) * 365 * 100) /
+            poolKpi?.liquidityUSD
+          : 0
+
+      return {
+        volume,
+        volume24hChange,
+        fees,
+        fees24hChange,
+        liquidity,
+        liquidity24hChange:
+          ((poolKpi?.volumeUSD - oneDayPoolKpi?.volumeUSD) /
+            poolKpi?.liquidityUSD /
+            ((oneDayPoolKpi?.volumeUSD - twoDayPoolKpi?.volumeUSD) / oneDayPoolKpi?.liquidityUSD)) *
+            100 -
+          100,
+        transactions,
+        transactions24hChange:
+          ((poolKpi?.transactionCount - oneDayPoolKpi?.transactionCount) /
+            (oneDayPoolKpi?.transactionCount - twoDayPoolKpi?.transactionCount)) *
+            100 -
+          100,
+        apy,
+      }
+    }),
   }
 }
 

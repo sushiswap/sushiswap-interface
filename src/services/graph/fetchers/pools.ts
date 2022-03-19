@@ -169,6 +169,7 @@ export const getTridentPoolTransactions = async (chainId: ChainId = ChainId.ETHE
 }
 
 export interface PoolKpiQueryResult {
+  id: string
   fees: string
   feesUSD: string
   volume: string
@@ -179,6 +180,7 @@ export interface PoolKpiQueryResult {
 }
 
 export interface PoolKpi {
+  id: string
   fees: number
   feesUSD: number
   volume: number
@@ -189,6 +191,7 @@ export interface PoolKpi {
 }
 
 const formatKpi = ({
+  id,
   fees,
   feesUSD,
   volume,
@@ -197,6 +200,7 @@ const formatKpi = ({
   liquidityUSD,
   transactionCount,
 }: PoolKpiQueryResult) => ({
+  id,
   fees: Number(fees),
   feesUSD: Number(feesUSD),
   volume: Number(volume),

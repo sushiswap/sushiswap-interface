@@ -76,13 +76,20 @@ export const usePoolsTableData = () => {
         // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
           const oneDayBlock = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-          const { data: poolKpi } = usePoolKpi({
+          const { data: oneDayPoolKpi } = usePoolKpi({
             chainId,
             variables: { block: oneDayBlock, id: data?.[props.row.id].address },
           })
 
           const percent = // @ts-ignore TYPE NEEDS FIXING
-            (Math.max(0, data?.[props.row.id]?.volumeUSD - poolKpi?.volumeUSD) *
+            (Math.max(
+              0,
+              // @ts-ignore TYPE NEEDS FIXING
+              oneDayPoolKpi
+                ? // @ts-ignore TYPE NEEDS FIXING
+                  data?.[props.row.id]?.volumeUSD - oneDayPoolKpi?.volumeUSD
+                : data?.[props.row.id]?.volumeUSD
+            ) *
               // @ts-ignore TYPE NEEDS FIXING
               (data?.[props.row.id]?.swapFee / 10000) *
               365 *
