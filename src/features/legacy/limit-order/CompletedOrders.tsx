@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useWeb3ReactManager } from '@web3-react/core/dist/manager'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
 import { useCompletedOrdersTableConfig } from 'app/features/legacy/limit-order/useCompletedOrdersTableConfig'
@@ -13,13 +12,14 @@ import {
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import React, { FC } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
-  const { account } = useWeb3ReactManager()
+  const { account } = useActiveWeb3React()
   const { completed } = useLimitOrders()
   const { config } = useCompletedOrdersTableConfig({ orders: completed.data })
 
