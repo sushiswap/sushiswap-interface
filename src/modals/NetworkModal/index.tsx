@@ -12,8 +12,9 @@ import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks
 import Image from 'next/image'
 import React, { FC } from 'react'
 
-export const SUPPORTED_NETWORKS: {
-  [key: number]: {
+export const SUPPORTED_NETWORKS: Record<
+  number,
+  {
     chainId: string
     chainName: string
     nativeCurrency: {
@@ -24,7 +25,7 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: string[]
     blockExplorerUrls: string[]
   }
-} = {
+> = {
   [ChainId.ETHEREUM]: {
     chainId: '0x1',
     chainName: 'Ethereum',
@@ -240,7 +241,7 @@ const NetworkModal: FC = () => {
             ChainId.PALM,
           ]
             .sort((key) => (chainId === key ? -1 : 0))
-            .map((key: ChainId, i: number) => {
+            .map((key: number, i: number) => {
               if (chainId === key) {
                 return (
                   <div
