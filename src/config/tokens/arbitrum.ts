@@ -42,10 +42,4 @@ export const FLUID = new Token(ChainId.ARBITRUM, '0x876Ec6bE52486Eeec06bc06434f3
 export const MAGIC = new Token(ChainId.ARBITRUM, '0x539bdE0d7Dbd336b79148AA742883198BBF60342', 18, 'MAGIC', 'MAGIC')
 export const FRAX = new Token(ChainId.ARBITRUM, '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F', 18, 'FRAX', 'Frax')
 export const FXS = new Token(ChainId.ARBITRUM, '0x9d2F299715D94d8A7E6F5eaa8E654E8c74a988A7', 18, 'FXS', 'Frax Share')
-export const STG = new Token(
-  ChainId.ARBITRUM,
-  '0x6694340fc020c5E6B96567843da2df01b2CE1eb6',
-  18,
-  'STG',
-  'Frax StargateToken'
-)
+export const STG = new Token(ChainId.ARBITRUM, '0x6694340fc020c5E6B96567843da2df01b2CE1eb6', 18, 'STG', 'StargateToken')

@@ -21,10 +21,4 @@ export const ICE = new Token(ChainId.FANTOM, '0xf16e81dce15B08F326220742020379B8
 export const SPELL = new Token(ChainId.FANTOM, '0x468003B688943977e6130F4F68F23aad939a1040', 18, 'SPELL', 'SpellToken')
 export const FRAX = new Token(ChainId.FANTOM, '0xdc301622e621166BD8E82f2cA0A26c13Ad0BE355', 18, 'FRAX', 'Frax')
 export const FXS = new Token(ChainId.FANTOM, '0x7d016eec9c25232b01F23EF992D98ca97fc2AF5a', 18, 'FXS', 'Frax Share')
-export const STG = new Token(
-  ChainId.FANTOM,
-  '0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590',
-  18,
-  'STG',
-  'Frax StargateToken'
-)
+export const STG = new Token(ChainId.FANTOM, '0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590', 18, 'STG', 'StargateToken')
