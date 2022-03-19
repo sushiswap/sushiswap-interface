@@ -36,25 +36,26 @@ const Desktop: FC = () => {
                   return <NavigationItem node={node} key={node.key} />
                 })}
               </div>
-              <div className="flex items-center justify-end gap-2">
-                <div className="flex items-center w-auto shadow select-none whitespace-nowrap">
-                  <Web3Status />
 
-                  {account && chainId && (
-                    <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
-                      {userEthBalance ? (
-                        `${userEthBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
-                      ) : (
-                        <Dots>Loading {NATIVE[chainId].symbol}</Dots>
-                      )}
-                    </Typography>
-                  )}
-                </div>
+              <div className="flex items-center justify-end w-auto shadow select-none whitespace-nowrap">
+                <Web3Status />
+
+                {account && chainId && (
+                  <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
+                    {userEthBalance ? (
+                      `${userEthBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
+                    ) : (
+                      <Dots>FETCHING</Dots>
+                    )}
+                  </Typography>
+                )}
+
                 {library && (library.provider.isMetaMask || isCoinbaseWallet) && (
                   <div className="hidden sm:inline-block">
                     <Web3Network />
                   </div>
                 )}
+
                 {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-6 h-6"

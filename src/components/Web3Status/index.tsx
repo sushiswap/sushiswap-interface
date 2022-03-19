@@ -25,7 +25,7 @@ function Web3StatusInner() {
   const { i18n } = useLingui()
   const { account, library } = useWeb3React()
 
-  const { ENSName } = useENSName(account ?? undefined)
+  const { ENSName, loading } = useENSName(account ?? undefined)
 
   const allTransactions = useAllTransactions()
 
@@ -60,16 +60,21 @@ function Web3StatusInner() {
               size={24}
               address={account}
               defaultComponent={
-                <Image src="https://app.sushi.com/images/chef.svg" alt="Sushi Chef" width={20} height={20} />
+                <Image
+                  src="https://app.sushi.com/images/chef.svg"
+                  alt="Sushi Chef"
+                  width={24}
+                  height={24}
+                  className="rounded-full pointer-events-none"
+                />
               }
-              style={{ borderRadius: 9999, pointerEvents: 'none', position: 'absolute', left: 0 }}
               provider={library}
             />
 
             <Typography
               weight={700}
               variant="sm"
-              className="py-5 pl-10 pr-2 font-bold rounded-full text-inherit hover:text-white"
+              className="px-2 py-5 font-bold rounded-full text-inherit hover:text-white"
             >
               {ENSName ? ENSName.toUpperCase() : shortenAddress(account)}
             </Typography>
