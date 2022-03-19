@@ -46,7 +46,7 @@ export const DiscoverHeader: FC = () => {
 
         <Link href="/trident/create" passHref={true}>
           <Button id="btn-create-new-pool" size="sm">
-            {i18n._(t`Create New Pool`)}
+            {i18n._(t`Create Pool`)}
           </Button>
         </Link>
       </div>

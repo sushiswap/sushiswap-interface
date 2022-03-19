@@ -55,7 +55,7 @@ export const CreatePoolOption: FC<OptionProps> = ({ selectedPoolConfig, allPoolC
       onClick={() => !selectedPoolConfig && setFunc(allPoolConfigs[0])}
     >
       <div>
-        {i18n._(t`Create New Pool`)} {!selectedPoolConfig && '→'}
+        {i18n._(t`Create Pool`)} {!selectedPoolConfig && '→'}
       </div>
       {selectedPoolConfig && (
         <>
@@ -64,7 +64,7 @@ export const CreatePoolOption: FC<OptionProps> = ({ selectedPoolConfig, allPoolC
             .map((pool) => pool.fee)
             .filter(deDupe)
             .map((fee) => (
-              <div className="flex gap-2 items-center" key={fee}>
+              <div className="flex items-center gap-2" key={fee}>
                 <Checkbox
                   checked={fee == selectedPoolConfig.fee}
                   set={(enable) => {
@@ -75,7 +75,7 @@ export const CreatePoolOption: FC<OptionProps> = ({ selectedPoolConfig, allPoolC
               </div>
             ))}
           <div>{i18n._(t`TWAP`)}</div>
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2">
             <Checkbox
               checked={selectedPoolConfig.twap}
               set={() => setTwapOption(allPoolConfigs, selectedPoolConfig, setFunc)}
