@@ -37,7 +37,7 @@ export const DiscoverHeader: FC = () => {
       </div>
       <div className="flex gap-3">
         {account && (
-          <Link href={`/portfolio/${account}/liquidity`} passHref={true}>
+          <Link href={`/account/${account}/liquidity`} passHref={true}>
             <Button color="blue" size="sm">
               {i18n._(t`My Positions`)}
             </Button>
