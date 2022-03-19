@@ -5,7 +5,7 @@ import { BentoBalances, WalletBalances } from 'app/features/portfolio/AssetBalan
 import HeaderDropdown from 'app/features/portfolio/HeaderDropdown'
 import { useAccountInUrl } from 'app/features/portfolio/useAccountInUrl'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
-import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 import React from 'react'
 
 const Portfolio = () => {
@@ -17,14 +17,7 @@ const Portfolio = () => {
 
   return (
     <>
-      <Head>
-        <title>{i18n._(t`Portfolio`)} | Sushi</title>
-        <meta
-          key="description"
-          name="description"
-          content="Get a summary of all of the balances in your portfolio on Sushi."
-        />
-      </Head>
+      <NextSeo title={`${i18n._(t`Account`)} ${account}`} />
       <TridentHeader pattern="bg-chevron">
         <HeaderDropdown account={account} />
       </TridentHeader>
