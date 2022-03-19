@@ -30,3 +30,10 @@ export const MIM = new Token(
 )
 export const ICE = new Token(ChainId.MATIC, '0x4e1581f01046eFDd7a1a2CDB0F82cdd7F71F2E59', 18, 'ICE', 'IceToken')
 export const gOHM = new Token(ChainId.MATIC, '0xd8cA34fd379d9ca3C6Ee3b3905678320F5b45195', 18, 'gOHM', 'Governance OHM')
+export const STG = new Token(
+  ChainId.MATIC,
+  '0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590',
+  18,
+  'STG',
+  'Frax StargateToken'
+)
