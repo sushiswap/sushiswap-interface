@@ -168,8 +168,8 @@ const useMenu: UseMenu = () => {
             link: '/miso',
           },
           {
-            key: 'launch',
-            title: i18n._(t`Launch`),
+            key: 'launchpad',
+            title: i18n._(t`Launchpad`),
             link: '/miso/auction',
           },
         ],
