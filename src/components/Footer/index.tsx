@@ -52,22 +52,19 @@ const Footer = () => {
             <Typography variant="xs" weight={700} className="mt-2.5 hover:text-high-emphesis">
               {i18n._(t`Products`)}
             </Typography>
-            <Link
-              href={featureEnabled(Feature.TRIDENT, chainId || 1) ? '/trident/pools' : '/legacy/pool'}
-              passHref={true}
-            >
+            <Link href={featureEnabled(Feature.TRIDENT, chainId) ? '/trident/pools' : '/legacy/pool'} passHref={true}>
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">
                 {i18n._(t`Liquidity Pools`)}
               </Typography>
             </Link>
-            <Link href="/lend" passHref={true}>
+            <Link href="/kashi" passHref={true}>
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">
-                {i18n._(t`Lending`)}
+                {i18n._(t`Kashi Lending`)}
               </Typography>
             </Link>
             <Link href="/miso" passHref={true}>
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">
-                {i18n._(t`Launchpad`)}
+                {i18n._(t`MISO Launchpad`)}
               </Typography>
             </Link>
             <a href="https://shoyunft.com" target="_blank" rel="noreferrer">
