@@ -30,7 +30,7 @@ export const KashiMarketCurrentPosition: FC<KashiMarketCurrentPosition> = ({
     <div className="grid grid-cols-3 px-3">
       <div className="flex flex-col items-baseline">
         <Typography variant="xs" className="text-secondary">
-          {i18n._(t`Collateral`)}
+          {i18n._(t`Collateralized`)}
         </Typography>
         <Typography
           weight={700}
@@ -63,10 +63,10 @@ export const KashiMarketCurrentPosition: FC<KashiMarketCurrentPosition> = ({
         </Typography>
       </div>
       <div className="flex flex-col items-end">
-        <Typography variant="xs" className="text-secondary text-right">
-          {i18n._(t`Position Health`)}
+        <Typography variant="xs" className="text-right text-secondary">
+          {i18n._(t`Health`)}
         </Typography>
-        <Typography weight={700} variant="sm" className="text-high-emphesis flex items-center">
+        <Typography weight={700} variant="sm" className="flex items-center text-high-emphesis">
           {new Percent(market.health, 1e18).toSignificant(6)}%
           <div className="-ml-1">
             <QuestionHelper
