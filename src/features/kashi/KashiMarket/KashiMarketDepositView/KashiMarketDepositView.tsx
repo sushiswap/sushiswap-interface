@@ -26,7 +26,7 @@ export const KashiMarketDepositView: FC = () => {
       <KashiMarketCurrentLentPosition setLentAmount={setDepositAmount} />
       <SwapAssetPanel
         error={false}
-        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Deposit`)} />}
+        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Deposit`)} hideSearchModal />}
         walletToggle={(props) => (
           <SwapAssetPanel.Switch
             id={`switch-classic-withdraw-from-0}`}

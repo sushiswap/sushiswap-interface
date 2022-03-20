@@ -38,7 +38,7 @@ export const KashiMarketWithdrawView: FC = () => {
       <KashiMarketCurrentLentPosition setLentAmount={setWithdrawAmount} />
       <SwapAssetPanel
         error={false}
-        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Withdraw`)} />}
+        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Withdraw`)} hideSearchModal />}
         walletToggle={(props) => (
           <SwapAssetPanel.Switch
             id={`switch-classic-withdraw-from-0}`}
