@@ -8,11 +8,13 @@ import { featureEnabled } from 'app/functions/feature'
 import { formatNumber } from 'app/functions/format'
 import useFuse from 'app/hooks/useFuse'
 import { useBentoBox, useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
+import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
 export default function BentoBox(): JSX.Element {
-  const { chainId } = useActiveWeb3React()
+  const router = useRouter()
+
+  const chainId = Number(router.query.chainId)
 
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })

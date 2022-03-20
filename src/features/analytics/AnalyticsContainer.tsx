@@ -1,10 +1,13 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 import Container from '../../components/Container'
 import Sidebar from '../../components/Sidebar'
 
 // @ts-ignore TYPE NEEDS FIXING
 export default function AnalyticsContainer({ children }): JSX.Element {
+  const router = useRouter()
+  const chainId = String(router.query.chainId)
   return (
     <>
       <Head>
@@ -22,7 +25,7 @@ export default function AnalyticsContainer({ children }): JSX.Element {
             items={[
               {
                 text: 'Dashboard',
-                href: '/analytics/dashboard',
+                href: `/analytics/${chainId}/dashboard`,
               },
               {
                 text: 'xSushi',
@@ -30,19 +33,19 @@ export default function AnalyticsContainer({ children }): JSX.Element {
               },
               {
                 text: 'Farms',
-                href: '/analytics/farms',
+                href: `/analytics/${chainId}/farms`,
               },
               {
                 text: 'Pairs',
-                href: '/analytics/pairs',
+                href: `/analytics/${chainId}/pairs`,
               },
               {
                 text: 'Tokens',
-                href: '/analytics/tokens',
+                href: `/analytics/${chainId}/tokens`,
               },
               {
                 text: 'BentoBox',
-                href: '/analytics/bentobox',
+                href: `/analytics/${chainId}/bentobox`,
               },
             ]}
           />

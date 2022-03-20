@@ -18,7 +18,7 @@ import {
   useTokens,
   useTwoDayBlock,
 } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
+import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
 const chartTimespans = [
@@ -41,9 +41,11 @@ const chartTimespans = [
 ]
 
 export default function Dashboard(): JSX.Element {
-  const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')
+  const router = useRouter()
 
-  const { chainId } = useActiveWeb3React()
+  const chainId = Number(router.query.chainId)
+
+  const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')
 
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
@@ -107,7 +109,7 @@ export default function Dashboard(): JSX.Element {
   )
 
   // For Top Farms
-  const farms = useFarmRewards()
+  const farms = useFarmRewards({ chainId })
   const nativePrice = useNativePrice({ chainId })
   const farmsFormatted = useMemo(
     () =>

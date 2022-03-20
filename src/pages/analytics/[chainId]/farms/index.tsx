@@ -4,10 +4,15 @@ import Background from 'app/features/analytics/Background'
 import FarmList from 'app/features/analytics/Farms/FarmList'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import useFuse from 'app/hooks/useFuse'
+import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
 export default function Farms(): JSX.Element {
-  const farms = useFarmRewards()
+  const router = useRouter()
+
+  const chainId = Number(router.query.chainId)
+
+  const farms = useFarmRewards({ chainId })
 
   const farmsFormatted = useMemo(
     () =>

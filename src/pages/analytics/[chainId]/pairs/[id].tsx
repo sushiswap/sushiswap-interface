@@ -1,5 +1,7 @@
+import { getAddress } from '@ethersproject/address'
 import { DuplicateIcon } from '@heroicons/react/outline'
 import { CheckIcon } from '@heroicons/react/solid'
+import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
@@ -9,10 +11,8 @@ import InfoCard from 'app/features/analytics/InfoCard'
 import { LegacyTransactions } from 'app/features/transactions/Transactions'
 import { getExplorerLink } from 'app/functions/explorer'
 import { formatNumber, shortenAddress } from 'app/functions/format'
-import { useCurrency } from 'app/hooks/Tokens'
 import useCopyClipboard from 'app/hooks/useCopyClipboard'
 import { useNativePrice, useOneDayBlock, usePairDayData, useSushiPairs, useTwoDayBlock } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
 import { times } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -40,9 +40,10 @@ const chartTimespans = [
 
 export default function Pair() {
   const router = useRouter()
-  const id = (router.query.id as string).toLowerCase()
 
-  const { chainId } = useActiveWeb3React()
+  const chainId = Number(router.query.chainId)
+
+  const id = (router.query.id as string).toLowerCase()
 
   const [isCopied, setCopied] = useCopyClipboard()
 
@@ -91,10 +92,6 @@ export default function Pair() {
     [pair, pair1d, pair2d, pairDayData]
   )
 
-  // For the logos
-  const currency0 = useCurrency(pair?.token0?.id)
-  const currency1 = useCurrency(pair?.token1?.id)
-
   // For the Info Cards
   const liquidityUSDChange = pair?.reserveUSD / pair1d?.reserveUSD
 
@@ -113,6 +110,27 @@ export default function Pair() {
   const utilisation1d = (volumeUSD1d / pair?.reserveUSD) * 100
   const utilisation2d = (volumeUSD2d / pair1d?.reserveUSD) * 100
   const utilisation1dChange = (utilisation1d / utilisation2d) * 100 - 100
+
+  // For the logos
+
+  if (!pair) return <></>
+
+  console.log(pair)
+
+  const currency0 = new Token(
+    chainId,
+    getAddress(pair?.token0?.id),
+    pair?.token0?.decimals || 18,
+    pair?.token0?.symbol,
+    pair?.token0?.name
+  )
+  const currency1 = new Token(
+    chainId,
+    getAddress(pair?.token1?.id),
+    pair?.token1?.decimals || 18,
+    pair?.token1?.symbol,
+    pair?.token1?.name
+  )
 
   return (
     <AnalyticsContainer>

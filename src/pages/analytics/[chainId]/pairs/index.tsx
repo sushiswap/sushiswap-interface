@@ -5,13 +5,15 @@ import PairList from 'app/features/analytics/Pairs/PairList'
 import PairTabs from 'app/features/analytics/Pairs/PairTabs'
 import useFuse from 'app/hooks/useFuse'
 import { useOneDayBlock, useOneWeekBlock, useSushiPairs, useTwoDayBlock, useTwoWeekBlock } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
+import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
 export default function Pairs() {
   const [type, setType] = useState<'all' | 'gainers' | 'losers'>('all')
 
-  const { chainId } = useActiveWeb3React()
+  const router = useRouter()
+
+  const chainId = Number(router.query.chainId)
 
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })

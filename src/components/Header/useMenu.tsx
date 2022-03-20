@@ -219,7 +219,7 @@ const useMenu: UseMenu = () => {
         {
           key: 'dashboard',
           title: 'Dashboard',
-          link: '/analytics/dashboard',
+          link: `/analytics/${chainId}/dashboard`,
         },
         {
           key: 'xsushi',
@@ -229,21 +229,29 @@ const useMenu: UseMenu = () => {
         {
           key: 'tokens',
           title: 'Tokens',
-          link: '/analytics/tokens',
+          link: `/analytics/${chainId}/tokens`,
         },
         {
           key: 'pairs',
           title: 'Pairs',
-          link: '/analytics/pairs',
+          link: `/analytics/${chainId}/pairs`,
         },
       ],
     }
 
     if (featureEnabled(Feature.BENTOBOX, chainId)) {
       analyticsMenu.items.push({
+        key: 'farms',
+        title: 'Farms',
+        link: `/analytics/${chainId}/farms`,
+      })
+    }
+
+    if (featureEnabled(Feature.BENTOBOX, chainId)) {
+      analyticsMenu.items.push({
         key: 'bentobox',
         title: 'Bentobox',
-        link: '/analytics/bentobox',
+        link: `/analytics/${chainId}/bentobox`,
       })
     }
 

@@ -1,11 +1,9 @@
+import { ChainId } from '@sushiswap/core-sdk'
 import { useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
 import { useEffect, useMemo, useState } from 'react'
 
-export default function useTokensAnalytics() {
+export default function useTokensAnalytics({ chainId = ChainId.ETHEREUM }) {
   const [loadState, setLoadState] = useState<'loading' | 'initial' | 'loaded'>('loading')
-
-  const { chainId } = useActiveWeb3React()
 
   const block1d = useOneDayBlock({ chainId })
   const block1w = useOneWeekBlock({ chainId })
