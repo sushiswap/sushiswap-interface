@@ -32,7 +32,7 @@ const SortIcon: FC<{ id?: string; direction?: 'ascending' | 'descending'; active
 
 // @ts-ignore TYPE NEEDS FIXING
 const FarmList = ({ farms, term }) => {
-  const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'tvl', direction: 'descending' })
+  const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'roiPerYear', direction: 'descending' })
   const { chainId } = useActiveWeb3React()
   const positions = usePositions(chainId)
   const { i18n } = useLingui()
