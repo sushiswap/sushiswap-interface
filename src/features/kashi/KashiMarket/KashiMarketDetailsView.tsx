@@ -137,13 +137,13 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
                   <div className="flex justify-between gap-4">
                     <Typography variant="xs">{i18n._(t`Current Percentage`)}</Typography>
                     <Typography variant="xs" className="text-right">
-                      {formatPercent(strategy.targetPercentage)}
+                      {formatPercent(strategy.utilization)}
                     </Typography>
                   </div>
                   <div className="flex justify-between gap-4">
                     <Typography variant="xs">{i18n._(t`Target Percentage`)}</Typography>
                     <Typography variant="xs" className="text-right">
-                      {formatPercent(strategy.utilization)}
+                      {formatPercent(strategy.targetPercentage)}
                     </Typography>
                   </div>
                 </div>
