@@ -2,8 +2,6 @@ import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
 import Fraction from './src/entities/bignumber/Fraction'
 
-declare module 'fortmatic'
-
 // Used by Ethers.js
 interface CustomError extends Error {
     reason?: string; 
