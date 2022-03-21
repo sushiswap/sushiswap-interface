@@ -1,4 +1,5 @@
 import Search from 'app/components/Search'
+import { Feature } from 'app/enums'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import Background from 'app/features/analytics/Background'
 import ChartCard from 'app/features/analytics/ChartCard'
@@ -6,6 +7,7 @@ import DashboardTabs from 'app/features/analytics/Dashboard/DashboardTabs'
 import PoolList from 'app/features/analytics/Farms/FarmList'
 import PairList from 'app/features/analytics/Pairs/PairList'
 import TokenList from 'app/features/analytics/Tokens/TokenList'
+import { featureEnabled } from 'app/functions'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import useFuse from 'app/hooks/useFuse'
 import {
@@ -45,7 +47,9 @@ export default function Dashboard(): JSX.Element {
 
   const chainId = Number(router.query.chainId)
 
-  const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')
+  const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>(
+    featureEnabled(Feature.LIQUIDITY_MINING, chainId) ? 'pools' : 'pairs'
+  )
 
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
@@ -268,7 +272,7 @@ export default function Dashboard(): JSX.Element {
       </div>
       <DashboardTabs currentType={type} setType={setType} />
       <div className="px-4 pt-4 lg:px-14">
-        {type === 'pools' && <PoolList pools={searched} />}
+        {featureEnabled(Feature.LIQUIDITY_MINING, chainId) && type === 'pools' && <PoolList pools={searched} />}
         {type === 'pairs' && <PairList pairs={searched} type={'all'} />}
         {type === 'tokens' && <TokenList tokens={searched} />}
       </div>
