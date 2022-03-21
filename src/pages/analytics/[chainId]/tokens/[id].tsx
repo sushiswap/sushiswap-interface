@@ -273,7 +273,7 @@ export default function TokenPage() {
           <PairList pairs={tokenPairsFormatted} type="all" />
         </div>
         {/*@ts-ignore TYPE NEEDS FIXING*/}
-        <LegacyTransactions pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
+        <LegacyTransactions chainId={chainId} pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
       </div>
     </AnalyticsContainer>
   )

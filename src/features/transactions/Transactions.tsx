@@ -1,6 +1,7 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
 import { LoadingSpinner } from 'app/components/LoadingSpinner'
 import {
   TABLE_TABLE_CLASSNAME,
@@ -12,6 +13,7 @@ import {
 import { useTridentTransactions } from 'app/services/graph/hooks/pools'
 import { useLegacyTransactions } from 'app/services/graph/hooks/transactions/legacy'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 // @ts-ignore TYPE NEEDS FIXING
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
@@ -22,8 +24,10 @@ import { TransactionFetcherState } from './types'
 import { useTableConfig } from './useTableConfig'
 
 export const LegacyTransactions: FC<{ pairs: string[] }> = ({ pairs }) => {
-  const { transactions, error, loading } = useLegacyTransactions(pairs)
-  return <_Transactions transactions={transactions} error={error} loading={loading} />
+  const router = useRouter()
+  const chainId = Number(router.query.chainId)
+  const { transactions, error, loading } = useLegacyTransactions(chainId, pairs)
+  return <_Transactions chainId={chainId} transactions={transactions} error={error} loading={loading} />
 }
 
 export const TridentTransactions: FC<{ poolAddress?: string }> = ({ poolAddress }) => {
@@ -39,12 +43,12 @@ export const TridentTransactions: FC<{ poolAddress?: string }> = ({ poolAddress 
     shouldFetch: !!poolAddress,
   })
 
-  return <_Transactions transactions={data ?? []} error={error} loading={loading} />
+  return <_Transactions chainId={chainId} transactions={data ?? []} error={error} loading={loading} />
 }
 
-const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loading }) => {
+const _Transactions: FC<TransactionFetcherState> = ({ chainId = ChainId.ETHEREUM, transactions, error, loading }) => {
   const { i18n } = useLingui()
-  const { config } = useTableConfig(transactions)
+  const { config } = useTableConfig(chainId, transactions)
 
   const {
     getTableProps,

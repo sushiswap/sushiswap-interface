@@ -341,6 +341,9 @@ export const transactionsQuery = gql`
     swaps(orderBy: timestamp, orderDirection: desc, where: $where) {
       id
       timestamp
+      transaction {
+        id
+      }
       pair {
         id
         token0 {
@@ -361,6 +364,9 @@ export const transactionsQuery = gql`
     mints(orderBy: timestamp, orderDirection: desc, where: $where) {
       id
       timestamp
+      transaction {
+        id
+      }
       pair {
         id
         token0 {
@@ -379,6 +385,9 @@ export const transactionsQuery = gql`
     burns(orderBy: timestamp, orderDirection: desc, where: $where) {
       id
       timestamp
+      transaction {
+        id
+      }
       pair {
         id
         token0 {
