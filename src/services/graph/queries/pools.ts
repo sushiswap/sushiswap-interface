@@ -69,6 +69,79 @@ export const poolDaySnapshotsQuery = gql`
   }
 `
 
+export const getTransactionsForPoolQuery = gql`
+  query poolTransactionsQuery($poolAddress: String!) {
+    mints: mints(where: { pool: $poolAddress }) {
+      id
+      token0 {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      token1 {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      amount0
+      amount1
+      transaction {
+        id
+        timestamp
+      }
+      sender
+      recipient
+      origin
+      logIndex
+    }
+    burns: burns(where: { pool: $poolAddress }) {
+      id
+      token0 {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      token1 {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      transaction {
+        id
+        timestamp
+      }
+      amount0
+      amount1
+      sender
+      recipient
+      origin
+      logIndex
+    }
+    swaps: swaps(where: { pool: $poolAddress }) {
+      amountIn
+      amountOut
+      transaction {
+        id
+        timestamp
+      }
+      recipient
+      tokenIn {
+        symbol
+        price {
+          derivedUSD
+        }
+      }
+      tokenOut {
+        symbol
+      }
+    }
+  }
+`
+
 /* Need support for amountUSD */
 export const getSwapsForPoolQuery = gql`
   query poolSwapQuery($poolAddress: String!) {
@@ -116,9 +189,25 @@ export const getTridentPositionsQuery = gql`
   }
 `
 
+export const poolKpiQuery = gql`
+  query poolKpiQuery($id: String!, $block: Block_height, $where: PoolKpi_filter) {
+    poolKpi(id: $id, block: $block, where: $where) {
+      id
+      fees
+      feesUSD
+      volume
+      volumeUSD
+      liquidity
+      liquidityUSD
+      transactionCount
+    }
+  }
+`
+
 export const poolKpisQuery = gql`
   query poolKpisQuery($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolKpi_filter) {
     poolKpis(first: $first, skip: $skip, block: $block, where: $where) {
+      id
       fees
       feesUSD
       volume

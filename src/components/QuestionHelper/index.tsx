@@ -6,12 +6,13 @@ import React, { FC, ReactElement, ReactNode, useCallback, useRef, useState } fro
 
 import Tooltip from '../Tooltip'
 
-const QuestionHelper: FC<{ text?: any; icon?: ReactNode; children?: ReactElement; className?: string }> = ({
-  className,
-  children,
-  text,
-  icon = <InformationCircleIcon width={14} height={14} />,
-}) => {
+const QuestionHelper: FC<{
+  text?: any
+  icon?: ReactNode
+  children?: ReactElement
+  className?: string
+  gap?: boolean
+}> = ({ className, children, text, icon = <InformationCircleIcon width={14} height={14} />, gap = true }) => {
   const [show, setShow] = useState<boolean>(false)
   const [toggle, setToggle] = useToggle(false)
   const node = useRef<HTMLDivElement | null>(null)
@@ -38,7 +39,10 @@ const QuestionHelper: FC<{ text?: any; icon?: ReactNode; children?: ReactElement
       <div
         ref={node}
         onClick={setToggle}
-        className="flex items-center justify-center ml-1 outline-none cursor-help hover:text-primary"
+        className={classNames(
+          gap ? 'ml-1' : '',
+          'flex items-center justify-center outline-none cursor-help hover:text-primary'
+        )}
         onMouseEnter={open}
         onMouseLeave={close}
       >

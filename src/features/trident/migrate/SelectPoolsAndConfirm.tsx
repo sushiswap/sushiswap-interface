@@ -1,11 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
+import EXPORTS from '@sushiswap/trident/exports/all.json'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import { LoadingSpinner } from 'app/components/LoadingSpinner'
 import { SelectTridentPoolPanel } from 'app/components/Migrate/SelectTridentPoolPanel'
-import { tridentMigrationContracts } from 'app/config/tridentMigration'
 import { migrateGridLayoutCss } from 'app/features/trident/migrate/AvailableToMigrate'
 import {
   addSLPPermit,
@@ -45,7 +44,9 @@ export const SelectPoolsAndConfirm: FC = () => {
     account ?? undefined,
     selectedMigrations.map((m) => m.v2Pair.liquidityToken)
   )
-  const migrationContractAddress = chainId ? tridentMigrationContracts[chainId as ChainId] : undefined
+  const migrationContractAddress = chainId
+    ? (EXPORTS as any)[chainId][0].contracts.TridentSushiRollCP.address
+    : undefined
 
   const execute = useExecuteTridentMigration()
 

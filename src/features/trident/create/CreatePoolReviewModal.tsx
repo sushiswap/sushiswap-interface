@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
+import Dots from 'app/components/Dots'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
@@ -66,7 +67,7 @@ export const CreatePoolReviewModal: FC = () => {
 
           <TradePrice price={price} showInverted={inverted} setShowInverted={setInverted} className="justify-center" />
           <Button id="btn-confirm-pool-creation" color="blue" onClick={_execute} disabled={attemptingTxn}>
-            {attemptingTxn ? i18n._(t`Transaction pending`) : i18n._(t`Confirm Pool Creation`)}
+            {attemptingTxn ? <Dots>{i18n._(t`Transaction pending`)}</Dots> : i18n._(t`Confirm Pool Creation`)}
           </Button>
         </div>
       ) : (

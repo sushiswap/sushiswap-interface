@@ -12,12 +12,14 @@ import {
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import React, { FC } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
+  const { account } = useActiveWeb3React()
   const { completed } = useLimitOrders()
   const { config } = useCompletedOrdersTableConfig({ orders: completed.data })
 
@@ -97,7 +99,7 @@ const CompletedOrders: FC = () => {
               >
                 <Typography variant="xs" className="italic text-center text-low-emphesis">
                   Funds will be received in your{' '}
-                  <Link href="/portfolio" passHref={true}>
+                  <Link href={`/account/${account}`} passHref={true}>
                     <Typography variant="xs" className="text-blue" component="span">
                       BentoBox
                     </Typography>

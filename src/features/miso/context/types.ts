@@ -144,3 +144,8 @@ export enum TokenType {
   MINTABLE,
   SUSHI,
 }
+
+export enum TokenSetup {
+  CREATE = 1,
+  PROVIDE = 2,
+}

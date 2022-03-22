@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { DiscordIcon, InstagramIcon, MediumIcon, TwitterIcon } from 'app/components/Icon'
+import LanguageSwitch from 'app/components/LanguageSwitch'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
@@ -17,8 +18,8 @@ const Footer = () => {
 
   return (
     <div className="z-10 w-full py-20 mt-20">
-      <Container maxWidth="7xl" className="mx-auto px-6">
-        <div className="grid grid-cols-2 gap-10 pt-8 md:grid-cols-3 lg:grid-cols-6 xs:px-6 border-t border-dark-900">
+      <Container maxWidth="7xl" className="px-6 mx-auto">
+        <div className="grid grid-cols-2 gap-10 pt-8 border-t md:grid-cols-3 lg:grid-cols-6 xs:px-6 border-dark-900">
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-start gap-2">
               <div className="">
@@ -51,22 +52,19 @@ const Footer = () => {
             <Typography variant="xs" weight={700} className="mt-2.5 hover:text-high-emphesis">
               {i18n._(t`Products`)}
             </Typography>
-            <Link
-              href={featureEnabled(Feature.TRIDENT, chainId || 1) ? '/trident/pools' : '/legacy/pools'}
-              passHref={true}
-            >
+            <Link href={featureEnabled(Feature.TRIDENT, chainId) ? '/trident/pools' : '/legacy/pool'} passHref={true}>
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">
                 {i18n._(t`Liquidity Pools`)}
               </Typography>
             </Link>
-            <Link href="/lend" passHref={true}>
+            <Link href="/kashi" passHref={true}>
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">
-                {i18n._(t`Lending`)}
+                {i18n._(t`Kashi Lending`)}
               </Typography>
             </Link>
             <Link href="/miso" passHref={true}>
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">
-                {i18n._(t`Launchpad`)}
+                {i18n._(t`MISO Launchpad`)}
               </Typography>
             </Link>
             <a href="https://shoyunft.com" target="_blank" rel="noreferrer">
@@ -173,6 +171,9 @@ const Footer = () => {
                 {i18n._(t`Vesting`)}
               </Typography>
             </Link>
+          </div>
+          <div className="hidden lg:flex">
+            <LanguageSwitch />
           </div>
         </div>
       </Container>

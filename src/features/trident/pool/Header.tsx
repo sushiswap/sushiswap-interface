@@ -81,7 +81,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
         <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
         <div className="flex flex-col gap-2">
           <Typography variant="h3" className="text-high-emphesis" weight={700}>
-            {formatPercent(stats?.[0]?.apy)}
+            {formatPercent(stats?.[0]?.apy, 'NEW')}
           </Typography>
           {isFarm ? (
             <div className="flex flex-row justify-end gap-2.5">

@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { TridentHeader } from 'app/layouts/Trident'
+import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import React, { FC } from 'react'
 
@@ -22,6 +23,7 @@ const HeaderButton: FC<{ title: string; linkTo: string; id?: string }> = ({ titl
 
 export const DiscoverHeader: FC = () => {
   const { i18n } = useLingui()
+  const { account } = useActiveWeb3React()
 
   return (
     <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
@@ -34,14 +36,17 @@ export const DiscoverHeader: FC = () => {
         </Typography>
       </div>
       <div className="flex gap-3">
-        <Link href="/farm" passHref={true}>
-          <Button color="blue" size="sm">
-            {i18n._(t`My Positions`)}
-          </Button>
-        </Link>
+        {account && (
+          <Link href={`/account/${account}/liquidity`} passHref={true}>
+            <Button color="blue" size="sm">
+              {i18n._(t`My Positions`)}
+            </Button>
+          </Link>
+        )}
+
         <Link href="/trident/create" passHref={true}>
           <Button id="btn-create-new-pool" size="sm">
-            {i18n._(t`Create New Pool`)}
+            {i18n._(t`Create Pool`)}
           </Button>
         </Link>
       </div>

@@ -105,6 +105,8 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     ETHEREUM.FRAX,
     // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.ETHEREUM],
+    // @ts-ignore TYPE NEEDS FIXING
+    ETHEREUM.STG,
   ],
   [ChainId.MATIC]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.MATIC],
@@ -116,6 +118,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     MATIC.MIM,
     MATIC.SUSHI,
     MATIC.FRAX,
+    MATIC.STG,
   ],
   [ChainId.FANTOM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
@@ -125,6 +128,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     FANTOM.WETH,
     FANTOM.MIM,
     FANTOM.FRAX,
+    FANTOM.STG,
   ],
   [ChainId.BSC]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.BSC],
@@ -136,6 +140,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     BSC.WETH,
     BSC.MIM,
     BSC.FRAX,
+    BSC.STG,
   ],
   [ChainId.ARBITRUM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM],
@@ -144,6 +149,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     ARBITRUM.USDT,
     ARBITRUM.MIM,
     ARBITRUM.FRAX,
+    ARBITRUM.STG,
   ],
   [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI], XDAI.USDC, XDAI.USDT, XDAI.WBTC, XDAI.WETH],
   [ChainId.AVALANCHE]: [
@@ -167,6 +173,8 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     AVALANCHE.FRAX,
     // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.AVALANCHE],
+    // @ts-ignore TYPE NEEDS FIXING
+    AVALANCHE.STG,
   ],
   [ChainId.HARMONY]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.HARMONY],
@@ -329,6 +337,8 @@ export const COMMON_BASES: ChainTokenList = {
     ETHEREUM.OHM_V2,
     // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.FRAX,
+    // @ts-ignore TYPE NEEDS FIXING
+    ETHEREUM.STG,
   ],
   [ChainId.MATIC]: [
     // @ts-ignore TYPE NEEDS FIXING
@@ -351,6 +361,8 @@ export const COMMON_BASES: ChainTokenList = {
     MATIC.DAI,
     // @ts-ignore TYPE NEEDS FIXING
     MATIC.FRAX,
+    // @ts-ignore TYPE NEEDS FIXING
+    MATIC.STG,
   ],
   [ChainId.FANTOM]: [
     // @ts-ignore TYPE NEEDS FIXING
@@ -373,6 +385,8 @@ export const COMMON_BASES: ChainTokenList = {
     FANTOM.DAI,
     // @ts-ignore TYPE NEEDS FIXING
     FANTOM.FRAX,
+    // @ts-ignore TYPE NEEDS FIXING
+    FANTOM.STG,
   ],
   [ChainId.BSC]: [
     // @ts-ignore TYPE NEEDS FIXING
@@ -399,6 +413,8 @@ export const COMMON_BASES: ChainTokenList = {
     BSC.USD,
     // @ts-ignore TYPE NEEDS FIXING
     BSC.FRAX,
+    // @ts-ignore TYPE NEEDS FIXING
+    BSC.STG,
   ],
   [ChainId.ARBITRUM]: [
     // @ts-ignore TYPE NEEDS FIXING
@@ -419,6 +435,8 @@ export const COMMON_BASES: ChainTokenList = {
     ARBITRUM.USDT,
     // @ts-ignore TYPE NEEDS FIXING
     ARBITRUM.FRAX,
+    // @ts-ignore TYPE NEEDS FIXING
+    ARBITRUM.STG,
   ],
   [ChainId.XDAI]: [
     // @ts-ignore TYPE NEEDS FIXING
@@ -460,7 +478,9 @@ export const COMMON_BASES: ChainTokenList = {
     // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.DAI,
     // @ts-ignore TYPE NEEDS FIXING
-    ARBITRUM.FRAX,
+    AVALANCHE.FRAX,
+    // @ts-ignore TYPE NEEDS FIXING
+    AVALANCHE.STG,
   ],
   [ChainId.HARMONY]: [
     // @ts-ignore TYPE NEEDS FIXING
@@ -603,6 +623,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     ETHEREUM.OHM_V2,
     ETHEREUM.MIM,
     ETHEREUM.FRAX,
+    ETHEREUM.STG,
   ],
   [ChainId.MATIC]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.MATIC],
@@ -613,6 +634,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     MATIC.WETH,
     MATIC.USDT,
     MATIC.FRAX,
+    MATIC.STG,
   ],
   [ChainId.FANTOM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
@@ -622,6 +644,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     FANTOM.WETH,
     FANTOM.MIM,
     FANTOM.FRAX,
+    FANTOM.STG,
   ],
   [ChainId.BSC]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.BSC],
@@ -633,6 +656,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     BSC.WETH,
     BSC.MIM,
     BSC.FRAX,
+    BSC.STG,
   ],
   [ChainId.ARBITRUM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM],
@@ -643,6 +667,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     ARBITRUM.gOHM,
     ARBITRUM.MAGIC,
     ARBITRUM.FRAX,
+    ARBITRUM.STG,
   ],
   [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI], XDAI.USDC, XDAI.USDT, XDAI.WBTC, XDAI.WETH],
   [ChainId.AVALANCHE]: [
@@ -666,6 +691,8 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     AVALANCHE.FRAX,
     // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.AVALANCHE],
+    // @ts-ignore TYPE NEEDS FIXING
+    AVALANCHE.STG,
   ],
   [ChainId.HARMONY]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.HARMONY],

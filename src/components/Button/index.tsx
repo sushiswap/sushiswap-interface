@@ -16,8 +16,8 @@ const DIMENSIONS = {
 }
 
 const SIZE = {
-  xs: 'text-xs rounded',
-  sm: 'text-sm rounded',
+  xs: 'text-xs rounded-full',
+  sm: 'text-sm rounded-full',
   md: 'rounded',
   lg: 'text-lg rounded',
 }
@@ -36,11 +36,11 @@ const FILLED = {
 
 const OUTLINED = {
   default: 'border-2 disabled:pointer-events-none disabled:opacity-40',
-  blue: 'border-blue hover:bg-blue/10 active:bg-blue/20 text-blue focus:bg-blue/10',
-  red: 'border-red hover:bg-red/10 active:bg-red/20 text-red focus:bg-red/10',
-  pink: 'border-pink hover:bg-pink/10 active:bg-pink/20 text-pink focus:bg-pink/10',
-  purple: 'border-purple hover:bg-purple/10 active:bg-purple/20 text-purple focus:bg-purple/10',
-  gradient: 'border-purple hover:bg-purple/10 active:bg-purple/20 text-purple focus:bg-purple/10',
+  blue: 'border-none bg-blue/20 hover:bg-blue/40 active:bg-blue/60 text-blue focus:bg-blue/40',
+  red: 'border-none bg-red/20 hover:bg-red/40 active:bg-red/60 text-red focus:bg-red/40',
+  pink: 'border-none bg-pink/20 hover:bg-pink/40 active:bg-pink/60 text-pink focus:bg-pink/40',
+  purple: 'border-none bg-purple/20 hover:bg-purple/40 active:bg-purple/60 text-purple focus:bg-purple/40',
+  gradient: 'border-none bg-purple/20 hover:bg-purple/40 active:bg-purple/60 text-purple focus:bg-purple/40',
   gray: 'border-dark-700 hover:bg-dark-700/30 active:bg-dark-700/50 focus:bg-dark-700/30',
 }
 
@@ -88,13 +88,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       endIcon = undefined,
       fullWidth = false,
       loading,
+      disabled,
       ...rest
     },
     ref
   ) => {
     return (
       <button
+        {...rest}
         ref={ref}
+        disabled={disabled || loading}
         className={classNames(
           VARIANT[variant]['default'],
           // @ts-ignore TYPE NEEDS FIXING
@@ -107,7 +110,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'font-bold flex items-center justify-center gap-1',
           className
         )}
-        {...rest}
       >
         {loading ? (
           <Loader stroke="currentColor" />

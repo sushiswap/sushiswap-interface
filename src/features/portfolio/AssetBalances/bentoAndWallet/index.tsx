@@ -6,6 +6,7 @@ import AssetBalances from 'app/features/portfolio/AssetBalances/AssetBalances'
 import { Assets } from 'app/features/portfolio/AssetBalances/types'
 import { setBalancesState } from 'app/features/portfolio/portfolioSlice'
 import { ActiveModal } from 'app/features/trident/types'
+import { useBentoStrategies } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalancesV2ForAccount } from 'app/state/bentobox/hooks'
 import { useAppDispatch } from 'app/state/hooks'
@@ -13,15 +14,30 @@ import { useAllTokenBalancesWithLoadingIndicator, useCurrencyBalance } from 'app
 import React, { FC, useCallback, useMemo } from 'react'
 
 import { useBasicTableConfig } from '../useBasicTableConfig'
-
+import { useBentoBoxTableConfig } from '../useBentoBoxTableConfig'
 export const BentoBalances = ({ account }: { account: string }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
+
   const { data: balances, loading } = useBentoBalancesV2ForAccount(account)
-  const assets = balances.reduce<Assets[]>((acc, el) => {
-    if (el) acc.push({ asset: el })
-    return acc
-  }, [])
+
+  const tokens = useMemo(() => balances.map((balance) => balance.currency.address.toLowerCase()), [balances])
+
+  const strategies = useBentoStrategies({
+    chainId,
+    shouldFetch: !!chainId && !loading && balances.length > 0,
+    variables: { where: { token_in: tokens } },
+  })
+
+  const assets = useMemo(
+    () =>
+      balances.reduce<Assets[]>((previousValue, currentValue) => {
+        const strategy = strategies?.find((strategy) => strategy.token === currentValue.currency.address.toLowerCase())
+        return [...previousValue, { asset: currentValue, strategy }]
+      }, []),
+    [balances, strategies]
+  )
 
   const handleRowClick = useCallback(
     (row) => {
@@ -36,7 +52,7 @@ export const BentoBalances = ({ account }: { account: string }) => {
     [dispatch]
   )
 
-  const { config } = useBasicTableConfig(assets, loading)
+  const { config } = useBentoBoxTableConfig(assets, loading)
 
   return (
     <div className="flex flex-col gap-3">

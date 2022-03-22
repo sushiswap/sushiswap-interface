@@ -17,8 +17,8 @@ import { setStrategy } from 'app/state/inari/actions'
 import { useDerivedInariState, useInariState, useSelectedInariStrategy } from 'app/state/inari/hooks'
 import useStakeSushiToBentoStrategy from 'app/state/inari/strategies/useStakeSushiToBentoStrategy'
 import { Field } from 'app/state/inari/types'
-import Head from 'next/head'
 import Image from 'next/image'
+import { NextSeo } from 'next-seo'
 import React, { useEffect } from 'react'
 
 const Inari = () => {
@@ -38,12 +38,7 @@ const Inari = () => {
 
   return (
     <>
-      <Head>
-        <title>Inari | Sushi</title>
-        <meta name="description" content="Inari..." />
-        <meta key="twitter:description" name="twitter:description" content="Inari..." />
-        <meta key="og:description" property="og:description" content="Inari..." />
-      </Head>
+      <NextSeo title={`Inari`} />
       <Container maxWidth="5xl" className="flex flex-col gap-8 px-4 py-8">
         <div className="flex items-center gap-8">
           <div className="min-w-[140px] min-h-[105px]">

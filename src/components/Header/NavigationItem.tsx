@@ -4,6 +4,7 @@ import { MenuItem, MenuItemLeaf, MenuItemNode } from 'app/components/Header/useM
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
 import useDesktopMediaQuery, { useTouchDeviceMediaQuery } from 'app/hooks/useDesktopMediaQuery'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { FC, Fragment, useCallback, useRef } from 'react'
 
@@ -44,7 +45,7 @@ export const NavigationItem: FC<NavigationItem> = ({ node }) => {
   }
 
   return (
-    <Popover key={node.key} className="flex relative">
+    <Popover key={node.key} className="relative flex">
       {({ open }) => (
         <div
           {...(!touchDevice && {
@@ -83,17 +84,20 @@ export const NavigationItem: FC<NavigationItem> = ({ node }) => {
                   )}
                 >
                   {(node as MenuItemNode).items.map((leaf) => (
-                    <Typography
-                      variant="sm"
-                      weight={700}
-                      key={leaf.key}
-                      onClick={() => {
-                        router.push(leaf.link).then(() => buttonRef?.current?.click())
-                      }}
-                      className="relative px-3 py-2 hover:cursor-pointer hover:text-white m-1 rounded-lg hover:bg-white/10"
-                    >
-                      {leaf.title}
-                    </Typography>
+                    <Link key={leaf.key} href={leaf.link}>
+                      <a>
+                        <Typography
+                          variant="sm"
+                          weight={700}
+                          onClick={() => {
+                            router.push(leaf.link).then(() => buttonRef?.current?.click())
+                          }}
+                          className="relative px-3 py-2 m-1 rounded-lg hover:cursor-pointer hover:text-white hover:bg-white/10"
+                        >
+                          {leaf.title}
+                        </Typography>
+                      </a>
+                    </Link>
                   ))}
                 </div>
               </Popover.Panel>

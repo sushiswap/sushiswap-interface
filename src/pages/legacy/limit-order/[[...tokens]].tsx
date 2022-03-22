@@ -14,6 +14,7 @@ import LimitPriceInputPanel from 'app/features/legacy/limit-order/LimitPriceInpu
 import OrderExpirationDropdown from 'app/features/legacy/limit-order/OrderExpirationDropdown'
 import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
+import { featureEnabled } from 'app/functions'
 import NetworkGuard from 'app/guards/Network'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -27,6 +28,7 @@ import useLimitOrderDerivedCurrencies, {
   useLimitOrderState,
 } from 'app/state/limit-order/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
+import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
 
 const LimitOrder = () => {
@@ -84,15 +86,22 @@ const LimitOrder = () => {
 
   return (
     <>
+      <NextSeo title="Limit Order" />
       <SwapLayoutCard>
         <LimitOrderApprovalCheck />
         <div className="px-2">
-          <HeaderNew inputCurrency={inputCurrency} outputCurrency={outputCurrency} />
+          {chainId && (
+            <HeaderNew
+              inputCurrency={inputCurrency}
+              outputCurrency={outputCurrency}
+              trident={featureEnabled(Feature.TRIDENT, chainId)}
+            />
+          )}
         </div>
         <div className="flex flex-col gap-3">
           <SwapAssetPanel
             error={false}
-            header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You pay`)} />}
+            header={SwapAssetPanel.Header}
             walletToggle={(props) => (
               <SwapAssetPanel.Switch
                 id={`switch-classic-withdraw-from-0}`}
@@ -124,7 +133,7 @@ const LimitOrder = () => {
           </div>
           <SwapAssetPanel
             error={false}
-            header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You receive`)} />}
+            header={SwapAssetPanel.Header}
             selected={true}
             currency={outputCurrency}
             value={(typedField === Field.OUTPUT ? typedValue : parsedAmounts?.outputAmount?.toSignificant(6)) || ''}
@@ -144,11 +153,11 @@ const LimitOrder = () => {
           limitPrice={!!rate ? rate : trade?.executionPrice}
         />
       </SwapLayoutCard>
-      <Typography variant="xs" className="px-10 mt-5 italic text-center text-low-emphesis">
+      <Typography variant="xs" className="px-10 mt-5 text-center text-low-emphesis">
         {i18n._(t`Limit orders use funds from BentoBox, to create a limit order depositing into BentoBox is required.`)}
       </Typography>
-      <Typography variant="xxs" className="px-10 mt-5 italic text-center text-low-emphesis">
-        <Typography variant="xxs" weight={700} component="span">
+      <Typography variant="xs" className="px-10 mt-5 text-center text-low-emphesis">
+        <Typography variant="xs" weight={700} component="span">
           Tip
         </Typography>
         :{' '}

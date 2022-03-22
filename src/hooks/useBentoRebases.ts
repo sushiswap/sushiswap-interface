@@ -1,11 +1,11 @@
-import { Currency, JSBI, Rebase } from '@sushiswap/core-sdk'
+import { Currency, JSBI, Rebase, Token } from '@sushiswap/core-sdk'
 import { useMemo } from 'react'
 
 import { useSingleContractMultipleData } from '../state/multicall/hooks'
 import { useBentoBoxContract } from './useContract'
 
 type UseBentoRebases = (tokens: (Currency | undefined)[]) => {
-  rebases: Record<string, Rebase | undefined>
+  rebases: Record<string, (Rebase & { token: Token }) | undefined>
   loading: boolean
 }
 
@@ -17,20 +17,24 @@ const useBentoRebases: UseBentoRebases = (tokens) => {
 
   return useMemo(
     () => ({
-      rebases: tokens.reduce<Record<string, Rebase | undefined>>((previousValue, currentValue, index) => {
-        const el = results[index]
-        if (currentValue) {
-          if (el?.result) {
-            previousValue[currentValue.wrapped.address] = {
-              base: JSBI.BigInt(el.result.base.toString()),
-              elastic: JSBI.BigInt(el.result.elastic.toString()),
+      rebases: tokens.reduce<Record<string, (Rebase & { token: Token }) | undefined>>(
+        (previousValue, currentValue, index) => {
+          const el = results[index]
+          if (currentValue) {
+            if (el?.result) {
+              previousValue[currentValue.wrapped.address] = {
+                token: currentValue.wrapped,
+                base: JSBI.BigInt(el.result.base.toString()),
+                elastic: JSBI.BigInt(el.result.elastic.toString()),
+              }
+            } else {
+              previousValue[currentValue.wrapped.address] = undefined
             }
-          } else {
-            previousValue[currentValue.wrapped.address] = undefined
           }
-        }
-        return previousValue
-      }, {}),
+          return previousValue
+        },
+        {}
+      ),
       loading,
     }),
     [loading, results, tokens]

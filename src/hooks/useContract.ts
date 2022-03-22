@@ -22,9 +22,11 @@ import {
 } from '@sushiswap/core-sdk'
 import { LIMIT_ORDER_HELPER_ADDRESS, STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
+import { PoolType } from '@sushiswap/tines'
+import ConstantProductPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/constant-product/ConstantProductPool.sol/ConstantProductPool.json'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
+import { Pool } from '@sushiswap/trident-sdk'
 import { OLD_FARMS } from 'app/config/farms'
-import { tridentMigrationContracts } from 'app/config/tridentMigration'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
@@ -43,6 +45,7 @@ import { ERC20_BYTES32_ABI } from 'app/constants/abis/erc20'
 import ERC20_ABI from 'app/constants/abis/erc20.json'
 import FACTORY_ABI from 'app/constants/abis/factory.json'
 import INARI_ABI from 'app/constants/abis/inari.json'
+import KASHI_REPOSITORY_ABI from 'app/constants/abis/kashi-repository.json'
 import LIMIT_ORDER_ABI from 'app/constants/abis/limit-order.json'
 import LIMIT_ORDER_HELPER_ABI from 'app/constants/abis/limit-order-helper.json'
 import MAKER_ABI from 'app/constants/abis/maker.json'
@@ -57,11 +60,11 @@ import ROUTER_ABI from 'app/constants/abis/router.json'
 import SUSHI_ABI from 'app/constants/abis/sushi.json'
 import SUSHIROLL_ABI from 'app/constants/abis/sushi-roll.json'
 import TIMELOCK_ABI from 'app/constants/abis/timelock.json'
-import TRIDENT_MIGRATION_ABI from 'app/constants/abis/trident-migration.json'
 import UNI_FACTORY_ABI from 'app/constants/abis/uniswap-v2-factory.json'
 import IUniswapV2PairABI from 'app/constants/abis/uniswap-v2-pair.json'
 import WETH9_ABI from 'app/constants/abis/weth.json'
 import ZENKO_ABI from 'app/constants/abis/zenko.json'
+import { poolEntityMapper } from 'app/features/trident/poolEntityMapper'
 import { getContract } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
@@ -129,6 +132,11 @@ export function useMerkleDistributorContract(): Contract | null {
 export function useProtocolMerkleDistributorContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId ? '0x1026cbed7b7E851426b959BC69dcC1bf5876512d' : undefined, MERKLE_DISTRIBUTOR_ABI, true)
+}
+
+export function useKashiRepositoryContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? '0x400AFAbFB249210E08A8dfC429FfE20d32245f57' : undefined, KASHI_REPOSITORY_ABI, false)
 }
 
 export function useBoringHelperContract(): Contract | null {
@@ -248,7 +256,20 @@ export function useZenkoContract(withSignerIfPossible?: boolean): Contract | nul
 
 export function useTridentMigrationContract() {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId ? tridentMigrationContracts[chainId as ChainId] : undefined, TRIDENT_MIGRATION_ABI)
+  return useContract(
+    chainId ? (TRIDENT as any)[chainId][0].contracts.TridentSushiRollCP.address : undefined,
+    chainId ? (TRIDENT as any)[chainId][0].contracts.TridentSushiRollCP.abi : undefined
+  )
+}
+
+export function useTridentPoolContract(pool?: Pool, withSignerIfPossible?: boolean) {
+  let artifact
+  if (pool && poolEntityMapper(pool) === PoolType.ConstantProduct) artifact = ConstantProductPoolArtifact
+  if (pool && poolEntityMapper(pool) !== PoolType.ConstantProduct) {
+    throw new Error('Implement new pool type')
+  }
+
+  return useContract(pool?.liquidityToken.address ?? undefined, artifact?.abi, withSignerIfPossible)
 }
 
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {

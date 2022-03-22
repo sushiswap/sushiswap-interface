@@ -12,7 +12,7 @@ export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'lg' | 'base' | 's
 
 const VARIANTS = {
   hero: 'text-hero leading-[4rem]',
-  h1: 'text-4xl leading-[28px]',
+  h1: 'text-4xl leading-[46px]',
   h2: 'text-3xl tracking-[-0.02em]',
   h3: 'text-2xl leading-7 tracking-[-0.01em]',
   lg: 'text-lg leading-6',

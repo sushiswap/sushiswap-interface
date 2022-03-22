@@ -22,7 +22,7 @@ const Moonriver = 'https://raw.githubusercontent.com/sushiswap/icons/master/netw
 const Fuse = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/fuse.jpg'
 const Telos = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/telos.jpg'
 
-export const NETWORK_ICON = {
+export const NETWORK_ICON: Record<number, string> = {
   [ChainId.ETHEREUM]: Mainnet,
   [ChainId.ROPSTEN]: Ropsten,
   [ChainId.RINKEBY]: Rinkeby,
@@ -54,7 +54,7 @@ export const NETWORK_ICON = {
   [ChainId.MOONBEAM]: Moonbeam,
 }
 
-export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
+export const NETWORK_LABEL: Record<number, string> = {
   [ChainId.ETHEREUM]: 'Ethereum',
   [ChainId.RINKEBY]: 'Rinkeby',
   [ChainId.ROPSTEN]: 'Ropsten',

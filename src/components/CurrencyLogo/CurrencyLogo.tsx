@@ -27,26 +27,26 @@ const BLOCKCHAIN = {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getCurrencyLogoUrls = (currency): string[] => {
+export const getCurrencyLogoUrls = (currency: Currency): string[] => {
   const urls: string[] = []
 
   if (currency.chainId in BLOCKCHAIN) {
     urls.push(
       // @ts-ignore TYPE NEEDS FIXING
       `https://raw.githubusercontent.com/sushiswap/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
-        currency.address
+        currency.wrapped.address
       }.jpg`
     )
     urls.push(
       // @ts-ignore TYPE NEEDS FIXING
       `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
-        currency.address
+        currency.wrapped.address
       }/logo.png`
     )
     urls.push(
       // @ts-ignore TYPE NEEDS FIXING
       `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
-        currency.address
+        currency.wrapped.address
       }/logo.png`
     )
   }
@@ -114,7 +114,6 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({ currency, size = '
   const uriLocations = useHttpLocations(
     currency instanceof WrappedTokenInfo ? currency.logoURI || currency.tokenInfo.logoURI : undefined
   )
-
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative || currency?.equals(WNATIVE[currency.chainId])) {
       // @ts-ignore TYPE NEEDS FIXING
@@ -123,6 +122,7 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({ currency, size = '
 
     if (currency?.isToken) {
       const defaultUrls = [...getCurrencyLogoUrls(currency)]
+
       if (currency instanceof WrappedTokenInfo) {
         return [...uriLocations, ...defaultUrls, UNKNOWN_ICON]
       }

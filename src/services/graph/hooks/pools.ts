@@ -1,13 +1,13 @@
-import { aprToApy, formatNumber, formatPercent } from 'app/functions'
+import { formatNumber, formatPercent } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useOneDayBlock, useTwoDayBlock } from 'app/services/graph'
 import stringify from 'fast-json-stable-stringify'
-import { useMemo } from 'react'
 import useSWR from 'swr'
 
 import {
   getPoolDayBuckets,
   getPoolHourBuckets,
+  getPoolKpi,
   getPoolKpis,
   getTridentPools,
   getTridentPoolTransactions,
@@ -23,7 +23,7 @@ export function useTridentPools({
   swrConfig = undefined,
 }: GraphProps): TridentPool[] {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['trident-pools', chainId, variables] : null,
+    shouldFetch && !!chainId ? ['trident-pools', chainId, stringify(variables)] : null,
     () => getTridentPools({ chainId, variables }),
     swrConfig
   )
@@ -37,7 +37,7 @@ export function usePoolHourBuckets({
   swrConfig = undefined,
 }: GraphProps): PoolBucket[] {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['trident-pool-hour-buckets', chainId, variables] : null,
+    shouldFetch && !!chainId ? ['trident-pool-hour-buckets', chainId, stringify(variables)] : null,
     () => getPoolHourBuckets(chainId, variables),
     swrConfig
   )
@@ -51,54 +51,54 @@ export function usePoolDayBuckets({
   swrConfig = undefined,
 }: GraphProps): PoolBucket[] {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['trident-pool-day-buckets', chainId, variables] : null,
+    shouldFetch && !!chainId ? ['trident-pool-day-buckets', chainId, stringify(variables)] : null,
     () => getPoolDayBuckets(chainId, variables),
     swrConfig
   )
   return data
 }
 
-// @ts-ignore TYPE NEEDS FIXING
-export function usePoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
+export function usePoolKpi({ chainId, variables, shouldFetch = true, swrConfig = undefined }: GraphProps) {
   return useSWR(
-    shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, variables] : null,
+    shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, stringify(variables)] : null,
+    () => getPoolKpi(chainId, variables),
+    swrConfig
+  )
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export function usePoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }: GraphProps) {
+  return useSWR(
+    shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, stringify(variables)] : null,
     () => getPoolKpis(chainId, variables),
     swrConfig
   )
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export function useOneDayPoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
+
+export function useOneDayPoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }: GraphProps) {
+  return useSWR(
+    shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, stringify(variables)] : null,
+    () => getPoolKpis(chainId, variables),
+    swrConfig
+  )
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export function useTwoDayPoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }: GraphProps) {
+  return useSWR(
+    shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, stringify(variables)] : null,
+    () => getPoolKpis(chainId, variables),
+    swrConfig
+  )
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export function useRollingPoolStats({ chainId, variables, shouldFetch = true, swrConfig = undefined }: GraphProps) {
   const oneDayBlock = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-  const _variables = {
-    ...variables,
-    block: oneDayBlock,
-  }
-
-  return useSWR(
-    shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, stringify(_variables)] : null,
-    () => getPoolKpis(chainId, _variables),
-    swrConfig
-  )
-}
-
-// @ts-ignore TYPE NEEDS FIXING
-export function useTwoDayPoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
   const twoDayBlock = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
-  const _variables = {
-    ...variables,
-    block: twoDayBlock,
-  }
 
-  return useSWR(
-    shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, stringify(_variables)] : null,
-    () => getPoolKpis(chainId, _variables),
-    swrConfig
-  )
-}
-
-// @ts-ignore TYPE NEEDS FIXING
-export function useRollingPoolStats({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
   const {
     data: poolKpis,
     isValidating: poolKpisIsValidating,
@@ -116,7 +116,7 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
   } = useOneDayPoolKpis({
     chainId,
     shouldFetch,
-    variables,
+    variables: { ...variables, block: oneDayBlock },
     swrConfig,
   })
   const {
@@ -126,52 +126,73 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
   } = useTwoDayPoolKpis({
     chainId,
     shouldFetch,
-    variables,
+    variables: { ...variables, block: twoDayBlock },
     swrConfig,
   })
 
   return {
     isValidating: poolKpisIsValidating || oneDayPoolKpisIsValidating || twoDayPoolKpisIsValidating,
     error: poolKpisError || oneDayPoolKpisError || twoDayPoolKpisError,
-    data:
-      poolKpis && oneDayPoolKpis && twoDayPoolKpis
-        ? oneDayPoolKpis.map((el, i) => {
-            return {
-              volume: formatNumber(poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD, true, false),
-              volume24hChange:
-                ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) /
-                  (oneDayPoolKpis?.[i]?.volumeUSD - twoDayPoolKpis?.[i]?.volumeUSD)) *
-                  100 -
-                100,
-              fees: formatNumber(poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD, true, false),
-              fees24hChange:
-                ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) /
-                  (oneDayPoolKpis?.[i]?.feesUSD - twoDayPoolKpis?.[i]?.feesUSD)) *
-                  100 -
-                100,
-              liquidity: formatPercent(
-                ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) / poolKpis?.[i]?.liquidityUSD) * 100
-              ),
-              liquidity24hChange:
-                ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) /
-                  poolKpis?.[i]?.liquidityUSD /
-                  ((oneDayPoolKpis?.[i]?.volumeUSD - twoDayPoolKpis?.[i]?.volumeUSD) /
-                    oneDayPoolKpis?.[i]?.liquidityUSD)) *
-                  100 -
-                100,
-              transactions: poolKpis?.[i]?.transactionCount - oneDayPoolKpis?.[i]?.transactionCount,
-              transactions24hChange:
-                ((poolKpis?.[i]?.transactionCount - oneDayPoolKpis?.[i]?.transactionCount) /
-                  (oneDayPoolKpis?.[i]?.transactionCount - twoDayPoolKpis?.[i]?.transactionCount)) *
-                  100 -
-                100,
-              apy: aprToApy(
-                ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) / poolKpis?.[i]?.liquidityUSD) * 100,
-                3650
-              ),
-            }
-          })
-        : [],
+    data: poolKpis?.map((poolKpi: any) => {
+      const oneDayPoolKpi = oneDayPoolKpis?.find((oneDayPoolKpi: any) => oneDayPoolKpi.id === poolKpi.id)
+      const twoDayPoolKpi = twoDayPoolKpis?.find((twoDayPoolKpi: any) => twoDayPoolKpi.id === poolKpi.id)
+
+      const volume = formatNumber(
+        oneDayPoolKpi?.volumeUSD ? poolKpi.volumeUSD - oneDayPoolKpi.volumeUSD : poolKpi.volumeUSD,
+        true,
+        false
+      )
+
+      const volume24hChange =
+        ((poolKpi?.volumeUSD - oneDayPoolKpi?.volumeUSD) / (oneDayPoolKpi?.volumeUSD - twoDayPoolKpi?.volumeUSD)) *
+          100 -
+        100
+
+      const fees = formatNumber(
+        oneDayPoolKpi ? poolKpi?.feesUSD - oneDayPoolKpi?.feesUSD : poolKpi?.feesUSD,
+        true,
+        false
+      )
+
+      const fees24hChange =
+        ((poolKpi?.feesUSD - oneDayPoolKpi?.feesUSD) / (oneDayPoolKpi?.feesUSD - twoDayPoolKpi?.feesUSD)) * 100 - 100
+
+      const liquidity = formatPercent(
+        ((oneDayPoolKpi ? poolKpi?.volumeUSD - oneDayPoolKpi?.volumeUSD : poolKpi?.volumeUSD) / poolKpi?.liquidityUSD) *
+          100
+      )
+
+      const transactions = oneDayPoolKpi
+        ? poolKpi.transactionCount - oneDayPoolKpi.transactionCount
+        : poolKpi.transactionCount
+
+      const apy =
+        poolKpi.liquidityUSD > 0
+          ? (Math.max(0, oneDayPoolKpi ? poolKpi?.feesUSD - oneDayPoolKpi?.feesUSD : poolKpi?.feesUSD) * 365 * 100) /
+            poolKpi?.liquidityUSD
+          : 0
+
+      return {
+        volume,
+        volume24hChange,
+        fees,
+        fees24hChange,
+        liquidity,
+        liquidity24hChange:
+          ((poolKpi?.volumeUSD - oneDayPoolKpi?.volumeUSD) /
+            poolKpi?.liquidityUSD /
+            ((oneDayPoolKpi?.volumeUSD - twoDayPoolKpi?.volumeUSD) / oneDayPoolKpi?.liquidityUSD)) *
+            100 -
+          100,
+        transactions,
+        transactions24hChange:
+          ((poolKpi?.transactionCount - oneDayPoolKpi?.transactionCount) /
+            (oneDayPoolKpi?.transactionCount - twoDayPoolKpi?.transactionCount)) *
+            100 -
+          100,
+        apy,
+      }
+    }),
   }
 }
 
@@ -191,10 +212,10 @@ export const useGetAllTridentPools = ({
   swrConfig = undefined,
 }: GraphProps) => {
   const tokens = useAllTokens()
-  const allowedAssets = useMemo(() => Object.keys(tokens).map((address) => address.toLowerCase()), [tokens])
-  return useSWR(
+  // const allowedAssets = useMemo(() => Object.keys(tokens).map((address) => address.toLowerCase()), [tokens])
+  return useSWR<TridentPool[]>(
     shouldFetch ? ['getAllTridentPools', chainId] : null,
-    () => getTridentPools({ chainId, allowedAssets }),
+    () => getTridentPools({ chainId, tokens }),
     swrConfig
   )
 }

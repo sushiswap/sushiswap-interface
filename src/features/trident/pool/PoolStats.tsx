@@ -2,7 +2,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
 import { usePoolContext } from 'app/features/trident/PoolContext'
-import { formatPercent } from 'app/functions'
+import { classNames, formatPercent } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -16,7 +16,6 @@ const PoolStats: FC<PoolStatsProps> = () => {
   const isDesktop = useDesktopMediaQuery()
   const { poolWithState } = usePoolContext()
 
-  console.log(poolWithState?.pool?.liquidityToken?.address.toLowerCase())
   const { data: stats } = useRollingPoolStats({
     chainId,
     variables: { where: { id: poolWithState?.pool?.liquidityToken?.address.toLowerCase() } },
@@ -46,6 +45,8 @@ const PoolStats: FC<PoolStatsProps> = () => {
     },
   ]
 
+  console.log({ stats })
+
   return (
     <div className="flex flex-col gap-3 lg:grid lg:grid-cols-4">
       {items.map(({ label, value, change }, index) => (
@@ -65,7 +66,11 @@ const PoolStats: FC<PoolStatsProps> = () => {
               weight={400}
               variant={isDesktop ? 'xs' : 'sm'}
               // @ts-ignore TYPE NEEDS FIXING
-              className={stats?.[0]?.[change] > 0 ? 'text-green' : 'text-red'}
+              className={classNames(
+                stats?.[0]?.[change] > 0 && 'text-green',
+                stats?.[0]?.[change] < 0 && 'text-red',
+                'text-inherit'
+              )}
             >
               {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatPercent(stats?.[0]?.[change])}

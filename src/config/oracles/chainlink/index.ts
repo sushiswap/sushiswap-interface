@@ -9,20 +9,22 @@ import MAINNET from './mappings/mainnet'
 import MATIC from './mappings/matic'
 import XDAI from './mappings/xdai'
 
+export type ChainlinkPriceFeedEntry = {
+  from: string
+  to: string
+  decimals: number
+  fromDecimals: number
+  toDecimals: number
+  warning?: string
+  address?: string
+}
+
 export type ChainlinkPriceFeedMap = {
-  readonly [address: string]: {
-    from: string
-    to: string
-    decimals: number
-    fromDecimals: number
-    toDecimals: number
-    warning?: string
-    address?: string
-  }
+  readonly [address: string]: ChainlinkPriceFeedEntry
 }
 
 export const CHAINLINK_PRICE_FEED_MAP: {
-  [chainId in ChainId]?: ChainlinkPriceFeedMap
+  [key: number]: ChainlinkPriceFeedMap
 } = {
   [ChainId.ETHEREUM]: MAINNET,
   [ChainId.KOVAN]: KOVAN,

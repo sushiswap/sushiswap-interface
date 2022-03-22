@@ -3,10 +3,7 @@ const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   // important: '#__next',
-  // darkMode: true,
-  mode: 'jit',
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
-  // darkMode: false,
   theme: {
     extend: {
       gridTemplateColumns: {

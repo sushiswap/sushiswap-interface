@@ -18,6 +18,7 @@ import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React from 'react'
 
 const MisoAuction = () => {
@@ -34,29 +35,32 @@ const MisoAuction = () => {
   }
 
   return (
-    <AuctionContext auction={auction} loading={loading}>
-      <MisoHeader breadcrumb={<Breadcrumb auction={auction} />} auction={auction}>
-        <section className="flex flex-col w-full">
-          <AuctionHeader />
-        </section>
-      </MisoHeader>
-      <MisoBody>
-        <section>
-          <div className="flex flex-col lg:flex-row gap-[60px]">
-            <div className="flex flex-col gap-6 lg:min-w-[396px] lg:max-w-[396px]">
-              <AuctionDocuments />
-              <div className="flex flex-grow" />
-              {auction?.status === AuctionStatus.FINISHED ? <AuctionClaimer /> : <AuctionCommitter />}
+    <>
+      <NextSeo title={`MISO Auction ${address}`} />
+      <AuctionContext auction={auction} loading={loading}>
+        <MisoHeader breadcrumb={<Breadcrumb auction={auction} />} auction={auction}>
+          <section className="flex flex-col w-full">
+            <AuctionHeader />
+          </section>
+        </MisoHeader>
+        <MisoBody>
+          <section>
+            <div className="flex flex-col lg:flex-row gap-[60px]">
+              <div className="flex flex-col gap-6 lg:min-w-[396px] lg:max-w-[396px]">
+                <AuctionDocuments />
+                <div className="flex flex-grow" />
+                {auction?.status === AuctionStatus.FINISHED ? <AuctionClaimer /> : <AuctionCommitter />}
+              </div>
+              <AuctionStats />
             </div>
-            <AuctionStats />
-          </div>
-        </section>
-        <section className="mt-4">
-          <AuctionTabs />
-        </section>
-        <AuctionFinalizeModal />
-      </MisoBody>
-    </AuctionContext>
+          </section>
+          <section className="mt-4">
+            <AuctionTabs />
+          </section>
+          <AuctionFinalizeModal />
+        </MisoBody>
+      </AuctionContext>
+    </>
   )
 }
 

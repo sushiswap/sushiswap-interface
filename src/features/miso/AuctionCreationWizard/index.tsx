@@ -12,7 +12,7 @@ import LiquidityLauncherStep from 'app/features/miso/AuctionCreationWizard/Liqui
 import TokenCreationStep from 'app/features/miso/AuctionCreationWizard/TokenCreationStep'
 import { formatCreationFormData } from 'app/features/miso/AuctionCreationWizard/utils'
 import WhitelistDetailsStep from 'app/features/miso/AuctionCreationWizard/WhitelistDetailsStep'
-import { AuctionTemplate, TokenType, WhitelistEntry } from 'app/features/miso/context/types'
+import { AuctionTemplate, TokenSetup, TokenType, WhitelistEntry } from 'app/features/miso/context/types'
 import { addressValidator } from 'app/functions/yupValidators'
 import { useToken } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -25,9 +25,11 @@ export interface AuctionCreationWizardInput {
   startDate: string
   endDate: string
   tokenType: TokenType
-  tokenName: string
-  tokenSymbol: string
-  tokenSupply: number
+  tokenSetupType?: TokenSetup
+  tokenAddress?: string
+  tokenName?: string
+  tokenSymbol?: string
+  tokenSupply?: number
   tokenAmount: number
   tokenForLiquidity: number
   auctionType: AuctionTemplate
@@ -59,7 +61,7 @@ export type AuctionCreationWizardInputFormatted = Omit<
   startDate: Date
   endDate: Date
   tokenAmount: CurrencyAmount<Token>
-  tokenSupply: CurrencyAmount<Token>
+  tokenSupply?: CurrencyAmount<Token>
   auctionType: AuctionTemplate
   fixedPrice?: Price<Token, Currency>
   minimumTarget?: CurrencyAmount<Currency>
@@ -83,16 +85,33 @@ const schema = yup.object().shape({
     .typeError('Please enter a valid date')
     .min(yup.ref('startDate'), 'Date must be later than start date')
     .required('Must enter a valid date'),
-  tokenType: yup.number().required('Must select a token type'),
-  tokenName: yup.string().required('Must enter a valid name'),
-  tokenSymbol: yup.string().required('Must enter a valid symbol'),
-  tokenSupply: yup
-    .number()
-    .typeError('Supply must be a number')
-    .required('Must enter a valid number')
-    .moreThan(0, 'Token supply must be larger than zero')
-    .max(2e256 - 1, 'Token supply can be at most 2^256 - 1 due to network limitations')
-    .integer('Must be a whole number'),
+  tokenSetupType: yup.number().required('Must select a token setup type'),
+  tokenAddress: yup.string().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.PROVIDE,
+    then: addressValidator.required('Please enter a valid ERC20-address'),
+  }),
+  tokenType: yup.number().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.CREATE,
+    then: yup.number().required('Must select a token type'),
+  }),
+  tokenName: yup.string().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.CREATE,
+    then: yup.string().required('Must enter a valid name'),
+  }),
+  tokenSymbol: yup.string().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.CREATE,
+    then: yup.string().required('Must enter a valid symbol'),
+  }),
+  tokenSupply: yup.number().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.CREATE,
+    then: yup
+      .number()
+      .typeError('Supply must be a number')
+      .required('Must enter a valid number')
+      .moreThan(0, 'Token supply must be larger than zero')
+      .max(2e256 - 1, 'Token supply can be at most 2^256 - 1 due to network limitations')
+      .integer('Must be a whole number'),
+  }),
   tokenAmount: yup
     .number()
     .typeError('Must be a valid number')
@@ -101,7 +120,10 @@ const schema = yup.object().shape({
     .integer('Must be a whole number')
     .test({
       message: 'Amount of tokens for sale must be less than half the total supply',
-      test: (value, ctx) => (value ? value * 2 <= ctx.parent.tokenSupply : false),
+      test: (value, ctx) => {
+        if (ctx.parent.tokenSetupType === TokenSetup.PROVIDE) return true
+        return value ? value * 2 <= ctx.parent.tokenSupply : false
+      },
     }),
   tokenForLiquidity: yup
     .number()
@@ -185,15 +207,24 @@ const AuctionCreationWizard: FC = () => {
 
   const data = watch()
 
-  // @ts-ignore TYPE NEEDS FIXING
   const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
+  const providedAuctionToken = useToken(data.tokenSetupType === TokenSetup.PROVIDE ? data.tokenAddress : undefined)
+  const createdAuctionToken = new Token(1, AddressZero, 18, data.tokenSymbol, data.tokenName)
   const formattedData =
-    paymentToken && !isValidating && isValid ? formatCreationFormData(data, paymentToken) : undefined
-  const handleSubmit = () => setOpen(true)
+    paymentToken &&
+    !isValidating &&
+    isValid &&
+    !!(data.tokenSetupType === TokenSetup.PROVIDE ? providedAuctionToken : createdAuctionToken)
+      ? formatCreationFormData(
+          data,
+          paymentToken,
+          (data.tokenSetupType === TokenSetup.PROVIDE ? providedAuctionToken : createdAuctionToken) as Token
+        )
+      : undefined
 
   return (
     <>
-      <Form {...methods} onSubmit={methods.handleSubmit(handleSubmit)}>
+      <Form {...methods} onSubmit={methods.handleSubmit(() => setOpen(true))}>
         <Form.Card className="divide-none">
           <Form.Wizard
             submitButton={

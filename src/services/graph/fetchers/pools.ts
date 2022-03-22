@@ -1,12 +1,14 @@
+import { getAddress } from '@ethersproject/address'
 import { ChainId, Token } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
 import { Fee } from '@sushiswap/trident-sdk'
 import { GRAPH_HOST, TRIDENT } from 'app/services/graph/constants'
 import {
-  getSwapsForPoolQuery,
+  getTransactionsForPoolQuery,
   getTridentPoolsQuery,
   poolDaySnapshotsQuery,
   poolHourSnapshotsQuery,
+  poolKpiQuery,
   poolKpisQuery,
 } from 'app/services/graph/queries'
 
@@ -14,9 +16,17 @@ import { TridentTransactionRawData, tridentTransactionsRawDataFormatter } from '
 import { pager } from './pager'
 
 // @ts-ignore TYPE NEEDS FIXING
-export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables: {} = undefined) =>
+export const fetcher = async <T>(chainId = ChainId.ETHEREUM, query, variables: {} = undefined): Promise<T> => {
+  if (chainId === ChainId.KOVAN) {
+    return pager(
+      `https://api.thegraph.com/subgraphs/id/QmPoTrAgjC8f7kq5AU1cyknGvqZUQVjubdnH3idYP6EaP8`,
+      query,
+      variables
+    )
+  }
   // @ts-ignore TYPE NEEDS FIXING
-  pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${TRIDENT[chainId]}`, query, variables)
+  return pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${TRIDENT[chainId]}`, query, variables)
+}
 
 const gqlPoolTypeMap: Record<string, PoolType> = {
   concentratedLiquidityPools: PoolType.ConcentratedLiquidity,
@@ -37,12 +47,17 @@ export interface TridentPool {
   twapEnabled: boolean
 }
 
-const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult, allowedAssets: string[]): TridentPool[] =>
+const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult, tokens: Record<string, Token>): TridentPool[] =>
   Object.entries(pools)
     .filter(([, pools]) => pools.length)
     .flatMap(([poolType, poolList]: [string, TridentPoolData[]]) =>
       poolList
-        .filter(({ assets }) => assets.every((asset: any) => allowedAssets.includes(asset.token.id)))
+        .filter(({ assets }) =>
+          assets.every((asset: any) => {
+            const address = getAddress(asset.token.id)
+            return address in tokens
+          })
+        )
         .map(({ kpi, assets, swapFee, twapEnabled, id }) => ({
           address: id,
           type: gqlPoolTypeMap[poolType],
@@ -50,9 +65,13 @@ const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult, allowedAss
           liquidityUSD: Number(kpi.liquidityUSD),
           apy: '12.34', // TODO: Needs subgraph support
           transactionCount: Number(kpi.transactionCount),
-          assets: assets.map(
-            ({ token }) => new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)
-          ),
+          assets: assets.map(({ token }) => {
+            const address = getAddress(token.id)
+            if (address in tokens) {
+              return tokens[address]
+            }
+            return new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)
+          }),
           swapFee: Number(swapFee),
           twapEnabled,
         }))
@@ -90,15 +109,15 @@ export const getTridentPools = async ({
   chainId = ChainId.ETHEREUM,
   // @ts-ignore TYPE NEEDS FIXING
   variables = undefined,
-  allowedAssets = [],
+  tokens = {},
 }: {
   chainId?: ChainId
   variables?: {}
-  allowedAssets?: string[]
+  tokens?: Record<string, Token>
 }): Promise<TridentPool[]> => {
   // @ts-ignore TYPE NEEDS FIXING
   const result: TridentPoolQueryResult = await fetcher(chainId, getTridentPoolsQuery, variables)
-  return formatPools(chainId, result, allowedAssets)
+  return formatPools(chainId, result, tokens)
 }
 
 interface PoolBucketQueryResult {
@@ -145,11 +164,12 @@ export const getPoolDayBuckets = async (chainId: ChainId = ChainId.ETHEREUM, var
 
 // @ts-ignore TYPE NEEDS FIXING
 export const getTridentPoolTransactions = async (chainId: ChainId = ChainId.ETHEREUM, variables) => {
-  const result = (await fetcher(chainId, getSwapsForPoolQuery, variables)).swaps as TridentTransactionRawData[]
-  return tridentTransactionsRawDataFormatter(result || [])
+  const result = await fetcher<TridentTransactionRawData>(chainId, getTransactionsForPoolQuery, variables)
+  return tridentTransactionsRawDataFormatter(result)
 }
 
 export interface PoolKpiQueryResult {
+  id: string
   fees: string
   feesUSD: string
   volume: string
@@ -160,30 +180,47 @@ export interface PoolKpiQueryResult {
 }
 
 export interface PoolKpi {
+  id: string
   fees: number
   feesUSD: number
   volume: number
   volumeUSD: number
-  liquidity: string
+  liquidity: number
   liquidityUSD: number
   transactionCount: number
 }
 
-const formatKpis = (kpis: PoolKpiQueryResult[]): PoolKpi[] =>
-  kpis.map(({ fees, feesUSD, volume, volumeUSD, liquidity, liquidityUSD, transactionCount }) => ({
-    fees: Number(fees),
-    feesUSD: Number(feesUSD),
-    volume: Number(volume),
-    volumeUSD: Number(volumeUSD),
-    liquidity,
-    liquidityUSD: Number(liquidityUSD),
-    transactionCount: Number(transactionCount),
-  }))
+const formatKpi = ({
+  id,
+  fees,
+  feesUSD,
+  volume,
+  volumeUSD,
+  liquidity,
+  liquidityUSD,
+  transactionCount,
+}: PoolKpiQueryResult) => ({
+  id,
+  fees: Number(fees),
+  feesUSD: Number(feesUSD),
+  volume: Number(volume),
+  volumeUSD: Number(volumeUSD),
+  liquidity: Number(liquidity),
+  liquidityUSD: Number(liquidityUSD),
+  transactionCount: Number(transactionCount),
+})
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getPoolKpis = async (chainId: ChainId = ChainId.ETHEREUM, variables): Promise<PoolKpi[]> => {
+export const getPoolKpis = async (chainId: ChainId = ChainId.ETHEREUM, variables = {}): Promise<PoolKpi[]> => {
   const result: PoolKpiQueryResult[] = Object.values(
     await fetcher(chainId, poolKpisQuery, variables)
   )?.[0] as PoolKpiQueryResult[]
-  return formatKpis(result)
+  return result.map(formatKpi)
+}
+
+export const getPoolKpi = async (chainId: ChainId = ChainId.ETHEREUM, variables = {}): Promise<PoolKpi> => {
+  const result: PoolKpiQueryResult = Object.values(
+    await fetcher(chainId, poolKpiQuery, variables)
+  )?.[0] as PoolKpiQueryResult
+  return formatKpi(result)
 }

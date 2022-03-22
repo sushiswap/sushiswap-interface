@@ -89,7 +89,7 @@ export const useBentoBalancesWeb3 = ({
         ? tokenAddresses && tokenAddresses.length > 0
           ? tokenAddresses.map((el) => [el])
           : Object.keys(allTokens).reduce<string[][]>((acc, token) => {
-              if (!BLACKLISTED.includes(token) && isAddress(token) !== false) acc.push([token])
+              if (!BLACKLISTED.includes(token) && isAddress(token)) acc.push([token])
               return acc
             }, [])
         : [],

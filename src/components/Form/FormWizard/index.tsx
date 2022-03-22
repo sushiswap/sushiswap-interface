@@ -72,7 +72,7 @@ const FormWizard: FC<FormWizardProps> = ({ children, submitButton }) => {
                 enterFrom="opacity-0 scale-95"
                 enterTo="opacity-100 scale-100"
               >
-                <div className="max-h-[820px] h-[820px] overflow-auto">
+                <div className="min-h-[820px] overflow-auto">
                   <div className={`grid grid-cols-${child.props.columns || 6} gap-8`}>{child.props.children}</div>
                 </div>
               </Transition>

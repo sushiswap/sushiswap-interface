@@ -1,11 +1,12 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import { Zero } from '@ethersproject/constants'
-import { ChainId, KASHI_ADDRESS, NATIVE, Token, USD, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
+import { AddressZero, Zero } from '@ethersproject/constants'
+import { ChainId, JSBI, KASHI_ADDRESS, NATIVE, Token, USD, WNATIVE_ADDRESS, ZERO } from '@sushiswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP, ChainlinkPriceFeedEntry } from 'app/config/oracles/chainlink'
 import { Fraction } from 'app/entities'
 import { Feature } from 'app/enums'
+import { KashiMarket } from 'app/features/kashi/types'
 import {
   accrue,
   accrueTotalAssetWithFee,
@@ -25,10 +26,13 @@ import {
 } from 'app/functions'
 import { useBentoBoxContract, useBoringHelperContract } from 'app/hooks'
 import { useTokens } from 'app/hooks/Tokens'
+import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useBentoStrategies, useClones } from 'app/services/graph'
 import { useActiveWeb3React, useQueryFilter } from 'app/services/web3'
 import { useSingleCallResult } from 'app/state/multicall/hooks'
 import { useMemo } from 'react'
+
+import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
 
 const BLACKLISTED_TOKENS = ['0xC6d54D2f624bc83815b49d9c2203b1330B841cA0']
 
@@ -40,25 +44,35 @@ const BLACKLISTED_ORACLES = [
 
 const BLACKLISTED_PAIRS = ['0xF71e398B5CBb473a3378Bf4335256295A8eD713d']
 
+export const useKashiMediumRiskLendingPositions = (account: string): KashiMediumRiskLendingPair[] => {
+  const addresses = useKashiPairAddresses()
+  const markets = useKashiMediumRiskLendingPairs(account, addresses)
+  return markets.filter((pair: KashiMediumRiskLendingPair) => JSBI.greaterThan(pair.userAssetFraction, ZERO))
+}
+
+export const useKashiMediumRiskBorrowingPositions = (account: string): KashiMediumRiskLendingPair[] => {
+  const addresses = useKashiPairAddresses()
+  const markets = useKashiMediumRiskLendingPairs(account, addresses)
+  return markets.filter(
+    (pair: KashiMediumRiskLendingPair) =>
+      JSBI.greaterThan(pair.userCollateralShare, ZERO) || JSBI.greaterThan(pair.userBorrowPart, ZERO)
+  )
+}
+
+// Reduce all tokens down to only those which are found in the Oracle mapping
 export function useKashiTokens(): { [address: string]: Token } {
   const { chainId } = useActiveWeb3React()
   const allTokens = useTokens()
   return useMemo(
     () =>
-      Object.values(allTokens).reduce((previousValue, currentValue) => {
+      Object.values(allTokens).reduce((previousValue: Record<string, Token>, currentValue: Token) => {
         if (
-          // @ts-ignore TYPE NEEDS FIXING
+          chainId &&
           CHAINLINK_PRICE_FEED_MAP?.[chainId] &&
-          // @ts-ignore TYPE NEEDS FIXING
-          Object.values(CHAINLINK_PRICE_FEED_MAP?.[chainId])?.some(
-            // @ts-ignore TYPE NEEDS FIXING
-            (value) => {
-              // @ts-ignore TYPE NEEDS FIXING
-              return currentValue.address === value.from || currentValue.address === value.to
-            }
-          )
+          Object.values(CHAINLINK_PRICE_FEED_MAP?.[chainId])?.some((value: ChainlinkPriceFeedEntry) => {
+            return currentValue.address === value.from || currentValue.address === value.to
+          })
         ) {
-          // @ts-ignore TYPE NEEDS FIXING
           previousValue[currentValue.address] = currentValue
         }
         return previousValue
@@ -70,21 +84,21 @@ export function useKashiTokens(): { [address: string]: Token } {
 export function useKashiPairAddresses(): string[] {
   const bentoBoxContract = useBentoBoxContract()
   const { chainId } = useActiveWeb3React()
-  // const useEvents = false
-  const useEvents = chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM
-  const allTokens = useKashiTokens()
-  const events = useQueryFilter({
+  const useEvents = useMemo(
+    () => Boolean(chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM),
+    [chainId]
+  )
+  const tokens = useKashiTokens()
+  const { data: events } = useQueryFilter({
     chainId,
     contract: bentoBoxContract,
-    // @ts-ignore TYPE NEEDS FIXING
-    event: bentoBoxContract && bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
-    // @ts-ignore TYPE NEEDS FIXING
-    shouldFetch: useEvents && featureEnabled(Feature.KASHI, chainId),
+    event: chainId && bentoBoxContract && bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
+    shouldFetch: Boolean(chainId && useEvents && featureEnabled(Feature.KASHI, chainId)),
   })
   const clones = useClones({ chainId, shouldFetch: !useEvents })
-  return (
-    (
-      useEvents
+  return useMemo(
+    () =>
+      (useEvents
         ? events?.map((event) => ({
             address:
               // @ts-ignore TYPE NEEDS FIXING
@@ -93,29 +107,177 @@ export function useKashiPairAddresses(): string[] {
             data: event.args.data,
           }))
         : clones
-    )
-      // @ts-ignore TYPE NEEDS FIXING
-      ?.reduce((previousValue, currentValue) => {
-        try {
-          const [collateral, asset, oracle, oracleData] = defaultAbiCoder.decode(
-            ['address', 'address', 'address', 'bytes'],
-            currentValue.data
-          )
-          if (
-            BLACKLISTED_TOKENS.includes(collateral) ||
-            BLACKLISTED_TOKENS.includes(asset) ||
-            BLACKLISTED_ORACLES.includes(oracle) ||
-            // @ts-ignore TYPE NEEDS FIXING
-            !validateChainlinkOracleData(chainId, allTokens[collateral], allTokens[asset], oracleData)
-          ) {
+      )
+        // @ts-ignore TYPE NEEDS FIXING
+        ?.reduce((previousValue, currentValue) => {
+          try {
+            const [collateral, asset, oracle, oracleData] = defaultAbiCoder.decode(
+              ['address', 'address', 'address', 'bytes'],
+              currentValue.data
+            )
+            if (
+              BLACKLISTED_TOKENS.includes(collateral) ||
+              BLACKLISTED_TOKENS.includes(asset) ||
+              BLACKLISTED_ORACLES.includes(oracle) ||
+              !validateChainlinkOracleData(chainId, tokens[collateral], tokens[asset], oracleData)
+            ) {
+              return previousValue
+            }
+            return [...previousValue, currentValue.address]
+          } catch (error) {
             return previousValue
           }
-          return [...previousValue, currentValue.address]
-        } catch (error) {
-          return previousValue
-        }
-      }, [])
+        }, []),
+    [chainId, clones, events, tokens, useEvents]
   )
+}
+
+type BoringHelperKashiPair = {
+  collateral: string
+  asset: string
+  oracle: string
+  oracleData: string
+  totalCollateralShare: string
+  userCollateralShare: string
+  totalAsset: {
+    elastic: BigNumber
+    base: BigNumber
+  }
+  userAssetFraction: string
+  totalBorrow: {
+    elastic: BigNumber
+    base: BigNumber
+  }
+  userBorrowPart: BigNumber
+  currentExchangeRate: BigNumber
+  spotExchangeRate: BigNumber
+  oracleExchangeRate: BigNumber
+  accrueInfo: {
+    interestPerSecond: BigNumber
+    lastAccrued: BigNumber
+    feesEarnedFraction: BigNumber
+  }
+}
+
+export function useKashiMediumRiskLendingPairs(
+  account: string | null | undefined,
+  addresses: string[] = []
+): KashiMediumRiskLendingPair[] {
+  const { chainId } = useActiveWeb3React()
+  const boringHelperContract = useBoringHelperContract()
+  const tokens = useKashiTokens()
+  const args = useMemo(() => [account ? account : AddressZero, addresses], [account, addresses])
+  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args)
+  const { rebases } = useBentoRebases(useMemo(() => Object.values(tokens), [tokens]))
+
+  // TODO: for skeleton loading
+  // const kashiRepositoryContract = useKashiRepositoryContract()
+  // const callStates = useSingleContractMultipleData(kashiRepositoryContract, 'getPair', args, NEVER_RELOAD)
+
+  return useMemo(() => {
+    if (!chainId || !result || !rebases) {
+      return []
+    }
+    return result?.[0]
+      .filter(
+        (pair: BoringHelperKashiPair) =>
+          rebases[pair.collateral] &&
+          rebases[pair.collateral]?.token &&
+          rebases[pair.asset] &&
+          rebases[pair.asset]?.token
+      )
+      .map(
+        (pair: BoringHelperKashiPair) =>
+          new KashiMediumRiskLendingPair({
+            accrueInfo: {
+              feesEarnedFraction: JSBI.BigInt(pair.accrueInfo.feesEarnedFraction.toString()),
+              lastAccrued: JSBI.BigInt(pair.accrueInfo.lastAccrued),
+              interestPerSecond: JSBI.BigInt(pair.accrueInfo.interestPerSecond.toString()),
+            },
+            // @ts-ignore
+            collateral: rebases[pair.collateral],
+            // @ts-ignore
+            asset: rebases[pair.asset],
+            oracle: getOracle(chainId, pair.oracle, pair.oracleData),
+            totalCollateralShare: JSBI.BigInt(pair.totalCollateralShare.toString()),
+            totalAsset: {
+              elastic: JSBI.BigInt(pair.totalAsset.elastic.toString()),
+              base: JSBI.BigInt(pair.totalAsset.base.toString()),
+            },
+            totalBorrow: {
+              elastic: JSBI.BigInt(pair.totalBorrow.elastic.toString()),
+              base: JSBI.BigInt(pair.totalBorrow.base.toString()),
+            },
+            exchangeRate: JSBI.BigInt(pair.currentExchangeRate.toString()),
+            oracleExchangeRate: JSBI.BigInt(pair.oracleExchangeRate.toString()),
+            spotExchangeRate: JSBI.BigInt(pair.spotExchangeRate.toString()),
+            userCollateralShare: JSBI.BigInt(pair.userCollateralShare.toString()),
+            userAssetFraction: JSBI.BigInt(pair.userAssetFraction.toString()),
+            userBorrowPart: JSBI.BigInt(pair.userBorrowPart.toString()),
+          })
+      )
+  }, [chainId, rebases, result])
+}
+
+// export function useKashiMediumRiskLendingPairs(
+//   account: string | null | undefined,
+//   addresses: string[] = []
+// ): KashiMediumRiskLendingPair[] {
+//   const { chainId } = useActiveWeb3React()
+//   const boringHelperContract = useBoringHelperContract()
+//   const tokens = useKashiTokens()
+//   const args = useMemo(() => [account ? account : AddressZero, addresses], [account, addresses])
+//   const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args, { blocksPerFetch: 10 })
+//   const { rebases } = useBentoRebases(Object.values(tokens))
+
+//   // TODO: for skeleton loading
+//   // const kashiRepositoryContract = useKashiRepositoryContract()
+//   // const callStates = useSingleContractMultipleData(kashiRepositoryContract, 'getPair', args, NEVER_RELOAD)
+
+//   return useMemo(() => {
+//     if (!chainId || !result || !rebases) {
+//       return []
+//     }
+
+//     return result?.[0].map((pair: any) => {
+//       if (!rebases[pair.collateral]?.token || !rebases[pair.asset]?.token) return undefined
+
+//       return new KashiMediumRiskLendingPair({
+//         accrueInfo: {
+//           feesEarnedFraction: JSBI.BigInt(pair.accrueInfo.feesEarnedFraction.toString()),
+//           lastAccrued: JSBI.BigInt(pair.accrueInfo.lastAccrued),
+//           interestPerSecond: JSBI.BigInt(pair.accrueInfo.interestPerSecond.toString()),
+//         },
+//         // @ts-ignore
+//         collateral: rebases[pair.collateral],
+//         // @ts-ignore
+//         asset: rebases[pair.asset],
+//         oracle: getOracle(chainId, pair.oracle, pair.oracleData),
+//         totalCollateralShare: JSBI.BigInt(pair.totalCollateralShare.toString()),
+//         totalAsset: {
+//           elastic: JSBI.BigInt(pair.totalAsset.elastic.toString()),
+//           base: JSBI.BigInt(pair.totalAsset.base.toString()),
+//         },
+//         totalBorrow: {
+//           elastic: JSBI.BigInt(pair.totalBorrow.elastic.toString()),
+//           base: JSBI.BigInt(pair.totalBorrow.base.toString()),
+//         },
+//         exchangeRate: JSBI.BigInt(pair.currentExchangeRate.toString()),
+//         oracleExchangeRate: JSBI.BigInt(pair.oracleExchangeRate.toString()),
+//         spotExchangeRate: JSBI.BigInt(pair.spotExchangeRate.toString()),
+//         userCollateralShare: JSBI.BigInt(pair.userCollateralShare.toString()),
+//         userAssetFraction: JSBI.BigInt(pair.userAssetFraction.toString()),
+//         userBorrowPart: JSBI.BigInt(pair.userBorrowPart.toString()),
+//       })
+//     })
+//   }, [chainId, result, rebases])
+// }
+
+export function useKashiMediumRiskLendingPair(
+  account: string | null | undefined,
+  address: string
+): KashiMediumRiskLendingPair {
+  return useKashiMediumRiskLendingPairs(account, [getAddress(address)])[0]
 }
 
 export const useKashiPairs = (addresses: string[] = []) => {
@@ -134,18 +296,54 @@ export function useKashiPairsForAccount(account: string | null | undefined, addr
   // @ts-ignore TYPE NEEDS FIXING
   const currency: Token = USD[chainId]
 
-  const allTokens = useKashiTokens()
+  const tokens = useKashiTokens()
 
   const pollArgs = useMemo(() => [account, addresses], [account, addresses])
 
   // TODO: Replace
   // @ts-ignore TYPE NEEDS FIXING
-  const pollKashiPairs = useSingleCallResult(boringHelperContract, 'pollKashiPairs', pollArgs, { blocksPerFetch: 0 })
-    ?.result?.[0]
+  const pollKashiPairs: any[] = useSingleCallResult(boringHelperContract, 'pollKashiPairs', pollArgs, {
+    blocksPerFetch: 0,
+  })?.result?.[0]
+
+  const { rebases } = useBentoRebases(Object.values(tokens))
+
+  const entities =
+    chainId &&
+    pollKashiPairs?.map(
+      (pair: any) =>
+        new KashiMediumRiskLendingPair({
+          accrueInfo: {
+            feesEarnedFraction: JSBI.BigInt(pair.accrueInfo.feesEarnedFraction.toString()),
+            lastAccrued: JSBI.BigInt(pair.accrueInfo.lastAccrued),
+            interestPerSecond: JSBI.BigInt(pair.accrueInfo.interestPerSecond.toString()),
+          },
+          // @ts-ignore
+          collateral: rebases[pair.collateral],
+          // @ts-ignore
+          asset: rebases[pair.asset],
+          oracle: getOracle(chainId, pair.oracle, pair.oracleData),
+          totalCollateralShare: JSBI.BigInt(pair.totalCollateralShare.toString()),
+          totalAsset: {
+            elastic: JSBI.BigInt(pair.totalAsset.elastic.toString()),
+            base: JSBI.BigInt(pair.totalAsset.base.toString()),
+          },
+          totalBorrow: {
+            elastic: JSBI.BigInt(pair.totalBorrow.elastic.toString()),
+            base: JSBI.BigInt(pair.totalBorrow.base.toString()),
+          },
+          exchangeRate: JSBI.BigInt(pair.currentExchangeRate.toString()),
+          oracleExchangeRate: JSBI.BigInt(pair.oracleExchangeRate.toString()),
+          spotExchangeRate: JSBI.BigInt(pair.spotExchangeRate.toString()),
+          userCollateralShare: JSBI.BigInt(pair.userCollateralShare.toString()),
+          userAssetFraction: JSBI.BigInt(pair.userAssetFraction.toString()),
+          userBorrowPart: JSBI.BigInt(pair.userBorrowPart.toString()),
+        })
+    )
 
   const strategies = useBentoStrategies({ chainId })
 
-  const tokenAddresses = Object.keys(allTokens)
+  const tokenAddresses = Object.keys(tokens)
 
   const getBalancesArgs = useMemo(() => [account, tokenAddresses], [account, tokenAddresses])
 
@@ -162,7 +360,7 @@ export function useKashiPairsForAccount(account: string | null | undefined, addr
   )
 
   // TODO: Disgusting but until final refactor this will have to remain...
-  const pairTokens = Object.values(allTokens)
+  const pairTokens = Object.values(tokens)
     .filter((token) => balances?.[token.address])
     .reduce((previousValue, currentValue) => {
       const balance = balances[currentValue.address]
@@ -185,7 +383,7 @@ export function useKashiPairsForAccount(account: string | null | undefined, addr
       }
     }, {})
 
-  return useMemo(() => {
+  const pairs = useMemo<any[]>(() => {
     if (!addresses || !tokenAddresses || !pollKashiPairs) {
       return []
     }
@@ -323,7 +521,6 @@ export function useKashiPairsForAccount(account: string | null | undefined, addr
           value: pair.utilization,
           string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString(),
         }
-
         pair.supplyAPR = {
           value: pair.supplyAPR,
           valueWithStrategy: pair.supplyAPR.add(pair.strategyAPY.asset.value.mulDiv(pair.utilization.value, e10(18))),
@@ -373,6 +570,9 @@ export function useKashiPairsForAccount(account: string | null | undefined, addr
     }, [])
   }, [addresses, tokenAddresses, pollKashiPairs, chainId, pairTokens, balances])
 
+  // console.log(entities?.[0], pairs?.[0])
+  return pairs
+
   //   return useMemo(
   //     () =>
   //       addresses.reduce((memo, address, i) => {
@@ -384,7 +584,7 @@ export function useKashiPairsForAccount(account: string | null | undefined, addr
   //   )
 }
 
-export function useKashiPair(address: string) {
+export function useKashiPair(address: string): KashiMarket | undefined {
   // @ts-ignore TYPE NEEDS FIXING
   return useKashiPairs([getAddress(address)])[0]
 }

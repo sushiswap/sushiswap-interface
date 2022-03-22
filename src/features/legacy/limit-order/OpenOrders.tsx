@@ -13,6 +13,7 @@ import {
 } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
 import { useLimitOrderContract } from 'app/hooks'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Link from 'next/link'
 import React, { FC, useCallback } from 'react'
@@ -22,6 +23,7 @@ import { useOpenOrdersTableConfig } from './useOpenOrdersTableConfig'
 
 const OpenOrders: FC = () => {
   const { i18n } = useLingui()
+  const { account } = useActiveWeb3React()
   const { pending, mutate } = useLimitOrders()
   const addTransaction = useTransactionAdder()
   const limitOrderContract = useLimitOrderContract(true)
@@ -122,7 +124,7 @@ const OpenOrders: FC = () => {
               >
                 <Typography variant="xs" className="italic text-center text-low-emphesis">
                   Funds will be received in your{' '}
-                  <Link href="/portfolio" passHref={true}>
+                  <Link href={`/account/${account}`} passHref={true}>
                     <Typography variant="xs" className="text-blue" component="span">
                       BentoBox
                     </Typography>

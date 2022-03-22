@@ -5,7 +5,7 @@ import useSWR from 'swr'
 
 // @ts-ignore TYPE NEEDS FIXING
 async function queryFilter(contract: Contract, event, fromBlockOrBlockHash, toBlock) {
-  return await contract.queryFilter(event, fromBlockOrBlockHash, toBlock)
+  return contract.queryFilter(event, fromBlockOrBlockHash, toBlock)
 }
 
 export function useQueryFilter({
@@ -18,9 +18,8 @@ export function useQueryFilter({
   fromBlockOrBlockHash = undefined,
   toBlock = undefined,
 }) {
-  const { data } = useSWR(
+  return useSWR(
     shouldFetch ? () => ['queryFilter', chainId, stringify(event), fromBlockOrBlockHash, toBlock] : null,
     () => queryFilter(contract, event, fromBlockOrBlockHash, toBlock)
   )
-  return data
 }

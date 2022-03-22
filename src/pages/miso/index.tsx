@@ -13,7 +13,9 @@ import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React from 'react'
+
 const queryToAuctionStatus = {
   live: AuctionStatus.LIVE,
   upcoming: AuctionStatus.UPCOMING,
@@ -35,6 +37,7 @@ const Miso = () => {
 
   return (
     <>
+      <NextSeo title="MISO Marketplace" />
       <MisoHeader>
         <div className="flex flex-col justify-between gap-8 lg:flex-row">
           <div className="flex flex-col">
@@ -45,17 +48,20 @@ const Miso = () => {
               {i18n._(t`Use with caution, this is experimental and permissionless. Due dilligence is required.`)}
             </Typography>
           </div>
-          {(chainId === ChainId.HARMONY || chainId === ChainId.KOVAN || chainId === ChainId.MOONBEAM) && (
-            <div className="flex items-center gap-4">
-              <div>
-                <Link href="/miso/auction" passHref={true}>
-                  <Button color="blue" className="rounded-full">
-                    {i18n._(t`Create Auction`)}
-                  </Button>
-                </Link>
+          {chainId &&
+            [ChainId.HARMONY, ChainId.KOVAN, ChainId.MOONBEAM, ChainId.MOONRIVER, ChainId.MATIC, ChainId.BSC].includes(
+              chainId
+            ) && (
+              <div className="flex items-center gap-4">
+                <div>
+                  <Link href="/miso/auction" passHref={true}>
+                    <Button color="blue" className="rounded-full">
+                      {i18n._(t`Create Auction`)}
+                    </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
       </MisoHeader>
       <MisoBody>

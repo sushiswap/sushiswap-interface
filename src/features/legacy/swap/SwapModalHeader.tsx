@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, TradeType, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
@@ -13,22 +13,28 @@ import { ArrowDown } from 'react-feather'
 
 interface SwapModalHeader {
   trade?: TradeUnion
-  allowedSlippage: Percent
   recipient?: string
   showAcceptChanges: boolean
   onAcceptChanges: () => void
+  inputAmount?: CurrencyAmount<Currency>
+  outputAmount?: CurrencyAmount<Currency>
+  minimumAmountOut?: CurrencyAmount<Currency>
+  maximumAmountIn?: CurrencyAmount<Currency>
 }
 
 const SwapModalHeader: FC<SwapModalHeader> = ({
   trade,
-  allowedSlippage,
   recipient,
   showAcceptChanges,
   onAcceptChanges,
+  inputAmount,
+  minimumAmountOut,
+  outputAmount,
+  maximumAmountIn,
 }) => {
   const { i18n } = useLingui()
-  const fiatValueInput = useUSDCValue(trade?.inputAmount)
-  const fiatValueOutput = useUSDCValue(trade?.outputAmount)
+  const fiatValueInput = useUSDCValue(inputAmount)
+  const fiatValueOutput = useUSDCValue(outputAmount)
 
   const change =
     ((Number(fiatValueOutput?.toExact()) - Number(fiatValueInput?.toExact())) / Number(fiatValueInput?.toExact())) * 100
@@ -41,7 +47,7 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
             <div className="flex items-start gap-3">
               <div className="flex flex-col gap-1">
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
-                  {trade?.inputAmount.toSignificant(6)}{' '}
+                  {inputAmount?.toSignificant(6)}{' '}
                 </Typography>
                 {fiatValueInput?.greaterThan(ZERO) && (
                   <Typography className="text-secondary">${fiatValueInput.toFixed(2)}</Typography>
@@ -49,13 +55,9 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <CurrencyLogo
-                currency={trade?.inputAmount.currency}
-                size={18}
-                className="!rounded-full overflow-hidden"
-              />
+              <CurrencyLogo currency={inputAmount?.currency} size={18} className="!rounded-full overflow-hidden" />
               <Typography variant="lg" weight={700} className="text-high-emphesis">
-                {trade?.inputAmount.currency.symbol}
+                {inputAmount?.currency.symbol}
               </Typography>
             </div>
           </div>
@@ -70,7 +72,7 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
             <div className="flex items-start gap-3">
               <div className="flex flex-col gap-1">
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
-                  {trade?.outputAmount.toSignificant(6)}{' '}
+                  {outputAmount?.toSignificant(6)}{' '}
                 </Typography>
                 {fiatValueOutput?.greaterThan(ZERO) && (
                   <Typography className="text-secondary">
@@ -83,13 +85,9 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <CurrencyLogo
-                currency={trade?.outputAmount.currency}
-                size={18}
-                className="!rounded-full overflow-hidden"
-              />
+              <CurrencyLogo currency={outputAmount?.currency} size={18} className="!rounded-full overflow-hidden" />
               <Typography variant="lg" weight={700} className="text-high-emphesis">
-                {trade?.outputAmount.currency.symbol}
+                {outputAmount?.currency.symbol}
               </Typography>
             </div>
           </div>
@@ -98,8 +96,11 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
       <SwapDetails
         trade={trade}
         recipient={recipient}
-        inputCurrency={trade?.inputAmount.currency}
-        outputCurrency={trade?.outputAmount.currency}
+        inputCurrency={inputAmount?.currency}
+        outputCurrency={outputAmount?.currency}
+        inputAmount={inputAmount}
+        outputAmount={outputAmount}
+        minimumAmountOut={minimumAmountOut}
         className="!border-dark-800"
       />
 
@@ -120,7 +121,7 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
           <Typography variant="xs" className="text-secondary">
             {i18n._(t`Output is estimated. You will receive at least`)}{' '}
             <Typography variant="xs" className="text-high-emphesis" weight={700} component="span">
-              {trade.minimumAmountOut(allowedSlippage).toSignificant(6)} {trade.outputAmount.currency.symbol}
+              {minimumAmountOut?.toSignificant(6)} {outputAmount?.currency.symbol}
             </Typography>{' '}
             {i18n._(t`or the transaction will revert.`)}
           </Typography>
@@ -128,7 +129,7 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
           <Typography variant="xs" className="text-secondary">
             {i18n._(t`Input is estimated. You will sell at most`)}{' '}
             <Typography variant="xs" className="text-high-emphesis" weight={700} component="span">
-              {trade?.maximumAmountIn(allowedSlippage).toSignificant(6)} {trade?.inputAmount.currency.symbol}
+              {maximumAmountIn?.toSignificant(6)} {inputAmount?.currency.symbol}
             </Typography>{' '}
             {i18n._(t`or the transaction will revert.`)}
           </Typography>

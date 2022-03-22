@@ -158,7 +158,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
             <input
               className={classNames(
                 deadlineError ? 'text-red' : '',
-                'font-bold bg-transparent placeholder-low-emphesis bg-dark-1000/40 border-2 border-dark-800 rounded px-3 py-2 max-w-[100px] focus:border-blue'
+                'font-bold h-[36px] placeholder-low-emphesis bg-dark-1000/40 border-2 border-dark-800 rounded px-2  max-w-[100px] focus:border-blue'
               )}
               placeholder={(DEFAULT_DEADLINE_FROM_NOW / 60).toString()}
               value={

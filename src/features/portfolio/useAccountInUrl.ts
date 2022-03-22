@@ -1,14 +1,13 @@
 import { isAddress } from 'app/functions'
 import { useRouter } from 'next/router'
 
-export const useAccountInUrl = (redirectPath: string): string | false => {
+export const useAccountInUrl = (redirectPath: string): string | undefined => {
   const router = useRouter()
-  const { account } = router.query
+  const account = router.query.account as string
 
-  if (!account || typeof account !== 'string' || !isAddress(account)) {
-    router.replace(redirectPath)
-    return false
-  } else {
-    return account
+  if (!account || !isAddress(account)) {
+    void router.replace(redirectPath)
   }
+
+  return account
 }
