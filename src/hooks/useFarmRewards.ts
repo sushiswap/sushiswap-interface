@@ -279,42 +279,6 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
             rewards[1] = reward[chainId]
           }
         }
-
-        /*if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
-          rewards[1] = {
-            currency: ARBITRUM_TOKENS.SPELL,
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice: spellPrice,
-          }
-        }
-        if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
-          rewards[1] = {
-            currency: ARBITRUM_TOKENS.gOHM,
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice: ohmPrice,
-          }
-        }
-        if (chainId === ChainId.ARBITRUM && ['13'].includes(pool.id)) {
-          rewards[1] = {
-            currency: ARBITRUM_TOKENS.MAGIC,
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice: magicPrice,
-          }
-        }*/
-        /*if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {
-          const rewardTokenPerSecond = 0.00000462962963
-          const rewardTokenPerBlock = rewardTokenPerSecond * averageBlockTime
-          const rewardTokenPerDay = 0.4
-          rewards[1] = {
-            currency: MATIC_TOKENS.gOHM,
-            rewardPerBlock: rewardTokenPerBlock,
-            rewardPerDay: rewardTokenPerDay,
-            rewardPrice: ohmPrice,
-          }
-        }*/
       } else if (chainId === ChainId.MATIC || chainId === ChainId.ARBITRUM) {
         if (pool.rewarder.rewardPerSecond !== '0') {
           const rewardPerSecond =
