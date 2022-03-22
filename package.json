@@ -24,7 +24,8 @@
     "postinstall": "yarn lingui"
   },
   "resolutions": {
-    "@walletconnect/jsonrpc-provider": "1.0.2"
+    "@walletconnect/jsonrpc-provider": "1.0.2",
+    "@walletconnect/ethereum-provider": "1.7.5"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
