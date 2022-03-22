@@ -203,6 +203,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
+        // @ts-ignore TYPE NEEDS FIXING
         const rewardPerSecond =
           pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
             ? pool.rewarder.rewardPerSecond / 1e18
@@ -307,6 +308,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
+        // @ts-ignore TYPE NEEDS FIXING
         const rewardPerSecond =
           pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
             ? pool.rewarder.rewardPerSecond / 1e18
