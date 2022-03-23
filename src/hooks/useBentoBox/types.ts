@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { ChainId, JSBI } from '@sushiswap/core-sdk'
 
-export type Action<T> = (x: T) => { data: string; value?: BigNumber }
+export type Action<T, P = { data: string; value?: BigNumber }> = (x: T) => P
 
 export interface DepositActionPayload {
   chainId: ChainId
@@ -25,4 +25,10 @@ export interface HarvestAction {
   bentobox: Contract
   tokenAddress: string
   rebalance: boolean
+}
+
+export interface BatchAction {
+  bentobox: Contract
+  actions: string[]
+  revertOnFail: boolean
 }
