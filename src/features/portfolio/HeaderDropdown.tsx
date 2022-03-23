@@ -2,7 +2,6 @@ import Davatar from '@davatar/react'
 import { LinkIcon } from '@heroicons/react/outline'
 import CopyHelper from 'app/components/AccountDetails/Copy'
 import Typography from 'app/components/Typography'
-import { BalancesSum } from 'app/features/portfolio/BalancesSum'
 import { getExplorerLink, shortenAddress } from 'app/functions'
 import useENSName from 'app/hooks/useENSName'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -39,7 +38,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ account, hideAccount = false 
               <a target="_blank">
                 <Typography
                   variant="h3"
-                  className="text-high-emphesis flex gap-1 cursor-pointer hover:text-blue-100"
+                  className="flex gap-1 cursor-pointer text-high-emphesis hover:text-blue-100"
                   weight={700}
                 >
                   {ENSName ? ENSName : account ? shortenAddress(account) : ''} <LinkIcon width={20} />
@@ -54,7 +53,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ account, hideAccount = false 
           )}
         </div>
       </div>
-      <BalancesSum account={account} />
+      {/* <BalancesSum account={account} /> */}
     </>
   )
 }
