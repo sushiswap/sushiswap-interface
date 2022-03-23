@@ -137,7 +137,7 @@ export default function XSushi() {
         ],
       },
       {
-        title: 'Daily Fees Received',
+        title: 'Daily Fees Received on Mainnet',
         labels: ['Fees (USD)'],
         data: [
           // @ts-ignore TYPE NEEDS FIXING
