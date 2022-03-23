@@ -14,11 +14,7 @@ import { useMemo } from 'react'
 export default function BentoBox(): JSX.Element {
   const router = useRouter()
 
-  console.log('Router query', router.query)
-
   const chainId = Number(router.query.chainId)
-
-  console.log('casted chainId from query', chainId)
 
   const nativePrice = useNativePrice({ chainId })
 

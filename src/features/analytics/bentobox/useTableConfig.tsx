@@ -13,18 +13,15 @@ export const useTableConfig = (chainId: number, tokens: any) => {
         minWidth: 200,
         // @ts-ignore
         Cell: (props) => {
-          console.log({ chainId, token: props.value })
           const currency = useMemo(
             () =>
-              chainId && props.value
-                ? new Token(
-                    chainId,
-                    getAddress(props.value.id),
-                    Number(props.value.decimals),
-                    props.value.symbol,
-                    props.value.name
-                  )
-                : undefined,
+              new Token(
+                chainId,
+                getAddress(props.value.id),
+                Number(props.value.decimals),
+                props.value.symbol,
+                props.value.name
+              ),
             [props]
           )
           return (
@@ -71,7 +68,7 @@ export const useTableConfig = (chainId: number, tokens: any) => {
         Cell: (props) => formatPercent(props.value?.apy),
       },
     ],
-    []
+    [chainId]
   )
 
   const defaultColumn = React.useMemo(() => ({ minWidth: 0 }), [])
