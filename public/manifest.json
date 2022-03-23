@@ -1,5 +1,6 @@
 {
   "name": "SushiSwap",
+  "description": "Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform",
   "short_name": "SushiSwap",
   "display": "standalone",
   "orientation": "portrait",
