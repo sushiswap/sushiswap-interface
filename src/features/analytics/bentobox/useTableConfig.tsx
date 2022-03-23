@@ -15,13 +15,15 @@ export const useTableConfig = (chainId = ChainId.ETHEREUM, tokens: any) => {
         Cell: (props) => {
           const currency = useMemo(
             () =>
-              new Token(
-                chainId,
-                getAddress(props.value.id),
-                Number(props.value.decimals),
-                props.value.symbol,
-                props.value.name
-              ),
+              props.value
+                ? new Token(
+                    chainId,
+                    getAddress(props.value.id),
+                    Number(props.value.decimals),
+                    props.value.symbol,
+                    props.value.name
+                  )
+                : undefined,
             [props]
           )
           return (
