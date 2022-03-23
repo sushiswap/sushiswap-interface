@@ -1,8 +1,10 @@
+import { getAddress } from '@ethersproject/address'
+import { Token as CoreToken } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import LineGraph from 'app/components/LineGraph'
 import Table, { Column } from 'app/components/Table'
 import { formatNumber, formatPercent } from 'app/functions'
-import { useCurrency } from 'app/hooks/Tokens'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 import ColoredNumber from '../ColoredNumber'
@@ -31,12 +33,15 @@ interface TokenListNameProps {
   token: {
     id: string
     symbol: string
+    decimals: number
+    name: string
   }
 }
 
 function TokenListName({ token }: TokenListNameProps): JSX.Element {
-  const currency = useCurrency(token.id)
-
+  const router = useRouter()
+  const chainId = Number(router.query.chainId)
+  const currency = new CoreToken(chainId, getAddress(token?.id), token?.decimals || 18, token?.symbol, token?.name)
   return (
     <>
       <div className="flex items-center">
@@ -52,8 +57,9 @@ export default function TokenList({
   tokens,
   enabledColumns = Object.keys(TokenListColumns) as TokenListColumnType[],
 }: TokenListProps): JSX.Element {
+  const router = useRouter()
+  const chainId = Number(router.query.chainId)
   const columns = React.useMemo<Column[]>(() => enabledColumns.map((col) => TokenListColumns[col]), [enabledColumns])
-
   return (
     <>
       {tokens && (
@@ -61,7 +67,7 @@ export default function TokenList({
           columns={columns}
           data={tokens}
           defaultSortBy={{ id: 'liquidity', desc: true }}
-          link={{ href: '/analytics/tokens/', id: 'token.id' }}
+          link={{ href: `/analytics/${chainId}/tokens/`, id: 'token.id' }}
         />
       )}
     </>

@@ -1,14 +1,12 @@
+import { ChainId } from '@sushiswap/core-sdk'
 import { formatDateAgo, getExplorerLink } from 'app/functions'
-import { useActiveWeb3React } from 'app/services/web3'
 import React, { useMemo } from 'react'
 
 import ExternalLink from '../../components/ExternalLink'
 import { shortenAddress } from './table-utils'
 import { Transactions } from './types'
 
-export const useTableConfig = (transactions?: Transactions[]) => {
-  const { chainId } = useActiveWeb3React()
-
+export const useTableConfig = (chainId = ChainId.ETHEREUM, transactions?: Transactions[]) => {
   const TransactionColumns = useMemo(
     () => [
       {
@@ -35,7 +33,7 @@ export const useTableConfig = (transactions?: Transactions[]) => {
         // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
           return (
-            <ExternalLink color="blue" href={getExplorerLink(chainId || 1, props.cell.value, 'transaction')}>
+            <ExternalLink color="blue" href={getExplorerLink(chainId, props.cell.value, 'transaction')}>
               {shortenAddress(props.cell.value)}
             </ExternalLink>
           )

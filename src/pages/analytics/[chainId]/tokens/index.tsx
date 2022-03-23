@@ -2,11 +2,16 @@ import Search from 'app/components/Search'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import Background from 'app/features/analytics/Background'
 import useTokensAnalytics from 'app/features/analytics/hooks/useTokensAnalytics'
-import TokenList from 'app/features/analytics/Tokens/TokenList'
+import TokenList from 'app/features/analytics/tokens/TokenList'
 import useFuse from 'app/hooks/useFuse'
+import { useRouter } from 'next/router'
 
 export default function Tokens() {
-  const tokens = useTokensAnalytics()
+  const router = useRouter()
+
+  const chainId = Number(router.query.chainId)
+
+  const tokens = useTokensAnalytics({ chainId })
 
   const {
     result: tokensSearched,

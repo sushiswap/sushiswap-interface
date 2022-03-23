@@ -1,7 +1,8 @@
+import { ChainId } from '@sushiswap/core-sdk'
 import { Transactions } from 'app/features/transactions/types'
-import { formatDateAgo, formatNumber } from 'app/functions'
+import { formatNumber } from 'app/functions'
 import { getTransactions } from 'app/services/graph/fetchers'
-import { useActiveWeb3React } from 'app/services/web3'
+import stringify from 'fast-json-stable-stringify'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
@@ -23,6 +24,7 @@ export interface LegacyTransactions {
   sender: string
   timestamp: string
   to: string
+  txHash: string
 }
 
 export const legacyTransactionDataFormatter = (rawData: LegacyTransactions[]): Transactions[] => {
@@ -42,16 +44,16 @@ export const legacyTransactionDataFormatter = (rawData: LegacyTransactions[]): T
     return {
       value: formatNumber(tx.amountUSD, true),
       address: tx.to,
-      time: formatDateAgo(new Date(Number(tx.timestamp) * 1000)),
+      time: tx.timestamp,
+      txHash: tx.id,
       ...props,
     }
   })
 }
-export const useLegacyTransactions = (pairs?: string[]) => {
-  const { chainId } = useActiveWeb3React()
+export const useLegacyTransactions = (chainId?: ChainId, pairs?: string[]) => {
   const variables = { where: { pair_in: pairs } }
   const { data, error, isValidating } = useSWR<LegacyTransactions[]>(
-    !!chainId && !!pairs ? ['legacyTransactions', chainId, JSON.stringify(variables)] : null,
+    !!chainId && !!pairs ? ['legacyTransactions', chainId, stringify(variables)] : null,
     // @ts-ignore TYPE NEEDS FIXING
     () => getTransactions(chainId, variables)
   )

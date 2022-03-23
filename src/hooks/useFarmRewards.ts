@@ -1,6 +1,6 @@
 import { getAddress } from '@ethersproject/address'
 import { ChainId, Currency, NATIVE, SUSHI, Token } from '@sushiswap/core-sdk'
-import { ARBITRUM_TOKENS, MATIC_TOKENS, XDAI_TOKENS } from 'app/config/tokens'
+import { XDAI_TOKENS } from 'app/config/tokens'
 import { Feature } from 'app/enums'
 import { Chef, PairType } from 'app/features/onsen/enum'
 import { usePositions } from 'app/features/onsen/hooks'
@@ -28,17 +28,12 @@ import {
   useSushiPairs,
   useSushiPrice,
 } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
 import toLower from 'lodash/toLower'
 import { useMemo } from 'react'
 
-export default function useFarmRewards() {
-  const { chainId } = useActiveWeb3React()
-
+export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
   // @ts-ignore TYPE NEEDS FIXING
   const positions = usePositions(chainId)
-
-  // console.log({ positions })
 
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
@@ -203,15 +198,13 @@ export default function useFarmRewards() {
           }
           rewards[1] = reward
         }
-      } else if (pool.chef === Chef.MINICHEF) {
+      } else if (pool.chef === Chef.MINICHEF && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM) {
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
         const rewardPerSecond =
-          pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
-            ? pool.rewarder.rewardPerSecond / 1e18
-            : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+          ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 
         const rewardPerBlock = rewardPerSecond * averageBlockTime
 
@@ -284,40 +277,27 @@ export default function useFarmRewards() {
             rewards[1] = reward[chainId]
           }
         }
+      } else if (chainId === ChainId.MATIC || chainId === ChainId.ARBITRUM) {
+        if (pool.rewarder.rewardPerSecond !== '0') {
+          const rewardPerSecond =
+            pool.rewarder.totalAllocPoint === '0'
+              ? pool.rewarder.rewardPerSecond / 10 ** pool.rewardToken.decimals
+              : ((pool.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+          const rewardPerBlock = rewardPerSecond * averageBlockTime
+          const rewardPerDay = rewardPerBlock * blocksPerDay
+          const rewardPrice = pool.rewardToken.derivedETH * ethPrice
 
-        if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
           rewards[1] = {
-            currency: ARBITRUM_TOKENS.SPELL,
+            currency: new Token(
+              chainId,
+              getAddress(pool.rewardToken.id),
+              Number(pool.rewardToken.decimals),
+              pool.rewardToken.symbol,
+              pool.rewardToken.name
+            ),
             rewardPerBlock,
             rewardPerDay,
-            rewardPrice: spellPrice,
-          }
-        }
-        if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
-          rewards[1] = {
-            currency: ARBITRUM_TOKENS.gOHM,
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice: ohmPrice,
-          }
-        }
-        if (chainId === ChainId.ARBITRUM && ['13'].includes(pool.id)) {
-          rewards[1] = {
-            currency: ARBITRUM_TOKENS.MAGIC,
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice: magicPrice,
-          }
-        }
-        if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {
-          const rewardTokenPerSecond = 0.00000462962963
-          const rewardTokenPerBlock = rewardTokenPerSecond * averageBlockTime
-          const rewardTokenPerDay = 0.4
-          rewards[1] = {
-            currency: MATIC_TOKENS.gOHM,
-            rewardPerBlock: rewardTokenPerBlock,
-            rewardPerDay: rewardTokenPerDay,
-            rewardPrice: ohmPrice,
+            rewardPrice,
           }
         }
       } else if (pool.chef === Chef.OLD_FARMS) {
@@ -326,9 +306,7 @@ export default function useFarmRewards() {
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
         const rewardPerSecond =
-          pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
-            ? pool.rewarder.rewardPerSecond / 1e18
-            : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+          ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 
         const rewardPerBlock = rewardPerSecond * averageBlockTime
 

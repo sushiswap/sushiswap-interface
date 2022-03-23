@@ -31,7 +31,6 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
     [asset, market.currentBorrowAmount]
   )
   // @ts-ignore
-  // AVAILABLE?
   const totalAssetAmount = useMemo(
     () => (asset ? CurrencyAmount.fromRawAmount(asset, market.totalAssetAmount) : undefined),
     [asset, market.totalAssetAmount]

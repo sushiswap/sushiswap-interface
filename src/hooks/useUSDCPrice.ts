@@ -31,7 +31,7 @@ export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> }
  * Returns the price in USDC of the input currency
  * @param currency currency to compute the USDC price of
  */
-export default function useUSDCPrice(currency?: Currency): Price<Currency, Token> | undefined {
+export default function useUSDCPrice(currency?: Currency, useTrident = false): Price<Currency, Token> | undefined {
   const { chainId } = useActiveWeb3React()
 
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined
@@ -54,8 +54,8 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
   }, [allowedPools, currency, stablecoin])
 }
 
-export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null) {
-  const price = useUSDCPrice(currencyAmount?.currency)
+export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null, includeTrident = false) {
+  const price = useUSDCPrice(currencyAmount?.currency, includeTrident)
 
   return useMemo(() => {
     if (!price || !currencyAmount) return null

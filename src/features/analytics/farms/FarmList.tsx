@@ -1,8 +1,10 @@
+import { getAddress } from '@ethersproject/address'
+import { Token } from '@sushiswap/core-sdk'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
 import Table from 'app/components/Table'
 import { formatNumber, formatPercent } from 'app/functions'
-import { useCurrency } from 'app/hooks/Tokens'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 import ColoredNumber from '../ColoredNumber'
@@ -20,9 +22,15 @@ type FarmListNameProps = {
   pair: {
     token0: {
       id: string
+      decimals: number
+      symbol: string
+      name: string
     }
     token1: {
       id: string
+      decimals: number
+      symbol: string
+      name: string
     }
     name: string
     type: 'Sushi Farm' | 'Kashi Farm'
@@ -38,9 +46,22 @@ type Reward = {
 }
 
 function FarmListName({ pair }: FarmListNameProps): JSX.Element {
-  const token0 = useCurrency(pair?.token0?.id)
-  const token1 = useCurrency(pair?.token1?.id)
-
+  const router = useRouter()
+  const chainId = Number(router.query.chainId)
+  const token0 = new Token(
+    chainId,
+    getAddress(pair?.token0?.id),
+    Number(pair?.token0?.decimals) || 18,
+    pair?.token0?.symbol,
+    pair?.token0?.name
+  )
+  const token1 = new Token(
+    chainId,
+    getAddress(pair?.token1?.id),
+    Number(pair?.token1?.decimals) || 18,
+    pair?.token1?.symbol,
+    pair?.token1?.name
+  )
   return (
     <>
       <div className="flex items-center">

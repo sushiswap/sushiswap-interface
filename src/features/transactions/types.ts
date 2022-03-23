@@ -1,3 +1,5 @@
+import { ChainId } from '@sushiswap/core-sdk'
+
 export interface TransactionTableData {
   type: string
   value: string
@@ -33,4 +35,9 @@ export interface Transactions {
   type: string
 }
 
-export type TransactionFetcherState = { transactions?: Transactions[]; error: Error; loading: boolean }
+export type TransactionFetcherState = {
+  chainId?: ChainId
+  transactions?: Transactions[]
+  error: Error
+  loading: boolean
+}

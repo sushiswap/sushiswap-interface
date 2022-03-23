@@ -14,11 +14,23 @@ const AuctionClaimer: FC = () => {
   const { i18n } = useLingui()
   const { auction, loading } = useAuctionContext()
   const [pending, setPending] = useState(false)
-  const { claimTokens } = useAuctionEdit(
+  const { claimTokens, finalizeAuction } = useAuctionEdit(
     auction?.auctionInfo.addr,
     auction?.template,
     auction?.auctionInfo.liquidityTemplate
   )
+
+  const handleFinalize = useCallback(async () => {
+    try {
+      setPending(true)
+      const tx = await finalizeAuction()
+      if (tx?.hash) {
+        await tx.wait()
+      }
+    } finally {
+      setPending(false)
+    }
+  }, [finalizeAuction])
 
   const handleClick = useCallback(async () => {
     try {
@@ -69,8 +81,8 @@ const AuctionClaimer: FC = () => {
               </div>
             ),
           })}
-          onClick={handleClick}
-          disabled={(!auction.canWithdraw && !auction.canClaim) || pending}
+          onClick={auction.canFinalize ? handleFinalize : handleClick}
+          disabled={(!auction.canWithdraw && !auction.canClaim && !auction.canFinalize) || pending}
           className={classNames(
             auction.canWithdraw ? 'from-blue to-blue' : 'from-blue to-pink',
             'w-full outline-none h-[74px] bg-gradient-to-r from-blue to-pink transition-all disabled:scale-[1] hover:scale-[1.02] !opacity-100 disabled:!opacity-40'
@@ -78,7 +90,9 @@ const AuctionClaimer: FC = () => {
         >
           <div className="flex flex-col">
             <Typography className="text-white" weight={700}>
-              {auction.canWithdraw
+              {auction.canFinalize
+                ? i18n._(t`Finalize Auction`)
+                : auction.canWithdraw
                 ? i18n._(t`Withdraw`)
                 : auction.canClaim
                 ? i18n._(t`Claim`)

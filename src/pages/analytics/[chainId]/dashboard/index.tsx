@@ -1,11 +1,13 @@
 import Search from 'app/components/Search'
+import { Feature } from 'app/enums'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import Background from 'app/features/analytics/Background'
 import ChartCard from 'app/features/analytics/ChartCard'
-import DashboardTabs from 'app/features/analytics/Dashboard/DashboardTabs'
-import PoolList from 'app/features/analytics/Farms/FarmList'
-import PairList from 'app/features/analytics/Pairs/PairList'
-import TokenList from 'app/features/analytics/Tokens/TokenList'
+import DashboardTabs from 'app/features/analytics/dashboard/DashboardTabs'
+import PoolList from 'app/features/analytics/farms/FarmList'
+import PairList from 'app/features/analytics/pairs/PairList'
+import TokenList from 'app/features/analytics/tokens/TokenList'
+import { featureEnabled } from 'app/functions'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import useFuse from 'app/hooks/useFuse'
 import {
@@ -18,7 +20,7 @@ import {
   useTokens,
   useTwoDayBlock,
 } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
+import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
 const chartTimespans = [
@@ -41,9 +43,13 @@ const chartTimespans = [
 ]
 
 export default function Dashboard(): JSX.Element {
-  const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')
+  const router = useRouter()
 
-  const { chainId } = useActiveWeb3React()
+  const chainId = Number(router.query.chainId)
+
+  const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>(
+    featureEnabled(Feature.LIQUIDITY_MINING, chainId) ? 'pools' : 'pairs'
+  )
 
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
@@ -107,7 +113,7 @@ export default function Dashboard(): JSX.Element {
   )
 
   // For Top Farms
-  const farms = useFarmRewards()
+  const farms = useFarmRewards({ chainId })
   const nativePrice = useNativePrice({ chainId })
   const farmsFormatted = useMemo(
     () =>
@@ -250,7 +256,7 @@ export default function Dashboard(): JSX.Element {
             figure={chartData.liquidity}
             change={chartData.liquidityChange}
             chart={chartData.liquidityChart}
-            defaultTimespan="1W"
+            defaultTimespan="1M"
             timespans={chartTimespans}
           />
           <ChartCard
@@ -259,14 +265,14 @@ export default function Dashboard(): JSX.Element {
             figure={chartData.volume1d}
             change={chartData.volume1dChange}
             chart={chartData.volumeChart}
-            defaultTimespan="1W"
+            defaultTimespan="1M"
             timespans={chartTimespans}
           />
         </div>
       </div>
       <DashboardTabs currentType={type} setType={setType} />
       <div className="px-4 pt-4 lg:px-14">
-        {type === 'pools' && <PoolList pools={searched} />}
+        {featureEnabled(Feature.LIQUIDITY_MINING, chainId) && type === 'pools' && <PoolList pools={searched} />}
         {type === 'pairs' && <PairList pairs={searched} type={'all'} />}
         {type === 'tokens' && <TokenList tokens={searched} />}
       </div>

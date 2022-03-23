@@ -1,9 +1,11 @@
+import { getAddress } from '@ethersproject/address'
+import { Token } from '@sushiswap/core-sdk'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
 import Table from 'app/components/Table'
 import ColoredNumber from 'app/features/analytics/ColoredNumber'
 import { formatNumber, formatNumberScale, formatPercent } from 'app/functions'
 import { aprToApy } from 'app/functions/convert/apyApr'
-import { useCurrency } from 'app/hooks/Tokens'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 interface PairListProps {
@@ -31,18 +33,35 @@ interface PairListNameProps {
     token0: {
       id: string
       symbol: string
+      decimals: number
+      name: string
     }
     token1: {
       id: string
       symbol: string
+      decimals: number
+      name: string
     }
   }
 }
 
 function PairListName({ pair }: PairListNameProps): JSX.Element {
-  const token0 = useCurrency(pair?.token0?.id)
-  const token1 = useCurrency(pair?.token1?.id)
-
+  const router = useRouter()
+  const chainId = Number(router.query.chainId)
+  const token0 = new Token(
+    chainId,
+    getAddress(pair?.token0?.id),
+    pair?.token0?.decimals || 18,
+    pair?.token0?.symbol,
+    pair?.token0?.name
+  )
+  const token1 = new Token(
+    chainId,
+    getAddress(pair?.token1?.id),
+    pair?.token1?.decimals || 18,
+    pair?.token1?.symbol,
+    pair?.token1?.name
+  )
   return (
     <>
       <div className="flex items-center">
@@ -192,6 +211,8 @@ const gainersColumns = [
 ]
 
 export default function PairList({ pairs, type }: PairListProps): JSX.Element {
+  const router = useRouter()
+  const chainId = Number(router.query.chainId)
   const defaultSortBy = React.useMemo(() => {
     switch (type) {
       case 'all':
@@ -221,7 +242,7 @@ export default function PairList({ pairs, type }: PairListProps): JSX.Element {
           columns={columns}
           data={pairs}
           defaultSortBy={defaultSortBy}
-          link={{ href: '/analytics/pairs/', id: 'pair.id' }}
+          link={{ href: `/analytics/${chainId}/pairs/`, id: 'pair.id' }}
         />
       )}
     </>

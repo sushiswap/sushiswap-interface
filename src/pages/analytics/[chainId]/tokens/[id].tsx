@@ -1,17 +1,18 @@
+import { getAddress } from '@ethersproject/address'
 import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
+import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import Background from 'app/features/analytics/Background'
 import ChartCard from 'app/features/analytics/ChartCard'
 import ColoredNumber from 'app/features/analytics/ColoredNumber'
 import InfoCard from 'app/features/analytics/InfoCard'
-import PairList from 'app/features/analytics/Pairs/PairList'
+import PairList from 'app/features/analytics/pairs/PairList'
 import { LegacyTransactions } from 'app/features/transactions/Transactions'
 import { getExplorerLink } from 'app/functions/explorer'
 import { formatNumber, shortenAddress } from 'app/functions/format'
-import { useCurrency } from 'app/hooks/Tokens'
-import { useTokenContract } from 'app/hooks/useContract'
 import useCopyClipboard from 'app/hooks/useCopyClipboard'
+import { useTotalSupply } from 'app/hooks/useTotalSupply'
 import {
   useNativePrice,
   useOneDayBlock,
@@ -21,10 +22,9 @@ import {
   useTokens,
   useTwoDayBlock,
 } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { ExternalLink as LinkIcon } from 'react-feather'
 
 const chartTimespans = [
@@ -46,24 +46,12 @@ const chartTimespans = [
   },
 ]
 
-export default function Token() {
+export default function TokenPage() {
   const router = useRouter()
+  const chainId = Number(router.query.chainId)
   const id = (router.query.id as string)?.toLowerCase()
 
-  const { chainId } = useActiveWeb3React()
-
   const [isCopied, setCopied] = useCopyClipboard()
-
-  const [totalSupply, setTotalSupply] = useState(0)
-  const tokenContract = useTokenContract(id)
-
-  useEffect(() => {
-    const fetch = async () => {
-      /* @ts-ignore TYPE NEEDS FIXING */
-      setTotalSupply(await tokenContract.totalSupply())
-    }
-    fetch()
-  }, [tokenContract])
 
   const block1d = useOneDayBlock({ chainId })
   const block2d = useTwoDayBlock({ chainId })
@@ -121,9 +109,6 @@ export default function Token() {
     [tokenPairs, tokenPairs1d, tokenPairs1w]
   )
 
-  // For the logo
-  const currency = useCurrency(token?.id)
-
   // For the Info Cards
   const price = token?.derivedETH * nativePrice
   const priceChange = ((token?.derivedETH * nativePrice) / (token1d?.derivedETH * nativePrice1d)) * 100 - 100
@@ -159,6 +144,14 @@ export default function Token() {
     }),
     [tokenDayData]
   )
+
+  const currency = token
+    ? new Token(chainId, getAddress(id), Number(token?.decimals) || 18, token?.symbol, token?.name)
+    : undefined
+
+  const totalSupply = useTotalSupply(currency)
+
+  if (!token) return <></>
 
   return (
     <AnalyticsContainer>
@@ -207,7 +200,7 @@ export default function Token() {
               <div>Market Cap</div>
               <div className="flex items-center space-x-2">
                 <div className="text-lg font-medium text-high-emphesis">
-                  {formatNumber(price * (totalSupply / 10 ** token?.decimals) ?? 0, true, false)}
+                  {formatNumber(price * (Number(totalSupply?.toExact()) / 10 ** token?.decimals) ?? 0, true, false)}
                 </div>
                 <ColoredNumber number={priceChange} percent={true} />
               </div>
@@ -280,7 +273,7 @@ export default function Token() {
           <PairList pairs={tokenPairsFormatted} type="all" />
         </div>
         {/*@ts-ignore TYPE NEEDS FIXING*/}
-        <LegacyTransactions pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
+        <LegacyTransactions chainId={chainId} pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
       </div>
     </AnalyticsContainer>
   )

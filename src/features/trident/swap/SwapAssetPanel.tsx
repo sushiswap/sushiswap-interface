@@ -234,10 +234,9 @@ const SwapAssetPanelHeader: FC<
   Pick<
     SwapAssetPanel,
     'currency' | 'currencies' | 'onSelect' | 'walletToggle' | 'spendFromWallet' | 'disabled' | 'onChange' | 'value'
-  > & { label: string; id?: string; selectLabel?: string }
-> = ({ label, selectLabel, walletToggle, currency, onSelect, spendFromWallet, id, currencies }) => {
+  > & { label: string; id?: string; selectLabel?: string; hideSearchModal?: boolean }
+> = ({ label, selectLabel, walletToggle, currency, onSelect, spendFromWallet, id, currencies, hideSearchModal }) => {
   const { i18n } = useLingui()
-  const hideSearchModal = Array.isArray(currencies) && currencies.length === 0
 
   const trigger = currency ? (
     <div

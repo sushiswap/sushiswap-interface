@@ -3,7 +3,7 @@ import TimespanGraph from 'app/components/TimespanGraph'
 import { XSUSHI } from 'app/config/tokens'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import Background from 'app/features/analytics/Background'
-import InfoCard from 'app/features/analytics/Bar/InfoCard'
+import InfoCard from 'app/features/analytics/bar/InfoCard'
 import ColoredNumber from 'app/features/analytics/ColoredNumber'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
 import { aprToApy } from 'app/functions/convert/apyApr'
@@ -137,7 +137,7 @@ export default function XSushi() {
         ],
       },
       {
-        title: 'Daily Fees Received',
+        title: 'Daily Fees Received on Mainnet',
         labels: ['Fees (USD)'],
         data: [
           // @ts-ignore TYPE NEEDS FIXING

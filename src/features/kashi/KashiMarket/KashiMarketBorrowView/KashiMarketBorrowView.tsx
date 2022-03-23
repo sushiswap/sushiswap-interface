@@ -89,7 +89,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
       <KashiMarketCurrentPosition setBorrowAmount={setBorrowAmount} setCollateralAmount={setCollateralAmount} />
       <SwapAssetPanel
         error={borrowAmountCurrencyAmount && maxBorrow ? borrowAmountCurrencyAmount.greaterThan(maxBorrow) : false}
-        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Deposit`)} />}
+        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Deposit`)} hideSearchModal />}
         walletToggle={(props) => (
           <SwapAssetPanel.Switch
             id={`switch-classic-withdraw-from-0}`}
@@ -111,7 +111,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
       <SwapAssetPanel
         ref={inputRef}
         error={false}
-        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Borrow`)} />}
+        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Borrow`)} hideSearchModal />}
         walletToggle={(props) => (
           <Transition
             show={!leverage}
