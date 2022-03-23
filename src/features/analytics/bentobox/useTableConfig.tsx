@@ -1,10 +1,10 @@
 import { getAddress } from '@ethersproject/address'
-import { ChainId, Token } from '@sushiswap/core-sdk'
+import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { formatNumber, formatPercent } from 'app/functions'
 import React, { useMemo } from 'react'
 
-export const useTableConfig = (chainId = ChainId.ETHEREUM, tokens: any) => {
+export const useTableConfig = (chainId: number, tokens: any) => {
   const TokenColumns = useMemo(
     () => [
       {

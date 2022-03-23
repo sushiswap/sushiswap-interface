@@ -1,7 +1,6 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import {
@@ -17,7 +16,7 @@ import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { useTableConfig } from './useTableConfig'
 
-const TokenTable: FC<any> = ({ chainId = ChainId.ETHEREUM, tokens }) => {
+const TokenTable: FC<any> = ({ chainId, tokens }) => {
   const { i18n } = useLingui()
   const { config } = useTableConfig(chainId, tokens)
 
