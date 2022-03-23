@@ -256,7 +256,7 @@ export default function Dashboard(): JSX.Element {
             figure={chartData.liquidity}
             change={chartData.liquidityChange}
             chart={chartData.liquidityChart}
-            defaultTimespan="1W"
+            defaultTimespan="1M"
             timespans={chartTimespans}
           />
           <ChartCard
@@ -265,7 +265,7 @@ export default function Dashboard(): JSX.Element {
             figure={chartData.volume1d}
             change={chartData.volume1dChange}
             chart={chartData.volumeChart}
-            defaultTimespan="1W"
+            defaultTimespan="1M"
             timespans={chartTimespans}
           />
         </div>
