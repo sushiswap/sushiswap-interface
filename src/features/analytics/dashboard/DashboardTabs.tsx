@@ -2,7 +2,7 @@ import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
 import { useRouter } from 'next/router'
 
-import Tabs from './../Tabs'
+import Tabs from '../Tabs'
 
 // @ts-ignore TYPE NEEDS FIXING
 export default function DashboardTabs({ currentType, setType }): JSX.Element {
