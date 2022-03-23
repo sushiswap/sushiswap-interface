@@ -37,7 +37,7 @@ export default function BentoBox(): JSX.Element {
   // Combine Bento Box Tokens with Token data from exchange
   const bentoBoxTokensFormatted = useMemo<Array<any>>(
     () =>
-      bentoBox?.tokens
+      (bentoBox?.tokens || [])
         // @ts-ignore TYPE NEEDS FIXING
         ?.map(({ id, totalSupplyElastic, decimals, symbol, name }) => {
           const token = tokenIdToPrice.get(id)
@@ -94,7 +94,7 @@ export default function BentoBox(): JSX.Element {
           <InfoCard
             text="TVL"
             number={formatNumber(
-              bentoBoxTokensFormatted.reduce((prev, curr) => prev + curr.liquidity, 0),
+              bentoBoxTokensFormatted?.reduce((prev, curr) => prev + curr.liquidity, 0),
               true,
               false
             )}
