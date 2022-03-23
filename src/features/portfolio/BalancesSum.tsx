@@ -43,7 +43,7 @@ export const LiquidityPositionsBalancesSum = () => {
 
 const useWalletBalances = (account: string) => {
   const { chainId } = useActiveWeb3React()
-  const { data: tokenBalances, loading } = useAllTokenBalancesWithLoadingIndicator()
+  const { data: tokenBalances, loading } = useAllTokenBalancesWithLoadingIndicator(account)
   // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
   return useMemo(() => {
