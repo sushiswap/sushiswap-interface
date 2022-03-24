@@ -3,17 +3,21 @@ import { useLingui } from '@lingui/react'
 import ActionsModal from 'app/features/portfolio/ActionsModal'
 import { BentoBalances, WalletBalances } from 'app/features/portfolio/AssetBalances/bentoAndWallet'
 import HeaderDropdown from 'app/features/portfolio/HeaderDropdown'
-import { useAccountInUrl } from 'app/features/portfolio/useAccountInUrl'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React from 'react'
 
 const Portfolio = () => {
   const { i18n } = useLingui()
 
-  const account = useAccountInUrl('/')
+  const router = useRouter()
 
-  if (!account) return
+  const account = router.query.account as string
+
+  // const account = useAccountInUrl('/')
+
+  // if (!account) return
 
   return (
     <>
