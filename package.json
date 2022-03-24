@@ -24,8 +24,9 @@
     "postinstall": "yarn lingui"
   },
   "resolutions": {
-    "@walletconnect/jsonrpc-provider": "1.0.2",
-    "@walletconnect/ethereum-provider": "1.7.5"
+    "**/@walletconnect/jsonrpc-provider": "1.0.2",
+    "**/@walletconnect/ethereum-provider": "1.7.5",
+    "**/node-hid": "2.1.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -161,6 +162,7 @@
     "next-pwa": "^5.4.6",
     "next-seo": "^5.1.0",
     "next-unused": "^0.0.6",
+    "node-hid": "^2.1.1",
     "node-vibrant": "3.1.6",
     "numeral": "^2.0.0",
     "polished": "^4.1.0",
