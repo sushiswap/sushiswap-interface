@@ -34,7 +34,7 @@
       "app/types": ["./types"],
       "app/types/*": ["./types/*"]
     },
-    "target": "es5",
+    "target": "es2018",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -50,6 +50,6 @@
     "downlevelIteration": true,
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "sushi-env.d.ts"],
   "exclude": ["node_modules"]
 }
