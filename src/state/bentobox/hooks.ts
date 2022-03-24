@@ -46,6 +46,7 @@ export const useBentoBalancesV2ForAccount = (
 ): { data: CurrencyAmount<Token>[]; loading: boolean } => {
   const { chainId } = useActiveWeb3React()
   return useBentoBalancesWeb3({
+    account,
     shouldFetch: !!chainId,
     tokenAddresses,
   })
@@ -74,13 +75,15 @@ export const useBentoBalanceV2 = (
 }
 
 export const useBentoBalancesWeb3 = ({
+  account,
   shouldFetch = true,
   tokenAddresses,
 }: {
+  account: string | null | undefined
   shouldFetch?: boolean
   tokenAddresses?: string[]
 }) => {
-  const { account } = useActiveWeb3React()
+  // const { account } = useActiveWeb3React()
   const contract = useBentoBoxContract()
   const allTokens = useAllTokens()
   const totalsInput = useMemo(
