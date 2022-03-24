@@ -33,8 +33,8 @@ const Mobile: FC = () => {
             </Link>
           </div>
         </div>
-        <Transition.Root show={open} as={Fragment}>
-          <Dialog as="div" className="fixed inset-0 z-20 overflow-hidden" onClose={setOpen}>
+        <Transition.Root show={open} as={Fragment} unmount={false}>
+          <Dialog as="div" className="fixed inset-0 z-20 overflow-hidden" onClose={setOpen} unmount={false}>
             <div className="absolute inset-0 overflow-hidden">
               <Transition.Child
                 as={Fragment}
@@ -57,6 +57,7 @@ const Mobile: FC = () => {
                   leave="transform transition ease-in-out duration-300"
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-[-100%]"
+                  unmount={false}
                 >
                   <div className="w-screen max-w-sm">
                     <div className="flex flex-col h-full py-6 overflow-x-hidden overflow-y-scroll shadow-xl bg-dark-800">

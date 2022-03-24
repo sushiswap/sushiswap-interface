@@ -8,7 +8,7 @@ import { Activity } from 'react-feather'
 
 import Button, { ButtonProps } from '../Button'
 
-export default function Web3Connect({ color = 'gray', size = 'sm', className = '', ...rest }: ButtonProps) {
+export default function Web3Connect({ color = 'gray', size, className = '', ...rest }: ButtonProps) {
   const { i18n } = useLingui()
   const toggleWalletModal = useWalletModalToggle()
   const { error } = useWeb3React()

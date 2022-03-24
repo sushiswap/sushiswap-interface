@@ -24,6 +24,9 @@ export const fetcher = async <T>(chainId = ChainId.ETHEREUM, query, variables: {
       variables
     )
   }
+
+  // return pager(`https://api.thegraph.com/subgraphs/name/matthewlilley/trident-polygon`, query, variables)
+
   // @ts-ignore TYPE NEEDS FIXING
   return pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${TRIDENT[chainId]}`, query, variables)
 }

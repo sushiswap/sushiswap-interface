@@ -1,15 +1,18 @@
+import { LinkIcon } from '@heroicons/react/outline'
 import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
+import CopyHelper from 'app/components/AccountDetails/Copy'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { usePoolContext } from 'app/features/trident/PoolContext'
-import { formatPercent } from 'app/functions'
+import { formatPercent, getExplorerLink, shortenAddress } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
-import { FC } from 'react'
+import Link from 'next/link'
+import React, { FC } from 'react'
 
 import { PoolProperties } from './PoolProperties'
 
@@ -49,14 +52,27 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
           </div>
         </div>
         <div className="flex flex-row items-center gap-2 lg:order-2">
-          <Typography
-            id={`pool-title-${poolId}`}
-            variant={isDesktop ? 'h3' : 'h2'}
-            className="text-high-emphesis"
-            weight={700}
-          >
-            {poolId}
-          </Typography>
+          <div className="flex flex-col">
+            {pool && (
+              <Link href={getExplorerLink(chainId, pool.liquidityToken.address, 'address')} passHref={true}>
+                <a target="_blank">
+                  <Typography
+                    id={`pool-title-${poolId}`}
+                    variant={isDesktop ? 'h3' : 'h2'}
+                    className="text-high-emphesis hover:text-blue-100 flex gap-1"
+                    weight={700}
+                  >
+                    {poolId} <LinkIcon width={20} />
+                  </Typography>
+                </a>
+              </Link>
+            )}
+            {pool && (
+              <CopyHelper toCopy={pool.liquidityToken.address} className="opacity-100 text-primary">
+                {shortenAddress(pool.liquidityToken.address)}
+              </CopyHelper>
+            )}
+          </div>
           {isFarm && (
             <>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">

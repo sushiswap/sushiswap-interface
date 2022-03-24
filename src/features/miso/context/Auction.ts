@@ -288,6 +288,11 @@ export class Auction {
     if (this.auctionInfo.finalized) return false
     if (this.status !== AuctionStatus.FINISHED) return false
     if (this.isOwner) return true
+
+    const endTime = this.auctionInfo.endTime.mul('1000').toNumber()
+    const now = Date.now()
+    if (endTime + 60 * 60 * 24 * 7 * 1000 < now) return true
+
     if (!this.auctionInfo?.liquidityTemplate) return false
     return this.auctionInfo?.liquidityTemplate > 0
   }

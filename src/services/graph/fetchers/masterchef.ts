@@ -8,16 +8,17 @@ import {
   masterChefV2PairAddressesQuery,
   miniChefPairAddressesQuery,
   miniChefPoolsQuery,
+  miniChefPoolsQueryV2,
   poolsQuery,
   poolsV2Query,
 } from 'app/services/graph/queries'
 import { request } from 'graphql-request'
 
 export const MINICHEF = {
-  [ChainId.MATIC]: 'sushiswap/matic-minichef',
+  [ChainId.MATIC]: 'jiro-ono/minichef-staging-updates',
   [ChainId.XDAI]: 'sushiswap/xdai-minichef',
   [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
-  [ChainId.ARBITRUM]: 'matthewlilley/arbitrum-minichef',
+  [ChainId.ARBITRUM]: 'jiro-ono/arbitrum-minichef-staging',
   [ChainId.CELO]: 'sushiswap/celo-minichef-v2',
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-minichef',
   [ChainId.FUSE]: 'sushiswap/fuse-minichef',
@@ -110,8 +111,28 @@ export const getOldMiniChefFarms = async (chainId = ChainId.ETHEREUM) => {
 }
 
 export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const { pools } = await miniChef(miniChefPoolsQuery, chainId, variables)
-  return pools
+  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM].includes(chainId)
+
+  if (v2Query) {
+    const { pools } = await miniChef(miniChefPoolsQueryV2, chainId, variables)
+    const tokens = await getTokenSubset(chainId, {
+      // @ts-ignore TYPE NEEDS FIXING
+      tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
+    })
+
+    // @ts-ignore TYPE NEEDS FIXING
+    return pools.map((pool) => ({
+      ...pool,
+      rewardToken: {
+        // @ts-ignore TYPE NEEDS FIXING
+        ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+      },
+    }))
+  } else {
+    console.log('hitting here')
+    const { pools } = await miniChef(miniChefPoolsQuery, chainId, variables)
+    return pools
+  }
 }
 
 export const getMiniChefPairAddreses = async (chainId = ChainId.ETHEREUM) => {
