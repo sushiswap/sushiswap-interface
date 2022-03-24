@@ -36,10 +36,11 @@ const nextConfig = {
 
     return config
   },
-  // experimental: {
-  //   concurrentFeatures: true,
-  //   serverComponents: true,
-  // },
+   experimental: {
+    nextScriptWorkers: true
+   },
+  poweredByHeader: false,
+  productionBrowserSourceMaps: false,
   swcMinify: false,
   reactStrictMode: true,
   pwa: {

@@ -23,6 +23,10 @@
     "e2e": "concurrently -k -s first -n \"app,e2e\" \"yarn dev\" \"yarn e2e:safe\"",
     "postinstall": "yarn lingui"
   },
+  "resolutions": {
+    "@walletconnect/jsonrpc-provider": "1.0.2",
+    "@walletconnect/ethereum-provider": "1.7.5"
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
@@ -88,7 +92,7 @@
     "@testing-library/jest-dom": "^5.14.0",
     "@testing-library/react": "^12.1.0",
     "@transak/transak-sdk": "^1.0.31",
-    "@types/gtag.js": "^0.0.7",
+    "@types/gtag.js": "^0.0.10",
     "@types/ioredis": "^4.28.8",
     "@types/jest": "^27.0.2",
     "@types/js-cookie": "^3.0.1",
@@ -111,6 +115,7 @@
     "@visx/scale": "^2.1.0",
     "@visx/shape": "^2.1.0",
     "@visx/text": "^2.1.0",
+    "@walletconnect/ethereum-provider": "^1.7.5",
     "@web3-react/abstract-connector": "^6.0.7",
     "@web3-react/core": "^6.1.9",
     "@web3-react/fortmatic-connector": "^6.1.6",
@@ -188,7 +193,6 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "serve": "^12.0.0",
-    "sharp": "^0.30.0",
     "start-server-and-test": "1.14.0",
     "swr": "^1.2.0",
     "tailwindcss": "^3.0.23",

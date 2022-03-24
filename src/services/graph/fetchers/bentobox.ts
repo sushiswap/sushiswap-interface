@@ -151,7 +151,7 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) 
         previousHarvest?.tokenElastic / 10 ** strategy.token.decimals,
       ]
 
-      return [...apys, ((profitPerYear / ((tvl + tvlPrevious) / 2)) * 100) / 2]
+      return [...apys, (profitPerYear / ((tvl + tvlPrevious) / 2)) * 100]
     }, [])
 
     // @ts-ignore TYPE NEEDS FIXING
