@@ -28,8 +28,9 @@ import { DefaultSeo } from 'next-seo'
 import React, { Fragment, useEffect } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-
+import PWAPrompt from 'react-ios-pwa-prompt'
 import SEO from '../config/seo'
+import { BrowserRouter, useLocation } from 'react-router-dom'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
@@ -95,24 +96,36 @@ function MyApp({ Component, pageProps, fallback, err }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale])
 
-  // Allows for conditionally setting a provider to be hoisted per page
-  const Provider = Component.Provider || Fragment
+  function ScrollToTop() {
+    const { pathname } = useLocation()
 
-  // Allows for conditionally setting a layout to be hoisted per page
-  const Layout = Component.Layout || DefaultLayout
+    useEffect(() => {
+      window.scrollTo(0, 0)
+      /** `
+    
+       if (isProd) {
+        Fathom.trackPageview();
 
-  // Allows for conditionally setting a guard to be hoisted per page
-  const Guard = Component.Guard || Fragment
+      } */
+    }, [pathname])
 
-  return (
-    <>
-      <Head>Sushi</Head>
-      <meta
-        name="viewport"
-        content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
-      />
+    return null
+  }
 
-      {/* Global Site Tag (gtag.js) - Google Analytics */}
+  const Index = () => {
+    useEffect(() => {}, [])
+
+    // Allows for conditionally setting a provider to be hoisted per page
+    const Provider = Component.Provider || Fragment
+
+    // Allows for conditionally setting a layout to be hoisted per page
+    const Layout = Component.Layout || DefaultLayout
+
+    // Allows for conditionally setting a guard to be hoisted per page
+    const Guard = Component.Guard || Fragment
+
+    {
+      /* Global Site Tag (gtag.js) - Google Analytics 
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_TRACKING_ID}`}
@@ -131,39 +144,55 @@ function MyApp({ Component, pageProps, fallback, err }) {
           `,
         }}
       />
-      <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
-        <Web3ReactProvider getLibrary={getLibrary}>
-          <Web3ProviderNetwork getLibrary={getLibrary}>
-            <Web3ReactManager>
-              <ReduxProvider store={store}>
-                <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
-                  <>
-                    <ListsUpdater />
-                    <UserUpdater />
-                    <ApplicationUpdater />
-                    <MulticallUpdater />
-                    <TransactionUpdater />
-                  </>
-                  <Provider>
-                    <Layout>
-                      <Guard>
-                        {/* TODO: Added alert Jan 25. Delete component after a few months. */}
-                        <MultichainExploitAlertModal />
-                        {/*@ts-ignore TYPE NEEDS FIXING*/}
-                        <DefaultSeo {...SEO} />
-                        <Component {...pageProps} err={err} />
-                      </Guard>
-                      <Portals />
-                    </Layout>
-                  </Provider>
-                </PersistGate>
-              </ReduxProvider>
-            </Web3ReactManager>
-          </Web3ProviderNetwork>
-        </Web3ReactProvider>
-      </I18nProvider>
-    </>
-  )
-}
+      */
+    }
+
+    return (
+      <>
+        <PWAPrompt
+          timesToShow={2}
+          permanentlyHideOnDismiss={false}
+          copyTitle="Sushi now on iOS"
+          copyBody="Sushi works best when added to the homescreen. Tap the share button to add Sushi to your home screen."
+          copyClosePrompt="Close"
+        />
+        <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
+          <Web3ReactProvider getLibrary={getLibrary}>
+            <Web3ProviderNetwork getLibrary={getLibrary}>
+              <Web3ReactManager>
+              <BrowserRouter>
+                <ScrollToTop />
+                <ReduxProvider store={store}>
+                  <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
+                    <>
+                      <ListsUpdater />
+                      <UserUpdater />
+                      <ApplicationUpdater />
+                      <MulticallUpdater />
+                      <TransactionUpdater />
+                    </>
+                    <Provider>
+                      <Layout>
+                        <Guard>
+                          {/* TODO: Added alert Jan 25. Delete component after a few months. */}
+                          <MultichainExploitAlertModal />
+                          {/*@ts-ignore TYPE NEEDS FIXING*/}
+                          <DefaultSeo {...SEO} />
+                          <Component {...pageProps} err={err} />
+                        </Guard>
+                        <Portals />
+                      </Layout>
+                    </Provider>
+                  </PersistGate>
+                </ReduxProvider>
+                </BrowserRouter>
+              </Web3ReactManager>
+            </Web3ProviderNetwork>
+          </Web3ReactProvider>
+        </I18nProvider>
+      </>
+    )
+  }
+};
 
 export default MyApp

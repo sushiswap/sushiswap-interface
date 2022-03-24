@@ -13979,6 +13979,11 @@ react-infinite-scroll-component@^6.1.0:
   dependencies:
     throttle-debounce "^2.1.0"
 
+react-ios-pwa-prompt@^1.8.4:
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/react-ios-pwa-prompt/-/react-ios-pwa-prompt-1.8.4.tgz#4c28f08336a8af1508b951003cd7c4700fd420d6"
+  integrity sha512-y2dMzPZWWcdCClb1JItMJkyEfapnJe/Nz2bC8HIMaXTRA4hQfL1nwxsjiENwKESYKQdm6wrrS4b8qD2Mx/bwtw==
+
 "react-is@^16.12.0 || ^17.0.0", react-is@^17.0.1, react-is@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
