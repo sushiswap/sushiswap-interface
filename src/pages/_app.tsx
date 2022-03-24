@@ -10,7 +10,7 @@ import Portals from 'app/components/Portals'
 import Web3ReactManager from 'app/components/Web3ReactManager'
 import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploitAlertModal'
 import getLibrary from 'app/functions/getLibrary'
-import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
+import { exception, pageview } from 'app/functions/gtag'
 import DefaultLayout from 'app/layouts/Default'
 // @ts-ignore TYPE NEEDS FIXING
 import store, { persistor } from 'app/state'
@@ -21,16 +21,15 @@ import TransactionUpdater from 'app/state/transactions/updater'
 import UserUpdater from 'app/state/user/updater'
 import * as plurals from 'make-plural/plurals'
 import dynamic from 'next/dynamic'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
-import Script from 'next/script'
 import { DefaultSeo } from 'next-seo'
 import React, { Fragment, useEffect } from 'react'
-import { Provider as ReduxProvider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
 import PWAPrompt from 'react-ios-pwa-prompt'
-import SEO from '../config/seo'
+import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter, useLocation } from 'react-router-dom'
+import { PersistGate } from 'redux-persist/integration/react'
+
+import SEO from '../config/seo'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
@@ -160,31 +159,31 @@ function MyApp({ Component, pageProps, fallback, err }) {
           <Web3ReactProvider getLibrary={getLibrary}>
             <Web3ProviderNetwork getLibrary={getLibrary}>
               <Web3ReactManager>
-              <BrowserRouter>
-                <ScrollToTop />
-                <ReduxProvider store={store}>
-                  <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
-                    <>
-                      <ListsUpdater />
-                      <UserUpdater />
-                      <ApplicationUpdater />
-                      <MulticallUpdater />
-                      <TransactionUpdater />
-                    </>
-                    <Provider>
-                      <Layout>
-                        <Guard>
-                          {/* TODO: Added alert Jan 25. Delete component after a few months. */}
-                          <MultichainExploitAlertModal />
-                          {/*@ts-ignore TYPE NEEDS FIXING*/}
-                          <DefaultSeo {...SEO} />
-                          <Component {...pageProps} err={err} />
-                        </Guard>
-                        <Portals />
-                      </Layout>
-                    </Provider>
-                  </PersistGate>
-                </ReduxProvider>
+                <BrowserRouter>
+                  <ScrollToTop />
+                  <ReduxProvider store={store}>
+                    <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
+                      <>
+                        <ListsUpdater />
+                        <UserUpdater />
+                        <ApplicationUpdater />
+                        <MulticallUpdater />
+                        <TransactionUpdater />
+                      </>
+                      <Provider>
+                        <Layout>
+                          <Guard>
+                            {/* TODO: Added alert Jan 25. Delete component after a few months. */}
+                            <MultichainExploitAlertModal />
+                            {/*@ts-ignore TYPE NEEDS FIXING*/}
+                            <DefaultSeo {...SEO} />
+                            <Component {...pageProps} err={err} />
+                          </Guard>
+                          <Portals />
+                        </Layout>
+                      </Provider>
+                    </PersistGate>
+                  </ReduxProvider>
                 </BrowserRouter>
               </Web3ReactManager>
             </Web3ProviderNetwork>
@@ -193,6 +192,6 @@ function MyApp({ Component, pageProps, fallback, err }) {
       </>
     )
   }
-};
+}
 
 export default MyApp
