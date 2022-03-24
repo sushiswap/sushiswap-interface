@@ -21,6 +21,7 @@ export const BENTOBOX = {
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
+  [ChainId.AVALANCHE]: 'sushiswap/avalanche-bentobox',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -150,7 +151,7 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) 
         previousHarvest?.tokenElastic / 10 ** strategy.token.decimals,
       ]
 
-      return [...apys, ((profitPerYear / ((tvl + tvlPrevious) / 2)) * 100) / 2]
+      return [...apys, (profitPerYear / ((tvl + tvlPrevious) / 2)) * 100]
     }, [])
 
     // @ts-ignore TYPE NEEDS FIXING

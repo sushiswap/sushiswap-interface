@@ -85,7 +85,14 @@ export function useKashiPairAddresses(): string[] {
   const bentoBoxContract = useBentoBoxContract()
   const { chainId } = useActiveWeb3React()
   const useEvents = useMemo(
-    () => Boolean(chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM),
+    () =>
+      Boolean(
+        chainId &&
+          chainId !== ChainId.BSC &&
+          chainId !== ChainId.MATIC &&
+          chainId !== ChainId.ARBITRUM &&
+          chainId !== ChainId.AVALANCHE
+      ),
     [chainId]
   )
   const tokens = useKashiTokens()

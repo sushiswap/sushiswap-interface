@@ -15,7 +15,9 @@ import PoolContext, { usePoolContext } from 'app/features/trident/PoolContext'
 import NetworkGuard from 'app/guards/Network'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
+import { NextSeo } from 'next-seo'
 import React from 'react'
+
 const Pool = () => {
   const { i18n } = useLingui()
   const _linkButtons = <ClassicLinkButtons />
@@ -32,6 +34,11 @@ const Pool = () => {
 
   return (
     <>
+      <NextSeo
+        title={`Pool ${poolWithState?.pool?.token0?.symbol}/${poolWithState?.pool?.token1?.symbol} Fee ${
+          Number(poolWithState?.pool?.fee) / 10000
+        } Twap ${poolWithState?.pool?.twap ? 'Enabled' : 'Disabled'}`}
+      />
       <TridentHeader pattern="bg-chevron" condensed className="lg:py-[22px]">
         <div className="flex flex-col gap-3 lg:w-8/12 lg:gap-5 lg:pr-6 h-[68px] lg:h-auto">
           <div>

@@ -1,7 +1,7 @@
 import { GlobeIcon, SwitchVerticalIcon, TrendingUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { RocketIcon, WalletIcon } from 'app/components/Icon'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
@@ -157,7 +157,7 @@ const useMenu: UseMenu = () => {
     }
 
     if (featureEnabled(Feature.MISO, chainId)) {
-      menu.push({
+      const misoMenu = {
         key: 'miso',
         title: i18n._(t`MISO`),
         icon: <RocketIcon width={20} />,
@@ -167,13 +167,18 @@ const useMenu: UseMenu = () => {
             title: i18n._(t`Marketplace`),
             link: '/miso',
           },
-          {
-            key: 'launchpad',
-            title: i18n._(t`Launchpad`),
-            link: '/miso/auction',
-          },
         ],
-      })
+      }
+
+      if (chainId !== ChainId.ETHEREUM) {
+        misoMenu.items.push({
+          key: 'launchpad',
+          title: i18n._(t`Launchpad`),
+          link: '/miso/auction',
+        })
+      }
+
+      menu.push(misoMenu)
     }
 
     const exploreMenu: MenuItemLeaf[] = []

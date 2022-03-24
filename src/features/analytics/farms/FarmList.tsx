@@ -106,8 +106,6 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
         <div className="flex flex-col space-y-1">
           {rewards?.map((reward, i) => {
             const decimals = 6 - String(reward?.rewardPerDay?.toFixed(0)).length
-
-            console.log({ reward })
             return (
               <div key={i} className="text-base whitespace-nowrap">
                 {reward?.rewardPerDay?.toFixed(decimals > 0 ? decimals : 0)} {reward.currency.symbol}

@@ -3,10 +3,10 @@ import { Feature } from 'app/enums'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import Background from 'app/features/analytics/Background'
 import ChartCard from 'app/features/analytics/ChartCard'
-import DashboardTabs from 'app/features/analytics/Dashboard/DashboardTabs'
-import PoolList from 'app/features/analytics/Farms/FarmList'
-import PairList from 'app/features/analytics/Pairs/PairList'
-import TokenList from 'app/features/analytics/Tokens/TokenList'
+import DashboardTabs from 'app/features/analytics/dashboard/DashboardTabs'
+import PoolList from 'app/features/analytics/farms/FarmList'
+import PairList from 'app/features/analytics/pairs/PairList'
+import TokenList from 'app/features/analytics/tokens/TokenList'
 import { featureEnabled } from 'app/functions'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import useFuse from 'app/hooks/useFuse'
@@ -256,7 +256,7 @@ export default function Dashboard(): JSX.Element {
             figure={chartData.liquidity}
             change={chartData.liquidityChange}
             chart={chartData.liquidityChart}
-            defaultTimespan="1W"
+            defaultTimespan="1M"
             timespans={chartTimespans}
           />
           <ChartCard
@@ -265,7 +265,7 @@ export default function Dashboard(): JSX.Element {
             figure={chartData.volume1d}
             change={chartData.volume1dChange}
             chart={chartData.volumeChart}
-            defaultTimespan="1W"
+            defaultTimespan="1M"
             timespans={chartTimespans}
           />
         </div>
