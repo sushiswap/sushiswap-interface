@@ -21,6 +21,7 @@ export const BENTOBOX = {
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
+  [ChainId.AVALANCHE]: 'sushiswap/avalanche-bentobox',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
