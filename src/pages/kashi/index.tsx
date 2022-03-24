@@ -39,11 +39,11 @@ const KashiPage: FC = () => {
             </>
           )}
 
-          <Link href="/kashi/create" passHref={true}>
+          {/* <Link href="/kashi/create" passHref={true}>
             <Button id="btn-create-new-pool" size="sm">
               {i18n._(t`Create Market`)}
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </TridentHeader>
       <TridentBody>
