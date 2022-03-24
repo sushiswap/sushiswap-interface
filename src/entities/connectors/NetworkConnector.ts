@@ -63,7 +63,7 @@ class MiniRpcProvider implements AsyncSendable {
           this.connector.changeChainId(parseInt((b.request.params as [{ chainId: string }])[0].chainId))
           b.resolve({ id: b.request.id })
         } catch (error) {
-          b.reject(error as Error)
+          b.reject(error)
         }
         return false
       }
@@ -108,7 +108,7 @@ class MiniRpcProvider implements AsyncSendable {
       } = byKey[result.id]
       if ('error' in result) {
         reject(new RequestError(result?.error?.message, result?.error?.code, result?.error?.data))
-      } else if ('result' in result && resolve) {
+      } else if ('result' in result && resolve!) {
         resolve(result.result)
       } else {
         reject(new RequestError(`Received unexpected JSON-RPC response to ${method} request.`, -32000, result))
