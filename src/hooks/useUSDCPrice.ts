@@ -1,9 +1,8 @@
 import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap/core-sdk'
-import { calcTokenPrices } from '@sushiswap/trident-sdk'
 import { useMemo } from 'react'
 
 import { useActiveWeb3React } from '../services/web3'
-import { useAllCommonPools } from './useBestTridentTrade'
+import { useV2TradeExactOut } from './useV2Trades'
 
 // StableCoin amounts used when calculating spot price for a given currency.
 // The amount is large enough to filter low liquidity pairs.
@@ -37,7 +36,11 @@ export default function useUSDCPrice(currency?: Currency, useTrident = false): P
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined
   const stablecoin = amountOut?.currency
 
-  const allowedPools = useAllCommonPools(currency, stablecoin)
+  // const allowedPools = useAllCommonPools(currency, stablecoin)
+
+  const v2USDCTrade = useV2TradeExactOut(currency, amountOut, {
+    maxHops: 2,
+  })
 
   return useMemo(() => {
     if (!currency || !stablecoin) {
@@ -49,9 +52,16 @@ export default function useUSDCPrice(currency?: Currency, useTrident = false): P
       return new Price(stablecoin, stablecoin, '1', '1')
     }
 
-    const prices = calcTokenPrices(allowedPools, stablecoin)
-    return prices[(currency as Token).address]
-  }, [allowedPools, currency, stablecoin])
+    if (v2USDCTrade) {
+      const { numerator, denominator } = v2USDCTrade.route.midPrice
+      return new Price(currency, stablecoin, denominator, numerator)
+    }
+
+    // const prices = calcTokenPrices(allowedPools, stablecoin)
+    // return prices[(currency as Token).address]
+
+    return undefined
+  }, [currency, stablecoin, v2USDCTrade])
 }
 
 export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null, includeTrident = false) {
