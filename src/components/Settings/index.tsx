@@ -11,13 +11,13 @@ import Switch from 'app/components/Switch'
 import TransactionSettings from 'app/components/TransactionSettings'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
-import useWalletSupportsOpenMev from 'app/hooks/useWalletSupportsOpenMev'
+import useWalletSupportsSushiGuard from 'app/hooks/useWalletSupportsSushiGuard'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useToggleSettingsMenu } from 'app/state/application/hooks'
 import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
 import React, { FC, useState } from 'react'
 
-import { OPENMEV_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
+import { useExpertModeManager, useUserSingleHopOnly, useUserSushiGuard } from 'app/state/user/hooks'
 
 interface SettingsTabProps {
   placeholderSlippage?: Percent
@@ -33,8 +33,8 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
   const [expertMode, toggleExpertMode] = useExpertModeManager()
   const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
   const [showConfirmation, setShowConfirmation] = useState(false)
-  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMev()
-  const walletSupportsOpenMev = useWalletSupportsOpenMev()
+  const [userUseSushiGuard, setUserUseSushiGuard] = useUserSushiGuard()
+  const walletSupportsSushiGuard = useWalletSupportsSushiGuard()
 
   return (
     <>
@@ -113,9 +113,9 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
                   </div>
                   <Switch
                     size="sm"
-                    id="toggle-use-openmev"
-                    checked={userUseOpenMev}
-                    onChange={() => (userUseOpenMev ? setUserUseOpenMev(false) : setUserUseOpenMev(true))}
+                    id="toggle-use-sushiguard"
+                    checked={userUseSushiGuard}
+                    onChange={() => (userUseSushiGuard ? setUserUseSushiGuard(false) : setUserUseSushiGuard(true))}
                     checkedIcon={<CheckIcon className="text-dark-700" />}
                     uncheckedIcon={<CloseIcon />}
                     color="gradient"

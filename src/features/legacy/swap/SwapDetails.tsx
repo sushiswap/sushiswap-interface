@@ -7,8 +7,10 @@ import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
 import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
+import sushiGuardEnabledFeature from 'app/hooks/sushiGuardEnabledFeature'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
 import React, { FC, Fragment, useState } from 'react'
 import { isAddress } from 'web3-utils'
@@ -51,7 +53,7 @@ const SwapDetails: FC<SwapDetails> = ({
             className
           )}
         >
-          <div className="flex justify-between gap-2 items-center pl-2">
+          <div className="flex items-center justify-between gap-2 pl-2">
             <div>
               <TradePrice
                 inputCurrency={inputCurrency}
@@ -62,7 +64,7 @@ const SwapDetails: FC<SwapDetails> = ({
               />
             </div>
             <Disclosure.Button as={Fragment}>
-              <div className="flex gap-2 flex-grow items-center justify-end p-1 cursor-pointer rounded">
+              <div className="flex items-center justify-end flex-grow gap-2 p-1 rounded cursor-pointer">
                 <Chip
                   size="sm"
                   id="trade-type"
@@ -104,7 +106,7 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const minReceived = minimumAmountOut || trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
-
+  const sushiGuardEnabled = sushiGuardEnabledFeature()
   let path
   if (trade && getTradeVersion(trade) === TradeVersion.V2TRADE) {
     path = (trade.route as Route<Currency, Currency>).path

@@ -10,28 +10,27 @@ import Web3Connect from 'app/components/Web3Connect'
 import ConfirmSwapModal from 'app/features/legacy/swap/ConfirmSwapModal'
 import SwapCallbackError from 'app/features/legacy/swap/SwapCallbackError'
 import SwapDetails from 'app/features/legacy/swap/SwapDetails'
+import SwapGasFeeInputs from 'app/features/legacy/swap/SwapGasFeeInputs'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
 import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
-import confirmPriceImpactWithoutFee from 'app/functions/prices'
-import { warningSeverity } from 'app/functions/prices'
+import confirmPriceImpactWithoutFee, { warningSeverity } from 'app/functions/prices'
 import { computeFiatValuePriceImpact } from 'app/functions/trade'
 import { useAllTokens, useCurrency } from 'app/hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from 'app/hooks/useApproveCallback'
 import useENSAddress from 'app/hooks/useENSAddress'
 import useIsArgentWallet from 'app/hooks/useIsArgentWallet'
 import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
+import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
 import { useSwapCallback } from 'app/hooks/useSwapCallback'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
-import useWalletSupportsOpenMev from 'app/hooks/useWalletSupportsOpenMev'
 import useWrapCallback, { WrapType } from 'app/hooks/useWrapCallback'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import TokenWarningModal from 'app/modals/TokenWarningModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { Field, setRecipient } from 'app/state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
-import { NextSeo } from 'next-seo'
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
 
@@ -188,8 +187,8 @@ const Swap = ({ banners }) => {
     }
   }, [approvalState, approvalSubmitted])
 
-  const [useOpenMev] = useUserOpenMev()
-  const walletSupportsOpenMev = useWalletSupportsOpenMev()
+  // Checks if user has enabled the feature and if the wallet supports it
+  const useSushiGuard = useSushiGuardFeature()
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
@@ -199,7 +198,7 @@ const Swap = ({ banners }) => {
     signatureData,
     /* @ts-ignore TYPE NEEDS FIXING */
     null,
-    walletSupportsOpenMev && useOpenMev
+    useSushiGuard
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -350,7 +349,6 @@ const Swap = ({ banners }) => {
 
   return (
     <>
-      <NextSeo title="Swap" />
       <ConfirmSwapModal
         isOpen={showConfirm}
         trade={trade}
@@ -378,7 +376,14 @@ const Swap = ({ banners }) => {
         <div className="flex flex-col gap-3">
           <SwapAssetPanel
             spendFromWallet={true}
-            header={SwapAssetPanel.Header}
+            header={(props) => (
+              <SwapAssetPanel.Header
+                {...props}
+                label={
+                  independentField === Field.OUTPUT && !showWrap ? i18n._(t`Swap from (est.):`) : i18n._(t`Swap from:`)
+                }
+              />
+            )}
             currency={currencies[Field.INPUT]}
             value={formattedAmounts[Field.INPUT]}
             onChange={handleTypeInput}
@@ -398,7 +403,12 @@ const Swap = ({ banners }) => {
           </div>
           <SwapAssetPanel
             spendFromWallet={true}
-            header={SwapAssetPanel.Header}
+            header={(props) => (
+              <SwapAssetPanel.Header
+                {...props}
+                label={independentField === Field.INPUT && !showWrap ? i18n._(t`Swap to (est.):`) : i18n._(t`Swap to:`)}
+              />
+            )}
             currency={currencies[Field.OUTPUT]}
             value={formattedAmounts[Field.OUTPUT]}
             onChange={handleTypeOutput}
@@ -406,6 +416,7 @@ const Swap = ({ banners }) => {
             priceImpact={priceImpact}
             priceImpactCss={priceImpactCss}
           />
+          {isExpertMode && useSushiGuard && <SwapGasFeeInputs />}
           {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
           {Boolean(trade) && (
             <SwapDetails
