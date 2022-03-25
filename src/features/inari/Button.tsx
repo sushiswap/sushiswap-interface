@@ -35,7 +35,9 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
   // Add token approve to approve flow
   // Note that this is not required when unstaking from BentoBox strategies, hence approveCallback can be null
   const steps = []
+  // @ts-ignore
   if (approveCallback) steps.push(approveCallback[0] === ApprovalState.APPROVED)
+  // @ts-ignore
   if (bentoApproveCallback) steps.push(bentoApproveCallback.approvalState === BentoApprovalState.APPROVED)
 
   const approveFlow = (

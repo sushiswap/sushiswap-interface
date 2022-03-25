@@ -6,6 +6,7 @@ export interface Oracle {
 }
 
 export abstract class Oracle implements Oracle {
+// @ts-ignore 
   chainId
   address
   data
