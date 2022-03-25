@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
-import { classNames } from 'app/functions'
+import { classNames, formatNumber } from 'app/functions'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import React, { FC, ReactNode } from 'react'
 
@@ -190,11 +190,11 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
         </Typography>
       </div>
       <Typography className="text-right text-high-emphesis" weight={700}>
-        {amount?.toSignificant(6)}
+        {formatNumber(amount?.toSignificant(6))}
       </Typography>
       {!hideUSDC && (
         <Typography className="text-right" variant="sm">
-          ${usdcValue?.toSignificant(6)}
+          {formatNumber(usdcValue?.toSignificant(6), true, false, 6)}
         </Typography>
       )}
     </div>
