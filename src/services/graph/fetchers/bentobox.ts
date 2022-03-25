@@ -17,7 +17,7 @@ import { pager } from './pager'
 export const BENTOBOX = {
   [ChainId.ETHEREUM]: 'lufycz/bentobox',
   [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
-  [ChainId.MATIC]: 'lufycz/matic-bentobox',
+  [ChainId.MATIC]: 'matthewlilley/bentobox-polygon',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
