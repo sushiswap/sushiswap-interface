@@ -32,10 +32,11 @@ const SwapGasFeeInputs: FC = () => {
         <Typography variant="sm" className="px-2">
           {i18n._(t`Max Fee`)}
         </Typography>
-        <div className="flex justify-between items-baseline bg-dark-900 rounded px-4 py-1 border border-dark-700 hover:border-dark-600">
-          <Typography weight={700} className="flex gap-3 flex-grow items-baseline relative overflow-hidden">
+        <div className="flex items-baseline justify-between px-4 py-1 border rounded bg-dark-900 border-dark-700 hover:border-dark-600">
+          <Typography weight={700} className="relative flex items-baseline flex-grow gap-3 overflow-hidden">
             <NumericalInput
               value={maxFee ? fromWei(maxFee, 'gwei') : ''}
+              // @ts-ignore TODO: fix this gas pricing
               onUserInput={(val) => dispatch(setMaxFee(val ? toWei(val, 'gwei') : undefined))}
               placeholder={`${
                 chainId && maxFeePerGas
@@ -56,10 +57,11 @@ const SwapGasFeeInputs: FC = () => {
         <Typography variant="sm" className="px-2">
           {i18n._(t`Max Priority Fee`)}
         </Typography>
-        <div className="flex justify-between items-baseline bg-dark-900 rounded px-4 py-1 border border-dark-700 hover:border-dark-600">
-          <Typography weight={700} className="flex gap-3 flex-grow items-baseline relative overflow-hidden">
+        <div className="flex items-baseline justify-between px-4 py-1 border rounded bg-dark-900 border-dark-700 hover:border-dark-600">
+          <Typography weight={700} className="relative flex items-baseline flex-grow gap-3 overflow-hidden">
             <NumericalInput
               value={maxPriorityFee ? fromWei(maxPriorityFee, 'gwei') : ''}
+              // @ts-ignore TODO: fix this gas pricing
               onUserInput={(val) => dispatch(setPriorityFee(val ? toWei(val, 'gwei') : undefined))}
               placeholder={`${
                 chainId && maxPriorityFeePerGas

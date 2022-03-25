@@ -77,7 +77,7 @@ export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = 
             }
           />
         </Typography>
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <Switch
             size="sm"
             id="toggle-expert-mode-button"
@@ -106,6 +106,7 @@ export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = 
               min={0.25}
               max={2}
               step={0.01}
+              // @ts-ignore TODO: fix this
               defaultValue={0.5}
               markFormatter={(mark) => `${mark}x`}
             />

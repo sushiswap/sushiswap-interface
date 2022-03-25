@@ -40,6 +40,7 @@ export default createReducer(initialState, (builder) =>
   builder
     .addCase(
       addTransaction,
+      // @ts-expect-error
       (transactions, { payload: { chainId, from, hash, approval, summary, claim, privateTx = false } }) => {
         if (transactions[chainId]?.[hash]) {
           throw Error('Attempted to add existing transaction.')

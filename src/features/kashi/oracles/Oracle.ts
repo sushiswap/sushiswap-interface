@@ -6,11 +6,11 @@ export interface Oracle {
 }
 
 export abstract class Oracle implements Oracle {
-// @ts-ignore 
-  chainId
-  address
-  data
-  name
+
+  chainId: number
+  address: string
+  data: string
+  name: string
   warning = ''
   error = ''
   // @ts-ignore TYPE NEEDS FIXING

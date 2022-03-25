@@ -65,9 +65,11 @@ const initialState: LimitOrderState = {
   attemptingTxn: false,
   showReview: false,
   invertRate: false,
+
 }
 
 export default createReducer<LimitOrderState>(initialState, (builder) =>
+  // @ts-expect-error
   builder
     .addCase(
       // @ts-ignore TYPE NEEDS FIXING
