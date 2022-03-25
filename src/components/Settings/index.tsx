@@ -14,10 +14,9 @@ import { classNames } from 'app/functions'
 import useWalletSupportsSushiGuard from 'app/hooks/useWalletSupportsSushiGuard'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useToggleSettingsMenu } from 'app/state/application/hooks'
-import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
-import React, { FC, useState } from 'react'
-
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { useExpertModeManager, useUserSingleHopOnly, useUserSushiGuard } from 'app/state/user/hooks'
+import React, { FC, useState } from 'react'
 
 interface SettingsTabProps {
   placeholderSlippage?: Percent
