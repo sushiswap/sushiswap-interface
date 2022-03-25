@@ -5,11 +5,14 @@ import loadingRollingCircle from 'app/animation/loading-rolling-circle.json'
 import receiptPrinting from 'app/animation/receipt-printing.json'
 import Button from 'app/components/Button'
 import ExternalLink from 'app/components/ExternalLink'
+import Loader from 'app/components/Loader'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { getExplorerLink } from 'app/functions'
 import useAddTokenToMetaMask from 'app/hooks/useAddTokenToMetaMask'
+import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useSwapState } from 'app/state/swap/hooks'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 
@@ -19,10 +22,26 @@ interface ConfirmationPendingContentProps {
 }
 
 export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({ onDismiss, pendingText }) => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
+  const { sushiRelayChallenge } = useSwapState()
+  const useSushiGuard = useSushiGuardFeature()
+
   return (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={i18n._(t`Confirm transaction`)} onClose={onDismiss} />
+      {useSushiGuard && (
+        <HeadlessUiModal.BorderedContent className="flex flex-col gap-3 bg-dark-1000/40">
+          <Typography variant="sm">
+            {i18n._(
+              t`Your transaction will be realized using the SushiGuard. Your wallet may prompt you with a warning message, please confirm the following challenge before signing`
+            )}
+          </Typography>
+          <Typography variant="sm" className="break-words text-high-emphesis">
+            {sushiRelayChallenge ? sushiRelayChallenge : <Loader />}
+          </Typography>
+        </HeadlessUiModal.BorderedContent>
+      )}
       <HeadlessUiModal.BorderedContent className="flex flex-col items-center justify-center gap-1">
         <div className="w-16 py-8 m-auto">
           <Lottie animationData={loadingRollingCircle} autoplay loop />
@@ -53,6 +72,7 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
   const { i18n } = useLingui()
   const { library } = useActiveWeb3React()
   const { addToken, success } = useAddTokenToMetaMask(currencyToAdd)
+
   return (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={i18n._(t`Transaction submitted`)} onClose={onDismiss} />

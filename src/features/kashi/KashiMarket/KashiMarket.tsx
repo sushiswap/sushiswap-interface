@@ -41,7 +41,6 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
           <ToggleButtonGroup.Button value={KashiMarketView.BORROW}>
             {i18n._(t`Borrow`)}
             <QuestionHelper
-              gap={false}
               text={
                 <div className="flex flex-col gap-2">
                   <Typography variant="xs">
@@ -60,7 +59,6 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
           <ToggleButtonGroup.Button value={KashiMarketView.DEPOSIT}>
             {i18n._(t`Deposit`)}
             <QuestionHelper
-              gap={false}
               text={
                 <div className="flex flex-col gap-2">
                   <Typography variant="xs">

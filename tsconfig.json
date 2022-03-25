@@ -43,13 +43,18 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
+    "importHelpers": true,
+    "downlevelIteration": true,
     "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "noUnusedLocals": false,
+    "noStrictGenericChecks": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "downlevelIteration": true,
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "sushi-env.d.ts"],
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "sushi-env.d.ts"],
   "exclude": ["node_modules"]
 }

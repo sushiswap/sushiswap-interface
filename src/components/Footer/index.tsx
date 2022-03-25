@@ -122,9 +122,9 @@ const Footer = () => {
                 {i18n._(t`Development`)}
               </Typography>
             </a>
-            <a href="https://docs.openmev.org" target="_blank" rel="noreferrer">
+            <a href="https://manifoldfinance.com" target="_blank" rel="noreferrer">
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">
-                {i18n._(t`Sushi Relay`)}
+                {i18n._(t`SushiGuard`)}
               </Typography>
             </a>
           </div>

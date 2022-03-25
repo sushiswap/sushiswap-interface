@@ -28,6 +28,14 @@ export const PROTOCOL_MERKLE_ROOT =
 
 export const NetworkContextName = 'NETWORK'
 
+/**
+ * [#sushiguard]
+ * @export INITIAL_ALLOWED_SLIPPAGE
+ * @const number
+ * @summary default allowed slippage, in bips
+ */
+export const INITIAL_ALLOWED_SLIPPAGE = 50
+
 // 30 minutes, denominated in seconds
 export const DEFAULT_DEADLINE_FROM_NOW = 60 * 30
 

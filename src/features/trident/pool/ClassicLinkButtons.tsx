@@ -24,9 +24,9 @@ const ClassicLinkButtons: FC = () => {
               href={{
                 pathname: `/trident/remove`,
                 query: {
-                  tokens: [poolWithState?.pool.token0.address, poolWithState?.pool.token1.address],
-                  fee: poolWithState?.pool.fee,
-                  twap: poolWithState?.pool.twap,
+                  tokens: [poolWithState.pool.token0.address, poolWithState.pool.token1.address],
+                  fee: poolWithState.pool.fee,
+                  twap: poolWithState.pool.twap,
                 },
               }}
               passHref={true}
@@ -40,12 +40,11 @@ const ClassicLinkButtons: FC = () => {
                 pathname: `/trident/add`,
                 query: {
                   tokens: [
-                    // It makes more sense to add liquidity with ETH instead of WETH
-                    isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token0.address),
-                    isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token1.address),
+                    isWrappedReturnNativeSymbol(chainId, poolWithState.pool.token0.address),
+                    isWrappedReturnNativeSymbol(chainId, poolWithState.pool.token1.address),
                   ],
-                  fee: poolWithState?.pool.fee,
-                  twap: poolWithState?.pool.twap,
+                  fee: poolWithState.pool.fee,
+                  twap: poolWithState.pool.twap,
                 },
               }}
               passHref={true}
@@ -62,11 +61,11 @@ const ClassicLinkButtons: FC = () => {
               query: {
                 tokens: [
                   // It makes more sense to add liquidity with ETH instead of WETH
-                  isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token0.address),
-                  isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token1.address),
+                  isWrappedReturnNativeSymbol(chainId, poolWithState.pool.token0.address),
+                  isWrappedReturnNativeSymbol(chainId, poolWithState.pool.token1.address),
                 ],
-                fee: poolWithState?.pool.fee,
-                twap: poolWithState?.pool.twap,
+                fee: poolWithState.pool.fee,
+                twap: poolWithState.pool.twap,
               },
             }}
             passHref={true}
@@ -83,8 +82,8 @@ const ClassicLinkButtons: FC = () => {
             query: {
               // It makes more sense to swap with ETH instead of WETH
               tokens: [
-                isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token0.address),
-                isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token1.address),
+                isWrappedReturnNativeSymbol(chainId, poolWithState.pool.token0.address),
+                isWrappedReturnNativeSymbol(chainId, poolWithState.pool.token1.address),
               ],
             },
           }}

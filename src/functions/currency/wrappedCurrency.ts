@@ -9,11 +9,11 @@ export function unwrappedToken(currency: Currency): Currency {
   return currency
 }
 
+// [#sushiguard]
 export const isWrappedReturnNativeSymbol = (chainId: ChainId | undefined, address: string): string => {
   if (!chainId) return address
   if (address.toLowerCase() === WNATIVE[chainId].address.toLowerCase()) {
-    // @ts-ignore TYPE NEEDS FIXING
-    return NATIVE[chainId].symbol
+    return NATIVE[chainId].symbol || address
   }
 
   return address
