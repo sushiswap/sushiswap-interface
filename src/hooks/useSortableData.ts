@@ -26,8 +26,6 @@ const useSortableData = (items: any, config: any = null) => {
           const aValue = getNested(a, sortConfig.key)
           const bValue = getNested(b, sortConfig.key)
 
-          console.log({ aValue, bValue })
-
           if (aValue instanceof Number && bValue instanceof Number) {
             if (aValue === Infinity) {
               return sortConfig.direction === 'ascending' ? -1 : 1
