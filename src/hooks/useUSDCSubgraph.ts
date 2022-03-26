@@ -51,20 +51,20 @@ export default function useUSDCPriceSubgraph(
       } else {
         price = tokenTrident.price.derivedUSD
       }
-    }
-
-    if (ethPrice && tokenLegacy) {
+    } else if (ethPrice && tokenLegacy) {
       price = ethPrice * tokenLegacy.derivedETH
-    }
-
-    if (tokenTrident) {
+    } else if (tokenTrident) {
       price = tokenTrident.price.derivedUSD
     }
 
-    if (price !== undefined) {
+    if (price !== undefined && price !== 0) {
       const base = 10 ** (String(price).split('.')?.[1]?.length ?? 0)
-      const quote = price * base
-      return new Price(currency, stablecoin, (base * 10 ** currency.decimals) / 10 ** stablecoin.decimals, quote)
+      const quote = Math.floor(price * base)
+      try {
+        return new Price(currency, stablecoin, (base * 10 ** currency.decimals) / 10 ** stablecoin.decimals, quote)
+      } catch (e) {
+        console.log(currency.wrapped.name, price, base, quote, e)
+      }
     }
 
     return undefined
