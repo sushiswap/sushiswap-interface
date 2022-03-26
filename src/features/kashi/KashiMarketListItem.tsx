@@ -42,7 +42,7 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
 
   return (
     <Link href={`/kashi/${market.address}`} passHref={true}>
-      <div className={classNames(TABLE_TBODY_TR_CLASSNAME, 'grid grid-cols-7')} onClick={() => {}}>
+      <div className={classNames(TABLE_TBODY_TR_CLASSNAME, 'grid grid-cols-7 overflow-x-auto')} onClick={() => {}}>
         <div className={classNames('flex gap-2', TABLE_TBODY_TD_CLASSNAME(0, 7))}>
           {asset && collateral && <CurrencyLogoArray currencies={[asset, collateral]} dense size={32} />}
           <div className="flex flex-col items-start">
