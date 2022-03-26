@@ -80,7 +80,8 @@ export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefine
 }
 
 export function useUSDCPriceWithLoadingIndicator(currency?: Currency) {
-  const price = useUSDCPrice(currency)
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currency)
   return useMemo(() => {
     if (!price || !currency) return { price: undefined, loading: false }
     try {
@@ -92,7 +93,8 @@ export function useUSDCPriceWithLoadingIndicator(currency?: Currency) {
 }
 
 export function useUSDCValueWithLoadingIndicator(currencyAmount: CurrencyAmount<Currency> | undefined) {
-  const price = useUSDCPrice(currencyAmount?.currency)
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currencyAmount?.currency)
   return useMemo(() => {
     if (!price || !currencyAmount) return { value: undefined, loading: false }
     try {
