@@ -5,8 +5,7 @@ import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { KashiMarketActions } from 'app/features/kashi/KashiMarket'
 import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features/trident/constants'
-import { classNames, currencyFormatter, formatNumber, formatPercent } from 'app/functions'
-import { useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
+import { classNames, formatNumber, formatPercent } from 'app/functions'
 import Link from 'next/link'
 import React, { FC, memo, useMemo } from 'react'
 
@@ -37,15 +36,6 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
     [asset, market.totalAssetAmount]
   )
 
-  const { value: currentAllAssetsUSD, loading: currentAllAssetsUSDLoading } =
-    useUSDCValueWithLoadingIndicator(currentAllAssets)
-
-  const { value: currentBorrowAmountUSD, loading: currentBorrowAmountUSDLoading } =
-    useUSDCValueWithLoadingIndicator(currentBorrowAmount)
-
-  const { value: totalAssetAmountUSD, loading: totalAssetAmountLoading } =
-    useUSDCValueWithLoadingIndicator(totalAssetAmount)
-
   const currentSupplyAPR = new Percent(market.currentSupplyAPR, 1e18)
 
   const currentInterestPerYear = new Percent(market.currentInterestPerYear, 1e18)
@@ -68,22 +58,18 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
         </div>
         <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(1, 7))}>
           <Typography weight={700} className="text-high-emphesis">
-            {formatNumber(currentAllAssets?.toSignificant(6))} {market.asset.token.symbol}
+            {formatNumber(market.currentAllAssetsUSD?.toFixed(0), true)}
           </Typography>
           <Typography variant="xs" className="text-low-emphesis">
-            {currentAllAssetsUSD && !currentAllAssetsUSDLoading
-              ? currencyFormatter.format(Number(currentAllAssetsUSD?.toExact()))
-              : '-'}
+            {formatNumber(currentAllAssets?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
         </div>
         <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(2, 7))}>
           <Typography weight={700} className="text-high-emphesis">
-            {formatNumber(currentBorrowAmount?.toSignificant(6))} {market.asset.token.symbol}
+            {formatNumber(market.currentBorrowAmountUSD?.toFixed(0), true)}
           </Typography>
           <Typography variant="xs" className="text-low-emphesis">
-            {currentBorrowAmountUSD && !currentBorrowAmountUSDLoading
-              ? currencyFormatter.format(Number(currentBorrowAmountUSD?.toExact()))
-              : '-'}
+            {formatNumber(currentBorrowAmount?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
         </div>
 
@@ -98,12 +84,10 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
 
         <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(4, 7))}>
           <Typography weight={700} className="text-high-emphesis">
-            {formatNumber(totalAssetAmount?.toSignificant(6))} {market.asset.token.symbol}
+            {formatNumber(market.totalAssetAmountUSD?.toFixed(0), true)}
           </Typography>
           <Typography variant="xs" className="text-low-emphesis">
-            {totalAssetAmountUSD && !totalAssetAmountLoading
-              ? currencyFormatter.format(Number(totalAssetAmountUSD?.toExact()))
-              : '-'}
+            {formatNumber(totalAssetAmount?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
         </div>
 
