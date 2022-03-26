@@ -10,7 +10,7 @@ import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/fun
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { TradeUnion } from 'app/types'
-import React, { FC, Fragment, useState } from 'react'
+import React, { FC, Fragment, useMemo, useState } from 'react'
 import { isAddress } from 'web3-utils'
 
 interface SwapDetailsContent {
@@ -51,7 +51,7 @@ const SwapDetails: FC<SwapDetails> = ({
             className
           )}
         >
-          <div className="flex justify-between gap-2 items-center pl-2">
+          <div className="flex items-center justify-between gap-2 pl-2">
             <div>
               <TradePrice
                 inputCurrency={inputCurrency}
@@ -62,7 +62,7 @@ const SwapDetails: FC<SwapDetails> = ({
               />
             </div>
             <Disclosure.Button as={Fragment}>
-              <div className="flex gap-2 flex-grow items-center justify-end p-1 cursor-pointer rounded">
+              <div className="flex items-center justify-end flex-grow gap-2 p-1 rounded cursor-pointer">
                 <Chip
                   size="sm"
                   id="trade-type"
@@ -113,6 +113,14 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
   const _outputAmount = outputAmount || trade?.outputAmount
   const _inputAmount = inputAmount || trade?.inputAmount
 
+  const priceImpact = useMemo(() => {
+    if (getTradeVersion(trade) === TradeVersion.V2TRADE) {
+      return trade?.priceImpact
+    } else if (getTradeVersion(trade) === TradeVersion.V3TRADE) {
+      return trade?.route?.priceImpact * 100
+    }
+  }, [trade])
+
   return (
     <div className="flex flex-col divide-y divide-dark-850">
       <div className="flex flex-col gap-1 pb-2">
@@ -125,7 +133,7 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
         <div className="flex justify-between gap-4">
           <Typography variant="xs">{i18n._(t`Price Impact`)}</Typography>
           <Typography variant="xs" className="text-right">
-            {trade?.priceImpact?.toFixed(2)}%
+            {priceImpact?.toFixed(2)}%
           </Typography>
         </div>
         {recipient && isAddress(recipient) && (
