@@ -2,7 +2,8 @@ import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Route, TradeVersion } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Token, Trade as LegacyTrade, TradeVersion } from '@sushiswap/core-sdk'
+import { Trade as TridentTrade } from '@sushiswap/trident-sdk'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
@@ -105,20 +106,33 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
   const minReceived = minimumAmountOut || trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
 
-  let path
-  if (trade && getTradeVersion(trade) === TradeVersion.V2TRADE) {
-    path = (trade.route as Route<Currency, Currency>).path
-  }
-
   const _outputAmount = outputAmount || trade?.outputAmount
   const _inputAmount = inputAmount || trade?.inputAmount
 
-  const priceImpact = useMemo(() => {
-    if (getTradeVersion(trade) === TradeVersion.V2TRADE) {
-      return trade?.priceImpact
-    } else if (getTradeVersion(trade) === TradeVersion.V3TRADE) {
-      return trade?.route?.priceImpact * 100
+  console.log({ trade })
+
+  const path = useMemo(() => {
+    if (trade instanceof LegacyTrade) {
+      return trade.route.path
+    } else if (trade instanceof TridentTrade) {
+      return trade.route.legs.reduce<Token[]>((previousValue, leg, i) => {
+        if (trade.route.legs.length === 1 || trade.route.legs.length - 1 === i) {
+          return [...previousValue, leg.tokenFrom as Token, leg.tokenTo as Token]
+        }
+
+        return [...previousValue, leg.tokenFrom as Token]
+      }, [])
     }
+    return []
+  }, [trade])
+
+  const priceImpact = useMemo(() => {
+    if (trade instanceof LegacyTrade) {
+      return trade.priceImpact
+    } else if (trade instanceof TridentTrade) {
+      return Number(trade.route.priceImpact) * 100
+    }
+    return 0
   }, [trade])
 
   return (
