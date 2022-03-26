@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { JSBI } from '@sushiswap/core-sdk'
+import { CurrencyAmount, JSBI } from '@sushiswap/core-sdk'
 import { useMemo, useState } from 'react'
 
 function getNested(theObject: any, path: string, separator = '.') {
@@ -26,6 +26,20 @@ const useSortableData = (items: any, config: any = null) => {
           const aValue = getNested(a, sortConfig.key)
           const bValue = getNested(b, sortConfig.key)
 
+          console.log({ aValue, bValue })
+
+          if (aValue instanceof Number && bValue instanceof Number) {
+            if (aValue === Infinity) {
+              return sortConfig.direction === 'ascending' ? -1 : 1
+            } else if (bValue === Infinity) {
+              return sortConfig.direction === 'ascending' ? 1 : -1
+            } else if (aValue < bValue) {
+              return sortConfig.direction === 'ascending' ? -1 : 1
+            } else if (aValue > bValue) {
+              return sortConfig.direction === 'ascending' ? 1 : -1
+            }
+          }
+
           if (aValue instanceof BigNumber && bValue instanceof BigNumber) {
             if (aValue.lt(bValue)) {
               return sortConfig.direction === 'ascending' ? -1 : 1
@@ -34,6 +48,7 @@ const useSortableData = (items: any, config: any = null) => {
               return sortConfig.direction === 'ascending' ? 1 : -1
             }
           }
+
           if (aValue instanceof JSBI && bValue instanceof JSBI) {
             if (JSBI.lessThan(aValue, bValue)) {
               return sortConfig.direction === 'ascending' ? -1 : 1
@@ -41,18 +56,25 @@ const useSortableData = (items: any, config: any = null) => {
             if (JSBI.greaterThan(aValue, bValue)) {
               return sortConfig.direction === 'ascending' ? 1 : -1
             }
-          } else if (aValue === Infinity) {
-            return sortConfig.direction === 'ascending' ? -1 : 1
-          } else if (bValue === Infinity) {
-            return sortConfig.direction === 'ascending' ? 1 : -1
-          } else {
-            if (aValue < bValue) {
+          }
+
+          if (aValue instanceof CurrencyAmount && bValue instanceof CurrencyAmount) {
+            if (aValue.lessThan(bValue)) {
               return sortConfig.direction === 'ascending' ? -1 : 1
             }
-            if (aValue > bValue) {
+            if (aValue.greaterThan(bValue)) {
               return sortConfig.direction === 'ascending' ? 1 : -1
             }
           }
+
+          if (!aValue) {
+            return 1
+          }
+
+          if (!bValue) {
+            return -1
+          }
+
           return 0
         })
       }
@@ -61,7 +83,7 @@ const useSortableData = (items: any, config: any = null) => {
     return []
   }, [items, sortConfig])
 
-  const requestSort = (key: any, direction = 'ascending') => {
+  const requestSort = (key: string, direction = 'ascending') => {
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending'
     } else if (sortConfig && sortConfig.key === key && sortConfig.direction === 'descending') {
