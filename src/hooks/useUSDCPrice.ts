@@ -2,6 +2,7 @@ import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap
 import { useMemo } from 'react'
 
 import { useActiveWeb3React } from '../services/web3'
+import useUSDCPriceSubgraph from './useUSDCSubgraph'
 import { useV2TradeExactOut } from './useV2Trades'
 
 // StableCoin amounts used when calculating spot price for a given currency.
@@ -65,7 +66,8 @@ export default function useUSDCPrice(currency?: Currency, useTrident = false): P
 }
 
 export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null, includeTrident = false) {
-  const price = useUSDCPrice(currencyAmount?.currency, includeTrident)
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currencyAmount?.currency, includeTrident)
 
   return useMemo(() => {
     if (!price || !currencyAmount) return null
