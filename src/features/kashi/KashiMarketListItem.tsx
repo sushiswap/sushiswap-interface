@@ -36,15 +36,6 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
     [asset, market.totalAssetAmount]
   )
 
-  // const { value: currentAllAssetsUSD, loading: currentAllAssetsUSDLoading } =
-  //   useUSDCValueWithLoadingIndicator(currentAllAssets)
-
-  // const { value: currentBorrowAmountUSD, loading: currentBorrowAmountUSDLoading } =
-  //   useUSDCValueWithLoadingIndicator(currentBorrowAmount)
-
-  // const { value: totalAssetAmountUSD, loading: totalAssetAmountLoading } =
-  //   useUSDCValueWithLoadingIndicator(totalAssetAmount)
-
   const currentSupplyAPR = new Percent(market.currentSupplyAPR, 1e18)
 
   const currentInterestPerYear = new Percent(market.currentInterestPerYear, 1e18)
@@ -67,23 +58,19 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
         </div>
         <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(1, 7))}>
           <Typography weight={700} className="text-high-emphesis">
+            {formatNumber(market.currentAllAssetsUSD?.toFixed(0), true)}
+          </Typography>
+          <Typography variant="xs" className="text-low-emphesis">
             {formatNumber(currentAllAssets?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
-          {/* <Typography variant="xs" className="text-low-emphesis">
-            {currentAllAssetsUSD && !currentAllAssetsUSDLoading
-              ? currencyFormatter.format(Number(currentAllAssetsUSD?.toExact()))
-              : '-'}
-          </Typography> */}
         </div>
         <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(2, 7))}>
           <Typography weight={700} className="text-high-emphesis">
+            {formatNumber(market.currentBorrowAmountUSD?.toFixed(0), true)}
+          </Typography>
+          <Typography variant="xs" className="text-low-emphesis">
             {formatNumber(currentBorrowAmount?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
-          {/* <Typography variant="xs" className="text-low-emphesis">
-            {currentBorrowAmountUSD && !currentBorrowAmountUSDLoading
-              ? currencyFormatter.format(Number(currentBorrowAmountUSD?.toExact()))
-              : '-'}
-          </Typography> */}
         </div>
 
         <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(3, 7))}>
@@ -97,13 +84,11 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, i18n }) => 
 
         <div className={classNames('flex flex-col !items-end !justify-start', TABLE_TBODY_TD_CLASSNAME(4, 7))}>
           <Typography weight={700} className="text-high-emphesis">
+            {formatNumber(market.totalAssetAmountUSD?.toFixed(0), true)}
+          </Typography>
+          <Typography variant="xs" className="text-low-emphesis">
             {formatNumber(totalAssetAmount?.toSignificant(6))} {market.asset.token.symbol}
           </Typography>
-          {/* <Typography variant="xs" className="text-low-emphesis">
-            {totalAssetAmountUSD && !totalAssetAmountLoading
-              ? currencyFormatter.format(Number(totalAssetAmountUSD?.toExact()))
-              : '-'}
-          </Typography> */}
         </div>
 
         <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(5, 7))}>

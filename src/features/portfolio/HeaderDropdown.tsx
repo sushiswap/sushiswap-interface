@@ -9,6 +9,8 @@ import Link from 'next/link'
 import React, { FC, useState } from 'react'
 import Identicon from 'react-blockies'
 
+import { BalancesSum } from './BalancesSum'
+
 interface HeaderDropdownProps {
   hideAccount?: boolean
   account: string
@@ -53,7 +55,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ account, hideAccount = false 
           )}
         </div>
       </div>
-      {/* <BalancesSum account={account} /> */}
+      <BalancesSum account={account} />
     </>
   )
 }

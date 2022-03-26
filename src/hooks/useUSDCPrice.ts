@@ -2,6 +2,7 @@ import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap
 import { useMemo } from 'react'
 
 import { useActiveWeb3React } from '../services/web3'
+import useUSDCPriceSubgraph from './useUSDCSubgraph'
 import { useV2TradeExactOut } from './useV2Trades'
 
 // StableCoin amounts used when calculating spot price for a given currency.
@@ -65,7 +66,8 @@ export default function useUSDCPrice(currency?: Currency, useTrident = false): P
 }
 
 export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null, includeTrident = false) {
-  const price = useUSDCPrice(currencyAmount?.currency, includeTrident)
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currencyAmount?.currency, includeTrident)
 
   return useMemo(() => {
     if (!price || !currencyAmount) return null
@@ -78,7 +80,8 @@ export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefine
 }
 
 export function useUSDCPriceWithLoadingIndicator(currency?: Currency) {
-  const price = useUSDCPrice(currency)
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currency)
   return useMemo(() => {
     if (!price || !currency) return { price: undefined, loading: false }
     try {
@@ -90,7 +93,8 @@ export function useUSDCPriceWithLoadingIndicator(currency?: Currency) {
 }
 
 export function useUSDCValueWithLoadingIndicator(currencyAmount: CurrencyAmount<Currency> | undefined) {
-  const price = useUSDCPrice(currencyAmount?.currency)
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currencyAmount?.currency)
   return useMemo(() => {
     if (!price || !currencyAmount) return { value: undefined, loading: false }
     try {
