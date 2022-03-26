@@ -45,7 +45,8 @@ export function useUSDCPricesSubgraph(
 
       // handle usdc
       if (currency?.wrapped.equals(stablecoin)) {
-        return new Price(stablecoin, stablecoin, '1', '1')
+        prices[currency.wrapped.address] = new Price(stablecoin, stablecoin, '1', '1')
+        return
       }
 
       if (tokenLegacy && tokenTrident) {
