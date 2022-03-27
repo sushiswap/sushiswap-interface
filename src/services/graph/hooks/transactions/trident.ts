@@ -108,7 +108,7 @@ export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionR
     outgoingAmt: `${formatNumber(tx.amount1)} ${tx.token1.symbol}`,
     time: tx.transaction.timestamp,
     value: formatNumber(
-      Number(tx.token0) * Number(tx.token0.price.derivedUSD) + Number(tx.token1) * Number(tx.token1.price.derivedUSD),
+      Number(tx.amount0) * Number(tx.token0.price.derivedUSD) + Number(tx.amount1) * Number(tx.token1.price.derivedUSD),
       true
     ),
     type: `Burn ${tx.token0.symbol} and ${tx.token1.symbol}`,
