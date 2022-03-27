@@ -22,12 +22,9 @@ const KashiMarketList: FC<KashiMarketList> = () => {
   const { account, chainId } = useActiveWeb3React()
   const addresses = useKashiPairAddresses()
   const markets = useKashiMediumRiskLendingPairs(account, addresses)
+
   const { i18n } = useLingui()
-  const {
-    result: pairs,
-    term,
-    search,
-  } = useFuse<KashiMediumRiskLendingPair>({
+  const { result, term, search } = useFuse<KashiMediumRiskLendingPair>({
     data: markets,
     options: {
       keys: ['asset.token.symbol', 'collateral.token.symbol'],
@@ -36,8 +33,11 @@ const KashiMarketList: FC<KashiMarketList> = () => {
       useExtendedSearch: false,
     },
   })
-  const { items, requestSort, sortConfig } = useSortableData(pairs, {
-    key: 'currentAllAssets',
+
+  // console.log({ result })
+
+  const { items, requestSort, sortConfig } = useSortableData(result, {
+    key: 'currentAllAssetsUSD',
     direction: 'descending',
   })
 
@@ -61,7 +61,7 @@ const KashiMarketList: FC<KashiMarketList> = () => {
           </div>
           <div
             className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(1, 7))}
-            onClick={() => requestSort('currentAllAssets')}
+            onClick={() => requestSort('currentAllAssetsUSD')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`TVL`)}
@@ -69,12 +69,12 @@ const KashiMarketList: FC<KashiMarketList> = () => {
             <SortIcon
               id={sortConfig.key}
               direction={sortConfig.direction}
-              active={sortConfig.key === 'currentAllAssets'}
+              active={sortConfig.key === 'currentAllAssetsUSD'}
             />
           </div>
           <div
             className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(2, 7))}
-            onClick={() => requestSort('currentBorrowAmount')}
+            onClick={() => requestSort('currentBorrowAmountUSD')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Borrowed`)}
@@ -82,7 +82,7 @@ const KashiMarketList: FC<KashiMarketList> = () => {
             <SortIcon
               id={sortConfig.key}
               direction={sortConfig.direction}
-              active={sortConfig.key === 'currentBorrowAmount'}
+              active={sortConfig.key === 'currentBorrowAmountUSD'}
             />
           </div>
 
@@ -100,14 +100,17 @@ const KashiMarketList: FC<KashiMarketList> = () => {
             />
           </div>
 
-          <div className={classNames(TABLE_TR_TH_CLASSNAME(4, 7))} onClick={() => requestSort('totalAssetAmount')}>
+          <div
+            className={classNames('flex gap-1 items-center cursor-pointer justify-end', TABLE_TR_TH_CLASSNAME(4, 7))}
+            onClick={() => requestSort('totalAssetAmountUSD')}
+          >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Available`)}
             </Typography>
             <SortIcon
               id={sortConfig.key}
               direction={sortConfig.direction}
-              active={sortConfig.key === 'totalAssetAmount'}
+              active={sortConfig.key === 'totalAssetAmountUSD'}
             />
           </div>
 

@@ -55,7 +55,7 @@ const SwapDetailsContent: FC<SwapDetailsContent> = ({ trade, recipient }) => {
         <div className="flex justify-between gap-4">
           <Typography variant="xs">{i18n._(t`Price Impact`)}</Typography>
           <Typography variant="xs" className="text-right">
-            {trade?.priceImpact?.toFixed(2)}%
+            {priceImpact?.toFixed(2)}%
           </Typography>
         </div>
         {recipient && isAddress(recipient) && (

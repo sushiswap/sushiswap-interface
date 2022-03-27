@@ -1,5 +1,16 @@
 import { toAmount, toShare } from '@sushiswap/bentobox-sdk'
-import { JSBI, maximum, minimum, Rebase, toElastic, Token, ZERO } from '@sushiswap/core-sdk'
+import {
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  maximum,
+  minimum,
+  Price,
+  Rebase,
+  toElastic,
+  Token,
+  ZERO,
+} from '@sushiswap/core-sdk'
 import { accrue, AccrueInfo, computePairAddress, interestAccrue, takeFee } from '@sushiswap/kashi-sdk'
 
 import { accrueTotalAssetWithFee } from './functions'
@@ -10,6 +21,8 @@ export class KashiMediumRiskLendingPair {
   public readonly accrueInfo: AccrueInfo
   public readonly collateral: Rebase & { token: Token }
   public readonly asset: Rebase & { token: Token }
+  public readonly collateralPrice: Price<Currency, Token>
+  public readonly assetPrice: Price<Currency, Token>
   public readonly oracle: Oracle
   public readonly totalCollateralShare: JSBI
   public readonly totalAsset: Rebase
@@ -34,6 +47,8 @@ export class KashiMediumRiskLendingPair {
     accrueInfo,
     collateral,
     asset,
+    collateralPrice,
+    assetPrice,
     oracle,
     totalCollateralShare,
     totalAsset,
@@ -48,6 +63,8 @@ export class KashiMediumRiskLendingPair {
     accrueInfo: AccrueInfo
     collateral: Rebase & { token: Token }
     asset: Rebase & { token: Token }
+    collateralPrice: Price<Currency, Token>
+    assetPrice: Price<Currency, Token>
     oracle: Oracle
     totalCollateralShare: JSBI
     totalAsset: Rebase
@@ -63,6 +80,8 @@ export class KashiMediumRiskLendingPair {
     this.accrueInfo = accrueInfo
     this.collateral = collateral
     this.asset = asset
+    this.collateralPrice = collateralPrice
+    this.assetPrice = assetPrice
     this.oracle = oracle
     this.totalCollateralShare = totalCollateralShare
     this.totalAsset = totalAsset
@@ -111,6 +130,10 @@ export class KashiMediumRiskLendingPair {
     return toAmount(this.asset, this.totalAsset.elastic)
   }
 
+  public get totalAssetAmountUSD(): CurrencyAmount<Token> {
+    return this.assetPrice?.quote(CurrencyAmount.fromRawAmount(this.asset.token, this.totalAssetAmount))
+  }
+
   /**
    * The total assets borrowed in the market right now
    */
@@ -118,11 +141,19 @@ export class KashiMediumRiskLendingPair {
     return accrue(this, this.totalBorrow.elastic, true)
   }
 
+  public get currentBorrowAmountUSD(): CurrencyAmount<Token> {
+    return this.assetPrice?.quote(CurrencyAmount.fromRawAmount(this.asset.token, this.currentBorrowAmount))
+  }
+
   /**
    * The total amount of assets, both borrowed and still available right now
    */
   public get currentAllAssets(): JSBI {
     return JSBI.add(this.totalAssetAmount, this.currentBorrowAmount)
+  }
+
+  public get currentAllAssetsUSD(): CurrencyAmount<Token> {
+    return this.assetPrice?.quote(CurrencyAmount.fromRawAmount(this.asset.token, this.currentAllAssets))
   }
 
   /**

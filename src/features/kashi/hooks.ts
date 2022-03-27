@@ -27,6 +27,7 @@ import {
 import { useBentoBoxContract, useBoringHelperContract } from 'app/hooks'
 import { useTokens } from 'app/hooks/Tokens'
 import useBentoRebases from 'app/hooks/useBentoRebases'
+import { useUSDCPricesSubgraph } from 'app/hooks/useUSDCSubgraph'
 import { useBentoStrategies, useClones } from 'app/services/graph'
 import { useActiveWeb3React, useQueryFilter } from 'app/services/web3'
 import { useSingleCallResult } from 'app/state/multicall/hooks'
@@ -176,13 +177,13 @@ export function useKashiMediumRiskLendingPairs(
   const args = useMemo(() => [account ? account : AddressZero, addresses], [account, addresses])
   const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args)
   const { rebases } = useBentoRebases(useMemo(() => Object.values(tokens), [tokens]))
-
+  const prices = useUSDCPricesSubgraph(Object.values(tokens))
   // TODO: for skeleton loading
   // const kashiRepositoryContract = useKashiRepositoryContract()
   // const callStates = useSingleContractMultipleData(kashiRepositoryContract, 'getPair', args, NEVER_RELOAD)
 
   return useMemo(() => {
-    if (!chainId || !result || !rebases) {
+    if (!chainId || !result || !rebases || !prices) {
       return []
     }
     return result?.[0]
@@ -205,6 +206,8 @@ export function useKashiMediumRiskLendingPairs(
             collateral: rebases[pair.collateral],
             // @ts-ignore
             asset: rebases[pair.asset],
+            collateralPrice: prices[pair.collateral],
+            assetPrice: prices[pair.asset],
             oracle: getOracle(chainId, pair.oracle, pair.oracleData),
             totalCollateralShare: JSBI.BigInt(pair.totalCollateralShare.toString()),
             totalAsset: {
@@ -223,7 +226,7 @@ export function useKashiMediumRiskLendingPairs(
             userBorrowPart: JSBI.BigInt(pair.userBorrowPart.toString()),
           })
       )
-  }, [chainId, rebases, result])
+  }, [chainId, prices, rebases, result])
 }
 
 // export function useKashiMediumRiskLendingPairs(

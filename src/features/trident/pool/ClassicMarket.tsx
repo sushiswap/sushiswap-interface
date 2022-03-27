@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import ListPanel from 'app/components/ListPanel'
 import Typography from 'app/components/Typography'
 import { usePoolContext } from 'app/features/trident/PoolContext'
-import { toAmountCurrencyAmount } from 'app/functions'
+import { formatNumber, toAmountCurrencyAmount } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { FC } from 'react'
 
@@ -38,22 +38,20 @@ const ClassicMarket: FC = () => {
                 {i18n._(t`Total Assets`)}
               </Typography>
               <Typography weight={700} className="text-right text-high-emphesis">
-                {`$${amount ? `${amount.toSignificant(6)}` : '0.000'}`}
+                {`${amount ? `${formatNumber(amount.toSignificant(6), true, false, 2)}` : '$0.000'}`}
               </Typography>
             </div>
           </div>
-
           <div className="block lg:hidden">
             <ClassicTokenPrices />
           </div>
-
           <ListPanel
             header={
               isDesktop ? (
-                <div className="grid grid-cols-3 h-14 items-center pl-5 pr-4">
+                <div className="grid items-center grid-cols-3 pl-5 pr-4 h-14">
                   <Typography className="text-high-emphesis">{i18n._(t`Token`)}</Typography>
-                  <Typography className="text-high-emphesis text-right">{i18n._(t`Amount`)}</Typography>
-                  <Typography className="text-high-emphesis text-right">{i18n._(t`Value`)}</Typography>
+                  <Typography className="text-right text-high-emphesis">{i18n._(t`Amount`)}</Typography>
+                  <Typography className="text-right text-high-emphesis">{i18n._(t`Value`)}</Typography>
                 </div>
               ) : (
                 <ListPanel.Header
