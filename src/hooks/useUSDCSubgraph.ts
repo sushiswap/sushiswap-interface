@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap/core-sdk'
-import { useEthPrice, useTokens, useTridentTokens } from 'app/services/graph'
+import { useNativePrice, useTokens, useTridentTokens } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 
@@ -16,7 +16,7 @@ export function useUSDCPricesSubgraph(
 
   const stablecoin = chainId ? CurrencyAmount.fromRawAmount(USD[chainId], 0).currency : undefined
 
-  const ethPrice = useEthPrice()
+  const ethPrice = useNativePrice({ chainId })
   const tokensLegacy = useTokens({
     chainId,
     variables: { where: { id_in: currencies?.map((currency) => currency.wrapped.address.toLowerCase()) } },
