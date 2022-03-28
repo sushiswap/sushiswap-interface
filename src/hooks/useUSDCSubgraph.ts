@@ -108,3 +108,29 @@ export function useUSDCValueSubgraph(
     }
   }, [currencyAmount, price])
 }
+
+export function useUSDCSubgraphPriceWithLoadingIndicator(currency?: Currency) {
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currency)
+  return useMemo(() => {
+    if (!price || !currency) return { price: undefined, loading: false }
+    try {
+      return { price, loading: false }
+    } catch (error) {
+      return { price: undefined, loading: false }
+    }
+  }, [currency, price])
+}
+
+export function useUSDCSubgraphValueWithLoadingIndicator(currencyAmount: CurrencyAmount<Currency> | undefined) {
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currencyAmount?.currency)
+  return useMemo(() => {
+    if (!price || !currencyAmount) return { value: undefined, loading: false }
+    try {
+      return { value: price.quote(currencyAmount), loading: false }
+    } catch (error) {
+      return { value: undefined, loading: false }
+    }
+  }, [currencyAmount, price])
+}
