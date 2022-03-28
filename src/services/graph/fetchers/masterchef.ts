@@ -129,7 +129,6 @@ export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = u
       },
     }))
   } else {
-    console.log('hitting here')
     const { pools } = await miniChef(miniChefPoolsQuery, chainId, variables)
     return pools
   }

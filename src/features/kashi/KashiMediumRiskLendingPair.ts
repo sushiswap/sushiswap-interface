@@ -326,7 +326,7 @@ export class KashiMediumRiskLendingPair {
     }
   }
 
-  public simulatedMaxBorrowable(borrowAmount: JSBI, collateralAmount: JSBI) {
+  public simulatedMaxBorrowable(borrowAmount: JSBI, collateralAmount: JSBI, updateExchangeRate = true) {
     const max = {
       oracle: JSBI.greaterThan(this.oracleExchangeRate, ZERO)
         ? JSBI.divide(
@@ -343,16 +343,26 @@ export class KashiMediumRiskLendingPair {
       stored: JSBI.greaterThan(this.exchangeRate, ZERO)
         ? JSBI.divide(
             JSBI.multiply(collateralAmount, JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))),
-            this.exchangeRate
+            updateExchangeRate ? this.oracleExchangeRate : this.exchangeRate
           )
         : ZERO,
     }
 
     const min = minimum(...Object.values(max))
 
-    const safe = JSBI.subtract(JSBI.divide(JSBI.multiply(min, JSBI.BigInt(95)), JSBI.BigInt(100)), borrowAmount)
+    const safe = JSBI.subtract(
+      JSBI.divide(JSBI.multiply(min, JSBI.BigInt(95)), JSBI.BigInt(100)),
+      this.currentUserBorrowAmount
+    )
 
     const possible = minimum(safe, this.maxAssetAvailable)
+
+    // console.log({
+    //   collateralAmount: collateralAmount.toString(),
+    //   min: min.toString(),
+    //   safe: safe.toString(),
+    //   possible: possible.toString(),
+    // })
 
     return {
       ...max,

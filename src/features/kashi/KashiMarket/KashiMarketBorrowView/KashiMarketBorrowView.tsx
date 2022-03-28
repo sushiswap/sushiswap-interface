@@ -13,7 +13,7 @@ import {
 import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
 import { KashiMarketCurrentPosition } from 'app/features/kashi/KashiMarket/KashiMarketCurrentPosition'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
-import { e10, tryParseAmount, unwrappedToken } from 'app/functions'
+import { tryParseAmount, unwrappedToken } from 'app/functions'
 import React, { FC, useCallback, useMemo, useRef, useState } from 'react'
 
 interface KashiMarketBorrowView {}
@@ -35,15 +35,10 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
   const [collateralAmount, setCollateralAmount] = useState<string>()
   const [borrowAmount, setBorrowAmount] = useState<string>()
 
-  const borrowAmountCurrencyAmount = useMemo(
-    () => tryParseAmount(borrowAmount || '0', asset) ?? (asset ? CurrencyAmount.fromRawAmount(asset, '0') : undefined),
-    [asset, borrowAmount]
-  )
+  const borrowAmountCurrencyAmount = useMemo(() => tryParseAmount(borrowAmount, asset), [asset, borrowAmount])
 
   const collateralAmountCurrencyAmount = useMemo(
-    () =>
-      tryParseAmount(collateralAmount || '0', collateral) ??
-      (collateral ? CurrencyAmount.fromRawAmount(collateral, '0') : undefined),
+    () => tryParseAmount(collateralAmount, collateral),
     [collateral, collateralAmount]
   )
 
@@ -68,8 +63,8 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
             .multiply(multiplier.toBigNumber(collateral.decimals).toString())
             .divide('1'.toBigNumber(collateral.decimals).toString())
         )
-        .multiply(JSBI.BigInt(e10(16)))
-        .multiply(JSBI.BigInt('75'))
+        .multiply(JSBI.BigInt(1e16))
+        .multiply(JSBI.BigInt(75))
         .divide(market.exchangeRate)
 
       const amount = CurrencyAmount.fromFractionalAmount(asset, numerator, denominator)
