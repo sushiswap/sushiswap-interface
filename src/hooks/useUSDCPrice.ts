@@ -2,7 +2,6 @@ import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap
 import { useMemo } from 'react'
 
 import { useActiveWeb3React } from '../services/web3'
-import useUSDCPriceSubgraph from './useUSDCSubgraph'
 import { useV2TradeExactOut } from './useV2Trades'
 
 // StableCoin amounts used when calculating spot price for a given currency.
@@ -31,7 +30,7 @@ export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> }
  * Returns the price in USDC of the input currency
  * @param currency currency to compute the USDC price of
  */
-export default function useUSDCPrice(currency?: Currency, useTrident = false): Price<Currency, Token> | undefined {
+export default function useUSDCPrice(currency?: Currency): Price<Currency, Token> | undefined {
   const { chainId } = useActiveWeb3React()
 
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined
@@ -65,9 +64,9 @@ export default function useUSDCPrice(currency?: Currency, useTrident = false): P
   }, [currency, stablecoin, v2USDCTrade])
 }
 
-export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null, includeTrident = false) {
+export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null) {
   // Bandaid solution for now, might become permanent
-  const price = useUSDCPriceSubgraph(currencyAmount?.currency, includeTrident)
+  const price = useUSDCPrice(currencyAmount?.currency)
 
   return useMemo(() => {
     if (!price || !currencyAmount) return null
@@ -80,8 +79,7 @@ export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefine
 }
 
 export function useUSDCPriceWithLoadingIndicator(currency?: Currency) {
-  // Bandaid solution for now, might become permanent
-  const price = useUSDCPriceSubgraph(currency)
+  const price = useUSDCPrice(currency)
   return useMemo(() => {
     if (!price || !currency) return { price: undefined, loading: false }
     try {
@@ -93,8 +91,7 @@ export function useUSDCPriceWithLoadingIndicator(currency?: Currency) {
 }
 
 export function useUSDCValueWithLoadingIndicator(currencyAmount: CurrencyAmount<Currency> | undefined) {
-  // Bandaid solution for now, might become permanent
-  const price = useUSDCPriceSubgraph(currencyAmount?.currency)
+  const price = useUSDCPrice(currencyAmount?.currency)
   return useMemo(() => {
     if (!price || !currencyAmount) return { value: undefined, loading: false }
     try {
