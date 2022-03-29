@@ -320,35 +320,34 @@ export function useKashiPairsForAccount(account: string | null | undefined, addr
 
   const entities =
     chainId &&
-    pollKashiPairs?.map(
-      (pair: any) =>
-        entities.KashiMediumRiskLendingPair({
-          accrueInfo: {
-            feesEarnedFraction: JSBI.BigInt(pair.accrueInfo.feesEarnedFraction.toString()),
-            lastAccrued: JSBI.BigInt(pair.accrueInfo.lastAccrued),
-            interestPerSecond: JSBI.BigInt(pair.accrueInfo.interestPerSecond.toString()),
-          },
-          // @ts-ignore
-          collateral: rebases[pair.collateral],
-          // @ts-ignore
-          asset: rebases[pair.asset],
-          oracle: getOracle(chainId, pair.oracle, pair.oracleData),
-          totalCollateralShare: JSBI.BigInt(pair.totalCollateralShare.toString()),
-          totalAsset: {
-            elastic: JSBI.BigInt(pair.totalAsset.elastic.toString()),
-            base: JSBI.BigInt(pair.totalAsset.base.toString()),
-          },
-          totalBorrow: {
-            elastic: JSBI.BigInt(pair.totalBorrow.elastic.toString()),
-            base: JSBI.BigInt(pair.totalBorrow.base.toString()),
-          },
-          exchangeRate: JSBI.BigInt(pair.currentExchangeRate.toString()),
-          oracleExchangeRate: JSBI.BigInt(pair.oracleExchangeRate.toString()),
-          spotExchangeRate: JSBI.BigInt(pair.spotExchangeRate.toString()),
-          userCollateralShare: JSBI.BigInt(pair.userCollateralShare.toString()),
-          userAssetFraction: JSBI.BigInt(pair.userAssetFraction.toString()),
-          userBorrowPart: JSBI.BigInt(pair.userBorrowPart.toString()),
-        })
+    pollKashiPairs?.map((pair: any) =>
+      entities.KashiMediumRiskLendingPair({
+        accrueInfo: {
+          feesEarnedFraction: JSBI.BigInt(pair.accrueInfo.feesEarnedFraction.toString()),
+          lastAccrued: JSBI.BigInt(pair.accrueInfo.lastAccrued),
+          interestPerSecond: JSBI.BigInt(pair.accrueInfo.interestPerSecond.toString()),
+        },
+        // @ts-ignore
+        collateral: rebases[pair.collateral],
+        // @ts-ignore
+        asset: rebases[pair.asset],
+        oracle: getOracle(chainId, pair.oracle, pair.oracleData),
+        totalCollateralShare: JSBI.BigInt(pair.totalCollateralShare.toString()),
+        totalAsset: {
+          elastic: JSBI.BigInt(pair.totalAsset.elastic.toString()),
+          base: JSBI.BigInt(pair.totalAsset.base.toString()),
+        },
+        totalBorrow: {
+          elastic: JSBI.BigInt(pair.totalBorrow.elastic.toString()),
+          base: JSBI.BigInt(pair.totalBorrow.base.toString()),
+        },
+        exchangeRate: JSBI.BigInt(pair.currentExchangeRate.toString()),
+        oracleExchangeRate: JSBI.BigInt(pair.oracleExchangeRate.toString()),
+        spotExchangeRate: JSBI.BigInt(pair.spotExchangeRate.toString()),
+        userCollateralShare: JSBI.BigInt(pair.userCollateralShare.toString()),
+        userAssetFraction: JSBI.BigInt(pair.userAssetFraction.toString()),
+        userBorrowPart: JSBI.BigInt(pair.userBorrowPart.toString()),
+      })
     )
 
   const strategies = useBentoStrategies({ chainId })
