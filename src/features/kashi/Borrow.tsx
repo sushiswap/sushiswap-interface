@@ -100,11 +100,6 @@ export default function Borrow({ pair }: BorrowProps) {
   const nextMaxBorrowableOracle = nextUserCollateralValue.mulDiv(e10(16).mul('75'), pair.oracleExchangeRate)
   const nextMaxBorrowableSpot = nextUserCollateralValue.mulDiv(e10(16).mul('75'), pair.spotExchangeRate)
 
-  console.log({
-    nextMaxBorrowableOracle: nextMaxBorrowableOracle.toString(),
-    nextMaxBorrowableSpot: nextMaxBorrowableSpot.toString(),
-  })
-
   const nextMaxBorrowableStored = nextUserCollateralValue.mulDiv(
     e10(16).mul('75'),
     displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate
@@ -118,25 +113,8 @@ export default function Borrow({ pair }: BorrowProps) {
 
   const maxBorrow = nextMaxBorrowPossible.toFixed(pair.asset.tokenInfo.decimals)
 
-  // console.log({
-  //   totalCollateral: nextUserCollateralValue.toString(),
-  //   borrowableOracleRate: nextMaxBorrowableOracle.toString(),
-  //   borrowableSpotRate: nextMaxBorrowableSpot.toString(),
-  //   borrowableMinimum: nextMaxBorrowMinimum.toString(),
-  //   borrowableMinimumPadded: nextMaxBorrowSafe.toString(),
-  //   maxAvailableBorrow: nextMaxBorrowPossible.toString(),
-  // })
-
   const nextBorrowValue = pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.tokenInfo.decimals))
   const nextHealth = nextBorrowValue.mulDiv('1000000000000000000', nextMaxBorrowMinimum)
-
-  console.log({
-    nextUserCollateralValue: nextUserCollateralValue.toString(),
-    nextBorrowValue: nextBorrowValue.toString(),
-    nextMaxBorrowMinimum: nextMaxBorrowMinimum.toString(),
-    nextMaxBorrowSafe: nextMaxBorrowSafe.toString(),
-    nextMaxBorrowPossible: nextMaxBorrowPossible.toString(),
-  })
 
   const collateralValueSet = !collateralValue.toBigNumber(pair.collateral.tokenInfo.decimals).isZero()
 
@@ -352,6 +330,7 @@ export default function Borrow({ pair }: BorrowProps) {
     console.log(multipliedCollateral.toString())
 
     const multipliedBorrow = multipliedCollateral.mulDiv(e10(16).mul('75'), pair.currentExchangeRate)
+    console.log(multipliedBorrow.toString())
 
     // console.log({
     //     original: swapCollateral.toFixed(pair.collateral.tokenInfo.decimals),

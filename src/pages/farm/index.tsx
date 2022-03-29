@@ -21,7 +21,7 @@ export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
 
   const router = useRouter()
-  const type = router.query.filter === null ? 'all' : (router.query.filter as string)
+  const type = !router.query.filter ? 'all' : (router.query.filter as string)
 
   const FILTER = {
     // @ts-ignore TYPE NEEDS FIXING

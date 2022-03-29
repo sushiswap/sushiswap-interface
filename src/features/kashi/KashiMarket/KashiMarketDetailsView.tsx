@@ -22,7 +22,7 @@ interface KashiMarketDetailsView {
   priceImpact?: Percent
   multiplier?: Fraction
   view: KashiMarketView
-  trade?: LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT>
+  trade?: LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT> | null
 }
 
 export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
@@ -53,27 +53,18 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
     market.userCollateralAmount
   )
 
-  const extraCollateral = CurrencyAmount.fromRawAmount(
-    unwrappedToken(market.collateral.token),
+  const extraCollateral =
     view === KashiMarketView.BORROW && multiplier && trade
-      ? trade.minimumAmountOut(allowedSlippage).quotient
-      : JSBI.BigInt(0)
-  )
+      ? trade.minimumAmountOut(allowedSlippage)
+      : CurrencyAmount.fromRawAmount(unwrappedToken(market.collateral.token), JSBI.BigInt(0))
 
-  const nextCollateralAmount =
-    collateralAmount &&
-    userCollateralAmount[view === KashiMarketView.BORROW ? 'add' : 'subtract'](collateralAmount.add(extraCollateral))
+  const nextCollateralAmount = collateralAmount
+    ? userCollateralAmount[view === KashiMarketView.BORROW ? 'add' : 'subtract'](collateralAmount.add(extraCollateral))
+    : CurrencyAmount.fromRawAmount(market.collateral.token, market.userCollateralAmount)
 
   const nextBorrowAmount = borrowAmount
     ? currentUserBorrowAmount[view === KashiMarketView.BORROW ? 'add' : 'subtract'](borrowAmount)
     : CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserBorrowAmount)
-
-  // console.log({
-  //   trade,
-  //   multiplier: multiplier?.quotient.toString(),
-  //   nextCollateralAmount: nextCollateralAmount.quotient.toString(),
-  //   nextBorrowAmount: nextBorrowAmount.quotient.toString(),
-  // })
 
   return (
     <div className="flex flex-col divide-y divide-dark-850">
