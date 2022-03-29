@@ -322,7 +322,7 @@ export function useKashiPairsForAccount(account: string | null | undefined, addr
     chainId &&
     pollKashiPairs?.map(
       (pair: any) =>
-        new KashiMediumRiskLendingPair({
+        entities.KashiMediumRiskLendingPair({
           accrueInfo: {
             feesEarnedFraction: JSBI.BigInt(pair.accrueInfo.feesEarnedFraction.toString()),
             lastAccrued: JSBI.BigInt(pair.accrueInfo.lastAccrued),
