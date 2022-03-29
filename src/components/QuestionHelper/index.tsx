@@ -2,17 +2,17 @@ import { InformationCircleIcon } from '@heroicons/react/outline'
 import { classNames } from 'app/functions'
 import { useOnClickOutside } from 'app/hooks/useOnClickOutside'
 import useToggle from 'app/hooks/useToggle'
+import { MouseEvent } from 'react'
 import React, { FC, ReactElement, ReactNode, useCallback, useRef, useState } from 'react'
 
 import Tooltip from '../Tooltip'
 
-const QuestionHelper: FC<{
-  text?: any
-  icon?: ReactNode
-  children?: ReactElement
-  className?: string
-  gap?: boolean
-}> = ({ className, children, text, icon = <InformationCircleIcon width={14} height={14} />, gap = true }) => {
+const QuestionHelper: FC<{ text?: any; icon?: ReactNode; children?: ReactElement; className?: string }> = ({
+  className,
+  children,
+  text,
+  icon = <InformationCircleIcon width={14} height={14} />,
+}) => {
   const [show, setShow] = useState<boolean>(false)
   const [toggle, setToggle] = useToggle(false)
   const node = useRef<HTMLDivElement | null>(null)
@@ -20,7 +20,13 @@ const QuestionHelper: FC<{
 
   const open = useCallback(() => setShow(true), [setShow])
   const close = useCallback(() => setShow(false), [setShow])
-
+  const handler = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation()
+      setToggle()
+    },
+    [setToggle]
+  )
   if (children) {
     return (
       <Tooltip text={text} show={show || toggle} className={className}>
@@ -38,11 +44,8 @@ const QuestionHelper: FC<{
     <Tooltip text={text} show={show || toggle} className={className}>
       <div
         ref={node}
-        onClick={setToggle}
-        className={classNames(
-          gap ? 'ml-1' : '',
-          'flex items-center justify-center outline-none cursor-help hover:text-primary'
-        )}
+        onClick={handler}
+        className="flex items-center justify-center ml-1 outline-none cursor-help hover:text-primary"
         onMouseEnter={open}
         onMouseLeave={close}
       >

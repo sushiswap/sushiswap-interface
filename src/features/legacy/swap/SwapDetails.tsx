@@ -13,6 +13,7 @@ import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { TradeUnion } from 'app/types'
 import React, { FC, Fragment, useMemo, useState } from 'react'
 import { isAddress } from 'web3-utils'
+import sushiGuardEnabledFeature from 'app/hooks/useSushiGuardFeature'
 
 interface SwapDetailsContent {
   trade?: TradeUnion
@@ -106,6 +107,7 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
   const minReceived = minimumAmountOut || trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
 
+  const sushiGuardEnabled = sushiGuardEnabledFeature()
   const _outputAmount = outputAmount || trade?.outputAmount
   const _inputAmount = inputAmount || trade?.inputAmount
 

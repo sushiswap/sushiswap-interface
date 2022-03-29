@@ -1,6 +1,17 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
+import {
+  Field,
+  replaceSwapState,
+  selectCurrency,
+  setFees,
+  setMaxFee,
+  setPriorityFee,
+  setRecipient,
+  setSushiRelayChallenge,
+  switchCurrencies,
+  typeInput,
+} from './actions'
 
 export interface SwapState {
   readonly independentField: Field
@@ -13,6 +24,9 @@ export interface SwapState {
   }
   // the typed recipient address or ENS name, or null if swap should go to sender
   readonly recipient?: string
+  readonly sushiRelayChallenge?: string
+  readonly maxFee?: string
+  readonly maxPriorityFee?: string
 }
 
 const initialState: SwapState = {
@@ -25,6 +39,9 @@ const initialState: SwapState = {
     currencyId: '',
   },
   recipient: undefined,
+  sushiRelayChallenge: undefined,
+  maxFee: undefined,
+  maxPriorityFee: undefined,
 }
 
 export default createReducer<SwapState>(initialState, (builder) =>
@@ -81,5 +98,18 @@ export default createReducer<SwapState>(initialState, (builder) =>
     })
     .addCase(setRecipient, (state, { payload: recipient }) => {
       state.recipient = recipient
+    })
+    .addCase(setSushiRelayChallenge, (state, { payload: sushiRelayChallenge }) => {
+      state.sushiRelayChallenge = sushiRelayChallenge
+    })
+    .addCase(setFees, (state, { payload: { maxFee, maxPriorityFee } }) => {
+      state.maxFee = maxFee
+      state.maxPriorityFee = maxPriorityFee
+    })
+    .addCase(setMaxFee, (state, { payload: maxFee }) => {
+      state.maxFee = maxFee
+    })
+    .addCase(setPriorityFee, (state, { payload: setPriorityFee }) => {
+      state.maxPriorityFee = setPriorityFee
     })
 )

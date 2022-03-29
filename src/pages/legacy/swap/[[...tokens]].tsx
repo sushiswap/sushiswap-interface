@@ -9,12 +9,13 @@ import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import ConfirmSwapModal from 'app/features/legacy/swap/ConfirmSwapModal'
 import SwapCallbackError from 'app/features/legacy/swap/SwapCallbackError'
+import SwapGasFeeInputs from 'app/features/legacy/swap/SwapGasFeeInputs'
+
 import SwapDetails from 'app/features/legacy/swap/SwapDetails'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
 import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
-import confirmPriceImpactWithoutFee from 'app/functions/prices'
-import { warningSeverity } from 'app/functions/prices'
+import confirmPriceImpactWithoutFee, { warningSeverity } from 'app/functions/prices'
 import { computeFiatValuePriceImpact } from 'app/functions/trade'
 import { useAllTokens, useCurrency } from 'app/hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from 'app/hooks/useApproveCallback'
@@ -23,14 +24,14 @@ import useIsArgentWallet from 'app/hooks/useIsArgentWallet'
 import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
 import { useSwapCallback } from 'app/hooks/useSwapCallback'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
-import useWalletSupportsOpenMev from 'app/hooks/useWalletSupportsOpenMev'
+import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
 import useWrapCallback, { WrapType } from 'app/hooks/useWrapCallback'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import TokenWarningModal from 'app/modals/TokenWarningModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { Field, setRecipient } from 'app/state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
@@ -188,8 +189,8 @@ const Swap = ({ banners }) => {
     }
   }, [approvalState, approvalSubmitted])
 
-  const [useOpenMev] = useUserOpenMev()
-  const walletSupportsOpenMev = useWalletSupportsOpenMev()
+  // Checks if user has enabled the feature and if the wallet supports it
+  const useSushiGuard = useSushiGuardFeature()
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
@@ -199,7 +200,7 @@ const Swap = ({ banners }) => {
     signatureData,
     /* @ts-ignore TYPE NEEDS FIXING */
     null,
-    walletSupportsOpenMev && useOpenMev
+    useSushiGuard
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -406,6 +407,7 @@ const Swap = ({ banners }) => {
             priceImpact={priceImpact}
             priceImpactCss={priceImpactCss}
           />
+          {isExpertMode && useSushiGuard && <SwapGasFeeInputs />}
           {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
           {Boolean(trade) && (
             <SwapDetails

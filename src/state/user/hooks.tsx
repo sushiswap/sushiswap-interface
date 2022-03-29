@@ -9,8 +9,10 @@ import {
   computePairAddress,
   Currency,
   FACTORY_ADDRESS,
+  JSBI,
   KASHI_ADDRESS,
   Pair,
+  Percent,
   Token,
 } from '@sushiswap/core-sdk'
 import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
@@ -35,7 +37,8 @@ import {
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSingleHopOnly,
-  updateUserUseOpenMev,
+  updateUserSlippageTolerance,
+  updateUserUseSushiGuard,
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -92,7 +95,39 @@ export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) =>
   return [singleHopOnly, setSingleHopOnly]
 }
 
-export function useUserTransactionTTL(): [number, (userDeadline: number) => void] {
+export function useSetUserSlippageTolerance(): (slippageTolerance: Percent | 'auto') => void {
+  const dispatch = useAppDispatch()
+  return useCallback(
+    (userSlippageTolerance: Percent | 'auto') => {
+      let value: 'auto' | number
+      try {
+        value =
+          userSlippageTolerance === 'auto' ? 'auto' : JSBI.toNumber(userSlippageTolerance.multiply(10_000).quotient)
+      } catch (error) {
+        value = 'auto'
+      }
+      dispatch(
+        updateUserSlippageTolerance({
+          userSlippageTolerance: value,
+        })
+      )
+    },
+    [dispatch]
+  )
+}
+/**
+ * Return the user's slippage tolerance, from the redux store, and a function to update the slippage tolerance
+ */
+export function useUserSlippageTolerance(): Percent | 'auto' {
+  const userSlippageTolerance = useAppSelector((state) => {
+    return state.user.userSlippageTolerance
+  })
+  return useMemo(
+    () => (userSlippageTolerance === 'auto' ? 'auto' : new Percent(userSlippageTolerance, 10_000)),
+    [userSlippageTolerance]
+  )
+}
+export function useUserTransactionTTL(): [number, (slippage: number) => void] {
   const dispatch = useAppDispatch()
   const userDeadline = useSelector<AppState, AppState['user']['userDeadline']>((state) => {
     return state.user.userDeadline
@@ -263,9 +298,11 @@ export const computeKashiPairAddress = ({
     keccak256(
       ['bytes'],
       [
+        //![#PROTECT_ADDRESS_START]
         '0x3d602d80600a3d3981f3363d3d373d3d3d363d73' +
           KASHI_ADDRESS[collateral.chainId].substring(2) +
           '5af43d82803e903d91602b57fd5bf3',
+        //![#PROTECT_ADDRESS_END]
       ]
     )
   )
@@ -370,20 +407,31 @@ export function useTrackedTokenPairs(): [Token, Token][] {
     return Object.keys(keyed).map((key) => keyed[key])
   }, [combinedList])
 }
-
 /**
- * Returns a boolean indicating if the user has enabled OpenMEV protection.
+ * Same as above but replaces the auto with a default value
+ * @param defaultSlippageTolerance the default value to replace auto with
  */
-export function useUserOpenMev(): [boolean, (newUseOpenMev: boolean) => void] {
+export function useUserSlippageToleranceWithDefault(defaultSlippageTolerance: Percent): Percent {
+  const allowedSlippage = useUserSlippageTolerance()
+  return useMemo(
+    () => (allowedSlippage === 'auto' ? defaultSlippageTolerance : allowedSlippage),
+    [allowedSlippage, defaultSlippageTolerance]
+  )
+}
+/**
+ * Returns a boolean indicating if the user has enabled SushiGuard / MEV protection.
+ */
+export function useUserSushiGuard(): [boolean, (newUseSushiGuard: boolean) => void] {
   const dispatch = useAppDispatch()
 
   // @ts-ignore TYPE NEEDS FIXING
-  const useOpenMev = useSelector<AppState, AppState['user']['useOpenMev']>((state) => state.user.userUseOpenMev)
-
-  const setUseOpenMev = useCallback(
-    (newUseOpenMev: boolean) => dispatch(updateUserUseOpenMev({ userUseOpenMev: newUseOpenMev })),
-    [dispatch]
+  const useSushiGuard = useSelector<AppState, AppState['user']['useSushiGuard']>(
+    (state) => state.user.userUseSushiGuard
   )
 
-  return [useOpenMev, setUseOpenMev]
+  const setUseSushiGuard = useCallback(
+    (newUseSushiGuard: boolean) => dispatch(updateUserUseSushiGuard({ userUseSushiGuard: newUseSushiGuard })),
+    [dispatch]
+  )
+  return [useSushiGuard, setUseSushiGuard]
 }
