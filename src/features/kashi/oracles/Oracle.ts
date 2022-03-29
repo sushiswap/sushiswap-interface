@@ -6,7 +6,6 @@ export interface Oracle {
 }
 
 export abstract class Oracle implements Oracle {
-
   chainId: number
   address: string
   data: string

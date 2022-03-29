@@ -65,7 +65,6 @@ const initialState: LimitOrderState = {
   attemptingTxn: false,
   showReview: false,
   invertRate: false,
-
 }
 
 export default createReducer<LimitOrderState>(initialState, (builder) =>

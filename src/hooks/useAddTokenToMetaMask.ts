@@ -18,7 +18,7 @@ export default function useAddTokenToMetaMask(currencyToAdd: Currency | undefine
       library.provider
         .request({
           method: 'wallet_watchAsset',
-      // @ts-expect-error
+          // @ts-expect-error
           params: {
             // @ts-ignore // need this for incorrect ethers provider type
             type: 'ERC20',
