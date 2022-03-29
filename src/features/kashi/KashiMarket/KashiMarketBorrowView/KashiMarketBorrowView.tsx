@@ -2,21 +2,25 @@ import { Transition } from '@headlessui/react'
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Fraction, JSBI, ZERO } from '@sushiswap/core-sdk'
+import { CurrencyAmount, Fraction, JSBI, maximum, minimum, ZERO } from '@sushiswap/core-sdk'
 import {
   KashiMarketBorrowButton,
   KashiMarketBorrowLeverageView,
   KashiMarketDetailsView,
   KashiMarketView,
-  useMaxBorrow,
 } from 'app/features/kashi/KashiMarket'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
 import { KashiMarketCurrentPosition } from 'app/features/kashi/KashiMarket/KashiMarketCurrentPosition'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
-import { tryParseAmount, unwrappedToken } from 'app/functions'
+import { computeRealizedLPFeePercent, tryParseAmount, unwrappedToken } from 'app/functions'
+import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
+import { useAppSelector } from 'app/state/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import React, { FC, useCallback, useMemo, useRef, useState } from 'react'
 
 interface KashiMarketBorrowView {}
+
+const DEFAULT_UPDATE_ORACLE = true
 
 export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
   const { i18n } = useLingui()
@@ -25,6 +29,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   const multiplierRef = useRef<Fraction>()
 
+  const [updateOracle, setUpdateOracle] = useState(DEFAULT_UPDATE_ORACLE)
   const [leverage, setLeverage] = useState<boolean>(false)
   const [spendFromWallet, setSpendFromWallet] = useState<boolean>(true)
   const [receiveInWallet, setReceiveInWallet] = useState<boolean>(true)
@@ -35,19 +40,61 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
   const [collateralAmount, setCollateralAmount] = useState<string>()
   const [borrowAmount, setBorrowAmount] = useState<string>()
 
-  const borrowAmountCurrencyAmount = useMemo(() => tryParseAmount(borrowAmount, asset), [asset, borrowAmount])
+  const borrowAmountCurrencyAmount = borrowAmount ? tryParseAmount(borrowAmount, asset) : undefined
 
-  const collateralAmountCurrencyAmount = useMemo(
-    () => tryParseAmount(collateralAmount, collateral),
-    [collateral, collateralAmount]
+  const collateralAmountCurrencyAmount = collateralAmount ? tryParseAmount(collateralAmount, collateral) : undefined
+
+  const allowedSlippage = useAppSelector(selectSlippage)
+
+  const trade = useV2TradeExactIn(borrowAmountCurrencyAmount, collateral, { maxHops: 3 })
+
+  const swapCollateralAmount = leverage ? trade?.minimumAmountOut(allowedSlippage) : undefined
+
+  const nextUserCollateralValue = JSBI.add(
+    JSBI.add(
+      market.userCollateralAmount,
+      collateralAmountCurrencyAmount ? collateralAmountCurrencyAmount.quotient : JSBI.BigInt(0)
+    ),
+    swapCollateralAmount ? swapCollateralAmount.quotient : JSBI.BigInt(0)
   )
 
-  const { maxBorrow, priceImpact, trade } = useMaxBorrow({
-    leveraged: leverage,
-    borrowAmount: borrowAmountCurrencyAmount,
-    collateralAmount: collateralAmountCurrencyAmount,
-    market,
-  })
+  const nextMaxBorrowableOracle = JSBI.divide(
+    JSBI.multiply(nextUserCollateralValue, JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))),
+    market.oracleExchangeRate
+  )
+
+  const nextMaxBorrowableSpot = JSBI.divide(
+    JSBI.multiply(nextUserCollateralValue, JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))),
+    market.spotExchangeRate
+  )
+
+  const nextMaxBorrowableStored = JSBI.divide(
+    JSBI.multiply(nextUserCollateralValue, JSBI.multiply(JSBI.BigInt(1e16), JSBI.BigInt(75))),
+    updateOracle ? market.oracleExchangeRate : market.exchangeRate
+  )
+
+  const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
+
+  const nextMaxBorrowSafe = JSBI.subtract(
+    JSBI.divide(JSBI.multiply(nextMaxBorrowMinimum, JSBI.BigInt(95)), JSBI.BigInt(100)),
+    market.currentUserBorrowAmount
+  )
+
+  const nextMaxBorrowPossible = maximum(minimum(nextMaxBorrowSafe, market.maxAssetAvailable), ZERO)
+
+  const nextBorrowValue = CurrencyAmount.fromRawAmount(
+    asset,
+    JSBI.add(
+      market.currentUserBorrowAmount,
+      borrowAmountCurrencyAmount ? borrowAmountCurrencyAmount.quotient : JSBI.BigInt(0)
+    )
+  )
+
+  const priceImpact = useMemo(() => {
+    if (!trade) return undefined
+    const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
+    return realizedLpFeePercent ? trade.priceImpact.subtract(realizedLpFeePercent.asFraction) : undefined
+  }, [trade])
 
   const onMultiply = useCallback(
     (multiplier: string, persist: boolean = false) => {
@@ -83,7 +130,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
     <div className="flex flex-col gap-3">
       <KashiMarketCurrentPosition setBorrowAmount={setBorrowAmount} setCollateralAmount={setCollateralAmount} />
       <SwapAssetPanel
-        error={borrowAmountCurrencyAmount && maxBorrow ? borrowAmountCurrencyAmount.greaterThan(maxBorrow) : false}
+        error={false}
         header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Deposit`)} hideSearchModal />}
         walletToggle={(props) => (
           <SwapAssetPanel.Switch
@@ -155,10 +202,12 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
         borrowAmount={borrowAmountCurrencyAmount}
         collateralAmount={collateralAmountCurrencyAmount}
         spendFromWallet={spendFromWallet}
-        maxBorrow={maxBorrow}
         leveraged={leverage}
         receiveInWallet={receiveInWallet}
         view={KashiMarketView.BORROW}
+        nextMaxBorrowMinimum={nextMaxBorrowMinimum}
+        nextMaxBorrowSafe={nextMaxBorrowSafe}
+        nextMaxBorrowPossible={nextMaxBorrowPossible}
       />
     </div>
   )

@@ -42,6 +42,7 @@ export const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrow
 
   const userCollateralAmount = CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount)
 
+  
   // Calculate total collateral amount
   let userTotalCollateral = userCollateralAmount.add(collateralAmount)
   if (swapCollateralAmount) {

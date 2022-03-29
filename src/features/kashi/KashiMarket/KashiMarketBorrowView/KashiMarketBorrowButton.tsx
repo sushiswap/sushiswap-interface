@@ -1,9 +1,10 @@
 import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, KASHI_ADDRESS, Percent, ZERO } from '@sushiswap/core-sdk'
+import { CurrencyAmount, JSBI, KASHI_ADDRESS, Percent, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
+import { Warning, Warnings } from 'app/entities/Warnings'
 import {
   BorrowExecutePayload,
   KashiMarketBorrowReviewModal,
@@ -15,12 +16,14 @@ import { unwrappedToken } from 'app/functions'
 import { useBentoBoxContract } from 'app/hooks'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { FC, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 
 export interface KashiMarketBorrowButtonProps extends Omit<BorrowExecutePayload, 'permit' | 'trade'> {
   view: KashiMarketView
-  maxBorrow?: CurrencyAmount<Currency>
   priceImpact?: Percent
+  nextMaxBorrowMinimum: JSBI
+  nextMaxBorrowSafe: JSBI
+  nextMaxBorrowPossible: JSBI
 }
 
 export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
@@ -29,9 +32,11 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
   borrowAmount,
   spendFromWallet,
   collateralAmount,
-  maxBorrow,
   view,
   priceImpact,
+  nextMaxBorrowMinimum,
+  nextMaxBorrowSafe,
+  nextMaxBorrowPossible,
 }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
@@ -60,7 +65,7 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
     ? i18n._(t`Loading balance`)
     : collateralAmount?.greaterThan(balance)
     ? i18n._(t`Insufficient balance`)
-    : borrowAmount && maxBorrow && borrowAmount.greaterThan(maxBorrow)
+    : borrowAmount && borrowAmount.greaterThan(nextMaxBorrowPossible)
     ? i18n._(t`Not enough collateral`)
     : totalAvailableToBorrow && borrowAmount && borrowAmount.greaterThan(totalAvailableToBorrow)
     ? i18n._(t`Not enough ${borrowAmount.currency.symbol} available`)
@@ -76,8 +81,51 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
     ? i18n._(t`Deposit Collateral`)
     : ''
 
+  const borrowWarnings = new Warnings()
+    .add(
+      JSBI.lessThan(nextMaxBorrowMinimum, market.currentUserBorrowAmount),
+      'You have surpassed your borrow limit and may be liquidated at any moment. Repay now or add collateral!',
+      true,
+      new Warning(
+        JSBI.lessThan(nextMaxBorrowSafe, ZERO),
+        'You have surpassed your borrow limit and assets are at a high risk of liquidation.',
+        true,
+        new Warning(
+          JSBI.greaterThan(
+            borrowAmount?.quotient || ZERO,
+            JSBI.subtract(nextMaxBorrowMinimum, market.currentUserBorrowAmount)
+          ),
+          "You don't have enough collateral to borrow this amount.",
+          true,
+          new Warning(
+            JSBI.greaterThan(borrowAmount?.quotient || ZERO, nextMaxBorrowSafe),
+            'You will surpass your borrow limit and assets will be at a high risk of liquidation.',
+            false
+          )
+        )
+      )
+    )
+    .add(
+      JSBI.lessThan(market.maxAssetAvailable, borrowAmount?.quotient || ZERO),
+      'Not enough liquidity in this pair.',
+      true
+    )
+
   return (
     <>
+      {borrowWarnings.reduce<ReactNode[]>((acc, cur, index) => {
+        if (cur)
+          acc.push(
+            <Typography
+              variant="sm"
+              className="p-4 text-center border rounded border-yellow/40 text-yellow"
+              key={index}
+            >
+              {cur.message}
+            </Typography>
+          )
+        return acc
+      }, [])}
       {permitError && (
         <Typography variant="sm" className="p-4 text-center border rounded border-yellow/40 text-yellow">
           {i18n._(
@@ -96,7 +144,7 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
         onPermitError={() => setPermitError(true)}
       >
         {({ approved, loading }) => {
-          const disabled = !!error || !approved || loading
+          const disabled = !!error || !approved || loading || borrowWarnings.some((warning) => warning.breaking)
           return (
             <Button
               loading={loading}
