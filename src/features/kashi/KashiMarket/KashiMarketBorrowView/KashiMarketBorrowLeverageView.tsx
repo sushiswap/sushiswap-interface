@@ -41,6 +41,11 @@ export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = 
   const { i18n } = useLingui()
   const [range, setRange] = useState<number>(0.5)
   const [invert, setInvert] = useState(false)
+  // console.log(2, {
+  //   invert,
+  //   borrowAmount: borrowAmount?.quotient.toString(),
+  //   collateralAmount: collateralAmount?.quotient.toString(),
+  // })
   const liquidationPrice = useLiquidationPrice({ invert, borrowAmount, collateralAmount, multiplier, reduce: false })
   const { market } = useKashiMarket()
 

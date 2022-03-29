@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import { useUSDCValueSubgraph } from 'app/hooks/useUSDCSubgraph'
 import { FC, memo, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 // Dummy component that fetches usdcValue
@@ -9,7 +9,7 @@ const USDCValue: FC<{
   // @ts-ignore TYPE NEEDS FIXING
   update(address: string, value?: CurrencyAmount<Currency>)
 }> = memo(({ amount, update }) => {
-  const usdcValue = useUSDCValue(amount)
+  const usdcValue = useUSDCValueSubgraph(amount)
   const address = amount ? (amount.currency.isNative ? AddressZero : amount.currency.wrapped.address) : undefined
 
   useEffect(() => {

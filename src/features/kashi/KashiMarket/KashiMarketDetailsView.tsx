@@ -30,6 +30,7 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
   priceImpact,
   collateralAmount,
   borrowAmount,
+  multiplier,
   view,
 }) => {
   const { chainId } = useActiveWeb3React()
@@ -42,32 +43,37 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
   const strategy = strategies?.[0]
   const allowedSlippage = useAppSelector(selectSlippage)
 
-  const borrowPosition = CurrencyAmount.fromRawAmount(
+  const currentUserBorrowAmount = CurrencyAmount.fromRawAmount(
     unwrappedToken(market.asset.token),
     market.currentUserBorrowAmount
   )
 
-  const collateralPosition = CurrencyAmount.fromRawAmount(
+  const userCollateralAmount = CurrencyAmount.fromRawAmount(
     unwrappedToken(market.collateral.token),
     market.userCollateralAmount
   )
 
   const extraCollateral = CurrencyAmount.fromRawAmount(
     unwrappedToken(market.collateral.token),
-    trade ? trade.minimumAmountOut(allowedSlippage).quotient : JSBI.BigInt(0)
+    view === KashiMarketView.BORROW && multiplier && trade
+      ? trade.minimumAmountOut(allowedSlippage).quotient
+      : JSBI.BigInt(0)
   )
 
-  const newCollateralAmount =
+  const nextCollateralAmount =
     collateralAmount &&
-    CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount)[
-      view === KashiMarketView.BORROW ? 'add' : 'subtract'
-    ](collateralAmount.add(extraCollateral))
+    userCollateralAmount[view === KashiMarketView.BORROW ? 'add' : 'subtract'](collateralAmount.add(extraCollateral))
 
-  const newBorrowAmount = borrowAmount
-    ? CurrencyAmount.fromRawAmount(borrowAmount.currency, market.currentUserBorrowAmount)[
-        view === KashiMarketView.BORROW ? 'add' : 'subtract'
-      ](borrowAmount)
+  const nextBorrowAmount = borrowAmount
+    ? currentUserBorrowAmount[view === KashiMarketView.BORROW ? 'add' : 'subtract'](borrowAmount)
     : CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserBorrowAmount)
+
+  // console.log({
+  //   trade,
+  //   multiplier: multiplier?.quotient.toString(),
+  //   nextCollateralAmount: nextCollateralAmount.quotient.toString(),
+  //   nextBorrowAmount: nextBorrowAmount.quotient.toString(),
+  // })
 
   return (
     <div className="flex flex-col divide-y divide-dark-850">
@@ -82,7 +88,7 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
               <ArrowSmRightIcon width={14} className="text-secondary" />
               <Typography variant="xs" className="text-right">
                 {new Percent(
-                  market.simulatedHealth(newBorrowAmount?.quotient, newCollateralAmount?.quotient),
+                  market.simulatedHealth(nextBorrowAmount?.quotient, nextCollateralAmount?.quotient),
                   1e18
                 ).toSignificant(6)}
                 %
@@ -168,11 +174,11 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
             </Typography>
             <div className="flex gap-1">
               <Typography variant="xs" className="text-right text-secondary">
-                {collateralPosition.toSignificant(6)} {market.collateral.token.symbol}
+                {userCollateralAmount.toSignificant(6)} {market.collateral.token.symbol}
               </Typography>
               <ArrowSmRightIcon width={14} className="text-secondary" />
               <Typography variant="xs" className="text-right">
-                {newCollateralAmount?.toSignificant(6)} {market.collateral.token.symbol}
+                {nextCollateralAmount?.toSignificant(6)} {market.collateral.token.symbol}
               </Typography>
             </div>
           </div>
@@ -184,11 +190,11 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
             </Typography>
             <div className="flex gap-1">
               <Typography variant="xs" className="text-right text-secondary">
-                {borrowPosition?.toSignificant(6)} {market.asset.token.symbol}
+                {currentUserBorrowAmount?.toSignificant(6)} {market.asset.token.symbol}
               </Typography>
               <ArrowSmRightIcon width={14} className="text-secondary" />
               <Typography variant="xs" className="text-right">
-                {newBorrowAmount?.toSignificant(6)} {market.asset.token.symbol}
+                {nextBorrowAmount?.toSignificant(6)} {market.asset.token.symbol}
               </Typography>
             </div>
           </div>
@@ -215,7 +221,8 @@ export const KashiMarketDetailsView: FC<KashiMarketDetailsView> = ({
   trade,
 }) => {
   const { i18n } = useLingui()
-  const [invert, setInvert] = useState(true)
+  const [invert, setInvert] = useState(false)
+
   const liquidationPrice = useLiquidationPrice({
     invert,
     borrowAmount,
@@ -287,6 +294,7 @@ export const KashiMarketDetailsView: FC<KashiMarketDetailsView> = ({
                 trade={trade}
                 priceImpact={priceImpact}
                 collateralAmount={collateralAmount}
+                multiplier={multiplier}
                 borrowAmount={borrowAmount}
                 view={view}
               />

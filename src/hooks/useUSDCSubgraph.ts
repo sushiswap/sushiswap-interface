@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap/core-sdk'
-import { useEthPrice, useTokens, useTridentTokens } from 'app/services/graph'
+import { useNativePrice, useTokens, useTridentTokens } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 
@@ -16,7 +16,7 @@ export function useUSDCPricesSubgraph(
 
   const stablecoin = chainId ? CurrencyAmount.fromRawAmount(USD[chainId], 0).currency : undefined
 
-  const ethPrice = useEthPrice()
+  const ethPrice = useNativePrice({ chainId })
   const tokensLegacy = useTokens({
     chainId,
     variables: { where: { id_in: currencies?.map((currency) => currency.wrapped.address.toLowerCase()) } },
@@ -105,6 +105,32 @@ export function useUSDCValueSubgraph(
       return price.quote(currencyAmount)
     } catch (error) {
       return null
+    }
+  }, [currencyAmount, price])
+}
+
+export function useUSDCSubgraphPriceWithLoadingIndicator(currency?: Currency) {
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currency)
+  return useMemo(() => {
+    if (!price || !currency) return { price: undefined, loading: false }
+    try {
+      return { price, loading: false }
+    } catch (error) {
+      return { price: undefined, loading: false }
+    }
+  }, [currency, price])
+}
+
+export function useUSDCSubgraphValueWithLoadingIndicator(currencyAmount: CurrencyAmount<Currency> | undefined) {
+  // Bandaid solution for now, might become permanent
+  const price = useUSDCPriceSubgraph(currencyAmount?.currency)
+  return useMemo(() => {
+    if (!price || !currencyAmount) return { value: undefined, loading: false }
+    try {
+      return { value: price.quote(currencyAmount), loading: false }
+    } catch (error) {
+      return { value: undefined, loading: false }
     }
   }, [currencyAmount, price])
 }
