@@ -182,7 +182,7 @@ function getExactInputParams(
         pool: multiRoute.legs[legIndex].poolAddress,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, receiveToWallet]
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, legIndex === routeLegs && receiveToWallet]
         ),
       }
       paths.push(path)
@@ -191,13 +191,14 @@ function getExactInputParams(
         pool: multiRoute.legs[legIndex].poolAddress,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, receiveToWallet]
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, legIndex === routeLegs && receiveToWallet]
         ),
       }
       paths.push(path)
     }
   }
-
+  // @note console.log slippage and inputAmount
+  console.log('slippage?', { amountOut: multiRoute.amountOut, slippage })
   let inputParams: ExactInputParams = {
     tokenIn: inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[0].tokenFrom.address,
     amountIn: fromWallet ? inputAmount.quotient.toString().toBigNumber(0) : getBigNumber(multiRoute.amountIn),
@@ -339,7 +340,8 @@ export function useSwapCallArguments(
   const { account, chainId, library } = useActiveWeb3React()
 
   const { address: recipientAddress } = useENS(recipientAddressOrName)
-  const recipient = recipientAddressOrName === null ? account : recipientAddress
+  const recipient = recipientAddressOrName ? recipientAddress ?? undefined : account ?? undefined
+
   const deadline = useTransactionDeadline()
 
   const legacyRouterContract = useRouterContract()
