@@ -3,7 +3,6 @@ import { useLingui } from '@lingui/react'
 import { CurrencyAmount, NATIVE } from '@sushiswap/core-sdk'
 import NumericalInput from 'app/components/Input/Numeric'
 import Typography from 'app/components/Typography'
-import useFeeData from '../../../hooks/useFeeData'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch } from 'app/state/hooks'
 import { setFees, setMaxFee, setPriorityFee } from 'app/state/swap/actions'
@@ -11,6 +10,8 @@ import { useSwapState } from 'app/state/swap/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import React, { FC, useEffect } from 'react'
 import { fromWei, toWei } from 'web3-utils'
+
+import useFeeData from '../../../hooks/useFeeData'
 
 const SwapGasFeeInputs: FC = () => {
   const { chainId } = useActiveWeb3React()

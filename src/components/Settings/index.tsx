@@ -18,8 +18,6 @@ import { useToggleSettingsMenu } from 'app/state/application/hooks'
 import { useExpertModeManager, useUserSingleHopOnly, useUserSushiGuard } from 'app/state/user/hooks'
 import React, { FC, useState } from 'react'
 
-import { OPENMEV_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/sushiguard'
-
 interface SettingsTabProps {
   placeholderSlippage?: Percent
   trident?: boolean

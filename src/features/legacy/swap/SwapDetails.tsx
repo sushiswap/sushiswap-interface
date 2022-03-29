@@ -9,11 +9,11 @@ import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
 import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
+import sushiGuardEnabledFeature from 'app/hooks/useSushiGuardFeature'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { TradeUnion } from 'app/types'
 import React, { FC, Fragment, useMemo, useState } from 'react'
 import { isAddress } from 'web3-utils'
-import sushiGuardEnabledFeature from 'app/hooks/useSushiGuardFeature'
 
 interface SwapDetailsContent {
   trade?: TradeUnion
