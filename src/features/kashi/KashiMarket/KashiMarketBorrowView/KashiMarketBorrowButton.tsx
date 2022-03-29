@@ -65,8 +65,6 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
     ? i18n._(t`Loading balance`)
     : collateralAmount?.greaterThan(balance)
     ? i18n._(t`Insufficient balance`)
-    : borrowAmount && borrowAmount.greaterThan(nextMaxBorrowPossible)
-    ? i18n._(t`Not enough collateral`)
     : totalAvailableToBorrow && borrowAmount && borrowAmount.greaterThan(totalAvailableToBorrow)
     ? i18n._(t`Not enough ${borrowAmount.currency.symbol} available`)
     : ''
