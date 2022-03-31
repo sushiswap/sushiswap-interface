@@ -9,14 +9,7 @@ export const miniChefPoolsQuery = gql`
     $block: Block_height
     $where: Pool_filter! = { allocPoint_gt: 0 } # $where: Pool_filter! = { allocPoint_gt: 0, accSushiPerShare_gt: 0 }
   ) {
-    pools(
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      block: $block
-      where: $where
-    ) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, block: $block) {
       id
       pair
       rewarder {
