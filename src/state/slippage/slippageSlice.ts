@@ -43,6 +43,11 @@ const inputToPercent = (input: string) => new Percent(parseSlippageInput(input),
 const selectSlippageInputError = (state: AppState): SlippageError | false => {
   try {
     const parsedInput = parseSlippageInput(state.slippage.input)
+
+    if (state.user.userExpertMode) {
+      return false
+    }
+
     return !Number.isInteger(parsedInput) || parsedInput < 1 || parsedInput > 5000
       ? SlippageError.INVALID_INPUT
       : inputToPercent(state.slippage.input).lessThan(new Percent(5, 10_000))
