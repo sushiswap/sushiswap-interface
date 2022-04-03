@@ -31,3 +31,9 @@ export type PoolWithState<T> =
   | PoolWithStateLoading
   | PoolWithStateNotExists
   | PoolWithStateInvalid
+
+import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
+
+type TokenAddress = string
+
+export type TokenBalancesMap = Record<TokenAddress, CurrencyAmount<Token> | undefined>

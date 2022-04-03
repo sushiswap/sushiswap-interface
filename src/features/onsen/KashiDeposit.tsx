@@ -14,7 +14,7 @@ import { useCurrency } from 'app/hooks/Tokens'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useKashiApproveCallback, { BentoApprovalState } from 'app/hooks/useKashiApproveCallback'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useETHBalances } from 'app/state/wallet/hooks'
+import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
 import React, { useCallback, useState } from 'react'
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -26,7 +26,7 @@ const KashiDeposit = ({ pair, header }) => {
   const [depositValue, setDepositValue] = useState('')
   const assetNative = WNATIVE[chainId || 1].address === pair?.asset.address
   // @ts-ignore TYPE NEEDS FIXING
-  const ethBalance = useETHBalances(assetNative ? [account ?? undefined] : [])
+  const ethBalance = useNativeCurrencyBalances(assetNative ? [account ?? undefined] : [])
 
   const balanceAmount = useBento
     ? pair?.asset.bentoBalance

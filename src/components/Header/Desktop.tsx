@@ -6,7 +6,7 @@ import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
 import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useETHBalances } from 'app/state/wallet/hooks'
+import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
 import React, { FC } from 'react'
 
@@ -19,7 +19,7 @@ const HEADER_HEIGHT = 64
 const Desktop: FC = () => {
   const menu = useMenu()
   const { account, chainId, library } = useActiveWeb3React()
-  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+  const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
   const isCoinbaseWallet = useIsCoinbaseWallet()
 
   return (
