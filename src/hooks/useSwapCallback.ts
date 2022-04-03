@@ -248,8 +248,7 @@ function getComplexPathParams(
       initialPaths.push(initialPath)
     } else {
       const percentagePath: PercentagePath = {
-        tokenIn:
-          inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[legIndex].tokenFrom.address,
+        tokenIn: multiRoute.legs[legIndex].tokenFrom.address,
         pool: multiRoute.legs[legIndex].poolAddress,
         balancePercentage: getBigNumber(multiRoute.legs[legIndex].swapPortion * 10 ** 8),
         data: defaultAbiCoder.encode(
