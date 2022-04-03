@@ -5,7 +5,7 @@ import React, { FC, ReactNode } from 'react'
 
 import Chip from '../Chip'
 import { CurrencyLogo } from '../CurrencyLogo'
-import Typography from '../Typography'
+import Typography, { TypographyVariant } from '../Typography'
 
 interface ListPanelProps {
   header?: ReactNode
@@ -110,14 +110,15 @@ interface ListPanelItemLeftProps {
   amount: CurrencyAmount<Currency> | undefined
   startAdornment?: ReactNode
   hideCurrencyLogo?: boolean
+  size?: TypographyVariant
 }
 
-const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, hideCurrencyLogo, startAdornment }) => {
+const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, size, hideCurrencyLogo, startAdornment }) => {
   return (
     <div className="flex flex-row gap-1.5 lg:gap-3 items-center">
       {startAdornment && startAdornment}
       {!hideCurrencyLogo && <CurrencyLogo currency={amount?.currency} size={20} className="rounded-full" />}
-      <Typography variant="sm" className="text-high-emphesis" weight={700}>
+      <Typography variant={size || 'sm'} className="text-high-emphesis" weight={700}>
         {amount?.greaterThan(ZERO) ? amount?.toSignificant(6) : '0.00'} {amount?.currency.symbol}
       </Typography>
     </div>
@@ -140,6 +141,7 @@ interface CurrencyAmountItemProps {
   hideIfZero?: boolean
   hideCurrencyLogo?: boolean
   hideUSDC?: boolean
+  size?: TypographyVariant
 }
 
 // ListPanelItem for displaying a CurrencyAmount
@@ -151,6 +153,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
   hideIfZero = true,
   hideCurrencyLogo,
   hideUSDC = false,
+  size,
 }) => {
   const usdcValue = useUSDCValue(
     hideUSDC ? undefined : amount?.equalTo(ZERO) ? CurrencyAmount.fromRawAmount(amount?.currency, '1') : amount
@@ -162,6 +165,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
         <ListPanel.Item
           left={
             <ListPanel.Item.Left
+              size={size}
               hideCurrencyLogo={hideCurrencyLogo}
               amount={amount}
               {...(weight && { startAdornment: <Chip color="default" label={weight} size="sm" /> })}
@@ -185,7 +189,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
     >
       <div className="flex items-center gap-3 -ml-1">
         {!hideCurrencyLogo && <CurrencyLogo currency={amount?.currency} size={30} className="rounded-full" />}
-        <Typography className="text-high-emphesis" weight={700}>
+        <Typography className="text-high-emphesis" weight={700} variant={size || 'base'}>
           {amount?.currency.symbol}
         </Typography>
       </div>

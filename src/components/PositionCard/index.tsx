@@ -3,6 +3,8 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CurrencyAmount, JSBI, Pair, Percent, Token } from '@sushiswap/core-sdk'
+import ListPanel from 'app/components/ListPanel'
+import Typography from 'app/components/Typography'
 import { BIG_INT_ZERO } from 'app/constants'
 import { classNames } from 'app/functions'
 import { currencyId, unwrappedToken } from 'app/functions/currency'
@@ -56,6 +58,31 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
           pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false),
         ]
       : [undefined, undefined]
+
+  return (
+    <div>
+      <ListPanel
+        header={
+          <div className="overflow-hidden px-4 py-2 bg-dark-900">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`My Position`)}
+            </Typography>
+          </div>
+        }
+        items={[token0Deposited, token1Deposited].map((cur, index) => (
+          <ListPanel.CurrencyAmountItem amount={cur} key={index} size="xs" />
+        ))}
+        footer={
+          <div className="flex overflow-hidden px-4 py-2 justify-between">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`Pool Share`)}
+            </Typography>
+            <Typography variant="xs">{poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}</Typography>
+          </div>
+        }
+      />
+    </div>
+  )
 
   return (
     <>

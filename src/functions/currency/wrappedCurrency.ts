@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId, Currency, CurrencyAmount, NATIVE, WNATIVE } from '@sushiswap/core-sdk'
 
 export function unwrappedToken(currency: Currency): Currency {
   if (currency.isNative) return currency
@@ -7,6 +7,13 @@ export function unwrappedToken(currency: Currency): Currency {
   if (currency.chainId in ChainId && currency.equals(WNATIVE[currency.chainId])) return NATIVE[currency.chainId]
 
   return currency
+}
+
+export function unwrappedCurrencyAmount(amount?: CurrencyAmount<Currency>): CurrencyAmount<Currency> | undefined {
+  if (!amount) return
+
+  const native = NATIVE[amount.currency.chainId]
+  return CurrencyAmount.fromRawAmount(native, amount.quotient)
 }
 
 export const isWrappedReturnNativeSymbol = (chainId: ChainId | undefined, address: string): string => {

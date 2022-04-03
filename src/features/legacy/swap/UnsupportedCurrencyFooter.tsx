@@ -31,7 +31,7 @@ const UnsupportedCurrencyFooter: FC<UnsupportedCurrencyFooter> = ({ currencies }
 
   return (
     <>
-      <HeadlessUiModal.Controlled isOpen={showDetails} onDismiss={() => setShowDetails(false)}>
+      <HeadlessUiModal.Controlled isOpen={showDetails} onDismiss={() => setShowDetails(false)} maxWidth="sm">
         <div className="flex flex-col gap-4">
           <HeadlessUiModal.Header header={i18n._(t`Unsupported Asset`)} onClose={() => setShowDetails(false)} />
           <HeadlessUiModal.BorderedContent className="flex flex-col gap-4">

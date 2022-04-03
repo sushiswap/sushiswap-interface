@@ -14,7 +14,7 @@ interface Input extends Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChang
 }
 
 export const Input: FC<Input> = forwardRef<HTMLInputElement, Input>(
-  ({ value, onUserInput, placeholder, className = defaultClassName, ...rest }, ref) => {
+  ({ value, onUserInput, placeholder, className = defaultClassName, min, ...rest }, ref) => {
     const enforcer = (nextUserInput: string) => {
       if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
         onUserInput(nextUserInput)
@@ -39,7 +39,7 @@ export const Input: FC<Input> = forwardRef<HTMLInputElement, Input>(
         type="text"
         pattern="^[0-9]*[.,]?[0-9]*$"
         placeholder={placeholder || '0.0'}
-        min={0}
+        min={min || 0}
         minLength={1}
         maxLength={79}
         spellCheck="false"

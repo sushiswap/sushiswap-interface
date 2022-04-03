@@ -1,21 +1,17 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
-import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, Currency, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
-import { AutoColumn } from 'app/components/Column'
-import Container from 'app/components/Container'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
-import NavLink from 'app/components/NavLink'
-import PercentInputPanel from 'app/components/PercentInputPanel'
-import { MinimalPositionCard } from 'app/components/PositionCard'
-import { AutoRow, RowBetween } from 'app/components/Row'
+import Input from 'app/components/Input'
+import ListPanel from 'app/components/ListPanel'
+import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
-import Header from 'app/features/trade/Header'
+import HeaderNew from 'app/features/trade/HeaderNew'
+import { classNames, unwrappedCurrencyAmount } from 'app/functions'
 import { currencyId } from 'app/functions/currency'
 import { calculateGasMargin, calculateSlippageAmount } from 'app/functions/trade'
 import { useCurrency } from 'app/hooks/Tokens'
@@ -24,6 +20,7 @@ import { usePairContract, useRouterContract } from 'app/hooks/useContract'
 import useDebouncedChangeHandler from 'app/hooks/useDebouncedChangeHandler'
 import { useV2LiquidityTokenPermit } from 'app/hooks/useERC20Permit'
 import useTransactionDeadline from 'app/hooks/useTransactionDeadline'
+import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
@@ -414,167 +411,139 @@ export default function Remove() {
   }, [onUserInput, txHash])
 
   const [innerLiquidityPercentage, setInnerLiquidityPercentage] = useDebouncedChangeHandler(
-    parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0),
+    '25',
     liquidityPercentChangeCallback
   )
 
+  const inputError = +innerLiquidityPercentage > 100 || +innerLiquidityPercentage < 0
+
   return (
-    <Container id="remove-liquidity-page" className="py-4 space-y-4 md:py-8 lg:py-12" maxWidth="2xl">
+    <>
       <NextSeo title="Remove Liquidity" />
-      <div className="px-4 mb-5">
-        <NavLink href="/pool">
-          <a className="flex items-center space-x-2 text-base font-medium text-center cursor-pointer text-secondary hover:text-high-emphesis">
-            <span>{i18n._(t`View Liquidity Positions`)}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
-        </NavLink>
-      </div>
-
-      <DoubleGlowShadow>
-        <div className="p-4 space-y-4 rounded bg-dark-900" style={{ zIndex: 1 }}>
-          {/* <AddRemoveTabs
-          creating={false}
-          adding={false}
-          defaultSlippage={DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE}
-        /> */}
-          <Header input={currencyA} output={currencyB} allowedSlippage={allowedSlippage} />
-          <div>
-            <TransactionConfirmationModal
-              isOpen={showConfirm}
-              onDismiss={handleDismissConfirmation}
-              attemptingTxn={attemptingTxn}
-              hash={txHash ? txHash : ''}
-              content={
-                <ConfirmationModalContent
-                  title={i18n._(t`You will receive`)}
-                  onDismiss={handleDismissConfirmation}
-                  topContent={ModalHeader}
-                  bottomContent={ModalBottom}
-                />
-              }
-              pendingText={pendingText}
-            />
-            <AutoColumn gap="md">
-              {/* <LiquidityHeader input={currencyA} output={currencyB} /> */}
-
-              <div>
-                <PercentInputPanel
+      <TransactionConfirmationModal
+        isOpen={showConfirm}
+        onDismiss={handleDismissConfirmation}
+        attemptingTxn={attemptingTxn}
+        hash={txHash ? txHash : ''}
+        content={
+          <ConfirmationModalContent
+            title={i18n._(t`You will receive`)}
+            onDismiss={handleDismissConfirmation}
+            topContent={ModalHeader}
+            bottomContent={ModalBottom}
+          />
+        }
+        pendingText={pendingText}
+      />
+      <SwapLayoutCard>
+        <div className="px-2">
+          <HeaderNew inputCurrency={currencyA} outputCurrency={currencyB} />
+        </div>
+        <div className="flex flex-col gap-3">
+          <div
+            className={classNames(
+              inputError ? 'border-red/40 hover:border-red' : 'border-dark-700 hover:border-dark-600',
+              'flex flex-col gap-1 bg-dark-900 px-4 py-2 rounded border'
+            )}
+          >
+            <Typography variant="sm" weight={700}>
+              {i18n._(t`Amount to remove (%)`)}
+            </Typography>
+            <div className="flex gap-1 items-center">
+              <Typography
+                weight={700}
+                variant="lg"
+                className="relative flex items-baseline flex-grow gap-3 overflow-hidden text-high-emphesis"
+              >
+                <Input.Numeric
+                  className="leading-[32px] focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
+                  placeholder="0%"
+                  id="limit-price-input"
                   value={innerLiquidityPercentage}
                   onUserInput={setInnerLiquidityPercentage}
-                  id="liquidity-percent"
+                  min={0}
+                  max={100}
+                  step={1}
                 />
-
-                <AutoColumn justify="space-between" className="py-2.5">
-                  <AutoRow justify={'flex-start'} style={{ padding: '0 1rem' }}>
-                    <button className="z-10 -mt-6 -mb-6 rounded-full cursor-default bg-dark-900 p-3px">
-                      <div className="p-3 rounded-full bg-dark-800">
-                        <ArrowDownIcon width="32px" height="32px" />
-                      </div>
-                    </button>
-                  </AutoRow>
-                </AutoColumn>
-
-                <div id="remove-liquidity-output" className="p-5 rounded bg-dark-800">
-                  <div className="flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row">
-                    <div className="w-full text-white sm:w-2/5" style={{ margin: 'auto 0px' }}>
-                      <AutoColumn>
-                        <div>You Will Receive:</div>
-                        {chainId && (oneCurrencyIsWETH || oneCurrencyIsETH) ? (
-                          <RowBetween className="text-sm">
-                            {oneCurrencyIsETH ? (
-                              <Link
-                                href={`/remove/${currencyA?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdA}/${
-                                  currencyB?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdB
-                                }`}
-                              >
-                                <a className="text-baseline text-blue opacity-80 hover:opacity-100 focus:opacity-100 whitespace-nowrap">
-                                  {/* @ts-ignore TYPE NEEDS FIXING */}
-                                  Receive W{NATIVE[chainId].symbol}
-                                </a>
-                              </Link>
-                            ) : oneCurrencyIsWETH ? (
-                              <Link
-                                href={`/remove/${currencyA?.equals(WNATIVE[chainId]) ? 'ETH' : currencyIdA}/${
-                                  currencyB?.equals(WNATIVE[chainId]) ? 'ETH' : currencyIdB
-                                }`}
-                              >
-                                <a className="text-baseline text-blue opacity-80 hover:opacity-100 whitespace-nowrap">
-                                  {/* @ts-ignore TYPE NEEDS FIXING */}
-                                  Receive {NATIVE[chainId].symbol}
-                                </a>
-                              </Link>
-                            ) : null}
-                          </RowBetween>
-                        ) : null}
-                      </AutoColumn>
-                    </div>
-
-                    <div className="flex flex-col space-y-3 md:flex-row md:space-x-6 md:space-y-0">
-                      <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
-                        <CurrencyLogo currency={currencyA} size="46px" />
-                        <AutoColumn>
-                          <div className="text-white truncate">{formattedAmounts[Field.CURRENCY_A] || '-'}</div>
-                          <div className="text-sm">{currencyA?.symbol}</div>
-                        </AutoColumn>
-                      </div>
-                      <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
-                        <CurrencyLogo currency={currencyB} size="46px" />
-                        <AutoColumn>
-                          <div className="text-white truncate">{formattedAmounts[Field.CURRENCY_B] || '-'}</div>
-                          <div className="text-sm">{currencyB?.symbol}</div>
-                        </AutoColumn>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ position: 'relative' }}>
-                {!account ? (
-                  <Web3Connect size="lg" color="blue" className="w-full" />
-                ) : (
-                  <div className="grid grid-cols-2 gap-4">
-                    <Button
-                      fullWidth
-                      loading={approval === ApprovalState.PENDING}
-                      onClick={onAttemptToApprove}
-                      disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
-                    >
-                      {approval === ApprovalState.APPROVED || signatureData !== null
-                        ? i18n._(t`Approved`)
-                        : i18n._(t`Approve`)}
-                    </Button>
-                    <Button
-                      fullWidth
-                      color={
-                        !isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]
-                          ? 'red'
-                          : 'blue'
-                      }
-                      onClick={() => {
-                        setShowConfirm(true)
-                      }}
-                      disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
-                    >
-                      {error || i18n._(t`Confirm Withdrawal`)}
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </AutoColumn>
+              </Typography>
+            </div>
           </div>
-
-          {pair ? <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} /> : null}
+          <div className="flex-col bg-dark-900 border border-dark-700 rounded overflow-hidden">
+            <div className="overflow-hidden px-4 py-2 bg-dark-900 flex justify-between items-center">
+              <Typography variant="sm" weight={700} className="text-high-emphesis">
+                {i18n._(t`You'll receive`)}
+              </Typography>
+              {chainId && (oneCurrencyIsWETH || oneCurrencyIsETH) && (
+                <Typography variant="xs" weight={700}>
+                  {oneCurrencyIsETH ? (
+                    <Link
+                      href={`/remove/${currencyA?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdA}/${
+                        currencyB?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdB
+                      }`}
+                    >
+                      <a className="text-baseline text-blue opacity-80 hover:opacity-100 focus:opacity-100 whitespace-nowrap">
+                        Receive W{NATIVE[chainId].symbol} instead
+                      </a>
+                    </Link>
+                  ) : (
+                    oneCurrencyIsWETH && (
+                      <Link
+                        href={`/remove/${currencyA?.equals(WNATIVE[chainId]) ? 'ETH' : currencyIdA}/${
+                          currencyB?.equals(WNATIVE[chainId]) ? 'ETH' : currencyIdB
+                        }`}
+                      >
+                        <a className="text-baseline text-blue opacity-80 hover:opacity-100 whitespace-nowrap">
+                          Receive {NATIVE[chainId].symbol} instead
+                        </a>
+                      </Link>
+                    )
+                  )}
+                </Typography>
+              )}
+            </div>
+            {[
+              currencyA?.isNative
+                ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_A])
+                : parsedAmounts[Field.CURRENCY_A],
+              currencyB?.isNative
+                ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_B])
+                : parsedAmounts[Field.CURRENCY_B],
+            ].map((cur, index) => (
+              <ListPanel.CurrencyAmountItem amount={cur} key={index} size="xs" />
+            ))}
+          </div>
+          {!account ? (
+            <Web3Connect size="lg" color="blue" className="w-full" />
+          ) : (
+            <div className="flex flex-col gap-3">
+              <Button
+                fullWidth
+                loading={approval === ApprovalState.PENDING}
+                onClick={onAttemptToApprove}
+                disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
+              >
+                {approval === ApprovalState.APPROVED || signatureData !== null
+                  ? i18n._(t`Approved`)
+                  : i18n._(t`Approve`)}
+              </Button>
+              <Button
+                fullWidth
+                color={
+                  !isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B] ? 'red' : 'blue'
+                }
+                onClick={() => {
+                  setShowConfirm(true)
+                }}
+                disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
+              >
+                {error || i18n._(t`Confirm Withdrawal`)}
+              </Button>
+            </div>
+          )}
         </div>
-      </DoubleGlowShadow>
-    </Container>
+      </SwapLayoutCard>
+    </>
   )
 }
+
+Remove.Layout = SwapLayout('remove-page')

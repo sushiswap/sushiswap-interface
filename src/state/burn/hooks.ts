@@ -125,11 +125,11 @@ export function useDerivedBurnInfo(
         : undefined,
     [Field.CURRENCY_A]:
       tokenA && percentToRemove && percentToRemove.greaterThan('0') && liquidityValueA
-        ? CurrencyAmount.fromRawAmount(tokenA, percentToRemove.multiply(liquidityValueA.quotient).quotient)
+        ? CurrencyAmount.fromRawAmount(tokenA, percentToRemove.multiply(liquidityValueA.quotient).quotient || '0')
         : undefined,
     [Field.CURRENCY_B]:
       tokenB && percentToRemove && percentToRemove.greaterThan('0') && liquidityValueB
-        ? CurrencyAmount.fromRawAmount(tokenB, percentToRemove.multiply(liquidityValueB.quotient).quotient)
+        ? CurrencyAmount.fromRawAmount(tokenB, percentToRemove.multiply(liquidityValueB.quotient).quotient || '0')
         : undefined,
   }
 
