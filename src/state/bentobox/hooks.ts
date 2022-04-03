@@ -6,6 +6,7 @@ import { useAllTokens } from 'app/hooks/Tokens'
 import { useBentoBoxContract } from 'app/hooks/useContract'
 import { useSingleCallResult, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
+import { OptionalMethodInputs } from 'app/types'
 import { useMemo } from 'react'
 
 export interface BentoBalance {
