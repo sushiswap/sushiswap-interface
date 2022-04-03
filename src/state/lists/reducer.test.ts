@@ -14,24 +14,15 @@ const STUB_TOKEN_LIST = {
 
 const PATCHED_STUB_LIST = {
   ...STUB_TOKEN_LIST,
-  version: {
-    ...STUB_TOKEN_LIST.version,
-    patch: STUB_TOKEN_LIST.version.patch + 1,
-  },
+  version: { ...STUB_TOKEN_LIST.version, patch: STUB_TOKEN_LIST.version.patch + 1 },
 }
 const MINOR_UPDATED_STUB_LIST = {
   ...STUB_TOKEN_LIST,
-  version: {
-    ...STUB_TOKEN_LIST.version,
-    minor: STUB_TOKEN_LIST.version.minor + 1,
-  },
+  version: { ...STUB_TOKEN_LIST.version, minor: STUB_TOKEN_LIST.version.minor + 1 },
 }
 const MAJOR_UPDATED_STUB_LIST = {
   ...STUB_TOKEN_LIST,
-  version: {
-    ...STUB_TOKEN_LIST.version,
-    major: STUB_TOKEN_LIST.version.major + 1,
-  },
+  version: { ...STUB_TOKEN_LIST.version, major: STUB_TOKEN_LIST.version.major + 1 },
 }
 
 describe('list reducer', () => {
@@ -92,11 +83,7 @@ describe('list reducer', () => {
     describe('fulfilled', () => {
       it('saves the list', () => {
         store.dispatch(
-          fetchTokenList.fulfilled({
-            tokenList: STUB_TOKEN_LIST,
-            requestId: 'request-id',
-            url: 'fake-url',
-          })
+          fetchTokenList.fulfilled({ tokenList: STUB_TOKEN_LIST, requestId: 'request-id', url: 'fake-url' })
         )
         expect(store.getState()).toEqual({
           byUrl: {
@@ -113,18 +100,10 @@ describe('list reducer', () => {
 
       it('does not save the list in pending if current is same', () => {
         store.dispatch(
-          fetchTokenList.fulfilled({
-            tokenList: STUB_TOKEN_LIST,
-            requestId: 'request-id',
-            url: 'fake-url',
-          })
+          fetchTokenList.fulfilled({ tokenList: STUB_TOKEN_LIST, requestId: 'request-id', url: 'fake-url' })
         )
         store.dispatch(
-          fetchTokenList.fulfilled({
-            tokenList: STUB_TOKEN_LIST,
-            requestId: 'request-id',
-            url: 'fake-url',
-          })
+          fetchTokenList.fulfilled({ tokenList: STUB_TOKEN_LIST, requestId: 'request-id', url: 'fake-url' })
         )
         expect(store.getState()).toEqual({
           byUrl: {
@@ -141,19 +120,11 @@ describe('list reducer', () => {
 
       it('does not save to current if list is newer patch version', () => {
         store.dispatch(
-          fetchTokenList.fulfilled({
-            tokenList: STUB_TOKEN_LIST,
-            requestId: 'request-id',
-            url: 'fake-url',
-          })
+          fetchTokenList.fulfilled({ tokenList: STUB_TOKEN_LIST, requestId: 'request-id', url: 'fake-url' })
         )
 
         store.dispatch(
-          fetchTokenList.fulfilled({
-            tokenList: PATCHED_STUB_LIST,
-            requestId: 'request-id',
-            url: 'fake-url',
-          })
+          fetchTokenList.fulfilled({ tokenList: PATCHED_STUB_LIST, requestId: 'request-id', url: 'fake-url' })
         )
         expect(store.getState()).toEqual({
           byUrl: {
@@ -169,19 +140,11 @@ describe('list reducer', () => {
       })
       it('does not save to current if list is newer minor version', () => {
         store.dispatch(
-          fetchTokenList.fulfilled({
-            tokenList: STUB_TOKEN_LIST,
-            requestId: 'request-id',
-            url: 'fake-url',
-          })
+          fetchTokenList.fulfilled({ tokenList: STUB_TOKEN_LIST, requestId: 'request-id', url: 'fake-url' })
         )
 
         store.dispatch(
-          fetchTokenList.fulfilled({
-            tokenList: MINOR_UPDATED_STUB_LIST,
-            requestId: 'request-id',
-            url: 'fake-url',
-          })
+          fetchTokenList.fulfilled({ tokenList: MINOR_UPDATED_STUB_LIST, requestId: 'request-id', url: 'fake-url' })
         )
         expect(store.getState()).toEqual({
           byUrl: {
@@ -197,19 +160,11 @@ describe('list reducer', () => {
       })
       it('does not save to pending if list is newer major version', () => {
         store.dispatch(
-          fetchTokenList.fulfilled({
-            tokenList: STUB_TOKEN_LIST,
-            requestId: 'request-id',
-            url: 'fake-url',
-          })
+          fetchTokenList.fulfilled({ tokenList: STUB_TOKEN_LIST, requestId: 'request-id', url: 'fake-url' })
         )
 
         store.dispatch(
-          fetchTokenList.fulfilled({
-            tokenList: MAJOR_UPDATED_STUB_LIST,
-            requestId: 'request-id',
-            url: 'fake-url',
-          })
+          fetchTokenList.fulfilled({ tokenList: MAJOR_UPDATED_STUB_LIST, requestId: 'request-id', url: 'fake-url' })
         )
         expect(store.getState()).toEqual({
           byUrl: {
@@ -227,13 +182,7 @@ describe('list reducer', () => {
 
     describe('rejected', () => {
       it('no-op if not loading', () => {
-        store.dispatch(
-          fetchTokenList.rejected({
-            requestId: 'request-id',
-            errorMessage: 'abcd',
-            url: 'fake-url',
-          })
-        )
+        store.dispatch(fetchTokenList.rejected({ requestId: 'request-id', errorMessage: 'abcd', url: 'fake-url' }))
         expect(store.getState()).toEqual({
           byUrl: {},
           activeListUrls: undefined,
@@ -252,13 +201,7 @@ describe('list reducer', () => {
           },
           activeListUrls: undefined,
         })
-        store.dispatch(
-          fetchTokenList.rejected({
-            requestId: 'request-id',
-            errorMessage: 'abcd',
-            url: 'fake-url',
-          })
-        )
+        store.dispatch(fetchTokenList.rejected({ requestId: 'request-id', errorMessage: 'abcd', url: 'fake-url' }))
         expect(store.getState()).toEqual({
           byUrl: {
             'fake-url': {
