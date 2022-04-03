@@ -1,5 +1,5 @@
 import { Currency, JSBI, Rebase, Token } from '@sushiswap/core-sdk'
-import { useSingleContractMultipleData } from 'lib/hooks/multicall'
+import { useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useMemo } from 'react'
 
 import { useBentoBoxContract } from './useContract'

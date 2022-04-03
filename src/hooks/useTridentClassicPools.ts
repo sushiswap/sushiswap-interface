@@ -4,8 +4,8 @@ import ConstantProductPoolArtifact from '@sushiswap/trident/artifacts/contracts/
 import { computeConstantProductPoolAddress, ConstantProductPool, Fee } from '@sushiswap/trident-sdk'
 import { PoolAtomType } from 'app/features/trident/types'
 import { useConstantProductPoolFactory } from 'app/hooks/useContract'
+import { useMultipleContractSingleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useMultipleContractSingleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
 const CONSTANT_PRODUCT_POOL_INTERFACE = new Interface(ConstantProductPoolArtifact.abi)

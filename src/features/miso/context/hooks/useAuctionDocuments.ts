@@ -1,6 +1,6 @@
 import { AuctionDocument } from 'app/features/miso/context/types'
 import { useMisoHelperContract } from 'app/hooks'
-import { useSingleContractMultipleData } from 'lib/hooks/multicall'
+import { useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 
 export interface DocumentInput {
   name: string

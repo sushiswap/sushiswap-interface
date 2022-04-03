@@ -3,8 +3,8 @@ import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from '@sushiswap/core-s
 import ERC20_ABI from 'app/constants/abis/erc20.json'
 import { isAddress } from 'app/functions/validate'
 import { useInterfaceMulticall } from 'app/hooks/useContract'
+import { useMultipleContractSingleData, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useMultipleContractSingleData, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
 /**

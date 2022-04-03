@@ -1,6 +1,6 @@
 import { isAddress } from '@ethersproject/address'
 import { namehash } from '@ethersproject/hash'
-import { useSingleCallResult } from 'lib/hooks/multicall'
+import { useSingleCallResult } from 'app/lib/hooks/multicall'
 import { useMemo } from 'react'
 
 import { isZero } from '../functions'

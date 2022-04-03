@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { useSingleCallResult } from 'lib/hooks/multicall'
+import { useSingleCallResult } from 'app/lib/hooks/multicall'
 
 import { useMulticall2Contract } from './useContract'
 

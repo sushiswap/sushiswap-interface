@@ -1,8 +1,8 @@
 import { CHAIN_KEY } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { useContract } from 'app/hooks'
+import { useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useSingleContractMultipleData } from 'lib/hooks/multicall'
 
 export interface TokenFactoryData {
   exists: boolean

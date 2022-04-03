@@ -16,8 +16,8 @@ import {
   useMiniChefContract,
   useOldFarmsContract,
 } from 'app/hooks/useContract'
+import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
-import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import concat from 'lodash/concat'
 import zip from 'lodash/zip'
 import { useCallback, useMemo } from 'react'

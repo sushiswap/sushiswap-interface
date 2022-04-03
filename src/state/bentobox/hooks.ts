@@ -1,18 +1,12 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { Web3Provider } from '@ethersproject/providers'
 import { CurrencyAmount, JSBI, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { isAddress, toAmountCurrencyAmount } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useBentoBoxContract } from 'app/hooks/useContract'
+import { useSingleCallResult, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useSingleCallResult, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
-
-type MethodArg = string | number | BigNumber
-type MethodArgs = Array<MethodArg | MethodArg[]>
-
-export type OptionalMethodInputs = Array<MethodArg | MethodArg[] | undefined> | undefined
 
 export interface BentoBalance {
   address: string

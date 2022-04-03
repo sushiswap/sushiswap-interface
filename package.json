@@ -157,6 +157,7 @@
     "js-cookie": "^3.0.1",
     "lint-staged": "^11.0.0",
     "lodash": "^4.17.21",
+    "lodash.zip": "^4.2.0",
     "lottie-react": "2.1.0",
     "madge": "^5.0.1",
     "millify": "^4.0.0",

@@ -4,9 +4,9 @@ import { CHAIN_KEY, Currency, CurrencyAmount, Fraction, JSBI } from '@sushiswap/
 import MISO from '@sushiswap/miso/exports/all.json'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
 import { useContract } from 'app/hooks'
+import { CallState, useMultipleContractSingleData, useSingleCallResult } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { CallState, useMultipleContractSingleData, useSingleCallResult } from 'lib/hooks/multicall'
 import { useCallback } from 'react'
 
 export const useAuctionPointLists = (auctionAddresses: string[]): string[] => {

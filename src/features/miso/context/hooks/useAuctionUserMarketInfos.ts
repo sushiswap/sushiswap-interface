@@ -1,7 +1,7 @@
 import { RawMarketInfo } from 'app/features/miso/context/types'
 import { useMisoHelperContract } from 'app/hooks'
+import { useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useSingleContractMultipleData } from 'lib/hooks/multicall'
 
 export const useAuctionUserMarketInfos = (addresses: string[], owner?: string): (RawMarketInfo | undefined)[] => {
   const { account } = useActiveWeb3React()
@@ -11,7 +11,6 @@ export const useAuctionUserMarketInfos = (addresses: string[], owner?: string): 
     'getUserMarketInfo',
     addresses.map((el) => [el, owner ?? account ?? undefined])
   )
-
   if (results && Array.isArray(results) && results.length === addresses.length) {
     return results.map<RawMarketInfo | undefined>((el) => {
       if (el.result && Array.isArray(el.result) && el.result.length > 0) {

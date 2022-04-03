@@ -5,7 +5,7 @@ import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { useTridentPoolContract } from 'app/hooks'
-import { useSingleCallResult } from 'lib/hooks/multicall'
+import { useSingleCallResult } from 'app/lib/hooks/multicall'
 import React, { FC } from 'react'
 
 const TransactionDetailsExplanationModal: FC = ({ children }) => {

@@ -28,9 +28,9 @@ import { useBentoBoxContract, useBoringHelperContract } from 'app/hooks'
 import { useTokens } from 'app/hooks/Tokens'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useUSDCPricesSubgraph } from 'app/hooks/useUSDCSubgraph'
+import { useSingleCallResult } from 'app/lib/hooks/multicall'
 import { useBentoStrategies, useClones } from 'app/services/graph'
 import { useActiveWeb3React, useQueryFilter } from 'app/services/web3'
-import { useSingleCallResult } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
 import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
@@ -178,12 +178,6 @@ export function useKashiMediumRiskLendingPairs(
   const { result, valid, loading, syncing, error } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args, {
     gasRequired: 20_000_000,
   })
-  // readonly valid: boolean;
-  // readonly result: CallStateResult | undefined;
-  // readonly loading: boolean;
-  // readonly syncing: boolean;
-  // readonly error: boolean;
-  console.log({ result, valid, loading, syncing, error })
 
   const { rebases } = useBentoRebases(useMemo(() => Object.values(tokens), [tokens]))
   const prices = useUSDCPricesSubgraph(Object.values(tokens))

@@ -12,8 +12,8 @@ import { useAuctionPointLists } from 'app/features/miso/context/hooks/useAuction
 import { useAuctionRawInfos } from 'app/features/miso/context/hooks/useAuctionRawInfo'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { getNativeOrToken, getStatusByTimestamp } from 'app/features/miso/context/utils'
+import useCurrentBlockTimestamp from 'app/hooks/useCurrentBlockTimestamp'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBlockTimestamp } from 'app/state/application/hooks'
 import { useMemo } from 'react'
 
 import { Auction } from '../Auction'
@@ -29,7 +29,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
   const auctionInfos = useAuctionRawInfos(addresses, auctionTemplateIds)
   const auctionDocuments = useAuctionDocuments(addresses)
   const pointListAddresses = useAuctionPointLists(addresses)
-  const blockTimestamp = useBlockTimestamp()
+  const blockTimestamp = useCurrentBlockTimestamp()
 
   return useMemo(() => {
     if (!chainId) return Array(Math.min(auctions.length, 6)).fill(undefined)
@@ -66,7 +66,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
               launcherInfo: undefined, // for performance reasons since this hook is only used on overview screen
               auctionDocuments: auctionDocs,
               pointListAddress,
-              status: getStatusByTimestamp(blockTimestamp, auctionInfo),
+              status: getStatusByTimestamp(blockTimestamp.toNumber(), auctionInfo),
             })
           )
         } else {
@@ -101,7 +101,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
 
 export const useAuction = (address?: string, owner?: string) => {
   const { chainId } = useActiveWeb3React()
-  const blockTimestamp = useBlockTimestamp()
+  const blockTimestamp = useCurrentBlockTimestamp()
 
   const {
     marketTemplateId,
@@ -164,7 +164,7 @@ export const useAuction = (address?: string, owner?: string) => {
         launcherInfo,
         auctionDocuments,
         pointListAddress,
-        status: getStatusByTimestamp(blockTimestamp, auctionInfo, auctionEnded),
+        status: getStatusByTimestamp(blockTimestamp.toNumber(), auctionInfo, auctionEnded),
       }),
       error,
     }
