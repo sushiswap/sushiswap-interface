@@ -172,7 +172,7 @@ const Footer = () => {
               </Typography>
             </Link>
           </div>
-          <div className="hidden lg:flex">
+          <div className="flex flex-col gap-1">
             <LanguageSwitch />
           </div>
         </div>

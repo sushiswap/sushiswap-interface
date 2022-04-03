@@ -7,9 +7,8 @@ import { NETWORK_ICON, NETWORK_LABEL } from 'app/config/networks'
 import { classNames } from 'app/functions'
 import { logEvent } from 'app/functions/analytics'
 import { useActiveWeb3React } from 'app/services/web3'
-import { ApplicationModal } from 'app/state/application/actions'
 import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks'
-// @ts-ignore TYPE NEEDS FIXING
+import { ApplicationModal } from 'app/state/application/reducer'
 import Image from 'next/image'
 import React, { FC } from 'react'
 

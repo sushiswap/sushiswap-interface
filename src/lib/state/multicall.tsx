@@ -1,9 +1,8 @@
 import { createMulticall } from '@uniswap/redux-multicall'
 import { useInterfaceMulticall } from 'app/hooks/useContract'
+import useBlockNumber from 'app/lib/hooks/useBlockNumber'
 import { useActiveWeb3React } from 'app/services/web3'
 import { combineReducers, createStore } from 'redux'
-
-import useBlockNumber from '../hooks/useBlockNumber'
 
 const multicall = createMulticall()
 const reducer = combineReducers({ [multicall.reducerPath]: multicall.reducer })

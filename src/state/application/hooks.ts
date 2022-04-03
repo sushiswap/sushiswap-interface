@@ -1,21 +1,10 @@
-import { useActiveWeb3React } from 'app/services/web3'
-import { AppState } from 'app/state'
-import { addPopup, ApplicationModal, PopupContent, removePopup, setOpenModal } from 'app/state/application/actions'
-import { useAppDispatch } from 'app/state/hooks'
+import { DEFAULT_TXN_DISMISS_MS } from 'app/constants'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useCallback, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-export function useBlockNumber(): number | undefined {
-  const { chainId } = useActiveWeb3React()
-
-  return useSelector((state: AppState) => state.application.blockNumber[chainId ?? -1])
-}
-
-export function useBlockTimestamp(): number | undefined {
-  const { chainId } = useActiveWeb3React()
-
-  return useSelector((state: AppState) => state.application.blockTimestamp[chainId ?? -1])
-}
+import { AppState } from '..'
+import { addPopup, ApplicationModal, PopupContent, removePopup, setOpenModal } from './reducer'
 
 export function useModalOpen(modal: ApplicationModal): boolean {
   const openModal = useSelector((state: AppState) => state.application.openModal)
@@ -71,12 +60,12 @@ export function useToggleVoteModal(): () => void {
 }
 
 // returns a function that allows adding a popup
-export function useAddPopup(): (content: PopupContent, key?: string) => void {
-  const dispatch = useDispatch()
+export function useAddPopup(): (content: PopupContent, key?: string, removeAfterMs?: number) => void {
+  const dispatch = useAppDispatch()
 
   return useCallback(
-    (content: PopupContent, key?: string) => {
-      dispatch(addPopup({ content, key }))
+    (content: PopupContent, key?: string, removeAfterMs?: number) => {
+      dispatch(addPopup({ content, key, removeAfterMs: removeAfterMs ?? DEFAULT_TXN_DISMISS_MS }))
     },
     [dispatch]
   )
@@ -84,7 +73,7 @@ export function useAddPopup(): (content: PopupContent, key?: string) => void {
 
 // returns a function that allows removing a popup via its key
 export function useRemovePopup(): (key: string) => void {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   return useCallback(
     (key: string) => {
       dispatch(removePopup({ key }))
@@ -95,8 +84,7 @@ export function useRemovePopup(): (key: string) => void {
 
 // get the list of active popups
 export function useActivePopups(): AppState['application']['popupList'] {
-  const list = useSelector((state: AppState) => state.application.popupList)
-  // @ts-ignore TYPE NEEDS FIXING
+  const list = useAppSelector((state: AppState) => state.application.popupList)
   return useMemo(() => list.filter((item) => item.show), [list])
 }
 
