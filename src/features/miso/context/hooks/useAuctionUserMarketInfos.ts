@@ -1,7 +1,7 @@
 import { RawMarketInfo } from 'app/features/miso/context/types'
 import { useMisoHelperContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useSingleContractMultipleData } from 'app/state/multicall/hooks'
+import { useSingleContractMultipleData } from 'lib/hooks/multicall'
 
 export const useAuctionUserMarketInfos = (addresses: string[], owner?: string): (RawMarketInfo | undefined)[] => {
   const { account } = useActiveWeb3React()

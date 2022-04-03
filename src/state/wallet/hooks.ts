@@ -5,7 +5,7 @@ import { isAddress } from 'app/functions/validate'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useMulticall2Contract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useMultipleContractSingleData, useSingleContractMultipleData } from 'app/state/multicall/hooks'
+import { useMultipleContractSingleData, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
 import { TokenBalancesMap } from './types'
@@ -63,14 +63,7 @@ export function useTokenBalancesWithLoadingIndicator(
 
   const validatedTokenAddresses = useMemo(() => validatedTokens.map((vt) => vt.address), [validatedTokens])
   const ERC20Interface = new Interface(ERC20_ABI)
-  const balances = useMultipleContractSingleData(
-    validatedTokenAddresses,
-    ERC20Interface,
-    'balanceOf',
-    [address],
-    undefined,
-    100_000
-  )
+  const balances = useMultipleContractSingleData(validatedTokenAddresses, ERC20Interface, 'balanceOf', [address])
 
   const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances])
 

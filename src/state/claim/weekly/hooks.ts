@@ -5,8 +5,8 @@ import { WEEKLY_MERKLE_ROOT as MERKLE_ROOT } from 'app/constants'
 import { calculateGasMargin } from 'app/functions/trade'
 import { useMerkleDistributorContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useSingleCallResult } from 'app/state/multicall/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useSingleCallResult } from 'lib/hooks/multicall'
 import { useEffect, useState } from 'react'
 
 interface UserClaimData {

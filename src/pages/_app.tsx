@@ -12,11 +12,11 @@ import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploit
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
 import DefaultLayout from 'app/layouts/Default'
-// @ts-ignore TYPE NEEDS FIXING
+import { BlockUpdater } from 'app/lib/hooks/useBlockNumber'
+import { MulticallUpdater } from 'app/lib/state/multicall'
 import store, { persistor } from 'app/state'
 import ApplicationUpdater from 'app/state/application/updater'
 import ListsUpdater from 'app/state/lists/updater'
-import MulticallUpdater from 'app/state/multicall/updater'
 import TransactionUpdater from 'app/state/transactions/updater'
 import UserUpdater from 'app/state/user/updater'
 import * as plurals from 'make-plural/plurals'
@@ -141,6 +141,7 @@ function MyApp({ Component, pageProps, fallback, err }) {
                     <ListsUpdater />
                     <UserUpdater />
                     <ApplicationUpdater />
+                    <BlockUpdater />
                     <MulticallUpdater />
                     <TransactionUpdater />
                   </>

@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { AuctionTemplate, RawAuctionInfo } from 'app/features/miso/context/types'
 import { useMisoHelperContract } from 'app/hooks'
-import { useSingleContractMultipleMethods } from 'app/state/multicall/hooks'
+import { useSingleContractMultipleMethods } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
 export const useAuctionRawInfos = (

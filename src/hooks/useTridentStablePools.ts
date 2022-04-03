@@ -5,7 +5,7 @@ import { computeHybridPoolAddress, Fee, HybridPool } from '@sushiswap/trident-sd
 import { PoolAtomType } from 'app/features/trident/types'
 import { useStablePoolFactory } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useMultipleContractSingleData } from 'app/state/multicall/hooks'
+import { useMultipleContractSingleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
 const STABLE_POOL_INTERFACE = new Interface(HybridPoolArtifact.abi)

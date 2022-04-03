@@ -1,5 +1,5 @@
 import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { useSingleCallResult } from 'app/state/multicall/hooks'
+import { useSingleCallResult } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
 import { useTokenContract } from './useContract'

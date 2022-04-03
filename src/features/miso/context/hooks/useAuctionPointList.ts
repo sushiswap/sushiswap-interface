@@ -5,8 +5,8 @@ import MISO from '@sushiswap/miso/exports/all.json'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
-import { CallState, useMultipleContractSingleData, useSingleCallResult } from 'app/state/multicall/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { CallState, useMultipleContractSingleData, useSingleCallResult } from 'lib/hooks/multicall'
 import { useCallback } from 'react'
 
 export const useAuctionPointLists = (auctionAddresses: string[]): string[] => {

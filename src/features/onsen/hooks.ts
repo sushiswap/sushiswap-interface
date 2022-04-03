@@ -17,7 +17,7 @@ import {
   useOldFarmsContract,
 } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
-import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
+import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import concat from 'lodash/concat'
 import zip from 'lodash/zip'
 import { useCallback, useMemo } from 'react'

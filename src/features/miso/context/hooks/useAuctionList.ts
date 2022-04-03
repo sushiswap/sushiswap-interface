@@ -1,7 +1,7 @@
 import { BAD_AUCTIONS } from 'app/features/miso/context/constants'
 import { AuctionStatus, RawAuction } from 'app/features/miso/context/types'
 import { useMisoHelperContract } from 'app/hooks'
-import { useSingleCallResult } from 'app/state/multicall/hooks'
+import { useSingleCallResult } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
 export const useAuctionList = (type?: AuctionStatus): RawAuction[] => {

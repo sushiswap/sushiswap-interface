@@ -1,5 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import portfolio from 'app/features/portfolio/portfolioSlice'
+import multicall from 'app/lib/state/multicall'
 
 import onsen from '../features/onsen/onsenSlice'
 import tridentAdd from '../features/trident/add/addSlice'
@@ -16,7 +17,7 @@ import inari from './inari/reducer'
 import limitOrder from './limit-order/reducer'
 import lists from './lists/reducer'
 import mint from './mint/reducer'
-import multicall from './multicall/reducer'
+// import multicall from './multicall-2/reducer'
 import slippage from './slippage/slippageSlice'
 import swap from './swap/reducer'
 import transactions from './transactions/reducer'
@@ -31,7 +32,8 @@ const reducer = combineReducers({
   limitOrder,
   lists,
   mint,
-  multicall,
+  // multicall,
+  multicall: multicall.reducer,
   onsen,
   slippage,
   swap,

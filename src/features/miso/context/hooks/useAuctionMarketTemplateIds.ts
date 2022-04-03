@@ -1,7 +1,7 @@
 import { Interface } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
-import { useMultipleContractSingleData } from 'app/state/multicall/hooks'
+import { useMultipleContractSingleData } from 'lib/hooks/multicall'
 
 const AUCTION_INTERFACE = new Interface(BASE_AUCTION_ABI)
 
