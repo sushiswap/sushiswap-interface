@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "analyze": "ANALYZE=true yarn build && serve .next -n",
-    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
-    "inspect": "NODE_OPTIONS='--inspect' next dev",
+    "dev": "cross-env NODE_OPTIONS=--inspect next dev",
+    "inspect": "NODE_OPTIONS=--inspect next dev",
     "build": "yarn lingui && next build",
     "start": "next start",
     "lingui": "lingui extract --clean --overwrite && lingui compile",
@@ -13,7 +13,7 @@
     "unused": "next-unused",
     "prepare": "husky install",
     "pre-commit": "lint-staged",
-    "prettier": "prettier --write 'src/**/*.{ts,tsx}'",
+    "prettier": "prettier --write src/**/*.{ts,tsx}",
     "lint": "next lint",
     "test": "jest --modulePathIgnorePatterns=e2e",
     "test:watch": "jest -modulePathIgnorePatterns=e2e --watch",
@@ -25,7 +25,8 @@
   },
   "resolutions": {
     "@walletconnect/jsonrpc-provider": "1.0.2",
-    "@walletconnect/ethereum-provider": "1.7.5"
+    "@walletconnect/ethereum-provider": "1.7.5",
+    "axios": "0.26.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -128,10 +129,11 @@
     "@web3-react/walletlink-connector": "^6.2.13",
     "@welldone-software/why-did-you-render": "^6.2.3",
     "autoprefixer": "^10.4.4",
+    "axios": "^0.26.1",
     "babel-jest": "^27.2.0",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "^8.2.4",
     "babel-plugin-macros": "^3.1.0",
-    "combinate": "^1.1.7",
+    "combinate": "^1.1.9",
     "concurrently": "^6.4.0",
     "cookie-cutter": "^0.2.0",
     "copy-to-clipboard": "^3.3.1",
@@ -211,10 +213,26 @@
       "src/pages"
     ]
   },
-  "browserslist": [
-    ">0.3%",
-    "not ie 11",
-    "not dead",
-    "not op_mini all"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.3% ",
+      "not IE > 0 ",
+      "not op_mini all ",
+      "not dead ",
+      "last 2 Edge major versions ",
+      "last 1 Chrome version ",
+      "last 2 iOS major versions ",
+      "last 1 Firefox version ",
+      "not iOS 12.5",
+      "Chrome 99"
+    ],
+    "modern": [
+      "last 2 chrome version",
+      "last 1 firefox version",
+      "last 1 edge version"
+    ],
+    "ssr": [
+      "node 14"
+    ]
+  }
 }

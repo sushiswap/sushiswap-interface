@@ -2,7 +2,7 @@ import { Popover as HeadlessuiPopover } from '@headlessui/react'
 import { Placement } from '@popperjs/core'
 import { classNames } from 'app/functions'
 import useInterval from 'app/hooks/useInterval'
-import React, { Fragment, useCallback, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useState } from 'react'
 // @ts-ignore TYPE NEEDS FIXING
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
@@ -35,6 +35,14 @@ export default function Popover({ content, children, placement = 'auto', show, m
 
   useInterval(updateCallback, show ? 100 : null)
 
+  // Add portal to end of page for popover
+  useEffect(() => {
+    if (!document.getElementById('popover-portal')) {
+      const node = document.body.appendChild(document.createElement('div'))
+      node.setAttribute('id', 'popover-portal')
+    }
+  }, [])
+
   return (
     <HeadlessuiPopover as={Fragment}>
       {({ open }) => (
@@ -50,7 +58,7 @@ export default function Popover({ content, children, placement = 'auto', show, m
             ReactDOM.createPortal(
               <HeadlessuiPopover.Panel
                 static
-                className="z-1000 shadow-xl shadow-dark-1000/80 rounded overflow-hidden"
+                className="z-[1000] shadow-xl shadow-dark-1000/80 rounded overflow-hidden"
                 ref={setPopperElement as any}
                 style={styles.popper}
                 {...attributes.popper}

@@ -9,6 +9,7 @@ import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
 import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
+import sushiGuardEnabledFeature from 'app/hooks/useSushiGuardFeature'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { TradeUnion } from 'app/types'
 import React, { FC, Fragment, useMemo, useState } from 'react'
@@ -106,6 +107,7 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
   const minReceived = minimumAmountOut || trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
 
+  const sushiGuardEnabled = sushiGuardEnabledFeature()
   const _outputAmount = outputAmount || trade?.outputAmount
   const _inputAmount = inputAmount || trade?.inputAmount
 
