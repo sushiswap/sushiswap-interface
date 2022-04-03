@@ -17,6 +17,7 @@ import { MulticallUpdater } from 'app/lib/state/multicall'
 import store, { persistor } from 'app/state'
 import ApplicationUpdater from 'app/state/application/updater'
 import ListsUpdater from 'app/state/lists/updater'
+import LogsUpdater from 'app/state/logs/updater'
 import TransactionUpdater from 'app/state/transactions/updater'
 import UserUpdater from 'app/state/user/updater'
 import * as plurals from 'make-plural/plurals'
@@ -141,9 +142,10 @@ function MyApp({ Component, pageProps, fallback, err }) {
                     <ListsUpdater />
                     <UserUpdater />
                     <ApplicationUpdater />
+                    <TransactionUpdater />
                     <BlockUpdater />
                     <MulticallUpdater />
-                    <TransactionUpdater />
+                    <LogsUpdater />
                   </>
                   <Provider>
                     <Layout>

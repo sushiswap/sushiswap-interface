@@ -16,13 +16,13 @@ import web3Context from './global/web3ContextSlice'
 import inari from './inari/reducer'
 import limitOrder from './limit-order/reducer'
 import lists from './lists/reducer'
+import logs from './logs/slice'
 import mint from './mint/reducer'
 // import multicall from './multicall-2/reducer'
 import slippage from './slippage/slippageSlice'
 import swap from './swap/reducer'
 import transactions from './transactions/reducer'
 import user from './user/reducer'
-
 const reducer = combineReducers({
   application,
   burn,
@@ -37,6 +37,7 @@ const reducer = combineReducers({
   onsen,
   slippage,
   swap,
+  logs,
   transactions,
   tridentSwap,
   tridentAdd,
