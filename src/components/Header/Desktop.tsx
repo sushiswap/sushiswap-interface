@@ -26,7 +26,7 @@ const Desktop: FC = () => {
     <>
       <header className="fixed z-20 hidden w-full lg:block" style={{ height: HEADER_HEIGHT }}>
         <nav className={NAV_CLASS}>
-          <Container maxWidth="7xl" className="mx-auto">
+          <Container maxWidth="full" className="mx-auto">
             <div className="flex items-center justify-between gap-4 px-6">
               <div className="flex gap-4">
                 <div className="flex items-center w-6 mr-4">
