@@ -65,8 +65,8 @@ export default function Table<T>({
     state: { pageIndex, pageSize },
   } = useTable(
     {
+    // @ts-ignore
       columns,
-      // @ts-ignore TYPE NEEDS FIXING
       data,
       defaultCanSort: false,
       autoResetSortBy: false,
