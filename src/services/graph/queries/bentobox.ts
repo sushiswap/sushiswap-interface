@@ -154,14 +154,14 @@ export const bentoBoxQuery = gql`
       totalUsers
       totalTokens
       totalKashiPairs
-      tokens(first: 1000) {
-        id
-        name
-        symbol
-        decimals
-        totalSupplyBase
-        totalSupplyElastic
-      }
+      # tokens(first: 1000) {
+      #   id
+      #   name
+      #   symbol
+      #   decimals
+      #   totalSupplyBase
+      #   totalSupplyElastic
+      # }
     }
   }
 `
