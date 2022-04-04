@@ -1,5 +1,5 @@
-import { Currency, TradeType } from '@sushiswap/core-sdk'
-import { Trade as LegacyTrade } from '@sushiswap/core-sdk/dist/entities/Trade'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Currency, CurrencyAmount, Token, Trade as LegacyTrade, TradeType } from '@sushiswap/core-sdk'
 import { PoolState, Trade } from '@sushiswap/trident-sdk'
 
 export type TradeUnion =
@@ -31,3 +31,12 @@ export type PoolWithState<T> =
   | PoolWithStateLoading
   | PoolWithStateNotExists
   | PoolWithStateInvalid
+
+export type MethodArg = string | number | BigNumber
+export type MethodArgs = Array<MethodArg | MethodArg[]>
+
+export type OptionalMethodInputs = Array<MethodArg | MethodArg[] | undefined> | undefined
+
+export type TokenAddress = string
+
+export type TokenBalancesMap = Record<TokenAddress, CurrencyAmount<Token> | undefined>

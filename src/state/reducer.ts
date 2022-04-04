@@ -1,5 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import portfolio from 'app/features/portfolio/portfolioSlice'
+import multicall from 'app/lib/state/multicall'
 
 import onsen from '../features/onsen/onsenSlice'
 import tridentAdd from '../features/trident/add/addSlice'
@@ -11,17 +12,16 @@ import tridentSwap from '../features/trident/swap/swapSlice'
 import application from './application/reducer'
 import burn from './burn/reducer'
 import create from './create/reducer'
-import web3Context from './global/web3ContextSlice'
 import inari from './inari/reducer'
 import limitOrder from './limit-order/reducer'
 import lists from './lists/reducer'
+import logs from './logs/slice'
 import mint from './mint/reducer'
-import multicall from './multicall/reducer'
+// import multicall from './multicall-2/reducer'
 import slippage from './slippage/slippageSlice'
 import swap from './swap/reducer'
 import transactions from './transactions/reducer'
 import user from './user/reducer'
-
 const reducer = combineReducers({
   application,
   burn,
@@ -31,10 +31,12 @@ const reducer = combineReducers({
   limitOrder,
   lists,
   mint,
-  multicall,
+  // multicall,
+  multicall: multicall.reducer,
   onsen,
   slippage,
   swap,
+  logs,
   transactions,
   tridentSwap,
   tridentAdd,
@@ -43,7 +45,6 @@ const reducer = combineReducers({
   tridentPools,
   tridentCreate,
   tridentMigrations,
-  web3Context,
 })
 
 export default reducer

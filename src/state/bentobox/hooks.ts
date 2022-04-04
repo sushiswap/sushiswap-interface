@@ -4,8 +4,9 @@ import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { isAddress, toAmountCurrencyAmount } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useBentoBoxContract } from 'app/hooks/useContract'
+import { useSingleCallResult, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
-import { OptionalMethodInputs, useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
+import { OptionalMethodInputs } from 'app/types'
 import { useMemo } from 'react'
 
 export interface BentoBalance {

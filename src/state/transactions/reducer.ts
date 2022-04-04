@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { ChainId } from '@sushiswap/core-sdk'
 
+import { updateVersion } from '../global/actions'
 import {
   addTransaction,
   checkedTransaction,
@@ -13,37 +13,33 @@ const now = () => new Date().getTime()
 
 export interface TransactionDetails {
   hash: string
-  approval?: { tokenAddress: string; spender: string }
-  summary?: string
-  claim?: { recipient: string }
   receipt?: SerializableTransactionReceipt
   lastCheckedBlockNumber?: number
   addedTime: number
   confirmedTime?: number
   from: string
+  summary?: string
+  claim?: { recipient: string }
+  approval?: { tokenAddress: string; spender: string }
 }
 
-type txHash = string
-
-export type TransactionState = { [key in ChainId]?: Record<txHash, TransactionDetails> }
+export interface TransactionState {
+  [chainId: number]: {
+    [txHash: string]: TransactionDetails
+  }
+}
 
 export const initialState: TransactionState = {}
 
 export default createReducer(initialState, (builder) =>
   builder
-    .addCase(addTransaction, (transactions, { payload: { chainId, from, hash, approval, summary, claim } }) => {
+    .addCase(updateVersion, (transactions) => {})
+    .addCase(addTransaction, (transactions, { payload: { chainId, from, hash, summary } }) => {
       if (transactions[chainId]?.[hash]) {
         throw Error('Attempted to add existing transaction.')
       }
       const txs = transactions[chainId] ?? {}
-      txs[hash] = {
-        hash,
-        approval,
-        summary,
-        claim,
-        from,
-        addedTime: now(),
-      }
+      txs[hash] = { hash, summary, from, addedTime: now() }
       transactions[chainId] = txs
     })
     .addCase(clearAllTransactions, (transactions, { payload: { chainId } }) => {

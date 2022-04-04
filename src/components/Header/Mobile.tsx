@@ -6,7 +6,7 @@ import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
 import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useETHBalances } from 'app/state/wallet/hooks'
+import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { FC, Fragment, useState } from 'react'
@@ -16,7 +16,7 @@ import { NavigationItem } from './NavigationItem'
 const Mobile: FC = () => {
   const menu = useMenu()
   const { account, chainId, library } = useActiveWeb3React()
-  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+  const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
   const [open, setOpen] = useState(false)
   const isCoinbaseWallet = useIsCoinbaseWallet()
 

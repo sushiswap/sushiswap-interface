@@ -1,6 +1,6 @@
 import { isWalletError, USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { AppDispatch } from 'app/state'
-import { addPopup } from 'app/state/application/actions'
+import { addPopup } from 'app/state/application/reducer'
 
 export const missingMigrationDependencies = addPopup({
   content: {
