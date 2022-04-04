@@ -739,9 +739,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ],
 }
 
-export const PINNED_PAIRS: {
-  readonly [chainId in ChainId]?: [Token, Token][]
-} = {
+export const PINNED_PAIRS: { readonly [chainId: number]: [Token, Token][] } = {
   [ChainId.ETHEREUM]: [
     // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[ChainId.ETHEREUM], WNATIVE[ChainId.ETHEREUM]],
