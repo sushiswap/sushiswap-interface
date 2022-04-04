@@ -16,7 +16,7 @@ const Transaction: FC<{ hash: string }> = ({ hash }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const allTransactions = useAllTransactions()
-  
+
   const tx = allTransactions?.[hash]
   const summary = tx?.summary
   const pending = isTxPending(tx)
@@ -24,8 +24,6 @@ const Transaction: FC<{ hash: string }> = ({ hash }) => {
   const success = isTxSuccessful(tx)
   const cancelled = tx?.receipt && tx.receipt.status === 1337
   const privateTx = tx?.privateTx
-  
-
 
   if (!chainId) return null
 
@@ -35,7 +33,7 @@ const Transaction: FC<{ hash: string }> = ({ hash }) => {
         <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')} className="flex items-center gap-2">
           <div
             className={classNames(
-                  pending
+              pending
                 ? 'text-primary'
                 : success
                 ? 'text-green'
@@ -61,7 +59,7 @@ const Transaction: FC<{ hash: string }> = ({ hash }) => {
           </Typography>
         </ExternalLink>
         {privateTx && (
-              <>
+          <>
             <QuestionHelper
               text={i18n._(t`This transaction has been sent using SushiGuard`)}
               icon={<ShieldCheckIcon className="text-green" width={14} />}

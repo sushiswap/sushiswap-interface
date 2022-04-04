@@ -1,5 +1,4 @@
 import { ChainId } from '@sushiswap/core-sdk'
-<<<<<<< HEAD
 import { SUSHIGUARD } from 'app/config/sushiguard'
 import { PrivateTxState, PrivateTxStatus } from 'app/entities/SushiGuard'
 import { retry, RetryableError, RetryOptions } from 'app/functions/retry'
@@ -7,7 +6,7 @@ import { retry, RetryableError, RetryOptions } from 'app/functions/retry'
 import { txMinutesPending } from 'app/functions/transactions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { updateBlockNumber } from 'app/state/application/actions'
-import { useAddPopup, useBlockNumber } from 'app/state/application/hooks'
+import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { selectTransactions } from 'app/state/transactions/selectors'
 import { fetchJsonRpc } from 'lib/jsonrpc'
@@ -89,7 +88,6 @@ export default function Updater(): null {
   const { chainId, library } = useActiveWeb3React()
 
   const lastBlockNumber = useBlockNumber()
-=======
 import { DEFAULT_TXN_DISMISS_MS } from 'app/constants'
 import LibUpdater from 'lib/hooks/transactions/updater'
 import { useCallback, useMemo } from 'react'
@@ -98,7 +96,6 @@ import { useAppDispatch, useAppSelector } from 'state/hooks'
 
 import { useAddPopup } from '../application/hooks'
 import { checkedTransaction, finalizeTransaction } from './actions'
->>>>>>> 0df12672e25f855790a0e5490380bed502cb8855
 
 export default function Updater() {
   const { chainId } = useActiveWeb3React()
@@ -113,7 +110,6 @@ export default function Updater() {
 
   const transactions = useMemo(() => (chainId ? state[chainId as ChainId] ?? {} : {}), [chainId, state])
 
-<<<<<<< HEAD
   // show popup on confirm
   const addPopup = useAddPopup()
 
@@ -131,7 +127,6 @@ export default function Updater() {
             return receipt as SerializableTransactionReceipt
           }),
         retryOptions
-=======
   const onReceipt = useCallback(
     ({ chainId, hash, receipt }) => {
       dispatch(
@@ -156,13 +151,11 @@ export default function Updater() {
         },
         hash,
         DEFAULT_TXN_DISMISS_MS
->>>>>>> 0df12672e25f855790a0e5490380bed502cb8855
       )
     },
     [addPopup, dispatch, transactions]
   )
 
-<<<<<<< HEAD
   const getPrivateTxStatus = useCallback(
     (hash: string) => {
       if (!chainId) throw new Error('No chainId')
@@ -313,9 +306,8 @@ export default function Updater() {
   }, [chainId, library, transactions, lastBlockNumber, dispatch, addPopup, getPrivateTxStatus, getReceipt])
 
   return null
-=======
   const pendingTransactions = useMemo(() => (chainId ? state[chainId] ?? {} : {}), [chainId, state])
 
   return <LibUpdater pendingTransactions={pendingTransactions} onCheck={onCheck} onReceipt={onReceipt} />
->>>>>>> 0df12672e25f855790a0e5490380bed502cb8855
+
 }
