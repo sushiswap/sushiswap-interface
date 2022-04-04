@@ -356,12 +356,10 @@ export default function Remove() {
 
   const inputError = +innerLiquidityPercentage > 100 || +innerLiquidityPercentage < 0
 
-  // console.log(
-  //   currencyA,
-  //   currencyB,
-  //   currencyA?.isNative ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_A]) : parsedAmounts[Field.CURRENCY_A],
-  //   currencyB?.isNative ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_B]) : parsedAmounts[Field.CURRENCY_B]
-  // )
+  const currencyAmounts = [
+    currencyA?.isNative ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_A]) : parsedAmounts[Field.CURRENCY_A],
+    currencyB?.isNative ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_B]) : parsedAmounts[Field.CURRENCY_B],
+  ]
 
   return (
     <>
@@ -453,15 +451,8 @@ export default function Remove() {
                 </Typography>
               )}
             </div>
-            {[
-              currencyA?.isNative
-                ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_A])
-                : parsedAmounts[Field.CURRENCY_A],
-              currencyB?.isNative
-                ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_B])
-                : parsedAmounts[Field.CURRENCY_B],
-            ].map((cur, index) => (
-              <ListPanel.CurrencyAmountItem amount={cur} key={index} size="xs" />
+            {currencyAmounts.map((currencyAmount, index) => (
+              <ListPanel.CurrencyAmountItem amount={currencyAmount} key={index} size="xs" hideIfZero={false} />
             ))}
           </div>
           {!account ? (
