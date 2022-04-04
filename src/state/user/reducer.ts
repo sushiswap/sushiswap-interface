@@ -61,7 +61,7 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
-  userUseOpenMev: true,
+  userUseOpenMev: false,
 }
 
 export default createReducer(initialState, (builder) =>

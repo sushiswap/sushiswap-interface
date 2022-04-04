@@ -20,7 +20,8 @@ import { DiscoverPoolsTableColumn, usePoolsTableData } from './usePoolsTableData
 
 export const sortTitleMapper: Record<PoolSortOption, DiscoverPoolsTableColumn['accessor']> = {
   [PoolSortOption.TVL]: 'liquidityUSD',
-  [PoolSortOption.APY]: 'apy',
+  [PoolSortOption.VOLUME]: 'volumeUSD',
+  // [PoolSortOption.APY]: 'apy',
 }
 
 const SearchResultPools: FC = () => {

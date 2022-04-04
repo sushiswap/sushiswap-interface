@@ -80,3 +80,5 @@ export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
   [ChainId.GÖRLI]: 5062605,
   [ChainId.RINKEBY]: 8897988,
 }
+
+export const DEFAULT_TXN_DISMISS_MS = 25000

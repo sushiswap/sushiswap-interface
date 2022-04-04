@@ -49,7 +49,7 @@ export const useLiquidationPrice: UseLiquidationPrice = ({
 
     const liquidationPrice =
       totalBorrowed && totalCollateral && totalBorrowed.greaterThan(ZERO)
-        ? new Price({ baseAmount: totalBorrowed, quoteAmount: totalCollateral.multiply(LTV.invert()) })
+        ? new Price({ baseAmount: totalBorrowed, quoteAmount: totalCollateral.multiply(LTV) })
         : undefined
 
     const liqPriceNumber = Number(liquidationPrice?.invert().toSignificant(6))
@@ -62,11 +62,11 @@ export const useLiquidationPrice: UseLiquidationPrice = ({
     }
 
     return invert
-      ? `1 ${totalCollateral?.currency.symbol} = ${liquidationPrice?.invert().toSignificant(6)} ${
-          totalBorrowed?.currency.symbol
-        }`
-      : `1 ${totalBorrowed?.currency.symbol} = ${liquidationPrice?.toSignificant(6)} ${
+      ? `1 ${totalBorrowed?.currency.symbol} = ${liquidationPrice?.toSignificant(6)} ${
           totalCollateral?.currency.symbol
+        }`
+      : `1 ${totalCollateral?.currency.symbol} = ${liquidationPrice?.invert().toSignificant(6)} ${
+          totalBorrowed?.currency.symbol
         }`
   } catch (e) {
     console.log(e)

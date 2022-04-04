@@ -121,7 +121,10 @@ export const usePoolsTableData = () => {
         data: data ?? [],
         initialState: {
           pageSize: 15,
-          sortBy: [{ id: 'liquidityUSD' as DiscoverPoolsTableColumn['accessor'], desc: true }],
+          sortBy: [
+            { id: 'liquidityUSD' as DiscoverPoolsTableColumn['accessor'], desc: true },
+            { id: 'volumeUSD' as DiscoverPoolsTableColumn['accessor'], desc: true },
+          ],
         },
         autoResetFilters: false,
       },

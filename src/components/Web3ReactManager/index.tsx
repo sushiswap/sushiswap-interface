@@ -3,9 +3,12 @@ import { useLingui } from '@lingui/react'
 import { useWeb3React } from '@web3-react/core'
 import { network } from 'app/config/wallets'
 import { NetworkContextName } from 'app/constants'
+import { Feature } from 'app/enums'
+import { featureEnabled } from 'app/functions'
 import useEagerConnect from 'app/hooks/useEagerConnect'
 import useInactiveListener from 'app/hooks/useInactiveListener'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import React, { FC, useEffect, useState } from 'react'
 
 import Loader from '../Loader'
@@ -16,11 +19,21 @@ const GnosisManagerNoSSR = dynamic(() => import('./GnosisManager'), {
 
 export const Web3ReactManager: FC = ({ children }) => {
   const { i18n } = useLingui()
-  const { active } = useWeb3React()
+  const { active, chainId } = useWeb3React()
   const { active: networkActive, error: networkError, activate: activateNetwork } = useWeb3React(NetworkContextName)
 
   // try to eagerly connect to an injected provider, if it exists and has granted access already
   const triedEager = useEagerConnect()
+
+  const router = useRouter()
+
+  console.log(router)
+
+  useEffect(() => {
+    if (chainId && featureEnabled(Feature.TRIDENT, chainId) && router.asPath === '/swap') {
+      router.push('/trident/swap')
+    }
+  }, [chainId, router])
 
   // useNetworkOrchistrator()
 
@@ -28,8 +41,8 @@ export const Web3ReactManager: FC = ({ children }) => {
   useEffect(() => {
     const activate = async () => {
       if (triedEager && !networkActive && !networkError && !active) {
-        const Cookies = (await import('js-cookie')).default
-        network.changeChainId(Number(Cookies.get('chain-id')))
+        // const Cookies = (await import('js-cookie')).default
+        // network.changeChainId(Number(Cookies.get('chain-id')))
         activateNetwork(network)
       }
     }

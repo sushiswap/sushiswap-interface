@@ -95,7 +95,7 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
       if (!balances[CRXSUSHI.address]) return tryParseAmount('0', XSUSHI)
       const bal = await zenkoContract.fromCtoken(
         CRXSUSHI.address,
-        balances[CRXSUSHI.address].toFixed().toBigNumber(CRXSUSHI.decimals).toString()
+        balances?.[CRXSUSHI.address]?.toFixed().toBigNumber(CRXSUSHI.decimals).toString()
       )
       setBalances({
         // @ts-ignore TYPE NEEDS FIXING

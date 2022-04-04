@@ -2,7 +2,8 @@ import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Route, TradeVersion } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Token, Trade as LegacyTrade, TradeVersion } from '@sushiswap/core-sdk'
+import { Trade as TridentTrade } from '@sushiswap/trident-sdk'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
@@ -10,7 +11,7 @@ import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/fun
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { TradeUnion } from 'app/types'
-import React, { FC, Fragment, useState } from 'react'
+import React, { FC, Fragment, useMemo, useState } from 'react'
 import { isAddress } from 'web3-utils'
 
 interface SwapDetailsContent {
@@ -51,7 +52,7 @@ const SwapDetails: FC<SwapDetails> = ({
             className
           )}
         >
-          <div className="flex justify-between gap-2 items-center pl-2">
+          <div className="flex items-center justify-between gap-2 pl-2">
             <div>
               <TradePrice
                 inputCurrency={inputCurrency}
@@ -62,7 +63,7 @@ const SwapDetails: FC<SwapDetails> = ({
               />
             </div>
             <Disclosure.Button as={Fragment}>
-              <div className="flex gap-2 flex-grow items-center justify-end p-1 cursor-pointer rounded">
+              <div className="flex items-center justify-end flex-grow gap-2 p-1 rounded cursor-pointer">
                 <Chip
                   size="sm"
                   id="trade-type"
@@ -105,13 +106,32 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
   const minReceived = minimumAmountOut || trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
 
-  let path
-  if (trade && getTradeVersion(trade) === TradeVersion.V2TRADE) {
-    path = (trade.route as Route<Currency, Currency>).path
-  }
-
   const _outputAmount = outputAmount || trade?.outputAmount
   const _inputAmount = inputAmount || trade?.inputAmount
+
+  const path = useMemo(() => {
+    if (trade instanceof LegacyTrade) {
+      return trade.route.path
+    } else if (trade instanceof TridentTrade) {
+      return trade.route.legs.reduce<Token[]>((previousValue, leg, i) => {
+        if (trade.route.legs.length === 1 || trade.route.legs.length - 1 === i) {
+          return [...previousValue, leg.tokenFrom as Token, leg.tokenTo as Token]
+        }
+
+        return [...previousValue, leg.tokenFrom as Token]
+      }, [])
+    }
+    return []
+  }, [trade])
+
+  const priceImpact = useMemo(() => {
+    if (trade instanceof LegacyTrade) {
+      return trade.priceImpact
+    } else if (trade instanceof TridentTrade) {
+      return Number(trade.route.priceImpact) * 100
+    }
+    return 0
+  }, [trade])
 
   return (
     <div className="flex flex-col divide-y divide-dark-850">
@@ -125,7 +145,7 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
         <div className="flex justify-between gap-4">
           <Typography variant="xs">{i18n._(t`Price Impact`)}</Typography>
           <Typography variant="xs" className="text-right">
-            {trade?.priceImpact?.toFixed(2)}%
+            {priceImpact?.toFixed(2)}%
           </Typography>
         </div>
         {recipient && isAddress(recipient) && (

@@ -4,7 +4,8 @@ import { AppState } from 'app/state'
 
 export enum PoolSortOption {
   TVL = 'TVL Highest to Lowest',
-  APY = 'APY Highest to Lowest',
+  VOLUME = 'VOL Highest to Lowest',
+  // APY = 'APY Highest to Lowest',
 }
 
 export interface PoolsState {

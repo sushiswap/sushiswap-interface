@@ -47,7 +47,7 @@ export const useBorrowExecute: UseBorrowExecute = () => {
 
   return useCallback(
     async ({ trade, permit, collateralAmount, borrowAmount, leveraged, spendFromWallet, receiveInWallet }) => {
-      if (!account || !library || !chainId || !masterContract || !collateralAmount || !borrowAmount) {
+      if (!account || !library || !chainId || !masterContract || (!collateralAmount && !borrowAmount)) {
         console.error('Dependencies unavailable')
         return
       }
@@ -65,23 +65,24 @@ export const useBorrowExecute: UseBorrowExecute = () => {
         })
       }
 
-      // Always update exchange rate
-      cooker.updateExchangeRate(true, ZERO, ZERO)
+      if (borrowAmount) {
+        // Always update exchange rate
+        cooker.updateExchangeRate(true, ZERO, ZERO)
 
-      // Add deposit collateral action
-      if (leveraged && spendFromWallet) {
-        cooker.bentoDepositCollateral(BigNumber.from(collateralAmount.quotient.toString()))
+        // Add deposit collateral action
+        if (leveraged && spendFromWallet && collateralAmount) {
+          cooker.bentoDepositCollateral(BigNumber.from(collateralAmount.quotient.toString()))
+        }
+        // Add borrow action
+        cooker.borrow(
+          BigNumber.from(borrowAmount.quotient.toString()),
+          leveraged || !receiveInWallet,
+          leveraged ? SUSHISWAP_MULTISWAPPER_ADDRESS[chainId] : ''
+        )
       }
 
-      // Add borrow action
-      cooker.borrow(
-        BigNumber.from(borrowAmount.quotient.toString()),
-        leveraged || !receiveInWallet,
-        leveraged ? SUSHISWAP_MULTISWAPPER_ADDRESS[chainId] : ''
-      )
-
       // If we're leveraged, check for trade object and add actions accordingly
-      if (leveraged && trade) {
+      if (leveraged && trade && collateralAmount) {
         const path = trade.route.path.map((token) => token.address) || []
         cooker.action(
           SUSHISWAP_MULTISWAPPER_ADDRESS[chainId || 1],
@@ -113,16 +114,20 @@ export const useBorrowExecute: UseBorrowExecute = () => {
         )
       }
 
-      // Add collateral action
-      cooker.addCollateral(
-        leveraged ? BigNumber.from(-1) : BigNumber.from(collateralAmount.quotient.toString()),
-        leveraged || !spendFromWallet
-      )
+      if (collateralAmount) {
+        // Add collateral action
+        cooker.addCollateral(
+          leveraged ? BigNumber.from(-1) : BigNumber.from(collateralAmount.quotient.toString()),
+          leveraged || !spendFromWallet
+        )
+      }
+
+      // console.log(cooker)
 
       // Batch all actions
       const result = await cooker.cook()
 
-      if (result.success) {
+      if (collateralAmount && borrowAmount && result.success) {
         addTransaction(result.tx, {
           summary: i18n._(
             t`Borrow ${borrowAmount.toSignificant(6)} ${
@@ -130,9 +135,23 @@ export const useBorrowExecute: UseBorrowExecute = () => {
             } using ${collateralAmount.toSignificant(6)} ${collateralAmount.currency.symbol} as collateral`
           ),
         })
-
-        return result.tx
       }
+
+      if (collateralAmount && !borrowAmount && result.success) {
+        addTransaction(result.tx, {
+          summary: i18n._(
+            t`Adding ${collateralAmount.toSignificant(6)} ${collateralAmount.currency.symbol} as collateral`
+          ),
+        })
+      }
+
+      if (!collateralAmount && borrowAmount && result.success) {
+        addTransaction(result.tx, {
+          summary: i18n._(t`Borrow ${borrowAmount.toSignificant(6)} ${borrowAmount.currency.symbol}`),
+        })
+      }
+
+      return result.tx
     },
     [account, addTransaction, allowedSlippage, chainId, i18n, library, market, masterContract]
   )
