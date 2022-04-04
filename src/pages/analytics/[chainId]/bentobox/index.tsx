@@ -119,9 +119,9 @@ export default function BentoBox(): JSX.Element {
               false
             )}
           />
-          <InfoCard text="Total Users" number={formatNumber(bentoBox?.totalUsers)} />
-          <InfoCard text="Total Tokens" number={bentoBox?.totalTokens} />
-          <InfoCard text="Total Kashi Pairs" number={bentoBox?.totalKashiPairs} />
+          <InfoCard text="Total Users" number={bentoBox?.totalUsers || 0} />
+          <InfoCard text="Total Tokens" number={bentoBox?.totalTokens || 0} />
+          <InfoCard text="Total Kashi Pairs" number={bentoBox?.totalKashiPairs || 0} />
         </div>
       </div>
       <div className="pt-4 lg:px-14">
