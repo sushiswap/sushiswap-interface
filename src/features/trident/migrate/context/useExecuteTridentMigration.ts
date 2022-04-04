@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import { approveSLPAction, batchAction } from 'app/features/trident/actions'
 import { handleMigrationError, missingMigrationDependencies } from 'app/features/trident/migrate/context/errorPopups'
 import { selectTridentMigrations, setMigrationTxHash } from 'app/features/trident/migrate/context/migrateSlice'
@@ -48,6 +49,7 @@ export const useExecuteTridentMigration = () => {
       !migrationContract ||
       !router ||
       !Object.keys(v2LpTokenAmounts).length ||
+      !v2LpTokenAmounts ||
       rebasesLoading
     ) {
       dispatch(missingMigrationDependencies)
@@ -64,7 +66,7 @@ export const useExecuteTridentMigration = () => {
         return tridentMigrateAction({
           contract: migrationContract,
           migration: m,
-          v2LpTokenAmount: v2LpTokenAmounts[m.v2Pair.liquidityToken.address],
+          v2LpTokenAmount: (v2LpTokenAmounts as Record<string, CurrencyAmount<Token>>)[m.v2Pair.liquidityToken.address],
           v2PoolTotalSupply: v2PoolsSupplies[m.v2Pair.liquidityToken.address],
           selectedTridentPool: selectedTridentPools[i],
           tridentPoolSupply: tPool ? tridentPoolsSupplies[tPool?.liquidityToken.address] : undefined,

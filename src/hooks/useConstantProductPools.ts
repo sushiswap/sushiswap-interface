@@ -4,9 +4,9 @@ import { default as constantProductPoolArtifact } from '@sushiswap/trident/artif
 import { computeConstantProductPoolAddress, ConstantProductPool, Fee, PoolState } from '@sushiswap/trident-sdk'
 import { enumToArray } from 'app/functions/array/enumToArray'
 import { useConstantProductPoolFactory } from 'app/hooks/useContract'
-import { useMultipleContractSingleData, useSingleContractMultipleData } from 'app/lib/hooks'
 import { PoolWithState } from 'app/types'
 import combinate from 'combinate'
+import { useMultipleContractSingleData, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
 const POOL_INTERFACE = new Interface(constantProductPoolArtifact.abi)
