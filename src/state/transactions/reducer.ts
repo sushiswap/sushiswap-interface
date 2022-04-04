@@ -1,9 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { ChainId } from '@sushiswap/core-sdk'
 import { PrivateTxState, PrivateTxStatus } from 'app/entities/SushiGuard'
 import { txMinutesPending } from 'app/functions/transactions'
 
-import { updateVersion } from '../global/actions'
 import {
   addTransaction,
   checkedTransaction,

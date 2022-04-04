@@ -7,9 +7,9 @@ import Loader from 'app/components/Loader'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import { classNames, getExplorerLink } from 'app/functions'
+import { isTxIndeterminate, isTxPending, isTxSuccessful } from 'app/functions/transactions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAllTransactions } from 'app/state/transactions/hooks'
-import { isTxIndeterminate, isTxPending, isTxSuccessful } from 'app/functions/transactions'
 import React, { FC } from 'react'
 
 const Transaction: FC<{ hash: string }> = ({ hash }) => {
