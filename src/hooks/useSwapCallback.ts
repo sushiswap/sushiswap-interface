@@ -46,7 +46,7 @@ import { TransactionResponseLight, useTransactionAdder } from 'app/state/transac
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { useMemo } from 'react'
 
-import { OPENMEV_URI } from '../config/openmev'
+import { SUSHIGUARD_RELAY } from '../config/sushiguard'
 import { useArgentWalletContract } from './useArgentWalletContract'
 import { useRouterContract, useTridentRouterContract } from './useContract'
 import useENS from './useENS'
@@ -533,7 +533,7 @@ export function useSwapCallback(
   recipientAddressOrName: string | undefined, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
   signatureData: SignatureData | undefined | null,
   tridentTradeContext?: TridentTradeContext,
-  useOpenMev: boolean = false
+  useSushiGuard: boolean = false
 ): {
   state: SwapCallbackState
   callback: null | (() => Promise<string>)
@@ -668,10 +668,13 @@ export function useSwapCallback(
 
         let privateTx = false
         let txResponse: Promise<TransactionResponseLight>
-        if (!featureEnabled(Feature.RELAY, chainId) || (!useOpenMev && featureEnabled(Feature.RELAY, chainId))) {
+        if (
+          !featureEnabled(Feature.SUSHIGUARD, chainId) ||
+          (!useSushiGuard && featureEnabled(Feature.SUSHIGUARD, chainId))
+        ) {
           txResponse = library.getSigner().sendTransaction(txParams)
         } else {
-          const supportedNetwork = featureEnabled(Feature.RELAY, chainId)
+          const supportedNetwork = featureEnabled(Feature.SUSHIGUARD, chainId)
           if (!supportedNetwork)
             throw new Error(`Unsupported SushiGuard network id ${chainId} when building transaction`)
 
@@ -725,7 +728,7 @@ export function useSwapCallback(
               })
 
               // @ts-ignore TYPE NEEDS FIXING
-              return fetch(OPENMEV_URI[chainId], {
+              return fetch(SUSHIGUARD_RELAY[chainId], {
                 method: 'POST',
                 body,
                 headers: {
@@ -809,7 +812,7 @@ export function useSwapCallback(
     recipient,
     recipientAddressOrName,
     swapCalls,
-    useOpenMev,
+    useSushiGuard,
     eip1559,
     dispatch,
     tridentTradeContext,

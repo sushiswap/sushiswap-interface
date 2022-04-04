@@ -24,14 +24,14 @@ import useIsArgentWallet from 'app/hooks/useIsArgentWallet'
 import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
 import { useSwapCallback } from 'app/hooks/useSwapCallback'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
-import useWalletSupportsOpenMev from 'app/hooks/useWalletSupportsOpenMev'
+import useWalletSupportsSushiGuard from 'app/hooks/useWalletSupportsSushiGuard'
 import useWrapCallback, { WrapType } from 'app/hooks/useWrapCallback'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import TokenWarningModal from 'app/modals/TokenWarningModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { Field, setRecipient } from 'app/state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly, useUserSushiGuard } from 'app/state/user/hooks'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
@@ -189,8 +189,8 @@ const Swap = ({ banners }) => {
     }
   }, [approvalState, approvalSubmitted])
 
-  const [useOpenMev] = useUserOpenMev()
-  const walletSupportsOpenMev = useWalletSupportsOpenMev()
+  const [useSushiGuard] = useUserSushiGuard()
+  const walletSupportsSushiGuard = useWalletSupportsSushiGuard()
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
@@ -200,7 +200,7 @@ const Swap = ({ banners }) => {
     signatureData,
     /* @ts-ignore TYPE NEEDS FIXING */
     null,
-    walletSupportsOpenMev && useOpenMev
+    walletSupportsSushiGuard && useSushiGuard
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -407,7 +407,7 @@ const Swap = ({ banners }) => {
             priceImpact={priceImpact}
             priceImpactCss={priceImpactCss}
           />
-          {isExpertMode && useOpenMev && <SwapGasFeeInputs />}
+          {isExpertMode && useSushiGuard && <SwapGasFeeInputs />}
           {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
           {Boolean(trade) && (
             <SwapDetails

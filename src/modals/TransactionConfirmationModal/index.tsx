@@ -13,7 +13,7 @@ import { featureEnabled, getExplorerLink } from 'app/functions'
 import useAddTokenToMetaMask from 'app/hooks/useAddTokenToMetaMask'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useSwapState } from 'app/state/swap/hooks'
-import { useUserOpenMev } from 'app/state/user/hooks'
+import { useUserSushiGuard } from 'app/state/user/hooks'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 
@@ -25,15 +25,15 @@ interface ConfirmationPendingContentProps {
 export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({ onDismiss, pendingText }) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [openMev] = useUserOpenMev()
+  const [sushiGuard] = useUserSushiGuard()
   const { sushiRelayChallenge } = useSwapState()
 
   return (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={i18n._(t`Confirm transaction`)} onClose={onDismiss} />
 
-      {openMev && chainId && featureEnabled(Feature.RELAY, chainId) && (
-        <HeadlessUiModal.BorderedContent className="bg-dark-1000/40 flex flex-col gap-3">
+      {sushiGuard && chainId && featureEnabled(Feature.SUSHIGUARD, chainId) && (
+        <HeadlessUiModal.BorderedContent className="flex flex-col gap-3 bg-dark-1000/40">
           <Typography variant="sm">
             {i18n._(
               t`Your transaction will be realized using the SushiGuard. Your wallet may prompt you with a warning message, please confirm the following challenge before signing`
