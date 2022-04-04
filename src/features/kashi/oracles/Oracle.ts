@@ -6,9 +6,13 @@ export interface Oracle {
 }
 
 export abstract class Oracle implements Oracle {
+  // @ts-expect-error
   chainId
+  // @ts-expect-error
   address
+  // @ts-expect-error
   data
+  // @ts-expect-error
   name
   warning = ''
   error = ''

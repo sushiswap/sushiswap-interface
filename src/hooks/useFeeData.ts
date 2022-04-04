@@ -4,7 +4,12 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
 import { useEffect, useState } from 'react'
 
-interface FeeDataExtend extends FeeData {
+/**
+ * @interface FeeDataExtend
+ * @extends {FeeData}
+ * @summary Hook that returns the fee data from the active provider.
+ */
+export interface FeeDataExtend extends FeeData {
   eip1559: boolean
 }
 
@@ -21,7 +26,6 @@ const useFeeData: UseFeeData = () => {
     gasPrice: null,
   })
 
-  // @ts-expect-error
   const eip1559 = !!chainId && !!blockNumber ? blockNumber >= Number(EIP_1559_ACTIVATION_BLOCK[chainId]) : false
 
   // Call this useEffect every block

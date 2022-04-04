@@ -36,7 +36,7 @@
       "app/types": ["./types"],
       "app/types/*": ["./types/*"]
     },
-    "target": "es2018",
+    "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -44,15 +44,16 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
+    "downlevelIteration": true,
+    "importHelpers": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noImplicitAny": false,
     "isolatedModules": true,
     "jsx": "preserve",
-    "downlevelIteration": true,
     "incremental": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "sushi-env.d.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts", "**/*.test.tsx", "**/*.spec.tsx"],
 }

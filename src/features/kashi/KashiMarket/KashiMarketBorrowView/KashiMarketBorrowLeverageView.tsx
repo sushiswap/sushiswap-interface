@@ -111,6 +111,7 @@ export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = 
               min={0.25}
               max={2}
               step={0.01}
+              // @ts-expect-error
               defaultValue={0.5}
               markFormatter={(mark) => `${mark}x`}
             />

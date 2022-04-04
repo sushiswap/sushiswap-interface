@@ -14,6 +14,7 @@ import {
 const now = () => new Date().getTime()
 
 export interface TransactionDetails {
+  [x: string]: any
   hash: string
   receipt?: SerializableTransactionReceipt
   lastCheckedBlockNumber?: number
@@ -86,7 +87,7 @@ export default createReducer(initialState, (builder) =>
 
       const prevState = tx.privateTx?.state
       const prevStatus = tx.privateTx?.status
-      const minutesEllapsed = txMinutesPending(tx)
+      const minutesElapsed = txMinutesPending(tx)
 
       // If previous state was a definitive one, we skip processing new events
       if (
@@ -100,7 +101,7 @@ export default createReducer(initialState, (builder) =>
       // derive new private tx state from latest received status
       let state = PrivateTxState.PROCESSING
 
-      // OK - Relay received the Tx && all downstream miners accepted without complains && tx mined sucessfully
+      // OK - Relay received the Tx && all downstream miners accepted without complains && tx mined successfully
       if (status.receivedAt && status.relayedAt && !status.relayFailure && status.minedAt) state = PrivateTxState.OK
 
       // ERROR
@@ -121,7 +122,7 @@ export default createReducer(initialState, (builder) =>
         state = PrivateTxState.INDETERMINATE
 
       // If more than 20 minutes has passed, better to mark this TX as indeterminate
-      if (minutesEllapsed > 3) state = PrivateTxState.INDETERMINATE
+      if (minutesElapsed > 3) state = PrivateTxState.INDETERMINATE
 
       // update new state
       tx.privateTx.state = state ?? PrivateTxState.UNCHECKED

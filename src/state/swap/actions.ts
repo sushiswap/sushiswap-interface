@@ -23,3 +23,5 @@ export const setSushiRelayChallenge = createAction<string | undefined>('swap/set
 export const setFees = createAction<{ maxFee?: string; maxPriorityFee?: string }>('swap/setFees')
 export const setMaxFee = createAction<string | undefined>('swap/setMaxFee')
 export const setPriorityFee = createAction<string | undefined>('swap/setPriorityFee')
+export const maxPriorityFee = createAction<string | undefined>('swap/maxPriorityFee')
+export const maxFee = createAction<string | undefined>('swap/maxFee')

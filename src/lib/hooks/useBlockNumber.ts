@@ -50,6 +50,7 @@ function useBlock() {
 const blockAtom = atom<number | undefined>(undefined)
 
 export function BlockUpdater() {
+  // @ts-expect-error
   const setBlock = useUpdateAtom(blockAtom)
   const block = useBlock()
   useEffect(() => {
@@ -66,5 +67,6 @@ export default function useBlockNumber(): number | undefined {
 }
 
 export function useFastForwardBlockNumber(): (block: number) => void {
+  // @ts-expect-error
   return useUpdateAtom(blockAtom)
 }

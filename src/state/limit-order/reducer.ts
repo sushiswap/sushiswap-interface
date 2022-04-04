@@ -68,9 +68,9 @@ const initialState: LimitOrderState = {
 }
 
 export default createReducer<LimitOrderState>(initialState, (builder) =>
+  // @ts-expect-error
   builder
     .addCase(
-      // @ts-ignore TYPE NEEDS FIXING
       replaceLimitOrderState,
       (
         state,

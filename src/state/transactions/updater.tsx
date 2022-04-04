@@ -41,10 +41,9 @@ export default function Updater() {
       )
       addPopup(
         {
-          txn: { hash, success: receipt.status === 1, summary: transactions[hash]?.summary },
+          txn: { hash, success: receipt.status === 1, summary: transactions[hash]?.summary, DEFAULT_TXN_DISMISS_MS },
         },
-        hash,
-        DEFAULT_TXN_DISMISS_MS
+        hash
       )
     },
     [addPopup, dispatch, transactions]

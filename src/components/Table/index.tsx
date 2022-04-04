@@ -65,7 +65,7 @@ export default function Table<T>({
     state: { pageIndex, pageSize },
   } = useTable(
     {
-    // @ts-ignore
+      // @ts-ignore
       columns,
       data,
       defaultCanSort: false,

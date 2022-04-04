@@ -102,6 +102,7 @@ export default createReducer<SwapState>(initialState, (builder) =>
     .addCase(setSushiRelayChallenge, (state, { payload: sushiRelayChallenge }) => {
       state.sushiRelayChallenge = sushiRelayChallenge
     })
+    // @ts-expect-error
     .addCase(setFees, (state, { payload: { maxFee, maxPriorityFee } }) => {
       state.maxFee = maxFee
       state.maxPriorityFee = maxPriorityFee
