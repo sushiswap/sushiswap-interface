@@ -1,18 +1,17 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
+import { ArrowLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, Currency, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Input from 'app/components/Input'
 import ListPanel from 'app/components/ListPanel'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
-import HeaderNew from 'app/features/trade/HeaderNew'
 import { classNames, unwrappedCurrencyAmount } from 'app/functions'
-import { currencyId } from 'app/functions/currency'
 import { calculateGasMargin, calculateSlippageAmount } from 'app/functions/trade'
 import { useCurrency } from 'app/hooks/Tokens'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
@@ -24,9 +23,8 @@ import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
-import { useWalletModalToggle } from 'app/state/application/hooks'
 import { Field } from 'app/state/burn/actions'
-import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from 'app/state/burn/hooks'
+import { useBurnActionHandlers, useDerivedBurnInfo } from 'app/state/burn/hooks'
 import { useAppSelector } from 'app/state/hooks'
 import { selectSlippageWithDefault } from 'app/state/slippage/slippageSlice'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
@@ -38,8 +36,6 @@ import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
-const REMOVE_TIPS = {}
-
 export default function Remove() {
   const { i18n } = useLingui()
   const router = useRouter()
@@ -49,40 +45,19 @@ export default function Remove() {
   const { account, chainId, library } = useActiveWeb3React()
   const [tokenA, tokenB] = useMemo(() => [currencyA?.wrapped, currencyB?.wrapped], [currencyA, currencyB])
 
-  // toggle wallet when disconnected
-  const toggleWalletModal = useWalletModalToggle()
-
   // burn state
-  const { independentField, typedValue } = useBurnState()
   const { pair, parsedAmounts, error } = useDerivedBurnInfo(currencyA ?? undefined, currencyB ?? undefined)
   const { onUserInput: _onUserInput } = useBurnActionHandlers()
   const isValid = !error
 
   // modal and loading
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
-  const [showDetailed, setShowDetailed] = useState<boolean>(false)
   const [attemptingTxn, setAttemptingTxn] = useState(false) // clicked confirm
 
   // txn values
   const [txHash, setTxHash] = useState<string>('')
   const deadline = useTransactionDeadline()
   const allowedSlippage = useAppSelector(selectSlippageWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE))
-
-  const formattedAmounts = {
-    [Field.LIQUIDITY_PERCENT]: parsedAmounts[Field.LIQUIDITY_PERCENT].equalTo('0')
-      ? '0'
-      : parsedAmounts[Field.LIQUIDITY_PERCENT].lessThan(new Percent('1', '100'))
-      ? '<1'
-      : parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0),
-    [Field.LIQUIDITY]:
-      independentField === Field.LIQUIDITY ? typedValue : parsedAmounts[Field.LIQUIDITY]?.toSignificant(6) ?? '',
-    [Field.CURRENCY_A]:
-      independentField === Field.CURRENCY_A ? typedValue : parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) ?? '',
-    [Field.CURRENCY_B]:
-      independentField === Field.CURRENCY_B ? typedValue : parsedAmounts[Field.CURRENCY_B]?.toSignificant(6) ?? '',
-  }
-
-  const atMaxAmount = parsedAmounts[Field.LIQUIDITY_PERCENT]?.equalTo(new Percent('1'))
 
   // pair contract
   const pairContract: Contract | null = usePairContract(pair?.liquidityToken?.address)
@@ -124,19 +99,6 @@ export default function Remove() {
       return _onUserInput(field, typedValue)
     },
     [_onUserInput]
-  )
-
-  const onLiquidityInput = useCallback(
-    (typedValue: string): void => onUserInput(Field.LIQUIDITY, typedValue),
-    [onUserInput]
-  )
-  const onCurrencyAInput = useCallback(
-    (typedValue: string): void => onUserInput(Field.CURRENCY_A, typedValue),
-    [onUserInput]
-  )
-  const onCurrencyBInput = useCallback(
-    (typedValue: string): void => onUserInput(Field.CURRENCY_B, typedValue),
-    [onUserInput]
   )
 
   // tx sending
@@ -374,31 +336,8 @@ export default function Remove() {
   )
 
   const oneCurrencyIsETH = currencyA?.isNative || currencyB?.isNative
-
   const oneCurrencyIsWETH = Boolean(
     chainId && WNATIVE[chainId] && (currencyA?.equals(WNATIVE[chainId]) || currencyB?.equals(WNATIVE[chainId]))
-  )
-
-  const handleSelectCurrencyA = useCallback(
-    (currency: Currency) => {
-      if (currencyIdB && currencyId(currency) === currencyIdB) {
-        router.push(`/remove/${currencyId(currency)}/${currencyIdA}`)
-      } else {
-        router.push(`/remove/${currencyId(currency)}/${currencyIdB}`)
-      }
-    },
-    [currencyIdA, currencyIdB, router]
-  )
-
-  const handleSelectCurrencyB = useCallback(
-    (currency: Currency) => {
-      if (currencyIdA && currencyId(currency) === currencyIdA) {
-        router.push(`/remove/${currencyIdB}/${currencyId(currency)}`)
-      } else {
-        router.push(`/remove/${currencyIdA}/${currencyId(currency)}`)
-      }
-    },
-    [currencyIdA, currencyIdB, router]
   )
 
   const handleDismissConfirmation = useCallback(() => {
@@ -436,8 +375,17 @@ export default function Remove() {
         pendingText={pendingText}
       />
       <SwapLayoutCard>
-        <div className="px-2">
-          <HeaderNew inputCurrency={currencyA} outputCurrency={currencyB} />
+        <div className="grid grid-cols-3 items-center">
+          <ArrowLeftIcon
+            width={24}
+            height={24}
+            className="cursor-pointer text-high-emphesis hover:text-white focus:text-white"
+            onClick={() => router.push('/pool')}
+          />
+          <Typography weight={700} className="text-center whitespace-nowrap text-high-emphesis">
+            {i18n._(t`Remove Liquidity`)}
+          </Typography>
+          <div />
         </div>
         <div className="flex flex-col gap-3">
           <div

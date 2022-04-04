@@ -125,7 +125,7 @@ export default function PoolFinder() {
         {currency0 && currency1 ? (
           pairState === PairState.EXISTS ? (
             hasPosition && pair ? (
-              <MinimalPositionCard pair={pair} border="1px solid #CED0D9" />
+              <MinimalPositionCard pair={pair} />
             ) : (
               <div className="p-5 rounded bg-dark-800">
                 <AutoColumn gap="sm" justify="center">

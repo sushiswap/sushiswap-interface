@@ -1,19 +1,17 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
-import { PlusIcon } from '@heroicons/react/solid'
+import { ArrowLeftIcon, PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, currencyEquals, WNATIVE } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
-import { MinimalPositionCard } from 'app/components/PositionCard'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { ZERO_PERCENT } from 'app/constants'
 import { ConfirmAddModalBottom } from 'app/features/legacy/liquidity/ConfirmAddModalBottom'
 import LiquidityPrice from 'app/features/legacy/liquidity/LiquidityPrice'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
-import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import { currencyId } from 'app/functions/currency'
 import { calculateGasMargin, calculateSlippageAmount } from 'app/functions/trade'
@@ -294,8 +292,17 @@ export default function Add() {
         pendingText={pendingText}
       />
       <SwapLayoutCard>
-        <div className="px-2">
-          <HeaderNew inputCurrency={currencies[Field.CURRENCY_A]} outputCurrency={currencies[Field.CURRENCY_B]} />
+        <div className="grid grid-cols-3 items-center">
+          <ArrowLeftIcon
+            width={24}
+            height={24}
+            className="cursor-pointer text-high-emphesis hover:text-white focus:text-white"
+            onClick={() => router.push('/pool')}
+          />
+          <Typography weight={700} className="text-center whitespace-nowrap text-high-emphesis">
+            {i18n._(t`Add Liquidity`)}
+          </Typography>
+          <div />
         </div>
         <div className="flex flex-col gap-3">
           <SwapAssetPanel
@@ -374,13 +381,7 @@ export default function Add() {
           </div>
         )}
 
-        {!addIsUnsupported ? (
-          pair && !noLiquidity && pairState !== PairState.INVALID ? (
-            <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
-          ) : null
-        ) : (
-          <UnsupportedCurrencyFooter currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]} />
-        )}
+        {addIsUnsupported && <UnsupportedCurrencyFooter currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]} />}
       </SwapLayoutCard>
       {noLiquidity && (
         <Typography variant="xs" className="px-10 mt-5 text-center text-yellow">

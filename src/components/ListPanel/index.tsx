@@ -93,13 +93,16 @@ const ListPanelHeader: FC<ListPanelHeaderProps> = ({ title, value, subValue, cla
 interface ListPanelItemProps {
   left: ReactNode
   right: ReactNode
+  className?: string
 }
 
 // Default ListPanelFooter component, please note that you are not obliged to pass this to a ListPanel component
 // If you need different styling, please create another component and leave this one as is.
-const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
+const ListPanelItem = ({ left, right, className }: ListPanelItemProps) => {
   return (
-    <div className="flex grid items-center grid-cols-2 gap-2 px-3 py-3 lg:px-4 border-dark-700">
+    <div
+      className={classNames(className, 'flex grid items-center grid-cols-2 gap-2 px-3 py-3 lg:px-4 border-dark-700')}
+    >
       {left}
       {right}
     </div>
@@ -142,6 +145,7 @@ interface CurrencyAmountItemProps {
   hideCurrencyLogo?: boolean
   hideUSDC?: boolean
   size?: TypographyVariant
+  className?: string
 }
 
 // ListPanelItem for displaying a CurrencyAmount
@@ -154,6 +158,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
   hideCurrencyLogo,
   hideUSDC = false,
   size,
+  className,
 }) => {
   const usdcValue = useUSDCValue(
     hideUSDC ? undefined : amount?.equalTo(ZERO) ? CurrencyAmount.fromRawAmount(amount?.currency, '1') : amount
@@ -163,6 +168,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
     return (
       <div id={`${id}`} className={hideIfZero && amount?.equalTo(ZERO) ? 'hidden' : ''}>
         <ListPanel.Item
+          className={className}
           left={
             <ListPanel.Item.Left
               size={size}
@@ -184,7 +190,8 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
       id={id}
       className={classNames(
         hideIfZero && amount?.equalTo(ZERO) ? 'hidden' : '',
-        'flex grid items-center grid-cols-3 gap-2 px-3 py-3 lg:px-4 border-dark-700'
+        'flex grid items-center grid-cols-3 gap-2 px-3 py-3 lg:px-4 border-dark-700',
+        className
       )}
     >
       <div className="flex items-center gap-3 -ml-1">

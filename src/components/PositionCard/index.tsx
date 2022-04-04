@@ -1,5 +1,6 @@
-import { Transition } from '@headlessui/react'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
+import { Disclosure, Transition } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/outline'
+import { PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CurrencyAmount, JSBI, Pair, Percent, Token } from '@sushiswap/core-sdk'
@@ -8,35 +9,25 @@ import Typography from 'app/components/Typography'
 import { BIG_INT_ZERO } from 'app/constants'
 import { classNames } from 'app/functions'
 import { currencyId, unwrappedToken } from 'app/functions/currency'
-import { useColor } from 'app/hooks/useColor'
 import { useTotalSupply } from 'app/hooks/useTotalSupply'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTokenBalance } from 'app/state/wallet/hooks'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import { FC } from 'preact/compat'
+import React, { Fragment } from 'react'
 
 import Button from '../Button'
-import { AutoColumn } from '../Column'
-import { CurrencyLogo } from '../CurrencyLogo'
-import Dots from '../Dots'
-import DoubleCurrencyLogo from '../DoubleLogo'
+import { CurrencyLogoArray } from '../CurrencyLogo'
 
 interface PositionCardProps {
   pair: Pair
   showUnwrapped?: boolean
-  border?: string
   stakedBalance?: CurrencyAmount<Token> // optional balance to indicate that liquidity is deposited in mining pool
 }
 
-export function MinimalPositionCard({ pair, showUnwrapped = false, border }: PositionCardProps) {
+export const MinimalPositionCard: FC<PositionCardProps> = ({ pair }) => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-
-  const currency0 = showUnwrapped ? pair.token0 : unwrappedToken(pair.token0)
-  const currency1 = showUnwrapped ? pair.token1 : unwrappedToken(pair.token1)
-
-  const [showMore, setShowMore] = useState(false)
-
   const userPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
   const totalPoolTokens = useTotalSupply(pair.liquidityToken)
 
@@ -61,94 +52,39 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
 
   return (
     <div>
-      <ListPanel
-        header={
-          <div className="overflow-hidden px-4 py-2 bg-dark-900">
-            <Typography variant="xs" className="text-secondary">
-              {i18n._(t`My Position`)}
-            </Typography>
-          </div>
-        }
-        items={[token0Deposited, token1Deposited].map((cur, index) => (
-          <ListPanel.CurrencyAmountItem amount={cur} key={index} size="xs" />
-        ))}
-        footer={
-          <div className="flex overflow-hidden px-4 py-2 justify-between">
-            <Typography variant="xs" className="text-secondary">
-              {i18n._(t`Pool Share`)}
-            </Typography>
-            <Typography variant="xs">{poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}</Typography>
-          </div>
-        }
-      />
+      {userPoolBalance && JSBI.greaterThan(userPoolBalance.quotient, JSBI.BigInt(0)) && (
+        <ListPanel
+          header={
+            <div className="overflow-hidden px-4 py-2 bg-dark-900">
+              <Typography variant="xs" className="text-secondary">
+                {i18n._(t`My Position`)}
+              </Typography>
+            </div>
+          }
+          items={[token0Deposited, token1Deposited].map((cur, index) => (
+            <ListPanel.CurrencyAmountItem amount={cur} key={index} size="xs" />
+          ))}
+          footer={
+            <div className="flex overflow-hidden px-4 py-2 justify-between">
+              <Typography variant="xs" className="text-secondary">
+                {i18n._(t`Pool Share`)}
+              </Typography>
+              <Typography variant="xs">{poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}</Typography>
+            </div>
+          }
+        />
+      )}
     </div>
-  )
-
-  return (
-    <>
-      {userPoolBalance && JSBI.greaterThan(userPoolBalance.quotient, JSBI.BigInt(0)) ? (
-        <div className="p-5 rounded bg-dark-800 text-high-emphesis">
-          <AutoColumn gap={'md'}>
-            <div className="text-lg">Your Position</div>
-            <div className="flex flex-col md:flex-row md:justify-between">
-              <div className="flex items-center w-auto space-x-4">
-                <DoubleCurrencyLogo currency0={pair.token0} currency1={pair.token1} size={40} />
-                <div className="text-2xl font-semibold">
-                  {currency0.symbol}/{currency1.symbol}
-                </div>
-              </div>
-              <div className="flex items-center mt-3 space-x-2 text-base md:mt-0">
-                <div>{userPoolBalance ? userPoolBalance.toSignificant(4) : '-'} </div>
-                <div className="text-secondary">Pool Tokens</div>
-              </div>
-            </div>
-            <div className="flex flex-col w-full p-3 mt-3 space-y-1 text-sm rounded bg-dark-900 text-high-emphesis">
-              <div className="flex justify-between">
-                <div>{i18n._(t`Your pool share`)}</div>
-                <div className="font-bold">{poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}</div>
-              </div>
-              <div className="flex justify-between">
-                <div>{currency0.symbol}:</div>
-                {token0Deposited ? (
-                  <div className="flex space-x-2 font-bold">
-                    <div> {token0Deposited?.toSignificant(6)}</div>
-                    <div className="text-secondary">{currency0.symbol}</div>
-                  </div>
-                ) : (
-                  '-'
-                )}
-              </div>
-              <div className="flex justify-between">
-                <div>{currency1.symbol}:</div>
-                {token1Deposited ? (
-                  <div className="flex space-x-2 font-bold">
-                    <div>{token1Deposited?.toSignificant(6)}</div>
-                    <div className="text-secondary">{currency1.symbol}</div>
-                  </div>
-                ) : (
-                  '-'
-                )}
-              </div>
-            </div>
-          </AutoColumn>
-        </div>
-      ) : null}
-    </>
   )
 }
 
-export default function FullPositionCard({ pair, border, stakedBalance }: PositionCardProps) {
+const FullPositionCard: FC<PositionCardProps> = ({ pair, stakedBalance }) => {
   const { i18n } = useLingui()
   const router = useRouter()
-  const { account, chainId } = useActiveWeb3React()
-
+  const { account } = useActiveWeb3React()
   const currency0 = unwrappedToken(pair.token0)
   const currency1 = unwrappedToken(pair.token1)
-
-  const [showMore, setShowMore] = useState(false)
-
   const userDefaultPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
-
   const totalPoolTokens = useTotalSupply(pair.liquidityToken)
 
   // if staked balance balance provided, add to standard liquidity amount
@@ -173,114 +109,84 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
         ]
       : [undefined, undefined]
 
-  const backgroundColor = useColor(pair?.token0)
-
   return (
-    <div
-      className="rounded bg-dark-800"
-      // style={{ backgroundColor }}
-    >
-      <Button
-        variant="empty"
-        className={classNames(
-          'flex items-center justify-between w-full px-4 py-6 cursor-pointer bg-dark-800 hover:bg-dark-700 !text-blue',
-          showMore && '!bg-dark-800'
-        )}
-        style={{ boxShadow: 'none' }}
-        onClick={() => setShowMore(!showMore)}
-      >
-        <div className="flex items-center space-x-4">
-          <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={40} />
-          <div className="text-xl font-semibold">
-            {!currency0 || !currency1 ? <Dots>{i18n._(t`Loading`)}</Dots> : `${currency0.symbol}/${currency1.symbol}`}
-          </div>
-        </div>
-        <div className="flex items-center space-x-4">
-          {i18n._(t`Manage`)}
-          {showMore ? (
-            <ChevronUpIcon width="20px" height="20px" className="ml-4" />
-          ) : (
-            <ChevronDownIcon width="20px" height="20px" className="ml-4" />
+    <Disclosure as="div" className="py-2">
+      {({ open }) => (
+        <div
+          className={classNames(
+            open ? 'bg-dark-900' : 'hover:bg-dark-800',
+            'shadow-inner flex flex-col rounded-2xl gap-2 py-2 pl-1 pr-2 transition'
           )}
-        </div>
-      </Button>
-
-      <Transition
-        show={showMore}
-        enter="transition-opacity duration-75"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="transition-opacity duration-150"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      >
-        <div className="p-4 space-y-4">
-          <div className="px-4 py-4 space-y-1 text-sm rounded text-high-emphesis bg-dark-900">
-            <div className="flex items-center justify-between">
-              <div>{i18n._(t`Your total pool tokens`)}:</div>
-              <div className="font-semibold">{userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}</div>
-            </div>
-            {/* {stakedBalance && (
-              <div className="flex items-center justify-between">
-                <div>{i18n._(t`Pool tokens in rewards pool`)}:</div>
-                <div className="font-semibold">{stakedBalance.toSignificant(4)}</div>
+        >
+          <Disclosure.Button as={Fragment}>
+            <div className="flex justify-between gap-2 items-center pl-2 cursor-pointer">
+              <div className="flex items-center gap-2">
+                <CurrencyLogoArray currencies={[currency0, currency1]} dense />
+                <Typography variant="sm" weight={700} className="text-white">
+                  {currency0.symbol}-{currency1.symbol}
+                </Typography>
               </div>
-            )} */}
-            <div className="flex items-center justify-between">
-              <div>{i18n._(t`Pooled ${currency0?.symbol}`)}:</div>
-              {token0Deposited ? (
-                <div className="flex items-center space-x-2">
-                  <div className="font-semibold">{token0Deposited?.toSignificant(6)}</div>
-                  <CurrencyLogo size="20px" currency={currency0} />
-                </div>
-              ) : (
-                '-'
-              )}
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>{i18n._(t`Pooled ${currency1?.symbol}`)}:</div>
-              {token1Deposited ? (
-                <div className="flex items-center space-x-2">
-                  <div className="font-semibold ">{token1Deposited?.toSignificant(6)}</div>
-                  <CurrencyLogo size="20px" currency={currency1} />
-                </div>
-              ) : (
-                '-'
-              )}
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>{i18n._(t`Your pool share`)}:</div>
-              <div className="font-semibold">
-                {poolTokenPercentage
-                  ? (poolTokenPercentage.toFixed(2) === '0.00' ? '<0.01' : poolTokenPercentage.toFixed(2)) + '%'
-                  : '-'}
+              <div className="flex gap-2 flex-grow items-center justify-end p-1 rounded">
+                <ChevronDownIcon
+                  width={20}
+                  className={classNames(open ? 'transform rotate-180' : '', 'transition hover:text-white')}
+                />
               </div>
             </div>
-          </div>
-          {userDefaultPoolBalance && JSBI.greaterThan(userDefaultPoolBalance.quotient, BIG_INT_ZERO) && (
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                color="blue"
-                onClick={() => {
-                  router.push(`/add/${currencyId(currency0)}/${currencyId(currency1)}`)
-                }}
-              >
-                {i18n._(t`Add`)}
-              </Button>
-              <Button
-                color="blue"
-                onClick={() => {
-                  router.push(`/remove/${currencyId(currency0)}/${currencyId(currency1)}`)
-                }}
-              >
-                {i18n._(t`Remove`)}
-              </Button>
-            </div>
-          )}
+          </Disclosure.Button>
+          <Transition
+            show={open}
+            enter="transition duration-100 ease-out"
+            enterFrom="transform scale-95 opacity-0"
+            enterTo="transform scale-100 opacity-100"
+            unmount={false}
+          >
+            <Disclosure.Panel static>
+              <div className="border border-dark-800 rounded p-3">
+                {[token0Deposited, token1Deposited].map((cur, index) => (
+                  <ListPanel.CurrencyAmountItem amount={cur} key={index} size="xs" className="!px-0 !py-1" />
+                ))}
+                {userDefaultPoolBalance && JSBI.greaterThan(userDefaultPoolBalance.quotient, BIG_INT_ZERO) && (
+                  <div className="flex justify-between border-t border-dark-800 pt-3 mt-3">
+                    <div className="flex items-center mb-1">
+                      <Typography variant="xs" className="text-low-emphesis">
+                        {i18n._(t`Pool share`)}{' '}
+                        {poolTokenPercentage
+                          ? (poolTokenPercentage.toFixed(2) === '0.00' ? '<0.01' : poolTokenPercentage.toFixed(2)) + '%'
+                          : '-'}
+                      </Typography>
+                    </div>
+                    <div className="flex gap-4">
+                      <Button
+                        size="xs"
+                        variant="empty"
+                        color="blue"
+                        onClick={() => {
+                          router.push(`/remove/${currencyId(currency0)}/${currencyId(currency1)}`)
+                        }}
+                      >
+                        {i18n._(t`Remove`)}
+                      </Button>
+                      <Button
+                        startIcon={<PlusIcon width={14} height={14} />}
+                        size="xs"
+                        color="blue"
+                        onClick={() => {
+                          router.push(`/add/${currencyId(currency0)}/${currencyId(currency1)}`)
+                        }}
+                      >
+                        {i18n._(t`Add`)}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Disclosure.Panel>
+          </Transition>
         </div>
-      </Transition>
-    </div>
+      )}
+    </Disclosure>
   )
 }
+
+export default FullPositionCard
