@@ -6,20 +6,35 @@ import { useActiveWeb3React } from 'services/web3'
 import { useAppDispatch, useAppSelector } from 'state/hooks'
 
 import { useAddPopup } from '../application/hooks'
-import { checkedTransaction, finalizeTransaction } from './actions'
+import { checkedTransaction, finalizeTransaction, updatePrivateTxStatus } from './actions'
 
 export default function Updater() {
   const { chainId } = useActiveWeb3React()
   const addPopup = useAddPopup()
   const dispatch = useAppDispatch()
+
+  const state = useAppSelector((state) => state.transactions)
+  const transactions = useMemo(() => (chainId ? state[chainId as ChainId] ?? {} : {}), [chainId, state])
+  const pendingTransactions = useMemo(() => (chainId ? state[chainId] ?? {} : {}), [chainId, state])
+
   const onCheck = useCallback(
     ({ chainId, hash, blockNumber }) => dispatch(checkedTransaction({ chainId, hash, blockNumber })),
     [dispatch]
   )
 
-  const state = useAppSelector((state) => state.transactions)
-
-  const transactions = useMemo(() => (chainId ? state[chainId as ChainId] ?? {} : {}), [chainId, state])
+  const onPrivateTxStatusCheck = useCallback(
+    ({ chainId, hash, blockNumber, status }) => {
+      dispatch(
+        updatePrivateTxStatus({
+          chainId,
+          hash,
+          blockNumber,
+          status,
+        })
+      )
+    },
+    [dispatch, transactions]
+  )
 
   const onReceipt = useCallback(
     ({ chainId, hash, receipt }) => {
@@ -50,7 +65,12 @@ export default function Updater() {
     [addPopup, dispatch, transactions]
   )
 
-  const pendingTransactions = useMemo(() => (chainId ? state[chainId] ?? {} : {}), [chainId, state])
-
-  return <LibUpdater pendingTransactions={pendingTransactions} onCheck={onCheck} onReceipt={onReceipt} />
+  return (
+    <LibUpdater
+      pendingTransactions={pendingTransactions}
+      onCheck={onCheck}
+      onPrivateTxStatusCheck={onPrivateTxStatusCheck}
+      onReceipt={onReceipt}
+    />
+  )
 }

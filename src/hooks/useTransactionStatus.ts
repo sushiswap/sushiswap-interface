@@ -1,3 +1,4 @@
+import { isTxPending } from 'app/functions/transactions'
 import { isTransactionRecent, useAllTransactions } from 'app/state/transactions/hooks'
 import { TransactionDetails } from 'app/state/transactions/reducer'
 import { useEffect, useMemo, useState } from 'react'
@@ -16,7 +17,7 @@ const useTransactionStatus = () => {
     const txs = Object.values(allTransactions)
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
-  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter(isTxPending).map((tx) => tx.hash)
   const hasPendingTransactions = !!pending.length
 
   useEffect(() => {

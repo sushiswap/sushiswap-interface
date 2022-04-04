@@ -4,6 +4,7 @@ import { useLingui } from '@lingui/react'
 import { useWeb3React } from '@web3-react/core'
 import { NetworkContextName } from 'app/constants'
 import { shortenAddress } from 'app/functions'
+import { isTxConfirmed, isTxPending } from 'app/functions/transactions'
 import useENSName from 'app/hooks/useENSName'
 import WalletModal from 'app/modals/WalletModal'
 import { useWalletModalToggle } from 'app/state/application/hooks'
@@ -34,7 +35,7 @@ function Web3StatusInner() {
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
 
-  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter(isTxPending).map((tx) => tx.hash)
 
   const hasPendingTransactions = !!pending.length
 
@@ -108,8 +109,8 @@ export default function Web3Status() {
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
 
-  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
-  const confirmed = sortedRecentTransactions.filter((tx) => tx.receipt).map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter(isTxPending).map((tx) => tx.hash)
+  const confirmed = sortedRecentTransactions.filter(isTxConfirmed).map((tx) => tx.hash)
 
   if (!contextNetwork.active && !active) {
     return null

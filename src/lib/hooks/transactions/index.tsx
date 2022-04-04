@@ -77,6 +77,20 @@ export function TransactionsUpdater() {
     },
     [updateTxs]
   )
+  const onPrivateTxStatusCheck = useCallback(
+    ({ chainId, hash, blockNumber, status }) => {
+      updateTxs((txs) => {
+        const tx = txs[chainId]?.[hash]
+        if (tx) {
+          tx.lastCheckedBlockNumber = tx.lastCheckedBlockNumber
+            ? Math.max(tx.lastCheckedBlockNumber, blockNumber)
+            : blockNumber
+          tx.privateTx = status
+        }
+      })
+    },
+    [updateTxs]
+  )
   const onReceipt = useCallback(
     ({ chainId, hash, receipt }) => {
       updateTxs((txs) => {
@@ -89,5 +103,12 @@ export function TransactionsUpdater() {
     [updateTxs]
   )
 
-  return <Updater pendingTransactions={pendingTransactions} onCheck={onCheck} onReceipt={onReceipt} />
+  return (
+    <Updater
+      pendingTransactions={pendingTransactions}
+      onCheck={onCheck}
+      onPrivateTxStatusCheck={onPrivateTxStatusCheck}
+      onReceipt={onReceipt}
+    />
+  )
 }
