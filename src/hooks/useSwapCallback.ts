@@ -2,8 +2,7 @@ import { TransactionFactory } from '@ethereumjs/tx'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { TransactionRequest } from '@ethersproject/abstract-provider'
 import { BigNumber } from '@ethersproject/bignumber'
-import { Signature } from '@ethersproject/bytes'
-import { arrayify, DataOptions, hexlify, splitSignature } from '@ethersproject/bytes'
+import { arrayify, DataOptions, hexlify, Signature, splitSignature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import {
@@ -40,10 +39,14 @@ import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import useBlockNumber from 'app/lib/hooks/useBlockNumber'
 import { useActiveWeb3React } from 'app/services/web3'
 import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
+import { useAppDispatch } from 'app/state/hooks'
+import { setSushiRelayChallenge } from 'app/state/swap/actions'
+import { useSwapState } from 'app/state/swap/hooks'
 import { TransactionResponseLight, useTransactionAdder } from 'app/state/transactions/hooks'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import { useMemo } from 'react'
 
-import { OPENMEV_SUPPORTED_NETWORKS, OPENMEV_URI } from '../config/openmev'
+import { OPENMEV_URI } from '../config/openmev'
 import { useArgentWalletContract } from './useArgentWalletContract'
 import { useRouterContract, useTridentRouterContract } from './useContract'
 import useENS from './useENS'
@@ -538,6 +541,9 @@ export function useSwapCallback(
 } {
   const { account, chainId, library } = useActiveWeb3React()
   const blockNumber = useBlockNumber()
+  const dispatch = useAppDispatch()
+  const { maxFee, maxPriorityFee } = useSwapState()
+  const [expertMode] = useExpertModeManager()
 
   const eip1559 =
     // @ts-ignore TYPE NEEDS FIXING
@@ -660,15 +666,17 @@ export function useSwapCallback(
           ...(value && !isZero(value) ? { value } : {}),
         }
 
+        let privateTx = false
         let txResponse: Promise<TransactionResponseLight>
-        if (
-          !OPENMEV_SUPPORTED_NETWORKS.includes(chainId) ||
-          (OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && !useOpenMev)
-        ) {
+        if (!featureEnabled(Feature.RELAY, chainId) || (!useOpenMev && featureEnabled(Feature.RELAY, chainId))) {
           txResponse = library.getSigner().sendTransaction(txParams)
         } else {
-          const supportedNetwork = OPENMEV_SUPPORTED_NETWORKS.includes(chainId)
-          if (!supportedNetwork) throw new Error(`Unsupported OpenMEV network id ${chainId} when building transaction`)
+          const supportedNetwork = featureEnabled(Feature.RELAY, chainId)
+          if (!supportedNetwork)
+            throw new Error(`Unsupported SushiGuard network id ${chainId} when building transaction`)
+
+          // Set flag for transaction adder
+          privateTx = true
 
           // @ts-ignore TYPE NEEDS FIXING
           txResponse = library
@@ -679,20 +687,23 @@ export function useSwapCallback(
             })
             .then((fullTx) => {
               const { type, chainId, nonce, gasLimit, maxFeePerGas, maxPriorityFeePerGas, to, value, data } = fullTx
-
               const hOpts: DataOptions = { hexPad: 'left' }
+              const _maxFeePerGas = expertMode && maxFee ? maxFee : maxFeePerGas
+              const _maxPriorityFee = expertMode && maxPriorityFee ? maxPriorityFee : maxPriorityFeePerGas
 
               const txToSign = TransactionFactory.fromTxData({
                 type: type ? hexlify(type) : undefined,
                 chainId: chainId ? hexlify(chainId) : undefined,
                 nonce: nonce ? hexlify(nonce, hOpts) : undefined,
                 gasLimit: gasLimit ? hexlify(gasLimit, hOpts) : undefined,
-                maxFeePerGas: maxFeePerGas ? hexlify(maxFeePerGas, hOpts) : undefined,
-                maxPriorityFeePerGas: maxPriorityFeePerGas ? hexlify(maxPriorityFeePerGas, hOpts) : undefined,
+                maxFeePerGas: _maxFeePerGas ? hexlify(_maxFeePerGas, hOpts) : undefined,
+                maxPriorityFeePerGas: _maxPriorityFee ? hexlify(_maxPriorityFee, hOpts) : undefined,
                 to,
                 value: value ? hexlify(value, hOpts) : undefined,
                 data: data?.toString(),
               })
+
+              dispatch(setSushiRelayChallenge(hexlify(txToSign.getMessageToSign())))
 
               // @ts-ignore TYPE NEEDS FIXING
               return library.provider
@@ -736,6 +747,9 @@ export function useSwapCallback(
                 if (res.status !== 200) throw Error(res.statusText)
               })
             })
+            .finally(() => {
+              dispatch(setSushiRelayChallenge(undefined))
+            })
         }
 
         return txResponse
@@ -768,6 +782,7 @@ export function useSwapCallback(
 
             addTransaction(response, {
               summary: withRecipient,
+              privateTx,
             })
 
             return response.hash
@@ -786,5 +801,18 @@ export function useSwapCallback(
       },
       error: null,
     }
-  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, eip1559, addTransaction])
+  }, [
+    trade,
+    library,
+    account,
+    chainId,
+    recipient,
+    recipientAddressOrName,
+    swapCalls,
+    useOpenMev,
+    eip1559,
+    dispatch,
+    tridentTradeContext,
+    addTransaction,
+  ])
 }

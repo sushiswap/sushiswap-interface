@@ -19,3 +19,7 @@ export const replaceSwapState = createAction<{
   recipient?: string
 }>('swap/replaceSwapState')
 export const setRecipient = createAction<string | undefined>('swap/setRecipient')
+export const setSushiRelayChallenge = createAction<string | undefined>('swap/setSushiRelayChallenge')
+export const setFees = createAction<{ maxFee?: string; maxPriorityFee?: string }>('swap/setFees')
+export const setMaxFee = createAction<string | undefined>('swap/setMaxFee')
+export const setPriorityFee = createAction<string | undefined>('swap/setPriorityFee')

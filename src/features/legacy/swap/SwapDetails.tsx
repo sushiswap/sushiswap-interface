@@ -1,18 +1,23 @@
 import { Disclosure, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/outline'
+import { ChevronDownIcon, ExternalLinkIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Token, Trade as LegacyTrade, TradeVersion } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, NATIVE, Token, Trade as LegacyTrade, TradeVersion } from '@sushiswap/core-sdk'
 import { Trade as TridentTrade } from '@sushiswap/trident-sdk'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
 import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
+import useFeeData from 'app/hooks/useFeeData'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useSwapState } from 'app/state/swap/hooks'
+import { useExpertModeManager, useUserOpenMev } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
+import Link from 'next/link'
 import React, { FC, Fragment, useMemo, useState } from 'react'
-import { isAddress } from 'web3-utils'
+import { isAddress, toWei } from 'web3-utils'
 
 interface SwapDetailsContent {
   trade?: TradeUnion
@@ -102,12 +107,20 @@ const SwapDetails: FC<SwapDetails> = ({
 
 const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, outputAmount, minimumAmountOut }) => {
   const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const minReceived = minimumAmountOut || trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
+  const [userUseOpenMev] = useUserOpenMev()
+  const [expertMode] = useExpertModeManager()
+  const { maxFeePerGas, maxPriorityFeePerGas } = useFeeData()
+  const { maxFee, maxPriorityFee } = useSwapState()
 
   const _outputAmount = outputAmount || trade?.outputAmount
   const _inputAmount = inputAmount || trade?.inputAmount
+
+  const _maxFee = expertMode && maxFee ? maxFee : maxFeePerGas
+  const _maxPriorityFee = expertMode && maxPriorityFee ? maxPriorityFee : maxPriorityFeePerGas
 
   const path = useMemo(() => {
     if (trade instanceof LegacyTrade) {
@@ -187,6 +200,47 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
           </div>
         )}
       </div>
+      {userUseOpenMev && (
+        <div className="flex flex-col gap-1 py-2">
+          <div className="grid grid-cols-2 gap-4">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`SushiGuard Gas Rebate`)}
+            </Typography>
+            <Link href="https://docs.openmev.org/" passHref={true}>
+              <a target="_blank">
+                <Typography variant="xs" className="flex items-center justify-end gap-1 text-right text-blue">
+                  {i18n._(t`Enabled`)}
+                  <ExternalLinkIcon width={12} />
+                </Typography>
+              </a>
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`Max Fee`)}
+            </Typography>
+            <Typography variant="xs" className="text-right text-secondary">
+              {chainId &&
+                _maxFee &&
+                CurrencyAmount.fromRawAmount(NATIVE[chainId], toWei(_maxFee.toString(), 'gwei'))?.toSignificant(6)}{' '}
+              GWEI
+            </Typography>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`Max Priority Fee`)}
+            </Typography>
+            <Typography variant="xs" className="text-right text-secondary">
+              {chainId &&
+                _maxPriorityFee &&
+                CurrencyAmount.fromRawAmount(NATIVE[chainId], toWei(_maxPriorityFee.toString(), 'gwei'))?.toSignificant(
+                  6
+                )}{' '}
+              GWEI
+            </Typography>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

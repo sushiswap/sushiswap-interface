@@ -10,6 +10,7 @@ import Web3Connect from 'app/components/Web3Connect'
 import ConfirmSwapModal from 'app/features/legacy/swap/ConfirmSwapModal'
 import SwapCallbackError from 'app/features/legacy/swap/SwapCallbackError'
 import SwapDetails from 'app/features/legacy/swap/SwapDetails'
+import SwapGasFeeInputs from 'app/features/legacy/swap/SwapGasFeeInputs'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
 import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
@@ -406,6 +407,7 @@ const Swap = ({ banners }) => {
             priceImpact={priceImpact}
             priceImpactCss={priceImpactCss}
           />
+          {isExpertMode && useOpenMev && <SwapGasFeeInputs />}
           {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
           {Boolean(trade) && (
             <SwapDetails

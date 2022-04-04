@@ -21,6 +21,7 @@ export interface TransactionDetails {
   summary?: string
   claim?: { recipient: string }
   approval?: { tokenAddress: string; spender: string }
+  privateTx?: boolean
 }
 
 export interface TransactionState {
@@ -34,12 +35,12 @@ export const initialState: TransactionState = {}
 export default createReducer(initialState, (builder) =>
   builder
     .addCase(updateVersion, (transactions) => {})
-    .addCase(addTransaction, (transactions, { payload: { chainId, from, hash, summary } }) => {
+    .addCase(addTransaction, (transactions, { payload: { chainId, from, hash, summary, privateTx = false } }) => {
       if (transactions[chainId]?.[hash]) {
         throw Error('Attempted to add existing transaction.')
       }
       const txs = transactions[chainId] ?? {}
-      txs[hash] = { hash, summary, from, addedTime: now() }
+      txs[hash] = { hash, summary, from, privateTx, addedTime: now() }
       transactions[chainId] = txs
     })
     .addCase(clearAllTransactions, (transactions, { payload: { chainId } }) => {
