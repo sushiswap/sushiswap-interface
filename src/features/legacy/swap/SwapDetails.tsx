@@ -10,10 +10,11 @@ import TradePrice from 'app/features/legacy/swap/TradePrice'
 import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useFeeData from 'app/hooks/useFeeData'
+import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserSushiGuard } from 'app/state/user/hooks'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
 import Link from 'next/link'
 import React, { FC, Fragment, useMemo, useState } from 'react'
@@ -111,7 +112,7 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const minReceived = minimumAmountOut || trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
-  const [userUseSushiGuard] = useUserSushiGuard()
+  const sushiGuardEnabled = useSushiGuardFeature()
   const [expertMode] = useExpertModeManager()
   const { maxFeePerGas, maxPriorityFeePerGas } = useFeeData()
   const { maxFee, maxPriorityFee } = useSwapState()
@@ -200,7 +201,7 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
           </div>
         )}
       </div>
-      {userUseSushiGuard && (
+      {sushiGuardEnabled && (
         <div className="flex flex-col gap-1 py-2">
           <div className="grid grid-cols-2 gap-4">
             <Typography variant="xs" className="text-secondary">

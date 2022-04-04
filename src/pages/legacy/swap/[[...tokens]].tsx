@@ -22,16 +22,16 @@ import { ApprovalState, useApproveCallbackFromTrade } from 'app/hooks/useApprove
 import useENSAddress from 'app/hooks/useENSAddress'
 import useIsArgentWallet from 'app/hooks/useIsArgentWallet'
 import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
+import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
 import { useSwapCallback } from 'app/hooks/useSwapCallback'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
-import useWalletSupportsSushiGuard from 'app/hooks/useWalletSupportsSushiGuard'
 import useWrapCallback, { WrapType } from 'app/hooks/useWrapCallback'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import TokenWarningModal from 'app/modals/TokenWarningModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { Field, setRecipient } from 'app/state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserSingleHopOnly, useUserSushiGuard } from 'app/state/user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
@@ -189,8 +189,8 @@ const Swap = ({ banners }) => {
     }
   }, [approvalState, approvalSubmitted])
 
-  const [useSushiGuard] = useUserSushiGuard()
-  const walletSupportsSushiGuard = useWalletSupportsSushiGuard()
+  // Checks if user has enabled the feature and if the wallet supports it
+  const sushiGuardEnabled = useSushiGuardFeature()
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
@@ -200,7 +200,7 @@ const Swap = ({ banners }) => {
     signatureData,
     /* @ts-ignore TYPE NEEDS FIXING */
     null,
-    walletSupportsSushiGuard && useSushiGuard
+    sushiGuardEnabled
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -407,7 +407,7 @@ const Swap = ({ banners }) => {
             priceImpact={priceImpact}
             priceImpactCss={priceImpactCss}
           />
-          {isExpertMode && useSushiGuard && <SwapGasFeeInputs />}
+          {isExpertMode && sushiGuardEnabled && <SwapGasFeeInputs />}
           {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
           {Boolean(trade) && (
             <SwapDetails
