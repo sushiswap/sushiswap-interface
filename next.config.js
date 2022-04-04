@@ -36,9 +36,9 @@ const nextConfig = {
 
     return config
   },
-   experimental: {
-    nextScriptWorkers: true
-   },
+  experimental: {
+    nextScriptWorkers: true,
+  },
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
   swcMinify: false,
@@ -47,6 +47,7 @@ const nextConfig = {
     dest: 'public',
     runtimeCaching,
     disable: process.env.NODE_ENV === 'development',
+    buildExcludes: [/middleware-manifest\.json$/],
   },
   images: {
     loader: 'cloudinary',
