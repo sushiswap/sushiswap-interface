@@ -1,6 +1,6 @@
 import { getExplorerLink } from 'app/functions/explorer'
+import useBlockNumber from 'app/lib/hooks/useBlockNumber'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBlockNumber } from 'app/state/application/hooks'
 import React, { useEffect, useState } from 'react'
 
 import ExternalLink from '../ExternalLink'

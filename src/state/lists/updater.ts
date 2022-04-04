@@ -1,5 +1,6 @@
+import { ChainId } from '@sushiswap/core-sdk'
 import { getVersionUpgrade, minVersionBump, VersionUpgrade } from '@uniswap/token-lists'
-import { UNSUPPORTED_LIST_URLS } from 'app/config/token-lists'
+import { ARBITRUM_LIST, UNSUPPORTED_LIST_URLS } from 'app/config/token-lists'
 import { useFetchListCallback } from 'app/hooks/useFetchListCallback'
 import useInterval from 'app/hooks/useInterval'
 import useIsWindowVisible from 'app/hooks/useIsWindowVisible'
@@ -7,11 +8,11 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch } from 'app/state/hooks'
 import { useCallback, useEffect } from 'react'
 
-import { acceptListUpdate } from './actions'
+import { acceptListUpdate, enableList } from './actions'
 import { useActiveListUrls, useAllLists } from './hooks'
 
 export default function Updater(): null {
-  const { library } = useActiveWeb3React()
+  const { chainId, library } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const isWindowVisible = useIsWindowVisible()
 
@@ -27,6 +28,11 @@ export default function Updater(): null {
     )
   }, [fetchList, isWindowVisible, lists])
 
+  useEffect(() => {
+    if (chainId && chainId === ChainId.ARBITRUM) {
+      dispatch(enableList(ARBITRUM_LIST))
+    }
+  }, [chainId, dispatch])
   // fetch all lists every 10 minutes, but only after we initialize library
   useInterval(fetchAllListsCallback, library ? 1000 * 60 * 10 : null)
 

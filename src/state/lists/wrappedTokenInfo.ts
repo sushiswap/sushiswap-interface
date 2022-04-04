@@ -1,8 +1,6 @@
 import { Currency, Token } from '@sushiswap/core-sdk'
-import { Tags, TokenInfo } from '@uniswap/token-lists'
-import { TokenList } from '@uniswap/token-lists/dist/types'
-
-import { isAddress } from '../../functions/validate'
+import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
+import { isAddress } from 'functions/validate'
 
 type TagDetails = Tags[keyof Tags]
 interface TagInfo extends TagDetails {
@@ -78,12 +76,5 @@ export class WrappedTokenInfo implements Token {
 
   public get wrapped(): Token {
     return this
-  }
-
-  /**
-   * Returns token address. Useful in cases where a dependency is needed to detect changes (e.g. useEffect).
-   */
-  public serialize(): string {
-    return this.wrapped.address
   }
 }

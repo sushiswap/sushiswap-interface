@@ -25,6 +25,8 @@
       "app/interfaces/*": ["./interfaces/*"],
       "app/layouts": ["./layouts"],
       "app/layouts/*": ["./layouts/*"],
+      "app/lib": ["./lib"],
+      "app/lib/*": ["./lib/*"],
       "app/modals": ["./modals"],
       "app/modals/*": ["./modals/*"],
       "app/services": ["./services"],

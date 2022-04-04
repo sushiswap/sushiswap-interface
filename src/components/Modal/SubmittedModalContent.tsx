@@ -7,10 +7,9 @@ import { HeadlessUiModal } from 'app/components/Modal/index'
 import Typography from 'app/components/Typography'
 import { getExplorerLink, shortenString } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useAppSelector } from 'app/state/hooks'
-import { selectTxStatus } from 'app/state/transactions/selectors'
+import { useAllTransactions } from 'app/state/transactions/hooks'
 import Lottie from 'lottie-react'
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, useMemo } from 'react'
 
 import { ModalHeaderProps } from './Header'
 
@@ -34,8 +33,15 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
 }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
-  const txStatus = useAppSelector(selectTxStatus(txHash))
-
+  const allTransactions = useAllTransactions()
+  const tx = useMemo(() => allTransactions[txHash], [allTransactions, txHash])
+  const txStatus = !tx?.receipt
+    ? 'PENDING'
+    : tx && (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined')
+    ? 'SUCCESS'
+    : tx.receipt.status === 1337
+    ? 'CANCELLED'
+    : 'FAILED'
   return (
     <HeadlessUiModal.Body>
       {animationData && (

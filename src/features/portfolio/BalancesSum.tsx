@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, NATIVE, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, NATIVE, Token, ZERO } from '@sushiswap/core-sdk'
 import Typography, { TypographyVariant } from 'app/components/Typography'
 import { reduceBalances } from 'app/features/portfolio/AssetBalances/kashi/hooks'
 import SumUSDCValues from 'app/features/trident/SumUSDCValues'
@@ -43,18 +43,20 @@ export const LiquidityPositionsBalancesSum = () => {
 
 const useWalletBalances = (account: string) => {
   const { chainId } = useActiveWeb3React()
-  const { data: tokenBalances, loading } = useAllTokenBalancesWithLoadingIndicator(account)
-  // @ts-ignore TYPE NEEDS FIXING
+  const [tokenBalances, loading] = useAllTokenBalancesWithLoadingIndicator(account)
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
-  return useMemo(() => {
-    const res: CurrencyAmount<Currency>[] = Object.values(tokenBalances).filter((cur) => cur.greaterThan(ZERO))
-
+  return useMemo<{ data: CurrencyAmount<Currency>[]; loading: boolean }>(() => {
+    const balances = Object.values(tokenBalances)
+      .filter((tokenBalance): tokenBalance is CurrencyAmount<Token> => Boolean(tokenBalance))
+      .filter((tokenBalance) => tokenBalance.greaterThan(ZERO))
     if (ethBalance) {
-      res.push(ethBalance)
+      return {
+        data: [ethBalance, ...balances],
+        loading,
+      }
     }
-
     return {
-      data: res,
+      data: balances,
       loading,
     }
   }, [tokenBalances, ethBalance, loading])

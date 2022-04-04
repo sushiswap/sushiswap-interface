@@ -23,7 +23,7 @@ const migrations = {
       user: initialState,
     }
   },
-  // 1: (state) => {
+  // 2: (state) => {
   //   // migration to keep only device state
   //   return {
   //     device: state.device,

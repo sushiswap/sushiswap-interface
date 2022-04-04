@@ -4,8 +4,8 @@ import { ChainId, Currency, CurrencyAmount, JSBI, SUSHI } from '@sushiswap/core-
 import { WEEKLY_MERKLE_ROOT as MERKLE_ROOT } from 'app/constants'
 import { calculateGasMargin } from 'app/functions/trade'
 import { useMerkleDistributorContract } from 'app/hooks/useContract'
+import { useSingleCallResult } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useSingleCallResult } from 'app/state/multicall/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useEffect, useState } from 'react'
 
