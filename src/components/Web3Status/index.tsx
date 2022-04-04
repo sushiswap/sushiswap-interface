@@ -7,6 +7,7 @@ import { shortenAddress } from 'app/functions'
 import useENSName from 'app/hooks/useENSName'
 import WalletModal from 'app/modals/WalletModal'
 import { useWalletModalToggle } from 'app/state/application/hooks'
+import { isTxPending } from 'app/functions/transactions'
 import { isTransactionRecent, useAllTransactions } from 'app/state/transactions/hooks'
 import { TransactionDetails } from 'app/state/transactions/reducer'
 import Image from 'next/image'
@@ -108,7 +109,7 @@ export default function Web3Status() {
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
 
-  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter((tx) => isTxPending(tx)).map((tx) => tx.hash)
   const confirmed = sortedRecentTransactions.filter((tx) => tx.receipt).map((tx) => tx.hash)
 
   if (!contextNetwork.active && !active) {
