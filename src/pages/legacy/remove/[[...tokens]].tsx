@@ -350,11 +350,18 @@ export default function Remove() {
   }, [onUserInput, txHash])
 
   const [innerLiquidityPercentage, setInnerLiquidityPercentage] = useDebouncedChangeHandler(
-    '25',
+    parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0),
     liquidityPercentChangeCallback
   )
 
   const inputError = +innerLiquidityPercentage > 100 || +innerLiquidityPercentage < 0
+
+  // console.log(
+  //   currencyA,
+  //   currencyB,
+  //   currencyA?.isNative ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_A]) : parsedAmounts[Field.CURRENCY_A],
+  //   currencyB?.isNative ? unwrappedCurrencyAmount(parsedAmounts[Field.CURRENCY_B]) : parsedAmounts[Field.CURRENCY_B]
+  // )
 
   return (
     <>
@@ -375,7 +382,7 @@ export default function Remove() {
         pendingText={pendingText}
       />
       <SwapLayoutCard>
-        <div className="grid grid-cols-3 items-center">
+        <div className="grid items-center grid-cols-3">
           <ArrowLeftIcon
             width={24}
             height={24}
@@ -395,29 +402,26 @@ export default function Remove() {
             )}
           >
             <Typography variant="sm" weight={700}>
-              {i18n._(t`Amount to remove (%)`)}
+              {i18n._(t`Percent to remove`)}
             </Typography>
-            <div className="flex gap-1 items-center">
+            <div className="flex items-center gap-1">
               <Typography
                 weight={700}
                 variant="lg"
                 className="relative flex items-baseline flex-grow gap-3 overflow-hidden text-high-emphesis"
               >
-                <Input.Numeric
+                <Input.Percent
                   className="leading-[32px] focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
-                  placeholder="0%"
-                  id="limit-price-input"
                   value={innerLiquidityPercentage}
                   onUserInput={setInnerLiquidityPercentage}
-                  min={0}
-                  max={100}
-                  step={1}
+                  placeholder="0%"
+                  id="liquidity-percent"
                 />
               </Typography>
             </div>
           </div>
-          <div className="flex-col bg-dark-900 border border-dark-700 rounded overflow-hidden">
-            <div className="overflow-hidden px-4 py-2 bg-dark-900 flex justify-between items-center">
+          <div className="flex-col overflow-hidden border rounded bg-dark-900 border-dark-700">
+            <div className="flex items-center justify-between px-4 py-2 overflow-hidden bg-dark-900">
               <Typography variant="sm" weight={700} className="text-high-emphesis">
                 {i18n._(t`You'll receive`)}
               </Typography>

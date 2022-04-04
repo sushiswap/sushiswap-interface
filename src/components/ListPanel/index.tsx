@@ -161,7 +161,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
   className,
 }) => {
   const usdcValue = useUSDCValue(
-    hideUSDC ? undefined : amount?.equalTo(ZERO) ? CurrencyAmount.fromRawAmount(amount?.currency, '1') : amount
+    hideUSDC ? undefined : amount?.equalTo(ZERO) ? CurrencyAmount.fromRawAmount(amount?.currency?.wrapped, '1') : amount
   )
 
   if (!displayTokenAmount)
