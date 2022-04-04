@@ -269,10 +269,6 @@ export default function Add() {
 
   const addIsUnsupported = useIsSwapUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
-  // console.log(
-  //   { addIsUnsupported, isValid, approvalA, approvalB },
-  //   approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED
-  // )
   return (
     <>
       <NextSeo title={`Add Liquidity`} />
@@ -292,7 +288,7 @@ export default function Add() {
         pendingText={pendingText}
       />
       <SwapLayoutCard>
-        <div className="grid grid-cols-3 items-center">
+        <div className="grid items-center grid-cols-3">
           <ArrowLeftIcon
             width={24}
             height={24}
