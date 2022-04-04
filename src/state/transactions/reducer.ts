@@ -1,8 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit'
+<<<<<<< HEAD
 import { ChainId } from '@sushiswap/core-sdk'
 import { PrivateTxState, PrivateTxStatus } from 'app/entities/SushiGuard'
 import { txMinutesPending } from 'app/functions/transactions'
+=======
+>>>>>>> 0df12672e25f855790a0e5490380bed502cb8855
 
+import { updateVersion } from '../global/actions'
 import {
   addTransaction,
   checkedTransaction,
@@ -16,28 +20,34 @@ const now = () => new Date().getTime()
 
 export interface TransactionDetails {
   hash: string
-  approval?: { tokenAddress: string; spender: string }
-  summary?: string
-  claim?: { recipient: string }
   receipt?: SerializableTransactionReceipt
   lastCheckedBlockNumber?: number
   addedTime: number
   confirmedTime?: number
   from: string
+<<<<<<< HEAD
   privateTx?: {
     state: PrivateTxState
     status?: PrivateTxStatus
   }
+=======
+  summary?: string
+  claim?: { recipient: string }
+  approval?: { tokenAddress: string; spender: string }
+>>>>>>> 0df12672e25f855790a0e5490380bed502cb8855
 }
 
-type txHash = string
-
-export type TransactionState = { [key in ChainId]?: Record<txHash, TransactionDetails> }
+export interface TransactionState {
+  [chainId: number]: {
+    [txHash: string]: TransactionDetails
+  }
+}
 
 export const initialState: TransactionState = {}
 
 export default createReducer(initialState, (builder) =>
   builder
+<<<<<<< HEAD
     .addCase(
       addTransaction,
       (transactions, { payload: { chainId, from, hash, approval, summary, claim, privateTx = false } }) => {
@@ -57,6 +67,17 @@ export default createReducer(initialState, (builder) =>
         transactions[chainId] = txs
       }
     )
+=======
+    .addCase(updateVersion, (transactions) => {})
+    .addCase(addTransaction, (transactions, { payload: { chainId, from, hash, summary } }) => {
+      if (transactions[chainId]?.[hash]) {
+        throw Error('Attempted to add existing transaction.')
+      }
+      const txs = transactions[chainId] ?? {}
+      txs[hash] = { hash, summary, from, addedTime: now() }
+      transactions[chainId] = txs
+    })
+>>>>>>> 0df12672e25f855790a0e5490380bed502cb8855
     .addCase(clearAllTransactions, (transactions, { payload: { chainId } }) => {
       if (!transactions[chainId]) return
       transactions[chainId] = {}

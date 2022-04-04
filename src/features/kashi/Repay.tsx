@@ -17,7 +17,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useAppSelector } from 'app/state/hooks'
 import { selectSlippageWithDefault } from 'app/state/slippage/slippageSlice'
 import { useExpertModeManager } from 'app/state/user/hooks'
-import { useETHBalances } from 'app/state/wallet/hooks'
+import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
 import React, { useMemo, useState } from 'react'
 
 import { KashiApproveButton, TokenApproveButton } from './Button'
@@ -55,7 +55,7 @@ export default function Repay({ pair }: RepayProps) {
   // Calculated
   const assetNative = WNATIVE[chainId || 1].address === pair.asset.address
   // @ts-ignore TYPE NEEDS FIXING
-  const ethBalance = useETHBalances(assetNative ? [account] : [])
+  const ethBalance = useNativeCurrencyBalances(assetNative ? [account] : [])
 
   console.log({ pair })
 

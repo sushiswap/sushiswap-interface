@@ -68,23 +68,23 @@ export const WalletBalances: FC<{ account: string }> = ({ account }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
-  const { data: _balances, loading } = useAllTokenBalancesWithLoadingIndicator(account)
+  const [tokenBalances, loading] = useAllTokenBalancesWithLoadingIndicator(account)
 
-  // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
 
   const balances = useMemo(() => {
-    const res = Object.values(_balances).reduce<Assets[]>((acc, cur) => {
-      if (cur.greaterThan(ZERO)) acc.push({ asset: cur })
+    return Object.values(tokenBalances).reduce<Assets[]>(
+      (previousValue, currentValue) => {
+        if (currentValue && currentValue.greaterThan(ZERO)) {
+          return [...previousValue, { asset: currentValue }]
+        }
 
-      return acc
-    }, [])
+        return previousValue
+      },
+      ethBalance ? [{ asset: ethBalance }] : []
+    )
+  }, [tokenBalances, ethBalance])
 
-    if (ethBalance) {
-      res.push({ asset: ethBalance })
-    }
-    return res
-  }, [_balances, ethBalance])
   const { config } = useBasicTableConfig(balances, loading)
 
   const handleRowClick = useCallback(

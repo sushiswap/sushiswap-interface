@@ -1,4 +1,4 @@
-import { GlobeIcon, SwitchVerticalIcon, TrendingUpIcon } from '@heroicons/react/outline'
+import { BeakerIcon, GlobeIcon, SwitchVerticalIcon, TrendingUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
@@ -35,7 +35,7 @@ const useMenu: UseMenu = () => {
 
     const menu: Menu = []
 
-    const legacyItems = [
+    const trade = [
       {
         key: 'swap',
         title: i18n._(t`Swap`),
@@ -47,6 +47,9 @@ const useMenu: UseMenu = () => {
         link: '/limit-order',
         disabled: !featureEnabled(Feature.LIMIT_ORDERS, chainId),
       },
+    ]
+
+    const liquidity = [
       {
         key: 'pool',
         title: i18n._(t`Pool`),
@@ -75,10 +78,12 @@ const useMenu: UseMenu = () => {
       },
     ]
 
+    const legacy = [...trade, ...liquidity]
+
     if (featureEnabled(Feature.TRIDENT, chainId)) {
       menu.push({
-        key: 'trident',
-        title: i18n._(t`Trident`),
+        key: 'trade',
+        title: i18n._(t`Trade`),
         icon: <SwitchVerticalIcon width={20} />,
         items: [
           {
@@ -86,6 +91,19 @@ const useMenu: UseMenu = () => {
             title: i18n._(t`Swap`),
             link: '/trident/swap',
           },
+          {
+            key: 'limit',
+            title: i18n._(t`Limit order`),
+            link: '/limit-order',
+            disabled: !featureEnabled(Feature.LIMIT_ORDERS, chainId),
+          },
+        ].filter((item) => !item.disabled),
+      })
+      menu.push({
+        key: 'liquidity',
+        title: i18n._(t`Liquidity`),
+        icon: <BeakerIcon width={20} />,
+        items: [
           {
             key: 'trident-pools',
             title: i18n._(t`Pools`),
@@ -103,17 +121,26 @@ const useMenu: UseMenu = () => {
           },
         ],
       })
+      menu.push({
+        key: 'Legacy',
+        title: i18n._(t`Legacy`),
+        icon: <SwitchVerticalIcon width={20} />,
+        items: liquidity.filter((item) => !item?.disabled),
+      })
+    } else {
+      menu.push({
+        key: 'trade',
+        title: i18n._(t`Trade`),
+        icon: <SwitchVerticalIcon width={20} />,
+        items: trade.filter((item) => !item?.disabled),
+      })
+      menu.push({
+        key: 'liquidity',
+        title: i18n._(t`Liquidity`),
+        icon: <BeakerIcon width={20} />,
+        items: liquidity.filter((item) => !item?.disabled),
+      })
     }
-
-    // By default show just a swap button
-    let legacy: MenuItem = {
-      key: 'legacy',
-      title: i18n._(t`Legacy`),
-      icon: <SwitchVerticalIcon width={20} />,
-      items: legacyItems.filter((item) => !item?.disabled),
-    }
-
-    menu.push(legacy)
 
     if (featureEnabled(Feature.LIQUIDITY_MINING, chainId)) {
       const farmItems = {

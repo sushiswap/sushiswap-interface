@@ -111,8 +111,6 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
   const _outputAmount = outputAmount || trade?.outputAmount
   const _inputAmount = inputAmount || trade?.inputAmount
 
-  console.log({ trade })
-
   const path = useMemo(() => {
     if (trade instanceof LegacyTrade) {
       return trade.route.path

@@ -39,12 +39,16 @@ import { shortenAddress } from 'app/functions/format'
 import { calculateGasMargin } from 'app/functions/trade'
 import { isAddress, isZero } from 'app/functions/validate'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
+import useBlockNumber from 'app/lib/hooks/useBlockNumber'
 import { useActiveWeb3React } from 'app/services/web3'
 import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
+<<<<<<< HEAD
 import { useBlockNumber } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { setSushiRelayChallenge } from 'app/state/swap/actions'
 import { useSwapState } from 'app/state/swap/hooks'
+=======
+>>>>>>> 0df12672e25f855790a0e5490380bed502cb8855
 import { TransactionResponseLight, useTransactionAdder } from 'app/state/transactions/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { fetchJsonRpc } from 'lib/jsonrpc'
