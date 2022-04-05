@@ -10,7 +10,8 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks'
 import { ApplicationModal } from 'app/state/application/reducer'
 import Image from 'next/image'
-import React, { FC } from 'react'
+import { useRouter } from 'next/router'
+import React, { FC, useCallback } from 'react'
 
 export const SUPPORTED_NETWORKS: Record<
   number,
@@ -209,11 +210,68 @@ export const SUPPORTED_NETWORKS: Record<
   },
 }
 
+const switchToNetwork = async ({ provider, chainId }: any) => {
+  if (!provider.request) {
+    return
+  }
+  console.debug(`Switching to chain ${chainId}`)
+  const params = SUPPORTED_NETWORKS[chainId]
+  try {
+    await provider.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: `0x${chainId.toString(16)}` }],
+    })
+    logEvent('Chain', 'switch', params.chainName, chainId)
+  } catch (error) {
+    // @ts-ignore TYPE NEEDS FIXING
+    // This error code indicates that the chain has not been added to MetaMask.
+    if (error.code === 4902) {
+      await provider.request({
+        method: 'wallet_addEthereumChain',
+        params,
+      })
+      // metamask (only known implementer) automatically switches after a network is added
+      // the second call is done here because that behavior is not a part of the spec and cannot be relied upon in the future
+      // metamask's behavior when switching to the current network is just to return null (a no-op)
+      try {
+        await provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${chainId.toString(16)}` }],
+        })
+      } catch (error) {
+        console.debug('Added network but could not switch chains', error)
+      }
+    } else {
+      console.debug('Switch chain error', error)
+      throw error
+    }
+  }
+}
+
 const NetworkModal: FC = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
   const networkModalOpen = useModalOpen(ApplicationModal.NETWORK)
   const toggleNetworkModal = useNetworkModalToggle()
+
+  const router = useRouter()
+
+  const handleChainSwitch = useCallback(
+    (targetChain: number) => {
+      if (!library?.provider) return
+      toggleNetworkModal()
+      switchToNetwork({ provider: library.provider, chainId: targetChain })
+        .then(() => router.replace({ query: { ...router.query, chainId: targetChain } }))
+        .catch(() => {
+          // we want app network <-> chainId param to be in sync, so if user changes the network by changing the URL
+          // but the request fails, revert the URL back to current chainId
+          if (chainId) {
+            router.replace({ query: { ...router.query, chainId } })
+          }
+        })
+    },
+    [library?.provider, toggleNetworkModal, router, chainId]
+  )
 
   if (!chainId) return null
 
@@ -265,28 +323,7 @@ const NetworkModal: FC = () => {
               return (
                 <button
                   key={i}
-                  onClick={async () => {
-                    console.debug(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
-                    toggleNetworkModal()
-                    const params = SUPPORTED_NETWORKS[key]
-                    try {
-                      await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
-                      logEvent('Chain', 'switch', params.chainName, key)
-                    } catch (switchError) {
-                      // This error code indicates that the chain has not been added to MetaMask.
-                      // @ts-ignore TYPE NEEDS FIXING
-                      if (switchError.code === 4902) {
-                        try {
-                          await library?.send('wallet_addEthereumChain', [params, account])
-                        } catch (addError) {
-                          // handle "add" error
-                          console.error(`Add chain error ${addError}`)
-                        }
-                      }
-                      console.error(`Switch chain error ${switchError}`)
-                      // handle other "switch" errors
-                    }
-                  }}
+                  onClick={() => handleChainSwitch(key)}
                   className={classNames(
                     'bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-dark-700 hover:border-blue'
                   )}
