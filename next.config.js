@@ -47,7 +47,6 @@ const nextConfig = {
     dest: 'public',
     runtimeCaching,
     disable: process.env.NODE_ENV === 'development',
-    buildExcludes: [/middleware-manifest\.json$/],
   },
   images: {
     loader: 'cloudinary',
