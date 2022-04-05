@@ -11,7 +11,7 @@ import { e10, ZERO } from 'app/functions/math'
 import { useBentoBoxContract } from 'app/hooks'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useETHBalances } from 'app/state/wallet/hooks'
+import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
 import React, { useState } from 'react'
 
 import { KashiApproveButton, TokenApproveButton } from './Button'
@@ -37,7 +37,7 @@ export default function Deposit({ pair }: any): JSX.Element {
   const assetNative = WNATIVE[chainId].address === pair.asset.address
 
   // @ts-ignore TYPE NEEDS FIXING
-  const ethBalance = useETHBalances(assetNative ? [account] : [])
+  const ethBalance = useNativeCurrencyBalances(assetNative ? [account] : [])
 
   const balance = useBento
     ? pair.asset.bentoBalance

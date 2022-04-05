@@ -1,5 +1,6 @@
 import Container from 'app/components/Container'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
+import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 
 import DefaultLayout from './Default'
@@ -8,9 +9,14 @@ export interface Layout {
   id: string
 }
 
-export const SwapLayoutCard: FC = ({ children }) => {
+export const SwapLayoutCard: FC<{ className?: string }> = ({ children, className }) => {
   return (
-    <div className="flex flex-col gap-3 p-2 md:p-4 pt-4 rounded-[24px] bg-dark-800 shadow-md shadow-dark-1000">
+    <div
+      className={classNames(
+        'flex flex-col gap-3 p-2 md:p-4 pt-4 rounded-[24px] bg-dark-800 shadow-md shadow-dark-1000',
+        className
+      )}
+    >
       {children}
     </div>
   )

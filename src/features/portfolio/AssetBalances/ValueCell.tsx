@@ -1,11 +1,13 @@
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
+import { currencyFormatter } from 'app/functions'
+import { useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
 import React from 'react'
 
 export const ValueCell = (amount: CurrencyAmount<Currency>, balancesLoading?: boolean) => {
-  // const { value, loading } = useUSDCValueWithLoadingIndicator(balancesLoading ? undefined : amount)
+  const { value, loading } = useUSDCValueWithLoadingIndicator(balancesLoading ? undefined : amount)
 
-  if (balancesLoading) {
+  if (loading || balancesLoading) {
     return (
       <div className="flex gap-2.5 items-center justify-end w-full">
         <div className="flex flex-col gap-1.5">
@@ -16,16 +18,12 @@ export const ValueCell = (amount: CurrencyAmount<Currency>, balancesLoading?: bo
     )
   }
 
-  console.log('ValueCell render')
   return (
     <div className="flex flex-col">
-      {/* <Typography weight={700} className="w-full text-right text-high-emphesis">
-        {value ? `${currencyFormatter.format(Number(value.toExact()))}` : '-'}
-      </Typography> */}
-      {/* <Typography weight={400} variant="sm" className="text-right text-low-emphesis">
-        {amount.toSignificant(6)}
-      </Typography> */}
       <Typography weight={700} className="w-full text-right text-high-emphesis">
+        {value ? `${currencyFormatter.format(Number(value.toExact()))}` : '-'}
+      </Typography>
+      <Typography weight={400} variant="sm" className="text-right text-low-emphesis">
         {amount.toSignificant(6)}
       </Typography>
     </div>

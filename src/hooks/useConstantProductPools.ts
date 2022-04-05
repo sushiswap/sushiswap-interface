@@ -6,9 +6,8 @@ import { enumToArray } from 'app/functions/array/enumToArray'
 import { useConstantProductPoolFactory } from 'app/hooks/useContract'
 import { PoolWithState } from 'app/types'
 import combinate from 'combinate'
+import { useMultipleContractSingleData, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
-
-import { useMultipleContractSingleData, useSingleContractMultipleData } from '../state/multicall/hooks'
 
 const POOL_INTERFACE = new Interface(constantProductPoolArtifact.abi)
 

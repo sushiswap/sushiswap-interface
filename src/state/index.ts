@@ -3,6 +3,7 @@ import { createMigrate, persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
 import reducer from './reducer'
+import { initialState } from './user/reducer'
 
 // https://github.com/rt2zz/redux-persist/blob/master/docs/migrations.md#example-with-createmigrate
 const migrations = {
@@ -14,7 +15,15 @@ const migrations = {
       lists: undefined,
     }
   },
-  // 1: (state) => {
+  // @ts-ignore
+  1: (state) => {
+    // migration reset user state
+    return {
+      ...state,
+      user: initialState,
+    }
+  },
+  // 2: (state) => {
   //   // migration to keep only device state
   //   return {
   //     device: state.device,
@@ -27,7 +36,7 @@ const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'slippage']
 const persistConfig = {
   key: 'root',
   whitelist: PERSISTED_KEYS,
-  version: 0,
+  version: 1,
   storage,
   migrate: createMigrate(migrations, { debug: process.env.NODE_ENV === 'development' }),
 }

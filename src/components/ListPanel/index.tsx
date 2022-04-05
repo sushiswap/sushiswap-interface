@@ -1,11 +1,11 @@
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
-import { classNames } from 'app/functions'
-import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import { classNames, formatNumber } from 'app/functions'
+import { useUSDCValueSubgraph } from 'app/hooks/useUSDCSubgraph'
 import React, { FC, ReactNode } from 'react'
 
 import Chip from '../Chip'
 import { CurrencyLogo } from '../CurrencyLogo'
-import Typography from '../Typography'
+import Typography, { TypographyVariant } from '../Typography'
 
 interface ListPanelProps {
   header?: ReactNode
@@ -93,13 +93,16 @@ const ListPanelHeader: FC<ListPanelHeaderProps> = ({ title, value, subValue, cla
 interface ListPanelItemProps {
   left: ReactNode
   right: ReactNode
+  className?: string
 }
 
 // Default ListPanelFooter component, please note that you are not obliged to pass this to a ListPanel component
 // If you need different styling, please create another component and leave this one as is.
-const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
+const ListPanelItem = ({ left, right, className }: ListPanelItemProps) => {
   return (
-    <div className="flex grid items-center grid-cols-2 gap-2 px-3 py-3 lg:px-4 border-dark-700">
+    <div
+      className={classNames(className, 'flex grid items-center grid-cols-2 gap-2 px-3 py-3 lg:px-4 border-dark-700')}
+    >
       {left}
       {right}
     </div>
@@ -110,14 +113,15 @@ interface ListPanelItemLeftProps {
   amount: CurrencyAmount<Currency> | undefined
   startAdornment?: ReactNode
   hideCurrencyLogo?: boolean
+  size?: TypographyVariant
 }
 
-const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, hideCurrencyLogo, startAdornment }) => {
+const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, size, hideCurrencyLogo, startAdornment }) => {
   return (
     <div className="flex flex-row gap-1.5 lg:gap-3 items-center">
       {startAdornment && startAdornment}
       {!hideCurrencyLogo && <CurrencyLogo currency={amount?.currency} size={20} className="rounded-full" />}
-      <Typography variant="sm" className="text-high-emphesis" weight={700}>
+      <Typography variant={size || 'sm'} className="text-high-emphesis" weight={700}>
         {amount?.greaterThan(ZERO) ? amount?.toSignificant(6) : '0.00'} {amount?.currency.symbol}
       </Typography>
     </div>
@@ -140,6 +144,8 @@ interface CurrencyAmountItemProps {
   hideIfZero?: boolean
   hideCurrencyLogo?: boolean
   hideUSDC?: boolean
+  size?: TypographyVariant
+  className?: string
 }
 
 // ListPanelItem for displaying a CurrencyAmount
@@ -151,8 +157,10 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
   hideIfZero = true,
   hideCurrencyLogo,
   hideUSDC = false,
+  size,
+  className,
 }) => {
-  const usdcValue = useUSDCValue(
+  const usdcValue = useUSDCValueSubgraph(
     hideUSDC ? undefined : amount?.equalTo(ZERO) ? CurrencyAmount.fromRawAmount(amount?.currency, '1') : amount
   )
 
@@ -160,8 +168,10 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
     return (
       <div id={`${id}`} className={hideIfZero && amount?.equalTo(ZERO) ? 'hidden' : ''}>
         <ListPanel.Item
+          className={className}
           left={
             <ListPanel.Item.Left
+              size={size}
               hideCurrencyLogo={hideCurrencyLogo}
               amount={amount}
               {...(weight && { startAdornment: <Chip color="default" label={weight} size="sm" /> })}
@@ -180,21 +190,22 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
       id={id}
       className={classNames(
         hideIfZero && amount?.equalTo(ZERO) ? 'hidden' : '',
-        'flex grid items-center grid-cols-3 gap-2 px-3 py-3 lg:px-4 border-dark-700'
+        'flex grid items-center grid-cols-3 gap-2 px-3 py-3 lg:px-4 border-dark-700',
+        className
       )}
     >
       <div className="flex items-center gap-3 -ml-1">
         {!hideCurrencyLogo && <CurrencyLogo currency={amount?.currency} size={30} className="rounded-full" />}
-        <Typography className="text-high-emphesis" weight={700}>
+        <Typography className="text-high-emphesis" weight={700} variant={size || 'base'}>
           {amount?.currency.symbol}
         </Typography>
       </div>
       <Typography className="text-right text-high-emphesis" weight={700}>
-        {amount?.toSignificant(6)}
+        {formatNumber(amount?.toSignificant(6))}
       </Typography>
       {!hideUSDC && (
         <Typography className="text-right" variant="sm">
-          ${usdcValue?.toSignificant(6)}
+          {formatNumber(usdcValue?.toSignificant(6), true, false, 6)}
         </Typography>
       )}
     </div>

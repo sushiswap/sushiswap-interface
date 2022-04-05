@@ -7,7 +7,7 @@ import TokenTable from 'app/features/analytics/bentobox/TokenTable'
 import { featureEnabled } from 'app/functions/feature'
 import { formatNumber } from 'app/functions/format'
 import useFuse from 'app/hooks/useFuse'
-import { useBentoBox, useBentoStrategies, useNativePrice, useTokens } from 'app/services/graph'
+import { useBentoBox, useBentoStrategies, useBentoTokens, useNativePrice, useTokens } from 'app/services/graph'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
@@ -18,8 +18,29 @@ export default function BentoBox(): JSX.Element {
 
   const nativePrice = useNativePrice({ chainId })
 
+  // @ts-ignore TYPE NEEDS FIXING
+  const bentoBox = useBentoBox({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
+
+  const bentoBoxTokens = useBentoTokens({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
+
+  const bentoBoxTokenAddresses = useMemo(() => {
+    if (!bentoBoxTokens || !bentoBoxTokens.length) {
+      return []
+    }
+    // @ts-ignore
+    return bentoBoxTokens.map((token) => token.id)
+  }, [bentoBoxTokens])
+
   // Get exchange data
-  const tokens = useTokens({ chainId })
+  const tokens = useTokens({
+    chainId,
+    shouldFetch: bentoBoxTokenAddresses && bentoBoxTokenAddresses.length,
+    variables: {
+      where: {
+        id_in: bentoBoxTokenAddresses,
+      },
+    },
+  })
 
   // Creating map to easily reference TokenId -> Token
   const tokenIdToPrice = useMemo<
@@ -29,17 +50,16 @@ export default function BentoBox(): JSX.Element {
     return new Map(tokens?.map((token) => [token.id, token]))
   }, [tokens])
 
-  // @ts-ignore TYPE NEEDS FIXING
-  const bentoBox = useBentoBox({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
-
   const strategies = useBentoStrategies({ chainId })
 
-  // Combine Bento Box Tokens with Token data from exchange
-  const bentoBoxTokensFormatted = useMemo<Array<any>>(
-    () =>
-      (bentoBox?.tokens || [])
-        // @ts-ignore TYPE NEEDS FIXING
-        ?.map(({ id, totalSupplyElastic, decimals, symbol, name }) => {
+  const formatted = useMemo<Array<any>>(() => {
+    if (!bentoBoxTokens || !bentoBoxTokens.length || !tokens || !tokens.length) {
+      return []
+    }
+    return (
+      bentoBoxTokens
+        // @ts-ignore
+        .map(({ id, totalSupplyElastic, decimals, symbol, name }) => {
           const token = tokenIdToPrice.get(id)
           const supply = totalSupplyElastic / Math.pow(10, decimals)
           const tokenDerivedETH = token?.derivedETH
@@ -61,9 +81,9 @@ export default function BentoBox(): JSX.Element {
             liquidity: tvl,
           }
         })
-        .filter(Boolean),
-    [bentoBox?.tokens, tokenIdToPrice, nativePrice, strategies]
-  )
+        .filter(Boolean)
+    )
+  }, [bentoBoxTokens, tokens, tokenIdToPrice, nativePrice, strategies])
 
   const {
     result: searched,
@@ -74,7 +94,7 @@ export default function BentoBox(): JSX.Element {
       keys: ['token.address', 'token.symbol', 'token.name'],
       threshold: 0.4,
     },
-    data: bentoBoxTokensFormatted,
+    data: formatted,
   })
 
   return (
@@ -94,14 +114,14 @@ export default function BentoBox(): JSX.Element {
           <InfoCard
             text="TVL"
             number={formatNumber(
-              bentoBoxTokensFormatted?.reduce((prev, curr) => prev + curr.liquidity, 0),
+              formatted?.reduce((prev, curr) => prev + curr.liquidity, 0),
               true,
               false
             )}
           />
-          <InfoCard text="Total Users" number={formatNumber(bentoBox?.totalUsers)} />
-          <InfoCard text="Total Tokens" number={bentoBox?.totalTokens} />
-          <InfoCard text="Total Kashi Pairs" number={bentoBox?.totalKashiPairs} />
+          <InfoCard text="Total Users" number={bentoBox?.totalUsers || 0} />
+          <InfoCard text="Total Tokens" number={bentoBox?.totalTokens || 0} />
+          <InfoCard text="Total Kashi Pairs" number={bentoBox?.totalKashiPairs || 0} />
         </div>
       </div>
       <div className="pt-4 lg:px-14">

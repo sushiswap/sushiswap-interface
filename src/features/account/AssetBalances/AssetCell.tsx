@@ -11,7 +11,7 @@ export const AssetCell = (amount: CurrencyAmount<Currency>, balancesLoading?: bo
   if (loading || balancesLoading) {
     return (
       <div className="flex gap-2.5 items-center w-full h-10">
-        <div className="bg-dark-800 rounded-full w-9 h-9 animate-pulse" />
+        <div className="rounded-full bg-dark-800 w-9 h-9 animate-pulse" />
         <div className="flex flex-col gap-1.5">
           <div className="h-4 bg-dark-700 rounded animate-pulse w-[50px]" />
           <div className="h-2 bg-dark-800 rounded animate-pulse w-[50px]" />

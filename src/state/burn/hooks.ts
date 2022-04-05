@@ -30,7 +30,7 @@ export function useDerivedBurnInfo(
   error?: string
   userLiquidity: CurrencyAmount<Token> | undefined
 } {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
 
   const { i18n } = useLingui()
 
@@ -123,14 +123,16 @@ export function useDerivedBurnInfo(
             percentToRemove.multiply(userLiquidity.quotient).quotient
           )
         : undefined,
-    [Field.CURRENCY_A]:
-      tokenA && percentToRemove && percentToRemove.greaterThan('0') && liquidityValueA
-        ? CurrencyAmount.fromRawAmount(tokenA, percentToRemove.multiply(liquidityValueA.quotient).quotient)
-        : undefined,
-    [Field.CURRENCY_B]:
-      tokenB && percentToRemove && percentToRemove.greaterThan('0') && liquidityValueB
-        ? CurrencyAmount.fromRawAmount(tokenB, percentToRemove.multiply(liquidityValueB.quotient).quotient)
-        : undefined,
+    [Field.CURRENCY_A]: tokenA
+      ? percentToRemove && percentToRemove.greaterThan('0') && liquidityValueA
+        ? CurrencyAmount.fromRawAmount(tokenA, percentToRemove.multiply(liquidityValueA.quotient).quotient || '0')
+        : CurrencyAmount.fromRawAmount(tokenA, '0')
+      : undefined,
+    [Field.CURRENCY_B]: tokenB
+      ? percentToRemove && percentToRemove.greaterThan('0') && liquidityValueB
+        ? CurrencyAmount.fromRawAmount(tokenB, percentToRemove.multiply(liquidityValueB.quotient).quotient || '0')
+        : CurrencyAmount.fromRawAmount(tokenB, '0')
+      : undefined,
   }
 
   let error: string | undefined

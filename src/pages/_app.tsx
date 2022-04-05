@@ -8,15 +8,15 @@ import { Web3ReactProvider } from '@web3-react/core'
 import Dots from 'app/components/Dots'
 import Portals from 'app/components/Portals'
 import Web3ReactManager from 'app/components/Web3ReactManager'
-import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploitAlertModal'
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
 import DefaultLayout from 'app/layouts/Default'
-// @ts-ignore TYPE NEEDS FIXING
+import { BlockUpdater } from 'app/lib/hooks/useBlockNumber'
+import { MulticallUpdater } from 'app/lib/state/multicall'
 import store, { persistor } from 'app/state'
 import ApplicationUpdater from 'app/state/application/updater'
 import ListsUpdater from 'app/state/lists/updater'
-import MulticallUpdater from 'app/state/multicall/updater'
+import LogsUpdater from 'app/state/logs/updater'
 import TransactionUpdater from 'app/state/transactions/updater'
 import UserUpdater from 'app/state/user/updater'
 import * as plurals from 'make-plural/plurals'
@@ -141,14 +141,14 @@ function MyApp({ Component, pageProps, fallback, err }) {
                     <ListsUpdater />
                     <UserUpdater />
                     <ApplicationUpdater />
-                    <MulticallUpdater />
                     <TransactionUpdater />
+                    <BlockUpdater />
+                    <MulticallUpdater />
+                    <LogsUpdater />
                   </>
                   <Provider>
                     <Layout>
                       <Guard>
-                        {/* TODO: Added alert Jan 25. Delete component after a few months. */}
-                        <MultichainExploitAlertModal />
                         {/*@ts-ignore TYPE NEEDS FIXING*/}
                         <DefaultSeo {...SEO} />
                         <Component {...pageProps} err={err} />

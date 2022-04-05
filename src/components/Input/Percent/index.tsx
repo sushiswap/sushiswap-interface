@@ -10,7 +10,7 @@ export const Input = React.memo(
     placeholder,
     className,
     align,
-    fontSize = '24px',
+    fontSize,
     ...rest
   }: {
     value: string | number
@@ -43,11 +43,11 @@ export const Input = React.memo(
           // text-specific options
           type="text"
           pattern="^[0-9]*$"
-          placeholder={placeholder || '100'}
+          placeholder={placeholder || '100%'}
           maxLength={3}
           className={classNames(
             align === 'right' && 'text-right',
-            'font-medium bg-transparent whitespace-nowrap overflow-ellipsis flex-auto',
+            'relative font-bold outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis focus:placeholder-primary',
             className
           )}
           style={{ fontSize }}

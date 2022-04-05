@@ -11,10 +11,10 @@ import {
   TradeType,
 } from '@sushiswap/core-sdk'
 import { DAI, USDC } from 'app/config/tokens'
+import { useSingleCallResult } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
 
-import { useSingleCallResult } from '../state/multicall/hooks'
 import { useEIP2612Contract } from './useContract'
 import useIsArgentWallet from './useIsArgentWallet'
 import useTransactionDeadline from './useTransactionDeadline'

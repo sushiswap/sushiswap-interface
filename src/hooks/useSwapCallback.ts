@@ -37,9 +37,9 @@ import { shortenAddress } from 'app/functions/format'
 import { calculateGasMargin } from 'app/functions/trade'
 import { isAddress, isZero } from 'app/functions/validate'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
+import useBlockNumber from 'app/lib/hooks/useBlockNumber'
 import { useActiveWeb3React } from 'app/services/web3'
 import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
-import { useBlockNumber } from 'app/state/application/hooks'
 import { TransactionResponseLight, useTransactionAdder } from 'app/state/transactions/hooks'
 import { useMemo } from 'react'
 
@@ -248,8 +248,7 @@ function getComplexPathParams(
       initialPaths.push(initialPath)
     } else {
       const percentagePath: PercentagePath = {
-        tokenIn:
-          inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[legIndex].tokenFrom.address,
+        tokenIn: multiRoute.legs[legIndex].tokenFrom.address,
         pool: multiRoute.legs[legIndex].poolAddress,
         balancePercentage: getBigNumber(multiRoute.legs[legIndex].swapPortion * 10 ** 8),
         data: defaultAbiCoder.encode(

@@ -20,14 +20,14 @@ export const addTransaction = createAction<{
   claim?: { recipient: string }
   summary?: string
 }>('transactions/addTransaction')
-export const clearAllTransactions = createAction<{ chainId: ChainId }>('transactions/clearAllTransactions')
+export const clearAllTransactions = createAction<{ chainId: number }>('transactions/clearAllTransactions')
 export const finalizeTransaction = createAction<{
-  chainId: ChainId
+  chainId: number
   hash: string
   receipt: SerializableTransactionReceipt
 }>('transactions/finalizeTransaction')
 export const checkedTransaction = createAction<{
-  chainId: ChainId
+  chainId: number
   hash: string
   blockNumber: number
 }>('transactions/checkedTransaction')

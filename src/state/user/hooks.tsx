@@ -4,7 +4,6 @@ import { AddressZero } from '@ethersproject/constants'
 import { keccak256 } from '@ethersproject/solidity'
 import {
   BENTOBOX_ADDRESS,
-  ChainId,
   CHAINLINK_ORACLE_ADDRESS,
   computePairAddress,
   Currency,
@@ -20,7 +19,6 @@ import { useAllTokens } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
 import { AppState } from 'app/state'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
-import flatMap from 'lodash/flatMap'
 import { useCallback, useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useSelector } from 'react-redux'
@@ -312,13 +310,12 @@ export function useTrackedTokenPairs(): [Token, Token][] {
   const tokens = useAllTokens()
 
   // pinned pairs
-  const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId as ChainId] ?? [] : []), [chainId])
-
+  const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId] ?? [] : []), [chainId])
   // pairs for every token against every base
   const generatedPairs: [Token, Token][] = useMemo(
     () =>
       chainId
-        ? flatMap(Object.keys(tokens), (tokenAddress) => {
+        ? Object.keys(tokens).flatMap((tokenAddress) => {
             const token = tokens[tokenAddress]
             // for each token on the current chain,
             return (

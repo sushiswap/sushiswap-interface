@@ -1,4 +1,3 @@
-import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import {
   BAR_ADDRESS,
@@ -45,6 +44,7 @@ import { ERC20_BYTES32_ABI } from 'app/constants/abis/erc20'
 import ERC20_ABI from 'app/constants/abis/erc20.json'
 import FACTORY_ABI from 'app/constants/abis/factory.json'
 import INARI_ABI from 'app/constants/abis/inari.json'
+import MULTICALL_ABI from 'app/constants/abis/interface-multicall.json'
 import KASHI_REPOSITORY_ABI from 'app/constants/abis/kashi-repository.json'
 import LIMIT_ORDER_ABI from 'app/constants/abis/limit-order.json'
 import LIMIT_ORDER_HELPER_ABI from 'app/constants/abis/limit-order-helper.json'
@@ -76,17 +76,26 @@ export function useEIP2612Contract(tokenAddress?: string): Contract | null {
 }
 
 // returns null on errors
-export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
-  const { library, account } = useActiveWeb3React()
+export function useContract<T extends Contract = Contract>(
+  addressOrAddressMap: string | { [chainId: number]: string } | undefined,
+  ABI: any,
+  withSignerIfPossible = true
+): T | null {
+  const { library, account, chainId } = useActiveWeb3React()
+
   return useMemo(() => {
-    if (!address || address === AddressZero || !ABI || !library) return null
+    if (!addressOrAddressMap || !ABI || !library || !chainId) return null
+    let address: string | undefined
+    if (typeof addressOrAddressMap === 'string') address = addressOrAddressMap
+    else address = addressOrAddressMap[chainId]
+    if (!address) return null
     try {
       return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
     } catch (error) {
       console.error('Failed to get contract', error)
       return null
     }
-  }, [address, ABI, library, withSignerIfPossible, account])
+  }, [addressOrAddressMap, ABI, library, chainId, withSignerIfPossible, account]) as T
 }
 
 export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
@@ -156,6 +165,34 @@ export function useBoringHelperContract(): Contract | null {
 export function useMulticall2Contract() {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId ? MULTICALL2_ADDRESS[chainId] : undefined, MULTICALL2_ABI, false)
+}
+
+const MULTICALL_ADDRESS = {
+  [ChainId.ETHEREUM]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.ROPSTEN]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.RINKEBY]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.GÖRLI]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.KOVAN]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.MATIC]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  // [ChainId.OPTIMISM]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.ARBITRUM]: '0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB',
+  [ChainId.MOONBEAM]: '0x34c471ddceb20018bbb73f6d13709936fc870acc',
+  [ChainId.AVALANCHE]: '0x8C0F842791F03C095b6c633759224FcC9ACe68ea',
+  [ChainId.BSC]: '0x47A307e3167820daf22a377D777371753758f59c',
+  [ChainId.FANTOM]: '0xB1395e098c0a847CC719Bcf1Fc8114421a9F8232',
+  [ChainId.CELO]: '0x3d0B3b816DC1e0825808F27510eF7Aa5E3136D75',
+  [ChainId.HARMONY]: '0xaAB49386BFcB605F853763Ea382B91C9c83b9Ac5',
+  [ChainId.MOONRIVER]: '0x8C8BF5Dea280A1eC68219D66E8A21E60585830F5',
+  [ChainId.XDAI]: '0x2B75358D07417D4e895c952Ca84A44E63AEBE3Dd',
+  [ChainId.TELOS]: '0x64e1E895866B3126f8f2E2912B475FDB35b2F315',
+  [ChainId.FUSE]: '0x393B6DC9B00E18314888678721eC0e923FC5f49D',
+  [ChainId.OKEX]: '0x8C8BF5Dea280A1eC68219D66E8A21E60585830F5',
+  [ChainId.HECO]: '0x64e1E895866B3126f8f2E2912B475FDB35b2F315',
+  [ChainId.PALM]: '0x4d4A0D45a98AE8EC25b359D93A088A87BC9eF70b',
+}
+
+export function useInterfaceMulticall() {
+  return useContract(MULTICALL_ADDRESS, MULTICALL_ABI, false)
 }
 
 export function useSushiContract(withSignerIfPossible = true): Contract | null {
@@ -233,8 +270,7 @@ export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | n
 
 export function useLimitOrderContract(withSignerIfPossibe?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  // @ts-ignore TYPE NEEDS FIXING
-  return useContract(STOP_LIMIT_ORDER_ADDRESS[chainId], LIMIT_ORDER_ABI, withSignerIfPossibe)
+  return useContract(chainId ? STOP_LIMIT_ORDER_ADDRESS[chainId] : undefined, LIMIT_ORDER_ABI, withSignerIfPossibe)
 }
 
 export function useLimitOrderHelperContract(withSignerIfPossible?: boolean): Contract | null {
@@ -353,153 +389,7 @@ export function useDashboardContract(): Contract | null {
 }
 
 export function useQuickSwapFactoryContract(): Contract | null {
-  return useContract(
-    '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
-    [
-      {
-        type: 'constructor',
-        stateMutability: 'nonpayable',
-        payable: false,
-        inputs: [
-          {
-            type: 'address',
-            name: '_feeToSetter',
-            internalType: 'address',
-          },
-        ],
-      },
-      {
-        type: 'event',
-        name: 'PairCreated',
-        inputs: [
-          {
-            type: 'address',
-            name: 'token0',
-            internalType: 'address',
-            indexed: true,
-          },
-          {
-            type: 'address',
-            name: 'token1',
-            internalType: 'address',
-            indexed: true,
-          },
-          {
-            type: 'address',
-            name: 'pair',
-            internalType: 'address',
-            indexed: false,
-          },
-          {
-            type: 'uint256',
-            name: '',
-            internalType: 'uint256',
-            indexed: false,
-          },
-        ],
-        anonymous: false,
-      },
-      {
-        type: 'function',
-        stateMutability: 'view',
-        payable: false,
-        outputs: [{ type: 'address', name: '', internalType: 'address' }],
-        name: 'allPairs',
-        inputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
-        constant: true,
-      },
-      {
-        type: 'function',
-        stateMutability: 'view',
-        payable: false,
-        outputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
-        name: 'allPairsLength',
-        inputs: [],
-        constant: true,
-      },
-      {
-        type: 'function',
-        stateMutability: 'nonpayable',
-        payable: false,
-        outputs: [{ type: 'address', name: 'pair', internalType: 'address' }],
-        name: 'createPair',
-        inputs: [
-          {
-            type: 'address',
-            name: 'tokenA',
-            internalType: 'address',
-          },
-          {
-            type: 'address',
-            name: 'tokenB',
-            internalType: 'address',
-          },
-        ],
-        constant: false,
-      },
-      {
-        type: 'function',
-        stateMutability: 'view',
-        payable: false,
-        outputs: [{ type: 'address', name: '', internalType: 'address' }],
-        name: 'feeTo',
-        inputs: [],
-        constant: true,
-      },
-      {
-        type: 'function',
-        stateMutability: 'view',
-        payable: false,
-        outputs: [{ type: 'address', name: '', internalType: 'address' }],
-        name: 'feeToSetter',
-        inputs: [],
-        constant: true,
-      },
-      {
-        type: 'function',
-        stateMutability: 'view',
-        payable: false,
-        outputs: [{ type: 'address', name: '', internalType: 'address' }],
-        name: 'getPair',
-        inputs: [
-          { type: 'address', name: '', internalType: 'address' },
-          { type: 'address', name: '', internalType: 'address' },
-        ],
-        constant: true,
-      },
-      {
-        type: 'function',
-        stateMutability: 'nonpayable',
-        payable: false,
-        outputs: [],
-        name: 'setFeeTo',
-        inputs: [
-          {
-            type: 'address',
-            name: '_feeTo',
-            internalType: 'address',
-          },
-        ],
-        constant: false,
-      },
-      {
-        type: 'function',
-        stateMutability: 'nonpayable',
-        payable: false,
-        outputs: [],
-        name: 'setFeeToSetter',
-        inputs: [
-          {
-            type: 'address',
-            name: '_feeToSetter',
-            internalType: 'address',
-          },
-        ],
-        constant: false,
-      },
-    ],
-    false
-  )
+  return useContract('0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32', FACTORY_ABI, false)
 }
 
 export function useOldFarmsContract(withSignerIfPossibe?: boolean): Contract | null {

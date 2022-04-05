@@ -21,8 +21,8 @@ import StrategySelector from 'app/features/inari/StrategySelector'
 import StrategyStepDisplay from 'app/features/inari/StrategyStepDisplay'
 import { formatNumber } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
-import { ApplicationModal } from 'app/state/application/actions'
 import { useModalOpen, useToggleSelfClaimModal } from 'app/state/application/hooks'
+import { ApplicationModal } from 'app/state/application/reducer'
 import {
   useClaimCallback as useProtocolClaimCallback,
   useUserUnclaimedAmount as useUserUnclaimedProtocolAmount,

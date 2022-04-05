@@ -11,7 +11,8 @@ import { KashiMarketBorrowButtonProps } from 'app/features/kashi/KashiMarket/Kas
 import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import React, { FC, useCallback, useState } from 'react'
 
-interface KashiMarketBorrowReviewModal extends KashiMarketBorrowButtonProps {
+interface KashiMarketBorrowReviewModal
+  extends Omit<KashiMarketBorrowButtonProps, 'nextMaxBorrowMinimum' | 'nextMaxBorrowSafe' | 'nextMaxBorrowPossible'> {
   open: boolean
   onDismiss(): void
   permit?: Signature
@@ -76,7 +77,7 @@ export const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
               <div className="inline-flex gap-2">
                 <CurrencyLogo currency={market.collateral.token} size={20} />
                 <Typography weight={700} component="span" className="text-high-emphesis">
-                  {collateralAmount?.toSignificant(6)}{' '}
+                  {collateralAmount?.toSignificant(6) || 0}{' '}
                   <Typography weight={700} className="text-low-emphesis" component="span">
                     {collateralAmount?.currency.symbol}
                   </Typography>
@@ -90,7 +91,7 @@ export const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
               <div className="inline-flex gap-2">
                 <CurrencyLogo currency={market.asset.token} size={20} />
                 <Typography weight={700} component="span" className="text-high-emphesis">
-                  {borrowAmount?.toSignificant(6)}{' '}
+                  {borrowAmount?.toSignificant(6) || 0}{' '}
                   <Typography weight={700} className="text-low-emphesis" component="span">
                     {borrowAmount?.currency.symbol}
                   </Typography>

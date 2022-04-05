@@ -70,8 +70,8 @@ export const poolDaySnapshotsQuery = gql`
 `
 
 export const getTransactionsForPoolQuery = gql`
-  query poolTransactionsQuery($poolAddress: String!) {
-    mints: mints(where: { pool: $poolAddress }) {
+  query poolTransactionsQuery($first: Int = 1000, $skip: Int = 0, $poolAddress: String!) {
+    mints: mints(first: $first, skip: $skip, where: { pool: $poolAddress }) {
       id
       token0 {
         symbol
@@ -96,7 +96,7 @@ export const getTransactionsForPoolQuery = gql`
       origin
       logIndex
     }
-    burns: burns(where: { pool: $poolAddress }) {
+    burns: burns(first: $first, skip: $skip, where: { pool: $poolAddress }) {
       id
       token0 {
         symbol
@@ -121,7 +121,7 @@ export const getTransactionsForPoolQuery = gql`
       origin
       logIndex
     }
-    swaps: swaps(where: { pool: $poolAddress }) {
+    swaps: swaps(first: $first, skip: $skip, where: { pool: $poolAddress }) {
       amountIn
       amountOut
       transaction {

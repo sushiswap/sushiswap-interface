@@ -1,6 +1,6 @@
 import { XIcon } from '@heroicons/react/outline'
-import { PopupContent } from 'app/state/application/actions'
 import { useRemovePopup } from 'app/state/application/hooks'
+import { PopupContent } from 'app/state/application/reducer'
 import { useCallback, useEffect } from 'react'
 
 import TransactionPopup from './TransactionPopup'

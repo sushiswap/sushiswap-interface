@@ -2,7 +2,7 @@ import { Currency, CurrencyAmount, JSBI, Percent, TradeType, ZERO } from '@sushi
 import { Trade as LegacyTrade } from '@sushiswap/core-sdk/dist/entities/Trade'
 import { LTV, PADDING } from 'app/features/kashi/constants'
 import KashiMediumRiskLendingPair from 'app/features/kashi/KashiMediumRiskLendingPair'
-import { computeRealizedLPFeePercent, e10 } from 'app/functions'
+import { computeRealizedLPFeePercent } from 'app/functions'
 import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import { useAppSelector } from 'app/state/hooks'
 import { selectSlippage } from 'app/state/slippage/slippageSlice'
@@ -42,6 +42,7 @@ export const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrow
 
   const userCollateralAmount = CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount)
 
+  
   // Calculate total collateral amount
   let userTotalCollateral = userCollateralAmount.add(collateralAmount)
   if (swapCollateralAmount) {
@@ -49,13 +50,14 @@ export const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrow
   }
 
   const borrowableOracleAmount = JSBI.greaterThan(market.oracleExchangeRate, JSBI.BigInt(0))
-    ? userTotalCollateral.multiply(LTV).multiply(e10(18).toString()).divide(JSBI.BigInt(market.oracleExchangeRate))
+    ? userTotalCollateral.multiply(LTV).multiply(JSBI.BigInt(1e18)).divide(JSBI.BigInt(market.oracleExchangeRate))
         .asFraction
     : CurrencyAmount.fromRawAmount(userTotalCollateral.currency, '0')
   const borrowableSpotAmount = JSBI.greaterThan(market.spotExchangeRate, JSBI.BigInt(0))
-    ? userTotalCollateral.multiply(LTV).multiply(e10(18).toString()).divide(JSBI.BigInt(market.spotExchangeRate))
+    ? userTotalCollateral.multiply(LTV).multiply(JSBI.BigInt(1e18)).divide(JSBI.BigInt(market.spotExchangeRate))
         .asFraction
     : CurrencyAmount.fromRawAmount(userTotalCollateral.currency, '0')
+
   const borrowableMinimum = borrowableOracleAmount.lessThan(borrowableSpotAmount)
     ? borrowableOracleAmount
     : borrowableSpotAmount
