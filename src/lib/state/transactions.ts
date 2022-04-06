@@ -53,7 +53,7 @@ export interface Transaction<T extends TransactionInfo = TransactionInfo> {
   lastCheckedBlockNumber?: number
   receipt?: TransactionReceipt
   info: T
-  privateTx: PrivateTxStatus
+  privateTx?: PrivateTxStatus
 }
 
 export const transactionsAtom = atomWithImmer<{
