@@ -191,7 +191,7 @@ const MULTICALL_ADDRESS = {
   [ChainId.PALM]: '0x4d4A0D45a98AE8EC25b359D93A088A87BC9eF70b',
 }
 
-export function useInterfaceMulticall() {
+export function useInterfaceMulticall(): Contract | null | undefined {
   return useContract(MULTICALL_ADDRESS, MULTICALL_ABI, false)
 }
 

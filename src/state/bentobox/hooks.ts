@@ -1,6 +1,4 @@
-import { Web3Provider } from '@ethersproject/providers'
 import { CurrencyAmount, JSBI, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
-import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { isAddress, toAmountCurrencyAmount } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useBentoBoxContract } from 'app/hooks/useContract'
@@ -42,7 +40,7 @@ export const useBentoBalancesV2 = (tokenAddresses?: string[]): { data: CurrencyA
 }
 
 export const useBentoBalancesV2ForAccount = (
-  account: Web3ReactContextInterface<Web3Provider>['account'],
+  account?: null | string,
   tokenAddresses?: string[]
 ): { data: CurrencyAmount<Token>[]; loading: boolean } => {
   const { chainId } = useActiveWeb3React()

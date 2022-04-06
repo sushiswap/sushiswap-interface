@@ -4,8 +4,6 @@ import '../styles/index.css'
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
 import { remoteLoader } from '@lingui/remote-loader'
-import { Web3ReactProvider } from '@web3-react/core'
-import Dots from 'app/components/Dots'
 import Web3ReactManager from 'app/components/Web3ReactManager'
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
@@ -27,12 +25,11 @@ import { DefaultSeo } from 'next-seo'
 import React, { Fragment, useEffect } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+import { Web3ReactProvider } from 'web3-react-core'
 
 import SEO from '../config/seo'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
-
-// const PersistGate = dynamic(() => import('redux-persist/integration/react'), { ssr: false })
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
@@ -135,7 +132,7 @@ function MyApp({ Component, pageProps, fallback, err }) {
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
               <ReduxProvider store={store}>
-                <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
+                <PersistGate persistor={persistor}>
                   <>
                     <ListsUpdater />
                     <UserUpdater />

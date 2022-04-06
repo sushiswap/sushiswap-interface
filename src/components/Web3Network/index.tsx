@@ -1,16 +1,76 @@
 import { NETWORK_ICON } from 'app/config/networks'
+import { switchToNetwork } from 'app/functions/network'
+import usePrevious from 'app/hooks/usePrevious'
 import NetworkModel from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useNetworkModalToggle } from 'app/state/application/hooks'
 import Image from 'next/image'
-import React from 'react'
+import { useRouter } from 'next/router'
+import React, { useCallback, useEffect, useState } from 'react'
 
 function Web3Network(): JSX.Element | null {
-  const { chainId } = useActiveWeb3React()
+  const { chainId, library } = useActiveWeb3React()
 
   const toggleNetworkModal = useNetworkModalToggle()
 
-  if (!chainId) return null
+  const [switchedFromUrl, setSwitchedFromUrl] = useState(false)
+
+  const router = useRouter()
+
+  const prevChainId = usePrevious(chainId)
+
+  const queryChainId = Number(router.query.chainId)
+
+  const handleChainSwitch = useCallback(
+    (targetChain: number) => {
+      if (!library?.provider) return
+      setSwitchedFromUrl(true)
+      switchToNetwork({ provider: library.provider, chainId: targetChain })
+        .then(() => {
+          return router.replace({ query: { ...router.query, chainId: targetChain } })
+        })
+        .then(() => {
+          // setSwitching(false)
+        })
+        .catch(() => {
+          if (chainId) {
+            router.replace({ query: { ...router.query, chainId } })
+          }
+        })
+        .finally(() => {
+          //
+        })
+    },
+    [library?.provider, router, chainId]
+  )
+
+  useEffect(() => {
+    if (!chainId || !prevChainId) return
+
+    // when network change originates from wallet or dropdown selector, just update URL
+    if (chainId !== prevChainId) {
+      console.debug('network change from wallet or network modal')
+      router.replace({ query: { ...router.query, chainId } })
+    }
+  }, [chainId, prevChainId, router])
+
+  useEffect(() => {
+    // assume network change originates from URL
+    if (chainId && queryChainId && !switchedFromUrl && chainId !== queryChainId) {
+      console.debug('network change from query chainId', { queryChainId, chainId })
+      handleChainSwitch(queryChainId)
+    }
+  }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId])
+
+  // set chainId on initial load if not present
+  useEffect(() => {
+    if (chainId && !queryChainId) {
+      console.debug('Setting chain id on initial load because not present')
+      router.replace({ query: { ...router.query, chainId } })
+    }
+  }, [chainId, queryChainId, router])
+
+  if (!chainId || !library) return null
 
   return (
     <div
