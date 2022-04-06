@@ -4,7 +4,6 @@ import '../styles/index.css'
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
 import { remoteLoader } from '@lingui/remote-loader'
-import Dots from 'app/components/Dots'
 import Portals from 'app/components/Portals'
 import Web3ReactManager from 'app/components/Web3ReactManager'
 import getLibrary from 'app/functions/getLibrary'
@@ -134,7 +133,7 @@ function MyApp({ Component, pageProps, fallback, err }) {
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
               <ReduxProvider store={store}>
-                <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
+                <PersistGate persistor={persistor}>
                   <>
                     <ListsUpdater />
                     <UserUpdater />
