@@ -50,7 +50,7 @@ export default function Popover({ content, children, placement = 'auto', show, m
             ReactDOM.createPortal(
               <HeadlessuiPopover.Panel
                 static
-                className="z-1000 shadow-xl shadow-dark-1000/80 rounded overflow-hidden"
+                className="overflow-hidden rounded shadow-xl z-1000 shadow-dark-1000/80"
                 ref={setPopperElement as any}
                 style={styles.popper}
                 {...attributes.popper}
@@ -63,7 +63,7 @@ export default function Popover({ content, children, placement = 'auto', show, m
                   {...attributes.arrow}
                 />
               </HeadlessuiPopover.Panel>,
-              document.querySelector('#popover-portal')
+              document.querySelector('#popover-portal') as Element
             )}
         </>
       )}
