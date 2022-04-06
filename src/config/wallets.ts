@@ -38,6 +38,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#010101',
     primary: true,
   },
+  BITKEEP: {
+    connector: injected,
+    name: 'Bitkeep',
+    iconName: 'bitkeep.png',
+    description: 'Easy-to-use browser extension.',
+    href: null,
+    color: '#E8831D',
+    mobile: true
+  },
   METAMASK: {
     connector: injected,
     name: 'MetaMask',
