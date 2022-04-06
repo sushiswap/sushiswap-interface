@@ -29,12 +29,9 @@ import { Provider as ReduxProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Web3ReactProvider } from 'web3-react-core'
 
-const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
-// import Web3ProviderNetwork from '../components/Web3ProviderNetwork'
-
 import SEO from '../config/seo'
 
-// const PersistGate = dynamic(() => import('redux-persist/integration/react'), { ssr: false })
+const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
@@ -132,37 +129,37 @@ function MyApp({ Component, pageProps, fallback, err }) {
           `,
         }}
       />
-      <ReduxProvider store={store}>
-        <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
-          <Web3ReactProvider getLibrary={getLibrary}>
-            <Web3ProviderNetwork getLibrary={getLibrary}>
-              <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
-                <>
-                  <ListsUpdater />
-                  <UserUpdater />
-                  <ApplicationUpdater />
-                  <TransactionUpdater />
-                  <BlockUpdater />
-                  <MulticallUpdater />
-                  <LogsUpdater />
-                </>
-                <Provider>
-                  <Layout>
-                    <Guard>
-                      {/*@ts-ignore TYPE NEEDS FIXING*/}
-                      <DefaultSeo {...SEO} />
-                      <Web3ReactManager>
+      <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <Web3ProviderNetwork getLibrary={getLibrary}>
+            <Web3ReactManager>
+              <ReduxProvider store={store}>
+                <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
+                  <>
+                    <ListsUpdater />
+                    <UserUpdater />
+                    <ApplicationUpdater />
+                    <TransactionUpdater />
+                    <BlockUpdater />
+                    <MulticallUpdater />
+                    <LogsUpdater />
+                  </>
+                  <Provider>
+                    <Layout>
+                      <Guard>
+                        {/*@ts-ignore TYPE NEEDS FIXING*/}
+                        <DefaultSeo {...SEO} />
                         <Component {...pageProps} err={err} />
-                      </Web3ReactManager>
-                    </Guard>
-                    <Portals />
-                  </Layout>
-                </Provider>
-              </PersistGate>
-            </Web3ProviderNetwork>
-          </Web3ReactProvider>
-        </I18nProvider>
-      </ReduxProvider>
+                      </Guard>
+                      <Portals />
+                    </Layout>
+                  </Provider>
+                </PersistGate>
+              </ReduxProvider>
+            </Web3ReactManager>
+          </Web3ProviderNetwork>
+        </Web3ReactProvider>
+      </I18nProvider>
     </>
   )
 }

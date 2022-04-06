@@ -16,8 +16,6 @@ export const network = new NetworkConnector({
   urls: RPC,
 })
 
-// export const gnosisSafe = new SafeAppConnector()
-
 export const injected = new InjectedConnector({
   supportedChainIds,
 })

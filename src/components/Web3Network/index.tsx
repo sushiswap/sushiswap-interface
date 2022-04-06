@@ -18,7 +18,7 @@ function Web3Network(): JSX.Element | null {
 
   const prevChainId = usePrevious(chainId)
 
-  const urlChainId = router.query.chainId
+  const urlChainId = Number(router.query.chainId)
 
   const handleChainSwitch = useCallback(
     (targetChain: number) => {
@@ -53,9 +53,9 @@ function Web3Network(): JSX.Element | null {
       console.debug('after network change from wallet or network modal', { urlChainId: router.query.chainId, chainId })
 
       // otherwise assume network change originates from URL
-    } else if (!switching && urlChainId && Number(urlChainId) !== chainId) {
+    } else if (!switching && urlChainId && urlChainId !== chainId) {
       console.debug('network change from URL', { urlChainId, chainId })
-      handleChainSwitch(Number(urlChainId))
+      handleChainSwitch(urlChainId)
     }
   }, [chainId, urlChainId, prevChainId, router, handleChainSwitch, switching])
 
@@ -67,70 +67,7 @@ function Web3Network(): JSX.Element | null {
     }
   }, [chainId, urlChainId, router])
 
-  if (!chainId) return null
-
-  // const prevChainId = usePrevious(chainId)
-
-  // const urlChainId = useMemo(
-  //   () => (router.query.chainId ? Number(router.query.chainId) : undefined),
-  //   [router.query.chainId]
-  // )
-
-  // const handleChainSwitch = useCallback(
-  //   (targetChain: number) => {
-  //     if (!library?.provider) return
-  //     switchToNetwork({ provider: library.provider, chainId: targetChain })
-  //       .then(() => {
-  //         router.replace({ query: { ...router.query, chainId: targetChain } }, undefined, { shallow: true })
-  //       })
-  //       .catch(() => {
-  //         if (chainId) {
-  //           router.replace({ query: { ...router.query, chainId } }, undefined, { shallow: true })
-  //         }
-  //       })
-  //   },
-  //   [library?.provider, router, chainId]
-  // )
-
-  // useEffect(() => {
-  //   if (!chainId || !prevChainId || !urlChainId) return
-
-  //   // when network change originates from wallet or dropdown selector, just update URL
-  //   if (chainId !== prevChainId) {
-  //     console.log('network change from wallet or network modal', { urlChainId, chainId })
-
-  //     router.replace({ query: { ...router.query, chainId } }, undefined, { shallow: true })
-
-  //     // console.debug('after network change from wallet or network modal', { urlChainId: router.query.chainId, chainId })
-
-  //     // otherwise assume network change originates from URL
-  //   } else if (urlChainId && chainId && urlChainId !== chainId) {
-  //     console.log('network change from URL', { urlChainId, chainId })
-  //     // handleChainSwitch(urlChainId)
-  //     if (!library?.provider) return
-  //     switchToNetwork({ provider: library.provider, chainId: urlChainId })
-  //       .then(() => {
-  //         router.replace({ query: { ...router.query, chainId: urlChainId } }, undefined, { shallow: true })
-  //       })
-  //       .catch(() => {
-  //         if (chainId) {
-  //           router.replace({ query: { ...router.query, chainId } }, undefined, { shallow: true })
-  //         }
-  //       })
-  //   }
-  // }, [chainId, urlChainId, prevChainId, router, library])
-
-  // // set chainId on initial load if not present
-  // useEffect(() => {
-  //   if (chainId && !urlChainId) {
-  //     console.log('Setting chain id on initial load because not present')
-  //     router.replace({ query: { ...router.query, chainId } }, undefined, { shallow: true })
-  //   }
-  // }, [chainId, urlChainId, router])
-
   if (!chainId || !library) return null
-
-  console.log('BEFORE RENDER', { prevChainId, chainId, urlChainId })
 
   return (
     <div
@@ -145,7 +82,5 @@ function Web3Network(): JSX.Element | null {
     </div>
   )
 }
-
-Web3Network.whyDidYouRender = true
 
 export default Web3Network

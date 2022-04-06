@@ -10,14 +10,6 @@ const NETWORK_POLLING_INTERVALS: { [chainId: number]: number } = {
 }
 
 export default function getLibrary(provider: any): Web3Provider {
-  console.log(
-    'get library',
-    typeof provider.chainId === 'number'
-      ? provider.chainId
-      : typeof provider.chainId === 'string'
-      ? parseInt(provider.chainId)
-      : 'any'
-  )
   const library = new Web3Provider(
     provider,
     typeof provider.chainId === 'number'
