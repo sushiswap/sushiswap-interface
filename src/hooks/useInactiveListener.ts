@@ -1,5 +1,6 @@
-import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
+import type { EthereumProvider } from 'lib/ethereum'
 import { useEffect } from 'react'
+import { useWeb3React } from 'web3-react-core'
 
 import { injected } from '../config/wallets'
 
@@ -7,11 +8,11 @@ import { injected } from '../config/wallets'
  * Use for network and injected - logs user in
  * and out after checking what network theyre on
  */
-function useInactiveListener(suppress = false) {
-  const { active, error, activate } = useWeb3ReactCore() // specifically using useWeb3React because of what this hook does
+export function useInactiveListener(suppress = false) {
+  const { active, error, activate } = useWeb3React()
 
   useEffect(() => {
-    const { ethereum } = window
+    const ethereum = window.ethereum as EthereumProvider | undefined
 
     if (ethereum && ethereum.on && !active && !error && !suppress) {
       const handleChainChanged = () => {
@@ -43,5 +44,4 @@ function useInactiveListener(suppress = false) {
     return undefined
   }, [active, error, suppress, activate])
 }
-
 export default useInactiveListener

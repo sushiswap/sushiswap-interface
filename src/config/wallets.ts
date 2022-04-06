@@ -1,7 +1,11 @@
+// import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react'
 import { ChainId } from '@sushiswap/core-sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import { InjectedConnector } from '@web3-react/injected-connector'
+// import { PortisConnector } from 'web3-react-portis-connector'
+// import { WalletConnectConnector } from 'web3-react-walletconnect-connector'
+// import { WalletLinkConnector } from 'web3-react-walletlink-connector'
 import { NetworkConnector } from 'app/entities/connectors'
+import { InjectedConnector } from 'web3-react-injected-connector'
 
 import RPC from './rpc'
 
@@ -11,6 +15,8 @@ export const network = new NetworkConnector({
   defaultChainId: 1,
   urls: RPC,
 })
+
+// export const gnosisSafe = new SafeAppConnector()
 
 export const injected = new InjectedConnector({
   supportedChainIds,
@@ -57,7 +63,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   },
   WALLET_CONNECT: {
     connector: async () => {
-      const WalletConnectConnector = (await import('@web3-react/walletconnect-connector')).WalletConnectConnector
+      const WalletConnectConnector = (await import('web3-react-walletconnect-connector')).WalletConnectConnector
       return new WalletConnectConnector({
         rpc: RPC,
         bridge: 'https://bridge.walletconnect.org',
@@ -72,40 +78,40 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#4196FC',
     mobile: true,
   },
-  KEYSTONE: {
-    connector: async () => {
-      const KeystoneConnector = (await import('@keystonehq/keystone-connector')).KeystoneConnector
-      return new KeystoneConnector({
-        chainId: 1,
-        url: RPC[ChainId.ETHEREUM],
-      })
-    },
-    name: 'Keystone',
-    iconName: 'keystone.png',
-    description: 'Connect to Keystone hardware wallet.',
-    href: null,
-    color: '#4196FC',
-    mobile: true,
-  },
-  LATTICE: {
-    connector: async () => {
-      const LatticeConnector = (await import('@web3-react/lattice-connector')).LatticeConnector
-      return new LatticeConnector({
-        chainId: 1,
-        url: RPC[ChainId.ETHEREUM],
-        appName: 'SushiSwap',
-      })
-    },
-    name: 'Lattice',
-    iconName: 'lattice.png',
-    description: 'Connect to GridPlus Wallet.',
-    href: null,
-    color: '#40a9ff',
-    mobile: true,
-  },
+  // KEYSTONE: {
+  //   connector: async () => {
+  //     const KeystoneConnector = (await import('@keystonehq/keystone-connector')).KeystoneConnector
+  //     return new KeystoneConnector({
+  //       chainId: 1,
+  //       url: RPC[ChainId.ETHEREUM],
+  //     })
+  //   },
+  //   name: 'Keystone',
+  //   iconName: 'keystone.png',
+  //   description: 'Connect to Keystone hardware wallet.',
+  //   href: null,
+  //   color: '#4196FC',
+  //   mobile: true,
+  // },
+  // LATTICE: {
+  //   connector: async () => {
+  //     const LatticeConnector = (await import('@web3-react/lattice-connector')).LatticeConnector
+  //     return new LatticeConnector({
+  //       chainId: 1,
+  //       url: RPC[ChainId.ETHEREUM],
+  //       appName: 'SushiSwap',
+  //     })
+  //   },
+  //   name: 'Lattice',
+  //   iconName: 'lattice.png',
+  //   description: 'Connect to GridPlus Wallet.',
+  //   href: null,
+  //   color: '#40a9ff',
+  //   mobile: true,
+  // },
   WALLET_LINK: {
     connector: async () => {
-      const WalletLinkConnector = (await import('@web3-react/walletlink-connector')).WalletLinkConnector
+      const WalletLinkConnector = (await import('web3-react-walletlink-connector')).WalletLinkConnector
       return new WalletLinkConnector({
         url: RPC[ChainId.ETHEREUM],
         appName: 'SushiSwap',
@@ -130,7 +136,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   },
   FORTMATIC: {
     connector: async () => {
-      const FortmaticConnector = (await import('@web3-react/fortmatic-connector')).FortmaticConnector
+      const FortmaticConnector = (await import('web3-react-fortmatic-connector')).FortmaticConnector
       return new FortmaticConnector({
         apiKey: process.env.NEXT_PUBLIC_FORTMATIC_API_KEY ?? '',
         chainId: 1,
@@ -145,7 +151,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   },
   Portis: {
     connector: async () => {
-      const PortisConnector = (await import('@web3-react/portis-connector')).PortisConnector
+      const PortisConnector = (await import('web3-react-portis-connector')).PortisConnector
       return new PortisConnector({
         dAppId: process.env.NEXT_PUBLIC_PORTIS_ID ?? '',
         networks: [1],
@@ -158,20 +164,20 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#4A6C9B',
     mobile: true,
   },
-  Torus: {
-    connector: async () => {
-      const TorusConnector = (await import('@web3-react/torus-connector')).TorusConnector
-      return new TorusConnector({
-        chainId: 1,
-      })
-    },
-    name: 'Torus',
-    iconName: 'torus.png',
-    description: 'Login using Torus hosted wallet',
-    href: null,
-    color: '#315CF5',
-    mobile: true,
-  },
+  // Torus: {
+  //   connector: async () => {
+  //     const TorusConnector = (await import('web3-react/torus-connector')).TorusConnector
+  //     return new TorusConnector({
+  //       chainId: 1,
+  //     })
+  //   },
+  //   name: 'Torus',
+  //   iconName: 'torus.png',
+  //   description: 'Login using Torus hosted wallet',
+  //   href: null,
+  //   color: '#315CF5',
+  //   mobile: true,
+  // },
   Binance: {
     connector: async () => {
       const BscConnector = (await import('@binance-chain/bsc-connector')).BscConnector

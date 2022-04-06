@@ -4,7 +4,6 @@ import '../styles/index.css'
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
 import { remoteLoader } from '@lingui/remote-loader'
-import { Web3ReactProvider } from '@web3-react/core'
 import Dots from 'app/components/Dots'
 import Portals from 'app/components/Portals'
 import Web3ReactManager from 'app/components/Web3ReactManager'
@@ -28,10 +27,12 @@ import { DefaultSeo } from 'next-seo'
 import React, { Fragment, useEffect } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-
-import SEO from '../config/seo'
+import { Web3ReactProvider } from 'web3-react-core'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
+// import Web3ProviderNetwork from '../components/Web3ProviderNetwork'
+
+import SEO from '../config/seo'
 
 // const PersistGate = dynamic(() => import('redux-persist/integration/react'), { ssr: false })
 
@@ -131,37 +132,37 @@ function MyApp({ Component, pageProps, fallback, err }) {
           `,
         }}
       />
-      <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
-        <Web3ReactProvider getLibrary={getLibrary}>
-          <Web3ProviderNetwork getLibrary={getLibrary}>
-            <Web3ReactManager>
-              <ReduxProvider store={store}>
-                <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
-                  <>
-                    <ListsUpdater />
-                    <UserUpdater />
-                    <ApplicationUpdater />
-                    <TransactionUpdater />
-                    <BlockUpdater />
-                    <MulticallUpdater />
-                    <LogsUpdater />
-                  </>
-                  <Provider>
-                    <Layout>
-                      <Guard>
-                        {/*@ts-ignore TYPE NEEDS FIXING*/}
-                        <DefaultSeo {...SEO} />
+      <ReduxProvider store={store}>
+        <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
+          <Web3ReactProvider getLibrary={getLibrary}>
+            <Web3ProviderNetwork getLibrary={getLibrary}>
+              <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
+                <>
+                  <ListsUpdater />
+                  <UserUpdater />
+                  <ApplicationUpdater />
+                  <TransactionUpdater />
+                  <BlockUpdater />
+                  <MulticallUpdater />
+                  <LogsUpdater />
+                </>
+                <Provider>
+                  <Layout>
+                    <Guard>
+                      {/*@ts-ignore TYPE NEEDS FIXING*/}
+                      <DefaultSeo {...SEO} />
+                      <Web3ReactManager>
                         <Component {...pageProps} err={err} />
-                      </Guard>
-                      <Portals />
-                    </Layout>
-                  </Provider>
-                </PersistGate>
-              </ReduxProvider>
-            </Web3ReactManager>
-          </Web3ProviderNetwork>
-        </Web3ReactProvider>
-      </I18nProvider>
+                      </Web3ReactManager>
+                    </Guard>
+                    <Portals />
+                  </Layout>
+                </Provider>
+              </PersistGate>
+            </Web3ProviderNetwork>
+          </Web3ReactProvider>
+        </I18nProvider>
+      </ReduxProvider>
     </>
   )
 }

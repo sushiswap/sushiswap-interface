@@ -1,29 +1,19 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useWeb3React } from '@web3-react/core'
 import { network } from 'app/config/wallets'
 import { NetworkContextName } from 'app/constants'
-import { Feature } from 'app/enums'
-import { featureEnabled } from 'app/functions'
 import useEagerConnect from 'app/hooks/useEagerConnect'
 import useInactiveListener from 'app/hooks/useInactiveListener'
-import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { useWeb3React } from 'web3-react-core'
 
-const GnosisManagerNoSSR = dynamic(() => import('./GnosisManager'), {
-  ssr: false,
-})
-
-export const Web3ReactManager: FC = ({ children }) => {
+export const Web3ReactManager = ({ children }: { children: JSX.Element }) => {
   const { i18n } = useLingui()
-  const { active, chainId } = useWeb3React()
+  const { active } = useWeb3React()
   const { active: networkActive, error: networkError, activate: activateNetwork } = useWeb3React(NetworkContextName)
 
   // try to eagerly connect to an injected provider, if it exists and has granted access already
   const triedEager = useEagerConnect()
-
-  const router = useRouter()
 
   // after eagerly trying injected, if the network connect ever isn't active or in an error state, activate itd
   useEffect(() => {
@@ -34,12 +24,6 @@ export const Web3ReactManager: FC = ({ children }) => {
 
   // when there's no account connected, react to logins (broadly speaking) on the injected provider, if it exists
   useInactiveListener(!triedEager)
-
-  useEffect(() => {
-    if (chainId && featureEnabled(Feature.TRIDENT, chainId) && router.asPath === '/swap') {
-      router.push('/trident/swap')
-    }
-  }, [chainId, router])
 
   // if the account context isn't active, and there's an error on the network context, it's an irrecoverable error
   if (triedEager && !active && networkError) {
@@ -52,12 +36,7 @@ export const Web3ReactManager: FC = ({ children }) => {
     )
   }
 
-  return (
-    <>
-      <GnosisManagerNoSSR />
-      {children}
-    </>
-  )
+  return children
 }
 
 export default Web3ReactManager

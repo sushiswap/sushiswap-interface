@@ -1,11 +1,7 @@
-import { AbstractConnector } from '@web3-react/abstract-connector'
-import { ConnectorUpdate } from '@web3-react/types'
 import invariant from 'tiny-invariant'
+import { AbstractConnector } from 'web3-react-abstract-connector'
+import { ConnectorUpdate } from 'web3-react-types'
 
-/**
- *
- * @interface NetworkConnectorArguments
- */
 interface NetworkConnectorArguments {
   urls: { [chainId: number]: string }
   defaultChainId?: number
@@ -14,7 +10,6 @@ interface NetworkConnectorArguments {
 // taken from ethers.js, compatible interface with web3 provider
 type AsyncSendable = {
   isMetaMask?: boolean
-  isCoinbase?: boolean
   host?: string
   path?: string
   sendAsync?: (request: any, callback: (error: any, response: any) => void) => void
@@ -27,23 +22,14 @@ class RequestError extends Error {
   }
 }
 
-/**
- *
- * @interface BatchItem
- */
 interface BatchItem {
   request: { jsonrpc: '2.0'; id: number; method: string; params: unknown }
   resolve: (result: any) => void
   reject: (error: Error) => void
 }
 
-/**
- * @class MiniRpcProvider
- * @implements {AsyncSendable}
- */
 class MiniRpcProvider implements AsyncSendable {
   public readonly isMetaMask: false = false
-  public readonly isCoinbase: false = false
   public readonly chainId: number
   public readonly url: string
   public readonly host: string
@@ -77,7 +63,8 @@ class MiniRpcProvider implements AsyncSendable {
           this.connector.changeChainId(parseInt((b.request.params as [{ chainId: string }])[0].chainId))
           b.resolve({ id: b.request.id })
         } catch (error) {
-          b.reject
+          // @ts-ignore
+          b.reject(error)
         }
         return false
       }
@@ -114,6 +101,7 @@ class MiniRpcProvider implements AsyncSendable {
       memo[current.request.id] = current
       return memo
     }, {})
+
     for (const result of json) {
       const {
         resolve,
@@ -122,17 +110,10 @@ class MiniRpcProvider implements AsyncSendable {
       } = byKey[result.id]
       if ('error' in result) {
         reject(new RequestError(result?.error?.message, result?.error?.code, result?.error?.data))
-        // @ts-void
-      } else if ('result' in result && resolve!) {
+      } else if ('result' in result && resolve) {
         resolve(result.result)
       } else {
-        /** 
-        @error RequestError
-        @summary This is a catch-all error handler for the JSON-RPC response. If the response is not an
-        error, then it will return the result. If the response is an error, it will return the error
-        message.
-       */
-        reject(new RequestError(`[error] unexpected json-rpc response to ${method} request.`, -32000, result))
+        reject(new RequestError(`Received unexpected JSON-RPC response to ${method} request.`, -32000, result))
       }
     }
   }
@@ -177,12 +158,7 @@ class MiniRpcProvider implements AsyncSendable {
     return promise
   }
 }
-/**
- * @export
- * @class NetworkConnector
- * @extends {AbstractConnector}
- * @description NetworkConnector is a wrapper around a Web3 provider that handles the chainId
- */
+
 export class NetworkConnector extends AbstractConnector {
   private readonly providers: { [chainId: number]: MiniRpcProvider }
   private currentChainId: number
@@ -224,7 +200,6 @@ export class NetworkConnector extends AbstractConnector {
 
   /**
    * Meant to be called only by MiniRpcProvider
-   * @public changeChainId
    * @param chainId the new chain id
    */
   public changeChainId(chainId: number) {

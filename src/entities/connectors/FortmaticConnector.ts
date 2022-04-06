@@ -1,23 +1,20 @@
-import { ChainId } from '@sushiswap/core-sdk'
-import { FortmaticConnector as FortmaticConnectorCore } from '@web3-react/fortmatic-connector'
+import { FortmaticConnector as FortmaticConnectorCore } from 'web3-react-fortmatic-connector'
 
 export const OVERLAY_READY = 'OVERLAY_READY'
 
-type FormaticSupportedChains = Extract<ChainId, ChainId.ETHEREUM | ChainId.ROPSTEN | ChainId.RINKEBY | ChainId.KOVAN>
+type FormaticSupportedChains = 1 | 3 | 4 | 42
 
-const CHAIN_ID_NETWORK_ARGUMENT: {
-  readonly [chainId in FormaticSupportedChains]: string | undefined
-} = {
-  [ChainId.ETHEREUM]: undefined,
-  [ChainId.ROPSTEN]: 'ropsten',
-  [ChainId.RINKEBY]: 'rinkeby',
-  [ChainId.KOVAN]: 'kovan',
+const CHAIN_ID_NETWORK_ARGUMENT: { readonly [chainId in FormaticSupportedChains]: string | undefined } = {
+  1: undefined,
+  3: 'ropsten',
+  4: 'rinkeby',
+  42: 'kovan',
 }
 
 export class FortmaticConnector extends FortmaticConnectorCore {
   async activate() {
     if (!this.fortmatic) {
-      // @ts-ignore TYPE NEEDS FIXING
+      // @ts-ignore
       const { default: Fortmatic } = await import('fortmatic')
 
       const { apiKey, chainId } = this as any
@@ -45,10 +42,6 @@ export class FortmaticConnector extends FortmaticConnectorCore {
       pollForOverlayReady,
     ])
 
-    return {
-      provider: this.fortmatic.getProvider(),
-      chainId: (this as any).chainId,
-      account,
-    }
+    return { provider: this.fortmatic.getProvider(), chainId: (this as any).chainId, account }
   }
 }

@@ -1,14 +1,23 @@
 import { Web3Provider } from '@ethersproject/providers'
 import { ChainId } from '@sushiswap/core-sdk'
+import ms from 'ms.macro'
 
 const NETWORK_POLLING_INTERVALS: { [chainId: number]: number } = {
-  [ChainId.ARBITRUM]: 1_000,
-  [ChainId.ARBITRUM_TESTNET]: 1_000,
-  [ChainId.HARMONY]: 15_000,
-  [ChainId.MATIC]: 15_000,
+  [ChainId.ARBITRUM]: ms`1s`,
+  [ChainId.ARBITRUM_TESTNET]: ms`1s`,
+  [ChainId.HARMONY]: ms`1s`,
+  [ChainId.MATIC]: ms`1s`,
 }
 
 export default function getLibrary(provider: any): Web3Provider {
+  console.log(
+    'get library',
+    typeof provider.chainId === 'number'
+      ? provider.chainId
+      : typeof provider.chainId === 'string'
+      ? parseInt(provider.chainId)
+      : 'any'
+  )
   const library = new Web3Provider(
     provider,
     typeof provider.chainId === 'number'

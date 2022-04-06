@@ -82,3 +82,5 @@ export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
 }
 
 export const DEFAULT_TXN_DISMISS_MS = 25000
+
+export const IS_IN_IFRAME = typeof window !== 'undefined' && window.parent !== window

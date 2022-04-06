@@ -1,3 +1,4 @@
+import { isAddress } from '@ethersproject/address'
 import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
@@ -12,7 +13,6 @@ import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { TradeUnion } from 'app/types'
 import React, { FC, Fragment, useMemo, useState } from 'react'
-import { isAddress } from 'web3-utils'
 
 interface SwapDetailsContent {
   trade?: TradeUnion

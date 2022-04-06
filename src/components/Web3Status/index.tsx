@@ -1,7 +1,6 @@
 import Davatar from '@davatar/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useWeb3React } from '@web3-react/core'
 import { NetworkContextName } from 'app/constants'
 import { shortenAddress } from 'app/functions'
 import useENSName from 'app/hooks/useENSName'
@@ -11,6 +10,7 @@ import { isTransactionRecent, useAllTransactions } from 'app/state/transactions/
 import { TransactionDetails } from 'app/state/transactions/reducer'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
+import { useWeb3React } from 'web3-react-core'
 
 import Loader from '../Loader'
 import Typography from '../Typography'
