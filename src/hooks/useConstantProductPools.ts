@@ -2,10 +2,9 @@ import { Interface } from '@ethersproject/abi'
 import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import { default as constantProductPoolArtifact } from '@sushiswap/trident/artifacts/contracts/pool/constant-product/ConstantProductPool.sol/ConstantProductPool.json'
 import { computeConstantProductPoolAddress, ConstantProductPool, Fee, PoolState } from '@sushiswap/trident-sdk'
-import { enumToArray } from 'app/functions/array/enumToArray'
 import { useConstantProductPoolFactory } from 'app/hooks/useContract'
 import { PoolWithState } from 'app/types'
-import combinate from 'combinate'
+// import combinate from 'combinate'
 import { useMultipleContractSingleData, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 
@@ -136,20 +135,20 @@ export function poolListCompare(
   return true
 }
 
-export function useConstantProductPoolsPermutations(
-  currencies: [Currency | undefined, Currency | undefined][]
-): PoolWithState<ConstantProductPool>[] {
-  const permutations = useMemo(() => {
-    if (!currencies.length) return []
-    return combinate({
-      tokens: currencies.map(([currencyA, currencyB]) => [currencyA?.wrapped, currencyB?.wrapped]),
-      fee: enumToArray(Fee),
-      twap: [true, false],
-    }).map<PoolInput>(({ tokens: [tokenA, tokenB], fee, twap }) => [tokenA, tokenB, fee, twap])
-  }, [currencies])
+// export function useConstantProductPoolsPermutations(
+//   currencies: [Currency | undefined, Currency | undefined][]
+// ): PoolWithState<ConstantProductPool>[] {
+//   const permutations = useMemo(() => {
+//     if (!currencies.length) return []
+//     return combinate({
+//       tokens: currencies.map(([currencyA, currencyB]) => [currencyA?.wrapped, currencyB?.wrapped]),
+//       fee: enumToArray(Fee),
+//       twap: [true, false],
+//     }).map<PoolInput>(({ tokens: [tokenA, tokenB], fee, twap }) => [tokenA, tokenB, fee, twap])
+//   }, [currencies])
 
-  return useConstantProductPools(permutations)
-}
+//   return useConstantProductPools(permutations)
+// }
 
 export function useConstantProductPools(pools: PoolInput[]): PoolWithState<ConstantProductPool>[] {
   const constantProductPoolFactory = useConstantProductPoolFactory()
