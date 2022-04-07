@@ -86,7 +86,7 @@
     "@sushiswap/miso": "1.0.0-canary.45",
     "@sushiswap/miso-sdk": "1.0.0-canary.65",
     "@sushiswap/sdk": "^5.0.0-canary.109",
-    "@sushiswap/tines": "1.0.0-canary.73",
+    "@sushiswap/tines": "1.0.0-canary.74",
     "@sushiswap/trident": "^1.0.0-canary.36",
     "@sushiswap/trident-sdk": "1.0.0-canary.100",
     "@testing-library/jest-dom": "^5.14.0",

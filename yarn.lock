@@ -2890,6 +2890,22 @@
     tiny-warning "^1.0.0"
     toformat "^2.0.0"
 
+"@sushiswap/core-sdk@1.0.0-canary.91":
+  version "1.0.0-canary.91"
+  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.91.tgz#a59a602af67e110eee1ffc930032c531e1aa077d"
+  integrity sha512-Iv/iz5NwA8J3aGxfb9rTcMLyV0uqDc+QGvy08ppPtF1Z4WatGWslVAJwfK8tSXNMmcE5O8kKn9JqDldpQYdT9g==
+  dependencies:
+    "@ethersproject/address" "^5.4.0"
+    "@ethersproject/bignumber" "^5.4.0"
+    "@ethersproject/providers" "^5.4.0"
+    "@ethersproject/solidity" "^5.4.0"
+    big.js "^6.1.1"
+    decimal.js-light "^2.5.0"
+    jsbi "^4.1.0"
+    tiny-invariant "^1.1.0"
+    tiny-warning "^1.0.0"
+    toformat "^2.0.0"
+
 "@sushiswap/core@^2.0.0-canary.1":
   version "2.0.0-canary.1"
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
@@ -2974,6 +2990,14 @@
   dependencies:
     "@ethersproject/bignumber" "^5.4.0"
     "@sushiswap/core-sdk" "1.0.0-canary.90"
+
+"@sushiswap/tines@1.0.0-canary.74":
+  version "1.0.0-canary.74"
+  resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-1.0.0-canary.74.tgz#9f5c10fd8eea3031efc0f48ac53d818a546af2ed"
+  integrity sha512-g/6sjAOfVP1RGZ3m9ubtWrLCxtoAjpXnUoc3HO6tnC/fo6Mwo2r2keHC0KioNykg3sRMPLgZL9biHbRUpAv6BQ==
+  dependencies:
+    "@ethersproject/bignumber" "^5.4.0"
+    "@sushiswap/core-sdk" "1.0.0-canary.91"
 
 "@sushiswap/trident-sdk@1.0.0-canary.100":
   version "1.0.0-canary.100"
