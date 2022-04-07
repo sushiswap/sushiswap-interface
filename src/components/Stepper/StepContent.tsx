@@ -21,7 +21,12 @@ const StepContent: FC<StepContent> = ({ children, _index, _active, _last }) => {
         leaveTo="max-h-0 opacity-0"
         unmount={false}
       >
-        <div className="space-y-8 my-8 w-full">{children}</div>
+        {/*Empty divs act a trick to make the transition smooth with margins*/}
+        <div className="space-y-8 w-full">
+          <div />
+          {children}
+          <div />
+        </div>
       </Transition>
     </div>
   )
