@@ -9,7 +9,6 @@ import {
   TradeType,
   WNATIVE,
 } from '@sushiswap/core-sdk'
-import { MultiRoute, RouteStatus } from '@sushiswap/tines'
 import {
   ConstantProductPool,
   convertTinesSingleRouteToLegacyRoute,
@@ -17,7 +16,9 @@ import {
   findMultiRouteExactOut,
   findSingleRouteExactIn,
   findSingleRouteExactOut,
+  MultiRoute,
   PoolState,
+  RouteStatus,
   Trade,
 } from '@sushiswap/trident-sdk'
 import { PoolUnion } from 'app/features/trident/types'

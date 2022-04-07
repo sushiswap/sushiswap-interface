@@ -1,4 +1,4 @@
-import { PoolType } from '@sushiswap/tines'
+import { PoolType } from '@sushiswap/trident-sdk'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
