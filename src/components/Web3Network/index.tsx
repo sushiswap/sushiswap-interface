@@ -63,8 +63,7 @@ function Web3Network(): JSX.Element | null {
   useEffect(() => {
     if (chainId && !queryChainId) {
       console.debug('Setting chain id on initial load because not present')
-      console.log({ router })
-      router.replace({ query: { ...router.query, chainId } }, undefined)
+      router.replace({ query: { ...router.query, chainId } })
     }
   }, [chainId, queryChainId, router])
 

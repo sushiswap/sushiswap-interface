@@ -6,6 +6,7 @@ import { useLingui } from '@lingui/react'
 import { Currency, currencyEquals, WNATIVE } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
+import SettingsTab from 'app/components/Settings'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { ZERO_PERCENT } from 'app/constants'
@@ -298,7 +299,7 @@ export default function Add() {
           <Typography weight={700} className="text-center whitespace-nowrap text-high-emphesis">
             {i18n._(t`Add Liquidity`)}
           </Typography>
-          <div />
+          <SettingsTab className="!w-6 !h-6 justify-self-end" />
         </div>
         <div className="flex flex-col gap-3">
           <SwapAssetPanel

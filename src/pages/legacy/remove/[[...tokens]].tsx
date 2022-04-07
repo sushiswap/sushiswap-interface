@@ -9,6 +9,7 @@ import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Input from 'app/components/Input'
 import ListPanel from 'app/components/ListPanel'
+import SettingsTab from 'app/components/Settings'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { classNames, unwrappedCurrencyAmount } from 'app/functions'
@@ -390,7 +391,7 @@ export default function Remove() {
           <Typography weight={700} className="text-center whitespace-nowrap text-high-emphesis">
             {i18n._(t`Remove Liquidity`)}
           </Typography>
-          <div />
+          <SettingsTab className="!w-6 !h-6 justify-self-end" />
         </div>
         <div className="flex flex-col gap-3">
           <div
