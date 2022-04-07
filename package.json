@@ -181,7 +181,7 @@
     "react-dropzone": "^11.4.2",
     "react-feather": "^2.0.9",
     "react-ga": "^3.3.0",
-    "react-hook-form": "^7.22.1",
+    "react-hook-form": "^7.29.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-popper": "^2.2.5",
     "react-redux": "^7.2.6",

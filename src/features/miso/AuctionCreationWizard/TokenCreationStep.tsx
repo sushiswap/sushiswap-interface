@@ -1,4 +1,5 @@
 import { RadioGroup } from '@headlessui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Form from 'app/components/Form'
@@ -7,14 +8,80 @@ import Typography from 'app/components/Typography'
 import useTokenTemplateMap from 'app/features/miso/context/hooks/useTokenTemplateMap'
 import { TokenSetup, TokenType } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
+import { addressValidator } from 'app/functions/yupValidators'
 import { useToken } from 'app/hooks/Tokens'
 import React, { FC, ReactNode } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
-const TokenCreationStep: FC = () => {
-  const { watch, setValue } = useFormContext()
-  const [tokenType, tokenSetupType, tokenAddress] = watch(['tokenType', 'tokenSetupType', 'tokenAddress'])
+interface TokenCreationForm {
+  tokenType: TokenType
+  tokenSetupType?: TokenSetup
+  tokenAddress?: string
+  tokenName?: string
+  tokenSymbol?: string
+  tokenSupply?: number
+  tokenAmount: number
+}
+
+export const tokenSchema = yup.object().shape({
+  tokenSetupType: yup.number().required('Must select a token setup type'),
+  tokenAddress: yup.string().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.PROVIDE,
+    then: addressValidator.required('Please enter a valid ERC20-address'),
+  }),
+  tokenType: yup.number().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.CREATE,
+    then: yup.number().required('Must select a token type'),
+  }),
+  tokenName: yup.string().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.CREATE,
+    then: yup.string().required('Must enter a valid name'),
+  }),
+  tokenSymbol: yup.string().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.CREATE,
+    then: yup.string().required('Must enter a valid symbol'),
+  }),
+  tokenSupply: yup.number().when('tokenSetupType', {
+    is: (value: TokenSetup) => value === TokenSetup.CREATE,
+    then: yup
+      .number()
+      .typeError('Supply must be a number')
+      .required('Must enter a valid number')
+      .moreThan(0, 'Token supply must be larger than zero')
+      .max(2e256 - 1, 'Token supply can be at most 2^256 - 1 due to network limitations')
+      .integer('Must be a whole number'),
+  }),
+  tokenAmount: yup
+    .number()
+    .typeError('Must be a valid number')
+    .required('Must enter a valid number')
+    .moreThan(0, 'Token supply must be larger than zero')
+    .integer('Must be a whole number')
+    .test({
+      message: 'Amount of tokens for sale must be less than half the total supply',
+      test: (value, ctx) => {
+        if (ctx.parent.tokenSetupType === TokenSetup.PROVIDE) return true
+        return value ? value * 2 <= ctx.parent.tokenSupply : false
+      },
+    }),
+})
+
+const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ children }) => {
   const { i18n } = useLingui()
+  const methods = useForm<TokenCreationForm>({
+    resolver: yupResolver(tokenSchema),
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  })
+
+  const {
+    watch,
+    formState: { isValid },
+    setValue,
+  } = methods
+
+  const [tokenType, tokenSetupType, tokenAddress] = watch(['tokenType', 'tokenSetupType', 'tokenAddress'])
   const { templateIdToLabel } = useTokenTemplateMap()
   const token = useToken(tokenSetupType === TokenSetup.PROVIDE ? tokenAddress : undefined)
 
@@ -30,7 +97,6 @@ const TokenCreationStep: FC = () => {
       description: i18n._(t`I want to create a new ERC20 token.`),
     },
   ]
-
   const items = [
     {
       icon: <BlocksIcon height={83} width={83} />,
@@ -59,11 +125,11 @@ const TokenCreationStep: FC = () => {
   ]
 
   return (
-    <>
-      <div className="col-span-6 flex border-b border-dark-800 pt-10 pb-20 justify-center items-center">
+    <FormProvider {...methods}>
+      <div className="col-span-6 flex pt-10 justify-center items-center">
         <RadioGroup
           value={tokenSetupType || ''}
-          onChange={(tokenSetupType) => setValue('tokenSetupType', tokenSetupType)}
+          onChange={(tokenSetupType) => setValue('tokenSetupType', Number(tokenSetupType))}
           className="flex gap-10"
         >
           <input className="hidden" name="tokenSetupType" value={tokenSetupType} onChange={() => {}} />
@@ -179,15 +245,18 @@ const TokenCreationStep: FC = () => {
           />
         </div>
       )}
-      <div className="col-span-6">
-        <Form.TextField
-          name="tokenAmount"
-          label={i18n._(t`Tokens for sale*`)}
-          helperText={i18n._(t`This is the amount of tokens that will be sold to the public`)}
-          placeholder="Enter the amount of tokens you would like to auction."
-        />
-      </div>
-    </>
+      {tokenSetupType !== undefined && (
+        <div className="col-span-6">
+          <Form.TextField
+            name="tokenAmount"
+            label={i18n._(t`Tokens for sale*`)}
+            helperText={i18n._(t`This is the amount of tokens that will be sold to the public`)}
+            placeholder="Enter the amount of tokens you would like to auction."
+          />
+        </div>
+      )}
+      {children && children(isValid)}
+    </FormProvider>
   )
 }
 

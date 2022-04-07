@@ -1,5 +1,6 @@
 import { RadioGroup } from '@headlessui/react'
 import { InformationCircleIcon } from '@heroicons/react/outline'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { BatchAuctionIcon, CrowdsaleIcon, DutchAuctionIcon } from 'app/components/Icon'
@@ -8,13 +9,63 @@ import AuctionCreationStepGeneralDetails from 'app/features/miso/AuctionCreation
 import useAuctionTemplateMap from 'app/features/miso/context/hooks/useAuctionTemplateMap'
 import { AuctionTemplate } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
-import React, { FC } from 'react'
-import { useFormContext } from 'react-hook-form'
+import React, { FC, ReactNode } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
-const AuctionDetailsStep: FC = () => {
-  const { watch, setValue } = useFormContext()
-  const auctionType = watch('auctionType')
+interface AuctionDetailsForm {
+  auctionType: AuctionTemplate
+  fixedPrice?: number
+  minimumTarget?: number
+  minimumRaised?: number
+}
+
+const auctionDetailsSchema = yup.object().shape({
+  auctionType: yup.number().required('Must select an auction type'),
+  fixedPrice: yup.number().when('auctionType', {
+    is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
+    then: yup.number().typeError('Price must be a number').required('Must enter a fixed price'),
+  }),
+  minimumTarget: yup.number().when('auctionType', {
+    is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
+    then: yup
+      .number()
+      .typeError('Target must be a number')
+      .moreThan(0, 'Must be a number between 0 and 100')
+      .max(100, 'Must be a number between 0 and 100')
+      .integer('Must be a whole number'),
+  }),
+  minimumRaised: yup.number().when('auctionType', {
+    is: (value: AuctionTemplate) => value === AuctionTemplate.BATCH_AUCTION,
+    then: yup.number().typeError('Target must be a number').min(0, 'Must be greater than zero'),
+  }),
+  startPrice: yup.number().when('auctionType', {
+    is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
+    then: yup.number().typeError('Price must be a number').required('Must enter a start price'),
+  }),
+  endPrice: yup.number().when('auctionType', {
+    is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
+    then: yup
+      .number()
+      .typeError('Price must be a number')
+      .lessThan(yup.ref('startPrice'), 'End price must be less than start price')
+      .required('Must enter a start price'),
+  }),
+})
+
+const AuctionDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ children }) => {
   const { i18n } = useLingui()
+  const methods = useForm<AuctionDetailsForm>({
+    resolver: yupResolver(auctionDetailsSchema),
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  })
+  const {
+    watch,
+    setValue,
+    formState: { isValid },
+  } = methods
+  const auctionType = watch('auctionType')
   const { templateIdToLabel } = useAuctionTemplateMap()
 
   const items = [
@@ -46,7 +97,7 @@ const AuctionDetailsStep: FC = () => {
   ]
 
   return (
-    <>
+    <FormProvider {...methods}>
       <div className="col-span-4">
         <RadioGroup
           value={auctionType}
@@ -79,7 +130,8 @@ const AuctionDetailsStep: FC = () => {
         </RadioGroup>
       </div>
       <AuctionCreationStepGeneralDetails />
-    </>
+      {children(isValid)}
+    </FormProvider>
   )
 }
 

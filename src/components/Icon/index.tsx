@@ -1,4 +1,5 @@
-import React from 'react'
+import { classNames } from 'app/functions'
+import React, { FC } from 'react'
 
 export const GithubIcon = (props: React.ComponentProps<'svg'>) => {
   return (
@@ -280,6 +281,30 @@ export const PoolIcon = (props: React.ComponentProps<'svg'>) => {
     >
       <path stroke="none" d="M0 0h24v24H0z" />
       <path d="M12 3l5 5a7 7 0 1 1 -10 0l5 -5" />
+    </svg>
+  )
+}
+
+interface CircleWithText extends React.ComponentProps<'svg'> {
+  text?: string | number
+}
+
+export const CircleWithText: FC<CircleWithText> = ({ text, className, ...props }) => {
+  return (
+    <svg
+      {...props}
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      fontSize="1.5rem"
+      className={classNames('shrink-0 block rounded-full', className)}
+    >
+      <circle cx="12" cy="12" r="9.6" />
+      {typeof text !== undefined && (
+        <text x="12" y="16" textAnchor="middle" fontSize="0.75rem" stroke="var(--primary)" fontFamily="inherit">
+          {text}
+        </text>
+      )}
     </svg>
   )
 }

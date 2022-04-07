@@ -5,6 +5,7 @@ import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, Price, Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Form from 'app/components/Form'
+import { Stepper } from 'app/components/Stepper'
 import AuctionCreationWizardReviewModal from 'app/features/miso/AuctionCreationWizard/AuctionCreationWizardReviewModal'
 import AuctionCreationStep from 'app/features/miso/AuctionCreationWizard/AuctionDetailsStep'
 import GeneralDetailsStep from 'app/features/miso/AuctionCreationWizard/GeneralDetailsStep'
@@ -185,6 +186,7 @@ const schema = yup.object().shape({
 const AuctionCreationWizard: FC = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
+  const [step, setStep] = useState<number>(0)
   const [open, setOpen] = useState<boolean>(false)
   const methods = useForm<AuctionCreationWizardInput>({
     defaultValues: {
@@ -223,6 +225,130 @@ const AuctionCreationWizard: FC = () => {
       : undefined
 
   return (
+    <div>
+      <Stepper.Root activeStep={step} setActiveStep={setStep}>
+        <Stepper.Step>
+          <Stepper.Label>{i18n._(t`Token Details*`)}</Stepper.Label>
+          <Stepper.Content>
+            <TokenCreationStep>
+              {(isValid) => (
+                <div className="flex gap-4">
+                  <Button
+                    size="sm"
+                    color="blue"
+                    disabled={!isValid}
+                    onClick={() => setStep((prevStep) => prevStep + 1)}
+                  >
+                    {i18n._(t`Continue`)}
+                  </Button>
+                </div>
+              )}
+            </TokenCreationStep>
+          </Stepper.Content>
+        </Stepper.Step>
+        <Stepper.Step>
+          <Stepper.Label>{i18n._(t`General Details*`)}</Stepper.Label>
+          <Stepper.Content>
+            <GeneralDetailsStep>
+              {(isValid) => (
+                <div className="flex gap-4">
+                  <Button
+                    size="sm"
+                    color="blue"
+                    disabled={!isValid}
+                    onClick={() => setStep((prevStep) => prevStep + 1)}
+                  >
+                    {i18n._(t`Continue`)}
+                  </Button>
+                  <Button size="sm" color="blue" variant="empty" onClick={() => setStep((prevStep) => prevStep - 1)}>
+                    {i18n._(t`Back`)}
+                  </Button>
+                </div>
+              )}
+            </GeneralDetailsStep>
+          </Stepper.Content>
+        </Stepper.Step>
+        <Stepper.Step>
+          <Stepper.Label>Auction Details*</Stepper.Label>
+          <Stepper.Content>
+            <AuctionCreationStep>
+              {(isValid) => (
+                <div className="flex gap-4">
+                  <Button
+                    size="sm"
+                    color="blue"
+                    disabled={!isValid}
+                    onClick={() => setStep((prevStep) => prevStep + 1)}
+                  >
+                    {i18n._(t`Continue`)}
+                  </Button>
+                  <Button size="sm" color="blue" variant="empty" onClick={() => setStep((prevStep) => prevStep - 1)}>
+                    {i18n._(t`Back`)}
+                  </Button>
+                </div>
+              )}
+            </AuctionCreationStep>
+          </Stepper.Content>
+        </Stepper.Step>
+        <Stepper.Step>
+          <Stepper.Label>Liquidity Launcher</Stepper.Label>
+          <Stepper.Content>
+            <LiquidityLauncherStep>
+              {(isValid) => (
+                <div className="flex gap-4">
+                  <Button
+                    size="sm"
+                    color="blue"
+                    disabled={!isValid}
+                    onClick={() => setStep((prevStep) => prevStep + 1)}
+                  >
+                    {i18n._(t`Continue`)}
+                  </Button>
+                  <Button size="sm" color="blue" variant="empty" onClick={() => setStep((prevStep) => prevStep - 1)}>
+                    {i18n._(t`Back`)}
+                  </Button>
+                </div>
+              )}
+            </LiquidityLauncherStep>
+          </Stepper.Content>
+        </Stepper.Step>
+        <Stepper.Step>
+          <Stepper.Label>Whitelist</Stepper.Label>
+          <Stepper.Content>
+            <WhitelistDetailsStep>
+              {(isValid) => (
+                <div className="flex gap-4">
+                  <Button
+                    size="sm"
+                    color="blue"
+                    disabled={!isValid}
+                    onClick={() => setStep((prevStep) => prevStep + 1)}
+                  >
+                    {i18n._(t`Continue`)}
+                  </Button>
+                  <Button size="sm" color="blue" variant="empty" onClick={() => setStep((prevStep) => prevStep - 1)}>
+                    {i18n._(t`Back`)}
+                  </Button>
+                </div>
+              )}
+            </WhitelistDetailsStep>
+          </Stepper.Content>
+        </Stepper.Step>
+        <Stepper.Step>
+          <Stepper.Label>Review</Stepper.Label>
+          <Stepper.Content>
+            <div className="flex gap-4">
+              <Button size="sm" color="blue" variant="empty" onClick={() => setStep((prevStep) => prevStep - 1)}>
+                {i18n._(t`Back`)}
+              </Button>
+            </div>
+          </Stepper.Content>
+        </Stepper.Step>
+      </Stepper.Root>
+    </div>
+  )
+
+  return (
     <>
       <Form {...methods} onSubmit={methods.handleSubmit(() => setOpen(true))}>
         <Form.Card className="divide-none">
@@ -234,19 +360,19 @@ const AuctionCreationWizard: FC = () => {
             }
           >
             <Form.Section header={<Form.Section.Header header={i18n._(t`Token Details`)} />}>
-              <TokenCreationStep />
+              {/*<TokenCreationStep>*/}
             </Form.Section>
             <Form.Section header={<Form.Section.Header header={i18n._(t`General Details`)} />}>
-              <GeneralDetailsStep />
+              {/*<GeneralDetailsStep />*/}
             </Form.Section>
             <Form.Section columns={4} header={<Form.Section.Header header={i18n._(t`Auction Details`)} />}>
-              <AuctionCreationStep />
+              {/*<AuctionCreationStep />*/}
             </Form.Section>
             <Form.Section header={<Form.Section.Header header={i18n._(t`Liquidity Details`)} />}>
-              <LiquidityLauncherStep />
+              {/*<LiquidityLauncherStep />*/}
             </Form.Section>
             <Form.Section header={<Form.Section.Header header={i18n._(t`Whitelist`)} />}>
-              <WhitelistDetailsStep />
+              {/*<WhitelistDetailsStep />*/}
             </Form.Section>
           </Form.Wizard>
         </Form.Card>
