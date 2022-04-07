@@ -88,16 +88,8 @@ const nextConfig = {
         destination: '/legacy/swap/:token*',
       },
       {
-        source: '/limit-order',
-        destination: '/legacy/limit-order',
-      },
-      {
-        source: '/limit-order/:token*',
-        destination: '/legacy/limit-order/:token*',
-      },
-      {
         source: '/open-order',
-        destination: '/legacy/open-order',
+        destination: '/limit-order/open-order',
       },
       {
         source: '/pool',
