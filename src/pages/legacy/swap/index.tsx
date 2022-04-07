@@ -20,6 +20,7 @@ import { computeFiatValuePriceImpact } from 'app/functions/trade'
 import { useAllTokens, useCurrency } from 'app/hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from 'app/hooks/useApproveCallback'
 import useENSAddress from 'app/hooks/useENSAddress'
+import useIsAmbireWC from 'app/hooks/useIsAmbireWC'
 import useIsArgentWallet from 'app/hooks/useIsArgentWallet'
 import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
 import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
@@ -285,11 +286,13 @@ const Swap = ({ banners }) => {
     )
   }, [priceImpact, trade])
 
+  const isAmbireWC = useIsAmbireWC()
   const isArgentWallet = useIsArgentWallet()
 
   // show approve flow when: no error on inputs, not approved or pending, or approved in current session
   // never show if price impact is above threshold in non expert mode
   const showApproveFlow =
+    !isAmbireWC &&
     !isArgentWallet &&
     !swapInputError &&
     (approvalState === ApprovalState.NOT_APPROVED ||

@@ -6,6 +6,7 @@ import Button from 'app/components/Button'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useBentoMasterApproveCallback, { BentoApprovalState, BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
 import { StandardSignatureData, useTridentLiquidityTokenPermit } from 'app/hooks/useERC20Permit'
+import useIsAmbireWC from 'app/hooks/useIsAmbireWC'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import React, { FC, memo, ReactNode, useCallback, useEffect, useState } from 'react'
@@ -127,6 +128,7 @@ const TridentApproveGate = ({
   const toggleWalletModal = useWalletModalToggle()
   const [status, setStatus] = useState<Record<string, ApprovalState>>({})
   const [permitError, setPermitError] = useState(false)
+  const isAmbireWC = useIsAmbireWC()
 
   const { approve, approvalState, getPermit, permit } = useBentoMasterApproveCallback(
     withPermit ? masterContractAddress : undefined,
@@ -138,8 +140,9 @@ const TridentApproveGate = ({
     (withPermit ? approvalState === BentoApprovalState.UNKNOWN : false)
 
   const approved =
-    (Object.values(status).every((el) => el === ApprovalState.APPROVED) || !spendFromWallet) &&
-    (withPermit ? approvalState === BentoApprovalState.APPROVED : true)
+    ((Object.values(status).every((el) => el === ApprovalState.APPROVED) || !spendFromWallet) &&
+      (withPermit ? approvalState === BentoApprovalState.APPROVED : true)) ||
+    isAmbireWC
 
   // If we have a permitError, use the approveCallback as a fallback
   const onClick = useCallback(async () => {
@@ -161,7 +164,8 @@ const TridentApproveGate = ({
     <div className="flex flex-col gap-3">
       {/*hide bentobox approval if not every inputAmount is greater than than zero*/}
       {inputAmounts.every((el) => el?.greaterThan(ZERO)) &&
-        [BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(approvalState) && (
+        [BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(approvalState) &&
+        !isAmbireWC && (
           <Button loading={approvalState === BentoApprovalState.PENDING} id={`btn-approve`} onClick={onClick}>
             {i18n._(t`Approve BentoBox`)}
           </Button>
@@ -169,7 +173,7 @@ const TridentApproveGate = ({
 
       {tokenApproveOn &&
         inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {
-          if (!amount?.currency.isNative && amount?.greaterThan(ZERO)) {
+          if (!amount?.currency.isNative && amount?.greaterThan(ZERO) && !isAmbireWC) {
             acc.push(
               <TokenApproveButton
                 id={`btn-approve`}

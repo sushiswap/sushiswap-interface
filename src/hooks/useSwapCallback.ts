@@ -6,31 +6,34 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { isBigNumberish } from '@ethersproject/bignumber/lib/bignumber'
 import { arrayify, DataOptions, hexlify, Signature, SignatureLike, splitSignature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
+import { HashZero } from '@ethersproject/constants/src.ts/hashes'
 import { t } from '@lingui/macro'
 import {
   ChainId,
   Currency,
   CurrencyAmount,
+  MaxUint256,
   Percent,
   Router as LegacyRouter,
   SwapParameters,
   toHex,
+  Token,
   Trade as LegacyTrade,
   TradeType,
 } from '@sushiswap/core-sdk'
+import { getBigNumber, MultiRoute } from '@sushiswap/tines'
 import {
   ComplexPathParams,
   ExactInputParams,
   ExactInputSingleParams,
-  getBigNumber,
   InitialPath,
-  MultiRoute,
   Output,
   Path,
   PercentagePath,
   RouteType,
   Trade as TridentTrade,
 } from '@sushiswap/trident-sdk'
+import WalletConnectProvider from '@walletconnect/ethereum-provider'
 import { EIP_1559_ACTIVATION_BLOCK } from 'app/constants'
 import { Feature } from 'app/enums'
 import { approveMasterContractAction, batchAction, unwrapWETHAction } from 'app/features/trident/actions'
@@ -39,6 +42,8 @@ import approveAmountCalldata from 'app/functions/approveAmountCalldata'
 import { shortenAddress } from 'app/functions/format'
 import { calculateGasMargin } from 'app/functions/trade'
 import { isAddress, isZero } from 'app/functions/validate'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import useBentoMasterApproveCallback, { BentoApprovalState } from 'app/hooks/useBentoMasterApproveCallback'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import useBlockNumber from 'app/lib/hooks/useBlockNumber'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -53,9 +58,10 @@ import { useMemo } from 'react'
 
 import { SUSHIGUARD_RELAY } from '../config/sushiguard'
 import { useArgentWalletContract } from './useArgentWalletContract'
-import { useRouterContract, useTridentRouterContract } from './useContract'
+import { useBentoBoxContract, useRouterContract, useTokenContract, useTridentRouterContract } from './useContract'
 import useENS from './useENS'
 import { SignatureData } from './useERC20Permit'
+import useIsAmbireWC from './useIsAmbireWC'
 import useTransactionDeadline from './useTransactionDeadline'
 
 export enum SwapCallbackState {
@@ -68,6 +74,8 @@ interface SwapCall {
   address: string
   calldata: string
   value: string
+  skipGasEstimation?: boolean
+  extra?: any
 }
 
 interface SwapCallEstimate {
@@ -349,7 +357,16 @@ export function useSwapCallArguments(
 
   const tridentRouterContract = useTridentRouterContract()
 
+  const isAmbireWC = useIsAmbireWC()
   const argentWalletContract = useArgentWalletContract()
+
+  const { approvalState: bentoBoxApprovalState } = useBentoMasterApproveCallback(tridentRouterContract?.address, {})
+  const bentoBoxContract = useBentoBoxContract()
+  const spender = trade instanceof LegacyTrade ? legacyRouterContract?.address : bentoBoxContract?.address
+  const [approvalState] = useApproveCallback(trade?.inputAmount?.wrapped, spender)
+
+  const tokenAddress = trade?.inputAmount.currency.isToken ? (trade?.inputAmount.currency as Token)?.address : undefined
+  const tokenContract = useTokenContract(tokenAddress)
 
   const { rebase } = useBentoRebase(trade?.inputAmount.currency)
 
@@ -391,7 +408,31 @@ export function useSwapCallArguments(
       }
 
       result = swapMethods.map(({ methodName, args, value }) => {
-        if (argentWalletContract && trade.inputAmount.currency.isToken) {
+        if (isAmbireWC && tokenContract && approvalState === ApprovalState.NOT_APPROVED) {
+          let batchTxs: any[] = []
+
+          const approveData = tokenContract?.interface?.encodeFunctionData('approve', [
+            legacyRouterContract.address,
+            MaxUint256.toString(),
+          ])
+          batchTxs.push({
+            to: tokenContract?.address,
+            data: approveData,
+          })
+
+          batchTxs.push({
+            to: legacyRouterContract.address,
+            data: legacyRouterContract.interface.encodeFunctionData(methodName, args),
+          })
+
+          return {
+            address: AddressZero,
+            calldata: '0x0',
+            value: '0x0',
+            skipGasEstimation: true,
+            extra: batchTxs,
+          }
+        } else if (argentWalletContract && trade.inputAmount.currency.isToken) {
           return {
             address: argentWalletContract.address,
             calldata: argentWalletContract.interface.encodeFunctionData('wc_multiCall', [
@@ -459,14 +500,66 @@ export function useSwapCallArguments(
           })
         )
 
-      result.push({
-        address: tridentRouterContract.address,
-        calldata: batchAction({
-          contract: tridentRouterContract,
-          actions,
-        }),
-        value,
-      } as SwapCall)
+      if (
+        isAmbireWC &&
+        ((tokenContract && approvalState === ApprovalState.NOT_APPROVED) ||
+          bentoBoxApprovalState === BentoApprovalState.NOT_APPROVED)
+      ) {
+        let batchTxs: any[] = []
+
+        if (tokenContract && approvalState === ApprovalState.NOT_APPROVED) {
+          batchTxs.push({
+            to: tokenContract?.address,
+            data: tokenContract?.interface?.encodeFunctionData('approve', [
+              bentoBoxContract?.address,
+              MaxUint256.toString(),
+            ]),
+          })
+        }
+
+        if (bentoBoxApprovalState === BentoApprovalState.NOT_APPROVED) {
+          batchTxs.push({
+            to: bentoBoxContract?.address,
+            data: bentoBoxContract?.interface?.encodeFunctionData('setMasterContractApproval', [
+              account,
+              tridentRouterContract.address,
+              true,
+              0,
+              HashZero,
+              HashZero,
+            ]),
+          })
+        }
+
+        batchTxs = [
+          ...batchTxs,
+          ...actions
+            .filter((a) => a)
+            .map((a) => ({
+              to: tridentRouterContract.address,
+              data: a,
+            })),
+        ]
+
+        return [
+          {
+            address: AddressZero,
+            calldata: '0x0',
+            value: '0x0',
+            skipGasEstimation: true,
+            extra: batchTxs,
+          },
+        ]
+      } else {
+        result.push({
+          address: tridentRouterContract.address,
+          calldata: batchAction({
+            contract: tridentRouterContract,
+            actions,
+          }),
+          value,
+        } as SwapCall)
+      }
 
       return result
     }
@@ -475,13 +568,18 @@ export function useSwapCallArguments(
   }, [
     account,
     allowedSlippage,
+    approvalState,
     argentWalletContract,
+    bentoBoxApprovalState,
+    bentoBoxContract,
     chainId,
     deadline,
+    isAmbireWC,
     legacyRouterContract,
     library,
     rebase,
     recipient,
+    tokenContract,
     trade,
     tridentRouterContract,
     tridentTradeContext,
@@ -570,6 +668,17 @@ export function useSwapCallback(
 
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipient, signatureData, tridentTradeContext)
 
+  const bentoBoxContract = useBentoBoxContract()
+  const isAmbireWC = useIsAmbireWC()
+
+  const legacyRouterContract = useRouterContract()
+  const tridentRouterContract = useTridentRouterContract()
+
+  const { approvalState: bentoBoxApprovalState } = useBentoMasterApproveCallback(tridentRouterContract?.address, {})
+
+  const spender = trade instanceof LegacyTrade ? legacyRouterContract?.address : bentoBoxContract?.address
+  const [approvalState] = useApproveCallback(trade?.inputAmount?.wrapped, spender)
+
   const addTransaction = useTransactionAdder()
 
   return useMemo(() => {
@@ -602,7 +711,9 @@ export function useSwapCallback(
         console.log('onSwap callback')
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
           swapCalls.map((call) => {
-            const { address, calldata, value } = call
+            const { address, calldata, value, skipGasEstimation } = call
+
+            if (skipGasEstimation) return { call }
 
             const tx =
               !value || isZero(value)
@@ -666,7 +777,7 @@ export function useSwapCallback(
         }
 
         const {
-          call: { address, calldata, value },
+          call: { address, calldata, value, extra },
         } = bestCallOption
 
         console.log('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {})
@@ -683,8 +794,28 @@ export function useSwapCallback(
 
         let privateTx = false
         let txResponse: Promise<TransactionResponseLight>
+
         if (!useSushiGuard) {
-          txResponse = library.getSigner().sendTransaction(txParams)
+          if (
+            isAmbireWC &&
+            (approvalState === ApprovalState.NOT_APPROVED ||
+              (trade instanceof TridentTrade && bentoBoxApprovalState === BentoApprovalState.NOT_APPROVED))
+          ) {
+            const wcProvider = library.provider as WalletConnectProvider
+            txResponse = new Promise<TransactionResponseLight>((resolve, reject) => {
+              wcProvider.connector
+                .sendCustomRequest({
+                  method: 'ambire_sendBatchTransaction',
+                  params: extra,
+                })
+                .then((res: any) => {
+                  resolve({ hash: res } as TransactionResponseLight)
+                })
+                .catch(reject)
+            })
+          } else {
+            txResponse = library.getSigner().sendTransaction(txParams)
+          }
         } else {
           // Set flag for transaction adder
           privateTx = true
@@ -808,6 +939,9 @@ export function useSwapCallback(
       error: null,
     }
   }, [
+    approvalState,
+    bentoBoxApprovalState,
+    isAmbireWC,
     trade,
     library,
     account,
