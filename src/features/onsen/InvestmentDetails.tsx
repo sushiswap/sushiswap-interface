@@ -1,20 +1,21 @@
 import { getAddress } from '@ethersproject/address'
-import { BigNumber } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/core-sdk'
+import { toAmount } from '@sushiswap/bentobox-sdk'
+import { ChainId, CurrencyAmount, Token, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
-import { useKashiPair } from 'app/features/kashi/hooks'
-import { easyAmount, formatNumber } from 'app/functions'
+import { formatNumber } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
+import useUSDCPriceSubgraph from 'app/hooks/useUSDCSubgraph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
+import { useKashiMediumRiskLendingPair } from '../kashi/hooks'
 import { PairType } from './enum'
 import { usePendingSushi, useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
@@ -35,60 +36,48 @@ const RewardRow = ({ value, symbol }) => {
 // @ts-ignore TYPE NEEDS FIXING
 const InvestmentDetails = ({ farm }) => {
   const { i18n } = useLingui()
-  const { chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { harvest } = useMasterChef(farm.chef)
   const router = useRouter()
   const addTransaction = useTransactionAdder()
-  const kashiPair = useKashiPair(farm.pair.id)
+  const kashiPair = useKashiMediumRiskLendingPair(account, farm.pair.id)
   const [pendingTx, setPendingTx] = useState(false)
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
 
-  const liquidityToken = new Token(
-    // @ts-ignore TYPE NEEDS FIXING
-    chainId,
-    getAddress(farm.pair.id),
-    farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
-    farm.pair.symbol ?? farm.pair.type === PairType.KASHI ? 'KMP' : 'SLP',
-    farm.pair.name
+  const liquidityToken = useMemo(
+    () =>
+      chainId
+        ? new Token(
+            chainId,
+            getAddress(farm.pair.id),
+            farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
+            farm.pair.symbol ?? farm.pair.type === PairType.KASHI ? 'KMP' : 'SLP',
+            farm.pair.name
+          )
+        : undefined,
+    [chainId, farm.pair.asset.decimals, farm.pair.id, farm.pair.name, farm.pair.symbol, farm.pair.type]
   )
 
   const stakedAmount = useUserInfo(farm, liquidityToken)
 
-  const kashiAssetAmount =
-    kashiPair &&
-    stakedAmount &&
-    easyAmount(
-      BigNumber.from(stakedAmount.quotient.toString()).mulDiv(
-        // @ts-ignore TYPE NEEDS FIXING
-        kashiPair.currentAllAssets.value,
-        // @ts-ignore TYPE NEEDS FIXING
-        kashiPair.totalAsset.base
-      ),
-      // @ts-ignore TYPE NEEDS FIXING
-      kashiPair.asset
-    )
+  const kashiAssetAmount = useMemo(
+    () =>
+      kashiPair
+        ? CurrencyAmount.fromRawAmount(
+            kashiPair.asset.token,
+            stakedAmount?.greaterThan(0) ? toAmount(kashiPair.asset, stakedAmount.quotient) : '0'
+          )
+        : undefined,
+    [kashiPair, stakedAmount]
+  )
 
   const pendingSushi = usePendingSushi(farm)
   const pendingReward = usePendingReward(farm)
 
-  const positionFiatValue = CurrencyAmount.fromRawAmount(
-    // @ts-ignore TYPE NEEDS FIXING
-    USD[chainId],
-    farm.pair.type === PairType.KASHI
-      ? // @ts-ignore TYPE NEEDS FIXING
-        kashiAssetAmount?.usdValue.toString() ?? ZERO
-      : JSBI.BigInt(
-          ((Number(stakedAmount?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            // @ts-ignore TYPE NEEDS FIXING
-            .toFixed(USD[chainId].decimals)
-            // @ts-ignore TYPE NEEDS FIXING
-            .toBigNumber(USD[chainId].decimals)
-        )
-  )
+  const positionFiatValue = useUSDCPriceSubgraph(kashiPair ? kashiPair.asset.token : undefined)
 
-  // @ts-ignore TYPE NEEDS FIXING
-  const secondaryRewardOnly = [ChainId.FUSE].includes(chainId)
+  const secondaryRewardOnly = chainId && [ChainId.FUSE].includes(chainId)
 
   const rewardValue = !secondaryRewardOnly
     ? (farm?.rewards?.[0]?.rewardPrice ?? 0) * Number(pendingSushi?.toExact() ?? 0) +
@@ -130,7 +119,7 @@ const InvestmentDetails = ({ farm }) => {
               <RewardRow
                 symbol={token0?.symbol}
                 // @ts-ignore TYPE NEEDS FIXING
-                value={formatNumber(kashiAssetAmount?.value.toFixed(kashiPair.asset.tokenInfo.decimals) ?? 0)}
+                value={kashiAssetAmount?.toSignificant(6)}
               />
             )}
             {farm.pair.type === PairType.SWAP && (

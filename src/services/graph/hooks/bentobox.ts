@@ -26,13 +26,12 @@ export function useKashiPairs({
   shouldFetch = true,
   swrConfig = undefined,
 }: GraphProps) {
-  const { data } = useSWR(
+  return useSWR(
     shouldFetch ? () => ['kashiPairs', chainId, stringify(variables)] : null,
-    // @ts-ignore TYPE NEEDS FIXING
+    // @ts-ignore
     (_, chainId) => getKashiPairs(chainId, variables),
     swrConfig
   )
-  return data
 }
 
 export function useBentoBox({ chainId = ChainId.ETHEREUM, variables, shouldFetch = true, swrConfig }: GraphProps) {

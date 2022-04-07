@@ -1,7 +1,8 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount } from '@sushiswap/core-sdk'
+import { toShare } from '@sushiswap/bentobox-sdk'
+import { CurrencyAmount, JSBI, KASHI_ADDRESS, minimum, ZERO } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import { HeadlessUiModal } from 'app/components/Modal'
@@ -9,51 +10,77 @@ import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { KashiCooker } from 'app/entities'
 import { tryParseAmount } from 'app/functions'
-import { minimum, ZERO } from 'app/functions/math'
-import { useCurrency } from 'app/hooks/Tokens'
+import { useBentoBoxContract } from 'app/hooks'
 import useKashiApproveCallback, { BentoApprovalState } from 'app/hooks/useKashiApproveCallback'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import React, { useCallback, useState } from 'react'
 
-// @ts-ignore TYPE NEEDS FIXING
-const KashiWithdraw = ({ pair, header }) => {
+import KashiMediumRiskLendingPair from '../kashi/KashiMediumRiskLendingPair'
+
+const KashiWithdraw = ({ market, header }: { market: KashiMediumRiskLendingPair; header: JSX.Element }) => {
   const { i18n } = useLingui()
-  const { account } = useActiveWeb3React()
+  const { account, library, chainId } = useActiveWeb3React()
+  const addTransaction = useTransactionAdder()
+  const bentoBoxContract = useBentoBoxContract()
+  const masterContract = chainId && KASHI_ADDRESS[chainId]
   const [useBento, setUseBento] = useState<boolean>(false)
-  const assetToken = useCurrency(pair?.asset?.address) || undefined
+  const assetToken = market.asset.token
   const [withdrawValue, setWithdrawValue] = useState('')
   const [kashiApprovalState, approveKashiFallback, kashiPermit, onApproveKashi, onCook] = useKashiApproveCallback()
-  const amountAvailable = minimum(pair?.maxAssetAvailable ?? ZERO, pair?.currentUserAssetAmount.value ?? ZERO)
+  const amountAvailable = minimum(market?.maxAssetAvailable ?? ZERO, market?.currentUserAssetAmount ?? ZERO)
   const available =
     assetToken && amountAvailable && CurrencyAmount.fromRawAmount(assetToken, amountAvailable.toString())
   const parsedWithdrawValue = tryParseAmount(withdrawValue, assetToken)
 
   const onWithdraw = useCallback(
-    async (cooker: KashiCooker) => {
-      const maxFraction = minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
-      // @ts-ignore TYPE NEEDS FIXING
-      const fraction = BigNumber.from(parsedWithdrawValue?.quotient.toString()).mulDiv(
-        pair.currentTotalAsset.base,
-        pair.currentAllAssets.value
-      )
-      cooker.removeAsset(minimum(fraction, maxFraction), useBento)
-      return `${i18n._(t`Withdraw`)} ${pair.asset.tokenInfo.symbol}`
+    async ({ withdrawAmount, receiveToWallet, permit, removeMax = false }) => {
+      if (!account || !library || !chainId || !masterContract || !bentoBoxContract || !withdrawAmount) {
+        console.error('Dependencies unavailable')
+        return
+      }
+
+      const cooker = new KashiCooker(market, account, library, chainId)
+
+      // Add permit if available
+      if (permit) {
+        cooker.approve({
+          account,
+          masterContract,
+          v: permit.v,
+          r: permit.r,
+          s: permit.s,
+        })
+      }
+
+      const fraction = removeMax
+        ? minimum(market.userAssetFraction, market.maxAssetAvailableFraction)
+        : toShare(
+            {
+              base: market.currentTotalAsset.base,
+              elastic: market.currentAllAssets,
+            },
+            withdrawAmount.quotient
+          )
+
+      cooker.removeAsset(BigNumber.from(fraction.toString()), !receiveToWallet)
+
+      const result = await cooker.cook()
+
+      if (result.success) {
+        addTransaction(result.tx, {
+          summary: i18n._(t`Withdraw ${withdrawAmount.toSignificant(6)} ${withdrawAmount.currency.symbol}`),
+        })
+
+        return result.tx
+      }
     },
-    [
-      i18n,
-      pair?.asset.tokenInfo.symbol,
-      pair?.currentAllAssets.value,
-      pair?.currentTotalAsset.base,
-      pair?.maxAssetAvailableFraction,
-      pair?.userAssetFraction,
-      parsedWithdrawValue?.quotient,
-      useBento,
-    ]
+    [account, addTransaction, bentoBoxContract, chainId, i18n, library, market, masterContract]
   )
 
   const error = !parsedWithdrawValue
     ? 'Enter an amount'
-    : available?.lessThan(parsedWithdrawValue)
+    : available.lessThan(parsedWithdrawValue)
     ? 'Insufficient balance'
     : undefined
 
@@ -92,7 +119,7 @@ const KashiWithdraw = ({ pair, header }) => {
         </HeadlessUiModal.BorderedContent>
       )}
 
-      {!amountAvailable?.eq(0) && (
+      {JSBI.equal(amountAvailable, ZERO) && (
         <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 border !border-blue/40 bg-dark-1000/40">
           <Typography variant="sm">
             {i18n._(t`If your KMP is staked, you cannot withdraw your lent tokens. You must unstake first.`)}
@@ -118,7 +145,7 @@ const KashiWithdraw = ({ pair, header }) => {
         <Button
           fullWidth
           color={!isValid && !!parsedWithdrawValue ? 'red' : 'blue'}
-          onClick={() => onCook(pair, onWithdraw)}
+          onClick={() => onCook(market, onWithdraw)}
           disabled={!isValid}
         >
           {error || i18n._(t`Confirm Withdraw`)}
