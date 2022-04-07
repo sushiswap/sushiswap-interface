@@ -33,6 +33,7 @@ export const Layout: FC<Layout> = ({ children, id }) => {
 }
 
 type SwapLayout = (id: string) => FC
+
 export const SwapLayout: SwapLayout = (id: string) => {
   return (props) => <Layout id={id} {...props} />
 }

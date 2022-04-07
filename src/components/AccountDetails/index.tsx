@@ -37,9 +37,12 @@ const AccountDetails: FC<AccountDetailsProps> = ({
   const { chainId, account, connector, deactivate, library } = useActiveWeb3React()
   const dispatch = useAppDispatch()
 
-  const connectorName = useMemo(() => {
+  const isMetaMask = useMemo(() => {
     const { ethereum } = window
-    const isMetaMask = !!(ethereum && ethereum.isMetaMask)
+    return !!(ethereum && ethereum.isMetaMask)
+  }, [])
+
+  const connectorName = useMemo(() => {
     const name = Object.keys(SUPPORTED_WALLETS)
       .filter(
         (k) =>
@@ -51,7 +54,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
         Connected with {name}
       </Typography>
     )
-  }, [connector])
+  }, [connector, isMetaMask])
 
   const clearAllTransactionsCallback = useCallback(() => {
     if (chainId) dispatch(clearAllTransactions({ chainId }))
@@ -64,9 +67,11 @@ const AccountDetails: FC<AccountDetailsProps> = ({
         <HeadlessUiModal.BorderedContent className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             {connectorName}
-            <Button variant="outlined" color="blue" size="xs" onClick={deactivate}>
-              {i18n._(t`Disconnect`)}
-            </Button>
+            {!isMetaMask && (
+              <Button variant="outlined" color="blue" size="xs" onClick={deactivate}>
+                {i18n._(t`Disconnect`)}
+              </Button>
+            )}
           </div>
           <div id="web3-account-identifier-row" className="flex flex-col justify-center gap-4">
             <div className="flex items-center gap-4">
