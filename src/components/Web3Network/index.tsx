@@ -64,7 +64,7 @@ function Web3Network(): JSX.Element | null {
     if (chainId && !queryChainId) {
       console.debug('Setting chain id on initial load because not present')
       console.log({ router })
-      router.replace({ query: { ...router.query, chainId } })
+      router.replace({ query: { ...router.query, chainId } }, undefined)
     }
   }, [chainId, queryChainId, router])
 

@@ -60,15 +60,15 @@ export function useSwapActionHandlers(): {
         const newInputCurrencyId = currencyId(inputCurrency)
         if (outputCurrencyId === newInputCurrencyId) {
           if (outputCurrencyId) {
-            router.push(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=${inputCurrencyId}`)
+            router.replace(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=${inputCurrencyId}`)
           } else {
-            router.push(`/swap?inputCurrency=ETH&outputCurrency=`)
+            router.replace(`/swap?inputCurrency=ETH&outputCurrency=`)
           }
         } else {
           if (outputCurrencyId) {
-            router.push(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=${outputCurrencyId}`)
+            router.replace(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=${outputCurrencyId}`)
           } else {
-            router.push(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=`)
+            router.replace(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=`)
           }
         }
       }
@@ -78,15 +78,15 @@ export function useSwapActionHandlers(): {
         const newOutputCurrencyId = currencyId(outputCurrency)
         if (inputCurrencyId === newOutputCurrencyId) {
           if (outputCurrencyId) {
-            router.push(`/swap?inputCurrency=${outputCurrencyId}&outputCurrency=${newOutputCurrencyId}`)
+            router.replace(`/swap?inputCurrency=${outputCurrencyId}&outputCurrency=${newOutputCurrencyId}`)
           } else {
-            router.push(`/swap?inputCurrency=ETH&outputCurrency=${newOutputCurrencyId}`)
+            router.replace(`/swap?inputCurrency=ETH&outputCurrency=${newOutputCurrencyId}`)
           }
         } else {
           if (inputCurrencyId) {
-            router.push(`/swap?inputCurrency=${inputCurrencyId}&outputCurrency=${newOutputCurrencyId}`)
+            router.replace(`/swap?inputCurrency=${inputCurrencyId}&outputCurrency=${newOutputCurrencyId}`)
           } else {
-            router.push(`/swap?inputCurrency=ETH&outputCurrency=${newOutputCurrencyId}`)
+            router.replace(`/swap?inputCurrency=ETH&outputCurrency=${newOutputCurrencyId}`)
           }
         }
       }
@@ -106,7 +106,7 @@ export function useSwapActionHandlers(): {
   )
 
   const onSwitchTokens = useCallback(() => {
-    router.push(`/swap?inputCurrency=${outputCurrencyId}&outputCurrency=${inputCurrencyId}`)
+    router.replace(`/swap?inputCurrency=${outputCurrencyId}&outputCurrency=${inputCurrencyId}`)
     dispatch(switchCurrencies())
   }, [dispatch, inputCurrencyId, outputCurrencyId, router])
 
@@ -354,7 +354,7 @@ export function useDefaultsFromURLSearch():
       outputCurrencyId: parsed[Field.OUTPUT].currencyId,
     })
 
-    router.push(
+    router.replace(
       `/swap?inputCurrency=${parsed[Field.INPUT].currencyId}&outputCurrency=${parsed[Field.OUTPUT].currencyId}`
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
