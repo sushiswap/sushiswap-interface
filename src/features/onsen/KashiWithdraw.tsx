@@ -25,6 +25,7 @@ const KashiWithdraw = ({ market, header }: { market: KashiMediumRiskLendingPair;
   const bentoBoxContract = useBentoBoxContract()
   const masterContract = chainId && KASHI_ADDRESS[chainId]
   const [useBento, setUseBento] = useState<boolean>(false)
+  const [removeMax, setRemoveMax] = useState<boolean>(false)
   const assetToken = market.asset.token
   const [withdrawValue, setWithdrawValue] = useState('')
   const [kashiApprovalState, approveKashiFallback, kashiPermit, onApproveKashi, onCook] = useKashiApproveCallback()
@@ -33,50 +34,60 @@ const KashiWithdraw = ({ market, header }: { market: KashiMediumRiskLendingPair;
     assetToken && amountAvailable && CurrencyAmount.fromRawAmount(assetToken, amountAvailable.toString())
   const parsedWithdrawValue = tryParseAmount(withdrawValue, assetToken)
 
-  const onWithdraw = useCallback(
-    async ({ withdrawAmount, receiveToWallet, permit, removeMax = false }) => {
-      if (!account || !library || !chainId || !masterContract || !bentoBoxContract || !withdrawAmount) {
-        console.error('Dependencies unavailable')
-        return
-      }
+  const onWithdraw = useCallback(async () => {
+    if (!account || !library || !chainId || !masterContract || !bentoBoxContract || !parsedWithdrawValue) {
+      console.error('Dependencies unavailable')
+      return
+    }
 
-      const cooker = new KashiCooker(market, account, library, chainId)
+    const cooker = new KashiCooker(market, account, library, chainId)
 
-      // Add permit if available
-      if (permit) {
-        cooker.approve({
-          account,
-          masterContract,
-          v: permit.v,
-          r: permit.r,
-          s: permit.s,
-        })
-      }
+    // Add permit if available
+    if (kashiPermit) {
+      cooker.approve({
+        account,
+        masterContract,
+        v: kashiPermit.v,
+        r: kashiPermit.r,
+        s: kashiPermit.s,
+      })
+    }
 
-      const fraction = removeMax
-        ? minimum(market.userAssetFraction, market.maxAssetAvailableFraction)
-        : toShare(
-            {
-              base: market.currentTotalAsset.base,
-              elastic: market.currentAllAssets,
-            },
-            withdrawAmount.quotient
-          )
+    const fraction = removeMax
+      ? minimum(market.userAssetFraction, market.maxAssetAvailableFraction)
+      : toShare(
+          {
+            base: market.currentTotalAsset.base,
+            elastic: market.currentAllAssets,
+          },
+          parsedWithdrawValue.quotient
+        )
 
-      cooker.removeAsset(BigNumber.from(fraction.toString()), !receiveToWallet)
+    cooker.removeAsset(BigNumber.from(fraction.toString()), useBento)
 
-      const result = await cooker.cook()
+    const result = await cooker.cook()
 
-      if (result.success) {
-        addTransaction(result.tx, {
-          summary: i18n._(t`Withdraw ${withdrawAmount.toSignificant(6)} ${withdrawAmount.currency.symbol}`),
-        })
+    if (result.success) {
+      addTransaction(result.tx, {
+        summary: i18n._(t`Withdraw ${parsedWithdrawValue.toSignificant(6)} ${parsedWithdrawValue.currency.symbol}`),
+      })
 
-        return result.tx
-      }
-    },
-    [account, addTransaction, bentoBoxContract, chainId, i18n, library, market, masterContract]
-  )
+      return result.tx
+    }
+  }, [
+    account,
+    addTransaction,
+    bentoBoxContract,
+    chainId,
+    i18n,
+    kashiPermit,
+    library,
+    market,
+    masterContract,
+    parsedWithdrawValue,
+    removeMax,
+    useBento,
+  ])
 
   const error = !parsedWithdrawValue
     ? 'Enter an amount'
