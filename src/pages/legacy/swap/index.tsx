@@ -352,33 +352,6 @@ const Swap = ({ banners }) => {
     }
   }, [priceImpactSeverity])
 
-  // const handleCurrencyASelect = useCallback(
-  //   (currencyA: Currency) => {
-  //     const newCurrencyIdA = currencyId(currencyA)
-  //     if (newCurrencyIdA === currencyIdB) {
-  //       router.push(`/swap?inputCurrency=${currencyIdB}&outputCurrency=${currencyIdA}`)
-  //     } else {
-  //       router.push(`/swap?inputCurrency=${newCurrencyIdA}&outputCurrency=${currencyIdB}`)
-  //     }
-  //   },
-  //   [currencyIdB, router, currencyIdA]
-  // )
-  // const handleCurrencyBSelect = useCallback(
-  //   (currencyB: Currency) => {
-  //     const newCurrencyIdB = currencyId(currencyB)
-  //     if (currencyIdA === newCurrencyIdB) {
-  //       if (currencyIdB) {
-  //         router.push(`/swap?inputCurrency=${currencyIdB}&outputCurrency=${newCurrencyIdB}`)
-  //       } else {
-  //         router.push(`/add/${newCurrencyIdB}`)
-  //       }
-  //     } else {
-  //       router.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
-  //     }
-  //   },
-  //   [currencyIdA, router, currencyIdB]
-  // )
-
   return (
     <>
       <NextSeo title="Swap" />
@@ -437,7 +410,7 @@ const Swap = ({ banners }) => {
             priceImpact={priceImpact}
             priceImpactCss={priceImpactCss}
           />
-          {isExpertMode && sushiGuardEnabled && <SwapGasFeeInputs />}
+          {sushiGuardEnabled && <SwapGasFeeInputs />}
           {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
           {Boolean(trade) && (
             <SwapDetails
