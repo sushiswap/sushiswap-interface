@@ -9,12 +9,12 @@ import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { KashiCooker } from 'app/entities'
-import { tryParseAmount } from 'app/functions'
+import { tryParseAmount, unwrappedToken } from 'app/functions'
 import { useBentoBoxContract } from 'app/hooks'
 import useKashiApproveCallback, { BentoApprovalState } from 'app/hooks/useKashiApproveCallback'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 
 import KashiMediumRiskLendingPair from '../kashi/KashiMediumRiskLendingPair'
 
@@ -26,13 +26,26 @@ const KashiWithdraw = ({ market, header }: { market: KashiMediumRiskLendingPair;
   const masterContract = chainId && KASHI_ADDRESS[chainId]
   const [useBento, setUseBento] = useState<boolean>(false)
   const [removeMax, setRemoveMax] = useState<boolean>(false)
-  const assetToken = market.asset.token
+  const assetToken = unwrappedToken(market.asset.token)
   const [withdrawValue, setWithdrawValue] = useState('')
   const [kashiApprovalState, approveKashiFallback, kashiPermit, onApproveKashi, onCook] = useKashiApproveCallback()
   const amountAvailable = minimum(market?.maxAssetAvailable ?? ZERO, market?.currentUserAssetAmount ?? ZERO)
-  const available =
-    assetToken && amountAvailable && CurrencyAmount.fromRawAmount(assetToken, amountAvailable.toString())
+
   const parsedWithdrawValue = tryParseAmount(withdrawValue, assetToken)
+
+  const currentUserAssetAmount = useMemo(
+    () => CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserAssetAmount),
+    [market.asset.token, market.currentUserAssetAmount]
+  )
+
+  const max = useMemo(
+    () =>
+      CurrencyAmount.fromRawAmount(
+        market.asset.token,
+        minimum(market.maxAssetAvailable, market.currentUserAssetAmount)
+      ),
+    [market.asset.token, market.currentUserAssetAmount, market.maxAssetAvailable]
+  )
 
   const onWithdraw = useCallback(async () => {
     if (!account || !library || !chainId || !masterContract || !bentoBoxContract || !parsedWithdrawValue) {
@@ -91,11 +104,15 @@ const KashiWithdraw = ({ market, header }: { market: KashiMediumRiskLendingPair;
 
   const error = !parsedWithdrawValue
     ? 'Enter an amount'
-    : available.lessThan(parsedWithdrawValue)
+    : parsedWithdrawValue.greaterThan(currentUserAssetAmount)
     ? 'Insufficient balance'
+    : parsedWithdrawValue.greaterThan(max)
+    ? 'Not enough assets available'
     : undefined
 
   const isValid = !error
+
+  console.log({ market })
 
   return (
     <>
@@ -110,11 +127,13 @@ const KashiWithdraw = ({ market, header }: { market: KashiMediumRiskLendingPair;
             headerRight={
               <AssetInput.WalletSwitch
                 onChange={() => setUseBento(!useBento)}
-                checked={useBento}
+                checked={!useBento}
                 id="switch-spend-from-wallet-a"
+                label="Send to:"
               />
             }
-            spendFromWallet={useBento}
+            spendFromWallet={!useBento}
+            balance={max}
             id="add-liquidity-input-tokenb"
           />
         </div>
