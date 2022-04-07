@@ -29,9 +29,6 @@ function Web3Network(): JSX.Element | null {
         .then(() => {
           return router.replace({ query: { ...router.query, chainId: targetChain } })
         })
-        .then(() => {
-          // setSwitching(false)
-        })
         .catch(() => {
           if (chainId) {
             router.replace({ query: { ...router.query, chainId } })
