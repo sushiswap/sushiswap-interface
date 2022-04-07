@@ -57,6 +57,7 @@ const Swap = ({ banners }) => {
   const loadedUrlParams = useDefaultsFromURLSearch()
   const { account } = useActiveWeb3React()
   const defaultTokens = useAllTokens()
+
   const [isExpertMode] = useExpertModeManager()
   const { independentField, typedValue, recipient } = useSwapState()
   const { v2Trade, parsedAmount, currencies, inputError: swapInputError, allowedSlippage, to } = useDerivedSwapInfo()
@@ -321,7 +322,7 @@ const Swap = ({ banners }) => {
   }, [attemptingTxn, showConfirm, swapErrorMessage, trade, txHash])
 
   const handleInputSelect = useCallback(
-    (inputCurrency) => {
+    (inputCurrency: Currency) => {
       setApprovalSubmitted(false) // reset 2 step UI for approvals
       onCurrencySelection(Field.INPUT, inputCurrency)
     },
@@ -329,7 +330,9 @@ const Swap = ({ banners }) => {
   )
 
   const handleOutputSelect = useCallback(
-    (outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency),
+    (outputCurrency: Currency) => {
+      onCurrencySelection(Field.OUTPUT, outputCurrency)
+    },
     [onCurrencySelection]
   )
 
@@ -348,6 +351,33 @@ const Swap = ({ banners }) => {
         return 'text-red'
     }
   }, [priceImpactSeverity])
+
+  // const handleCurrencyASelect = useCallback(
+  //   (currencyA: Currency) => {
+  //     const newCurrencyIdA = currencyId(currencyA)
+  //     if (newCurrencyIdA === currencyIdB) {
+  //       router.push(`/swap?inputCurrency=${currencyIdB}&outputCurrency=${currencyIdA}`)
+  //     } else {
+  //       router.push(`/swap?inputCurrency=${newCurrencyIdA}&outputCurrency=${currencyIdB}`)
+  //     }
+  //   },
+  //   [currencyIdB, router, currencyIdA]
+  // )
+  // const handleCurrencyBSelect = useCallback(
+  //   (currencyB: Currency) => {
+  //     const newCurrencyIdB = currencyId(currencyB)
+  //     if (currencyIdA === newCurrencyIdB) {
+  //       if (currencyIdB) {
+  //         router.push(`/swap?inputCurrency=${currencyIdB}&outputCurrency=${newCurrencyIdB}`)
+  //       } else {
+  //         router.push(`/add/${newCurrencyIdB}`)
+  //       }
+  //     } else {
+  //       router.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+  //     }
+  //   },
+  //   [currencyIdA, router, currencyIdB]
+  // )
 
   return (
     <>

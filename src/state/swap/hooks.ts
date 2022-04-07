@@ -10,6 +10,7 @@ import {
   TradeType,
   WNATIVE_ADDRESS,
 } from '@sushiswap/core-sdk'
+import { currencyId } from 'app/functions'
 import { tryParseAmount } from 'app/functions/parse'
 import { isAddress } from 'app/functions/validate'
 import { useCurrency } from 'app/hooks/Tokens'
@@ -22,6 +23,7 @@ import { AppState } from 'app/state'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { useCurrencyBalances } from 'app/state/wallet/hooks'
+import { useRouter } from 'next/router'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -44,8 +46,51 @@ export function useSwapActionHandlers(): {
   onChangeRecipient: (recipient?: string) => void
 } {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
+  const router = useRouter()
+
+  const inputCurrencyId = router.query.inputCurrency || 'ETH'
+  const outputCurrencyId =
+    router.query.outputCurrency || (chainId && chainId in SUSHI_ADDRESS ? SUSHI_ADDRESS[chainId] : undefined)
+
   const onCurrencySelection = useCallback(
     (field: Field, currency: Currency) => {
+      if (field === Field.INPUT) {
+        const inputCurrency = currency
+        const newInputCurrencyId = currencyId(inputCurrency)
+        if (outputCurrencyId === newInputCurrencyId) {
+          if (outputCurrencyId) {
+            router.push(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=${inputCurrencyId}`)
+          } else {
+            router.push(`/swap?inputCurrency=ETH&outputCurrency=`)
+          }
+        } else {
+          if (outputCurrencyId) {
+            router.push(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=${outputCurrencyId}`)
+          } else {
+            router.push(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=`)
+          }
+        }
+      }
+
+      if (field === Field.OUTPUT) {
+        const outputCurrency = currency
+        const newOutputCurrencyId = currencyId(outputCurrency)
+        if (inputCurrencyId === newOutputCurrencyId) {
+          if (outputCurrencyId) {
+            router.push(`/swap?inputCurrency=${outputCurrencyId}&outputCurrency=${newOutputCurrencyId}`)
+          } else {
+            router.push(`/swap?inputCurrency=ETH&outputCurrency=${newOutputCurrencyId}`)
+          }
+        } else {
+          if (inputCurrencyId) {
+            router.push(`/swap?inputCurrency=${inputCurrencyId}&outputCurrency=${newOutputCurrencyId}`)
+          } else {
+            router.push(`/swap?inputCurrency=ETH&outputCurrency=${newOutputCurrencyId}`)
+          }
+        }
+      }
+
       dispatch(
         selectCurrency({
           field,
@@ -57,12 +102,13 @@ export function useSwapActionHandlers(): {
         })
       )
     },
-    [dispatch]
+    [dispatch, inputCurrencyId, outputCurrencyId, router]
   )
 
   const onSwitchTokens = useCallback(() => {
+    router.push(`/swap?inputCurrency=${outputCurrencyId}&outputCurrency=${inputCurrencyId}`)
     dispatch(switchCurrencies())
-  }, [dispatch])
+  }, [dispatch, inputCurrencyId, outputCurrencyId, router])
 
   const onUserInput = useCallback(
     (field: Field, typedValue: string) => {
@@ -277,6 +323,7 @@ export function useDefaultsFromURLSearch():
     }
   | undefined {
   const { chainId } = useActiveWeb3React()
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const parsedQs = useParsedQueryString()
   const [expertMode] = useExpertModeManager()
@@ -306,6 +353,10 @@ export function useDefaultsFromURLSearch():
       inputCurrencyId: parsed[Field.INPUT].currencyId,
       outputCurrencyId: parsed[Field.OUTPUT].currencyId,
     })
+
+    router.push(
+      `/swap?inputCurrency=${parsed[Field.INPUT].currencyId}&outputCurrency=${parsed[Field.OUTPUT].currencyId}`
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, chainId])
 
