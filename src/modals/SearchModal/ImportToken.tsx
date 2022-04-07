@@ -12,6 +12,7 @@ import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchMo
 import { useActiveWeb3React } from 'app/services/web3'
 import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import { useAddUserToken } from 'app/state/user/hooks'
+import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 
 interface ImportProps {
@@ -21,12 +22,14 @@ interface ImportProps {
 
 export const ImportToken: FC<ImportProps> = ({ tokens, onBack }) => {
   const { chainId } = useActiveWeb3React()
+  const router = useRouter()
+  const queryChainId = Number(router.query.chainId)
   const { onDismiss, onSelect, importToken } = useCurrencyModalContext()
   const { i18n } = useLingui()
   const addToken = useAddUserToken()
   const importList = importToken instanceof WrappedTokenInfo ? importToken.list : undefined
 
-  return (
+  return chainId === queryChainId ? (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={i18n._(t`Import token`)} onClose={onDismiss} onBack={onBack} />
       <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 divide-y divide-gray-700 !border-yellow/40">
@@ -41,7 +44,7 @@ export const ImportToken: FC<ImportProps> = ({ tokens, onBack }) => {
               <div className="flex items-center gap-3">
                 <CurrencyLogo currency={token} size={48} className="!rounded-full overflow-hidden" />
                 <div className="flex flex-col">
-                  <div className="flex gap-2 items-center">
+                  <div className="flex items-center gap-2">
                     <Typography variant="lg" weight={700}>
                       <ExternalLink href={getExplorerLink(chainId, token.address, 'address')} color="blue">
                         {shortenAddress(token.address)}
@@ -79,7 +82,7 @@ export const ImportToken: FC<ImportProps> = ({ tokens, onBack }) => {
         {i18n._(t`Import`)}
       </Button>
     </div>
-  )
+  ) : null
 }
 
 export default ImportToken
