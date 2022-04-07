@@ -5,24 +5,26 @@ import Settings from 'app/components/Settings'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
+import useActiveWeb3React from 'app/lib/hooks/useActiveWeb3React'
 import React, { useMemo, useState } from 'react'
 
-import { useKashiPair } from '../kashi/hooks'
+import { useKashiMediumRiskLendingPair } from '../kashi/hooks'
 import KashiDeposit from './KashiDeposit'
 import KashiWithdraw from './KashiWithdraw'
 
 // @ts-ignore TYPE NEEDS FIXING
 const ManageKashiPair = ({ farm }) => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
 
-  const kashiPair = useKashiPair(farm.pair.id)
+  const kashiPair = useKashiMediumRiskLendingPair(account, farm.pair.id)
 
   const [toggle, setToggle] = useState(true)
 
   const header = useMemo(
     () => (
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <Typography weight={700} className="text-high-emphesis">
             {toggle ? i18n._(t`Deposit`) : i18n._(t`Withdraw`)}
           </Typography>
