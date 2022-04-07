@@ -21,8 +21,8 @@ const Pool = () => {
 
   return (
     <>
-      <NextSeo title="Remove Liquidity" />
-      <div className="flex justify-between items-center">
+      <NextSeo title="Pool" />
+      <div className="flex items-center justify-between">
         <Typography variant="lg" className="py-6">
           Position Overview
         </Typography>
@@ -39,7 +39,7 @@ const Pool = () => {
           <div className="px-2 space-y-4 rounded bg-dark-900">
             <div className="grid grid-flow-row divide-y divide-dark-800">
               {loading ? (
-                <div className="flex justify-center items-center h-40">
+                <div className="flex items-center justify-center h-40">
                   <Loader />
                 </div>
               ) : pairs?.length > 0 ? (
@@ -51,7 +51,7 @@ const Pool = () => {
                   />
                 ))
               ) : (
-                <div className="flex justify-center items-center h-40">
+                <div className="flex items-center justify-center h-40">
                   <Typography variant="xs">{i18n._(t`No positions found`)}</Typography>
                 </div>
               )}

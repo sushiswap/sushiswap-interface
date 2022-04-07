@@ -84,10 +84,6 @@ const nextConfig = {
         destination: '/legacy/swap',
       },
       {
-        source: '/swap/:token*',
-        destination: '/legacy/swap/:token*',
-      },
-      {
         source: '/open-order',
         destination: '/limit-order/open-order',
       },
