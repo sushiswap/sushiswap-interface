@@ -1,7 +1,6 @@
 import { getAddress } from '@ethersproject/address'
 import { ChainId, Token } from '@sushiswap/core-sdk'
-import { PoolType } from '@sushiswap/tines'
-import { Fee } from '@sushiswap/trident-sdk'
+import { Fee, PoolType } from '@sushiswap/trident-sdk'
 import { GRAPH_HOST, TRIDENT } from 'app/services/graph/constants'
 import {
   getTransactionsForPoolQuery,
