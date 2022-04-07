@@ -28,6 +28,7 @@ export function useKashiPairs({
 }: GraphProps) {
   return useSWR(
     shouldFetch ? () => ['kashiPairs', chainId, stringify(variables)] : null,
+    // @ts-ignore
     (_, chainId) => getKashiPairs(chainId, variables),
     swrConfig
   )

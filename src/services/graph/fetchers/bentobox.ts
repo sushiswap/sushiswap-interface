@@ -34,10 +34,8 @@ export const getClones = async (chainId = ChainId.ETHEREUM) => {
   return clones
 }
 
-export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const { kashiPairs } = await fetcher(chainId, kashiPairsQuery, variables)
-
-  console.log('1', kashiPairs)
 
   const tokens = await getTokenSubset(chainId, {
     tokenAddresses: Array.from(
@@ -48,47 +46,6 @@ export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables) => {
       )
     ),
   })
-
-  console.log('2', tokens)
-
-  console.log('3', kashiPairs)
-
-  console.log(
-    '4',
-    kashiPairs.map((pair) => ({
-      ...pair,
-      token0: {
-        ...pair.asset,
-        // @ts-ignore TYPE NEEDS FIXING
-        ...tokens.find((token) => token.id === pair.asset.id),
-      },
-      token1: {
-        ...pair.collateral,
-        // @ts-ignore TYPE NEEDS FIXING
-        ...tokens.find((token) => token.id === pair.collateral.id),
-      },
-      assetAmount: Math.floor(
-        pair.totalAssetBase /
-          (pair.totalAssetBase /
-            (Number(pair.totalAssetElastic) +
-              (pair.totalBorrowElastic * pair.asset.totalSupplyBase) / pair.asset.totalSupplyElastic))
-      ).toString(),
-      borrowedAmount: toAmount(
-        {
-          elastic: pair.totalBorrowElastic.toBigNumber(0),
-          base: pair.totalBorrowBase.toBigNumber(0),
-        },
-        pair.totalBorrowElastic.toBigNumber(0)
-      ).toString(),
-      collateralAmount: toAmount(
-        {
-          elastic: pair.collateral.totalSupplyElastic.toBigNumber(0),
-          base: pair.collateral.totalSupplyBase.toBigNumber(0),
-        },
-        pair.totalCollateralShare.toBigNumber(0)
-      ).toString(),
-    }))
-  )
 
   // @ts-ignore TYPE NEEDS FIXING
   return kashiPairs.map((pair) => ({
