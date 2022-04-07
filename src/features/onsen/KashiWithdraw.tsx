@@ -156,7 +156,7 @@ const KashiWithdraw = ({ market, header }: { market: KashiMediumRiskLendingPair;
         <Button
           fullWidth
           color={!isValid && !!parsedWithdrawValue ? 'red' : 'blue'}
-          onClick={() => onCook(market, onWithdraw)}
+          onClick={onWithdraw}
           disabled={!isValid}
         >
           {error || i18n._(t`Confirm Withdraw`)}
