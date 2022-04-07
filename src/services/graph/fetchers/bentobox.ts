@@ -1,5 +1,5 @@
 import { ChainId, CurrencyAmount, JSBI, Token } from '@sushiswap/core-sdk'
-import { aprToApy, getFraction, toAmount, toAmountCurrencyAmount } from 'app/functions'
+import { aprToApy, toAmount, toAmountCurrencyAmount } from 'app/functions'
 import { GRAPH_HOST } from 'app/services/graph/constants'
 import { getTokenSubset } from 'app/services/graph/fetchers'
 import {
@@ -34,8 +34,10 @@ export const getClones = async (chainId = ChainId.ETHEREUM) => {
   return clones
 }
 
-export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
+export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables) => {
   const { kashiPairs } = await fetcher(chainId, kashiPairsQuery, variables)
+
+  console.log('1', kashiPairs)
 
   const tokens = await getTokenSubset(chainId, {
     tokenAddresses: Array.from(
@@ -46,6 +48,48 @@ export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = unde
       )
     ),
   })
+
+  console.log('2', tokens)
+
+  console.log('3', kashiPairs)
+
+  console.log(
+    '4',
+    kashiPairs.map((pair) => ({
+      ...pair,
+      token0: {
+        ...pair.asset,
+        // @ts-ignore TYPE NEEDS FIXING
+        ...tokens.find((token) => token.id === pair.asset.id),
+      },
+      token1: {
+        ...pair.collateral,
+        // @ts-ignore TYPE NEEDS FIXING
+        ...tokens.find((token) => token.id === pair.collateral.id),
+      },
+      assetAmount: Math.floor(
+        pair.totalAssetBase /
+          (pair.totalAssetBase /
+            (Number(pair.totalAssetElastic) +
+              (pair.totalBorrowElastic * pair.asset.totalSupplyBase) / pair.asset.totalSupplyElastic))
+      ).toString(),
+      borrowedAmount: toAmount(
+        {
+          elastic: pair.totalBorrowElastic.toBigNumber(0),
+          base: pair.totalBorrowBase.toBigNumber(0),
+        },
+        pair.totalBorrowElastic.toBigNumber(0)
+      ).toString(),
+      collateralAmount: toAmount(
+        {
+          elastic: pair.collateral.totalSupplyElastic.toBigNumber(0),
+          base: pair.collateral.totalSupplyBase.toBigNumber(0),
+        },
+        pair.totalCollateralShare.toBigNumber(0)
+      ).toString(),
+    }))
+  )
+
   // @ts-ignore TYPE NEEDS FIXING
   return kashiPairs.map((pair) => ({
     ...pair,
@@ -59,7 +103,12 @@ export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = unde
       // @ts-ignore TYPE NEEDS FIXING
       ...tokens.find((token) => token.id === pair.collateral.id),
     },
-    assetAmount: Math.floor(pair.totalAssetBase / getFraction({ ...pair, token0: pair.asset })).toString(),
+    assetAmount: Math.floor(
+      pair.totalAssetBase /
+        (pair.totalAssetBase /
+          (Number(pair.totalAssetElastic) +
+            (pair.totalBorrowElastic * pair.asset.totalSupplyBase) / pair.asset.totalSupplyElastic))
+    ).toString(),
     borrowedAmount: toAmount(
       {
         elastic: pair.totalBorrowElastic.toBigNumber(0),
@@ -85,7 +134,11 @@ export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables) =
   return userKashiPairs.map((userPair) => ({
     ...userPair,
     assetAmount: Math.floor(
-      userPair.assetFraction / getFraction({ ...userPair.pair, token0: userPair.pair.asset })
+      userPair.assetFraction /
+        (userPair.pair.totalAssetBase /
+          (Number(userPair.pair.totalAssetElastic) +
+            (userPair.pair.totalBorrowElastic * userPair.pair.asset.totalSupplyBase) /
+              userPair.pair.asset.totalSupplyElastic))
     ).toString(),
     borrowedAmount: toAmount(
       {

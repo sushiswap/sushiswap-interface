@@ -44,16 +44,16 @@ const ManageKashiPair = ({ farm }) => {
     [i18n, toggle]
   )
 
-  return (
+  return kashiPair ? (
     <>
       <div className={classNames(toggle ? 'flex flex-col flex-grow gap-4' : 'hidden')}>
-        <KashiDeposit pair={kashiPair} header={header} />
+        <KashiDeposit market={kashiPair} header={header} />
       </div>
       <div className={classNames(!toggle ? 'flex flex-col flex-grow gap-4' : 'hidden')}>
-        <KashiWithdraw pair={kashiPair} header={header} />
+        <KashiWithdraw market={kashiPair} header={header} />
       </div>
     </>
-  )
+  ) : null
 }
 
 export default ManageKashiPair

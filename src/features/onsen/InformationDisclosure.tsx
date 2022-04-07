@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { HeadlessUiModal } from 'app/components/Modal'
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import NavLink from '../../components/NavLink'
 import Typography from '../../components/Typography'

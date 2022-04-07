@@ -16,7 +16,7 @@ import useKashiApproveCallback, { BentoApprovalState } from 'app/hooks/useKashiA
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 
 import KashiMediumRiskLendingPair from '../kashi/KashiMediumRiskLendingPair'
 
@@ -27,19 +27,21 @@ const KashiDeposit = ({ market, header }: { market: KashiMediumRiskLendingPair; 
   const [useBento, setUseBento] = useState<boolean>(false)
   const asset = market.asset.token
   const [depositValue, setDepositValue] = useState('')
-  const isNative = chainId && chainId in WNATIVE_ADDRESS ? WNATIVE_ADDRESS[chainId] === asset.address : undefined
+
+  const isNative = useMemo(
+    () => (chainId && chainId in WNATIVE_ADDRESS ? WNATIVE_ADDRESS[chainId] === asset.address : undefined),
+    [asset.address, chainId]
+  )
   const ethBalance = useNativeCurrencyBalances(isNative ? [account ?? undefined] : [])
 
   const assetWalletBalance = useBentoOrWalletBalance(account ?? undefined, asset, true)
   const assetBentoBoxBalance = useBentoOrWalletBalance(account ?? undefined, asset, false)
 
-  const assetBalance = account
-    ? useBento
-      ? assetBentoBoxBalance
-      : isNative
-      ? ethBalance[account]
-      : assetWalletBalance
-    : undefined
+  const assetBalance = useMemo(
+    () =>
+      account ? (useBento ? assetBentoBoxBalance : isNative ? ethBalance[account] : assetWalletBalance) : undefined,
+    [account, assetBentoBoxBalance, assetWalletBalance, ethBalance, isNative, useBento]
+  )
 
   const parsedDepositValue = tryParseAmount(depositValue, asset)
   const [kashiApprovalState, approveKashiFallback, kashiPermit, onApproveKashi, onCook] = useKashiApproveCallback()
@@ -50,46 +52,56 @@ const KashiDeposit = ({ market, header }: { market: KashiMediumRiskLendingPair; 
 
   const addTransaction = useTransactionAdder()
   const bentoBoxContract = useBentoBoxContract()
-  const masterContract = chainId && KASHI_ADDRESS[chainId]
+  const masterContract = useMemo(() => chainId && KASHI_ADDRESS[chainId], [chainId])
 
-  const onDeposit = useCallback(
-    async ({ depositAmount, spendFromWallet, permit }) => {
-      if (!account || !library || !chainId || !masterContract || !bentoBoxContract || !depositAmount) {
-        console.error('Dependencies unavailable')
-        return
-      }
+  const onDeposit = useCallback(async () => {
+    console.log({ account, library, chainId, masterContract, bentoBoxContract, parsedDepositValue })
+    if (!account || !library || !chainId || !masterContract || !bentoBoxContract || !parsedDepositValue) {
+      console.error('Dependencies unavailable')
+      return
+    }
 
-      const cooker = new KashiCooker(market, account, library, chainId)
+    const cooker = new KashiCooker(market, account, library, chainId)
 
-      // Add permit if available
-      if (permit) {
-        cooker.approve({
-          account,
-          masterContract,
-          v: permit.v,
-          r: permit.r,
-          s: permit.s,
-        })
-      }
+    // Add permit if available
+    if (kashiPermit) {
+      cooker.approve({
+        account,
+        masterContract,
+        v: kashiPermit.v,
+        r: kashiPermit.r,
+        s: kashiPermit.s,
+      })
+    }
 
-      const deadBalance = await bentoBoxContract.balanceOf(
-        market.asset.token.address,
-        '0x000000000000000000000000000000000000dead'
-      )
+    const deadBalance = await bentoBoxContract.balanceOf(
+      market.asset.token.address,
+      '0x000000000000000000000000000000000000dead'
+    )
 
-      cooker.addAsset(BigNumber.from(depositAmount.quotient.toString()), !spendFromWallet, deadBalance.isZero())
-      const result = await cooker.cook()
+    cooker.addAsset(BigNumber.from(parsedDepositValue.quotient.toString()), useBento, deadBalance.isZero())
+    const result = await cooker.cook()
 
-      if (result.success) {
-        addTransaction(result.tx, {
-          summary: i18n._(t`Deposit ${depositAmount.toSignificant(6)} ${depositAmount.currency.symbol}`),
-        })
+    if (result.success) {
+      addTransaction(result.tx, {
+        summary: i18n._(t`Deposit ${parsedDepositValue.toSignificant(6)} ${parsedDepositValue.currency.symbol}`),
+      })
 
-        return result.tx
-      }
-    },
-    [account, addTransaction, bentoBoxContract, chainId, i18n, library, market, masterContract]
-  )
+      return result.tx
+    }
+  }, [
+    account,
+    addTransaction,
+    bentoBoxContract,
+    chainId,
+    i18n,
+    kashiPermit,
+    library,
+    market,
+    masterContract,
+    parsedDepositValue,
+    useBento,
+  ])
 
   const error = !parsedDepositValue
     ? 'Enter an amount'
@@ -111,11 +123,11 @@ const KashiDeposit = ({ market, header }: { market: KashiMediumRiskLendingPair; 
           headerRight={
             <AssetInput.WalletSwitch
               onChange={() => setUseBento(!useBento)}
-              checked={useBento}
+              checked={!useBento}
               id="switch-spend-from-wallet-a"
             />
           }
-          spendFromWallet={useBento}
+          spendFromWallet={!useBento}
           id="add-liquidity-input-tokenb"
         />
       </HeadlessUiModal.BorderedContent>
