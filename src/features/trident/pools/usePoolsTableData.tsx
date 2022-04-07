@@ -1,4 +1,4 @@
-import { PoolType } from '@sushiswap/tines'
+import { PoolType } from '@sushiswap/trident-sdk'
 import Chip from 'app/components/Chip'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import { useOneDayBlock } from 'app/services/graph'

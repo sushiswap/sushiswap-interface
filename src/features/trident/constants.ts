@@ -1,4 +1,4 @@
-import { PoolType } from '@sushiswap/tines'
+import { PoolType } from '@sushiswap/trident-sdk'
 import { ChipColor } from 'app/components/Chip'
 import { classNames } from 'app/functions'
 

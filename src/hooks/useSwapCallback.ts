@@ -18,12 +18,13 @@ import {
   Trade as LegacyTrade,
   TradeType,
 } from '@sushiswap/core-sdk'
-import { getBigNumber, MultiRoute } from '@sushiswap/tines'
 import {
   ComplexPathParams,
   ExactInputParams,
   ExactInputSingleParams,
+  getBigNumber,
   InitialPath,
+  MultiRoute,
   Output,
   Path,
   PercentagePath,

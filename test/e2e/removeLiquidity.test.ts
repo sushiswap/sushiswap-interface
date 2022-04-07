@@ -1,5 +1,5 @@
 import { Dappeteer } from '@chainsafe/dappeteer'
-import { closeValues } from '@sushiswap/tines'
+import { closeValues } from '@sushiswap/trident-sdk'
 import { Browser, Page } from 'puppeteer'
 
 import { FUNDING_SOURCE, RATIO } from './constants/Index'

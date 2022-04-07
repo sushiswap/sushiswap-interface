@@ -1,5 +1,4 @@
-import { PoolType } from '@sushiswap/tines'
-import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
+import { ConstantProductPool, HybridPool, PoolType } from '@sushiswap/trident-sdk'
 import { ChipColor } from 'app/components/Chip'
 import { ConstantProductPoolState } from 'app/hooks/useTridentClassicPools'
 import { StablePoolState } from 'app/hooks/useTridentStablePools'
