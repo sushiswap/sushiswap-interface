@@ -4,19 +4,22 @@ import { CHAIN_KEY, NATIVE, Percent } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import LoadingCircle from 'app/animation/loading-circle.json'
 import Button from 'app/components/Button'
+import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
+import Typography from 'app/components/Typography'
+import AuctionCreationSubmittedModalContent from 'app/features/miso/AuctionCreationForm/AuctionCreationSubmittedModalContent'
 import { formatCreationFormData } from 'app/features/miso/AuctionCreationWizard/utils'
 import useAuctionCreate from 'app/features/miso/context/hooks/useAuctionCreate'
 import { useStore } from 'app/features/miso/context/store'
 import { useAuctionedToken } from 'app/features/miso/context/store/createTokenDetailsSlice'
-import { TokenSetup } from 'app/features/miso/context/types'
+import { AuctionCreationWizardInput, TokenSetup } from 'app/features/miso/context/types'
 import { ApprovalState, useApproveCallback, useContract } from 'app/hooks'
 import { useToken } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import { useRouter } from 'next/router'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-const CreateAuctionButtons = () => {
+const CreateAuctionButtons: FC<{ onBack(): void }> = ({ onBack }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const state = useStore((state) => state)
@@ -35,21 +38,16 @@ const CreateAuctionButtons = () => {
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.AuctionCreation.abi : undefined
   )
 
-  const data = paymentToken && auctionToken ? formatCreationFormData(state, paymentToken, auctionToken) : undefined
+  const data =
+    paymentToken && auctionToken
+      ? formatCreationFormData(state as AuctionCreationWizardInput, paymentToken, auctionToken)
+      : undefined
   const approveAmount = useMemo(
     () => (data ? data.tokenAmount.add(data.tokenAmount.multiply(new Percent(data.liqPercentage, 10000))) : undefined),
     [data]
   )
 
   const [approvalState, approve] = useApproveCallback(approveAmount, recipeContract?.address)
-
-  const reset = useCallback(() => {
-    if (!pending) {
-      setAuctionAddress(undefined)
-      setTxHash(undefined)
-      setError(undefined)
-    }
-  }, [pending])
 
   const execute = useCallback(
     async (data) => {
@@ -65,9 +63,8 @@ const CreateAuctionButtons = () => {
           await tx.wait()
         }
       } catch (e) {
-        console.log(e)
         // @ts-ignore TYPE NEEDS FIXING
-        setError(e.error?.message)
+        setError(e?.message)
       } finally {
         setPending(false)
       }
@@ -91,42 +88,61 @@ const CreateAuctionButtons = () => {
   }, [router, subscribe, txHash, unsubscribe])
 
   return (
-    <>
-      {approvalState !== ApprovalState.APPROVED && data.tokenSetupType === TokenSetup.PROVIDE && (
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-4">
+        {approvalState !== ApprovalState.APPROVED && data?.tokenSetupType === TokenSetup.PROVIDE && (
+          <Button
+            size="sm"
+            color="blue"
+            type="button"
+            disabled={approvalState === ApprovalState.PENDING || pending}
+            {...((approvalState === ApprovalState.PENDING || pending) && {
+              startIcon: (
+                <div className="w-4 h-4 mr-1">
+                  <Lottie animationData={LoadingCircle} autoplay loop />
+                </div>
+              ),
+            })}
+            onClick={approve}
+          >
+            {i18n._(t`Approve`)}
+          </Button>
+        )}
         <Button
           size="sm"
           color="blue"
           type="button"
-          disabled={approvalState === ApprovalState.PENDING || pending}
-          {...((approvalState === ApprovalState.PENDING || pending) && {
+          disabled={
+            (data?.tokenSetupType === TokenSetup.PROVIDE && approvalState !== ApprovalState.APPROVED) || pending
+          }
+          {...(pending && {
             startIcon: (
               <div className="w-4 h-4 mr-1">
                 <Lottie animationData={LoadingCircle} autoplay loop />
               </div>
             ),
           })}
-          onClick={approve}
+          onClick={() => execute(data)}
         >
-          {i18n._(t`Approve`)}
+          {i18n._(t`Create auction`)}
         </Button>
+        <Button size="sm" color="blue" variant="empty" type="button" onClick={onBack}>
+          {i18n._(t`Back`)}
+        </Button>
+      </div>
+      <HeadlessUIModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash(undefined)}>
+        <AuctionCreationSubmittedModalContent
+          txHash={txHash}
+          auctionAddress={auctionAddress}
+          onDismiss={() => setTxHash(undefined)}
+        />
+      </HeadlessUIModal.Controlled>
+      {error && (
+        <Typography variant="sm" weight={700} className="text-red">
+          {error}
+        </Typography>
       )}
-      <Button
-        size="sm"
-        color="blue"
-        type="button"
-        disabled={(data.tokenSetupType === TokenSetup.PROVIDE && approvalState !== ApprovalState.APPROVED) || pending}
-        {...(pending && {
-          startIcon: (
-            <div className="w-4 h-4 mr-1">
-              <Lottie animationData={LoadingCircle} autoplay loop />
-            </div>
-          ),
-        })}
-        onClick={() => execute(data)}
-      >
-        {i18n._(t`Create auction`)}
-      </Button>
-    </>
+    </div>
   )
 }
 

@@ -201,18 +201,7 @@ const AuctionCreationWizard: FC = () => {
             <ReviewDetailsStep>
               {(isValid) =>
                 isValid ? (
-                  <>
-                    <CreateAuctionButtons />
-                    <Button
-                      size="sm"
-                      color="blue"
-                      variant="empty"
-                      type="button"
-                      onClick={() => setStep((prevStep) => prevStep - 1)}
-                    >
-                      {i18n._(t`Back`)}
-                    </Button>
-                  </>
+                  <CreateAuctionButtons onBack={() => setStep((prevStep) => prevStep - 1)} />
                 ) : (
                   <>
                     <Button size="sm" color="blue" type="button" disabled={true}>

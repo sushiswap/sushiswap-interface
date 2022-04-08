@@ -3,8 +3,8 @@ import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, Token } from 
 import {
   AuctionCreationWizardInput,
   AuctionCreationWizardInputFormatted,
-} from 'app/features/miso/AuctionCreationWizard/index'
-import { TokenSetup } from 'app/features/miso/context/types'
+  TokenSetup,
+} from 'app/features/miso/context/types'
 import { toWei } from 'web3-utils'
 
 export const getPriceEntity = (price: string, auctionToken: Token, paymentToken: Currency) => {

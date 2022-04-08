@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Price, Token } from '@sushiswap/core-sdk'
 import { GetState, SetState } from 'zustand'
 
 export type StoreSlice<T extends object, E extends object = T> = (
@@ -156,4 +156,57 @@ export enum TokenSetup {
   NOT_SET = 0,
   CREATE = 1,
   PROVIDE = 2,
+}
+
+export interface AuctionCreationWizardInput {
+  tokenSetupType: TokenSetup
+  paymentCurrencyAddress: string
+  startDate: string
+  endDate: string
+  tokenType: TokenType
+  tokenAddress?: string
+  tokenName?: string
+  tokenSymbol?: string
+  tokenSupply?: number
+  tokenAmount: number
+  tokenForLiquidity: number
+  auctionType: AuctionTemplate
+  fixedPrice?: number
+  minimumTarget?: number
+  minimumRaised?: number
+  startPrice?: number
+  endPrice?: number
+  liqLockTime?: number
+  liqPercentage: number
+  whitelistEnabled: boolean
+  whitelistAddresses: WhitelistEntry[]
+}
+
+export type AuctionCreationWizardInputFormatted = Omit<
+  AuctionCreationWizardInput,
+  | 'startDate'
+  | 'endDate'
+  | 'tokenSupply'
+  | 'tokenAmount'
+  | 'tokenForLiquidity'
+  | 'fixedPrice'
+  | 'minimumTarget'
+  | 'minimumRaised'
+  | 'startPrice'
+  | 'endPrice'
+> & {
+  paymentCurrency: Currency
+  startDate: Date
+  endDate: Date
+  tokenAmount: CurrencyAmount<Token>
+  tokenSupply?: CurrencyAmount<Token>
+  auctionType: AuctionTemplate
+  fixedPrice?: Price<Token, Currency>
+  minimumTarget?: CurrencyAmount<Currency>
+  minimumRaised?: CurrencyAmount<Currency>
+  startPrice?: Price<Token, Currency>
+  endPrice?: Price<Token, Currency>
+  auctionToken: Token
+  accounts: string[]
+  amounts: string[]
 }
