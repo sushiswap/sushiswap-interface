@@ -85,7 +85,7 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-const getApy = (volume, liquidity) => {
+export const getApy = (volume, liquidity) => {
   const apy = aprToApy((((volume / 7) * 365 * 0.0025) / liquidity) * 100, 3650)
   if (apy > 1000) return '>10,000%'
   return formatPercent(apy)

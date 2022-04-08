@@ -1,5 +1,5 @@
 import AssetBalances from 'app/features/portfolio/AssetBalances/AssetBalances'
-import { useLPTableConfig } from 'app/features/portfolio/AssetBalances/liquidityPositions/useLPTableConfig'
+import { useTridentLPTableConfig } from 'app/features/portfolio/AssetBalances/liquidityPositions/useTridentLPTableConfig'
 import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import React from 'react'
@@ -13,6 +13,6 @@ export const LiquidityPositionsBalances = () => {
     shouldFetch: !!chainId && !!account,
   })
 
-  const { config } = useLPTableConfig(positions)
+  const { config } = useTridentLPTableConfig(positions)
   return <AssetBalances config={config} />
 }

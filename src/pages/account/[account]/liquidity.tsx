@@ -8,7 +8,7 @@ import React from 'react'
 const LiquidityPosition = () => {
   const account = useAccountInUrl('/')
 
-  if (!account) return
+  if (!account) return null
 
   return (
     <>

@@ -12,7 +12,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import React, { useMemo } from 'react'
 
-export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
+export const useTridentLPTableConfig = (positions?: TridentPositionRow[]) => {
   const { chainId } = useActiveWeb3React()
 
   const AssetColumns = useMemo(
@@ -60,7 +60,7 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
               // @ts-ignore TYPE NEEDS FIXING
               Cell: (props) => {
                 return (
-                  <Typography weight={700} className="text-high-emphesis text-right w-full">
+                  <Typography weight={700} className="w-full text-right text-high-emphesis">
                     ${props.value.toFixed(2)}
                   </Typography>
                 )
@@ -80,7 +80,7 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
                 })
 
                 return (
-                  <Typography weight={700} className="text-high-emphesis text-right w-full">
+                  <Typography weight={700} className="w-full text-right text-high-emphesis">
                     {formatPercent(stats?.[row.id]?.apy)}
                   </Typography>
                 )
