@@ -1,5 +1,6 @@
 import { Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
+import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import { PoolCell } from 'app/features/trident/pools/PoolCell'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -28,6 +29,27 @@ export const useLegacyLPTableConfig = (positions?: LegacyPosition[]) => {
               Cell: ({ value }) => {
                 return <PoolCell assets={value} twapEnabled={false} />
               },
+            },
+            {
+              Header: 'Pool Type',
+              accessor: 'type',
+              maxWidth: 100,
+              className: 'text-left hidden lg:flex',
+              Cell: () => {
+                return <Chip label="Classic" color="purple" />
+              },
+              // @ts-ignore TYPE NEEDS FIXING
+              filter: (rows, id, filterValue) =>
+                // @ts-ignore TYPE NEEDS FIXING
+                rows.filter((row) => !filterValue.length || filterValue.includes(row.values.type)),
+            },
+            {
+              Header: 'Fee Tier',
+              accessor: 'swapFeePercent',
+              maxWidth: 100,
+              className: 'text-left hidden lg:flex',
+              // @ts-ignore TYPE NEEDS FIXING
+              Cell: () => <span>0.3%</span>,
             },
             {
               id: 'value',

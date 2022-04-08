@@ -1,9 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import {
-  LegacyLiquidityPositionsBalances,
-  TridentLiquidityPositionsBalances,
-} from 'app/features/account/AssetBalances/liquidityPositions'
 import ActionsModal from 'app/features/portfolio/ActionsModal'
 import { BentoBalances, WalletBalances } from 'app/features/portfolio/AssetBalances/bentoAndWallet'
 import HeaderDropdown from 'app/features/portfolio/HeaderDropdown'
@@ -32,10 +28,6 @@ const Portfolio = () => {
       <TridentBody className="flex flex-col grid-cols-2 gap-10 lg:grid lg:gap-4">
         <WalletBalances account={account} />
         <BentoBalances account={account} />
-        <div className="flex flex-col col-span-2 gap-10 lg:gap-4">
-          <TridentLiquidityPositionsBalances />
-          <LegacyLiquidityPositionsBalances />
-        </div>
       </TridentBody>
       <ActionsModal />
     </>
