@@ -10,8 +10,8 @@ import { useLiquidityPositions, useOneWeekBlock, useSushiPairs, useTridentLiquid
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { useMemo } from 'react'
 
-export const TridentLiquidityPositionsBalances = () => {
-  const { account, chainId } = useActiveWeb3React()
+export const TridentLiquidityPositionsBalances = ({ account }: { account: string }) => {
+  const { chainId } = useActiveWeb3React()
 
   const { data: positions } = useTridentLiquidityPositions({
     chainId,
@@ -30,8 +30,8 @@ export const TridentLiquidityPositionsBalances = () => {
   )
 }
 
-export const LegacyLiquidityPositionsBalances = () => {
-  const { account, chainId } = useActiveWeb3React()
+export const LegacyLiquidityPositionsBalances = ({ account }: { account: string }) => {
+  const { chainId } = useActiveWeb3React()
 
   const positions = useLiquidityPositions({
     chainId,

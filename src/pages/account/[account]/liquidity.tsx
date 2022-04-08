@@ -21,8 +21,8 @@ const LiquidityPosition = () => {
       </TridentHeader>
       <TridentBody>
         <div className="flex flex-col justify-between gap-8">
-          <TridentLiquidityPositionsBalances />
-          <LegacyLiquidityPositionsBalances />
+          <TridentLiquidityPositionsBalances account={account} />
+          <LegacyLiquidityPositionsBalances account={account} />
         </div>
       </TridentBody>
     </>
