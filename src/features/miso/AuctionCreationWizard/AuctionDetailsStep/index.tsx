@@ -3,28 +3,31 @@ import { InformationCircleIcon } from '@heroicons/react/outline'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Form from 'app/components/Form'
 import { BatchAuctionIcon, CrowdsaleIcon, DutchAuctionIcon } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
 import AuctionCreationStepGeneralDetails from 'app/features/miso/AuctionCreationWizard/AuctionDetailsStep/AuctionTypeDetails'
 import useAuctionTemplateMap from 'app/features/miso/context/hooks/useAuctionTemplateMap'
+import { useStore } from 'app/features/miso/context/store'
+import { auctionDetailsDefaultValues, IAuctionDetails } from 'app/features/miso/context/store/createAuctionDetailsSlice'
 import { AuctionTemplate } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
 import React, { FC, ReactNode } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-interface AuctionDetailsForm {
-  auctionType: AuctionTemplate
-  fixedPrice?: number
-  minimumTarget?: number
-  minimumRaised?: number
-}
-
-const auctionDetailsSchema = yup.object().shape({
-  auctionType: yup.number().required('Must select an auction type'),
+export const auctionDetailsSchema = yup.object().shape({
+  auctionType: yup
+    .number()
+    .required('Must select an auction type')
+    .test({
+      message: 'Please select an auction type',
+      test: (value) => value !== AuctionTemplate.NOT_SET,
+    }),
   fixedPrice: yup.number().when('auctionType', {
     is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
     then: yup.number().typeError('Price must be a number').required('Must enter a fixed price'),
+    otherwise: yup.number().nullable(),
   }),
   minimumTarget: yup.number().when('auctionType', {
     is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
@@ -34,14 +37,17 @@ const auctionDetailsSchema = yup.object().shape({
       .moreThan(0, 'Must be a number between 0 and 100')
       .max(100, 'Must be a number between 0 and 100')
       .integer('Must be a whole number'),
+    otherwise: yup.number().nullable(),
   }),
   minimumRaised: yup.number().when('auctionType', {
     is: (value: AuctionTemplate) => value === AuctionTemplate.BATCH_AUCTION,
     then: yup.number().typeError('Target must be a number').min(0, 'Must be greater than zero'),
+    otherwise: yup.number().nullable(),
   }),
   startPrice: yup.number().when('auctionType', {
     is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup.number().typeError('Price must be a number').required('Must enter a start price'),
+    otherwise: yup.number().nullable(),
   }),
   endPrice: yup.number().when('auctionType', {
     is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
@@ -50,23 +56,28 @@ const auctionDetailsSchema = yup.object().shape({
       .typeError('Price must be a number')
       .lessThan(yup.ref('startPrice'), 'End price must be less than start price')
       .required('Must enter a start price'),
+    otherwise: yup.number().nullable(),
   }),
 })
 
 const AuctionDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ children }) => {
   const { i18n } = useLingui()
-  const methods = useForm<AuctionDetailsForm>({
+  const { templateIdToLabel } = useAuctionTemplateMap()
+
+  const setAuctionDetails = useStore((state) => state.setAuctionDetails)
+  const methods = useForm<IAuctionDetails>({
+    defaultValues: auctionDetailsDefaultValues,
     resolver: yupResolver(auctionDetailsSchema),
     reValidateMode: 'onChange',
     mode: 'onChange',
   })
+
   const {
     watch,
     setValue,
     formState: { isValid },
   } = methods
   const auctionType = watch('auctionType')
-  const { templateIdToLabel } = useAuctionTemplateMap()
 
   const items = [
     {
@@ -97,41 +108,43 @@ const AuctionDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chi
   ]
 
   return (
-    <FormProvider {...methods}>
-      <div className="col-span-4">
-        <RadioGroup
-          value={auctionType}
-          onChange={(auctionType) => setValue('auctionType', auctionType)}
-          className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10"
-        >
-          <input className="hidden" name="auctionType" value={auctionType} onChange={() => {}} />
-          {items.map(({ icon, value, label, description, note }) => (
-            <RadioGroup.Option value={value} key={value}>
-              {({ checked }) => (
-                <div
-                  className={classNames(
-                    checked ? 'bg-dark-1000/40 border-purple' : 'bg-dark-900 hover:border-purple/40',
-                    'flex flex-col gap-4 border border-dark-800 p-5 rounded h-full cursor-pointer'
-                  )}
-                >
-                  <Typography variant="lg" weight={700} className="text-high-emphesis">
-                    {label}
-                  </Typography>
-                  {icon}
-                  <Typography className="text-high-emphesis">{description}</Typography>
-                  <div className="flex items-baseline gap-1">
-                    <InformationCircleIcon width={20} height={20} className="top-1 relative" />
-                    <Typography className="text-secondary italic">{note}</Typography>
+    <Form {...methods} onSubmit={methods.handleSubmit((data: IAuctionDetails) => setAuctionDetails(data))}>
+      <Form.Fields>
+        <div className="col-span-4">
+          <RadioGroup
+            value={auctionType}
+            onChange={(auctionType) => setValue('auctionType', auctionType, { shouldValidate: true })}
+            className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10"
+          >
+            <input className="hidden" name="auctionType" value={auctionType} onChange={() => {}} />
+            {items.map(({ icon, value, label, description, note }) => (
+              <RadioGroup.Option value={value} key={value}>
+                {({ checked }) => (
+                  <div
+                    className={classNames(
+                      checked ? 'bg-dark-1000/40 border-purple' : 'bg-dark-900 hover:border-purple/40',
+                      'flex flex-col gap-4 border border-dark-800 p-5 rounded h-full cursor-pointer'
+                    )}
+                  >
+                    <Typography variant="lg" weight={700} className="text-high-emphesis">
+                      {label}
+                    </Typography>
+                    {icon}
+                    <Typography className="text-high-emphesis">{description}</Typography>
+                    <div className="flex items-baseline gap-1">
+                      <InformationCircleIcon width={20} height={20} className="top-1 relative" />
+                      <Typography className="text-secondary italic">{note}</Typography>
+                    </div>
                   </div>
-                </div>
-              )}
-            </RadioGroup.Option>
-          ))}
-        </RadioGroup>
-      </div>
-      <AuctionCreationStepGeneralDetails />
-      {children(isValid)}
-    </FormProvider>
+                )}
+              </RadioGroup.Option>
+            ))}
+          </RadioGroup>
+        </div>
+        <AuctionCreationStepGeneralDetails />
+        {children(isValid)}
+      </Form.Fields>
+    </Form>
   )
 }
 

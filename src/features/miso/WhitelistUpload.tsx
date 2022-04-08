@@ -80,7 +80,6 @@ const WhitelistUpload: FC<WhitelistUploadProps> = ({ disabled, onChange, value }
             )}
             <div className="flex text-sm text-gray-600">
               <Typography
-                component={'label'}
                 variant="sm"
                 className={classNames(
                   isDragActive ? '' : 'text-purple',
@@ -111,10 +110,10 @@ const WhitelistUpload: FC<WhitelistUploadProps> = ({ disabled, onChange, value }
           {i18n._(t`Whitelisting must be enabled and an operator must be set before you can use a point list.`)}
         </p>
         <p className="text-sm text-gray-500">
-          {i18n._(t`CSV's must use a comma delimiter. Amounts should NOT contain comma's`)}
+          {i18n._(t`CSV's must use a comma delimiter. Amounts should NOT contain commas`)}
         </p>
       </div>
-      {value?.length > 0 && <WhitelistTable entries={value} />}
+      {value.length > 0 && <WhitelistTable entries={value} />}
     </>
   )
 }

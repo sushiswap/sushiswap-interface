@@ -178,7 +178,7 @@
     "react": "^17.0.2",
     "react-device-detect": "^2.1.2",
     "react-dom": "^17.0.2",
-    "react-dropzone": "^11.4.2",
+    "react-dropzone": "^12.0.4",
     "react-feather": "^2.0.9",
     "react-ga": "^3.3.0",
     "react-hook-form": "^7.29.0",
@@ -220,5 +220,8 @@
     "not ie 11",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "zustand": "^3.7.2"
+  }
 }

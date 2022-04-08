@@ -1,11 +1,18 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { GetState, SetState } from 'zustand'
+
+export type StoreSlice<T extends object, E extends object = T> = (
+  set: SetState<E extends T ? E : E & T>,
+  get: GetState<E extends T ? E : E & T>
+) => T
 
 export enum LiquidityLauncherTemplate {
   PostAuctionLauncher = 1,
 }
 
 export enum AuctionTemplate {
+  NOT_SET = 0,
   CROWDSALE = 1,
   DUTCH_AUCTION = 2,
   BATCH_AUCTION = 3,
@@ -146,6 +153,7 @@ export enum TokenType {
 }
 
 export enum TokenSetup {
+  NOT_SET = 0,
   CREATE = 1,
   PROVIDE = 2,
 }

@@ -3,16 +3,14 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Form from 'app/components/Form'
 import AuctionPaymentCurrencyField from 'app/features/miso/AuctionAdminForm/AuctionPaymentCurrencyField'
+import { useStore } from 'app/features/miso/context/store'
+import { generalDetailsDefaultValues, IGeneralDetails } from 'app/features/miso/context/store/createGeneralDetailsSlice'
 import React, { FC, ReactNode } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-interface GeneralDetailsForm {
-  startDate: string
-  endDate: string
-}
-
 export const generalDetailsSchema = yup.object().shape({
+  paymentCurrencyAddress: yup.string().required('Must enter a payment currency'),
   startDate: yup
     .date()
     .typeError('Please enter a valid date')
@@ -27,7 +25,9 @@ export const generalDetailsSchema = yup.object().shape({
 
 const GeneralDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ children }) => {
   const { i18n } = useLingui()
-  const methods = useForm<GeneralDetailsForm>({
+  const setGeneralDetails = useStore((state) => state.setGeneralDetails)
+  const methods = useForm<IGeneralDetails>({
+    defaultValues: generalDetailsDefaultValues,
     resolver: yupResolver(generalDetailsSchema),
     reValidateMode: 'onChange',
     mode: 'onChange',
@@ -38,32 +38,34 @@ const GeneralDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chi
   } = methods
 
   return (
-    <FormProvider {...methods}>
-      <div className="col-span-4">
-        <AuctionPaymentCurrencyField name="paymentCurrencyAddress" label={i18n._(t`Auction Payment Currency*`)} />
-      </div>
-      <div className="col-span-4 md:col-span-2">
-        <Form.TextField
-          className="inline-flex"
-          type="datetime-local"
-          name="startDate"
-          label={i18n._(t`Start Date*`)}
-          placeholder={i18n._(t`Selected a start date for your auction`)}
-          helperText={i18n._(t`Please enter your auction start date`)}
-        />
-      </div>
-      <div className="col-span-4 md:col-span-2">
-        <Form.TextField
-          className="inline-flex"
-          type="datetime-local"
-          name="endDate"
-          label={i18n._(t`End Date*`)}
-          placeholder={i18n._(t`Selected an end date for your auction`)}
-          helperText={i18n._(t`Please enter your auction end date`)}
-        />
-      </div>
-      {children(isValid)}
-    </FormProvider>
+    <Form {...methods} onSubmit={methods.handleSubmit((data: IGeneralDetails) => setGeneralDetails(data))}>
+      <Form.Fields>
+        <div className="col-span-4">
+          <AuctionPaymentCurrencyField name="paymentCurrencyAddress" label={i18n._(t`Payment Currency*`)} />
+        </div>
+        <div className="col-span-4 md:col-span-2">
+          <Form.TextField
+            className="inline-flex"
+            type="datetime-local"
+            name="startDate"
+            label={i18n._(t`Start Date*`)}
+            placeholder={i18n._(t`Selected a start date for your auction`)}
+            helperText={i18n._(t`Please enter your auction start date`)}
+          />
+        </div>
+        <div className="col-span-4 md:col-span-2">
+          <Form.TextField
+            className="inline-flex"
+            type="datetime-local"
+            name="endDate"
+            label={i18n._(t`End Date*`)}
+            placeholder={i18n._(t`Selected an end date for your auction`)}
+            helperText={i18n._(t`Please enter your auction end date`)}
+          />
+        </div>
+        {children(isValid)}
+      </Form.Fields>
+    </Form>
   )
 }
 
