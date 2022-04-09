@@ -7,19 +7,21 @@ import AssetBalances from 'app/features/portfolio/AssetBalances/AssetBalances'
 import { useLegacyLPTableConfig } from 'app/features/portfolio/AssetBalances/liquidityPositions/useLegacyLPTableConfig'
 import { useTridentLPTableConfig } from 'app/features/portfolio/AssetBalances/liquidityPositions/useTridentLPTableConfig'
 import { useLiquidityPositions, useOneWeekBlock, useSushiPairs, useTridentLiquidityPositions } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
 import React, { useMemo } from 'react'
 
-export const TridentLiquidityPositionsBalances = ({ account }: { account: string }) => {
-  const { chainId } = useActiveWeb3React()
+interface PositionBalances {
+  account: string
+  chainId: number | undefined
+}
 
+export const TridentLiquidityPositionsBalances = ({ account, chainId }: PositionBalances) => {
   const { data: positions } = useTridentLiquidityPositions({
     chainId,
     variables: { where: { user: account?.toLowerCase(), balance_gt: 0 } },
     shouldFetch: !!chainId && !!account,
   })
 
-  const { config } = useTridentLPTableConfig(positions)
+  const { config } = useTridentLPTableConfig({ positions, chainId })
   return (
     <div className="flex flex-col gap-3">
       <Typography weight={700} variant="lg" className="px-2 text-high-emphesis">
@@ -30,9 +32,7 @@ export const TridentLiquidityPositionsBalances = ({ account }: { account: string
   )
 }
 
-export const LegacyLiquidityPositionsBalances = ({ account }: { account: string }) => {
-  const { chainId } = useActiveWeb3React()
-
+export const LegacyLiquidityPositionsBalances = ({ account, chainId }: PositionBalances) => {
   const positions = useLiquidityPositions({
     chainId,
     variables: { where: { user: account?.toLowerCase(), liquidityTokenBalance_gt: 0 } },

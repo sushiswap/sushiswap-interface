@@ -6,7 +6,10 @@ export const useAccountInUrl = (redirectPath: string): string | undefined => {
   const account = router.query.account as string
 
   if (!account || !isAddress(account)) {
-    void router.replace(redirectPath)
+    void router.replace({
+      pathname: redirectPath,
+      query: { ...router.query },
+    })
   }
 
   return account

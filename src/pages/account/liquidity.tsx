@@ -4,25 +4,28 @@ import {
 } from 'app/features/account/AssetBalances/liquidityPositions'
 import { LiquidityPositionsBalancesSum } from 'app/features/portfolio/BalancesSum'
 import HeaderDropdown from 'app/features/portfolio/HeaderDropdown'
-import { useAccountInUrl } from 'app/features/portfolio/useAccountInUrl'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 const LiquidityPosition = () => {
-  const account = useAccountInUrl('/')
+  const router = useRouter()
 
-  if (!account) return null
+  const account = router.query.account as string
+  const chainId = router.query.account ? Number(router.query.chainId) : undefined
+
+  if (!account || !chainId) return null
 
   return (
     <>
       <TridentHeader pattern="bg-binary">
-        <HeaderDropdown account={account} />
+        <HeaderDropdown account={account} chainId={chainId} />
         <LiquidityPositionsBalancesSum />
       </TridentHeader>
       <TridentBody>
         <div className="flex flex-col justify-between gap-8">
-          <TridentLiquidityPositionsBalances account={account} />
-          <LegacyLiquidityPositionsBalances account={account} />
+          <TridentLiquidityPositionsBalances account={account} chainId={chainId} />
+          <LegacyLiquidityPositionsBalances account={account} chainId={chainId} />
         </div>
       </TridentBody>
     </>

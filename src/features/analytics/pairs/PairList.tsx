@@ -51,14 +51,14 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
   const token0 = new Token(
     chainId,
     getAddress(pair?.token0?.id),
-    pair?.token0?.decimals || 18,
+    Number(pair?.token0?.decimals || 18),
     pair?.token0?.symbol,
     pair?.token0?.name
   )
   const token1 = new Token(
     chainId,
     getAddress(pair?.token1?.id),
-    pair?.token1?.decimals || 18,
+    Number(pair?.token1?.decimals || 18),
     pair?.token1?.symbol,
     pair?.token1?.name
   )

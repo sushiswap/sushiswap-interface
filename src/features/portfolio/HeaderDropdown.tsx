@@ -13,11 +13,12 @@ import { BalancesSum } from './BalancesSum'
 
 interface HeaderDropdownProps {
   hideAccount?: boolean
+  chainId: number | undefined
   account: string
 }
 
-const HeaderDropdown: FC<HeaderDropdownProps> = ({ account, hideAccount = false }) => {
-  const { library, chainId } = useActiveWeb3React()
+const HeaderDropdown: FC<HeaderDropdownProps> = ({ account, chainId, hideAccount = false }) => {
+  const { library } = useActiveWeb3React()
   const [show, setShow] = useState<boolean>(false)
   const { ENSName } = useENSName(account ?? undefined)
 
