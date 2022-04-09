@@ -23,8 +23,6 @@ const KashiMarketList: FC<KashiMarketList> = () => {
   const addresses = useKashiPairAddresses()
   const markets = useKashiMediumRiskLendingPairs(account, addresses)
 
-  console.log({ addresses, markets })
-
   const { i18n } = useLingui()
   const { result, term, search } = useFuse<KashiMediumRiskLendingPair>({
     data: markets,

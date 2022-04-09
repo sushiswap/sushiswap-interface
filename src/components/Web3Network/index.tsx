@@ -1,5 +1,6 @@
 import { NETWORK_ICON } from 'app/config/networks'
 import { switchToNetwork } from 'app/functions/network'
+import useIsWindowVisible from 'app/hooks/useIsWindowVisible'
 import usePrevious from 'app/hooks/usePrevious'
 import NetworkModel from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -16,6 +17,8 @@ function Web3Network(): JSX.Element | null {
   const [switchedFromUrl, setSwitchedFromUrl] = useState(false)
 
   const router = useRouter()
+
+  const isWindowVisible = useIsWindowVisible()
 
   const prevChainId = usePrevious(chainId)
 
@@ -56,11 +59,12 @@ function Web3Network(): JSX.Element | null {
 
   useEffect(() => {
     // assume network change originates from URL
-    if (chainId && queryChainId && !switchedFromUrl && chainId !== queryChainId) {
+    if (chainId && queryChainId && !switchedFromUrl && isWindowVisible && chainId !== queryChainId) {
       console.debug('network change from query chainId', { queryChainId, chainId })
+
       handleChainSwitch(queryChainId)
     }
-  }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId])
+  }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId, isWindowVisible])
 
   // set chainId on initial load if not present
   useEffect(() => {
