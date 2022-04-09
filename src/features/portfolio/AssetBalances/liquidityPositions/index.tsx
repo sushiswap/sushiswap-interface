@@ -13,6 +13,6 @@ export const LiquidityPositionsBalances = () => {
     shouldFetch: !!chainId && !!account,
   })
 
-  const { config } = useTridentLPTableConfig(positions)
+  const { config } = useTridentLPTableConfig({ positions, chainId })
   return <AssetBalances config={config} />
 }
