@@ -34,8 +34,13 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
         accessor: 'type',
         maxWidth: 100,
         className: 'text-left hidden lg:flex',
-        Cell: (props: { value: PoolType }) => {
-          return <Chip label={poolTypeNameMapper[props.value]} color={chipPoolColorMapper[props.value]} />
+        Cell: (props: { value: PoolType; row: any }) => {
+          return (
+            <Chip
+              label={props.row.original.legacy ? 'Legacy' : poolTypeNameMapper[props.value]}
+              color={chipPoolColorMapper[props.value]}
+            />
+          )
         },
         // @ts-ignore TYPE NEEDS FIXING
         filter: (rows, id, filterValue) =>
@@ -72,7 +77,7 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
         maxWidth: 100,
         className: 'text-right flex justify-end',
         // @ts-ignore TYPE NEEDS FIXING
-        Cell: ({ row }) => {
+        Cell: ({ row, value }) => {
           const { data: stats } = useRollingPoolStats({
             chainId,
             variables: { where: { id_in: positions?.map((el) => el.id.toLowerCase()) } },
@@ -81,7 +86,7 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
 
           return (
             <Typography weight={700} className="w-full text-right text-high-emphesis">
-              {formatPercent(stats?.[row.id]?.apy)}
+              {formatPercent(value ?? stats?.[row.id]?.apy)}
             </Typography>
           )
         },
@@ -95,6 +100,25 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
         cellClassName: 'justify-end',
         // @ts-ignore TYPE NEEDS FIXING
         Cell: ({ row: { original } }) => {
+          if (original.legacy) {
+            return (
+              <Link
+                href={{
+                  pathname: `/add`,
+                  query: {
+                    // @ts-ignore TYPE NEEDS FIXING
+                    tokens: original.assets.map((el) => el.address),
+                  },
+                }}
+                passHref={true}
+              >
+                <Button color="blue" size="sm" variant="empty">
+                  Manage
+                </Button>
+              </Link>
+            )
+          }
+
           return (
             <Link
               href={{
