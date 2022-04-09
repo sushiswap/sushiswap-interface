@@ -27,6 +27,7 @@ function Web3Network(): JSX.Element | null {
   const handleChainSwitch = useCallback(
     (targetChain: number) => {
       if (!library?.provider) return
+      setSwitchedFromUrl(true)
       switchToNetwork({ provider: library.provider, chainId: targetChain })
         .then(() => {
           return router.replace({
@@ -60,10 +61,10 @@ function Web3Network(): JSX.Element | null {
     // assume network change originates from URL
     if (chainId && queryChainId && !switchedFromUrl && isWindowVisible && chainId !== queryChainId) {
       console.debug('network change from query chainId', { queryChainId, chainId })
-      setSwitchedFromUrl(true)
+
       handleChainSwitch(queryChainId)
     }
-  }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId])
+  }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId, isWindowVisible])
 
   // set chainId on initial load if not present
   useEffect(() => {
