@@ -4,13 +4,12 @@ import { useLingui } from '@lingui/react'
 import Badge from 'app/components/Badge'
 import QuestionHelper from 'app/components/QuestionHelper'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 import React, { FC } from 'react'
 
 const MyOrders: FC = () => {
   const { i18n } = useLingui()
   const { pending } = useLimitOrders()
-  const router = useRouter()
 
   const content = (
     <QuestionHelper
@@ -20,15 +19,17 @@ const MyOrders: FC = () => {
   )
 
   return (
-    <div onClick={() => router.push('/limit-order/open')}>
-      {pending.totalOrders > 0 ? (
-        <Badge color="blue" value={pending.totalOrders}>
-          {content}
-        </Badge>
-      ) : (
-        content
-      )}
-    </div>
+    <Link href="/limit-order/open">
+      <a>
+        {pending.totalOrders > 0 ? (
+          <Badge color="blue" value={pending.totalOrders}>
+            {content}
+          </Badge>
+        ) : (
+          content
+        )}
+      </a>
+    </Link>
   )
 }
 
