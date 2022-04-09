@@ -60,15 +60,24 @@ export function useSwapActionHandlers(): {
         const newInputCurrencyId = currencyId(inputCurrency)
         if (outputCurrencyId === newInputCurrencyId) {
           if (outputCurrencyId) {
-            router.replace(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=${inputCurrencyId}`)
+            router.replace({
+              pathname: window.location.pathname,
+              query: { ...router.query, inputCurrency: newInputCurrencyId, outputCurrency: inputCurrencyId },
+            })
           } else {
-            router.replace(`/swap?inputCurrency=ETH&outputCurrency=`)
+            router.replace({ pathname: window.location.pathname, query: { ...router.query, inputCurrency: 'ETH' } })
           }
         } else {
           if (outputCurrencyId) {
-            router.replace(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=${outputCurrencyId}`)
+            router.replace({
+              pathname: window.location.pathname,
+              query: { ...router.query, inputCurrency: newInputCurrencyId, outputCurrency: outputCurrencyId },
+            })
           } else {
-            router.replace(`/swap?inputCurrency=${newInputCurrencyId}&outputCurrency=`)
+            router.replace({
+              pathname: window.location.pathname,
+              query: { ...router.query, inputCurrency: newInputCurrencyId },
+            })
           }
         }
       }
@@ -78,15 +87,27 @@ export function useSwapActionHandlers(): {
         const newOutputCurrencyId = currencyId(outputCurrency)
         if (inputCurrencyId === newOutputCurrencyId) {
           if (outputCurrencyId) {
-            router.replace(`/swap?inputCurrency=${outputCurrencyId}&outputCurrency=${newOutputCurrencyId}`)
+            router.replace({
+              pathname: window.location.pathname,
+              query: { ...router.query, inputCurrency: outputCurrencyId, outputCurrency: newOutputCurrencyId },
+            })
           } else {
-            router.replace(`/swap?inputCurrency=ETH&outputCurrency=${newOutputCurrencyId}`)
+            router.replace({
+              pathname: window.location.pathname,
+              query: { ...router.query, inputCurrency: 'ETH', outputCurrency: newOutputCurrencyId },
+            })
           }
         } else {
           if (inputCurrencyId) {
-            router.replace(`/swap?inputCurrency=${inputCurrencyId}&outputCurrency=${newOutputCurrencyId}`)
+            router.replace({
+              pathname: window.location.pathname,
+              query: { ...router.query, inputCurrency: inputCurrencyId, outputCurrency: newOutputCurrencyId },
+            })
           } else {
-            router.replace(`/swap?inputCurrency=ETH&outputCurrency=${newOutputCurrencyId}`)
+            router.replace({
+              pathname: window.location.pathname,
+              query: { ...router.query, inputCurrency: 'ETH', outputCurrency: newOutputCurrencyId },
+            })
           }
         }
       }
@@ -106,7 +127,10 @@ export function useSwapActionHandlers(): {
   )
 
   const onSwitchTokens = useCallback(() => {
-    router.replace(`/swap?inputCurrency=${outputCurrencyId}&outputCurrency=${inputCurrencyId}`)
+    router.replace({
+      pathname: window.location.pathname,
+      query: { ...router.query, inputCurrency: outputCurrencyId, outputCurrency: inputCurrencyId },
+    })
     dispatch(switchCurrencies())
   }, [dispatch, inputCurrencyId, outputCurrencyId, router])
 
