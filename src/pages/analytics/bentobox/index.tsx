@@ -74,7 +74,7 @@ export default function BentoBox(): JSX.Element {
           <InfoCard
             text="TVL"
             number={formatNumber(
-              formatted?.reduce((prev, curr) => prev + curr.liquidity, 0),
+              formatted?.reduce((previousValue, currentValue) => previousValue + currentValue, 0),
               true,
               false
             )}
