@@ -1,7 +1,7 @@
 import Search from 'app/components/Search'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import Background from 'app/features/analytics/Background'
-import FarmList from 'app/features/analytics/farms/FarmList'
+import FarmList from 'app/features/analytics/Farms/FarmList'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import useFuse from 'app/hooks/useFuse'
 import { useRouter } from 'next/router'
