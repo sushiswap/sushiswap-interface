@@ -118,6 +118,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
       }
 
       if (conn) {
+        console.debug('About to activate')
         activate(
           conn,
           (error) => {
@@ -141,6 +142,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
           })
 
           .catch((error) => {
+            console.debug('Error activating', error)
             if (error instanceof UnsupportedChainIdError) {
               // @ts-ignore TYPE NEEDS FIXING
               activate(conn) // a little janky...can't use setError because the connector isn't set
