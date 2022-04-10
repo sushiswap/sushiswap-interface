@@ -8,9 +8,12 @@ import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
 import { OVERLAY_READY } from 'app/entities/connectors/FortmaticConnector'
+import { switchToNetwork } from 'app/functions/network'
 import usePrevious from 'app/hooks/usePrevious'
 import { useModalOpen, useWalletModalToggle } from 'app/state/application/hooks'
 import { ApplicationModal } from 'app/state/application/reducer'
+import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import ReactGA from 'react-ga'
@@ -44,6 +47,10 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
   const activePrevious = usePrevious(active)
   const connectorPrevious = usePrevious(connector)
 
+  const router = useRouter()
+  const queryChainId = Number(router.query.chainId)
+  const cookieChainId = Cookies.get('chain-id')
+  const defaultChainId = cookieChainId ? cookieChainId : 1
   // close on connection, when logged out before
   useEffect(() => {
     if (account && !previousAccount && walletModalOpen) toggleWalletModal()
@@ -87,11 +94,10 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
       let name = ''
       let conn = typeof connector === 'function' ? await connector() : connector
 
-      Object.keys(SUPPORTED_WALLETS).map((key) => {
+      Object.keys(SUPPORTED_WALLETS).find((key) => {
         if (connector === SUPPORTED_WALLETS[key].connector) {
           return (name = SUPPORTED_WALLETS[key].name)
         }
-        return true
       })
       // log selected wallet
       ReactGA.event({
@@ -107,15 +113,25 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
         conn.walletConnectProvider = undefined
       }
 
-      conn &&
-        activate(conn, undefined, true).catch((error) => {
-          if (error instanceof UnsupportedChainIdError) {
-            // @ts-ignore TYPE NEEDS FIXING
-            activate(conn) // a little janky...can't use setError because the connector isn't set
-          } else {
-            setPendingError(true)
-          }
-        })
+      if (conn) {
+        activate(conn, undefined, true)
+          .then(() => {
+            return conn?.getProvider()
+          })
+          .then((provider) => {
+            if (provider && defaultChainId && queryChainId) {
+              switchToNetwork({ provider, chainId: defaultChainId !== 1 ? cookieChainId : queryChainId })
+            }
+          })
+          .catch((error) => {
+            if (error instanceof UnsupportedChainIdError) {
+              // @ts-ignore TYPE NEEDS FIXING
+              activate(conn) // a little janky...can't use setError because the connector isn't set
+            } else {
+              setPendingError(true)
+            }
+          })
+      }
     },
     [activate]
   )
