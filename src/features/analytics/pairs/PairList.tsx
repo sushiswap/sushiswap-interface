@@ -51,14 +51,14 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
   const token0 = new Token(
     chainId,
     getAddress(pair?.token0?.id),
-    pair?.token0?.decimals || 18,
+    Number(pair?.token0?.decimals || 18),
     pair?.token0?.symbol,
     pair?.token0?.name
   )
   const token1 = new Token(
     chainId,
     getAddress(pair?.token1?.id),
-    pair?.token1?.decimals || 18,
+    Number(pair?.token1?.decimals || 18),
     pair?.token1?.symbol,
     pair?.token1?.name
   )
@@ -85,7 +85,7 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-const getApy = (volume, liquidity) => {
+export const getApy = (volume, liquidity) => {
   const apy = aprToApy((((volume / 7) * 365 * 0.0025) / liquidity) * 100, 3650)
   if (apy > 1000) return '>10,000%'
   return formatPercent(apy)

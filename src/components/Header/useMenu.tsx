@@ -251,7 +251,7 @@ const useMenu: UseMenu = () => {
         {
           key: 'dashboard',
           title: 'Dashboard',
-          link: `/analytics/${chainId}/dashboard`,
+          link: `/analytics/dashboard`,
         },
         {
           key: 'xsushi',
@@ -261,12 +261,12 @@ const useMenu: UseMenu = () => {
         {
           key: 'tokens',
           title: 'Tokens',
-          link: `/analytics/${chainId}/tokens`,
+          link: `/analytics/tokens`,
         },
         {
           key: 'pairs',
           title: 'Pairs',
-          link: `/analytics/${chainId}/pairs`,
+          link: `/analytics/pairs`,
         },
       ],
     }
@@ -275,7 +275,7 @@ const useMenu: UseMenu = () => {
       analyticsMenu.items.push({
         key: 'farms',
         title: 'Farms',
-        link: `/analytics/${chainId}/farms`,
+        link: `/analytics/farms`,
       })
     }
 
@@ -283,7 +283,7 @@ const useMenu: UseMenu = () => {
       analyticsMenu.items.push({
         key: 'bentobox',
         title: 'Bentobox',
-        link: `/analytics/${chainId}/bentobox`,
+        link: `/analytics/bentobox`,
       })
     }
 
@@ -295,7 +295,7 @@ const useMenu: UseMenu = () => {
       menu.push({
         key: 'portfolio',
         title: i18n._(t`Portfolio`),
-        link: `/account/${account}`,
+        link: `/account?account=${account}`,
         icon: <WalletIcon width={20} />,
       })
     }

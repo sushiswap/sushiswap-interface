@@ -14,20 +14,19 @@ const Portfolio = () => {
   const router = useRouter()
 
   const account = router.query.account as string
+  const chainId = router.query.account ? Number(router.query.chainId) : undefined
 
-  // const account = useAccountInUrl('/')
-
-  // if (!account) return
+  if (!account || !chainId) return null
 
   return (
     <>
       <NextSeo title={`${i18n._(t`Account`)} ${account}`} />
       <TridentHeader pattern="bg-chevron">
-        <HeaderDropdown account={account} />
+        <HeaderDropdown account={account} chainId={chainId} />
       </TridentHeader>
       <TridentBody className="flex flex-col grid-cols-2 gap-10 lg:grid lg:gap-4">
-        <WalletBalances account={account} />
-        <BentoBalances account={account} />
+        <WalletBalances account={account} chainId={chainId} />
+        <BentoBalances account={account} chainId={chainId} />
       </TridentBody>
       <ActionsModal />
     </>
