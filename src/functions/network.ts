@@ -19,6 +19,7 @@ export const switchToNetwork = async ({ provider, chainId }: SwitchNetworkArgume
     })
     // logEvent('Chain', 'switch', params.chainName, chainId)
   } catch (error) {
+    console.log('Error switching network', error)
     // @ts-ignore TYPE NEEDS FIXING
     // This error code indicates that the chain has not been added to MetaMask.
     if (error.code === 4902) {
