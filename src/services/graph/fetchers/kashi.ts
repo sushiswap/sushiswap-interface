@@ -44,6 +44,20 @@ export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = unde
       const collateral = bentoBoxTokens.find((token) => token.id === pair.collateral)
       return {
         ...pair,
+        asset: {
+          ...pair.asset,
+          // @ts-ignore TYPE NEEDS FIXING
+          ...bentoBoxTokens.find((token) => token.id === pair.asset),
+          // @ts-ignore TYPE NEEDS FIXING
+          ...exchangeTokens.find((token) => token.id === pair.asset),
+        },
+        collateral: {
+          ...pair.collateral,
+          // @ts-ignore TYPE NEEDS FIXING
+          ...bentoBoxTokens.find((token) => token.id === pair.collateral),
+          // @ts-ignore TYPE NEEDS FIXING
+          ...exchangeTokens.find((token) => token.id === pair.collateral),
+        },
         token0: {
           ...pair.asset,
           // @ts-ignore TYPE NEEDS FIXING
