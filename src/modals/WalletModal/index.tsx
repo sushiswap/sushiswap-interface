@@ -119,23 +119,27 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
 
       if (conn) {
         activate(conn, undefined, true)
-          .then(() => {
+          .then(async () => {
             console.debug('Activated, get provider')
-            return conn?.getProvider()
-          })
-          .then((provider) => {
-            console.debug(
-              'Got provider',
-              conn instanceof WalletConnectConnector,
-              provider,
-              defaultChainId,
-              queryChainId
-            )
-            if (conn instanceof WalletConnectConnector && provider && defaultChainId && queryChainId) {
-              console.debug('Provider is wallet connect, attempt network switch')
-              switchToNetwork({ provider, chainId: defaultChainId !== 1 ? defaultChainId : queryChainId })
+            if (conn instanceof WalletConnectConnector) {
+              const provider = await conn?.getProvider()
+              const chainId = await conn?.getChainId()
+              if (
+                provider &&
+                chainId &&
+                defaultChainId &&
+                queryChainId &&
+                (chainId !== queryChainId || chainId !== defaultChainId)
+              ) {
+                console.debug('Provider is wallet connect, attempt network switch')
+                switchToNetwork({
+                  provider,
+                  chainId: defaultChainId !== 1 || !queryChainId ? defaultChainId : queryChainId,
+                })
+              }
             }
           })
+
           .catch((error) => {
             if (error instanceof UnsupportedChainIdError) {
               // @ts-ignore TYPE NEEDS FIXING
