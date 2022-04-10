@@ -5,6 +5,7 @@ import usePrevious from 'app/hooks/usePrevious'
 import NetworkModel from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useNetworkModalToggle } from 'app/state/application/hooks'
+import Cookies from 'js-cookie'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -63,17 +64,23 @@ function Web3Network(): JSX.Element | null {
 
   useEffect(() => {
     // assume network change originates from URL
+
+    const cookieChainId = Cookies.get('chain-id')
+
+    const defaultChainId = cookieChainId ? Number(cookieChainId) : 1
+
     if (
       chainId &&
+      defaultChainId &&
       queryChainId &&
       !attemptingSwitchFromUrl &&
       !switchedFromUrl &&
       isWindowVisible &&
-      chainId !== queryChainId
+      (chainId !== queryChainId || chainId !== defaultChainId)
     ) {
       console.debug('network change from query chainId', { queryChainId, chainId })
       setAttemptingSwitchFromUrl(true)
-      handleChainSwitch(queryChainId)
+      handleChainSwitch(defaultChainId !== 1 ? defaultChainId : queryChainId)
     }
   }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId, isWindowVisible, attemptingSwitchFromUrl])
 
