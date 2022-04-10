@@ -118,7 +118,13 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
       }
 
       if (conn) {
-        activate(conn, undefined, true)
+        activate(
+          conn,
+          (error) => {
+            console.debug('Error activating connector ', name, error)
+          },
+          true
+        )
           .then(async () => {
             console.debug('Activated, get provider')
             if (conn instanceof WalletConnectConnector) {
