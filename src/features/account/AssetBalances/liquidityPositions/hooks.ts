@@ -1,6 +1,6 @@
 import { Token } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/trident-sdk'
-import { getApy } from 'app/features/analytics/Pairs/PairList'
+import { aprToApy, formatPercent } from 'app/functions'
 import {
   TridentPositionRow,
   useLiquidityPositions,
@@ -13,6 +13,12 @@ import { useMemo } from 'react'
 interface PositionBalances {
   account: string
   chainId: number | undefined
+}
+
+export const getApy = (volume: number, liquidity: number) => {
+  const apy = aprToApy((((volume / 7) * 365 * 0.0025) / liquidity) * 100, 3650)
+  if (apy > 1000) return '>10,000%'
+  return formatPercent(apy)
 }
 
 export function useTridentLiquidityPositionsBalances({ account, chainId }: PositionBalances) {
