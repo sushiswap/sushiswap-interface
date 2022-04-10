@@ -14,7 +14,6 @@ import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchMo
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import React, { KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import ReactGA from 'react-ga'
 
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
@@ -64,10 +63,9 @@ export function CurrencySearch({
 
   useEffect(() => {
     if (isAddressSearch) {
-      ReactGA.event({
-        category: 'Currency Select',
-        action: 'Search by address',
-        label: isAddressSearch,
+      gtag('event', 'Search by address', {
+        event_category: 'Currency Select',
+        event_label: isAddressSearch,
       })
     }
   }, [isAddressSearch])
@@ -165,7 +163,7 @@ export function CurrencySearch({
             otherCurrency={otherSelectedCurrency}
           />
         ) : (
-          <Typography weight={700} variant="xs" className="text-secondary flex h-full justify-center items-center">
+          <Typography weight={700} variant="xs" className="flex items-center justify-center h-full text-secondary">
             {i18n._(t`No results found`)}
           </Typography>
         )}

@@ -19,7 +19,6 @@ import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
-import ReactGA from 'react-ga'
 
 type ExecutePayload = {
   parsedAmounts: (CurrencyAmount<Currency> | undefined)[]
@@ -92,10 +91,9 @@ export const useCreatePoolExecute: UseCreatePoolExecute = () => {
 
         dispatch(setCreateAttemptingTxn(false))
 
-        ReactGA.event({
-          category: 'Constant Product Pool',
-          action: 'Create',
-          label: [assets[0].currency!!.symbol, assets[1].currency!!.symbol].join('/'),
+        gtag('event', 'Create', {
+          event_category: 'Constant Product Pool',
+          event_label: [assets[0].currency!!.symbol, assets[1].currency!!.symbol].join('/'),
         })
 
         dispatch(setCreateBentoPermit(undefined))

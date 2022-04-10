@@ -16,7 +16,6 @@ import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { isMobile } from 'react-device-detect'
-import ReactGA from 'react-ga'
 import { UnsupportedChainIdError, useWeb3React } from 'web3-react-core'
 import { WalletConnectConnector } from 'web3-react-walletconnect-connector'
 
@@ -103,11 +102,12 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
       console.debug('Attempting activation of', name)
 
       // log selected wallet
-      ReactGA.event({
-        category: 'Wallet',
-        action: 'Change Wallet',
-        label: name,
+
+      gtag('event', 'Change Wallet', {
+        event_category: 'Wallet',
+        event_label: name,
       })
+
       setPendingWallet({ connector: conn, id }) // set wallet for pending view
       setWalletView(WALLET_VIEWS.PENDING)
 

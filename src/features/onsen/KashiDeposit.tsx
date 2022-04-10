@@ -111,6 +111,8 @@ const KashiDeposit = ({ market, header }: { market: KashiMediumRiskLendingPair; 
 
   const isValid = !error
 
+  console.log({ tokenApprovalState })
+
   return (
     <>
       <HeadlessUiModal.BorderedContent className="flex flex-col bg-dark-1000/40">
