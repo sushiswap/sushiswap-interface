@@ -59,9 +59,9 @@ export default function BentoBox(): JSX.Element {
     return (
       bentoBoxTokens
         // @ts-ignore
-        .map(({ id, totalSupplyElastic, decimals, symbol, name }) => {
+        .map(({ id, rebase, decimals, symbol, name }) => {
           const token = tokenIdToPrice.get(id)
-          const supply = totalSupplyElastic / Math.pow(10, decimals)
+          const supply = rebase.elastic
           const tokenDerivedETH = token?.derivedETH
           const price = (tokenDerivedETH ?? 0) * nativePrice
           const tvl = price * supply
@@ -119,9 +119,12 @@ export default function BentoBox(): JSX.Element {
               false
             )}
           />
-          <InfoCard text="Total Users" number={bentoBox?.totalUsers || 0} />
-          <InfoCard text="Total Tokens" number={bentoBox?.totalTokens || 0} />
-          <InfoCard text="Total Kashi Pairs" number={bentoBox?.totalKashiPairs || 0} />
+          <InfoCard text="User Count" number={bentoBox?.userCount || 0} />
+          <InfoCard text="Token Count" number={bentoBox?.tokenCount || 0} />
+          <InfoCard text="Flashloan Count" number={bentoBox?.flashloanCount || 0} />
+          <InfoCard text="Transaction Count" number={bentoBox?.transactionCount || 0} />
+          {/* <InfoCard text="Master Contract Count" number={bentoBox?.masterContractCount || 0} /> */}
+          {/* <InfoCard text="Clone Count" number={bentoBox?.cloneCount || 0} /> */}
         </div>
       </div>
       <div className="pt-4 lg:px-14">

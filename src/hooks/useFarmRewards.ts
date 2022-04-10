@@ -69,7 +69,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
     shouldFetch: !!chainId && !!farmAddresses && featureEnabled(Feature.KASHI, chainId),
   })
 
-  // console.log({ farmAddresses, kashiPairs })
+  console.log({ farmAddresses, kashiPairs })
 
   const averageBlockTime = useAverageBlockTime({ chainId })
 

@@ -48,6 +48,8 @@ export default function Farm(): JSX.Element {
     return type in FILTER ? FILTER[type](farm) : true
   })
 
+  console.log({ data })
+
   const options = {
     keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol'],
     threshold: 0,
