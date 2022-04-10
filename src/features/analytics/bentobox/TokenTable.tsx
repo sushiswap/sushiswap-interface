@@ -86,7 +86,7 @@ const TokenTable: FC<{ chainId: number }> = ({ chainId }) => {
               return (
                 <Link
                   href={{
-                    pathname: `/analytics/tokens/${row.original.id}`,
+                    pathname: `/analytics/tokens/${row.original.token.id}`,
                     query: {
                       chainId,
                     },
