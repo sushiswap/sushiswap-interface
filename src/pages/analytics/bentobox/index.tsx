@@ -5,9 +5,8 @@ import TokenTable from 'app/features/analytics/bentobox/TokenTable'
 import TokenSearch from 'app/features/analytics/Tokens/TokenSearch'
 import { featureEnabled } from 'app/functions/feature'
 import { formatNumber } from 'app/functions/format'
-import useFuse from 'app/hooks/useFuse'
 import { TridentBody } from 'app/layouts/Trident'
-import { useBentoBox, useBentoStrategies, useBentoTokens, useNativePrice, useTokens } from 'app/services/graph'
+import { useBentoBox, useBentoTokens, useNativePrice, useTokens } from 'app/services/graph'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { useMemo } from 'react'
@@ -50,8 +49,6 @@ export default function BentoBox(): JSX.Element {
     return new Map(tokens?.map((token) => [token.id, token]))
   }, [tokens])
 
-  const strategies = useBentoStrategies({ chainId })
-
   const formatted = useMemo<Array<any>>(() => {
     if (!bentoBoxTokens || !bentoBoxTokens.length || !tokens || !tokens.length) {
       return []
@@ -59,43 +56,13 @@ export default function BentoBox(): JSX.Element {
     return (
       bentoBoxTokens
         // @ts-ignore
-        .map(({ id, rebase, decimals, symbol, name }) => {
+        .map(({ id, rebase }) => {
           const token = tokenIdToPrice.get(id)
-          const supply = rebase.elastic
-          const tokenDerivedETH = token?.derivedETH
-          const price = (tokenDerivedETH ?? 0) * nativePrice
-          const tvl = price * supply
-
-          // @ts-ignore
-          const strategy = strategies?.find((strategy) => strategy.token === id)
-
-          return {
-            token: {
-              id,
-              symbol,
-              name,
-              decimals,
-            },
-            strategy,
-            price,
-            liquidity: tvl,
-          }
+          return (token?.derivedETH ?? 0) * nativePrice * rebase.elastic
         })
         .filter(Boolean)
     )
-  }, [bentoBoxTokens, tokens, tokenIdToPrice, nativePrice, strategies])
-
-  const {
-    result: tokensSearched,
-    term,
-    search,
-  } = useFuse({
-    options: {
-      keys: ['token.address', 'token.symbol', 'token.name'],
-      threshold: 0.4,
-    },
-    data: formatted,
-  })
+  }, [bentoBoxTokens, tokens, tokenIdToPrice, nativePrice])
 
   return (
     <>
@@ -107,7 +74,7 @@ export default function BentoBox(): JSX.Element {
           <InfoCard
             text="TVL"
             number={formatNumber(
-              formatted?.reduce((prev, curr) => prev + curr.liquidity, 0),
+              formatted?.reduce((previousValue, currentValue) => previousValue + currentValue, 0),
               true,
               false
             )}
