@@ -21,7 +21,8 @@
     "e2e:run": "yarn jest --testPathPattern=test/e2e --runInBand",
     "e2e:safe": "wait-on -l http://localhost:3000 && yarn e2e:run",
     "e2e": "concurrently -k -s first -n \"app,e2e\" \"yarn dev\" \"yarn e2e:safe\"",
-    "postinstall": "yarn lingui"
+    "postinstall": "yarn lingui",
+    "ngrok": "ngrok http 3000"
   },
   "resolutions": {
     "@walletconnect/jsonrpc-provider": "1.0.2",
@@ -102,6 +103,7 @@
     "@types/react-slider": "^1.3.1",
     "@types/react-table": "^7.7.9",
     "@types/ua-parser-js": "^0.7.36",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",
     "@uniswap/redux-multicall": "^1.1.0",
@@ -163,6 +165,7 @@
     "next-pwa": "5.4.7",
     "next-seo": "^5.1.0",
     "next-unused": "^0.0.6",
+    "ngrok": "^4.3.1",
     "node-vibrant": "3.1.6",
     "numeral": "^2.0.0",
     "polished": "^4.1.0",
@@ -199,6 +202,7 @@
     "tailwindcss": "^3.0.23",
     "tailwindcss-border-gradient-radius": "^3.0.0",
     "typescript": "^4.6.2",
+    "uuid": "^8.3.2",
     "wcag-contrast": "^3.0.0",
     "web3-react-abstract-connector": "npm:@web3-react/abstract-connector@^6.0.7",
     "web3-react-core": "npm:@web3-react/core@^6.0.9",
