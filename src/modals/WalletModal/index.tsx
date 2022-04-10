@@ -94,11 +94,14 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
       let name = ''
       let conn = typeof connector === 'function' ? await connector() : connector
 
-      Object.keys(SUPPORTED_WALLETS).find((key) => {
+      Object.keys(SUPPORTED_WALLETS).map((key) => {
         if (connector === SUPPORTED_WALLETS[key].connector) {
           return (name = SUPPORTED_WALLETS[key].name)
         }
       })
+
+      console.debug('Attempting activation of', name)
+
       // log selected wallet
       ReactGA.event({
         category: 'Wallet',
@@ -110,16 +113,20 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
 
       // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
       if (conn instanceof WalletConnectConnector && conn.walletConnectProvider?.wc?.uri) {
+        console.debug('Wallet connector already tried to connect, reset')
         conn.walletConnectProvider = undefined
       }
 
       if (conn) {
         activate(conn, undefined, true)
           .then(() => {
+            console.debug('Activated, get provider')
             return conn?.getProvider()
           })
           .then((provider) => {
+            console.debug('Got provider')
             if (conn instanceof WalletConnectConnector && provider && defaultChainId && queryChainId) {
+              console.debug('Provider is wallet connect, attempt network switch')
               switchToNetwork({ provider, chainId: defaultChainId !== 1 ? defaultChainId : queryChainId })
             }
           })
@@ -133,7 +140,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
           })
       }
     },
-    [activate]
+    [activate, defaultChainId, queryChainId]
   )
 
   // get wallets user can switch too, depending on device/browser
