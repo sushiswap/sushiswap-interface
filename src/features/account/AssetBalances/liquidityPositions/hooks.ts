@@ -1,6 +1,6 @@
 import { Token } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/trident-sdk'
-import { getApy } from 'app/features/analytics/pairs/PairList'
+import { getApy } from 'app/features/analytics/Pairs/PairList'
 import {
   TridentPositionRow,
   useLiquidityPositions,

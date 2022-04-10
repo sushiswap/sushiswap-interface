@@ -218,7 +218,7 @@ export const KashiMarketDetailsView: FC<KashiMarketDetailsView> = ({
     invert,
     borrowAmount,
     collateralAmount,
-    multiplier,
+    trade,
     reduce: view === KashiMarketView.REPAY,
   })
 

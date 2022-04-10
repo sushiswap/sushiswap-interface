@@ -186,7 +186,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
           onSwitch={() => setLeverage((prev) => !prev)}
           onChange={(val) => onMultiply(val, false)}
           afterChange={(val) => onMultiply(val, true)}
-          multiplier={leverage ? multiplierRef.current : undefined}
+          trade={trade}
         />
       )}
       <KashiMarketDetailsView
