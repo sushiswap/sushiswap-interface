@@ -1,16 +1,85 @@
 import { getAddress } from '@ethersproject/address'
 import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import { formatNumber, formatPercent } from 'app/functions'
+import { Feature } from 'app/enums'
+import { featureEnabled, formatNumber, formatPercent } from 'app/functions'
+import { useBentoStrategies, useBentoTokens, useNativePrice, useTokens } from 'app/services/graph'
 import React, { useMemo } from 'react'
 
-export const useTableConfig = (chainId: number, tokens: any) => {
-  const TokenColumns = useMemo(
+import { filterForSearchQuery } from './tokenTableFilters'
+
+export const useTableConfig = (chainId: number) => {
+  const nativePrice = useNativePrice({ chainId })
+
+  const bentoBoxTokens = useBentoTokens({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
+
+  const bentoBoxTokenAddresses = useMemo(() => {
+    if (!bentoBoxTokens || !bentoBoxTokens.length) {
+      return []
+    }
+    // @ts-ignore
+    return bentoBoxTokens.map((token) => token.id)
+  }, [bentoBoxTokens])
+
+  // Get exchange data
+  const tokens = useTokens({
+    chainId,
+    shouldFetch: bentoBoxTokenAddresses && bentoBoxTokenAddresses.length,
+    variables: {
+      where: {
+        id_in: bentoBoxTokenAddresses,
+      },
+    },
+  })
+
+  // Creating map to easily reference TokenId -> Token
+  const tokenIdToPrice = useMemo<
+    Map<string, { derivedETH: number; volumeUSD: number; dayData: Array<{ priceUSD: number }> }>
+  >(() => {
+    // @ts-ignore TYPE NEEDS FIXING
+    return new Map(tokens?.map((token) => [token.id, token]))
+  }, [tokens])
+
+  const strategies = useBentoStrategies({ chainId })
+
+  const data = useMemo<Array<any>>(() => {
+    if (!bentoBoxTokens || !bentoBoxTokens.length || !tokens || !tokens.length) {
+      return []
+    }
+    return (
+      bentoBoxTokens
+        // @ts-ignore
+        .map(({ id, rebase, decimals, symbol, name }) => {
+          const token = tokenIdToPrice.get(id)
+          const supply = rebase.elastic
+          const tokenDerivedETH = token?.derivedETH
+          const price = (tokenDerivedETH ?? 0) * nativePrice
+          const tvl = price * supply
+
+          const strategy = strategies?.find((strategy) => strategy.token === id)
+
+          return {
+            token: {
+              id,
+              symbol,
+              name,
+              decimals,
+            },
+            strategy,
+            price,
+            liquidity: tvl,
+          }
+        })
+        .filter(Boolean)
+    )
+  }, [bentoBoxTokens, tokens, tokenIdToPrice, nativePrice, strategies])
+
+  const columns = useMemo(
     () => [
       {
         Header: 'Name',
         accessor: 'token',
-        minWidth: 200,
+        maxWidth: 100,
         // @ts-ignore
         Cell: (props) => {
           const currency = useMemo(
@@ -31,11 +100,12 @@ export const useTableConfig = (chainId: number, tokens: any) => {
             </div>
           )
         },
+        filter: filterForSearchQuery,
       },
       {
         Header: 'Price',
         accessor: 'price',
-        maxWidth: 100,
+        minWidth: 150,
         // @ts-ignore
         Cell: (props) => formatNumber(props.value, true, undefined, 2),
         align: 'right',
@@ -43,6 +113,7 @@ export const useTableConfig = (chainId: number, tokens: any) => {
       {
         Header: 'Liquidity',
         accessor: 'liquidity',
+        minWidth: 150,
         // @ts-ignore
         Cell: (props) => formatNumber(props.value, true, false),
         align: 'right',
@@ -50,40 +121,49 @@ export const useTableConfig = (chainId: number, tokens: any) => {
       {
         id: 'target',
         Header: 'Strategy Target',
-        accessor: 'strategy',
+        accessor: 'strategy.targetPercentage',
+        minWidth: 150,
         // @ts-ignore
-        Cell: (props) => formatPercent(props.value?.targetPercentage),
+        Cell: (props) => formatPercent(props.value),
       },
       {
         id: 'utilisation',
         Header: 'Strategy Utilization',
-        accessor: 'strategy',
+        accessor: 'strategy.utilization',
+        minWidth: 150,
         // @ts-ignore
-        Cell: (props) => formatPercent(props.value?.utilization),
+        Cell: (props) => formatPercent(props.value),
       },
       {
-        Header: 'Strategy APY',
-        accessor: 'strategy',
+        Header: 'APY',
+        accessor: 'strategy.apy',
+        minWidth: 200,
         // @ts-ignore
-        Cell: (props) => formatPercent(props.value?.apy),
+        Cell: (props) => formatPercent(props.value),
       },
     ],
     [chainId]
   )
 
-  const defaultColumn = React.useMemo(() => ({ minWidth: 0 }), [])
-
   return useMemo(
     () => ({
       config: {
-        columns: TokenColumns,
-        data: tokens,
-        defaultColumn,
+        columns,
+        data: data ?? [],
         initialState: {
-          sortBy: [{ id: 'liquidity', desc: true }],
+          sortBy: [
+            { id: 'liquidity', desc: true },
+            { id: 'price', desc: true },
+            { id: 'targetPercentage', desc: true },
+            { id: 'utilization', desc: true },
+            { id: 'apy', desc: true },
+          ],
         },
+        autoResetFilters: false,
       },
+      // loading: isValidating,
+      // error,
     }),
-    [TokenColumns, defaultColumn, tokens]
+    [columns, data]
   )
 }

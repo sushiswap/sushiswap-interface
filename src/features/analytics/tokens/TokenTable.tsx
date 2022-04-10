@@ -1,5 +1,4 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
-import { useLingui } from '@lingui/react'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import {
   TABLE_TABLE_CLASSNAME,
@@ -17,8 +16,7 @@ import { SearchCategoryLabel } from './SearchCategoryLabel'
 import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
 import { useTableConfig } from './useTableConfig'
 
-const TokenTable: FC<any> = ({ chainId }) => {
-  const { i18n } = useLingui()
+const TokenTable: FC<{ chainId: number }> = ({ chainId }) => {
   const { config } = useTableConfig(chainId)
 
   const {

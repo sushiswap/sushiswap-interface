@@ -1,7 +1,4 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import Typography from 'app/components/Typography'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import {
   TABLE_TABLE_CLASSNAME,
@@ -10,20 +7,23 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
+import Link from 'next/link'
 import React, { FC } from 'react'
 // @ts-ignore TYPE NEEDS FIXING
-import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
+import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
+import { SearchCategoryLabel } from './SearchCategoryLabel'
+import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
 import { useTableConfig } from './useTableConfig'
 
-const TokenTable: FC<any> = ({ chainId, tokens }) => {
-  const { i18n } = useLingui()
-  const { config } = useTableConfig(chainId, tokens)
+const TokenTable: FC<{ chainId: number }> = ({ chainId }) => {
+  const { config } = useTableConfig(chainId)
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    rows,
     // @ts-ignore TYPE NEEDS FIXING
     page,
     // @ts-ignore TYPE NEEDS FIXING
@@ -32,21 +32,21 @@ const TokenTable: FC<any> = ({ chainId, tokens }) => {
     canPreviousPage,
     // @ts-ignore TYPE NEEDS FIXING
     canNextPage,
+    // @ts-ignore TYPE NEEDS FIXING
     prepareRow,
+    // @ts-ignore TYPE NEEDS FIXING
+    setFilter,
+    // @ts-ignore TYPE NEEDS FIXING
+    toggleSortBy,
     // @ts-ignore TYPE NEEDS FIXING
     state: { pageIndex, pageSize },
     // @ts-ignore TYPE NEEDS FIXING
-  } = useTable(config, useSortBy, usePagination, useFlexLayout)
+  } = useTable(config, useFlexLayout, useFilters, useSortBy, useFlexLayout, usePagination)
+  useInstantiateTableFeatures(setFilter)
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-3">
-        <Typography variant="h3" className="text-high-emphesis" weight={700}>
-          {i18n._(t`Tokens`)}
-        </Typography>
-        {/* <LoadingSpinner active={loading} />
-        {error && <span className="-ml-2 text-sm italic text-red">{i18n._(t`⚠️ Loading Error`)}</span>} */}
-      </div>
+    <div className="flex flex-col gap-2">
+      <SearchCategoryLabel />
 
       <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
         <table {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
@@ -84,16 +84,27 @@ const TokenTable: FC<any> = ({ chainId, tokens }) => {
             {page.map((row, i) => {
               prepareRow(row)
               return (
-                <tr {...row.getRowProps()} key={i} className={TABLE_TBODY_TR_CLASSNAME}>
-                  {/*@ts-ignore TYPE NEEDS FIXING*/}
-                  {row.cells.map((cell, i) => {
-                    return (
-                      <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>
-                        {cell.render('Cell')}
-                      </td>
-                    )
-                  })}
-                </tr>
+                <Link
+                  href={{
+                    pathname: `/analytics/tokens/${row.original.id}`,
+                    query: {
+                      chainId,
+                    },
+                  }}
+                  key={i}
+                  passHref
+                >
+                  <tr {...row.getRowProps()} key={i} className={TABLE_TBODY_TR_CLASSNAME}>
+                    {/*@ts-ignore TYPE NEEDS FIXING*/}
+                    {row.cells.map((cell, i) => {
+                      return (
+                        <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>
+                          {cell.render('Cell')}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                </Link>
               )
             })}
           </tbody>
@@ -102,11 +113,11 @@ const TokenTable: FC<any> = ({ chainId, tokens }) => {
       <TablePageToggler
         pageIndex={pageIndex}
         pageSize={pageSize}
-        totalItems={tokens ? tokens.length : 0}
+        totalItems={rows.length}
         gotoPage={gotoPage}
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}
-        loading={!tokens}
+        loading={!rows.length}
       />
     </div>
   )

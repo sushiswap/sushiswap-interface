@@ -1,16 +1,16 @@
-import Search from 'app/components/Search'
 import { Feature } from 'app/enums'
-import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
-import Background from 'app/features/analytics/Background'
 import InfoCard from 'app/features/analytics/bar/InfoCard'
+import { DiscoverHeader } from 'app/features/analytics/bentobox/DiscoverHeader'
 import TokenTable from 'app/features/analytics/bentobox/TokenTable'
+import TokenSearch from 'app/features/analytics/tokens/TokenSearch'
 import { featureEnabled } from 'app/functions/feature'
 import { formatNumber } from 'app/functions/format'
 import useFuse from 'app/hooks/useFuse'
+import { TridentBody } from 'app/layouts/Trident'
 import { useBentoBox, useBentoStrategies, useBentoTokens, useNativePrice, useTokens } from 'app/services/graph'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import { useMemo } from 'react'
-
 export default function BentoBox(): JSX.Element {
   const router = useRouter()
 
@@ -86,7 +86,7 @@ export default function BentoBox(): JSX.Element {
   }, [bentoBoxTokens, tokens, tokenIdToPrice, nativePrice, strategies])
 
   const {
-    result: searched,
+    result: tokensSearched,
     term,
     search,
   } = useFuse({
@@ -98,18 +98,11 @@ export default function BentoBox(): JSX.Element {
   })
 
   return (
-    <AnalyticsContainer>
-      <Background background="dashboard">
-        <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
-          <div>
-            <div className="text-3xl font-bold text-high-emphesis">BentoBox</div>
-            <div className="">Click on the column name to sort tokens by price or liquidity.</div>
-          </div>
-          <Search term={term} search={search} />
-        </div>
-      </Background>
-      <div className="py-6 space-y-4 lg:px-14">
-        <div className="text-2xl font-bold text-high-emphesis">Overview</div>
+    <>
+      <NextSeo title={`BentoBox Anlytics`} />
+      <DiscoverHeader />
+      <TridentBody>
+        <div className="text-2xl font-bold text-high-emphesis">KPIs</div>
         <div className="flex flex-row space-x-4 overflow-auto">
           <InfoCard
             text="TVL"
@@ -126,10 +119,12 @@ export default function BentoBox(): JSX.Element {
           {/* <InfoCard text="Master Contract Count" number={bentoBox?.masterContractCount || 0} /> */}
           {/* <InfoCard text="Clone Count" number={bentoBox?.cloneCount || 0} /> */}
         </div>
-      </div>
-      <div className="pt-4 lg:px-14">
-        <TokenTable chainId={chainId} tokens={searched} />
-      </div>
-    </AnalyticsContainer>
+
+        <div className="flex flex-col w-full gap-10">
+          <TokenSearch />
+          <TokenTable chainId={chainId} />
+        </div>
+      </TridentBody>
+    </>
   )
 }
