@@ -120,7 +120,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
           })
           .then((provider) => {
             if (conn instanceof WalletConnectConnector && provider && defaultChainId && queryChainId) {
-              switchToNetwork({ provider, chainId: defaultChainId !== 1 ? cookieChainId : queryChainId })
+              switchToNetwork({ provider, chainId: defaultChainId !== 1 ? defaultChainId : queryChainId })
             }
           })
           .catch((error) => {
