@@ -27,10 +27,13 @@ const Mobile: FC = () => {
           <div className="p-2 rounded-full hover:bg-white/10">
             <MenuIcon width={28} className="text-white cursor-pointer hover:text-white" onClick={() => setOpen(true)} />
           </div>
-          <div className="flex items-center w-6 mr-1">
+          <div className="flex items-center w-6">
             <Link href="/swap" passHref={true}>
               <Image src="https://app.sushi.com/images/logo.svg" alt="Sushi logo" width="24px" height="24px" />
             </Link>
+          </div>
+          <div className="flex items-center">
+            {library && (library.provider.isMetaMask || isCoinbaseWallet) && <Web3Network />}
           </div>
         </div>
         <Transition.Root show={open} as={Fragment} unmount={false}>
