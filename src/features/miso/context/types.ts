@@ -178,6 +178,7 @@ export interface AuctionCreationWizardInput {
   endPrice?: number
   liqLockTime?: number
   liqPercentage: number
+  liqLauncherEnabled: boolean
   whitelistEnabled: boolean
   whitelistAddresses: WhitelistEntry[]
 }

@@ -74,7 +74,7 @@ export const formatCreationFormData = (
     accounts,
     amounts,
     liqLockTime: Number(liqLockTime) * 24 * 60 * 60,
-    liqPercentage: Number(liqPercentage) * 100,
+    liqPercentage: data.liqLauncherEnabled ? Number(liqPercentage) * 100 : 0,
     startDate: new Date(startDate),
     endDate: new Date(endDate),
     auctionToken,
