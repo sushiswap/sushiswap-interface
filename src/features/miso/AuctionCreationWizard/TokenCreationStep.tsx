@@ -149,39 +149,26 @@ const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
             className="flex gap-10"
           >
             <input className="hidden" name="tokenSetupType" value={tokenSetupType} onChange={() => {}} />
-            <div className="flex w-full gap-5 border border-dark-800 rounded">
-              {tokenSetupItems
-                .map<ReactNode>(({ description, label, value }, index) => (
-                  <RadioGroup.Option value={value} key={value}>
-                    {({ checked }) => (
-                      <div
-                        className={classNames(
-                          'flex flex-col border border-transparent gap-2 p-10 rounded h-full cursor-pointer max-w-[300px] hover:text-white',
-                          index === 0 ? 'text-right' : 'text-left'
-                        )}
-                      >
-                        <Typography variant="h3" className={checked ? 'text-blue' : 'text-inherit'}>
-                          {label}
-                        </Typography>
-                        <Typography variant="sm" className={checked ? 'text-blue' : 'text-inherit'}>
-                          {description}
-                        </Typography>
-                      </div>
-                    )}
-                  </RadioGroup.Option>
-                ))
-                .reduce((prev, cur, index) => [
-                  prev,
-                  <div className="relative flex items-center" key={`div-${index}`}>
-                    <div className="absolute inset-0 flex justify-center py-10" aria-hidden="true">
-                      <div className="h-full border-r border-dark-800" />
+            <div className="flex flex-col md:flex-row w-full gap-0 md:gap-5 border border-dark-800 rounded divide-y md:divide-y-0 md:divide-x divide-dark-800">
+              {tokenSetupItems.map<ReactNode>(({ description, label, value }, index) => (
+                <RadioGroup.Option value={value} key={value}>
+                  {({ checked }) => (
+                    <div
+                      className={classNames(
+                        'flex flex-col border border-transparent gap-2 p-10 rounded h-full cursor-pointer max-w-[300px] hover:text-white',
+                        index === 0 ? 'text-center md:text-right' : 'text-center md:text-left'
+                      )}
+                    >
+                      <Typography variant="h3" className={checked ? 'text-purple' : 'text-inherit'}>
+                        {label}
+                      </Typography>
+                      <Typography variant="sm" className={checked ? 'text-purple' : 'text-inherit'}>
+                        {description}
+                      </Typography>
                     </div>
-                    <div className="relative flex items-center bg-dark-1000 py-2">
-                      <span className="px-2 text-sm text-low-emphesis">OR</span>
-                    </div>
-                  </div>,
-                  cur,
-                ])}
+                  )}
+                </RadioGroup.Option>
+              ))}
             </div>
           </RadioGroup>
         </div>
