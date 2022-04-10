@@ -20,8 +20,10 @@ import mint from './mint/reducer'
 // import multicall from './multicall-2/reducer'
 import slippage from './slippage/slippageSlice'
 import swap from './swap/reducer'
+import tokens from './tokens/slice'
 import transactions from './transactions/reducer'
 import user from './user/reducer'
+
 const reducer = combineReducers({
   application,
   burn,
@@ -45,6 +47,7 @@ const reducer = combineReducers({
   tridentPools,
   tridentCreate,
   tridentMigrations,
+  tokens,
 })
 
 export default reducer

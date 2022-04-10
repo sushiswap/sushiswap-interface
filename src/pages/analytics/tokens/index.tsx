@@ -1,11 +1,11 @@
-import Search from 'app/components/Search'
-import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
-import Background from 'app/features/analytics/Background'
 import useTokensAnalytics from 'app/features/analytics/hooks/useTokensAnalytics'
-import TokenList from 'app/features/analytics/tokens/TokenList'
+import { DiscoverHeader } from 'app/features/analytics/tokens/DiscoverHeader'
+import TokenSearch from 'app/features/analytics/tokens/TokenSearch'
+import TokenTable from 'app/features/analytics/tokens/TokenTable'
 import useFuse from 'app/hooks/useFuse'
+import { TridentBody } from 'app/layouts/Trident'
 import { useRouter } from 'next/router'
-
+import { NextSeo } from 'next-seo'
 export default function Tokens() {
   const router = useRouter()
 
@@ -25,20 +25,18 @@ export default function Tokens() {
     },
   })
 
+  console.log({ tokensSearched })
+
   return (
-    <AnalyticsContainer>
-      <Background background="tokens">
-        <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
-          <div>
-            <div className="text-3xl font-bold text-high-emphesis">Tokens</div>
-            <div>Click on the column name to sort tokens by it&apos;s price or trading volume.</div>
-          </div>
-          <Search term={term} search={search} />
+    <>
+      <NextSeo title={`Token Anlytics`} />
+      <DiscoverHeader />
+      <TridentBody>
+        <div className="flex flex-col w-full gap-10">
+          <TokenSearch />
+          <TokenTable chainId={chainId} tokens={tokensSearched ?? []} />
         </div>
-      </Background>
-      <div className="px-4 pt-4 lg:px-14">
-        <TokenList tokens={tokensSearched} />
-      </div>
-    </AnalyticsContainer>
+      </TridentBody>
+    </>
   )
 }
