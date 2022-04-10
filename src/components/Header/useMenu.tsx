@@ -282,7 +282,7 @@ const useMenu: UseMenu = () => {
     if (featureEnabled(Feature.BENTOBOX, chainId)) {
       analyticsMenu.items.push({
         key: 'bentobox',
-        title: 'Bentobox',
+        title: 'BentoBox',
         link: `/analytics/bentobox`,
       })
     }
