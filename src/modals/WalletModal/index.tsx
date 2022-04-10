@@ -124,13 +124,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
             if (conn instanceof WalletConnectConnector) {
               const provider = await conn?.getProvider()
               const chainId = await conn?.getChainId()
-              if (
-                provider &&
-                chainId &&
-                defaultChainId &&
-                queryChainId &&
-                (chainId !== queryChainId || chainId !== defaultChainId)
-              ) {
+              if (provider && chainId && defaultChainId && (chainId !== queryChainId || chainId !== defaultChainId)) {
                 console.debug('Provider is wallet connect, attempt network switch')
                 switchToNetwork({
                   provider,
