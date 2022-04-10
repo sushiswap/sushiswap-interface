@@ -137,7 +137,7 @@ export const useTableConfig = (chainId: number) => {
       {
         Header: 'APY',
         accessor: 'strategy.apy',
-        minWidth: 200,
+        minWidth: 150,
         // @ts-ignore
         Cell: (props) => formatPercent(props.value),
       },
