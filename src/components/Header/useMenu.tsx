@@ -295,8 +295,30 @@ const useMenu: UseMenu = () => {
       menu.push({
         key: 'portfolio',
         title: i18n._(t`Portfolio`),
-        link: `/account?account=${account}`,
+
         icon: <WalletIcon width={20} />,
+        items: [
+          {
+            key: 'account',
+            title: 'Account',
+            link: `/account?account=${account}`,
+          },
+          {
+            key: 'liquidity',
+            title: 'Liquidity',
+            link: `/account/liquidity?account=${account}`,
+          },
+          {
+            key: 'lending',
+            title: 'Lending',
+            link: `/account/lending?account=${account}`,
+          },
+          {
+            key: 'borrowing',
+            title: 'Borrowing',
+            link: `/account/borrowing?account=${account}`,
+          },
+        ],
       })
     }
 
