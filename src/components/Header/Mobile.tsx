@@ -32,9 +32,7 @@ const Mobile: FC = () => {
               <Image src="https://app.sushi.com/images/logo.svg" alt="Sushi logo" width="24px" height="24px" />
             </Link>
           </div>
-          <div className="flex items-center">
-            {library && (library.provider.isMetaMask || isCoinbaseWallet) && <Web3Network />}
-          </div>
+          <div className="flex items-center">{<Web3Network />}</div>
         </div>
         <Transition.Root show={open} as={Fragment} unmount={false}>
           <Dialog as="div" className="fixed inset-0 z-20 overflow-hidden" onClose={setOpen} unmount={false}>
