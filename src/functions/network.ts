@@ -17,8 +17,12 @@ export const switchToNetwork = async ({ provider, chainId }: SwitchNetworkArgume
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: params.chainId }],
     })
-    // logEvent('Chain', 'switch', params.chainName, chainId)
+    gtag('event', params.chainName, {
+      event_category: 'Chain',
+      event_label: 'Switch',
+    })
   } catch (error) {
+    console.log('Error switching network', error)
     // @ts-ignore TYPE NEEDS FIXING
     // This error code indicates that the chain has not been added to MetaMask.
     if (error.code === 4902) {

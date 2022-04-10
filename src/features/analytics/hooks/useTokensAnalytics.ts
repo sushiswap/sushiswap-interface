@@ -1,5 +1,5 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from 'app/services/graph'
+import { useBentoStrategies, useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from 'app/services/graph'
 import { useEffect, useMemo, useState } from 'react'
 
 export default function useTokensAnalytics({ chainId = ChainId.ETHEREUM }) {
@@ -36,6 +36,8 @@ export default function useTokensAnalytics({ chainId = ChainId.ETHEREUM }) {
     shouldFetch: !!block1w && loadState !== 'loading',
   })
 
+  const strategies = useBentoStrategies({ chainId, shouldFetch: loadState !== 'loading' })
+
   useEffect(() => {
     if (loadState === 'loading' && !!tokens1dInitial && !!tokens1wInitial) setLoadState('initial')
     else if (!!tokens1d && !!tokens1w) setLoadState('loaded')
@@ -46,20 +48,24 @@ export default function useTokensAnalytics({ chainId = ChainId.ETHEREUM }) {
       // @ts-ignore TYPE NEEDS FIXING
       (loadState === 'loaded' ? tokens : tokensInitial)?.map((token) => {
         // @ts-ignore TYPE NEEDS FIXING
-        const token1d = (loadState === 'loaded' ? tokens1d : tokens1dInitial)?.find((p) => token.id === p.id) ?? token
+        const token1d = (loadState === 'loaded' ? tokens1d : tokens1dInitial)?.find((t) => token.id === t.id) ?? token
         // @ts-ignore TYPE NEEDS FIXING
-        const token1w = (loadState === 'loaded' ? tokens1w : tokens1wInitial)?.find((p) => token.id === p.id) ?? token
+        const token1w = (loadState === 'loaded' ? tokens1w : tokens1wInitial)?.find((t) => token.id === t.id) ?? token
+
+        const strategy = strategies?.find((strategy) => strategy.token === token.id)
 
         return {
           token: {
             id: token.id,
             symbol: token.symbol,
             name: token.name,
+            decimals: token.decimals,
           },
           liquidity: token.liquidity * token.derivedETH * nativePrice,
           volume1d: token.volumeUSD - token1d.volumeUSD,
           volume1w: token.volumeUSD - token1w.volumeUSD,
           price: token.derivedETH * nativePrice,
+          strategy,
           change1d: ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100,
           change1w: ((token.derivedETH * nativePrice) / (token1w.derivedETH * nativePrice1w)) * 100 - 100,
           graph: token.dayData
@@ -70,16 +76,17 @@ export default function useTokensAnalytics({ chainId = ChainId.ETHEREUM }) {
         }
       }),
     [
-      tokensInitial,
-      tokens1dInitial,
-      tokens1wInitial,
+      loadState,
       tokens,
+      tokensInitial,
       tokens1d,
+      tokens1dInitial,
       tokens1w,
+      tokens1wInitial,
+      strategies,
       nativePrice,
       nativePrice1d,
       nativePrice1w,
-      loadState,
     ]
   )
 }

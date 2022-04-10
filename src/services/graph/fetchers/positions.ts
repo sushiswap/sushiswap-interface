@@ -21,6 +21,7 @@ export interface TridentPositionRow {
   twapEnabled: boolean
   value: number
   apy: string
+  legacy?: boolean
 }
 
 const formatPositions = (chainId: ChainId, { liquidityPositions }: TridentPositionQueryResult) => {

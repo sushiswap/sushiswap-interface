@@ -7,18 +7,22 @@ import { Assets } from 'app/features/portfolio/AssetBalances/types'
 import { setBalancesState } from 'app/features/portfolio/portfolioSlice'
 import { ActiveModal } from 'app/features/trident/types'
 import { useBentoStrategies } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalancesV2ForAccount } from 'app/state/bentobox/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { useAllTokenBalancesWithLoadingIndicator, useCurrencyBalance } from 'app/state/wallet/hooks'
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { useBasicTableConfig } from '../useBasicTableConfig'
 import { useBentoBoxTableConfig } from '../useBentoBoxTableConfig'
-export const BentoBalances = ({ account }: { account: string }) => {
+
+interface Balances {
+  account: string
+  chainId: number | undefined
+}
+
+export const BentoBalances = ({ account, chainId }: Balances) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
-  const { chainId } = useActiveWeb3React()
 
   const { data: balances, loading } = useBentoBalancesV2ForAccount(account)
 
@@ -64,9 +68,8 @@ export const BentoBalances = ({ account }: { account: string }) => {
   )
 }
 
-export const WalletBalances: FC<{ account: string }> = ({ account }) => {
+export const WalletBalances = ({ account, chainId }: Balances) => {
   const { i18n } = useLingui()
-  const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const [tokenBalances, loading] = useAllTokenBalancesWithLoadingIndicator(account)
 

@@ -5,6 +5,7 @@ import usePrevious from 'app/hooks/usePrevious'
 import NetworkModel from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useNetworkModalToggle } from 'app/state/application/hooks'
+import Cookies from 'js-cookie'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -14,6 +15,7 @@ function Web3Network(): JSX.Element | null {
 
   const toggleNetworkModal = useNetworkModalToggle()
 
+  const [attemptingSwitchFromUrl, setAttemptingSwitchFromUrl] = useState(false)
   const [switchedFromUrl, setSwitchedFromUrl] = useState(false)
 
   const router = useRouter()
@@ -26,7 +28,10 @@ function Web3Network(): JSX.Element | null {
 
   const handleChainSwitch = useCallback(
     (targetChain: number) => {
-      if (!library?.provider) return
+      if (!library?.provider) {
+        setAttemptingSwitchFromUrl(false)
+        return
+      }
       setSwitchedFromUrl(true)
       switchToNetwork({ provider: library.provider, chainId: targetChain })
         .then(() => {
@@ -59,12 +64,25 @@ function Web3Network(): JSX.Element | null {
 
   useEffect(() => {
     // assume network change originates from URL
-    if (chainId && queryChainId && !switchedFromUrl && isWindowVisible && chainId !== queryChainId) {
-      console.debug('network change from query chainId', { queryChainId, chainId })
 
-      handleChainSwitch(queryChainId)
+    const cookieChainId = Cookies.get('chain-id')
+
+    const defaultChainId = cookieChainId ? Number(cookieChainId) : 1
+
+    if (
+      chainId &&
+      defaultChainId &&
+      queryChainId &&
+      !attemptingSwitchFromUrl &&
+      !switchedFromUrl &&
+      isWindowVisible &&
+      (chainId !== queryChainId || chainId !== defaultChainId)
+    ) {
+      console.debug('network change from query chainId', { queryChainId, chainId })
+      setAttemptingSwitchFromUrl(true)
+      handleChainSwitch(defaultChainId !== 1 ? defaultChainId : queryChainId)
     }
-  }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId, isWindowVisible])
+  }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId, isWindowVisible, attemptingSwitchFromUrl])
 
   // set chainId on initial load if not present
   useEffect(() => {

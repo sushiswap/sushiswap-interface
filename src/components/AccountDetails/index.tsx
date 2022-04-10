@@ -11,6 +11,7 @@ import { clearAllTransactions } from 'app/state/transactions/actions'
 import Image from 'next/image'
 import React, { FC, useCallback, useMemo } from 'react'
 import { ExternalLink as LinkIcon } from 'react-feather'
+import { WalletLinkConnector } from 'web3-react-walletlink-connector'
 
 import Button from '../Button'
 import ExternalLink from '../ExternalLink'
@@ -67,11 +68,15 @@ const AccountDetails: FC<AccountDetailsProps> = ({
         <HeadlessUiModal.BorderedContent className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             {connectorName}
-            {!isMetaMask && (
+            {connector !== injected && !(connector instanceof WalletLinkConnector) && (
               <Button variant="outlined" color="blue" size="xs" onClick={deactivate}>
                 {i18n._(t`Disconnect`)}
               </Button>
             )}
+
+            {/* <Button variant="outlined" color="blue" size="xs" onClick={deactivate}>
+              {i18n._(t`Change`)}
+            </Button> */}
           </div>
           <div id="web3-account-identifier-row" className="flex flex-col justify-center gap-4">
             <div className="flex items-center gap-4">

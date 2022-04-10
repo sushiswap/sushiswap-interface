@@ -113,6 +113,7 @@ export const pairFieldsQuery = gql`
     id
     name
     symbol
+    decimals
     totalSupply
     derivedETH
   }

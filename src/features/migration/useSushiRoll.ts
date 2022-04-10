@@ -5,7 +5,6 @@ import { useSushiRollContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { signERC2612Permit } from 'eth-permit'
 import { useCallback } from 'react'
-import ReactGA from 'react-ga'
 
 import LPToken from './LPToken'
 
@@ -33,10 +32,10 @@ const useSushiRoll = (version: 'v1' | 'v2' = 'v2') => {
           gasLimit: gasLimit.mul(120).div(100),
         })
 
-        ReactGA.event({
-          category: 'Migrate',
-          action: `${from}->Sushiswap`,
-          label: 'migrate',
+        gtag('event', `${from}->Sushiswap`, {
+          event_category: 'Migrate',
+          event_label: 'migrate',
+          event_action: `${from}->Sushiswap`,
         })
 
         return tx
@@ -74,10 +73,10 @@ const useSushiRoll = (version: 'v1' | 'v2' = 'v2') => {
           gasLimit: gasLimit.mul(120).div(100),
         })
 
-        ReactGA.event({
-          category: 'Migrate',
-          action: `${from}->Sushiswap`,
-          label: 'migrateWithPermit',
+        gtag('event', `${from}->Sushiswap`, {
+          event_category: 'Migrate',
+          event_label: 'migrateWithPermit',
+          event_action: `${from}->Sushiswap`,
         })
 
         return tx

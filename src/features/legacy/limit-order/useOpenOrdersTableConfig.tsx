@@ -61,7 +61,7 @@ export const useOpenOrdersTableConfig = ({
           return (
             <Typography
               variant="xs"
-              className="flex items-baseline gap-2 text-secondary cursor-pointer"
+              className="flex items-baseline gap-2 cursor-pointer text-secondary"
               onClick={() => setInvert(!invert)}
             >
               <Typography weight={700} variant="xs" component="span" className="text-high-emphesis">
@@ -156,7 +156,7 @@ export const useOpenOrdersTableConfig = ({
     () => ({
       config: {
         columns: data,
-        data: orders,
+        data: orders?.filter((order) => Number(order.limitOrder.endTime) * 1000 > Date.now()),
         defaultColumn,
         // initialState: {
         //   sortBy: [{ id: 'receive', desc: true }],

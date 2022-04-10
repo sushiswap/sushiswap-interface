@@ -25,13 +25,13 @@ const KashiPage: FC = () => {
         <div className="flex gap-3">
           {account && (
             <>
-              <Link href={`/account/${account}/lending`} passHref={true}>
+              <Link href={`/account/lending?account=${account}`} passHref={true}>
                 <Button id="btn-create-new-pool" size="sm">
                   {i18n._(t`My Lending`)}
                 </Button>
               </Link>
 
-              <Link href={`/account/${account}/borrowing`} passHref={true}>
+              <Link href={`/account/borrowing?account=${account}`} passHref={true}>
                 <Button id="btn-create-new-pool" size="sm">
                   {i18n._(t`My Borrowing`)}
                 </Button>

@@ -7,7 +7,6 @@ import {
   getBentoTokens,
   getBentoUserTokens,
   getClones,
-  getKashiPairs,
 } from 'app/services/graph/fetchers'
 import stringify from 'fast-json-stable-stringify'
 import useSWR from 'swr'
@@ -18,20 +17,6 @@ import { GraphProps } from '../interfaces'
 export function useClones({ chainId, shouldFetch = true, swrConfig = undefined }) {
   const { data } = useSWR(shouldFetch ? () => ['clones', chainId] : null, (_, chainId) => getClones(chainId), swrConfig)
   return data
-}
-
-export function useKashiPairs({
-  chainId = ChainId.ETHEREUM,
-  variables,
-  shouldFetch = true,
-  swrConfig = undefined,
-}: GraphProps) {
-  return useSWR(
-    shouldFetch ? () => ['kashiPairs', chainId, stringify(variables)] : null,
-    // @ts-ignore
-    (_, chainId) => getKashiPairs(chainId, variables),
-    swrConfig
-  )
 }
 
 export function useBentoBox({ chainId = ChainId.ETHEREUM, variables, shouldFetch = true, swrConfig }: GraphProps) {

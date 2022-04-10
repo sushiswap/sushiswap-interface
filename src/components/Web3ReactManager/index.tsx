@@ -1,11 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { network } from 'app/config/wallets'
+import { getNetworkConnector } from 'app/config/wallets'
 import { NetworkContextName } from 'app/constants'
 import useEagerConnect from 'app/hooks/useEagerConnect'
 import useInactiveListener from 'app/hooks/useInactiveListener'
 import React, { useEffect } from 'react'
 import { useWeb3React } from 'web3-react-core'
+
+const network = getNetworkConnector()
 
 export const Web3ReactManager = ({ children }: { children: JSX.Element }) => {
   const { i18n } = useLingui()
