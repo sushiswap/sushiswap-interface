@@ -29,6 +29,8 @@ const Miso = () => {
   // @ts-ignore TYPE NEEDS FIXING
   const auctions = useAuctions(queryToAuctionStatus[query?.status as string] ?? AuctionStatus.LIVE)
 
+  console.log({ auctions })
+
   const tabs = [
     { key: AuctionStatus.LIVE, value: i18n._(t`Live`), link: 'live' },
     { key: AuctionStatus.UPCOMING, value: i18n._(t`Upcoming`), link: 'upcoming' },

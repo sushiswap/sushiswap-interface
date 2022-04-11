@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 
 export const useAuctionList = (type?: AuctionStatus): RawAuction[] => {
   const contract = useMisoHelperContract()
-  const { result } = useSingleCallResult(contract, 'getMarkets')
+  const { result } = useSingleCallResult(contract, 'getMarkets', undefined, { gasRequired: 2_000_000 })
 
   return useMemo(() => {
     if (!result || !Array.isArray(result) || !(result.length > 0)) return []

@@ -31,6 +31,17 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
   const pointListAddresses = useAuctionPointLists(addresses)
   const blockTimestamp = useCurrentBlockTimestamp()
 
+  // console.log({
+  //   auctions,
+  //   addresses,
+  //   userMarketInfos,
+  //   auctionTemplateIds,
+  //   auctionInfos,
+  //   auctionDocuments,
+  //   pointListAddresses,
+  //   blockTimestamp,
+  // })
+
   return useMemo(() => {
     if (!chainId) return Array(Math.min(auctions.length, 6)).fill(undefined)
 
