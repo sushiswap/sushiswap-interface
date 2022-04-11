@@ -1,26 +1,22 @@
-import { Currency, CurrencyAmount, Fraction, Price, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Price, Trade as LegacyTrade, TradeType, ZERO } from '@sushiswap/core-sdk'
 import { LTV } from 'app/features/kashi/constants'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket'
 import { unwrappedToken } from 'app/functions'
 import { useUSDCPrice } from 'app/hooks'
+import { useAppSelector } from 'app/state/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
 
 interface Payload {
   borrowAmount?: CurrencyAmount<Currency>
   collateralAmount?: CurrencyAmount<Currency>
-  multiplier?: Fraction
+  trade?: LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT> | null
   invert: boolean
   reduce: boolean
 }
 
 type UseLiquidationPrice = (x: Payload) => string
 
-export const useLiquidationPrice: UseLiquidationPrice = ({
-  borrowAmount,
-  collateralAmount,
-  invert,
-  multiplier = undefined,
-  reduce,
-}) => {
+export const useLiquidationPrice: UseLiquidationPrice = ({ borrowAmount, collateralAmount, invert, trade, reduce }) => {
   const { market } = useKashiMarket()
   const currentCollateralAmount = CurrencyAmount.fromRawAmount(
     unwrappedToken(market.collateral.token),
@@ -32,10 +28,12 @@ export const useLiquidationPrice: UseLiquidationPrice = ({
   )
   const collateralAssetPrice = useUSDCPrice(market.collateral.token)
 
+  const allowedSlippage = useAppSelector(selectSlippage)
+
   try {
     const extraCollateral =
-      collateralAmount && multiplier
-        ? collateralAmount[reduce ? 'subtract' : 'add'](collateralAmount.multiply(multiplier))
+      collateralAmount && trade
+        ? collateralAmount[reduce ? 'subtract' : 'add'](trade.minimumAmountOut(allowedSlippage))
         : collateralAmount
 
     const totalCollateral = extraCollateral

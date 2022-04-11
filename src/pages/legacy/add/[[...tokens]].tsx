@@ -35,7 +35,6 @@ import { useExpertModeManager } from 'app/state/user/hooks'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useState } from 'react'
-import ReactGA from 'react-ga'
 
 export default function Add() {
   const { i18n } = useLingui()
@@ -167,10 +166,9 @@ export default function Add() {
 
           setTxHash(response.hash)
 
-          ReactGA.event({
-            category: 'Liquidity',
-            action: 'Add',
-            label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/'),
+          gtag('event', 'Add', {
+            event_category: 'Liquidity',
+            event_label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/'),
           })
         })
       )

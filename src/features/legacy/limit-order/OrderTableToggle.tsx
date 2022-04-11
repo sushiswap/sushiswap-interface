@@ -30,11 +30,11 @@ const OrdersTableToggle = () => {
     <div className="flex gap-8">
       {items.map(({ label, link, key }, index) => (
         <Link href={link} key={index} passHref={true} replace={true}>
-          <div className="h-full space-y-2 cursor-pointer">
+          <a className="h-full space-y-2 cursor-pointer">
             <Typography
               weight={700}
               className={classNames(
-                `/limit-order/${key}` === asPath
+                asPath.includes(`/limit-order/${key}`)
                   ? 'bg-gradient-to-r from-blue to-pink bg-clip-text text-transparent'
                   : '',
                 'font-bold text-sm text-high-emphesis'
@@ -44,10 +44,12 @@ const OrdersTableToggle = () => {
             </Typography>
             <div
               className={classNames(
-                `/limit-order/${key}` === asPath ? 'relative bg-gradient-to-r from-blue to-pink h-[3px] w-full' : ''
+                asPath.includes(`/limit-order/${key}`)
+                  ? 'relative bg-gradient-to-r from-blue to-pink h-[3px] w-full'
+                  : ''
               )}
             />
-          </div>
+          </a>
         </Link>
       ))}
     </div>

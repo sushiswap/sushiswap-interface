@@ -24,7 +24,6 @@ import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import React, { useState } from 'react'
-import ReactGA from 'react-ga'
 
 // @ts-ignore TYPE NEEDS FIXING
 const PoolDeposit = ({ currencyA, currencyB, header }) => {
@@ -155,10 +154,9 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
             ),
           })
 
-          ReactGA.event({
-            category: 'Liquidity',
-            action: 'Add',
-            label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/'),
+          gtag('event', 'Add', {
+            event_category: 'Liquidity',
+            event_label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/'),
           })
         })
       )

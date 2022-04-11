@@ -5,7 +5,6 @@ import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { NETWORK_ICON, NETWORK_LABEL } from 'app/config/networks'
 import { classNames } from 'app/functions'
-import { logEvent } from 'app/functions/analytics'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks'
 import { ApplicationModal } from 'app/state/application/reducer'
@@ -271,7 +270,11 @@ const NetworkModal: FC = () => {
                     const params = SUPPORTED_NETWORKS[key]
                     try {
                       await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
-                      logEvent('Chain', 'switch', params.chainName, key)
+
+                      gtag('event', 'Switch', {
+                        event_category: 'Chain',
+                        event_label: params.chainName,
+                      })
                     } catch (switchError) {
                       // This error code indicates that the chain has not been added to MetaMask.
                       // @ts-ignore TYPE NEEDS FIXING

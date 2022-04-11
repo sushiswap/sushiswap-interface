@@ -46,7 +46,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
 
   const allowedSlippage = useAppSelector(selectSlippage)
 
-  const trade = useV2TradeExactIn(borrowAmountCurrencyAmount, collateral, { maxHops: 3 })
+  const trade = useV2TradeExactIn(borrowAmountCurrencyAmount, collateral, { maxHops: 4 })
 
   const swapCollateralAmount = leverage ? trade?.minimumAmountOut(allowedSlippage) : undefined
 
@@ -186,7 +186,7 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
           onSwitch={() => setLeverage((prev) => !prev)}
           onChange={(val) => onMultiply(val, false)}
           afterChange={(val) => onMultiply(val, true)}
-          multiplier={leverage ? multiplierRef.current : undefined}
+          trade={trade}
         />
       )}
       <KashiMarketDetailsView

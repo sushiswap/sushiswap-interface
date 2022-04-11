@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Fraction } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Trade as LegacyTrade, TradeType } from '@sushiswap/core-sdk'
 import CloseIcon from 'app/components/CloseIcon'
 import QuestionHelper from 'app/components/QuestionHelper'
 import SettingsTab from 'app/components/Settings'
@@ -26,7 +26,7 @@ interface KashiMarketBorrowLeverageView {
   afterChange?(x: string): void
   enabled: boolean
   onSwitch(): void
-  multiplier?: Fraction
+  trade?: LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT> | null
 }
 
 export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({
@@ -36,17 +36,13 @@ export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = 
   onSwitch,
   onChange,
   afterChange,
-  multiplier,
+  trade,
 }) => {
   const { i18n } = useLingui()
   const [range, setRange] = useState<number>(0.5)
   const [invert, setInvert] = useState(false)
-  // console.log(2, {
-  //   invert,
-  //   borrowAmount: borrowAmount?.quotient.toString(),
-  //   collateralAmount: collateralAmount?.quotient.toString(),
-  // })
-  const liquidationPrice = useLiquidationPrice({ invert, borrowAmount, collateralAmount, multiplier, reduce: false })
+
+  const liquidationPrice = useLiquidationPrice({ invert, borrowAmount, collateralAmount, trade, reduce: false })
   const { market } = useKashiMarket()
 
   const handleChange = useCallback(

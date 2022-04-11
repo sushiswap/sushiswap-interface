@@ -5,16 +5,32 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 // import { WalletConnectConnector } from 'web3-react-walletconnect-connector'
 // import { WalletLinkConnector } from 'web3-react-walletlink-connector'
 import { NetworkConnector } from 'app/entities/connectors'
+import Cookies from 'js-cookie'
 import { InjectedConnector } from 'web3-react-injected-connector'
 
 import RPC from './rpc'
 
 const supportedChainIds = Object.values(ChainId) as number[]
 
-export const network = new NetworkConnector({
-  defaultChainId: 1,
-  urls: RPC,
-})
+// export const network = new NetworkConnector({
+//   defaultChainId: 1,
+//   urls: RPC,
+// })
+
+let network: NetworkConnector | undefined
+
+export const getNetworkConnector = (): NetworkConnector => {
+  if (network) {
+    return network
+  }
+
+  const defaultChainId = Cookies.get('chain-id')
+
+  return (network = new NetworkConnector({
+    defaultChainId: defaultChainId ? Number(defaultChainId) : 1,
+    urls: RPC,
+  }))
+}
 
 export const injected = new InjectedConnector({
   supportedChainIds,

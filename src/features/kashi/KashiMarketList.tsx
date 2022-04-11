@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Loader from 'app/components/Loader'
 import Search from 'app/components/Search'
 import SortIcon from 'app/components/SortIcon'
 import Typography from 'app/components/Typography'
@@ -22,8 +21,6 @@ const KashiMarketList: FC<KashiMarketList> = () => {
   const { account, chainId } = useActiveWeb3React()
   const addresses = useKashiPairAddresses()
   const markets = useKashiMediumRiskLendingPairs(account, addresses)
-
-  console.log({ addresses, markets })
 
   const { i18n } = useLingui()
   const { result, term, search } = useFuse<KashiMediumRiskLendingPair>({
@@ -51,7 +48,7 @@ const KashiMarketList: FC<KashiMarketList> = () => {
         <Search search={(val) => search(val.toUpperCase())} term={term} />
       </div>
       <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME)}>
-        <div className="grid grid-cols-7 min-w-[768px]">
+        <div className="grid grid-cols-7 min-w-[1024px]">
           <div
             className={classNames('flex gap-1 items-center cursor-pointer', TABLE_TR_TH_CLASSNAME(0, 7))}
             // onClick={() => requestSort('pair.token0.symbol')}
@@ -137,17 +134,21 @@ const KashiMarketList: FC<KashiMarketList> = () => {
             </Typography>
           </div>
         </div>
-        <InfiniteScroll
-          dataLength={numDisplayed}
-          next={() => setNumDisplayed(numDisplayed + 10)}
-          hasMore={numDisplayed <= items.length}
-          loader={<Loader />}
-        >
-          {items.slice(0, numDisplayed).reduce<ReactNode[]>((acc, market, index) => {
-            if (market) acc.push(<KashiMarketListItem market={market} key={index} i18n={i18n} />)
-            return acc
-          }, [])}
-        </InfiniteScroll>
+        <div className="min-w-[1024px]">
+          <InfiniteScroll
+            dataLength={numDisplayed}
+            next={() => setNumDisplayed(numDisplayed + 10)}
+            hasMore={numDisplayed <= items.length}
+            loader={null}
+          >
+            <>
+              {items.slice(0, numDisplayed).reduce<ReactNode[]>((acc, market, index) => {
+                if (market) acc.push(<KashiMarketListItem market={market} key={index} i18n={i18n} />)
+                return acc
+              }, [])}
+            </>
+          </InfiniteScroll>
+        </div>
       </div>
     </div>
   )

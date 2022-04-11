@@ -1,6 +1,5 @@
 import { classNames } from 'app/functions'
 import React, { FC, HTMLProps, useCallback } from 'react'
-import ReactGA from 'react-ga'
 
 const COLOR = {
   default: 'text-primary hover:text-high-emphesis focus:text-high-emphesis',
@@ -28,14 +27,23 @@ const ExternalLink: FC<ExternalLinkProps> = ({
     (event: React.MouseEvent<HTMLAnchorElement>) => {
       // don't prevent default, don't redirect if it's a new tab
       if (target === '_blank' || event.ctrlKey || event.metaKey) {
-        ReactGA.outboundLink({ label: href }, () => {
-          console.debug('Fired outbound link event', href)
+        gtag('event', href, {
+          event_category: 'Outbound Link',
+          event_label: href,
+          event_callback: () => {
+            console.debug('Fired outbound link event', href)
+          },
         })
       } else {
         event.preventDefault()
-        // send a ReactGA event and then trigger a location change
-        ReactGA.outboundLink({ label: href }, () => {
-          window.location.href = href
+        // send a gtag event and then trigger a location change
+
+        gtag('event', href, {
+          event_category: 'Outbound Link',
+          event_label: href,
+          event_callback: () => {
+            window.location.href = href
+          },
         })
       }
     },

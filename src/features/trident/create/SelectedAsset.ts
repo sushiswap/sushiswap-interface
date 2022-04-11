@@ -1,7 +1,6 @@
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { tryParseAmount } from 'app/functions'
-// @ts-ignore TYPE NEEDS FIXING
-import uuidv4 from 'uuid/v4'
+import { v4 } from 'uuid'
 
 export enum SpendSource {
   WALLET,
@@ -26,7 +25,7 @@ export class SelectedAsset {
   readonly error?: string
 
   constructor({
-    id = uuidv4(),
+    id = v4(),
     currency,
     amount = '',
     spendFromSource = SpendSource.WALLET,

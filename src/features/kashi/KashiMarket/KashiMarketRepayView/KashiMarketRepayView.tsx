@@ -77,7 +77,7 @@ export const KashiMarketRepayView: FC = () => {
     useV2TradeExactOut(
       unwrappedToken(market.collateral.token),
       CurrencyAmount.fromRawAmount(unwrappedToken(market.asset.token), market.currentUserBorrowAmount),
-      { maxHops: 3 }
+      { maxHops: 4 }
     ) ?? undefined
 
   const removeHandler = useCallback((val: string | undefined, max: boolean) => {

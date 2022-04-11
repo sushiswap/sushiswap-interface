@@ -251,7 +251,7 @@ const useMenu: UseMenu = () => {
         {
           key: 'dashboard',
           title: 'Dashboard',
-          link: `/analytics/${chainId}/dashboard`,
+          link: `/analytics/dashboard`,
         },
         {
           key: 'xsushi',
@@ -261,12 +261,12 @@ const useMenu: UseMenu = () => {
         {
           key: 'tokens',
           title: 'Tokens',
-          link: `/analytics/${chainId}/tokens`,
+          link: `/analytics/tokens`,
         },
         {
-          key: 'pairs',
-          title: 'Pairs',
-          link: `/analytics/${chainId}/pairs`,
+          key: 'pools',
+          title: 'Pools',
+          link: `/analytics/pools`,
         },
       ],
     }
@@ -275,15 +275,15 @@ const useMenu: UseMenu = () => {
       analyticsMenu.items.push({
         key: 'farms',
         title: 'Farms',
-        link: `/analytics/${chainId}/farms`,
+        link: `/analytics/farms`,
       })
     }
 
     if (featureEnabled(Feature.BENTOBOX, chainId)) {
       analyticsMenu.items.push({
         key: 'bentobox',
-        title: 'Bentobox',
-        link: `/analytics/${chainId}/bentobox`,
+        title: 'BentoBox',
+        link: `/analytics/bentobox`,
       })
     }
 
@@ -295,8 +295,30 @@ const useMenu: UseMenu = () => {
       menu.push({
         key: 'portfolio',
         title: i18n._(t`Portfolio`),
-        link: `/account/${account}`,
+
         icon: <WalletIcon width={20} />,
+        items: [
+          {
+            key: 'account',
+            title: 'Account',
+            link: `/account?account=${account}`,
+          },
+          {
+            key: 'liquidity',
+            title: 'Liquidity',
+            link: `/account/liquidity?account=${account}`,
+          },
+          {
+            key: 'lending',
+            title: 'Lending',
+            link: `/account/lending?account=${account}`,
+          },
+          {
+            key: 'borrowing',
+            title: 'Borrowing',
+            link: `/account/borrowing?account=${account}`,
+          },
+        ],
       })
     }
 

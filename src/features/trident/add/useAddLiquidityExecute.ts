@@ -16,7 +16,6 @@ import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useAppDispatch } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
-import ReactGA from 'react-ga'
 
 type ExecutePayload = {
   parsedAmounts: (CurrencyAmount<Currency> | undefined)[]
@@ -112,10 +111,9 @@ export const useAddLiquidityExecute: UseAddLiquidityExecute = () => {
 
         dispatch(setAddAttemptingTxn(false))
 
-        ReactGA.event({
-          category: 'Liquidity',
-          action: 'Add',
-          label: [pool.token0.symbol, pool.token1.symbol].join('/'),
+        gtag('event', 'Add', {
+          event_category: 'Liquidity',
+          event_label: [pool.token0.symbol, pool.token1.symbol].join('/'),
         })
 
         dispatch(setAddBentoPermit(undefined))
