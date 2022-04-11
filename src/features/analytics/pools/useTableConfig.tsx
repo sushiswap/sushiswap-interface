@@ -1,8 +1,9 @@
 import { getAddress } from '@ethersproject/address'
 import { Token } from '@sushiswap/core-sdk'
-import DoubleCurrencyLogo from 'app/components/DoubleLogo'
+import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import { formatNumber, getApy } from 'app/functions'
 import { useOneDayBlock, useOneWeekBlock, useSushiPairs } from 'app/services/graph'
+import Image from 'next/image'
 import React, { useMemo } from 'react'
 
 import { filterForSearchQuery } from './poolTableFilters'
@@ -55,7 +56,7 @@ export const useTableConfig = (chainId: number) => {
       {
         Header: 'Name',
         accessor: 'pair',
-        maxWidth: 100,
+        maxWidth: 150,
         // @ts-ignore
         Cell: (props) => {
           const currency0 = useMemo(
@@ -81,14 +82,23 @@ export const useTableConfig = (chainId: number) => {
             [props]
           )
           return (
-            <div className="flex items-center gap-2">
-              <DoubleCurrencyLogo
-                currency0={currency0 ?? undefined}
-                currency1={currency1 ?? undefined}
-                className="!rounded-full"
-                size={36}
-              />
-              {props.value.token0.symbol}/{props.value.token1.symbol}
+            <div className="flex items-center gap-2 overflow-hidden">
+              <CurrencyLogoArray currencies={[currency0, currency1]} size={40} dense />
+              <div
+                id={`pool-${props.value.token0.symbol}/${props.value.token1.symbol}`}
+                className="overflow-hidden font-bold text-high-emphesis overflow-ellipsis whitespace-nowrap"
+              >
+                {props.value.token0.symbol}/{props.value.token1.symbol}
+              </div>
+              <div className="w-3.5">
+                <Image
+                  src="https://app.sushi.com/images/rss.svg"
+                  alt="rss icon"
+                  layout="fixed"
+                  width="14"
+                  height="14"
+                />
+              </div>
             </div>
           )
         },

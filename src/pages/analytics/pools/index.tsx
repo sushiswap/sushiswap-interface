@@ -90,7 +90,7 @@ export default function Pools() {
             {i18n._(t`Pool Analytics.`)}
           </Typography>
           <Typography variant="sm" weight={400}>
-            {i18n._(t`Click on the column name to sort pairs by its TVL, volume or fees gained.`)}
+            {i18n._(t`Click on the column name to sort pairs by its TVL, volume, fees or APY.`)}
           </Typography>
         </div>
       </TridentHeader>
