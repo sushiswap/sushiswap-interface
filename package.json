@@ -81,7 +81,7 @@
     "@sushiswap/chainlink-token-list": "0.1.0",
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
-    "@sushiswap/core-sdk": "1.0.0-canary.91",
+    "@sushiswap/core-sdk": "1.0.0-canary.92",
     "@sushiswap/default-token-list": "27.1.0",
     "@sushiswap/kashi-sdk": "1.0.0-canary.67",
     "@sushiswap/limit-order-pair-list": "0.2.17",
