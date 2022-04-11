@@ -7,7 +7,7 @@ import { XSUSHI } from 'app/config/tokens'
 import InfoCard from 'app/features/analytics/bar/InfoCard'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
 import { aprToApy } from 'app/functions/convert/apyApr'
-import { TridentHeader } from 'app/layouts/Trident'
+import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useDayData, useFactory, useNativePrice, useOneDayBlock, useTokenDayData, useTokens } from 'app/services/graph'
 import { useBar, useBarHistory } from 'app/services/graph/hooks/bar'
 import { useRouter } from 'next/router'
@@ -224,37 +224,40 @@ export default function XSushi() {
           </div>
         </div>
       </Background> */}
-      <div className="px-4 pt-4 space-y-5 lg:px-14">
-        <div className="flex flex-row space-x-4 overflow-auto">
-          <InfoCard text="Price" number={formatNumber(xSushiPrice ?? 0, true)} />
-          <InfoCard text="Market Cap" number={formatNumber(xSushiMarketcap ?? 0, true, false)} />
-          <InfoCard text="APY (Last 24 Hours)" number={formatPercent(APY1d)} />
-          <InfoCard text="APY (Last 7 Days)" number={formatPercent(APY1w)} />
-          <InfoCard text="xSUSHI Supply" number={formatNumber(bar?.totalSupply)} />
-          <InfoCard text="xSUSHI : SUSHI" number={Number(bar?.ratio ?? 0)?.toFixed(4)} />
-        </div>
-        <div className="space-y-4">
-          {graphs.map((graph, i) => (
-            <div
-              className={classNames(
-                graph.data[0].length === 0 && 'hidden',
-                'p-1 border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]'
-              )}
-              key={i}
-            >
-              <div className="w-full h-96">
-                <TimespanGraph
-                  labels={graph.labels}
-                  title={graph.title}
-                  timespans={chartTimespans}
-                  defaultTimespan="1M"
-                  data={graph.data}
-                />
+
+      <TridentBody>
+        <div className="space-y-5">
+          <div className="grid grid-flow-col gap-4 overflow-auto">
+            <InfoCard text="Price" number={formatNumber(xSushiPrice ?? 0, true)} />
+            <InfoCard text="Market Cap" number={formatNumber(xSushiMarketcap ?? 0, true, false)} />
+            <InfoCard text="APY 24h" number={formatPercent(APY1d)} />
+            <InfoCard text="APY 7d" number={formatPercent(APY1w)} />
+            <InfoCard text="Total Supply" number={formatNumber(bar?.totalSupply)} />
+            <InfoCard text="xSUSHI : SUSHI" number={Number(bar?.ratio ?? 0)?.toFixed(4)} />
+          </div>
+          <div className="space-y-4">
+            {graphs.map((graph, i) => (
+              <div
+                className={classNames(
+                  graph.data[0].length === 0 && 'hidden',
+                  'p-1 border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]'
+                )}
+                key={i}
+              >
+                <div className="w-full h-96">
+                  <TimespanGraph
+                    labels={graph.labels}
+                    title={graph.title}
+                    timespans={chartTimespans}
+                    defaultTimespan="1M"
+                    data={graph.data}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      </TridentBody>
     </>
   )
 }
