@@ -201,8 +201,7 @@ export function useSushiPrice(swrConfig: SWRConfiguration = undefined) {
 // @ts-ignore TYPE NEEDS FIXING
 export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId
-  const { data } = useSWR(shouldFetch ? 'ohmPrice' : null, () => getOhmPrice(chainId), swrConfig)
+  const { data } = useSWR(chainId ? 'ohmPrice' : null, () => getOhmPrice(chainId), swrConfig)
   return data
 }
 

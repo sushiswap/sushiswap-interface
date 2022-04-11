@@ -6,10 +6,8 @@ import PoolTable from 'app/features/analytics/pools/PoolTable'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import { useState } from 'react'
 
 export default function Pools() {
-  const [type, setType] = useState<'all' | 'gainers' | 'losers'>('all')
   const { i18n } = useLingui()
   const router = useRouter()
 

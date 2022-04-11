@@ -53,9 +53,9 @@ export default function TokenPage() {
 
   const [isCopied, setCopied] = useCopyClipboard()
 
-  const block1d = useOneDayBlock({ chainId })
-  const block2d = useTwoDayBlock({ chainId })
-  const block1w = useOneWeekBlock({ chainId })
+  const { data: block1d } = useOneDayBlock({ chainId })
+  const { data: block2d } = useTwoDayBlock({ chainId })
+  const { data: block1w } = useOneWeekBlock({ chainId })
 
   // General data (volume, liquidity)
   const nativePrice = useNativePrice({ chainId })

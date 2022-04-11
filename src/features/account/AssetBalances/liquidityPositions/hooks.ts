@@ -1,6 +1,6 @@
 import { Token } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/trident-sdk'
-import { aprToApy, formatPercent } from 'app/functions'
+import { getApy } from 'app/functions'
 import {
   TridentPositionRow,
   useLiquidityPositions,
@@ -15,12 +15,6 @@ interface PositionBalances {
   chainId: number | undefined
 }
 
-export const getApy = (volume: number, liquidity: number) => {
-  const apy = aprToApy((((volume / 7) * 365 * 0.0025) / liquidity) * 100, 3650)
-  if (apy > 1000) return '>10,000%'
-  return formatPercent(apy)
-}
-
 export function useTridentLiquidityPositionsBalances({ account, chainId }: PositionBalances) {
   return useTridentLiquidityPositions({
     chainId,
@@ -30,6 +24,7 @@ export function useTridentLiquidityPositionsBalances({ account, chainId }: Posit
 }
 
 export function useLegacyLiquidityPositionsBalances({ account, chainId }: PositionBalances) {
+  const { data: block1w } = useOneWeekBlock({ chainId })
   const positions = useLiquidityPositions({
     chainId,
     variables: { where: { user: account?.toLowerCase(), liquidityTokenBalance_gt: 0 } },
@@ -44,7 +39,7 @@ export function useLegacyLiquidityPositionsBalances({ account, chainId }: Positi
   const pairs1w = useSushiPairs({
     chainId,
     variables: {
-      block: useOneWeekBlock({ chainId }),
+      block: block1w,
       where: { id_in: positions?.map((position: any) => position.pair.id) },
     },
     shouldFetch: !!positions,

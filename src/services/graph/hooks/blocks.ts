@@ -1,9 +1,8 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { getAverageBlockTime, getBlock, getMassBlocks } from 'app/services/graph/fetchers'
-import { useActiveWeb3React } from 'app/services/web3'
 import { addSeconds, getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subWeeks } from 'date-fns'
 import stringify from 'fast-json-stable-stringify'
-import useSWR, { SWRConfiguration } from 'swr'
+import useSWR from 'swr'
 
 import { GraphProps } from '../interfaces'
 
@@ -80,37 +79,30 @@ export function useBlock({
   variables,
   shouldFetch = true,
   swrConfig = undefined,
-}: GraphProps): { number?: number } {
-  const { data } = useSWR(
+}: GraphProps) {
+  return useSWR(
     shouldFetch ? ['block', chainId, stringify(variables)] : null,
     (_, chainId) => getBlock(chainId, variables),
     swrConfig
   )
-  return data
 }
 
-interface useMassBlocksProps {
-  timestamps: number[] | string[]
-  swrConfig?: SWRConfiguration
-}
-
-export function useMassBlocks({ timestamps, swrConfig = undefined }: useMassBlocksProps) {
-  const { chainId } = useActiveWeb3React()
-
-  const { data } = useSWR(
+export function useMassBlocks({
+  chainId,
+  timestamps,
+  swrConfig = undefined,
+}: GraphProps & { timestamps: number[] | string[] }) {
+  return useSWR(
     chainId ? ['massBlocks', chainId, stringify(timestamps)] : null,
     (_, chainId) => getMassBlocks(chainId, timestamps),
     swrConfig
   )
-
-  return data
 }
 
-export function useAverageBlockTime({ chainId = ChainId.ETHEREUM, swrConfig = undefined }) {
-  const { data } = useSWR(
-    chainId ? ['averageBlockTime', chainId] : null,
-    (_, chainId) => getAverageBlockTime(chainId),
-    swrConfig
-  )
-  return data
+export function useAverageBlockTime({
+  chainId = ChainId.ETHEREUM,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps) {
+  return useSWR(chainId ? ['averageBlockTime', chainId] : null, (_, chainId) => getAverageBlockTime(chainId), swrConfig)
 }

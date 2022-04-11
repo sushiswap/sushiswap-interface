@@ -19,23 +19,13 @@ import useSWR, { SWRConfiguration } from 'swr'
 export function useMasterChefV1TotalAllocPoint(swrConfig = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(
-    shouldFetch ? 'masterChefV1TotalAllocPoint' : null,
-    () => getMasterChefV1TotalAllocPoint(),
-    swrConfig
-  )
-  return data
+  return useSWR(shouldFetch ? 'masterChefV1TotalAllocPoint' : null, () => getMasterChefV1TotalAllocPoint(), swrConfig)
 }
 
 export function useMasterChefV1SushiPerBlock(swrConfig = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(
-    shouldFetch ? 'masterChefV1SushiPerBlock' : null,
-    () => getMasterChefV1SushiPerBlock(),
-    swrConfig
-  )
-  return data
+  return useSWR(shouldFetch ? 'masterChefV1SushiPerBlock' : null, () => getMasterChefV1SushiPerBlock(), swrConfig)
 }
 
 interface useFarmsProps {

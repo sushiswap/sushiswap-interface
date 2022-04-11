@@ -75,7 +75,7 @@ export const usePoolsTableData = () => {
         maxWidth: 100,
         // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
-          const oneDayBlock = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+          const { data: oneDayBlock } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
           const { data: oneDayPoolKpi } = usePoolKpi({
             chainId,
             variables: { block: oneDayBlock, id: data?.[props.row.id].address },

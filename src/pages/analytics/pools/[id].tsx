@@ -47,8 +47,8 @@ export default function Pair() {
 
   const [isCopied, setCopied] = useCopyClipboard()
 
-  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const { data: block2d } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
 
   const pair = useSushiPairs({ chainId, variables: { where: { id } }, shouldFetch: !!chainId })?.[0]
   const pair1d = useSushiPairs({

@@ -51,9 +51,9 @@ export default function Dashboard(): JSX.Element {
     featureEnabled(Feature.LIQUIDITY_MINING, chainId) ? 'pools' : 'pairs'
   )
 
-  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
-  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
+  const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const { data: block2d } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const { data: block1w } = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
   // For the charts
   const exchange = useFactory({ chainId })

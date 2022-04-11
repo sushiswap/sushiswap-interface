@@ -12,6 +12,7 @@ import tridentSwap from '../features/trident/swap/swapSlice'
 import application from './application/reducer'
 import burn from './burn/reducer'
 import create from './create/reducer'
+import farms from './farms/slice'
 import inari from './inari/reducer'
 import limitOrder from './limit-order/reducer'
 import lists from './lists/reducer'
@@ -50,6 +51,7 @@ const reducer = combineReducers({
   tridentMigrations,
   tokens,
   pools,
+  farms,
 })
 
 export default reducer

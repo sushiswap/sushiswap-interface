@@ -31,7 +31,7 @@ const chartTimespans = [
 ]
 
 export default function XSushi() {
-  const block1d = useOneDayBlock({ chainId: ChainId.ETHEREUM })
+  const { data: block1d } = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
   const exchange = useFactory({ chainId: ChainId.ETHEREUM })
 

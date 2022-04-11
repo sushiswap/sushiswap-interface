@@ -133,7 +133,7 @@ export default function Stake() {
     }
   }
 
-  const block1d = useOneDayBlock({ chainId: ChainId.ETHEREUM })
+  const { data: block1d } = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
   const exchange = useFactory({ chainId: ChainId.ETHEREUM })
 

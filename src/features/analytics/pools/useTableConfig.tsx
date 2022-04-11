@@ -9,9 +9,9 @@ import React, { useMemo } from 'react'
 import { filterForSearchQuery } from './poolTableFilters'
 
 export const useTableConfig = (chainId: number) => {
-  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
-  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
+  const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const { data: block2d } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const { data: block1w } = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
   const pairs = useSushiPairs({ chainId })
   const pairs1d = useSushiPairs({ variables: { block: block1d }, shouldFetch: !!block1d, chainId })
@@ -26,6 +26,7 @@ export const useTableConfig = (chainId: number) => {
         ?.map((pair) => {
           // @ts-ignore TYPE NEEDS FIXING
           const pair1d = pairs1d?.find((p) => pair.id === p.id) ?? pair
+          // @ts-ignore TYPE NEEDS FIXING
           const pair2d = pairs2d?.find((p) => pair.id === p.id) ?? pair
           // @ts-ignore TYPE NEEDS FIXING
           const pair1w = pairs1w?.find((p) => pair.id === p.id) ?? pair1d

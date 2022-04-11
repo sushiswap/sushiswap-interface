@@ -1,7 +1,6 @@
 import { Zero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import {
-  ChainId,
   CurrencyAmount,
   JSBI,
   MASTERCHEF_ADDRESS,
@@ -188,7 +187,7 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
   }, [args, getChef, pendingSushi, userInfo])
 }
 
-export function usePositions(chainId: ChainId | undefined) {
+export function usePositions(chainId: number | undefined) {
   const [masterChefV1Positions, masterChefV2Positions, miniChefPositions] = [
     // @ts-ignore TYPE NEEDS FIXING
     useChefPositions(useMasterChefContract(), undefined, chainId),
@@ -197,5 +196,8 @@ export function usePositions(chainId: ChainId | undefined) {
     // @ts-ignore TYPE NEEDS FIXING
     useChefPositions(useMiniChefContract(), undefined, chainId),
   ]
-  return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
+  return useMemo(
+    () => concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions),
+    [masterChefV1Positions, masterChefV2Positions, miniChefPositions]
+  )
 }

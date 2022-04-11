@@ -5,8 +5,8 @@ import { useEffect, useMemo, useState } from 'react'
 export default function useTokensAnalytics({ chainId = ChainId.ETHEREUM }) {
   const [loadState, setLoadState] = useState<'loading' | 'initial' | 'loaded'>('loading')
 
-  const block1d = useOneDayBlock({ chainId })
-  const block1w = useOneWeekBlock({ chainId })
+  const { data: block1d } = useOneDayBlock({ chainId })
+  const { data: block1w } = useOneWeekBlock({ chainId })
 
   const nativePrice = useNativePrice({ chainId })
   const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
