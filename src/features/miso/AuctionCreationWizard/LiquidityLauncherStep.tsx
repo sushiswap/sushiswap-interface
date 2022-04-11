@@ -31,10 +31,7 @@ export const liquidityLauncherSchema = (tokenAmount: number | null) =>
   yup.object().shape({
     liqLauncherEnabled: yup.boolean().required(),
     tokenForLiquidity: yup.number().when('liqLauncherEnabled', {
-      is: (val: boolean) => {
-        // console.log(val)
-        return val
-      },
+      is: (val: boolean) => val,
       then: yup
         .number()
         .typeError('Must be a valid number')

@@ -50,7 +50,10 @@ const CreateAuctionButtons: FC<{ onBack(): void }> = ({ onBack }) => {
     [data]
   )
 
-  const [approvalState, approve] = useApproveCallback(approveAmount, recipeContract?.address)
+  const [approvalState, approve] = useApproveCallback(
+    state.tokenSetupType === TokenSetup.PROVIDE ? approveAmount : undefined,
+    recipeContract?.address
+  )
 
   const execute = useCallback(
     async (data) => {
