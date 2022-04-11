@@ -9,6 +9,7 @@ import { pager } from './pager'
 
 export const KASHI = {
   [ChainId.ETHEREUM]: 'lufycz/kashi',
+  [ChainId.ARBITRUM]: 'matthewlilley/kashi-arbitrum',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
