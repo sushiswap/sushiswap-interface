@@ -10,11 +10,12 @@ import { filterForSearchQuery } from './poolTableFilters'
 
 export const useTableConfig = (chainId: number) => {
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-
+  const block2d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
   const pairs = useSushiPairs({ chainId })
   const pairs1d = useSushiPairs({ variables: { block: block1d }, shouldFetch: !!block1d, chainId })
+  const pairs2d = useSushiPairs({ variables: { block: block2d }, shouldFetch: !!block2d, chainId })
 
   const pairs1w = useSushiPairs({ variables: { block: block1w }, shouldFetch: !!block1w, chainId })
 
@@ -25,13 +26,29 @@ export const useTableConfig = (chainId: number) => {
         ?.map((pair) => {
           // @ts-ignore TYPE NEEDS FIXING
           const pair1d = pairs1d?.find((p) => pair.id === p.id) ?? pair
+          const pair2d = pairs1d?.find((p) => pair.id === p.id) ?? pair
           // @ts-ignore TYPE NEEDS FIXING
           const pair1w = pairs1w?.find((p) => pair.id === p.id) ?? pair1d
+
           const volume1d = pair.volumeUSD - pair1d.volumeUSD
+          const volume2d = pair.volumeUSD - pair2d.volumeUSD
           const volume1w = pair.volumeUSD - pair1w.volumeUSD
+          const volume1dChange = (volume1d / volume2d) * 100 - 100
+
           const fees1d = volume1d * 0.003
           const fees1w = volume1w * 0.003
+
           const liquidity = pair.reserveUSD
+          const liquidity1dChange = pair.reserveUSD / pair1d.reserveUSD
+
+          const utilisation1d = (volume1d / pair?.reserveUSD) * 100
+          const utilisation2d = (volume2d / pair1d?.reserveUSD) * 100
+          const utilisation1dChange = (utilisation1d / utilisation2d) * 100 - 100
+
+          const tx1d = pair.txCount - pair1d.txCount
+          const tx2d = pair1d.txCount - pair2d.txCount
+          const tx1dChange = (tx1d / tx2d) * 100 - 100
+
           return {
             pair: {
               token0: pair.token0,
@@ -39,10 +56,18 @@ export const useTableConfig = (chainId: number) => {
               id: pair.id,
             },
             liquidity,
+            liquidity1dChange,
             volume1d,
+            volume1dChange,
             volume1w,
             fees1d,
             fees1w,
+            utilisation1d,
+            utilisation2d,
+            utilisation1dChange,
+            tx1d,
+            tx2d,
+            tx1dChange,
             apy: getApy(volume1w, pair.reserveUSD),
           }
         })
