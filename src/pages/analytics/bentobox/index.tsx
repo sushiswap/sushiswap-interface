@@ -15,7 +15,7 @@ export default function BentoBox(): JSX.Element {
 
   const chainId = Number(router.query.chainId)
 
-  const nativePrice = useNativePrice({ chainId })
+  const { data: nativePrice } = useNativePrice({ chainId })
 
   // @ts-ignore TYPE NEEDS FIXING
   const bentoBox = useBentoBox({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })

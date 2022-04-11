@@ -114,7 +114,7 @@ export default function Dashboard(): JSX.Element {
 
   // For Top Farms
   const farms = useFarmRewards({ chainId })
-  const nativePrice = useNativePrice({ chainId })
+  const { data: nativePrice } = useNativePrice({ chainId })
   const farmsFormatted = useMemo(
     () =>
       farms
@@ -139,8 +139,8 @@ export default function Dashboard(): JSX.Element {
   )
 
   // For Top Tokens
-  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d } })
-  const nativePrice1w = useNativePrice({ chainId, variables: { block: block1w } })
+  const { data: nativePrice1d } = useNativePrice({ chainId, variables: { block: block1d } })
+  const { data: nativePrice1w } = useNativePrice({ chainId, variables: { block: block1w } })
 
   const tokens = useTokens({ chainId })
   const tokens1d = useTokens({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })

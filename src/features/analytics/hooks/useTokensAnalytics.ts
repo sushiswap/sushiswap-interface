@@ -8,9 +8,9 @@ export default function useTokensAnalytics({ chainId = ChainId.ETHEREUM }) {
   const { data: block1d } = useOneDayBlock({ chainId })
   const { data: block1w } = useOneWeekBlock({ chainId })
 
-  const nativePrice = useNativePrice({ chainId })
-  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
-  const nativePrice1w = useNativePrice({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
+  const { data: nativePrice } = useNativePrice({ chainId })
+  const { data: nativePrice1d } = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const { data: nativePrice1w } = useNativePrice({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
   const tokensInitial = useTokens({ chainId, variables: { first: 200 } })
   const tokens1dInitial = useTokens({

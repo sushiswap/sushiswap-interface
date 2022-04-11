@@ -145,7 +145,7 @@ export default function Stake() {
     shouldFetch: !!block1d,
   })
 
-  const ethPrice = useNativePrice({ chainId: ChainId.ETHEREUM })
+  const { data: ethPrice } = useNativePrice({ chainId: ChainId.ETHEREUM })
 
   const xSushi = useTokens({
     chainId: ChainId.ETHEREUM,
