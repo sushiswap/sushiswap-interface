@@ -56,7 +56,7 @@ export default function ChartCard({
   const overrideDate = useMemo(() => chartFiltered?.[selectedIndex]?.x, [chartFiltered, selectedIndex])
 
   return (
-    <div className="w-full p-5 space-y-4 font-bold border rounded bg-dark-900 border-dark-700">
+    <div className="w-full p-5 space-y-4 font-bold border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]">
       <div className="flex justify-between">
         <div>
           <div className="text-xs text-secondary">{subheader}</div>

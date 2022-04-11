@@ -15,7 +15,7 @@ export default function Farms(): JSX.Element {
   const farms = useFarmRewards({ chainId })
   return (
     <>
-      <NextSeo title={`Farm Anlytics`} />
+      <NextSeo title={`Farm Analytics`} />
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
         <div>
           <Typography variant="h2" className="text-high-emphesis" weight={700}>
