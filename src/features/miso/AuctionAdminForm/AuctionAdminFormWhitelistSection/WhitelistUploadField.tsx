@@ -22,8 +22,9 @@ const WhitelistUploadField: FC<WhitelistUploadFieldProps> = ({ auction }) => {
 
   const { updatePointList } = useAuctionEdit(
     auction.auctionInfo.addr,
+    auction.launcherInfo?.address,
     auction.template,
-    auction.auctionInfo.liquidityTemplate,
+    auction.launcherInfo?.liquidityTemplate,
     auction.pointListAddress
   )
 

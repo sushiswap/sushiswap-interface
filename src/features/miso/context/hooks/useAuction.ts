@@ -113,7 +113,8 @@ export const useAuction = (address?: string, owner?: string) => {
 
   const auctionEnded = useAuctionEnded(address, marketTemplateId)
 
-  const { launcherInfo, lpTokenAddress } = useAuctionLauncherDetails(auctionLauncherAddress)
+  const { launcherInfo, lpTokenAddress, token1Balance, token2Balance, liquidityTemplate } =
+    useAuctionLauncherDetails(auctionLauncherAddress)
 
   const {
     auctionDocuments,
@@ -161,7 +162,16 @@ export const useAuction = (address?: string, owner?: string) => {
         paymentToken,
         auctionInfo,
         marketInfo,
-        launcherInfo,
+        launcherInfo:
+          launcherInfo && token1Balance && token2Balance && liquidityTemplate && auctionLauncherAddress
+            ? {
+                ...launcherInfo,
+                address: auctionLauncherAddress,
+                liquidityTemplate: liquidityTemplate.toNumber(),
+                token1Balance,
+                token2Balance,
+              }
+            : undefined,
         auctionDocuments,
         pointListAddress,
         status: getStatusByTimestamp(blockTimestamp.toNumber(), auctionInfo, auctionEnded),
@@ -172,17 +182,21 @@ export const useAuction = (address?: string, owner?: string) => {
     auctionDocuments,
     auctionEnded,
     auctionInfo,
+    auctionLauncherAddress,
     blockTimestamp,
     chainId,
     errorDetails,
     errorInfo,
     launcherInfo,
+    liquidityTemplate,
     loadingDetails,
     loadingInfo,
     lpTokenAddress,
     marketInfo,
     marketTemplateId,
     pointListAddress,
+    token1Balance,
+    token2Balance,
   ])
 }
 

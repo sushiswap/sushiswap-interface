@@ -105,12 +105,15 @@ export interface RawMarketInfo {
 }
 
 export interface RawLauncherInfo {
-  lockTime: BigNumber
+  address: string
   locktime: number
   unlock: BigNumber
   liquidityPercent: BigNumber
   launched: boolean
   liquidityAdded: BigNumber
+  token1Balance: BigNumber
+  token2Balance: BigNumber
+  liquidityTemplate: number
 }
 
 export interface Auction {

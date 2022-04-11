@@ -53,7 +53,11 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
 
   const { watch } = methods
   const [exampleAuction, setExampleAuction] = useState<Auction>(auction)
-  const { editDocuments, cancelAuction } = useAuctionEdit(auction.auctionInfo.addr, auction.template)
+  const { editDocuments, cancelAuction } = useAuctionEdit(
+    auction.auctionInfo.addr,
+    auction.launcherInfo?.address,
+    auction.template
+  )
 
   useEffect(() => {
     // @ts-ignore TYPE NEEDS FIXING

@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 
 export const useAuctionEdit = (
   address?: string,
+  launcherAddress?: string,
   templateId?: number,
   liquidityTemplate?: number,
   listAddress?: string
@@ -17,7 +18,7 @@ export const useAuctionEdit = (
   const addTransaction = useTransactionAdder()
 
   const liquidityLauncherContract = useContract(
-    address,
+    launcherAddress,
     // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PostAuctionLauncher.abi : undefined
   )
@@ -104,6 +105,20 @@ export const useAuctionEdit = (
     }
   }, [addTransaction, auctionContract, liquidityLauncherContract, liquidityTemplate])
 
+  const withdrawDeposits = useCallback(async () => {
+    if (!liquidityLauncherContract) return
+    if (!(liquidityTemplate && liquidityTemplate > 0)) return
+
+    try {
+      const tx = await liquidityLauncherContract.withdrawDeposits()
+
+      addTransaction(tx, { summary: 'Withdraw Deposits' })
+      return tx
+    } catch (e) {
+      console.error('finalize auction error: ', e)
+    }
+  }, [addTransaction, liquidityLauncherContract, liquidityTemplate])
+
   const updatePermissionList = useCallback(
     async (address: string) => {
       if (!auctionContract) return
@@ -160,6 +175,7 @@ export const useAuctionEdit = (
     finalizeAuction,
     updatePermissionList,
     updatePermissionListStatus,
+    withdrawDeposits,
   }
 }
 
