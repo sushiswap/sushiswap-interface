@@ -1,4 +1,5 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
+import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import {
   TABLE_TABLE_CLASSNAME,
   TABLE_TBODY_TD_CLASSNAME,
@@ -15,8 +16,8 @@ import { SearchCategoryLabel } from './SearchCategoryLabel'
 import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
 import { useTableConfig } from './useTableConfig'
 
-const FarmTable: FC<{ chainId: number }> = ({ chainId }) => {
-  const { config } = useTableConfig(chainId)
+const FarmTable: FC<{ chainId: number; farms: any }> = ({ chainId, farms }) => {
+  const { config } = useTableConfig(chainId, farms)
 
   const {
     getTableProps,
@@ -84,13 +85,12 @@ const FarmTable: FC<{ chainId: number }> = ({ chainId }) => {
               prepareRow(row)
               return (
                 <Link
-                  // href={{
-                  //   pathname: `/analytics/pools/${row.original.pair.id}`,
-                  //   query: {
-                  //     chainId,
-                  //   },
-                  // }}
-                  href="test"
+                  href={{
+                    pathname: `/analytics/farms/${row.original.id}`,
+                    query: {
+                      chainId,
+                    },
+                  }}
                   key={i}
                   passHref
                 >
@@ -110,7 +110,7 @@ const FarmTable: FC<{ chainId: number }> = ({ chainId }) => {
           </tbody>
         </table>
       </div>
-      {/* <TablePageToggler
+      <TablePageToggler
         pageIndex={pageIndex}
         pageSize={pageSize}
         totalItems={rows.length}
@@ -118,7 +118,7 @@ const FarmTable: FC<{ chainId: number }> = ({ chainId }) => {
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}
         loading={!rows.length}
-      /> */}
+      />
     </div>
   )
 }

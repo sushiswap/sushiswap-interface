@@ -1,16 +1,12 @@
 import { getAddress } from '@ethersproject/address'
-import { Token } from '@sushiswap/core-sdk'
+import { Currency, Token } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
-import useFarmRewards from 'app/hooks/useFarmRewards'
+import { formatNumber, formatPercent } from 'app/functions'
 import { useMemo } from 'react'
 
 import { filterForSearchQuery } from './farmTableFilters'
 
-export const useTableConfig = (chainId: number) => {
-  const farms = useFarmRewards(useMemo(() => ({ chainId }), [chainId]))
-
-  // const farms = useMemo(() => [], [])
-
+export const useTableConfig = (chainId: number, farms: any) => {
   const data = useMemo(() => {
     return (
       farms
@@ -31,7 +27,6 @@ export const useTableConfig = (chainId: number) => {
             annual: farm.roiPerYear * 100,
           },
         }))
-        .filter((farm) => (farm ? true : false))
     )
   }, [farms])
 
@@ -83,6 +78,38 @@ export const useTableConfig = (chainId: number) => {
         },
         filter: filterForSearchQuery,
       },
+      {
+        Header: 'TVL',
+        accessor: 'liquidity',
+        minWidth: 150,
+        // @ts-ignore
+        Cell: (props) => formatNumber(props.value, true, false, 2),
+        align: 'right',
+      },
+      {
+        Header: 'Rewards',
+        accessor: 'rewards',
+        minWidth: 150,
+        // @ts-ignore
+        Cell: (props) => {
+          return (
+            <CurrencyLogoArray
+              currencies={props.value.map((reward: { currency: Currency }) => reward.currency)}
+              size={20}
+              dense
+            />
+          )
+        },
+        align: 'right',
+      },
+      {
+        Header: 'Reward APR',
+        accessor: 'apr.annual',
+        minWidth: 150,
+        // @ts-ignore
+        Cell: (props) => formatPercent(props.value, 'NEW'),
+        align: 'right',
+      },
     ],
     [chainId]
   )
@@ -93,7 +120,7 @@ export const useTableConfig = (chainId: number) => {
         columns,
         data: data ?? [],
         initialState: {
-          sortBy: [{ id: 'liquidity', desc: true }],
+          sortBy: [{ id: 'apr.annual', desc: true }],
         },
         autoResetFilters: false,
       },
