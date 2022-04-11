@@ -14,14 +14,25 @@ import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 export default function Farm(): JSX.Element {
   const { i18n } = useLingui()
-  const { chainId } = useActiveWeb3React()
+
+  const { account } = useActiveWeb3React()
 
   const router = useRouter()
+
   const type = !router.query.filter ? 'all' : (router.query.filter as string)
+
+  const queryOrActiveAccount = useMemo(
+    () => (router.query.account ? (router.query.account as string) : account),
+    [account, router.query.account]
+  )
+
+  console.log({ queryOrActiveAccount })
+
+  const chainId = Number(router.query.chainId)
 
   const FILTER = {
     // @ts-ignore TYPE NEEDS FIXING
@@ -86,7 +97,7 @@ export default function Farm(): JSX.Element {
         <div className="flex flex-col w-full gap-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <Search search={search} term={term} />
-            <OnsenFilter />
+            <OnsenFilter account={account} chainId={chainId} />
           </div>
           <FarmList farms={result} term={term} />
           {chainId && chainId === ChainId.CELO && (

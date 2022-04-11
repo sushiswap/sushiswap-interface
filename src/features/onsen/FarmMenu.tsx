@@ -4,7 +4,6 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
-import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import { useRouter } from 'next/router'
 import React, { FC, Fragment, ReactNode, useMemo, useState } from 'react'
@@ -59,30 +58,31 @@ const filters: Record<string, FarmFilter> = {
   sushi: FarmFilter.Sushi,
 }
 
-const OnsenFilter = () => {
+const OnsenFilter = ({ account, chainId }: { account: string; chainId: number }) => {
   const { i18n } = useLingui()
-  const { account, chainId } = useActiveWeb3React()
+
+  const router = useRouter()
+
+  const filter = router.query?.filter as string
+
   const toggleWalletModal = useWalletModalToggle()
-  const { query } = useRouter()
-  const filter = query?.filter as string
+
   const [selected, setSelected] = useState<FarmFilter>(filters[filter] || FarmFilter.All)
 
   const items = useMemo(() => {
     const map: Record<string, ReactNode> = {
       [FarmFilter.All]: <MenuLink href={'/farm'} label={i18n._(t`All Farms`)} />,
       [FarmFilter.Portfolio]: account ? (
-        <MenuLink href={'/farm?filter=portfolio'} label={i18n._(t`Your Farms`)} />
+        <MenuLink href={`/farm?account=${account}&filter=portfolio`} label={i18n._(t`Your Farms`)} />
       ) : (
         <MenuLink onClick={toggleWalletModal} label={i18n._(t`Your Farms`)} />
       ),
-      [FarmFilter.Kashi]:
-        chainId === ChainId.ETHEREUM ? (
-          <MenuLink href={'/farm?filter=kashi'} label={i18n._(t`Kashi Farms`)} />
-        ) : undefined,
-      [FarmFilter.Sushi]:
-        chainId === ChainId.ETHEREUM ? (
-          <MenuLink href={'/farm?filter=sushi'} label={i18n._(t`SushiSwap Farms`)} />
-        ) : undefined,
+      [FarmFilter.Kashi]: [ChainId.ETHEREUM, ChainId.ARBITRUM].includes(chainId) ? (
+        <MenuLink href={'/farm?filter=kashi'} label={i18n._(t`Kashi Farms`)} />
+      ) : undefined,
+      [FarmFilter.Sushi]: [ChainId.ETHEREUM, ChainId.ARBITRUM].includes(chainId) ? (
+        <MenuLink href={'/farm?filter=sushi'} label={i18n._(t`SushiSwap Farms`)} />
+      ) : undefined,
       // @ts-ignore TYPE NEEDS FIXING
       [FarmFilter.Old]: [ChainId.CELO].includes(chainId) ? (
         <MenuLink href={'/farm?filter=old'} label={i18n._(t`Old Farms`)} />
@@ -93,7 +93,7 @@ const OnsenFilter = () => {
       if (v && selected !== k) acc[k] = v
       return acc
     }, {})
-  }, [account, chainId, i18n, selected, toggleWalletModal])
+  }, [chainId, i18n, account, selected, toggleWalletModal])
 
   return (
     <div className="flex gap-2 items-center w-[180px]">
@@ -119,7 +119,7 @@ const OnsenFilter = () => {
         >
           <Menu.Items
             static
-            className="absolute w-full z-10 mt-2 border divide-y rounded shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border-dark-900 bg-dark-1000 divide-dark-900"
+            className="absolute z-10 w-full mt-2 border divide-y rounded shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border-dark-900 bg-dark-1000 divide-dark-900"
           >
             {Object.entries(items).map(([k, v], index) => (
               <div
