@@ -264,9 +264,9 @@ const useMenu: UseMenu = () => {
           link: `/analytics/tokens`,
         },
         {
-          key: 'pairs',
-          title: 'Pairs',
-          link: `/analytics/pairs`,
+          key: 'pools',
+          title: 'Pools',
+          link: `/analytics/pools`,
         },
       ],
     }

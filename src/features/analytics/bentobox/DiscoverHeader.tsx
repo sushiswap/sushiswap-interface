@@ -14,7 +14,7 @@ export const DiscoverHeader: FC = () => {
           {i18n._(t`BentoBox Analytics.`)}
         </Typography>
         <Typography variant="sm" weight={400}>
-          {i18n._(t`Click on the column name to sort tokens by it's price, liquidity, volume or APY.`)}
+          {i18n._(t`Click on the column name to sort BentoBox tokens by price, liquidity, volume, APY etc...`)}
         </Typography>
       </div>
     </TridentHeader>

@@ -59,6 +59,21 @@ const nextConfig = {
         destination: '/swap',
         permanent: true,
       },
+      {
+        source: '/analytics/pairs/:path*',
+        destination: '/analytics/pools/:path*',
+        permanent: true,
+      },
+      {
+        source: '/farms/special',
+        destination: '/farms',
+        permanent: true,
+      },
+      {
+        source: '/onsen',
+        destination: '/farms',
+        permanent: true,
+      },
     ]
   },
   async rewrites() {

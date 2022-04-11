@@ -17,6 +17,7 @@ import limitOrder from './limit-order/reducer'
 import lists from './lists/reducer'
 import logs from './logs/slice'
 import mint from './mint/reducer'
+import pools from './pools/slice'
 // import multicall from './multicall-2/reducer'
 import slippage from './slippage/slippageSlice'
 import swap from './swap/reducer'
@@ -48,6 +49,7 @@ const reducer = combineReducers({
   tridentCreate,
   tridentMigrations,
   tokens,
+  pools,
 })
 
 export default reducer

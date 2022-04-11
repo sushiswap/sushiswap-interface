@@ -2,10 +2,10 @@ import { SearchIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useAppDispatch } from 'app/state/hooks'
-import { setTokensSearchQuery } from 'app/state/tokens'
+import { setPoolsSearchQuery } from 'app/state/pools'
 import { FC } from 'react'
 
-export const TokenSearch: FC = () => {
+export const PoolSearch: FC = () => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   return (
@@ -14,12 +14,12 @@ export const TokenSearch: FC = () => {
         <SearchIcon strokeWidth={3} width={20} height={20} />
         <input
           className="w-full bg-transparent text-high-emphesis placeholder:text-low-emphesis"
-          placeholder={i18n._(t`Search by token name or symbol`)}
-          onChange={(e) => dispatch(setTokensSearchQuery(e.target.value))}
+          placeholder={i18n._(t`Search by token or pair`)}
+          onChange={(e) => dispatch(setPoolsSearchQuery(e.target.value))}
         />
       </div>
     </div>
   )
 }
 
-export default TokenSearch
+export default PoolSearch
