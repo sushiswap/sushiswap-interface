@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, Price, Token } from '@sushiswap/core-sdk'
@@ -23,7 +24,8 @@ const DutchAuctionDetails: FC = () => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const { paymentCurrencyAddress, tokenAmount } = useAuctionData()
-  const paymentToken = useToken(paymentCurrencyAddress) ?? NATIVE[chainId || 1]
+  const paymentToken =
+    useToken(paymentCurrencyAddress !== AddressZero ? paymentCurrencyAddress : undefined) ?? NATIVE[chainId || 1]
   const auctionToken = useAuctionedToken()
 
   const { watch } = useFormContext<IAuctionDetails>()

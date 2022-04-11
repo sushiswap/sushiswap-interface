@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, Percent, Price, Token } from '@sushiswap/core-sdk'
@@ -54,7 +55,9 @@ const ReviewDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
   const { chainId } = useActiveWeb3React()
   const state = useStore((state) => state)
   const auctionToken = useAuctionedToken()
-  const paymentToken = useToken(state.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
+  const paymentToken =
+    useToken(state.paymentCurrencyAddress !== AddressZero ? state.paymentCurrencyAddress : undefined) ??
+    NATIVE[chainId || 1]
   const { templateIdToLabel: auctionTemplateIdToLabel } = useAuctionTemplateMap()
   const { templateIdToLabel } = useTokenTemplateMap()
 
@@ -183,7 +186,7 @@ const ReviewDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
             </>
           )}
           {state.auctionType === AuctionTemplate.BATCH_AUCTION && (
-            <Item title={i18n._(t`Minimum raise amount`)} value={`${state.tokenName} ${paymentToken?.symbol}`} />
+            <Item title={i18n._(t`Minimum raise amount`)} value={`${state.minimumRaised} ${paymentToken?.symbol}`} />
           )}
           {state.auctionType === AuctionTemplate.CROWDSALE && (
             <>

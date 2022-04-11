@@ -2,11 +2,11 @@ import { AuctionTemplate, StoreSlice } from 'app/features/miso/context/types'
 
 export interface IAuctionDetails {
   auctionType: AuctionTemplate
-  fixedPrice: number | null
+  fixedPrice: string | null
   minimumTarget: number | null
-  minimumRaised: number | null
-  startPrice: number | null
-  endPrice: number | null
+  minimumRaised: string | null
+  startPrice: string | null
+  endPrice: string | null
 }
 
 export const auctionDetailsDefaultValues = {

@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { Switch } from '@headlessui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from '@lingui/macro'
@@ -76,7 +77,8 @@ const LiquidityLauncherStep: FC<{ children(isValid: boolean): ReactNode }> = ({ 
   const { chainId } = useActiveWeb3React()
   const { paymentCurrencyAddress, tokenAmount } = useAuctionData()
   const setLiquidityDetails = useStore((state) => state.setLiquidityDetails)
-  const paymentToken = useToken(paymentCurrencyAddress) ?? NATIVE[chainId || 1]
+  const paymentToken =
+    useToken(paymentCurrencyAddress !== AddressZero ? paymentCurrencyAddress : undefined) ?? NATIVE[chainId || 1]
   const auctionToken = useAuctionedToken()
 
   const methods = useForm<ILiquidityDetails>({

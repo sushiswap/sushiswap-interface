@@ -174,11 +174,11 @@ export interface AuctionCreationWizardInput {
   tokenAmount: number
   tokenForLiquidity: number
   auctionType: AuctionTemplate
-  fixedPrice?: number
+  fixedPrice?: string
   minimumTarget?: number
-  minimumRaised?: number
-  startPrice?: number
-  endPrice?: number
+  minimumRaised?: string
+  startPrice?: string
+  endPrice?: string
   liqLockTime?: number
   liqPercentage: number
   liqLauncherEnabled: boolean

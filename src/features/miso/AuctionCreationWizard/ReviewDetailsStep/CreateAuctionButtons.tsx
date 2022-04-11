@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CHAIN_KEY, NATIVE, Percent } from '@sushiswap/core-sdk'
@@ -24,7 +25,9 @@ const CreateAuctionButtons: FC<{ onBack(): void }> = ({ onBack }) => {
   const { chainId } = useActiveWeb3React()
   const state = useStore((state) => state)
   const auctionToken = useAuctionedToken()
-  const paymentToken = useToken(state.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
+  const paymentToken =
+    useToken(state.paymentCurrencyAddress !== AddressZero ? state.paymentCurrencyAddress : undefined) ??
+    NATIVE[chainId || 1]
   const router = useRouter()
   const [txHash, setTxHash] = useState<string>()
   const [pending, setPending] = useState<boolean>(false)
