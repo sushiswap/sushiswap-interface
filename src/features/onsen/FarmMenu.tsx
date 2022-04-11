@@ -58,7 +58,7 @@ const filters: Record<string, FarmFilter> = {
   sushi: FarmFilter.Sushi,
 }
 
-const OnsenFilter = ({ account, chainId }: { account: string; chainId: number }) => {
+const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: number }) => {
   const { i18n } = useLingui()
 
   const router = useRouter()
@@ -77,16 +77,19 @@ const OnsenFilter = ({ account, chainId }: { account: string; chainId: number })
       ) : (
         <MenuLink onClick={toggleWalletModal} label={i18n._(t`Your Farms`)} />
       ),
-      [FarmFilter.Kashi]: [ChainId.ETHEREUM, ChainId.ARBITRUM].includes(chainId) ? (
-        <MenuLink href={'/farm?filter=kashi'} label={i18n._(t`Kashi Farms`)} />
-      ) : undefined,
-      [FarmFilter.Sushi]: [ChainId.ETHEREUM, ChainId.ARBITRUM].includes(chainId) ? (
-        <MenuLink href={'/farm?filter=sushi'} label={i18n._(t`SushiSwap Farms`)} />
-      ) : undefined,
+      [FarmFilter.Kashi]:
+        chainId && [ChainId.ETHEREUM, ChainId.ARBITRUM].includes(chainId) ? (
+          <MenuLink href={'/farm?filter=kashi'} label={i18n._(t`Kashi Farms`)} />
+        ) : undefined,
+      [FarmFilter.Sushi]:
+        chainId && [ChainId.ETHEREUM, ChainId.ARBITRUM].includes(chainId) ? (
+          <MenuLink href={'/farm?filter=sushi'} label={i18n._(t`SushiSwap Farms`)} />
+        ) : undefined,
       // @ts-ignore TYPE NEEDS FIXING
-      [FarmFilter.Old]: [ChainId.CELO].includes(chainId) ? (
-        <MenuLink href={'/farm?filter=old'} label={i18n._(t`Old Farms`)} />
-      ) : undefined,
+      [FarmFilter.Old]:
+        chainId && [ChainId.CELO].includes(chainId) ? (
+          <MenuLink href={'/farm?filter=old'} label={i18n._(t`Old Farms`)} />
+        ) : undefined,
     }
 
     return Object.entries(map).reduce<Record<string, ReactNode>>((acc, [k, v]) => {
