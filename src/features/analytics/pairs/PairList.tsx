@@ -242,7 +242,7 @@ export default function PairList({ pairs, type }: PairListProps): JSX.Element {
           columns={columns}
           data={pairs}
           defaultSortBy={defaultSortBy}
-          link={{ href: `/analytics/${chainId}/pairs/`, id: 'pair.id' }}
+          link={{ href: `/analytics/pairs/`, id: 'pair.id' }}
         />
       )}
     </>
