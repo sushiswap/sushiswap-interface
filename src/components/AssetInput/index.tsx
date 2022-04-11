@@ -137,6 +137,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({
                 balance={balance}
                 onClick={() => props.onChange(maxSpend, true)}
                 spendFromWallet={spendFromWallet}
+                showIcon={!balanceProp}
                 id={props.id + '-balance'}
               />
             }
@@ -291,12 +292,19 @@ interface AssetInputPanelBalanceProps {
   balance?: CurrencyAmount<Currency>
   onClick: (x: CurrencyAmount<Currency> | undefined) => void
   spendFromWallet?: boolean
+  showIcon?: boolean
   id?: string
 }
 
 // This component seems to occur quite frequently which is why I gave it it's own component.
 // It's a child of AssetInputPanel so only use together with an AssetInputPanel
-const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onClick, spendFromWallet = true, id }) => {
+const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({
+  balance,
+  onClick,
+  spendFromWallet = true,
+  showIcon = true,
+  id,
+}) => {
   const { i18n } = useLingui()
   const error = useAssetInputContextError()
 
@@ -316,7 +324,7 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
   return (
     <div className={classNames(error ? 'bg-red/10' : '', 'flex justify-between py-2 px-3')}>
       <div className="flex items-center gap-1.5 mr-1">
-        {icon}
+        {showIcon ? icon : null}
         <Typography variant="sm" className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}>
           {i18n._(t`Balance:`)}
         </Typography>

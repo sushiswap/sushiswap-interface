@@ -48,9 +48,7 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
                     {i18n._(t`Gain exposure to tokens without reducing your assets.`)}
                   </Typography>
                   <Typography variant="xs">
-                    {i18n._(
-                      t`Leverage will enable you to take short positions against assets and earn from downside movements.`
-                    )}
+                    {i18n._(t`Leverage will enable you to take long or short positions.`)}
                   </Typography>
                 </div>
               }

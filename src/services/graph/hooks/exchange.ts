@@ -59,174 +59,149 @@ export function useNativePrice({
   shouldFetch = true,
   swrConfig = undefined,
 }: GraphProps) {
-  const { data } = useSWR(
+  return useSWR(
     shouldFetch ? ['nativePrice', chainId, stringify(variables)] : null,
     // @ts-ignore TYPE NEEDS FIXING
     () => getNativePrice(chainId, variables),
     swrConfig
   )
-
-  return data
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useEthPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['ethPrice'], () => getNativePrice(variables), swrConfig)
-  return data
+  return useSWR(['ethPrice'], () => getNativePrice(variables), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useGnoPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.XDAI
-  const { data } = useSWR(shouldFetch ? 'gnoPrice' : null, () => getGnoPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? 'gnoPrice' : null, () => getGnoPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useGlimmerPrice(swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR('glimmerPrice', () => getGlimmerPrice(), swrConfig)
-  return data
+  return useSWR('glimmerPrice', () => getGlimmerPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useSpellPrice(swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR('spellPrice', () => getSpellPrice(), swrConfig)
-  return data
+  return useSWR('spellPrice', () => getSpellPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useOnePrice(swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['onePrice'], () => getOnePrice(), swrConfig)
-  return data
+  return useSWR(['onePrice'], () => getOnePrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useCeloPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.CELO
-  const { data } = useSWR(shouldFetch ? 'celoPrice' : null, () => getCeloPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? 'celoPrice' : null, () => getCeloPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useFantomPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.FANTOM
-  const { data } = useSWR(shouldFetch ? 'fantomPrice' : null, () => getFantomPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? 'fantomPrice' : null, () => getFantomPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.MOONRIVER
-  const { data } = useSWR(shouldFetch ? 'movrPrice' : null, () => getMovrPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? 'movrPrice' : null, () => getMovrPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useYggPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(shouldFetch ? ['yggPrice'] : null, () => getYggPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? ['yggPrice'] : null, () => getYggPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useRulerPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(shouldFetch ? ['rulerPrice'] : null, () => getRulerPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? ['rulerPrice'] : null, () => getRulerPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useTruPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(chainId && chainId === ChainId.ETHEREUM ? ['truPrice'] : null, () => getTruPrice(), swrConfig)
-  return data
+  return useSWR(chainId && chainId === ChainId.ETHEREUM ? ['truPrice'] : null, () => getTruPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useAlcxPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(shouldFetch ? ['aclxPrice'] : null, () => getAlcxPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? ['aclxPrice'] : null, () => getAlcxPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useCvxPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(shouldFetch ? ['cvxPrice'] : null, () => getCvxPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? ['cvxPrice'] : null, () => getCvxPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function usePicklePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(shouldFetch ? ['picklePrice'] : null, () => getPicklePrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? ['picklePrice'] : null, () => getPicklePrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useMphPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(shouldFetch ? ['mphPrice'] : null, () => getMphPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? ['mphPrice'] : null, () => getMphPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useAvaxPrice(swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['avaxPrice'], () => getAvaxPrice(), swrConfig)
-  return data
+  return useSWR(['avaxPrice'], () => getAvaxPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['maticPrice'], () => getMaticPrice(), swrConfig)
-  return data
+  return useSWR(['maticPrice'], () => getMaticPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useSushiPrice(swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['sushiPrice'], () => getSushiPrice(), swrConfig)
-  return data
+  return useSWR(['sushiPrice'], () => getSushiPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId
-  const { data } = useSWR(shouldFetch ? 'ohmPrice' : null, () => getOhmPrice(chainId), swrConfig)
-  return data
+  return useSWR(chainId ? 'ohmPrice' : null, () => getOhmPrice(chainId), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useFusePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.FUSE
-  const { data } = useSWR(shouldFetch ? 'fusePrice' : null, () => getFusePrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? 'fusePrice' : null, () => getFusePrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useMagicPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ARBITRUM
-  const { data } = useSWR(shouldFetch ? 'magicPrice' : null, () => getMagicPrice(), swrConfig)
-  return data
+  return useSWR(shouldFetch ? 'magicPrice' : null, () => getMagicPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useBundle(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(chainId ? [chainId, ethPriceQuery, stringify(variables)] : null, () => getBundle(), swrConfig)
-  return data
+  return useSWR(chainId ? [chainId, ethPriceQuery, stringify(variables)] : null, () => getBundle(), swrConfig)
 }
 
 export function useLiquidityPositions({
@@ -249,13 +224,12 @@ export function useSushiPairs({
   shouldFetch = true,
   swrConfig = undefined,
 }: GraphProps) {
-  const { data } = useSWR(
+  return useSWR(
     shouldFetch ? ['sushiPairs', chainId, stringify(variables)] : null,
     // @ts-ignore TYPE NEEDS FIXING
     (_, chainId) => getPairs(chainId, variables),
     swrConfig
   )
-  return data
 }
 
 export function useTokens({

@@ -35,7 +35,6 @@ import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, us
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import ReactGA from 'react-ga'
 
 import { fetchAPI } from '../../../lib/api'
 
@@ -231,24 +230,25 @@ const Swap = ({ banners }) => {
           txHash: hash,
         })
 
-        ReactGA.event({
-          category: 'Swap',
-          action:
-            recipient === null
-              ? 'Swap w/o Send'
-              : (recipientAddress ?? recipient) === account
-              ? 'Swap w/o Send + recipient'
-              : 'Swap w/ Send',
-          label: [
-            trade?.inputAmount?.currency?.symbol,
-            trade?.outputAmount?.currency?.symbol,
-            singleHopOnly ? 'SH' : 'MH',
-          ].join('/'),
-        })
+        gtag(
+          'event',
+          recipient === null
+            ? 'Swap w/o Send'
+            : (recipientAddress ?? recipient) === account
+            ? 'Swap w/o Send + recipient'
+            : 'Swap w/ Send',
+          {
+            event_category: 'Swap',
+            event_label: [
+              trade?.inputAmount?.currency?.symbol,
+              trade?.outputAmount?.currency?.symbol,
+              singleHopOnly ? 'SH' : 'MH',
+            ].join('/'),
+          }
+        )
 
-        ReactGA.event({
-          category: 'Routing',
-          action: singleHopOnly ? 'Swap with multihop disabled' : 'Swap with multihop enabled',
+        gtag('event', singleHopOnly ? 'Swap with multihop disabled' : 'Swap with multihop enabled', {
+          event_category: 'Routing',
         })
       })
       .catch((error) => {

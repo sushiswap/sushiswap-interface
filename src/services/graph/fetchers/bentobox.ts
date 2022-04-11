@@ -1,27 +1,27 @@
 import { ChainId, CurrencyAmount, JSBI, Token } from '@sushiswap/core-sdk'
-import { aprToApy, toAmount, toAmountCurrencyAmount } from 'app/functions'
+import { aprToApy, toAmountCurrencyAmount } from 'app/functions'
 import { GRAPH_HOST } from 'app/services/graph/constants'
-import { getTokenSubset } from 'app/services/graph/fetchers'
 import {
   bentoBoxQuery,
   bentoStrategiesQuery,
   bentoTokensQuery,
   bentoUserTokensQuery,
   clonesQuery,
-  kashiPairsQuery,
-  kashiUserPairsQuery,
 } from 'app/services/graph/queries/bentobox'
 
 import { pager } from './pager'
 
 export const BENTOBOX = {
-  [ChainId.ETHEREUM]: 'lufycz/bentobox',
-  [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
+  [ChainId.ETHEREUM]: 'matthewlilley/bentobox-ethereum',
+  [ChainId.XDAI]: 'matthewlilley/bentobox-gnosis',
   [ChainId.MATIC]: 'matthewlilley/bentobox-polygon',
-  [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
-  [ChainId.BSC]: 'sushiswap/bsc-bentobox',
-  [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
-  [ChainId.AVALANCHE]: 'sushiswap/avalanche-bentobox',
+  [ChainId.FANTOM]: 'matthewlilley/bentobox-fantom',
+  [ChainId.BSC]: 'matthewlilley/bentobox-bsc',
+  [ChainId.ARBITRUM]: 'matthewlilley/bentobox-arbitrum',
+  [ChainId.AVALANCHE]: 'matthewlilley/bentobox-avalanche',
+  [ChainId.MOONBEAM]: 'matthewlilley/bentobox-moonbeam',
+  [ChainId.MOONRIVER]: 'matthewlilley/bentobox-moonriver',
+  [ChainId.CELO]: 'matthewlilley/bentobox-celo',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -34,96 +34,16 @@ export const getClones = async (chainId = ChainId.ETHEREUM) => {
   return clones
 }
 
-export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const { kashiPairs } = await fetcher(chainId, kashiPairsQuery, variables)
-
-  const tokens = await getTokenSubset(chainId, {
-    tokenAddresses: Array.from(
-      kashiPairs.reduce(
-        // @ts-ignore TYPE NEEDS FIXING
-        (previousValue, currentValue) => previousValue.add(currentValue.asset.id, currentValue.collateral.id),
-        new Set() // use set to avoid duplicates
-      )
-    ),
-  })
-
-  // @ts-ignore TYPE NEEDS FIXING
-  return kashiPairs.map((pair) => ({
-    ...pair,
-    token0: {
-      ...pair.asset,
-      // @ts-ignore TYPE NEEDS FIXING
-      ...tokens.find((token) => token.id === pair.asset.id),
-    },
-    token1: {
-      ...pair.collateral,
-      // @ts-ignore TYPE NEEDS FIXING
-      ...tokens.find((token) => token.id === pair.collateral.id),
-    },
-    assetAmount: Math.floor(
-      pair.totalAssetBase /
-        (pair.totalAssetBase /
-          (Number(pair.totalAssetElastic) +
-            (pair.totalBorrowElastic * pair.asset.totalSupplyBase) / pair.asset.totalSupplyElastic))
-    ).toString(),
-    borrowedAmount: toAmount(
-      {
-        elastic: pair.totalBorrowElastic.toBigNumber(0),
-        base: pair.totalBorrowBase.toBigNumber(0),
-      },
-      pair.totalBorrowElastic.toBigNumber(0)
-    ).toString(),
-    collateralAmount: toAmount(
-      {
-        elastic: pair.collateral.totalSupplyElastic.toBigNumber(0),
-        base: pair.collateral.totalSupplyBase.toBigNumber(0),
-      },
-      pair.totalCollateralShare.toBigNumber(0)
-    ).toString(),
-  }))
-}
-
-// @ts-ignore TYPE NEEDS FIXING
-export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables) => {
-  const { userKashiPairs } = await fetcher(chainId, kashiUserPairsQuery, variables)
-
-  // @ts-ignore TYPE NEEDS FIXING
-  return userKashiPairs.map((userPair) => ({
-    ...userPair,
-    assetAmount: Math.floor(
-      userPair.assetFraction /
-        (userPair.pair.totalAssetBase /
-          (Number(userPair.pair.totalAssetElastic) +
-            (userPair.pair.totalBorrowElastic * userPair.pair.asset.totalSupplyBase) /
-              userPair.pair.asset.totalSupplyElastic))
-    ).toString(),
-    borrowedAmount: toAmount(
-      {
-        elastic: userPair.pair.totalBorrowElastic.toBigNumber(0),
-        base: userPair.pair.totalBorrowBase.toBigNumber(0),
-      },
-      userPair.borrowPart.toBigNumber(0)
-    ).toString(),
-    collateralAmount: toAmount(
-      {
-        elastic: userPair.pair.collateral.totalSupplyElastic.toBigNumber(0),
-        base: userPair.pair.collateral.totalSupplyBase.toBigNumber(0),
-      },
-      userPair.collateralShare.toBigNumber(0)
-    ).toString(),
-  }))
-}
-
 // @ts-ignore TYPE NEEDS FIXING
 export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables): Promise<CurrencyAmount<Token>[]> => {
   const { userTokens } = await fetcher(chainId, bentoUserTokensQuery, variables)
   return (userTokens || []).map(
     // @ts-ignore TYPE NEEDS FIXING
-    ({ share, token: { decimals, id, name, symbol, totalSupplyElastic, totalSupplyBase } }) => {
+    ({ share, token: { decimals, id, name, symbol, rebase } }) => {
       return toAmountCurrencyAmount(
         {
-          elastic: JSBI.BigInt(totalSupplyElastic),
-          base: JSBI.BigInt(totalSupplyBase),
+          elastic: JSBI.BigInt(rebase.elastic),
+          base: JSBI.BigInt(rebase.base),
         },
         CurrencyAmount.fromRawAmount(new Token(chainId, id, Number(decimals), symbol, name), JSBI.BigInt(share))
       )
@@ -171,7 +91,9 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) 
       token: strategy.token.id,
       apy: !isNaN(apy) ? aprToApy(apy, 365) : 0,
       targetPercentage: Number(strategy.token.strategyTargetPercentage ?? 0),
-      utilization: (Number(strategy.balance) / Number(strategy.token.totalSupplyElastic)) * 100,
+      utilization:
+        (Number(strategy.balance / Math.pow(10, strategy.token.decimals)) / Number(strategy.token.rebase.elastic)) *
+        100,
     }
   })
 }

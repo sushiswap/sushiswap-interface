@@ -1,9 +1,11 @@
 import { NETWORK_ICON } from 'app/config/networks'
 import { switchToNetwork } from 'app/functions/network'
+import useIsWindowVisible from 'app/hooks/useIsWindowVisible'
 import usePrevious from 'app/hooks/usePrevious'
 import NetworkModel from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useNetworkModalToggle } from 'app/state/application/hooks'
+import Cookies from 'js-cookie'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -13,9 +15,12 @@ function Web3Network(): JSX.Element | null {
 
   const toggleNetworkModal = useNetworkModalToggle()
 
+  const [attemptingSwitchFromUrl, setAttemptingSwitchFromUrl] = useState(false)
   const [switchedFromUrl, setSwitchedFromUrl] = useState(false)
 
   const router = useRouter()
+
+  const isWindowVisible = useIsWindowVisible()
 
   const prevChainId = usePrevious(chainId)
 
@@ -23,15 +28,21 @@ function Web3Network(): JSX.Element | null {
 
   const handleChainSwitch = useCallback(
     (targetChain: number) => {
-      if (!library?.provider) return
+      if (!library?.provider) {
+        setAttemptingSwitchFromUrl(false)
+        return
+      }
       setSwitchedFromUrl(true)
       switchToNetwork({ provider: library.provider, chainId: targetChain })
         .then(() => {
-          return router.replace({ query: { ...router.query, chainId: targetChain } })
+          return router.replace({
+            pathname: window.location.pathname,
+            query: { ...router.query, chainId: targetChain },
+          })
         })
         .catch(() => {
           if (chainId) {
-            router.replace({ query: { ...router.query, chainId } })
+            router.replace({ pathname: window.location.pathname, query: { ...router.query, chainId } })
           }
         })
         .finally(() => {
@@ -47,23 +58,37 @@ function Web3Network(): JSX.Element | null {
     // when network change originates from wallet or dropdown selector, just update URL
     if (chainId !== prevChainId) {
       console.debug('network change from wallet or network modal')
-      router.replace({ query: { ...router.query, chainId } })
+      router.replace({ pathname: window.location.pathname, query: { ...router.query, chainId } })
     }
   }, [chainId, prevChainId, router])
 
   useEffect(() => {
     // assume network change originates from URL
-    if (chainId && queryChainId && !switchedFromUrl && chainId !== queryChainId) {
+
+    const cookieChainId = Cookies.get('chain-id')
+
+    const defaultChainId = cookieChainId ? Number(cookieChainId) : 1
+
+    if (
+      chainId &&
+      defaultChainId &&
+      queryChainId &&
+      !attemptingSwitchFromUrl &&
+      !switchedFromUrl &&
+      isWindowVisible &&
+      (chainId !== queryChainId || chainId !== defaultChainId)
+    ) {
       console.debug('network change from query chainId', { queryChainId, chainId })
-      handleChainSwitch(queryChainId)
+      setAttemptingSwitchFromUrl(true)
+      handleChainSwitch(defaultChainId !== 1 ? defaultChainId : queryChainId)
     }
-  }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId])
+  }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId, isWindowVisible, attemptingSwitchFromUrl])
 
   // set chainId on initial load if not present
   useEffect(() => {
     if (chainId && !queryChainId) {
       console.debug('Setting chain id on initial load because not present')
-      router.replace({ query: { ...router.query, chainId } })
+      router.replace({ pathname: window.location.pathname, query: { ...router.query, chainId } })
     }
   }, [chainId, queryChainId, router])
 

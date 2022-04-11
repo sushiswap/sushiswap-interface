@@ -24,7 +24,6 @@ import { useAppSelector } from 'app/state/hooks'
 import { selectSlippageWithDefault } from 'app/state/slippage/slippageSlice'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import React, { useCallback, useMemo, useState } from 'react'
-import ReactGA from 'react-ga'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
@@ -266,16 +265,20 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
             />
           )
 
-          ReactGA.event({
-            category: 'Liquidity',
-            action: 'Remove',
-            label: [currencyA?.symbol, currencyB?.symbol].join('/'),
+          gtag('event', 'Remove', {
+            event_category: 'Liquidity',
+            event_label: [currencyA?.symbol, currencyB?.symbol].join('/'),
           })
         })
         .catch((error: Error) => {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
           console.error(error)
+
+          gtag('event', 'Remove Failed', {
+            event_category: 'Liquidity',
+            event_label: [currencyA?.symbol, currencyB?.symbol].join('/'),
+          })
         })
     }
   }

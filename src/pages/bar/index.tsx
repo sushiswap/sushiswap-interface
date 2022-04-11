@@ -133,7 +133,7 @@ export default function Stake() {
     }
   }
 
-  const block1d = useOneDayBlock({ chainId: ChainId.ETHEREUM })
+  const { data: block1d } = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
   const exchange = useFactory({ chainId: ChainId.ETHEREUM })
 
@@ -145,7 +145,7 @@ export default function Stake() {
     shouldFetch: !!block1d,
   })
 
-  const ethPrice = useNativePrice({ chainId: ChainId.ETHEREUM })
+  const { data: ethPrice } = useNativePrice({ chainId: ChainId.ETHEREUM })
 
   const xSushi = useTokens({
     chainId: ChainId.ETHEREUM,

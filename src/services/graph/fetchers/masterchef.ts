@@ -79,7 +79,8 @@ export const getMasterChefV1Farms = async (variables = undefined) => {
 
 export const getMasterChefV1PairAddreses = async () => {
   const { pools } = await masterChefV1(masterChefV1PairAddressesQuery)
-  return pools
+  // @ts-ignore
+  return pools?.map((pool) => pool.pair)
 }
 
 export const getMasterChefV2Farms = async (variables = undefined) => {
@@ -102,7 +103,8 @@ export const getMasterChefV2Farms = async (variables = undefined) => {
 
 export const getMasterChefV2PairAddreses = async () => {
   const { pools } = await masterChefV2(masterChefV2PairAddressesQuery)
-  return pools
+  // @ts-ignore
+  return pools?.map((pool) => pool.pair)
 }
 
 export const getOldMiniChefFarms = async (chainId = ChainId.ETHEREUM) => {
@@ -137,5 +139,6 @@ export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = u
 export const getMiniChefPairAddreses = async (chainId = ChainId.ETHEREUM) => {
   console.debug('getMiniChefPairAddreses')
   const { pools } = await miniChef(miniChefPairAddressesQuery, chainId)
-  return pools
+  // @ts-ignore
+  return pools?.map((pool) => pool.pair)
 }

@@ -23,7 +23,6 @@ import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
-import ReactGA from 'react-ga'
 
 export const useRemoveLiquidityExecute = () => {
   const { i18n } = useLingui()
@@ -118,10 +117,9 @@ export const useRemoveLiquidityExecute = () => {
 
         dispatch(setRemoveAttemptingTxn(false))
 
-        ReactGA.event({
-          category: 'Liquidity',
-          action: 'Burn',
-          label: [poolWithState.pool.token0.symbol, poolWithState.pool.token1.symbol].join('/'),
+        gtag('event', 'Burn', {
+          event_category: 'Liquidity',
+          event_label: [poolWithState.pool.token0.symbol, poolWithState.pool.token1.symbol].join('/'),
         })
 
         dispatch(setRemoveDeletePermits())

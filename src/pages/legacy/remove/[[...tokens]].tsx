@@ -34,7 +34,6 @@ import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Plus } from 'react-feather'
-import ReactGA from 'react-ga'
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
 export default function Remove() {
@@ -233,10 +232,9 @@ export default function Remove() {
 
           setTxHash(response.hash)
 
-          ReactGA.event({
-            category: 'Liquidity',
-            action: 'Remove',
-            label: [currencyA?.symbol, currencyB?.symbol].join('/'),
+          gtag('event', 'Remove', {
+            event_category: 'Routing',
+            event_label: [currencyA?.symbol, currencyB?.symbol].join('/'),
           })
         })
         .catch((error: Error) => {

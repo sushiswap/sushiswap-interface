@@ -1,3 +1,4 @@
+import CHAINLINK_TOKEN_LIST from '@sushiswap/chainlink-token-list'
 import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
 import { TokenList } from '@uniswap/token-lists'
 import { UNSUPPORTED_LIST_URLS } from 'app/config/token-lists'
@@ -44,6 +45,8 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
 }
 
 const TRANSFORMED_DEFAULT_TOKEN_LIST = listToTokenMap(DEFAULT_TOKEN_LIST)
+
+const TRANSFORMED_CHAINLINK_TOKEN_LIST = listToTokenMap(CHAINLINK_TOKEN_LIST)
 
 export function useAllLists(): AppState['lists']['byUrl'] {
   return useAppSelector((state) => state.lists.byUrl)
@@ -124,7 +127,10 @@ export function useInactiveListUrls(): string[] {
 export function useCombinedActiveList(): TokenAddressMap {
   const activeListUrls = useActiveListUrls()
   const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-  return useMemo(() => combineMaps(activeTokens, TRANSFORMED_DEFAULT_TOKEN_LIST), [activeTokens])
+  return useMemo(
+    () => combineMaps(combineMaps(activeTokens, TRANSFORMED_DEFAULT_TOKEN_LIST), TRANSFORMED_CHAINLINK_TOKEN_LIST),
+    [activeTokens]
+  )
 }
 
 // list of tokens not supported on interface, used to show warnings and prevent swaps and adds

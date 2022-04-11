@@ -96,8 +96,8 @@ export function useTwoDayPoolKpis({ chainId, variables, shouldFetch = true, swrC
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useRollingPoolStats({ chainId, variables, shouldFetch = true, swrConfig = undefined }: GraphProps) {
-  const oneDayBlock = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-  const twoDayBlock = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const { data: oneDayBlock } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const { data: twoDayBlock } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
 
   const {
     data: poolKpis,

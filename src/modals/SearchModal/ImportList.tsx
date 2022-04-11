@@ -12,7 +12,6 @@ import { useAppDispatch } from 'app/state/hooks'
 import { enableList, removeList } from 'app/state/lists/actions'
 import { useAllLists } from 'app/state/lists/hooks'
 import React, { FC, useCallback, useState } from 'react'
-import ReactGA from 'react-ga'
 
 import CurrencyModalView from './CurrencyModalView'
 
@@ -30,20 +29,19 @@ const ImportList: FC = () => {
     setAddError(undefined)
     fetchList(listUrl)
       .then(() => {
-        ReactGA.event({
-          category: 'Lists',
-          action: 'Add List',
-          label: listUrl,
+        gtag('event', 'Add List', {
+          event_category: 'Lists',
+          event_label: listUrl,
         })
         dispatch(enableList(listUrl))
         setView(CurrencyModalView.manage)
       })
       .catch((error) => {
-        ReactGA.event({
-          category: 'Lists',
-          action: 'Add List Failed',
-          label: listUrl,
+        gtag('event', 'Add List Failed', {
+          event_category: 'Lists',
+          event_label: listUrl,
         })
+
         setAddError(error.message)
         dispatch(removeList(listUrl))
       })

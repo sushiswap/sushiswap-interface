@@ -21,7 +21,6 @@ import { acceptListUpdate, disableList, enableList, removeList } from 'app/state
 import { useActiveListUrls, useAllLists, useIsListActive } from 'app/state/lists/hooks'
 import React, { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Settings } from 'react-feather'
-import ReactGA from 'react-ga'
 import { useSelector } from 'react-redux'
 
 import CurrencyModalView from './CurrencyModalView'
@@ -39,45 +38,44 @@ const ListRow: FC<{ listUrl: string }> = memo(({ listUrl }) => {
 
   const handleAcceptListUpdate = useCallback(() => {
     if (!pending) return
-    ReactGA.event({
-      category: 'Lists',
-      action: 'Update List from List Select',
-      label: listUrl,
+    gtag('event', 'Update List from List Select', {
+      event_category: 'Lists',
+      event_label: listUrl,
     })
     dispatch(acceptListUpdate(listUrl))
   }, [dispatch, listUrl, pending])
 
   const handleRemoveList = useCallback(() => {
-    ReactGA.event({
-      category: 'Lists',
-      action: 'Start Remove List',
-      label: listUrl,
+    gtag('event', 'Start Remove List', {
+      event_category: 'Lists',
+      event_label: listUrl,
     })
+
     if (window.prompt(`Please confirm you would like to remove this list by typing REMOVE`) === `REMOVE`) {
-      ReactGA.event({
-        category: 'Lists',
-        action: 'Confirm Remove List',
-        label: listUrl,
+      gtag('event', 'Confirm Remove List', {
+        event_category: 'Lists',
+        event_label: listUrl,
       })
+
       dispatch(removeList(listUrl))
     }
   }, [dispatch, listUrl])
 
   const handleEnableList = useCallback(() => {
-    ReactGA.event({
-      category: 'Lists',
-      action: 'Enable List',
-      label: listUrl,
+    gtag('event', 'Enable List', {
+      event_category: 'Lists',
+      event_label: listUrl,
     })
+
     dispatch(enableList(listUrl))
   }, [dispatch, listUrl])
 
   const handleDisableList = useCallback(() => {
-    ReactGA.event({
-      category: 'Lists',
-      action: 'Disable List',
-      label: listUrl,
+    gtag('event', 'Disable List', {
+      event_category: 'Lists',
+      event_label: listUrl,
     })
+
     dispatch(disableList(listUrl))
   }, [dispatch, listUrl])
 
@@ -104,16 +102,16 @@ const ListRow: FC<{ listUrl: string }> = memo(({ listUrl }) => {
               {listVersionLabel(list.version)}
             </Typography>
           </Typography>
-          <div className="flex gap-1 items-center">
+          <div className="flex items-center gap-1">
             <Typography variant="xs" className="text-white">
               {i18n._(t`${list.tokens.length} tokens`)}
             </Typography>
             <Popover
               placement="bottom-start"
               content={
-                <div className="flex flex-col gap-1 border rounded shadow bg-dark-900 border-dark-700 p-3">
+                <div className="flex flex-col gap-1 p-3 border rounded shadow bg-dark-900 border-dark-700">
                   <a href={`https://tokenlists.org/token-list?url=${listUrl}`}>
-                    <Typography variant="sm" weight={700} className="text-blue flex items-center gap-1">
+                    <Typography variant="sm" weight={700} className="flex items-center gap-1 text-blue">
                       {i18n._(t`View list`)}
                       <ExternalLinkIcon width={16} />
                     </Typography>
@@ -124,7 +122,7 @@ const ListRow: FC<{ listUrl: string }> = memo(({ listUrl }) => {
                     weight={700}
                     onClick={handleRemoveList}
                     disabled={Object.keys(listsByUrl).length === 1}
-                    className="hover:text-white cursor-pointer disabled:cursor-default"
+                    className="cursor-pointer hover:text-white disabled:cursor-default"
                   >
                     {i18n._(t`Remove list`)}
                   </Typography>
@@ -133,14 +131,14 @@ const ListRow: FC<{ listUrl: string }> = memo(({ listUrl }) => {
                     variant="sm"
                     weight={700}
                     onClick={handleAcceptListUpdate}
-                    className="hover:text-white cursor-pointer disabled:cursor-default"
+                    className="cursor-pointer hover:text-white disabled:cursor-default"
                   >
                     {i18n._(t`Update list`)}
                   </Typography>
                 </div>
               }
             >
-              <Settings size={12} className="text-high-emphesis cursor-pointer hover:text-white" />
+              <Settings size={12} className="cursor-pointer text-high-emphesis hover:text-white" />
             </Popover>
           </div>
         </div>
@@ -264,7 +262,7 @@ const ManageLists: FC = () => {
           variant="sm"
           weight={700}
           title={addError}
-          className="overflow-hidden text-red text-ellipsis text-center h-9"
+          className="overflow-hidden text-center text-red text-ellipsis h-9"
         >
           {addError}
         </Typography>
@@ -296,7 +294,7 @@ const ManageLists: FC = () => {
                     </Typography>
                   )}
                 </Typography>
-                <div className="flex gap-1 items-center">
+                <div className="flex items-center gap-1">
                   <Typography variant="xs" className="text-white">
                     {i18n._(t`${tempList?.tokens.length} tokens`)}
                   </Typography>

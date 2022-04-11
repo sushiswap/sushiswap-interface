@@ -20,7 +20,6 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { AppState } from 'app/state'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useCallback, useMemo } from 'react'
-import ReactGA from 'react-ga'
 import { useSelector } from 'react-redux'
 
 import {
@@ -78,10 +77,10 @@ export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) =>
 
   const setSingleHopOnly = useCallback(
     (newSingleHopOnly: boolean) => {
-      ReactGA.event({
-        category: 'Routing',
-        action: newSingleHopOnly ? 'enable single hop' : 'disable single hop',
+      gtag('event', newSingleHopOnly ? 'Enabled Single Hop' : 'Disabled Single Hop', {
+        event_category: 'Routing',
       })
+
       dispatch(updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly }))
     },
     [dispatch]
