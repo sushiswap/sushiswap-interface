@@ -17,9 +17,9 @@ export const switchToNetwork = async ({ provider, chainId }: SwitchNetworkArgume
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: params.chainId }],
     })
-    gtag('event', params.chainName, {
+    gtag('event', 'Switch', {
       event_category: 'Chain',
-      event_label: 'Switch',
+      event_label: params.chainName,
     })
   } catch (error) {
     console.log('Error switching network', error)

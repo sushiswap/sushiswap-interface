@@ -271,9 +271,9 @@ const NetworkModal: FC = () => {
                     try {
                       await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
 
-                      gtag('event', params.chainName, {
+                      gtag('event', 'Switch', {
                         event_category: 'Chain',
-                        event_label: 'Switch',
+                        event_label: params.chainName,
                       })
                     } catch (switchError) {
                       // This error code indicates that the chain has not been added to MetaMask.
