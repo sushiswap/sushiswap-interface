@@ -1,16 +1,18 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { ChainId, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import TimespanGraph from 'app/components/TimespanGraph'
+import Typography from 'app/components/Typography'
 import { XSUSHI } from 'app/config/tokens'
-import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
-import Background from 'app/features/analytics/Background'
 import InfoCard from 'app/features/analytics/bar/InfoCard'
-import ColoredNumber from 'app/features/analytics/ColoredNumber'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
 import { aprToApy } from 'app/functions/convert/apyApr'
+import { TridentHeader } from 'app/layouts/Trident'
 import { useDayData, useFactory, useNativePrice, useOneDayBlock, useTokenDayData, useTokens } from 'app/services/graph'
 import { useBar, useBarHistory } from 'app/services/graph/hooks/bar'
+import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
-
 const chartTimespans = [
   {
     text: '1W',
@@ -31,6 +33,9 @@ const chartTimespans = [
 ]
 
 export default function XSushi() {
+  const { i18n } = useLingui()
+  const router = useRouter()
+
   const { data: block1d } = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
   const exchange = useFactory({ chainId: ChainId.ETHEREUM })
@@ -179,8 +184,21 @@ export default function XSushi() {
   )
 
   return (
-    <AnalyticsContainer>
-      <Background background="bar">
+    <>
+      <NextSeo title={`Farm Analytics`} />
+
+      <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
+        <div>
+          <Typography variant="h2" className="text-high-emphesis" weight={700}>
+            {i18n._(t`xSUSHI Analytics.`)}
+          </Typography>
+          <Typography variant="sm" weight={400}>
+            {i18n._(t`Find out all about xSushi here.`)}
+          </Typography>
+        </div>
+      </TridentHeader>
+
+      {/* <Background background="bar">
         <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
           <div className="space-y-5">
             <div className="text-3xl font-bold text-high-emphesis">xSushi</div>
@@ -205,9 +223,11 @@ export default function XSushi() {
             </div>
           </div>
         </div>
-      </Background>
+      </Background> */}
       <div className="px-4 pt-4 space-y-5 lg:px-14">
         <div className="flex flex-row space-x-4 overflow-auto">
+          <InfoCard text="Price" number={formatNumber(xSushiPrice ?? 0, true)} />
+          <InfoCard text="Market Cap" number={formatNumber(xSushiMarketcap ?? 0, true, false)} />
           <InfoCard text="APY (Last 24 Hours)" number={formatPercent(APY1d)} />
           <InfoCard text="APY (Last 7 Days)" number={formatPercent(APY1w)} />
           <InfoCard text="xSUSHI Supply" number={formatNumber(bar?.totalSupply)} />
@@ -218,7 +238,7 @@ export default function XSushi() {
             <div
               className={classNames(
                 graph.data[0].length === 0 && 'hidden',
-                'p-1 rounded bg-dark-900 border border-dark-700'
+                'p-1 border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]'
               )}
               key={i}
             >
@@ -235,6 +255,6 @@ export default function XSushi() {
           ))}
         </div>
       </div>
-    </AnalyticsContainer>
+    </>
   )
 }

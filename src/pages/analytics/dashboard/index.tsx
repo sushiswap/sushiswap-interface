@@ -47,11 +47,11 @@ export default function Dashboard(): JSX.Element {
   const { data: block2d } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
 
   // For the charts
-  const exchange = useFactory({ chainId })
+  const exchange = useFactory({ chainId, shouldFetch: !!chainId })
   const exchange1d = useFactory({ chainId, variables: { block: block1d } })
   const exchange2d = useFactory({ chainId, variables: { block: block2d } })
 
-  const dayData = useDayData({ chainId })
+  const dayData = useDayData({ chainId, shouldFetch: !!chainId })
 
   const chartData = useMemo(
     () => ({
