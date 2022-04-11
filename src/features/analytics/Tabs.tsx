@@ -9,7 +9,7 @@ interface TabsProps {
 export default function Tabs({ tabs, currentType, setType }: TabsProps): JSX.Element {
   return (
     <>
-      <div className="border-t border-b border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]">
+      <div className="border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]">
         <nav className="grid items-center grid-flow-col -mb-px overflow-x-auto whitespace-nowrap" aria-label="Tabs">
           {tabs.map((tab) => (
             <div

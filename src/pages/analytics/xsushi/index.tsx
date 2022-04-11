@@ -198,33 +198,6 @@ export default function XSushi() {
         </div>
       </TridentHeader>
 
-      {/* <Background background="bar">
-        <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
-          <div className="space-y-5">
-            <div className="text-3xl font-bold text-high-emphesis">xSushi</div>
-            <div>Find out all about xSushi here.</div>
-          </div>
-          <div className="flex space-x-12">
-            <div className="flex flex-col">
-              <div>Price</div>
-              <div className="flex items-center space-x-2">
-                <div className="text-lg font-medium text-high-emphesis">{formatNumber(xSushiPrice ?? 0, true)}</div>
-                <ColoredNumber number={(xSushiPrice / xSushiPrice1d) * 100 - 100} percent={true} />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <div>Market Cap</div>
-              <div className="flex items-center space-x-2">
-                <div className="text-lg font-medium text-high-emphesis">
-                  {formatNumber(xSushiMarketcap ?? 0, true, false)}
-                </div>
-                <ColoredNumber number={(xSushiMarketcap / xSushiMarketcap1d) * 100 - 100} percent={true} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </Background> */}
-
       <TridentBody>
         <div className="space-y-5">
           <div className="grid grid-flow-col gap-4 overflow-auto">
