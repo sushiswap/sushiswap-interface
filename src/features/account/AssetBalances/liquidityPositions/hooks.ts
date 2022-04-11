@@ -31,12 +31,12 @@ export function useLegacyLiquidityPositionsBalances({ account, chainId }: Positi
     shouldFetch: !!chainId && !!account,
   }) as any[]
 
-  const pairs = useSushiPairs({
+  const { data: pairs } = useSushiPairs({
     chainId,
     variables: { where: { id_in: positions?.map((position: any) => position.pair.id) } },
     shouldFetch: !!positions,
   })
-  const pairs1w = useSushiPairs({
+  const { data: pairs1w } = useSushiPairs({
     chainId,
     variables: {
       block: block1w,

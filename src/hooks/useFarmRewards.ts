@@ -39,7 +39,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair.toLowerCase()), [farms])
 
-  const swapPairs = useSushiPairs({
+  const { data: swapPairs } = useSushiPairs({
     chainId,
     variables: {
       where: {
@@ -49,7 +49,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
     shouldFetch: !!farmAddresses,
   })
 
-  const swapPairs1d = useSushiPairs({
+  const { data: swapPairs1d } = useSushiPairs({
     chainId,
     variables: {
       block: block1d,

@@ -13,11 +13,11 @@ export const useTableConfig = (chainId: number) => {
   const { data: block2d } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
   const { data: block1w } = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
-  const pairs = useSushiPairs({ chainId })
-  const pairs1d = useSushiPairs({ variables: { block: block1d }, shouldFetch: !!block1d, chainId })
-  const pairs2d = useSushiPairs({ variables: { block: block2d }, shouldFetch: !!block2d, chainId })
+  const { data: pairs } = useSushiPairs({ chainId })
+  const { data: pairs1d } = useSushiPairs({ variables: { block: block1d }, shouldFetch: !!block1d, chainId })
+  const { data: pairs2d } = useSushiPairs({ variables: { block: block2d }, shouldFetch: !!block2d, chainId })
 
-  const pairs1w = useSushiPairs({ variables: { block: block1w }, shouldFetch: !!block1w, chainId })
+  const { data: pairs1w } = useSushiPairs({ variables: { block: block1w }, shouldFetch: !!block1w, chainId })
 
   const data = useMemo(() => {
     return (
@@ -168,6 +168,7 @@ export const useTableConfig = (chainId: number) => {
         Header: 'APY',
         accessor: 'apy',
         minWidth: 150,
+        // @ts-ignore
         Cell: (props) => {
           console.log({ props })
           return (

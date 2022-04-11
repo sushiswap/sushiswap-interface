@@ -124,6 +124,4 @@ const FarmTable: FC<{ chainId: number }> = ({ chainId }) => {
   )
 }
 
-FarmTable.whyDidYouRender = true
-
 export default FarmTable

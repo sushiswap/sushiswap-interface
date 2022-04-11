@@ -111,27 +111,13 @@ export function useFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
 export function useMasterChefV1PairAddresses() {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(shouldFetch ? ['masterChefV1PairAddresses', chainId] : null, (_) =>
-    getMasterChefV1PairAddreses()
-  )
-  return useMemo(() => {
-    if (!data) return []
-    // @ts-ignore TYPE NEEDS FIXING
-    return data.map((data) => data.pair)
-  }, [data])
+  return useSWR(shouldFetch ? ['masterChefV1PairAddresses', chainId] : null, (_) => getMasterChefV1PairAddreses())
 }
 
 export function useMasterChefV2PairAddresses() {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(shouldFetch ? ['masterChefV2PairAddresses', chainId] : null, (_) =>
-    getMasterChefV2PairAddreses()
-  )
-  return useMemo(() => {
-    if (!data) return []
-    // @ts-ignore TYPE NEEDS FIXING
-    return data.map((data) => data.pair)
-  }, [data])
+  return useSWR(shouldFetch ? ['masterChefV2PairAddresses', chainId] : null, (_) => getMasterChefV2PairAddreses())
 }
 
 export function useMiniChefPairAddresses() {
@@ -148,22 +134,17 @@ export function useMiniChefPairAddresses() {
       ChainId.FUSE,
       ChainId.FANTOM,
     ].includes(chainId)
-  const { data } = useSWR(shouldFetch ? ['miniChefPairAddresses', chainId] : null, (_, chainId) =>
+  return useSWR(shouldFetch ? ['miniChefPairAddresses', chainId] : null, (_, chainId) =>
     getMiniChefPairAddreses(chainId)
   )
-  return useMemo(() => {
-    if (!data) return []
-    // @ts-ignore TYPE NEEDS FIXING
-    return data.map((data) => data.pair)
-  }, [data])
 }
 
 export function useFarmPairAddresses() {
-  const masterChefV1PairAddresses = useMasterChefV1PairAddresses()
-  const masterChefV2PairAddresses = useMasterChefV2PairAddresses()
-  const miniChefPairAddresses = useMiniChefPairAddresses()
+  const { data: masterChefV1PairAddresses } = useMasterChefV1PairAddresses()
+  const { data: masterChefV2PairAddresses } = useMasterChefV2PairAddresses()
+  const { data: miniChefPairAddresses } = useMiniChefPairAddresses()
   return useMemo(
-    () => concat(masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses),
+    () => concat(masterChefV1PairAddresses ?? [], masterChefV2PairAddresses ?? [], miniChefPairAddresses ?? []),
     [masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses]
   )
 }

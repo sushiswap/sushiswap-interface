@@ -50,17 +50,23 @@ export default function Pair() {
   const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const { data: block2d } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
 
-  const pair = useSushiPairs({ chainId, variables: { where: { id } }, shouldFetch: !!chainId })?.[0]
-  const pair1d = useSushiPairs({
+  const { data: pairs } = useSushiPairs({ chainId, variables: { where: { id } }, shouldFetch: !!chainId })
+  const pair = pairs?.[0]
+  const { data: pairs1d } = useSushiPairs({
     chainId,
     variables: { block: block1d, where: { id } },
     shouldFetch: !!chainId && !!block1d,
-  })?.[0]
-  const pair2d = useSushiPairs({
+  })
+
+  const pair1d = pairs1d?.[0]
+
+  const { data: pairs2d } = useSushiPairs({
     chainId,
     variables: { block: block2d, where: { id } },
     shouldFetch: !!chainId && !!block2d,
-  })?.[0]
+  })
+
+  const pair2d = pairs2d?.[0]
 
   const pairDayData = usePairDayData({
     chainId,

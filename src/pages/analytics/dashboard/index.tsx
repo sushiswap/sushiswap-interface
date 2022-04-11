@@ -85,9 +85,9 @@ export default function Dashboard(): JSX.Element {
   )
 
   // For Top Pairs
-  const pairs = useSushiPairs({ chainId })
-  const pairs1d = useSushiPairs({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
-  const pairs1w = useSushiPairs({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
+  const { data: pairs } = useSushiPairs({ chainId })
+  const { data: pairs1d } = useSushiPairs({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const { data: pairs1w } = useSushiPairs({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
   const pairsFormatted = useMemo(
     () =>

@@ -248,13 +248,12 @@ export function useSushiPairs({
   shouldFetch = true,
   swrConfig = undefined,
 }: GraphProps) {
-  const { data } = useSWR(
+  return useSWR(
     shouldFetch ? ['sushiPairs', chainId, stringify(variables)] : null,
     // @ts-ignore TYPE NEEDS FIXING
     (_, chainId) => getPairs(chainId, variables),
     swrConfig
   )
-  return data
 }
 
 export function useTokens({
