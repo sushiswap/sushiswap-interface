@@ -41,7 +41,7 @@ const FarmTable: FC<{ chainId: number }> = ({ chainId }) => {
     // @ts-ignore TYPE NEEDS FIXING
     state: { pageIndex, pageSize },
     // @ts-ignore TYPE NEEDS FIXING
-  } = useTable(config, useFlexLayout, useFilters, useSortBy, useFlexLayout, usePagination)
+  } = useTable(config, useFlexLayout, useFilters, useSortBy, usePagination)
   useInstantiateTableFeatures(setFilter)
 
   return (

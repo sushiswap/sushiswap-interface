@@ -32,11 +32,8 @@ import { useCallback, useMemo } from 'react'
 
 export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
   const positions = usePositions(chainId)
-
   const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-
   const farms = useFarms({ chainId })
-
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair.toLowerCase()), [farms])
 
   const { data: swapPairs } = useSushiPairs({
@@ -67,7 +64,6 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
   })
 
   const { data: averageBlockTime } = useAverageBlockTime({ chainId })
-
   const { data: masterChefV1TotalAllocPoint } = useMasterChefV1TotalAllocPoint()
   const { data: masterChefV1SushiPerBlock } = useMasterChefV1SushiPerBlock()
 
@@ -434,5 +430,5 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
     [kashiPairs, swapPairs]
   )
 
-  return useMemo(() => farms.filter(filter).map(map), [filter, farms, map])
+  return useMemo(() => farms.filter(filter).map(map), [farms, filter, map])
 }
