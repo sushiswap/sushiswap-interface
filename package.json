@@ -78,6 +78,7 @@
     "@sentry/nextjs": "^6.13.0",
     "@sentry/tracing": "^6.15.0",
     "@sushiswap/bentobox-sdk": "1.0.0-canary.76",
+    "@sushiswap/chainlink-token-list": "0.1.0",
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
     "@sushiswap/core-sdk": "1.0.0-canary.91",

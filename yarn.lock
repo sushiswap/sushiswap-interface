@@ -2583,6 +2583,11 @@
   dependencies:
     "@sushiswap/core-sdk" "1.0.0-canary.91"
 
+"@sushiswap/chainlink-token-list@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-token-list/-/chainlink-token-list-0.1.0.tgz#cd63ce07439f8d481111c961d18c99ec39449d95"
+  integrity sha512-OQwr4BIYbF3FlMKYMslYhjGXXzdsduW+CfSTq86tUQZm9okJG4fKBmyA8ZYkZ+oW8dTDRuI5LGGidUYVQUFH7A==
+
 "@sushiswap/chainlink-whitelist@0.2.8":
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.8.tgz#832dc80963b890a2eb02aaaf11ea8b57b2b7dde0"
