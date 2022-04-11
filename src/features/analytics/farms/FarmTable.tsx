@@ -1,5 +1,4 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
-import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import {
   TABLE_TABLE_CLASSNAME,
   TABLE_TBODY_TD_CLASSNAME,
@@ -111,7 +110,7 @@ const FarmTable: FC<{ chainId: number }> = ({ chainId }) => {
           </tbody>
         </table>
       </div>
-      <TablePageToggler
+      {/* <TablePageToggler
         pageIndex={pageIndex}
         pageSize={pageSize}
         totalItems={rows.length}
@@ -119,7 +118,7 @@ const FarmTable: FC<{ chainId: number }> = ({ chainId }) => {
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}
         loading={!rows.length}
-      />
+      /> */}
     </div>
   )
 }

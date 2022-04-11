@@ -58,8 +58,8 @@ export default function TokenPage() {
   const { data: block1w } = useOneWeekBlock({ chainId })
 
   // General data (volume, liquidity)
-  const nativePrice = useNativePrice({ chainId })
-  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const { data: nativePrice } = useNativePrice({ chainId })
+  const { data: nativePrice1d } = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
 
   const token = useTokens({ chainId, variables: { where: { id } }, shouldFetch: !!id })?.[0]
   const token1d = useTokens({

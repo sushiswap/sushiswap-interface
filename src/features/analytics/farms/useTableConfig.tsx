@@ -7,27 +7,32 @@ import { useMemo } from 'react'
 import { filterForSearchQuery } from './farmTableFilters'
 
 export const useTableConfig = (chainId: number) => {
-  const farms = useFarmRewards({ chainId })
+  const farms = useFarmRewards(useMemo(() => ({ chainId }), [chainId]))
+
+  // const farms = useMemo(() => [], [])
 
   const data = useMemo(() => {
-    return farms
-      ?.map((farm) => ({
-        pair: {
-          id: farm.pair.id,
-          token0: farm.pair.token0,
-          token1: farm.pair.token1,
-          name: farm.pair.symbol ?? `${farm.pair.token0.symbol}-${farm.pair.token1.symbol}`,
-          type: farm.pair.symbol ? 'Kashi Farm' : 'Sushi Farm',
-        },
-        rewards: farm.rewards,
-        liquidity: farm.tvl,
-        apr: {
-          daily: farm.roiPerDay * 100,
-          monthly: farm.roiPerMonth * 100,
-          annual: farm.roiPerYear * 100,
-        },
-      }))
-      .filter((farm) => (farm ? true : false))
+    return (
+      farms
+        // @ts-ignore
+        ?.map((farm: any) => ({
+          pair: {
+            id: farm.pair.id,
+            token0: farm.pair.token0,
+            token1: farm.pair.token1,
+            name: farm.pair.symbol ?? `${farm.pair.token0.symbol}-${farm.pair.token1.symbol}`,
+            type: farm.pair.symbol ? 'Kashi Farm' : 'Sushi Farm',
+          },
+          rewards: farm.rewards,
+          liquidity: farm.tvl,
+          apr: {
+            daily: farm.roiPerDay * 100,
+            monthly: farm.roiPerMonth * 100,
+            annual: farm.roiPerYear * 100,
+          },
+        }))
+        .filter((farm) => (farm ? true : false))
+    )
   }, [farms])
 
   const columns = useMemo(

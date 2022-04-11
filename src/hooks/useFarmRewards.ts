@@ -71,35 +71,19 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
   const { data: masterChefV1TotalAllocPoint } = useMasterChefV1TotalAllocPoint()
   const { data: masterChefV1SushiPerBlock } = useMasterChefV1SushiPerBlock()
 
-  const [
-    sushiPrice,
-    ethPrice,
-    maticPrice,
-    gnoPrice,
-    onePrice,
-    spellPrice,
-    celoPrice,
-    fantomPrice,
-    movrPrice,
-    ohmPrice,
-    fusePrice,
-    magicPrice,
-    glimmerPrice,
-  ] = [
-    useSushiPrice(),
-    useEthPrice(),
-    useMaticPrice(),
-    useGnoPrice(),
-    useOnePrice(),
-    useSpellPrice(),
-    useCeloPrice(),
-    useFantomPrice(),
-    useMovrPrice(),
-    useOhmPrice(),
-    useFusePrice(),
-    useMagicPrice(),
-    useGlimmerPrice(),
-  ]
+  const { data: sushiPrice } = useSushiPrice()
+  const { data: ethPrice } = useEthPrice()
+  const { data: maticPrice } = useMaticPrice()
+  const { data: gnoPrice } = useGnoPrice()
+  const { data: onePrice } = useOnePrice()
+  const { data: spellPrice } = useSpellPrice()
+  const { data: celoPrice } = useCeloPrice()
+  const { data: fantomPrice } = useFantomPrice()
+  const { data: movrPrice } = useMovrPrice()
+  const { data: ohmPrice } = useOhmPrice()
+  const { data: fusePrice } = useFusePrice()
+  const { data: magicPrice } = useMagicPrice()
+  const { data: glimmerPrice } = useGlimmerPrice()
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
 

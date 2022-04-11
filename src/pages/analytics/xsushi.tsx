@@ -44,9 +44,9 @@ export default function XSushi() {
 
   const dayData = useDayData({ chainId: ChainId.ETHEREUM })
 
-  const ethPrice = useNativePrice({ chainId: ChainId.ETHEREUM })
+  const { data: ethPrice } = useNativePrice({ chainId: ChainId.ETHEREUM })
 
-  const ethPrice1d = useNativePrice({
+  const { data: ethPrice1d } = useNativePrice({
     chainId: ChainId.ETHEREUM,
     variables: { block: block1d },
     shouldFetch: !!block1d,

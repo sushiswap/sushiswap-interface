@@ -74,7 +74,7 @@ export default function Pair() {
     shouldFetch: !!chainId && !!id,
   })
 
-  const nativePrice = useNativePrice({ chainId, shouldFetch: !!chainId })
+  const { data: nativePrice } = useNativePrice({ chainId, shouldFetch: !!chainId })
 
   // For the charts
   const chartData = useMemo(

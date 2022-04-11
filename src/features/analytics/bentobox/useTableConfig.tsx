@@ -9,7 +9,7 @@ import React, { useMemo } from 'react'
 import { filterForSearchQuery } from './tokenTableFilters'
 
 export const useTableConfig = (chainId: number) => {
-  const nativePrice = useNativePrice({ chainId })
+  const { data: nativePrice } = useNativePrice({ chainId })
 
   const bentoBoxTokens = useBentoTokens({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
 
