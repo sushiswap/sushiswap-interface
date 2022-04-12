@@ -66,7 +66,7 @@ const ReviewDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
       tokenSchema.isValidSync(state) &&
       generalDetailsSchema.isValidSync(state) &&
       auctionDetailsSchema.isValidSync(state) &&
-      liquidityLauncherSchema(state.tokenAmount).isValidSync(state) &&
+      liquidityLauncherSchema(state.tokenAmount, state.tokenSymbol).isValidSync(state) &&
       whitelistSchema.isValidSync(state),
     [state]
   )
@@ -145,6 +145,7 @@ const ReviewDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
               <Item title={i18n._(t`Token Symbol`)} value={auctionToken?.symbol} />
             </>
           )}
+          <Item title={i18n._(t`Tokens for Sale`)} value={state.tokenAmount} />
         </Table>
         <Table title={i18n._(t`General Details`)}>
           <Item title={i18n._(t`Payment Currency`)} value={paymentToken.name} />
