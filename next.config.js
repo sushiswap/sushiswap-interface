@@ -66,12 +66,12 @@ const nextConfig = {
       },
       {
         source: '/farms/special',
-        destination: '/farms',
+        destination: '/farm',
         permanent: true,
       },
       {
         source: '/onsen',
-        destination: '/farms',
+        destination: '/farm',
         permanent: true,
       },
     ]
