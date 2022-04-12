@@ -42,13 +42,19 @@ export const liquidityLauncherSchema = (tokenAmount: number | null, tokenSymbol:
           message: `Amount of tokens for liquidity seeding must be at least 1 percent of tokens for sale (${
             Number(tokenAmount) / 100
           } ${tokenSymbol})`,
-          test: (value) => Number(value) * 100 >= Number(tokenAmount),
+          test: (value, ctx) => {
+            if (!ctx.parent.liqLauncherEnabled) return true
+            return Number(value) * 100 >= Number(tokenAmount)
+          },
         })
         .test({
           message: `Amount of tokens for liquidity cannot be larger than amount of tokens for sale (${Number(
             tokenAmount
           )} ${tokenSymbol})`,
-          test: (value) => Number(value) <= Number(tokenAmount),
+          test: (value, ctx) => {
+            if (!ctx.parent.liqLauncherEnabled) return true
+            return Number(value) <= Number(tokenAmount)
+          },
         }),
       otherwise: yup.number().nullable(),
     }),
@@ -93,6 +99,7 @@ const LiquidityLauncherStep: FC<{ children(isValid: boolean): ReactNode }> = ({ 
   const {
     getValues,
     setValue,
+    reset,
     watch,
     formState: { isValid },
   } = methods
@@ -101,11 +108,6 @@ const LiquidityLauncherStep: FC<{ children(isValid: boolean): ReactNode }> = ({ 
     'liqPercentage',
     'liqLauncherEnabled',
   ])
-
-  useEffect(() => {
-    const value = Math.round((Number(getValues('liqPercentage')) / 100) * Number(tokenAmount))
-    setValue('tokenForLiquidity', value > 0 ? value : null, { shouldValidate: true })
-  }, [getValues, liqPercentage, setValue, tokenAmount])
 
   useEffect(() => {
     const value = Math.round((Number(getValues('tokenForLiquidity')) * 100) / Number(tokenAmount))
@@ -122,7 +124,13 @@ const LiquidityLauncherStep: FC<{ children(isValid: boolean): ReactNode }> = ({ 
               <Switch
                 name="whitelistEnabled"
                 checked={liqLauncherEnabled}
-                onChange={() => setValue('liqLauncherEnabled', !liqLauncherEnabled, { shouldValidate: true })}
+                onChange={() => {
+                  if (liqLauncherEnabled) {
+                    reset()
+                  } else {
+                    setValue('liqLauncherEnabled', !liqLauncherEnabled, { shouldValidate: true })
+                  }
+                }}
                 className={classNames(
                   liqLauncherEnabled ? 'bg-purple border-purple border-opacity-80' : 'bg-dark-700 border-dark-700',
                   'filter bg-opacity-60 border  relative inline-flex items-center h-[32px] rounded-full w-[54px] transition-colors focus:outline-none'
@@ -193,7 +201,6 @@ const LiquidityLauncherStep: FC<{ children(isValid: boolean): ReactNode }> = ({ 
               }
               name="tokenForLiquidity"
               label={i18n._(t`Amount of tokens reserved for liquidity seeding*`)}
-              placeholder="50"
               helperText={i18n._(
                 t`Must be between ${Number(tokenAmount) / 100} - ${Number(tokenAmount)} ${auctionToken?.symbol}`
               )}
