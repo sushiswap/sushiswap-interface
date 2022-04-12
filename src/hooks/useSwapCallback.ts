@@ -522,15 +522,15 @@ export function swapErrorToUserReadableMessage(error: any): string {
     case 'TF':
       return t`The output token cannot be transferred. There may be an issue with the output token.`
     case 'SushiGuard: FAILED_GAS_PRICE_ESTIMATION':
-      return t`Your wallet provider has failed to obtain an accurate gas price estimation. Try again as it may be a transient error or disable SushiGuard feature.`
+      return t`Your wallet provider has failed to obtain an accurate gas price estimation. Try again as it may be a transient error, or disable the SushiGuard feature.`
     case 'SushiGuard: FAILED_EIP1559_FEE_GAS_ESTIMATION':
-      return t`Your wallet provider has failed to obtain an accurate gas fee estimation. Try again as it may be a transient error or disable SushiGuard feature.`
+      return t`Your wallet provider has failed to obtain an accurate gas fee estimation. Try again as it may be a transient error, or disable the SushiGuard feature.`
     case 'SushiGuard: FAILED_NONCE_RETRIEVAL':
-      return t`Your wallet provider has failed to obtain a valid nonce from your wallet. Try again as it may be a transient error or disable SushiGuard feature.`
+      return t`Your wallet provider has failed to obtain a valid nonce from your wallet. Try again as it may be a transient error, or disable the SushiGuard feature.`
     case 'SushiGuard: UNSUPPORTED_PROVIDER_REQUEST':
-      return t`Your wallet provider doesn't support the custom signature features necessary to sign your TX. Disable SushiGuard feature or try with another wallet provider.`
+      return t`Swap failed: Your wallet provider doesn't support the custom signature features necessary to sign your TX. Disable the SushiGuard feature or try with another wallet provider.`
     case 'SushiGuard: RELAY_URL_NOT_AVAILABLE':
-      return t`SushiGuard is not available for the selected network. Disable SushiGuard feature or switch to a supported network.`
+      return t`SushiGuard is not available for the selected network. Disable the SushiGuard feature or switch to a supported network.`
     default:
       if (reason?.indexOf('undefined is not an object') !== -1) {
         console.error(error, reason)
@@ -740,6 +740,19 @@ export function useSwapCallback(
                   // eslint-disable-next-line
                   // @ts-ignore
                   const txWithSignature: TypedTransaction = txData._processSignature(v, arrayify(r), arrayify(s))
+
+                  // verification step:
+                  // if recovered sender address doesn't match with the one the user is using,
+                  // then the wallet doesn't support custom signing txs with `eth_sign`
+                  // so, better to fail here until a more robust solution is provided
+                  const signedSenderAddress = TransactionFactory.fromSerializedData(
+                    Buffer.from(txWithSignature.serialize(), 'utf8')
+                  )
+                    .getSenderAddress()
+                    .toString()
+                  if (account.toLowerCase() !== signedSenderAddress.toLowerCase())
+                    throw new Error('SushiGuard: UNSUPPORTED_PROVIDER_REQUEST')
+
                   return hexlify(txWithSignature.serialize())
                 })
             })
