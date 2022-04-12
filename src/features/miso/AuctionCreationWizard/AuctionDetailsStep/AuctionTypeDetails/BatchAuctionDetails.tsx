@@ -17,7 +17,7 @@ const BatchAuctionDetails: FC = () => {
     useToken(paymentCurrencyAddress !== AddressZero ? paymentCurrencyAddress : undefined) ?? NATIVE[chainId || 1]
 
   return (
-    <div className="col-span-4 md:col-span-2">
+    <div className="w-full md:w-1/2">
       <Form.TextField
         {...(paymentToken && {
           endIcon: (

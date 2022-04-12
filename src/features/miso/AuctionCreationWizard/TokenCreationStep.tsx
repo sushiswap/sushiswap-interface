@@ -201,7 +201,7 @@ const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
                 ))}
               </RadioGroup>
             </div>
-            <div className="col-span-4">
+            <div className="w-full md:w-1/2">
               <Form.TextField
                 name="tokenName"
                 label={i18n._(t`Name*`)}
@@ -209,7 +209,7 @@ const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
                 placeholder="The name of your token"
               />
             </div>
-            <div className="col-span-2">
+            <div className="w-full md:w-1/2">
               <Form.TextField
                 name="tokenSymbol"
                 label={i18n._(t`Symbol*`)}
@@ -219,7 +219,7 @@ const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
                 placeholder="The symbol of your token"
               />
             </div>
-            <div className="col-span-6">
+            <div className="w-full md:w-1/2">
               <Form.TextField
                 name="tokenSupply"
                 label={i18n._(t`Total supply*`)}
@@ -236,7 +236,7 @@ const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
           </>
         )}
         {tokenSetupType === TokenSetup.PROVIDE && (
-          <div className="col-span-6">
+          <div className="w-full md:w-1/2">
             <Form.TextField
               label={i18n._(`Token address*`)}
               name="tokenAddress"
@@ -253,7 +253,7 @@ const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
           </div>
         )}
         {tokenSetupType !== undefined && (
-          <div className="col-span-6">
+          <div className="w-full md:w-1/2">
             <Form.TextField
               name="tokenAmount"
               label={i18n._(t`Tokens for sale*`)}

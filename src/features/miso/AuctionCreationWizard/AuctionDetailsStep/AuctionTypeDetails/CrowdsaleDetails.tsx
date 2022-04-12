@@ -56,7 +56,7 @@ const CrowdsaleDetails: FC = () => {
 
   return (
     <>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Form.TextField
           {...(paymentToken && {
             endIcon: (
@@ -71,7 +71,7 @@ const CrowdsaleDetails: FC = () => {
           helperText={i18n._(t`Price at which your tokens get sold`)}
         />
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Form.TextField
           endIcon={
             <Typography variant="sm" weight={700} className="text-secondary">
@@ -84,7 +84,7 @@ const CrowdsaleDetails: FC = () => {
           helperText={i18n._(t`Percentage of tokens that has to sell for a successful auction`)}
         />
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Typography weight={700}>{i18n._(t`Minimum raised`)}</Typography>
         <Typography className="mt-2">
           {minimumRaised ? minimumRaised.toSignificant(6) : '0.00'} {paymentToken?.symbol}{' '}
@@ -95,7 +95,7 @@ const CrowdsaleDetails: FC = () => {
           )}
         </FormFieldHelperText>
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Typography weight={700}>{i18n._(t`Maximum raised`)}</Typography>
         <Typography className="mt-2">
           {maximumRaised ? maximumRaised.toSignificant(6) : '0.00'} {paymentToken?.symbol}{' '}

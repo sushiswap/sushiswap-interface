@@ -150,9 +150,9 @@ export enum AuctionCategory {
 }
 
 export enum TokenType {
-  FIXED,
-  MINTABLE,
-  SUSHI,
+  FIXED = 1,
+  MINTABLE = 2,
+  SUSHI = 3,
 }
 
 export enum TokenSetup {

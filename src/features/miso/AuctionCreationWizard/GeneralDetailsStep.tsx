@@ -40,10 +40,10 @@ const GeneralDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chi
   return (
     <Form {...methods} onSubmit={methods.handleSubmit((data: IGeneralDetails) => setGeneralDetails(data))}>
       <Form.Fields>
-        <div className="col-span-4">
+        <div className="w-full md:w-1/2">
           <AuctionPaymentCurrencyField name="paymentCurrencyAddress" label={i18n._(t`Payment Currency*`)} />
         </div>
-        <div className="col-span-4 md:col-span-2">
+        <div className="w-full md:w-1/3 lg:w-1/4">
           <Form.TextField
             className="inline-flex"
             type="datetime-local"
@@ -53,7 +53,7 @@ const GeneralDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chi
             helperText={i18n._(t`Please enter your auction start date`)}
           />
         </div>
-        <div className="col-span-4 md:col-span-2">
+        <div className="w-full md:w-1/3 lg:w-1/4">
           <Form.TextField
             className="inline-flex"
             type="datetime-local"

@@ -209,7 +209,7 @@ const LiquidityLauncherStep: FC<{ children(isValid: boolean): ReactNode }> = ({ 
             )}
           </FormFieldHelperText>
         </div>
-        {children(isValid)}
+        {children(isValid || !liqLauncherEnabled)}
       </Form.Fields>
     </Form>
   )
