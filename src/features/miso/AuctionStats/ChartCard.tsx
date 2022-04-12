@@ -45,7 +45,7 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
           )}
         >
           <Typography className="text-xs text-transparent bg-gray-400 bg-clip-text">
-            {i18n._(t`Fund Raised`)}
+            {i18n._(t`Funds Raised`)}
           </Typography>
           {parsedAuctionCommitments[selectedBlock] && (
             <Typography className="text-lg text-transparent text-gray-200 bg-clip-text">
@@ -82,7 +82,7 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
                 : 'text-secondary'
             )}
           >
-            {i18n._(t`Fund Raised`)}
+            {i18n._(t`Funds Raised`)}
           </Typography>
         </div>
       </div>
