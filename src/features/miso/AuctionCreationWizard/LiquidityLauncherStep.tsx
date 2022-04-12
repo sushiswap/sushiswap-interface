@@ -22,12 +22,13 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 const useAuctionData = () =>
-  useStore(({ paymentCurrencyAddress, tokenAmount }) => ({
+  useStore(({ paymentCurrencyAddress, tokenAmount, tokenSymbol }) => ({
     paymentCurrencyAddress,
     tokenAmount,
+    tokenSymbol,
   }))
 
-export const liquidityLauncherSchema = (tokenAmount: number | null) =>
+export const liquidityLauncherSchema = (tokenAmount: number | null, tokenSymbol: string) =>
   yup.object().shape({
     liqLauncherEnabled: yup.boolean().required(),
     tokenForLiquidity: yup.number().when('liqLauncherEnabled', {
@@ -38,11 +39,15 @@ export const liquidityLauncherSchema = (tokenAmount: number | null) =>
         .required('Must enter a valid number')
         .integer('Must be a whole number')
         .test({
-          message: 'Amount of tokens for liquidity seeding must be at least 1 percent of tokens for sale',
+          message: `Amount of tokens for liquidity seeding must be at least 1 percent of tokens for sale (${
+            Number(tokenAmount) / 100
+          } ${tokenSymbol})`,
           test: (value) => Number(value) * 100 >= Number(tokenAmount),
         })
         .test({
-          message: 'Amount of tokens for liquidity cannot be larger than amount of tokens for sale',
+          message: `Amount of tokens for liquidity cannot be larger than amount of tokens for sale (${Number(
+            tokenAmount
+          )} ${tokenSymbol})`,
           test: (value) => Number(value) <= Number(tokenAmount),
         }),
       otherwise: yup.number().nullable(),
@@ -72,7 +77,7 @@ export const liquidityLauncherSchema = (tokenAmount: number | null) =>
 const LiquidityLauncherStep: FC<{ children(isValid: boolean): ReactNode }> = ({ children }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
-  const { paymentCurrencyAddress, tokenAmount } = useAuctionData()
+  const { paymentCurrencyAddress, tokenAmount, tokenSymbol } = useAuctionData()
   const setLiquidityDetails = useStore((state) => state.setLiquidityDetails)
   const paymentToken =
     useToken(paymentCurrencyAddress !== AddressZero ? paymentCurrencyAddress : undefined) ?? NATIVE[chainId || 1]
@@ -80,7 +85,7 @@ const LiquidityLauncherStep: FC<{ children(isValid: boolean): ReactNode }> = ({ 
 
   const methods = useForm<ILiquidityDetails>({
     defaultValues: liquidityDetailsDefaultValues,
-    resolver: yupResolver(liquidityLauncherSchema(tokenAmount)),
+    resolver: yupResolver(liquidityLauncherSchema(tokenAmount, tokenSymbol)),
     reValidateMode: 'onChange',
     mode: 'onChange',
   })
@@ -190,14 +195,12 @@ const LiquidityLauncherStep: FC<{ children(isValid: boolean): ReactNode }> = ({ 
               label={i18n._(t`Amount of tokens reserved for liquidity seeding*`)}
               placeholder="50"
               helperText={i18n._(
-                t`Amount of tokens you want to reserve for seeding liquidity. Must be at least ${
-                  Number(tokenAmount) / 100
-                } ${auctionToken?.symbol}`
+                t`Must be between ${Number(tokenAmount) / 100} - ${Number(tokenAmount)} ${auctionToken?.symbol}`
               )}
             />
           </div>
         </div>
-        <div className={classNames('col-span-4', liqLauncherEnabled ? '' : 'opacity-40 pointer-events-none', '')}>
+        <div className={classNames('w-full md:w-1/2', liqLauncherEnabled ? '' : 'opacity-40 pointer-events-none', '')}>
           <Typography weight={700}>{i18n._(t`Liquidity Pair (will consist of)`)}</Typography>
           <Typography className="mt-2">
             {formatNumber((Number(tokenAmount) * Number(liqPercentage)) / 100)} {auctionToken?.symbol} +{' '}
