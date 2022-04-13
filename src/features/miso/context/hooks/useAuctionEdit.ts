@@ -89,11 +89,11 @@ export const useAuctionEdit = (
   }, [account, addTransaction, auctionContract])
 
   const finalizeAuction = useCallback(async () => {
-    if (!auctionContract || !liquidityLauncherContract) return
+    if (!auctionContract) return
 
     try {
       let tx
-      if (liquidityTemplate && liquidityTemplate > 0) {
+      if (liquidityTemplate && liquidityTemplate > 0 && liquidityLauncherContract) {
         tx = await liquidityLauncherContract.finalize()
       } else {
         tx = await auctionContract.finalize()
