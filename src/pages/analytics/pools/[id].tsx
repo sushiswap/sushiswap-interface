@@ -214,7 +214,10 @@ export default function Pair() {
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {times(2).map((i) => (
-            <div key={i} className="w-full p-6 space-y-2 border rounded bg-dark-900 border-dark-700">
+            <div
+              key={i}
+              className="w-full p-6 space-y-2 border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]"
+            >
               <div className="flex flex-row items-center space-x-2">
                 {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <CurrencyLogo size={32} currency={[currency0, currency1][i]} />
