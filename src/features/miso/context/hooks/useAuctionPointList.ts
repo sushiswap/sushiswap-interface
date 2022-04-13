@@ -26,7 +26,7 @@ export const useAuctionPointListPoints = (
 ): CurrencyAmount<Currency> | undefined => {
   const { account, chainId } = useActiveWeb3React()
 
-  if (!listAddress) return
+  if (listAddress === AddressZero) return
 
   const contract = useContract(
     listAddress,
