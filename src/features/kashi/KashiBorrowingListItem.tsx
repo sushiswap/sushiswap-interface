@@ -40,9 +40,17 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
     useUSDCValueWithLoadingIndicator(currentUserBorrowAmount)
 
   const liquidationPrice = new Price({
-    baseAmount: currentUserBorrowAmount.multiply(LTV),
-    quoteAmount: userCollateralAmount,
+    baseAmount: currentUserBorrowAmount,
+    quoteAmount: userCollateralAmount.multiply(LTV),
   })
+
+  // invert
+  // ? `1 ${totalBorrowed?.currency.symbol} = ${liquidationPrice?.toSignificant(6)} ${
+  //     totalCollateral?.currency.symbol
+  //   }`
+  // : `1 ${totalCollateral?.currency.symbol} = ${liquidationPrice?.invert().toSignificant(6)} ${
+  //     totalBorrowed?.currency.symbol
+  //   }`
 
   const currentInterestPerYear = new Percent(market.currentInterestPerYear, 1e18)
 
