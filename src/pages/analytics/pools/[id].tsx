@@ -184,13 +184,10 @@ export default function Pair() {
           </div>
         </div>
       </Background>
-      <div className="px-4 pt-4 space-y-4 lg:px-14">
+      <div className="px-4 pt-4 space-y-4">
         <div className="relative h-12">
-          <div className="absolute w-full h-full">
-            <div className="h-1/3" />
-            <div className="opacity-50 w-[210px] h-1/3 bg-gradient-to-r from-blue to-pink" />
-          </div>
-          <div className="absolute text-3xl font-bold text-high-emphesis">Pool Overview</div>
+          <div className="text-3xl font-bold text-high-emphesis">Pool Overview</div>
+          <div className="opacity-50 w-[210px] h-[3px] bg-gradient-to-r from-blue to-pink" />
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <ChartCard
@@ -249,20 +246,20 @@ export default function Pair() {
         </div>
         <div className="text-2xl font-bold text-high-emphesis">Information</div>
         <div>
-          <div className="px-4 text-sm leading-48px text-high-emphesis">
+          <div className="text-sm leading-48px overflow-x-auto border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]">
             <table className="w-full table-fixed">
-              <thead className="border-b border-gray-900">
+              <thead>
                 <tr>
-                  <td>
+                  <th className="py-3 pl-4 text-sm text-left text-secondary">
                     {pair?.token0?.symbol}-{pair?.token1?.symbol} Address
-                  </td>
-                  <td>{pair?.token0?.symbol} Address</td>
-                  <td>{pair?.token1?.symbol} Address</td>
+                  </th>
+                  <th className="py-3 pl-4 text-sm text-left text-secondary">{pair?.token0?.symbol} Address</th>
+                  <th className="py-3 pl-4 text-sm text-left text-secondary">{pair?.token1?.symbol} Address</th>
                 </tr>
               </thead>
-              <tbody className="border-b border-gray-900 ">
+              <tbody>
                 <tr>
-                  <td>
+                  <td className="border-t border-dark-900">
                     <div className="flex items-center justify-center w-11/12 space-x-1">
                       <div className="overflow-hidden overflow-ellipsis whitespace-nowrap">{pair?.id}</div>
                       <a href={getExplorerLink(chainId, pair?.id, 'token')} target="_blank" rel="noreferrer">
@@ -270,7 +267,7 @@ export default function Pair() {
                       </a>
                     </div>
                   </td>
-                  <td>
+                  <td className="border-t border-dark-900">
                     <div className="flex items-center w-11/12 space-x-1">
                       <Link href={`/analytics/tokens/${pair?.token0?.id}`} passHref>
                         <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
@@ -282,7 +279,7 @@ export default function Pair() {
                       </a>
                     </div>
                   </td>
-                  <td>
+                  <td className="border-t border-dark-900">
                     <div className="flex items-center w-11/12 space-x-1">
                       <Link href={`/analytics/tokens/${pair?.token1?.id}`} passHref>
                         <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
