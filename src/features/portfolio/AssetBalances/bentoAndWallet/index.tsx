@@ -49,7 +49,7 @@ export const BentoBalances = ({ account, chainId }: Balances) => {
       dispatch(
         setBalancesState({
           currency: currency.isNative ? 'ETH' : row.values.asset.currency.address,
-          activeModal: ActiveModal.MENU,
+          activeModal: ActiveModal.BENTOBOX_MENU,
         })
       )
     },
@@ -96,7 +96,7 @@ export const WalletBalances = ({ account, chainId }: Balances) => {
       dispatch(
         setBalancesState({
           currency: currency.isNative ? 'ETH' : row.values.asset.currency.address,
-          activeModal: ActiveModal.MENU,
+          activeModal: ActiveModal.WALLET_MENU,
         })
       )
     },

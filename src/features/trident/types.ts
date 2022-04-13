@@ -50,6 +50,8 @@ export enum TypedField {
 
 export enum ActiveModal {
   MENU = 'MENU',
+  WALLET_MENU = 'WALLET_MENU',
+  BENTOBOX_MENU = 'BENTOBOX_MENU',
   WITHDRAW = 'WITHDRAW',
   DEPOSIT = 'DEPOSIT',
 }

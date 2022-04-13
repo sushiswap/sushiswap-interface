@@ -6,12 +6,12 @@ import { BentoboxIcon, WalletIcon } from 'app/components/Icon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import { Feature } from 'app/enums/Feature'
 import ActionItem from 'app/features/portfolio/ActionsModal/ActionItem'
-import { setBalancesActiveModal } from 'app/features/portfolio/portfolioSlice'
+import { selectTridentBalances, setBalancesActiveModal } from 'app/features/portfolio/portfolioSlice'
 import { useBalancesSelectedCurrency } from 'app/features/portfolio/useBalancesDerivedState'
 import { ActiveModal } from 'app/features/trident/types'
 import { featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useAppDispatch } from 'app/state/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useRouter } from 'next/router'
 import React, { FC, useCallback } from 'react'
 
@@ -25,7 +25,7 @@ const ActionView: FC<ActionViewProps> = ({ onClose }) => {
   const dispatch = useAppDispatch()
   const { i18n } = useLingui()
   const router = useRouter()
-
+  const { activeModal, modalOpen } = useAppSelector(selectTridentBalances)
   const swapActionHandler = useCallback(async () => {
     // @ts-ignore TYPE NEEDS FIXING
     if (featureEnabled(Feature.TRIDENT, chainId)) {
@@ -38,6 +38,7 @@ const ActionView: FC<ActionViewProps> = ({ onClose }) => {
 
     return router.push(`/swap?inputCurrency=${currency?.wrapped.address}`)
   }, [chainId, currency?.isNative, currency?.wrapped.address, router])
+  // ActiveModal.DEPOSIT
 
   return (
     <div className="flex flex-col gap-4">
@@ -50,16 +51,20 @@ const ActionView: FC<ActionViewProps> = ({ onClose }) => {
       {/*@ts-ignore TYPE NEEDS FIXING*/}
       {featureEnabled(Feature.BENTOBOX, chainId) && (
         <>
-          <ActionItem
-            svg={<BentoboxIcon width={20} height={20} />}
-            label={i18n._(t`Deposit ${currency?.symbol} to BentoBox`)}
-            onClick={() => dispatch(setBalancesActiveModal({ activeModal: ActiveModal.DEPOSIT }))}
-          />
-          <ActionItem
-            svg={<WalletIcon width={20} height={20} />}
-            label={i18n._(t`Withdraw ${currency?.symbol} to Wallet`)}
-            onClick={() => dispatch(setBalancesActiveModal({ activeModal: ActiveModal.WITHDRAW }))}
-          />
+          {activeModal === ActiveModal.WALLET_MENU && (
+            <ActionItem
+              svg={<BentoboxIcon width={20} height={20} />}
+              label={i18n._(t`Deposit ${currency?.symbol} to BentoBox`)}
+              onClick={() => dispatch(setBalancesActiveModal({ activeModal: ActiveModal.DEPOSIT }))}
+            />
+          )}
+          {activeModal === ActiveModal.BENTOBOX_MENU && (
+            <ActionItem
+              svg={<WalletIcon width={20} height={20} />}
+              label={i18n._(t`Withdraw ${currency?.symbol} to Wallet`)}
+              onClick={() => dispatch(setBalancesActiveModal({ activeModal: ActiveModal.WITHDRAW }))}
+            />
+          )}
         </>
       )}
     </div>
