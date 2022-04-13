@@ -107,9 +107,6 @@ const WhitelistUpload: FC<WhitelistUploadProps> = ({ disabled, onChange, value }
           </div>
         </div>
         <p className="mt-2 text-sm text-gray-500">
-          {i18n._(t`Whitelisting must be enabled and an operator must be set before you can use a point list.`)}
-        </p>
-        <p className="text-sm text-gray-500">
           {i18n._(t`CSV's must use a comma delimiter. Amounts should NOT contain commas`)}
         </p>
       </div>

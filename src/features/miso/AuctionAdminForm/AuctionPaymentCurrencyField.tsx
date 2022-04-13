@@ -22,7 +22,7 @@ const AuctionPaymentCurrencyField: FC<AuctionPaymentCurrencyFieldProps> = ({ nam
   const { getValues, setValue } = useFormContext()
   const paymentTokenAddress = useWatch({ name })
   // @ts-ignore TYPE NEEDS FIXING
-  const token = useToken(paymentTokenAddress) ?? NATIVE[chainId || 1]
+  const token = useToken(paymentTokenAddress !== AddressZero ? paymentTokenAddress : undefined) ?? NATIVE[chainId || 1]
 
   if (!chainId) return <></>
 

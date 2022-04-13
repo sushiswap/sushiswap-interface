@@ -24,10 +24,13 @@ export const auctionDetailsSchema = yup.object().shape({
       message: 'Please select an auction type',
       test: (value) => value !== AuctionTemplate.NOT_SET,
     }),
-  fixedPrice: yup.number().when('auctionType', {
+  fixedPrice: yup.string().when('auctionType', {
     is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
-    then: yup.number().typeError('Price must be a number').required('Must enter a fixed price'),
-    otherwise: yup.number().nullable(),
+    then: yup
+      .string()
+      .matches(/^\d*(\.\d+)?$/, 'Price must be a number')
+      .required('Must enter a fixed price'),
+    otherwise: yup.string().nullable(),
   }),
   minimumTarget: yup.number().when('auctionType', {
     is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
@@ -39,24 +42,40 @@ export const auctionDetailsSchema = yup.object().shape({
       .integer('Must be a whole number'),
     otherwise: yup.number().nullable(),
   }),
-  minimumRaised: yup.number().when('auctionType', {
+  minimumRaised: yup.string().when('auctionType', {
     is: (value: AuctionTemplate) => value === AuctionTemplate.BATCH_AUCTION,
-    then: yup.number().typeError('Target must be a number').min(0, 'Must be greater than zero'),
-    otherwise: yup.number().nullable(),
+    then: yup
+      .string()
+      .matches(/^\d*(\.\d+)?$/, 'Target must be a number')
+      .test({
+        message: 'Must be greater than zero',
+        test: (value) => Number(value) > 0,
+      }),
+    otherwise: yup.string().nullable(),
   }),
-  startPrice: yup.number().when('auctionType', {
-    is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
-    then: yup.number().typeError('Price must be a number').required('Must enter a start price'),
-    otherwise: yup.number().nullable(),
-  }),
-  endPrice: yup.number().when('auctionType', {
+  startPrice: yup.string().when('auctionType', {
     is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup
-      .number()
-      .typeError('Price must be a number')
-      .lessThan(yup.ref('startPrice'), 'End price must be less than start price')
+      .string()
+      .matches(/^\d*(\.\d+)?$/, 'Price must be a number')
+      .test({
+        message: 'Start price must be higher than end price',
+        test: (value, ctx) => Number(value) >= Number(ctx.parent.endPrice),
+      })
       .required('Must enter a start price'),
-    otherwise: yup.number().nullable(),
+    otherwise: yup.string().nullable(),
+  }),
+  endPrice: yup.string().when('auctionType', {
+    is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
+    then: yup
+      .string()
+      .matches(/^\d*(\.\d+)?$/, 'Price must be a number')
+      .test({
+        message: 'End price must be less than start price',
+        test: (value, ctx) => Number(value) <= Number(ctx.parent.startPrice),
+      })
+      .required('Must enter a start price'),
+    otherwise: yup.string().nullable(),
   }),
 })
 

@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, Price, Token } from '@sushiswap/core-sdk'
@@ -23,7 +24,8 @@ const DutchAuctionDetails: FC = () => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const { paymentCurrencyAddress, tokenAmount } = useAuctionData()
-  const paymentToken = useToken(paymentCurrencyAddress) ?? NATIVE[chainId || 1]
+  const paymentToken =
+    useToken(paymentCurrencyAddress !== AddressZero ? paymentCurrencyAddress : undefined) ?? NATIVE[chainId || 1]
   const auctionToken = useAuctionedToken()
 
   const { watch } = useFormContext<IAuctionDetails>()
@@ -56,7 +58,7 @@ const DutchAuctionDetails: FC = () => {
 
   return (
     <>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Form.TextField
           {...(paymentToken && {
             endIcon: (
@@ -71,7 +73,7 @@ const DutchAuctionDetails: FC = () => {
           helperText={i18n._(t`The price when the auction will start. This value must be higher than the end price`)}
         />
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Form.TextField
           {...(paymentToken && {
             endIcon: (
@@ -86,7 +88,7 @@ const DutchAuctionDetails: FC = () => {
           helperText={i18n._(t`The price when the auction will meet its end date`)}
         />
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Typography weight={700}>{i18n._(t`Minimum Raised`)}</Typography>
         <Typography className="mt-2">
           {minimumRaised ? minimumRaised.toSignificant(6) : '0.00'} {paymentToken?.symbol}
@@ -97,7 +99,7 @@ const DutchAuctionDetails: FC = () => {
           )}
         </FormFieldHelperText>
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Typography weight={700}>{i18n._(t`Maximum Raised`)}</Typography>
         <Typography className="mt-2">
           {maximumRaised ? maximumRaised?.toExact({}) : '0.00'} {paymentToken?.symbol}

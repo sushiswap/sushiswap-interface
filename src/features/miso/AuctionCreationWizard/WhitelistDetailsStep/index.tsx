@@ -67,7 +67,7 @@ const WhitelistDetailsStep: FC<{ children(isValid: boolean): ReactNode }> = ({ c
             </div>
           </Switch.Group>
         </div>
-        <div className={classNames(whitelistEnabled ? '' : 'opacity-40 pointer-events-none', 'col-span-6')}>
+        <div className={classNames(whitelistEnabled ? '' : 'opacity-40 pointer-events-none', 'w-full md:w-1/2')}>
           <WhitelistUpload
             value={whitelistAddresses}
             disabled={false}
