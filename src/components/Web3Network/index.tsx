@@ -16,6 +16,7 @@ function Web3Network(): JSX.Element | null {
   const toggleNetworkModal = useNetworkModalToggle()
 
   const [attemptingSwitchFromUrl, setAttemptingSwitchFromUrl] = useState(false)
+
   const [switchedFromUrl, setSwitchedFromUrl] = useState(false)
 
   const router = useRouter()
@@ -71,8 +72,7 @@ function Web3Network(): JSX.Element | null {
 
     if (
       chainId &&
-      defaultChainId &&
-      queryChainId &&
+      (defaultChainId || queryChainId) &&
       !attemptingSwitchFromUrl &&
       !switchedFromUrl &&
       isWindowVisible &&
@@ -80,7 +80,7 @@ function Web3Network(): JSX.Element | null {
     ) {
       console.debug('network change from query chainId', { queryChainId, chainId })
       setAttemptingSwitchFromUrl(true)
-      handleChainSwitch(defaultChainId !== 1 ? defaultChainId : queryChainId)
+      handleChainSwitch(defaultChainId ? defaultChainId : queryChainId)
     }
   }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId, isWindowVisible, attemptingSwitchFromUrl])
 
