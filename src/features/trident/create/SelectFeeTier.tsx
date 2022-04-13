@@ -24,7 +24,7 @@ export const SelectFeeTier: FC = () => {
         volatility and less volume.`)}
         </Typography>
       </div>
-      <div className="grid gap-3 select-none lg:grid-cols-4 md:grid-cols-2">
+      <div className="grid gap-3 select-none lg:grid-cols-5 md:grid-cols-2">
         <FeeTierSelect
           tier={Fee.LOW}
           subtitle={i18n._(t`Best for very stable pairs`)}
@@ -34,6 +34,12 @@ export const SelectFeeTier: FC = () => {
         <FeeTierSelect
           tier={Fee.MEDIUM}
           subtitle={i18n._(t`Best for stable pairs`)}
+          selectedFeeTier={selectedFeeTier}
+          setter={(feeTier) => dispatch(setCreateSelectedFeeTier(feeTier))}
+        />
+        <FeeTierSelect
+          tier={Fee.AVERAGE}
+          subtitle={i18n._(t`Best for average pairs`)}
           selectedFeeTier={selectedFeeTier}
           setter={(feeTier) => dispatch(setCreateSelectedFeeTier(feeTier))}
         />
