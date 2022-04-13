@@ -142,14 +142,14 @@ const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
   return (
     <Form {...methods} onSubmit={methods.handleSubmit((data: ITokenDetails) => setTokenDetails(data))}>
       <Form.Fields>
-        <div className="col-span-6 flex items-center">
+        <div className="flex items-center col-span-6">
           <RadioGroup
             value={tokenSetupType || ''}
             onChange={(tokenSetupType) => setValue('tokenSetupType', Number(tokenSetupType), { shouldValidate: true })}
             className="flex gap-10"
           >
             <input className="hidden" name="tokenSetupType" value={tokenSetupType} onChange={() => {}} />
-            <div className="flex flex-col md:flex-row w-full gap-0 md:gap-5 border border-dark-800 rounded divide-y md:divide-y-0 md:divide-x divide-dark-800">
+            <div className="flex flex-col w-full gap-0 border divide-y rounded md:flex-row md:gap-5 border-dark-800 md:divide-y-0 md:divide-x divide-dark-800">
               {tokenSetupItems.map<ReactNode>(({ description, label, value }, index) => (
                 <RadioGroup.Option value={value} key={value}>
                   {({ checked }) => (
@@ -178,7 +178,7 @@ const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
               <RadioGroup
                 value={tokenType}
                 onChange={(tokenType) => setValue('tokenType', tokenType, { shouldValidate: true })}
-                className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10 mt-2"
+                className="grid grid-cols-1 gap-10 mt-2 lg:grid-cols-3 md:grid-cols-2"
               >
                 <input className="hidden" name="tokenType" value={tokenType} onChange={() => {}} />
                 {items.map(({ icon, value, label, description }) => (
@@ -230,7 +230,7 @@ const TokenCreationStep: FC<{ children(isValid: boolean): ReactNode }> = ({ chil
                       )
                     : i18n._(t`This will be the initial supply of your token.`)
                 }
-                placeholder="The name of your token"
+                placeholder="The total supply of your token"
               />
             </div>
           </>
