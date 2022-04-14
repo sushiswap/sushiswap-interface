@@ -1,21 +1,23 @@
 import { getAddress } from '@ethersproject/address'
-import { DuplicateIcon } from '@heroicons/react/outline'
-import { CheckIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
-import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
-import Background from 'app/features/analytics/Background'
+import ExternalLink from 'app/components/ExternalLink'
+import Typography from 'app/components/Typography'
 import ChartCard from 'app/features/analytics/ChartCard'
 import InfoCard from 'app/features/analytics/InfoCard'
 import { LegacyTransactions } from 'app/features/transactions/Transactions'
 import { getExplorerLink } from 'app/functions/explorer'
-import { formatNumber, shortenAddress } from 'app/functions/format'
+import { formatNumber } from 'app/functions/format'
 import useCopyClipboard from 'app/hooks/useCopyClipboard'
+import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useNativePrice, useOneDayBlock, usePairDayData, useSushiPairs, useTwoDayBlock } from 'app/services/graph'
 import { times } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
 import { ExternalLink as LinkIcon } from 'react-feather'
 
@@ -38,8 +40,10 @@ const chartTimespans = [
   },
 ]
 
-export default function Pair() {
+export default function Pool() {
   const router = useRouter()
+
+  const { i18n } = useLingui()
 
   const chainId = Number(router.query.chainId)
 
@@ -139,165 +143,145 @@ export default function Pair() {
   )
 
   return (
-    <AnalyticsContainer>
-      <div className="relative h-8">
-        <div className="absolute w-full h-full bg-gradient-to-r from-blue to-pink opacity-5" />
-        <div className="absolute flex items-center w-full p-2 lg:pl-14">
-          <div className="text-xs font-medium text-secondary">
-            <Link href="/analytics">Analytics</Link>&nbsp;
-            {'>'}&nbsp;
-            <Link href="/analytics/pairs">Pairs</Link>&nbsp;
-            {'> '}&nbsp;
-          </div>
-          <div className="text-xs font-bold text-high-emphesis">
-            {pair?.token0?.symbol}-{pair?.token1?.symbol}
-          </div>
-        </div>
-      </div>
-      <Background background="pool">
-        <div className="items-center -mt-4 space-y-6">
-          <button onClick={() => router.back()} className="text-sm text-blue">
-            {'<'} Go Back
-          </button>
+    <>
+      <NextSeo title={`Sushi Analytics`} />
+      <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
+        <div className="space-y-4">
           <div className="flex items-center space-x-4">
             <DoubleCurrencyLogo
               className="-space-x-3"
               logoClassName="rounded-full"
-              /* @ts-ignore TYPE NEEDS FIXING */
               currency0={currency0}
-              /* @ts-ignore TYPE NEEDS FIXING */
               currency1={currency1}
               size={54}
             />
-            <div>
-              <div className="text-lg font-bold text-high-emphesis">
-                {pair?.token0?.symbol}-{pair?.token1?.symbol}
+            <Typography variant="h2" className="text-high-emphesis" weight={700}>
+              {pair?.token0?.symbol}-{pair?.token1?.symbol}
+            </Typography>
+          </div>
+
+          <Typography variant="sm" weight={400}>
+            {i18n._(
+              t`Dive deeper in the analytics of the ${pair?.token0?.symbol}-${pair?.token1?.symbol} liquidity pool.`
+            )}
+          </Typography>
+        </div>
+      </TridentHeader>
+      <TridentBody>
+        <div className="flex flex-col w-full gap-10">
+          <div className="text-2xl font-bold text-high-emphesis">Overview</div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <ChartCard
+              header="Liquidity"
+              subheader={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`}
+              figure={chartData.liquidity}
+              change={chartData.liquidityChange}
+              chart={chartData.liquidityChart}
+              defaultTimespan="1W"
+              timespans={chartTimespans}
+            />
+            <ChartCard
+              header="Volume"
+              subheader={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`}
+              figure={chartData.volume1d}
+              change={chartData.volume1dChange}
+              chart={chartData.volumeChart}
+              defaultTimespan="1W"
+              timespans={chartTimespans}
+            />
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {times(2).map((i) => (
+              <div
+                key={i}
+                className="w-full p-6 space-y-2 border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]"
+              >
+                <div className="flex flex-row items-center space-x-2">
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
+                  <CurrencyLogo size={32} currency={[currency0, currency1][i]} />
+                  <div className="text-2xl font-bold">{formatNumber([pair?.reserve0, pair?.reserve1][i])}</div>
+                  <div className="text-lg text-secondary">{[pair?.token0, pair?.token1][i]?.symbol}</div>
+                </div>
+                <div className="font-bold">
+                  1 {[pair?.token0, pair?.token1][i]?.symbol} ={' '}
+                  {formatNumber([pair?.token1Price, pair?.token0Price][i])} {[pair?.token1, pair?.token0][i]?.symbol} (
+                  {formatNumber([pair?.token1, pair?.token0][i]?.derivedETH * nativePrice, true)})
+                </div>
               </div>
-              <div className="text-xs text-secondary">Sushi Liquidity Pool</div>
-            </div>
-            <div className="rounded-3xl text-sm bg-[#414a6c] py-px px-2 flex items-center space-x-1">
-              <div>{shortenAddress(id)}</div>
-              <div className="cursor-pointer" onClick={() => setCopied(id)}>
-                {isCopied ? <CheckIcon height={16} /> : <DuplicateIcon height={16} className="scale-x-[-1]" />}
-              </div>
+            ))}
+          </div>
+          <div className="flex flex-row justify-between flex-grow space-x-4 overflow-x-auto">
+            <InfoCard text="Liquidity (24h)" number={pair?.reserveUSD} percent={liquidityUSDChange} />
+            <InfoCard text="Volume (24h)" number={volumeUSD1d} percent={volumeUSD1dChange} />
+            <InfoCard text="Fees (24h)" number={volumeUSD1d * 0.003} percent={volumeUSD1dChange} />
+          </div>
+          <div className="flex flex-row justify-between flex-grow space-x-4 overflow-x-auto">
+            <InfoCard text="Tx (24h)" number={!isNaN(tx1d) ? tx1d : ''} numberType="text" percent={tx1dChange} />
+            <InfoCard text="Avg. Trade (24h)" number={avgTrade1d} percent={avgTrade1dChange} />
+            <InfoCard
+              text="Utilisation (24h)"
+              number={utilisation1d}
+              numberType="percent"
+              percent={utilisation1dChange}
+            />
+          </div>
+          <div className="text-2xl font-bold text-high-emphesis">Information</div>
+          <div>
+            <div className="text-sm leading-48px overflow-x-auto border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]">
+              <table className="w-full table-fixed">
+                <thead>
+                  <tr>
+                    <th className="py-3 pl-4 text-sm text-left text-secondary">
+                      {pair?.token0?.symbol}-{pair?.token1?.symbol} Address
+                    </th>
+                    <th className="py-3 pl-4 text-sm text-left text-secondary">{pair?.token0?.symbol} Address</th>
+                    <th className="py-3 pl-4 text-sm text-left text-secondary">{pair?.token1?.symbol} Address</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border-t border-dark-900">
+                      <div className="flex items-center w-11/12 space-x-1">
+                        <ExternalLink href={getExplorerLink(chainId, pair?.id, 'token')} className="flex items-center">
+                          <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
+                            {pair?.id}
+                          </div>
+                          <LinkIcon size={16} />
+                        </ExternalLink>
+                      </div>
+                    </td>
+                    <td className="border-t border-dark-900">
+                      <div className="flex items-center w-11/12 space-x-1">
+                        <Link href={`/analytics/tokens/${pair?.token0?.id}`} passHref>
+                          <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
+                            {pair?.token0?.id}
+                          </div>
+                        </Link>
+                        <a href={getExplorerLink(chainId, pair?.token0?.id, 'token')} target="_blank" rel="noreferrer">
+                          <LinkIcon size={16} />
+                        </a>
+                      </div>
+                    </td>
+                    <td className="border-t border-dark-900">
+                      <div className="flex items-center w-11/12 space-x-1">
+                        <Link href={`/analytics/tokens/${pair?.token1?.id}`} passHref>
+                          <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
+                            {pair?.token1?.id}
+                          </div>
+                        </Link>
+                        <a href={getExplorerLink(chainId, pair?.token1?.id, 'token')} target="_blank" rel="noreferrer">
+                          <LinkIcon size={16} />
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
+          <LegacyTransactions pairs={[id]} />
         </div>
-      </Background>
-      <div className="px-4 pt-4 space-y-4">
-        <div className="relative h-12">
-          <div className="text-3xl font-bold text-high-emphesis">Pool Overview</div>
-          <div className="opacity-50 w-[210px] h-[3px] bg-gradient-to-r from-blue to-pink" />
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <ChartCard
-            header="Liquidity"
-            subheader={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`}
-            figure={chartData.liquidity}
-            change={chartData.liquidityChange}
-            chart={chartData.liquidityChart}
-            defaultTimespan="1W"
-            timespans={chartTimespans}
-          />
-          <ChartCard
-            header="Volume"
-            subheader={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`}
-            figure={chartData.volume1d}
-            change={chartData.volume1dChange}
-            chart={chartData.volumeChart}
-            defaultTimespan="1W"
-            timespans={chartTimespans}
-          />
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {times(2).map((i) => (
-            <div
-              key={i}
-              className="w-full p-6 space-y-2 border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]"
-            >
-              <div className="flex flex-row items-center space-x-2">
-                {/*@ts-ignore TYPE NEEDS FIXING*/}
-                <CurrencyLogo size={32} currency={[currency0, currency1][i]} />
-                <div className="text-2xl font-bold">{formatNumber([pair?.reserve0, pair?.reserve1][i])}</div>
-                <div className="text-lg text-secondary">{[pair?.token0, pair?.token1][i]?.symbol}</div>
-              </div>
-              <div className="font-bold">
-                1 {[pair?.token0, pair?.token1][i]?.symbol} = {formatNumber([pair?.token1Price, pair?.token0Price][i])}{' '}
-                {[pair?.token1, pair?.token0][i]?.symbol} (
-                {formatNumber([pair?.token1, pair?.token0][i]?.derivedETH * nativePrice, true)})
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-row justify-between flex-grow space-x-4 overflow-x-auto">
-          <InfoCard text="Liquidity (24h)" number={pair?.reserveUSD} percent={liquidityUSDChange} />
-          <InfoCard text="Volume (24h)" number={volumeUSD1d} percent={volumeUSD1dChange} />
-          <InfoCard text="Fees (24h)" number={volumeUSD1d * 0.003} percent={volumeUSD1dChange} />
-        </div>
-        <div className="flex flex-row justify-between flex-grow space-x-4 overflow-x-auto">
-          <InfoCard text="Tx (24h)" number={!isNaN(tx1d) ? tx1d : ''} numberType="text" percent={tx1dChange} />
-          <InfoCard text="Avg. Trade (24h)" number={avgTrade1d} percent={avgTrade1dChange} />
-          <InfoCard
-            text="Utilisation (24h)"
-            number={utilisation1d}
-            numberType="percent"
-            percent={utilisation1dChange}
-          />
-        </div>
-        <div className="text-2xl font-bold text-high-emphesis">Information</div>
-        <div>
-          <div className="text-sm leading-48px overflow-x-auto border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]">
-            <table className="w-full table-fixed">
-              <thead>
-                <tr>
-                  <th className="py-3 pl-4 text-sm text-left text-secondary">
-                    {pair?.token0?.symbol}-{pair?.token1?.symbol} Address
-                  </th>
-                  <th className="py-3 pl-4 text-sm text-left text-secondary">{pair?.token0?.symbol} Address</th>
-                  <th className="py-3 pl-4 text-sm text-left text-secondary">{pair?.token1?.symbol} Address</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border-t border-dark-900">
-                    <div className="flex items-center justify-center w-11/12 space-x-1">
-                      <div className="overflow-hidden overflow-ellipsis whitespace-nowrap">{pair?.id}</div>
-                      <a href={getExplorerLink(chainId, pair?.id, 'token')} target="_blank" rel="noreferrer">
-                        <LinkIcon size={16} />
-                      </a>
-                    </div>
-                  </td>
-                  <td className="border-t border-dark-900">
-                    <div className="flex items-center w-11/12 space-x-1">
-                      <Link href={`/analytics/tokens/${pair?.token0?.id}`} passHref>
-                        <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
-                          {pair?.token0?.id}
-                        </div>
-                      </Link>
-                      <a href={getExplorerLink(chainId, pair?.token0?.id, 'token')} target="_blank" rel="noreferrer">
-                        <LinkIcon size={16} />
-                      </a>
-                    </div>
-                  </td>
-                  <td className="border-t border-dark-900">
-                    <div className="flex items-center w-11/12 space-x-1">
-                      <Link href={`/analytics/tokens/${pair?.token1?.id}`} passHref>
-                        <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
-                          {pair?.token1?.id}
-                        </div>
-                      </Link>
-                      <a href={getExplorerLink(chainId, pair?.token1?.id, 'token')} target="_blank" rel="noreferrer">
-                        <LinkIcon size={16} />
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <LegacyTransactions pairs={[id]} />
-      </div>
-    </AnalyticsContainer>
+      </TridentBody>
+    </>
   )
 }

@@ -10,7 +10,6 @@ import { aprToApy } from 'app/functions/convert/apyApr'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useDayData, useFactory, useNativePrice, useOneDayBlock, useTokenDayData, useTokens } from 'app/services/graph'
 import { useBar, useBarHistory } from 'app/services/graph/hooks/bar'
-import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
 const chartTimespans = [
@@ -34,7 +33,6 @@ const chartTimespans = [
 
 export default function XSushi() {
   const { i18n } = useLingui()
-  const router = useRouter()
 
   const { data: block1d } = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 

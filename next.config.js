@@ -114,10 +114,6 @@ const nextConfig = {
         source: '/migrate',
         destination: '/legacy/migrate',
       },
-      {
-        source: '/analytics',
-        destination: '/analytics/dashboard',
-      },
       // Kashi
       {
         source: '/me',

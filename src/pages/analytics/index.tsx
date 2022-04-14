@@ -34,7 +34,7 @@ const chartTimespans = [
   },
 ]
 
-export default function Dashboard(): JSX.Element {
+export default function Analytics(): JSX.Element {
   const { i18n } = useLingui()
   const router = useRouter()
   const chainId = Number(router.query.chainId)
@@ -84,7 +84,7 @@ export default function Dashboard(): JSX.Element {
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
         <div>
           <Typography variant="h2" className="text-high-emphesis" weight={700}>
-            {i18n._(t`Farm Analytics.`)}
+            {i18n._(t`Sushi Analytics.`)}
           </Typography>
           <Typography variant="sm" weight={400}>
             {i18n._(t`Dive deeper in the analytics of Sushi Bar, BentoBox, Pools, Farms and Tokens.`)}

@@ -53,6 +53,7 @@ export async function getServerSideProps() {
 /* @ts-ignore TYPE NEEDS FIXING */
 const Swap = ({ banners }) => {
   const { i18n } = useLingui()
+
   const loadedUrlParams = useDefaultsFromURLSearch()
   const { account } = useActiveWeb3React()
   const defaultTokens = useAllTokens()

@@ -251,7 +251,7 @@ const useMenu: UseMenu = () => {
         {
           key: 'dashboard',
           title: 'Dashboard',
-          link: `/analytics/dashboard`,
+          link: `/analytics`,
         },
         {
           key: 'xsushi',
