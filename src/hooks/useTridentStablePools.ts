@@ -8,6 +8,8 @@ import { useMultipleContractSingleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 
+import { useMasterDeployerContract } from '.'
+
 const STABLE_POOL_INTERFACE = new Interface(HybridPoolArtifact.abi)
 
 export enum StablePoolState {
@@ -21,6 +23,7 @@ export function useTridentStablePools(
   pools: [Currency | undefined, Currency | undefined, Fee | undefined, JSBI | undefined][]
 ): PoolAtomType[] {
   const { chainId } = useActiveWeb3React()
+  const masterDeployer = useMasterDeployerContract()
   const hybridPoolFactory = useStablePoolFactory()
 
   const poolAddresses = useMemo(() => {
@@ -39,8 +42,10 @@ export function useTridentStablePools(
         !tokenA.equals(tokenB) &&
         fee &&
         a &&
+        masterDeployer?.address &&
         hybridPoolFactory?.address
         ? computeHybridPoolAddress({
+            masterDeployer: masterDeployer.address,
             factoryAddress: hybridPoolFactory.address,
             tokenA,
             tokenB,

@@ -41,12 +41,12 @@ export function middleware(req: NextRequest) {
     return res
   }
 
-  // set the `cookie`
-  res.cookie(
-    'chain-id',
-    subdomain && subdomain in SUBDOMAIN_CHAIN_ID ? SUBDOMAIN_CHAIN_ID[subdomain] : DEFAULT_CHAIN_ID,
-    { sameSite: 'none', secure: true }
-  )
+  if (subdomain && subdomain in SUBDOMAIN_CHAIN_ID) {
+    // set the `cookie`
+    res.cookie('chain-id', SUBDOMAIN_CHAIN_ID[subdomain], { sameSite: 'none', secure: true })
+  } else {
+    res.clearCookie('chain-id')
+  }
 
   // return the res
   return res

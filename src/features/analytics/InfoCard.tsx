@@ -21,7 +21,7 @@ export default function InfoCard({ text, number, numberType = 'usd', percent }: 
   }
 
   return (
-    <div className="w-full px-6 py-4 border rounded bg-dark-900 border-dark-700">
+    <div className="w-full p-6 space-y-2 font-bold border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]">
       <div className="whitespace-nowrap">{text}</div>
       <div className="flex items-center space-x-2">
         <div className="text-2xl font-bold">{switchNumber()}</div>

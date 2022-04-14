@@ -16,6 +16,7 @@ function Web3Network(): JSX.Element | null {
   const toggleNetworkModal = useNetworkModalToggle()
 
   const [attemptingSwitchFromUrl, setAttemptingSwitchFromUrl] = useState(false)
+
   const [switchedFromUrl, setSwitchedFromUrl] = useState(false)
 
   const router = useRouter()
@@ -67,20 +68,19 @@ function Web3Network(): JSX.Element | null {
 
     const cookieChainId = Cookies.get('chain-id')
 
-    const defaultChainId = cookieChainId ? Number(cookieChainId) : 1
+    const defaultChainId = Number(cookieChainId)
 
     if (
       chainId &&
-      defaultChainId &&
-      queryChainId &&
       !attemptingSwitchFromUrl &&
       !switchedFromUrl &&
       isWindowVisible &&
+      (!Number.isNaN(defaultChainId) || !Number.isNaN(queryChainId)) &&
       (chainId !== queryChainId || chainId !== defaultChainId)
     ) {
-      console.debug('network change from query chainId', { queryChainId, chainId })
+      console.debug('network change from query chainId', { queryChainId, defaultChainId, chainId })
       setAttemptingSwitchFromUrl(true)
-      handleChainSwitch(defaultChainId !== 1 ? defaultChainId : queryChainId)
+      handleChainSwitch(defaultChainId ? defaultChainId : queryChainId)
     }
   }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId, isWindowVisible, attemptingSwitchFromUrl])
 

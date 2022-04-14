@@ -15,17 +15,13 @@ export const clonesQuery = gql`
     $skip: Int = 0
     $first: Int = 1000
     $where: Clone_filter
-    $block: Block_height
-    $orderBy: Clone_orderBy
-    $orderDirection: OrderDirection
+    $block: Block_height # $orderDirection: OrderDirection # $orderBy: Clone_orderBy
   ) {
     clones(
       skip: $skip
       first: $first
       where: $where
-      block: $block
-      orderBy: $orderBy
-      orderDirection: $orderDirection
+      block: $block # orderDirection: $orderDirection # orderBy: $orderBy
     ) {
       ...cloneFields
     }

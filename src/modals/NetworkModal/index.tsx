@@ -36,6 +36,50 @@ export const SUPPORTED_NETWORKS: Record<
     rpcUrls: ['https://mainnet.infura.io/v3'],
     blockExplorerUrls: ['https://etherscan.com'],
   },
+  [ChainId.ROPSTEN]: {
+    chainId: '0x3',
+    chainName: 'Ropsten',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: ['https://ropsten.infura.io/v3'],
+    blockExplorerUrls: ['https://ropsten.etherscan.com'],
+  },
+  [ChainId.RINKEBY]: {
+    chainId: '0x4',
+    chainName: 'Rinkeby',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: ['https://rinkeby.infura.io/v3'],
+    blockExplorerUrls: ['https://rinkeby.etherscan.com'],
+  },
+  [ChainId.GÖRLI]: {
+    chainId: '0x5',
+    chainName: 'Görli',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: ['https://goerli.infura.io/v3'],
+    blockExplorerUrls: ['https://goerli.etherscan.com'],
+  },
+  [ChainId.KOVAN]: {
+    chainId: '0x2A',
+    chainName: 'Kovan',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: ['https://kovan.infura.io/v3'],
+    blockExplorerUrls: ['https://kovan.etherscan.com'],
+  },
   [ChainId.FANTOM]: {
     chainId: '0xfa',
     chainName: 'Fantom',
