@@ -1,9 +1,10 @@
-import { PoolType } from '@sushiswap/trident-sdk'
 import { ChipColor } from 'app/components/Chip'
 import { classNames } from 'app/functions'
 
+import { AllPoolType } from './types'
+
 type PoolTypesInterface = Record<
-  PoolType,
+  AllPoolType,
   {
     label: string
     label_long: string
@@ -59,6 +60,19 @@ export const POOL_TYPES: PoolTypesInterface = {
     label_long: 'Stable Pool',
     color: 'blue',
     description: '3 to 32 assets, with tokens deposited in equal values',
+    long_description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim bibendum in ut amet, sit fames. Iaculis ultrices sit fermentum commodo nisl eget etiam fusce ac. Risus enim sollicitudin phasellus nibh. Neque turpis amet at scelerisque vitae nibh magna. Aliquet ut natoque quisque eget pellentesque id. Convallis enim.',
+    image: {
+      url: '/images/trident/a-b-pool.png',
+      width: 121,
+      height: 95,
+    },
+  },
+  Legacy: {
+    label: 'Legacy',
+    label_long: 'Legacy Pool',
+    color: 'default',
+    description: 'Most common, traditional 50/50 value split between assets',
     long_description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim bibendum in ut amet, sit fames. Iaculis ultrices sit fermentum commodo nisl eget etiam fusce ac. Risus enim sollicitudin phasellus nibh. Neque turpis amet at scelerisque vitae nibh magna. Aliquet ut natoque quisque eget pellentesque id. Convallis enim.',
     image: {

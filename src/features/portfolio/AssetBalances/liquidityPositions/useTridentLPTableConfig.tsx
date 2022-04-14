@@ -1,10 +1,9 @@
-import { PoolType } from '@sushiswap/trident-sdk'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import { PoolCell } from 'app/features/trident/pools/PoolCell'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from 'app/features/trident/pools/poolTableFilters'
-import { chipPoolColorMapper, poolTypeNameMapper } from 'app/features/trident/types'
+import { AllPoolType, chipPoolColorMapper, poolTypeNameMapper } from 'app/features/trident/types'
 import { formatPercent } from 'app/functions'
 import { TridentPositionRow } from 'app/services/graph'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
@@ -34,13 +33,8 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
         accessor: 'type',
         maxWidth: 100,
         className: 'text-left hidden lg:flex',
-        Cell: (props: { value: PoolType; row: any }) => {
-          return (
-            <Chip
-              label={props.row.original.legacy ? 'Legacy' : poolTypeNameMapper[props.value]}
-              color={chipPoolColorMapper[props.value]}
-            />
-          )
+        Cell: (props: { value: AllPoolType }) => {
+          return <Chip label={poolTypeNameMapper[props.value]} color={chipPoolColorMapper[props.value]} />
         },
         // @ts-ignore TYPE NEEDS FIXING
         filter: (rows, id, filterValue) =>
@@ -84,9 +78,11 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
             shouldFetch: !!chainId && !!positions,
           })
 
+          const apy = row.type === AllPoolType.Legacy ? value : stats?.[row.id]?.apy
+
           return (
             <Typography weight={700} className="w-full text-right text-high-emphesis">
-              {formatPercent(value ?? stats?.[row.id]?.apy)}
+              {formatPercent(apy)}
             </Typography>
           )
         },
@@ -99,8 +95,8 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
         className: 'text-right flex justify-end',
         cellClassName: 'justify-end',
         // @ts-ignore TYPE NEEDS FIXING
-        Cell: ({ row: { original } }) => {
-          if (original.legacy) {
+        Cell: ({ row: { original } }: { row: { original: TridentPositionRow } }) => {
+          if (original.type === AllPoolType.Legacy) {
             return (
               <Link
                 href={{

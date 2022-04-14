@@ -134,8 +134,9 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
     isValidating: poolKpisIsValidating || oneDayPoolKpisIsValidating || twoDayPoolKpisIsValidating,
     error: poolKpisError || oneDayPoolKpisError || twoDayPoolKpisError,
     data: poolKpis?.map((poolKpi: any) => {
-      const oneDayPoolKpi = oneDayPoolKpis?.find((oneDayPoolKpi: any) => oneDayPoolKpi.id === poolKpi.id)
-      const twoDayPoolKpi = twoDayPoolKpis?.find((twoDayPoolKpi: any) => twoDayPoolKpi.id === poolKpi.id)
+      const oneDayPoolKpi = oneDayPoolKpis?.find((oneDayPoolKpi: any) => oneDayPoolKpi.id === poolKpi.id) ?? poolKpi
+      const twoDayPoolKpi =
+        twoDayPoolKpis?.find((twoDayPoolKpi: any) => twoDayPoolKpi.id === poolKpi.id) ?? oneDayPoolKpi
 
       const volume = formatNumber(
         oneDayPoolKpi?.volumeUSD ? poolKpi.volumeUSD - oneDayPoolKpi.volumeUSD : poolKpi.volumeUSD,

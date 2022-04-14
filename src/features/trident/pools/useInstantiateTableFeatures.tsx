@@ -5,9 +5,15 @@ import { useAppSelector } from 'app/state/hooks'
 import { useLayoutEffect, useMemo } from 'react'
 
 const useInstantiateFilters = (setFilter: TableInstance['setFilter']) => {
-  const { searchQuery, showTWAPOnly, feeTiers: feeTiersSelected } = useAppSelector(selectTridentPools)
+  const {
+    searchQuery,
+    showTWAPOnly,
+    feeTiers: feeTiersSelected,
+    poolTypes: poolTypesSelected,
+  } = useAppSelector(selectTridentPools)
   useMemo(() => setFilter('assets', { searchQuery, twapEnabled: showTWAPOnly }), [searchQuery, setFilter, showTWAPOnly])
   useMemo(() => setFilter('swapFee', { feeTiersSelected }), [feeTiersSelected, setFilter])
+  useMemo(() => setFilter('type', { poolTypesSelected }), [poolTypesSelected, setFilter])
 }
 
 // @ts-ignore TYPE NEEDS FIXING
