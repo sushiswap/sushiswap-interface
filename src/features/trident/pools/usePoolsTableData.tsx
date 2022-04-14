@@ -90,6 +90,7 @@ export const usePoolsTableData: usePoolsTableData = () => {
             shouldFetch: !!chainId && !!data,
           })
 
+          console.log(stats, stats?.[row.id]?.apy)
           const apy = row.original.type === AllPoolType.Legacy ? value : stats?.[row.id]?.apy
 
           return (
@@ -125,7 +126,6 @@ export const usePoolsTableData: usePoolsTableData = () => {
             { id: 'volumeUSD', desc: true },
           ] as { id: DiscoverPoolsTableColumn['accessor']; desc: boolean }[],
         },
-        getRowId: (original) => original.address,
         autoResetFilters: false,
         autoResetPage: !isDataChanged,
         autoResetSortBy: false,
