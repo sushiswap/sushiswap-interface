@@ -5,6 +5,7 @@ import { TridentPool } from 'app/services/graph/fetchers/pools'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { ReactNode, useMemo } from 'react'
+import { UseFiltersOptions, UsePaginationOptions, UseTableOptions } from 'react-table'
 
 import { AllPoolType, chipPoolColorMapper, poolTypeNameMapper } from '../types'
 import { PoolCell } from './PoolCell'
@@ -19,9 +20,15 @@ export interface DiscoverPoolsTableColumn {
   maxWidth?: number
 }
 
-export const usePoolsTableData = () => {
+type usePoolsTableData = () => {
+  config: UseTableOptions<TridentPool> & UsePaginationOptions<any> & UseFiltersOptions<any>
+  loading: boolean
+  error: any
+}
+
+export const usePoolsTableData: usePoolsTableData = () => {
   const { chainId } = useActiveWeb3React()
-  const { data, error, isValidating } = useAllPools({ chainId })
+  const { data, error, isValidating, isDataChanged } = useAllPools({ chainId })
 
   const columns: DiscoverPoolsTableColumn[] = useMemo(() => {
     return [
@@ -109,20 +116,22 @@ export const usePoolsTableData = () => {
   return useMemo(
     () => ({
       config: {
-        columns: columns,
-        data: data ?? [],
+        columns: columns as any,
+        data: data ? data : [],
         initialState: {
           pageSize: 15,
           sortBy: [
-            { id: 'liquidityUSD' as DiscoverPoolsTableColumn['accessor'], desc: true },
-            { id: 'volumeUSD' as DiscoverPoolsTableColumn['accessor'], desc: true },
-          ],
+            { id: 'liquidityUSD', desc: true },
+            { id: 'volumeUSD', desc: true },
+          ] as { id: DiscoverPoolsTableColumn['accessor']; desc: boolean }[],
         },
+        getRowId: (original) => original.address,
         autoResetFilters: false,
+        autoResetPage: !isDataChanged,
       },
       loading: isValidating,
       error,
     }),
-    [columns, data, error, isValidating]
+    [columns, data, error, isDataChanged, isValidating]
   )
 }
