@@ -162,7 +162,7 @@ const TridentApproveGate = ({
       {/*hide bentobox approval if not every inputAmount is greater than than zero*/}
       {inputAmounts.every((el) => el?.greaterThan(ZERO)) &&
         [BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(approvalState) && (
-          <Button loading={approvalState === BentoApprovalState.PENDING} id={`btn-approve`} onClick={onClick}>
+          <Button id="btn-approve" loading={approvalState === BentoApprovalState.PENDING} onClick={onClick}>
             {i18n._(t`Approve BentoBox`)}
           </Button>
         )}

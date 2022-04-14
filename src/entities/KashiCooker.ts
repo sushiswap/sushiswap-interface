@@ -111,15 +111,13 @@ export default class KashiCooker {
   }
 
   approve(permit: KashiPermit): void {
-    if (permit) {
-      this.add(
-        Action.BENTO_SETAPPROVAL,
-        defaultAbiCoder.encode(
-          ['address', 'address', 'bool', 'uint8', 'bytes32', 'bytes32'],
-          [permit.account, permit.masterContract, true, permit.v, permit.r, permit.s]
-        )
+    this.add(
+      Action.BENTO_SETAPPROVAL,
+      defaultAbiCoder.encode(
+        ['address', 'address', 'bool', 'uint8', 'bytes32', 'bytes32'],
+        [permit.account, permit.masterContract, true, permit.v, permit.r, permit.s]
       )
-    }
+    )
   }
 
   updateExchangeRate(mustUpdate = false, minRate = ZERO, maxRate = ZERO): KashiCooker {

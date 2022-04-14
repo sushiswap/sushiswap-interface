@@ -84,6 +84,7 @@ export const KashiMarketWithdrawButton: FC<KashiMarketWithdrawButtonProps> = ({
         receiveToWallet={receiveToWallet}
         withdrawAmount={withdrawAmount}
         removeMax={removeMax}
+        permit={permit}
       />
     </>
   )

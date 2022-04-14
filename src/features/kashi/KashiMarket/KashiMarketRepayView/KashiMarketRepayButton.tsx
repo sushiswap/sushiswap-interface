@@ -183,6 +183,7 @@ export const KashiMarketRepayButton: FC<
         view={view}
         removeMax={removeMax}
         repayMax={repayMax}
+        permit={permit}
       />
     </>
   )

@@ -36,6 +36,8 @@ export const useDepositExecute: UseDepositExecute = () => {
 
       const cooker = new KashiCooker(market, account, library, chainId)
 
+      console.log({ permit })
+
       // Add permit if available
       if (permit) {
         cooker.approve({

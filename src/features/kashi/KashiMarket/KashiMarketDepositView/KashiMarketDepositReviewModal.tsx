@@ -30,7 +30,9 @@ export const KashiMarketDepositReviewModal: FC<KashiMarketDepositReviewModal> = 
   const [attemptingTxn, setAttemptingTxn] = useState(false)
   const execute = useDepositExecute()
 
-  const _execute = useCallback(async () => {
+  console.log('KashiMarketDepositReviewModal', permit)
+
+  const onClick = useCallback(async () => {
     setAttemptingTxn(true)
 
     try {
@@ -72,7 +74,7 @@ export const KashiMarketDepositReviewModal: FC<KashiMarketDepositReviewModal> = 
             </div>
           </HeadlessUiModal.BorderedContent>
           <KashiMarketLentDetailsView view={KashiMarketView.DEPOSIT} lentAmount={depositAmount} />
-          <Button loading={attemptingTxn} color="gradient" disabled={attemptingTxn} onClick={_execute}>
+          <Button loading={attemptingTxn} color="gradient" disabled={attemptingTxn} onClick={onClick}>
             {i18n._(t`Confirm Deposit`)}
           </Button>
         </div>
