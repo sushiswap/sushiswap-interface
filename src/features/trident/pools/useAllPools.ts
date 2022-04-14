@@ -43,11 +43,13 @@ export default function useAllPools({ chainId }: { chainId: number | undefined }
               volumeUSD: Number(legacyPool.volumeUSD),
               liquidityUSD: Number(legacyPool.reserveUSD),
               transactionCount: Number(legacyPool.txCount),
-              apy: getApy(
-                legacyPool.volumeUSD -
-                  legacyPools1w?.find((legacyPool1w: any) => legacyPool.id === legacyPool1w.id)?.volumeUSD ?? 0,
-                legacyPool.reserveUSD
-              ),
+              apy: getApy({
+                volume:
+                  legacyPool.volumeUSD -
+                    legacyPools1w?.find((legacyPool1w: any) => legacyPool.id === legacyPool1w.id)?.volumeUSD ?? 0,
+                liquidity: legacyPool.reserveUSD,
+                days: 7,
+              }),
               assets: [legacyPool.token0, legacyPool.token1].map(
                 (token: any) => new Token(chainId!, token.id, Number(token.decimals), token.symbol, token.name)
               ),

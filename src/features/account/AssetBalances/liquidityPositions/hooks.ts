@@ -61,7 +61,7 @@ export function useLegacyLiquidityPositionsBalances({ account, chainId }: Positi
               swapFeePercent: 0.3,
               twapEnabled: true,
               value: (position.liquidityTokenBalance / pair.totalSupply) * pair.reserveUSD,
-              apy: getApy(pair.volumeUSD - pair1w.volumeUSD, pair.reserveUSD),
+              apy: getApy({ volume: pair.volumeUSD - pair1w.volumeUSD, liquidity: pair.reserveUSD, days: 7 }),
             }
           })
         : undefined,
