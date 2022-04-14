@@ -5,7 +5,7 @@ import { TridentPool } from 'app/services/graph/fetchers/pools'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { ReactNode, useMemo } from 'react'
-import { UseFiltersOptions, UsePaginationOptions, UseTableOptions } from 'react-table'
+import { UseFiltersOptions, UsePaginationOptions, UseSortByOptions, UseTableOptions } from 'react-table'
 
 import { AllPoolType, chipPoolColorMapper, poolTypeNameMapper } from '../types'
 import { PoolCell } from './PoolCell'
@@ -21,7 +21,7 @@ export interface DiscoverPoolsTableColumn {
 }
 
 type usePoolsTableData = () => {
-  config: UseTableOptions<TridentPool> & UsePaginationOptions<any> & UseFiltersOptions<any>
+  config: UseTableOptions<TridentPool> & UsePaginationOptions<any> & UseFiltersOptions<any> & UseSortByOptions<any>
   loading: boolean
   error: any
 }
@@ -128,6 +128,7 @@ export const usePoolsTableData: usePoolsTableData = () => {
         getRowId: (original) => original.address,
         autoResetFilters: false,
         autoResetPage: !isDataChanged,
+        autoResetSortBy: false,
       },
       loading: isValidating,
       error,
