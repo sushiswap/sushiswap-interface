@@ -3,8 +3,9 @@ import { useLingui } from '@lingui/react'
 import { TradeVersion } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
+import Typography from 'app/components/Typography'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
-import { selectTridentSwap, setBentoPermit, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
+import { selectTridentSwap, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
 import { computeFiatValuePriceImpact, warningSeverity } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import { useBentoBoxContract, useRouterContract, useTridentRouterContract } from 'app/hooks'
@@ -12,7 +13,8 @@ import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
-import React, { FC, useCallback, useMemo } from 'react'
+import { Signature } from 'ethers'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 
 import TridentApproveGate from '../TridentApproveGate'
 
@@ -34,7 +36,8 @@ const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
   const fiatValueOutput = useUSDCValue(parsedAmounts?.[1])
   const priceImpact = computeFiatValuePriceImpact(fiatValueInput, fiatValueOutput)
   const [isExpertMode] = useExpertModeManager()
-
+  const [permitError, setPermitError] = useState<boolean>()
+  const [permit, setPermit] = useState<Signature>()
   const priceImpactSeverity = useMemo(() => {
     const executionPriceImpact = trade?.priceImpact
     return warningSeverity(
@@ -54,51 +57,61 @@ const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
   const isLegacy = getTradeVersion(trade) === TradeVersion.V2TRADE
 
   return (
-    <TridentApproveGate
-      inputAmounts={[parsedAmounts?.[0]]}
-      tokenApproveOn={spendFromWallet ? (!isLegacy ? bentoBox?.address : legacyRouterContract?.address) : undefined}
-      masterContractAddress={!isLegacy ? router?.address : undefined}
-      {...(!isLegacy
-        ? {
-            withPermit: true,
-            permit: bentoPermit,
-            onPermit: (permit) => dispatch(setBentoPermit(permit)),
-          }
-        : { withPermit: false })}
-    >
-      {({ approved, loading }) => {
-        const disabled = !!error || !approved || loading || attemptingTxn || priceImpactSeverity > 3
-        const buttonText = attemptingTxn ? (
-          <Dots>{i18n._(t`Swapping`)}</Dots>
-        ) : loading ? (
-          ''
-        ) : error ? (
-          error
-        ) : priceImpactSeverity > 3 && !isExpertMode ? (
-          i18n._(t`Price Impact Too High`)
-        ) : priceImpactSeverity > 2 ? (
-          i18n._(t`Swap Anyway`)
-        ) : (
-          i18n._(t`Swap`)
-        )
+    <>
+      {permitError && (
+        <Typography variant="sm" className="p-4 text-center border rounded border-yellow/40 text-yellow">
+          {i18n._(
+            t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click 'Approve BentoBox' again for approving using the fallback method`
+          )}
+        </Typography>
+      )}
+      <TridentApproveGate
+        inputAmounts={[parsedAmounts?.[0]]}
+        tokenApproveOn={spendFromWallet ? (!isLegacy ? bentoBox?.address : legacyRouterContract?.address) : undefined}
+        masterContractAddress={!isLegacy ? router?.address : undefined}
+        {...(!isLegacy
+          ? {
+              withPermit: true,
+              permit,
+              onPermit: setPermit,
+              onPermitError: () => setPermitError(true),
+            }
+          : { withPermit: false })}
+      >
+        {({ approved, loading }) => {
+          const disabled = !!error || !approved || loading || attemptingTxn || priceImpactSeverity > 3
+          const buttonText = attemptingTxn ? (
+            <Dots>{i18n._(t`Swapping`)}</Dots>
+          ) : loading ? (
+            ''
+          ) : error ? (
+            error
+          ) : priceImpactSeverity > 3 && !isExpertMode ? (
+            i18n._(t`Price Impact Too High`)
+          ) : priceImpactSeverity > 2 ? (
+            i18n._(t`Swap Anyway`)
+          ) : (
+            i18n._(t`Swap`)
+          )
 
-        return (
-          <div className="flex">
-            <Button
-              fullWidth
-              id="swap-button"
-              loading={loading}
-              color={priceImpactSeverity > 2 && !error ? 'red' : 'gradient'}
-              disabled={disabled}
-              onClick={handleClick}
-              className="rounded-2xl md:rounded"
-            >
-              {buttonText}
-            </Button>
-          </div>
-        )
-      }}
-    </TridentApproveGate>
+          return (
+            <div className="flex">
+              <Button
+                fullWidth
+                id="swap-button"
+                loading={loading}
+                color={priceImpactSeverity > 2 && !error ? 'red' : 'gradient'}
+                disabled={disabled}
+                onClick={handleClick}
+                className="rounded-2xl md:rounded"
+              >
+                {buttonText}
+              </Button>
+            </div>
+          )
+        }}
+      </TridentApproveGate>
+    </>
   )
 }
 
