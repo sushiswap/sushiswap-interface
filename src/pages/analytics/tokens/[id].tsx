@@ -1,5 +1,4 @@
 import { getAddress } from '@ethersproject/address'
-import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
@@ -127,7 +126,7 @@ export default function TokenPage() {
           </div>
 
           <Typography variant="sm" weight={400}>
-            {i18n._(t`Dive deeper in the analytics of ${token?.name}.`)}
+            Dive deeper in the analytics of {token?.name}.
           </Typography>
         </div>
         <div className="flex flex-row space-x-4">

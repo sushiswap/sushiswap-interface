@@ -1,5 +1,4 @@
 import { getAddress } from '@ethersproject/address'
-import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
@@ -11,7 +10,6 @@ import InfoCard from 'app/features/analytics/InfoCard'
 import { LegacyTransactions } from 'app/features/transactions/Transactions'
 import { getExplorerLink } from 'app/functions/explorer'
 import { formatNumber } from 'app/functions/format'
-import useCopyClipboard from 'app/hooks/useCopyClipboard'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useNativePrice, useOneDayBlock, usePairDayData, useSushiPairs, useTwoDayBlock } from 'app/services/graph'
 import { times } from 'lodash'
@@ -159,9 +157,7 @@ export default function Pool() {
           </div>
 
           <Typography variant="sm" weight={400}>
-            {i18n._(
-              t`Dive deeper in the analytics of the ${pair?.token0?.symbol}-${pair?.token1?.symbol} liquidity pool.`
-            )}
+            Dive deeper in the analytics of the {pair?.token0?.symbol}-{pair?.token1?.symbol} liquidity pool.
           </Typography>
         </div>
       </TridentHeader>
