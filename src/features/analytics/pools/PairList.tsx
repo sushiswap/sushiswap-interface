@@ -3,8 +3,7 @@ import { Token } from '@sushiswap/core-sdk'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
 import Table from 'app/components/Table'
 import ColoredNumber from 'app/features/analytics/ColoredNumber'
-import { formatNumber, formatNumberScale, formatPercent } from 'app/functions'
-import { aprToApy } from 'app/functions/convert/apyApr'
+import { formatNumber, formatNumberScale, formatPercent, getApy } from 'app/functions'
 import { useRouter } from 'next/router'
 import React from 'react'
 
@@ -84,13 +83,6 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
   )
 }
 
-// @ts-ignore TYPE NEEDS FIXING
-export const getApy = (volume, liquidity) => {
-  const apy = aprToApy((((volume / 7) * 365 * 0.0025) / liquidity) * 100, 3650)
-  if (apy > 1000) return '>10,000%'
-  return formatPercent(apy)
-}
-
 const allColumns = [
   {
     Header: 'Pair',
@@ -109,7 +101,9 @@ const allColumns = [
   {
     Header: 'Annual APY',
     // @ts-ignore TYPE NEEDS FIXING
-    accessor: (row) => <div className="text-high-emphesis">{getApy(row.volume1w, row.liquidity)}</div>,
+    accessor: (row) => (
+      <div className="text-high-emphesis">{getApy({ volume: row.volume1w, liquidity: row.liquidity, days: 7 })}</div>
+    ),
     align: 'right',
     // @ts-ignore TYPE NEEDS FIXING
     sortType: (a, b) => a.original.volume1w / a.original.liquidity - b.original.volume1w / b.original.liquidity,
