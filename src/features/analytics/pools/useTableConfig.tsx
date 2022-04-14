@@ -55,7 +55,7 @@ export const useTableConfig = (chainId: number) => {
           const tx2d = pair1d.txCount - pair2d.txCount
           const tx1dChange = (tx1d / tx2d) * 100 - 100
 
-          const apy = getApy(volume1d, liquidity)
+          const apy = getApy({ volume: volume1d, liquidity, days: 1 })
 
           return {
             pair: {
