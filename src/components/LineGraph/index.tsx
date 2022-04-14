@@ -43,7 +43,7 @@ const Graph: FC<GraphProps> = ({ data, stroke, strokeWidth, width, height, setSe
     () =>
       scaleLinear<number>({
         // @ts-ignore
-        domain: [Math.min(data[0].x, data[data.length - 1].x), Math.max(data[0].x, data[data.length - 1].x)],
+        domain: [Math.min(data[0]?.x, data[data.length - 1]?.x), Math.max(data[0]?.x, data[data.length - 1]?.x)],
         range: [10, width - 10],
       }),
     [data, width]

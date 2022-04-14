@@ -49,8 +49,6 @@ export default function Pool() {
 
   const id = (router.query.id as string).toLowerCase()
 
-  const [isCopied, setCopied] = useCopyClipboard()
-
   const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const { data: block2d } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
 
