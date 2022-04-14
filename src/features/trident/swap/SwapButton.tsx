@@ -5,7 +5,7 @@ import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Typography from 'app/components/Typography'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
-import { selectTridentSwap, setBentoPermit, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
+import { selectTridentSwap, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
 import { computeFiatValuePriceImpact, warningSeverity } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import { useBentoBoxContract, useRouterContract, useTridentRouterContract } from 'app/hooks'
@@ -13,7 +13,8 @@ import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
-import React, { FC, useCallback, useMemo } from 'react'
+import { Signature } from 'ethers'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 
 import TridentApproveGate from '../TridentApproveGate'
 
@@ -36,6 +37,7 @@ const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
   const priceImpact = computeFiatValuePriceImpact(fiatValueInput, fiatValueOutput)
   const [isExpertMode] = useExpertModeManager()
   const [permitError, setPermitError] = useState<boolean>()
+  const [permit, setPermit] = useState<Signature>()
   const priceImpactSeverity = useMemo(() => {
     const executionPriceImpact = trade?.priceImpact
     return warningSeverity(
@@ -70,8 +72,8 @@ const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
         {...(!isLegacy
           ? {
               withPermit: true,
-              permit: bentoPermit,
-              onPermit: (permit) => dispatch(setBentoPermit(permit)),
+              permit,
+              onPermit: setPermit,
               onPermitError: () => setPermitError(true),
             }
           : { withPermit: false })}
