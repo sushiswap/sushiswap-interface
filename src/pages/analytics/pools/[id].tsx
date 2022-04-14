@@ -240,7 +240,7 @@ export default function Pool() {
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="border-t border-dark-900">
+                    <td className="pl-4 border-t border-dark-900">
                       <div className="flex items-center w-11/12 space-x-1">
                         <ExternalLink href={getExplorerLink(chainId, pair?.id, 'token')} className="flex items-center">
                           <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
@@ -250,7 +250,7 @@ export default function Pool() {
                         </ExternalLink>
                       </div>
                     </td>
-                    <td className="border-t border-dark-900">
+                    <td className="pl-4 border-t border-dark-900">
                       <div className="flex items-center w-11/12 space-x-1">
                         <Link href={`/analytics/tokens/${pair?.token0?.id}`} passHref>
                           <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
@@ -262,7 +262,7 @@ export default function Pool() {
                         </a>
                       </div>
                     </td>
-                    <td className="border-t border-dark-900">
+                    <td className="pl-4 border-t border-dark-900">
                       <div className="flex items-center w-11/12 space-x-1">
                         <Link href={`/analytics/tokens/${pair?.token1?.id}`} passHref>
                           <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
