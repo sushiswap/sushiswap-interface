@@ -1,5 +1,4 @@
 import { getAddress } from '@ethersproject/address'
-import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
@@ -40,8 +39,6 @@ const chartTimespans = [
 
 export default function Pool() {
   const router = useRouter()
-
-  const { i18n } = useLingui()
 
   const chainId = Number(router.query.chainId)
 
@@ -140,7 +137,7 @@ export default function Pool() {
 
   return (
     <>
-      <NextSeo title={`Sushi Analytics`} />
+      <NextSeo title={`${pair?.token0?.symbol}-${pair?.token1?.symbol} Analytics`} />
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
         <div className="space-y-4">
           <div className="flex items-center space-x-4">

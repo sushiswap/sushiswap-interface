@@ -1,5 +1,4 @@
 import { getAddress } from '@ethersproject/address'
-import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
@@ -20,9 +19,9 @@ import {
   useTwoDayBlock,
 } from 'app/services/graph'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
 import { ExternalLink as LinkIcon } from 'react-feather'
-
 const chartTimespans = [
   {
     text: '1W',
@@ -46,7 +45,6 @@ export default function TokenPage() {
   const router = useRouter()
   const chainId = Number(router.query.chainId)
   const id = (router.query.id as string)?.toLowerCase()
-  const { i18n } = useLingui()
 
   const { data: block1d } = useOneDayBlock({ chainId })
   const { data: block2d } = useTwoDayBlock({ chainId })
@@ -116,6 +114,7 @@ export default function TokenPage() {
 
   return (
     <>
+      <NextSeo title={`${token?.name} Analytics`} />
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
         <div className="space-y-4">
           <div className="flex items-center space-x-4">
