@@ -73,7 +73,7 @@ const Banner: FC<BannerProps> = ({ banners }) => {
   return (
     <div className="flex flex-col justify-center">
       <div className="relative h-[96px] mt-4">
-        a{slides}
+        {slides}
         {slides.length > 1 && (
           <div className="flex items-center justify-between w-full h-full">
             <Button onClick={prevSlide} className="flex items-center -ml-12">
