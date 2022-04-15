@@ -35,13 +35,13 @@ import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { fetchAPI } from '../../../lib/api'
+import { Banner as BannerType, fetchBanners } from '../../../lib/api'
 
 export async function getServerSideProps() {
   try {
-    const { data } = await fetchAPI('/banners?populate=image')
+    const banners = await fetchBanners()
     return {
-      props: { banners: data || [] },
+      props: { banners: banners || [] },
     }
   } catch (e) {
     return {
@@ -50,8 +50,11 @@ export async function getServerSideProps() {
   }
 }
 
-/* @ts-ignore TYPE NEEDS FIXING */
-const Swap = ({ banners }) => {
+interface SwapProps {
+  banners: BannerType[]
+}
+
+const Swap = ({ banners }: SwapProps) => {
   const { i18n } = useLingui()
 
   const loadedUrlParams = useDefaultsFromURLSearch()
