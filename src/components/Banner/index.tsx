@@ -13,7 +13,14 @@ export interface BannerProps {
 }
 
 const Banner: FC<BannerProps> = ({ banners }) => {
-  const [slideIndex, setSlideIndex] = useState<number>(Math.floor(Math.random() * banners.length))
+  const filteredSlides = banners.filter(({ attributes: { startDate, endDate } }) => {
+    const now = new Date().getTime()
+    const startEpoch = new Date(startDate).getTime()
+    const endEpoch = new Date(endDate).getTime()
+    return now > startEpoch && now < endEpoch
+  })
+
+  const [slideIndex, setSlideIndex] = useState<number>(Math.floor(Math.random() * filteredSlides.length))
 
   const nextSlide = useCallback(() => {
     setSlideIndex((prevState) => (prevState + 1) % banners.length)
@@ -24,13 +31,6 @@ const Banner: FC<BannerProps> = ({ banners }) => {
   }, [banners.length])
 
   if (banners.length === 0) return <></>
-
-  const filteredSlides = banners.filter(({ attributes: { startDate, endDate } }) => {
-    const now = new Date().getTime()
-    const startEpoch = new Date(startDate).getTime()
-    const endEpoch = new Date(endDate).getTime()
-    return now > startEpoch && now < endEpoch
-  })
 
   const slides = filteredSlides.map(({ attributes: { image, url } }, index) => {
     return (
@@ -73,7 +73,7 @@ const Banner: FC<BannerProps> = ({ banners }) => {
   return (
     <div className="flex flex-col justify-center">
       <div className="relative h-[96px] mt-4">
-        {slides}
+        a{slides}
         {slides.length > 1 && (
           <div className="flex items-center justify-between w-full h-full">
             <Button onClick={prevSlide} className="flex items-center -ml-12">
