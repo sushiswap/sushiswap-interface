@@ -1,34 +1,18 @@
 import { Transition } from '@headlessui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import { ChainId } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { classNames } from 'app/functions'
-import { useActiveWeb3React } from 'app/services/web3'
+import { Banner as BannerType } from 'app/lib/api'
 import React, { useCallback, useState } from 'react'
 import { FC } from 'react'
 
 import { getStrapiMedia } from '../../lib/media'
 
-interface BannerProps {
-  banners: {
-    attributes: {
-      name: string
-      url: string
-      image: {
-        data: {
-          attributes: {
-            url: string
-          }
-        }
-      }
-      startDate: string
-      endDate: string
-    }
-  }[]
+export interface BannerProps {
+  banners: BannerType[]
 }
 
 const Banner: FC<BannerProps> = ({ banners }) => {
-  const { chainId } = useActiveWeb3React()
   const [slideIndex, setSlideIndex] = useState<number>(Math.floor(Math.random() * banners.length))
 
   const nextSlide = useCallback(() => {
@@ -39,7 +23,7 @@ const Banner: FC<BannerProps> = ({ banners }) => {
     setSlideIndex((prevState) => (prevState - 1 + banners.length) % banners.length)
   }, [banners.length])
 
-  if (chainId !== ChainId.ETHEREUM || banners.length === 0) return <></>
+  if (banners.length === 0) return <></>
 
   const filteredSlides = banners.filter(({ attributes: { startDate, endDate } }) => {
     const now = new Date().getTime()
@@ -71,7 +55,7 @@ const Banner: FC<BannerProps> = ({ banners }) => {
             rel="noreferrer"
             href={url}
             target="_blank"
-            className="hidden w-full py-12 rounded cursor-pointer sm:block"
+            className="block w-full py-12 rounded cursor-pointer"
             style={{
               backgroundImage: `url(${getStrapiMedia(image.data.attributes.url)})`,
               backgroundPosition: 'center',

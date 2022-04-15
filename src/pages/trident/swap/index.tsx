@@ -3,6 +3,7 @@ import { ArrowDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { TradeVersion, ZERO } from '@sushiswap/core-sdk'
+import Banner from 'app/components/Banner'
 import RecipientField from 'app/components/RecipientField'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
@@ -34,12 +35,30 @@ import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
 import { useSwapCallback } from 'app/hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
+import { Banner as BannerType, fetchBanners } from 'app/lib/api'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
 import React, { useCallback, useMemo, useState } from 'react'
 
-const Swap = () => {
+export async function getServerSideProps() {
+  try {
+    const banners = await fetchBanners()
+    return {
+      props: { banners: banners || [] },
+    }
+  } catch (e) {
+    return {
+      props: { banners: [] },
+    }
+  }
+}
+
+interface SwapProps {
+  banners: BannerType[]
+}
+
+const Swap = ({ banners }: SwapProps) => {
   const { formattedAmounts, trade, priceImpact, isWrap, parsedAmounts, error } = _useSwapPage()
   const tradeVersion = getTradeVersion(trade)
   const { i18n } = useLingui()
@@ -240,6 +259,7 @@ const Swap = () => {
         </Typography>
         : {i18n._(t`BentoBox to BentoBox swaps are up to 50% cheaper than normal swaps`)}
       </Typography>
+      <Banner banners={banners} />
     </>
   )
 }
