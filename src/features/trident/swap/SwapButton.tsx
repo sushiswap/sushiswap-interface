@@ -5,7 +5,7 @@ import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Typography from 'app/components/Typography'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
-import { selectTridentSwap, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
+import { selectTridentSwap, setBentoPermit, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
 import { computeFiatValuePriceImpact, warningSeverity } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import { useBentoBoxContract, useRouterContract, useTridentRouterContract } from 'app/hooks'
@@ -73,7 +73,7 @@ const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
           ? {
               withPermit: true,
               permit,
-              onPermit: setPermit,
+              onPermit: setBentoPermit,
               onPermitError: () => setPermitError(true),
             }
           : { withPermit: false })}
