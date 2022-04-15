@@ -3,9 +3,28 @@ export function getStrapiURL(path = '') {
 }
 
 // Helper to make GET requests to Strapi
-// @ts-ignore TYPE NEEDS FIXING
-export async function fetchAPI(path) {
+export async function fetchAPI(path: string) {
   const requestUrl = getStrapiURL(path)
   const response = await fetch(requestUrl)
   return await response.json()
+}
+
+export interface Banner {
+  attributes: {
+    name: string
+    url: string
+    image: {
+      data: {
+        attributes: {
+          url: string
+        }
+      }
+    }
+    startDate: string
+    endDate: string
+  }
+}
+
+export async function fetchBanners() {
+  return (await fetchAPI('/banners?populate=image'))?.data as Banner[]
 }
