@@ -126,8 +126,13 @@ const nextConfig = {
     locales,
     defaultLocale: sourceLocale,
   },
+  // serverRuntimeConfig: {},
   publicRuntimeConfig: {
     breakpoints: screens,
+
+    [ChainId.ETHEREUM]: {
+      features: [],
+    },
   },
 }
 
