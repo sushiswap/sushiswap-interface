@@ -16,7 +16,7 @@ import {
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { addMinuites, getUnixTime } from 'date-fns'
+import { addMinutes, getUnixTime } from 'date-fns'
 import { useCallback } from 'react'
 const useAuctionCreate = () => {
   const { chainId, account } = useActiveWeb3React()
@@ -101,8 +101,8 @@ const useAuctionCreate = () => {
         marketFactoryAddress,
         data.auctionToken.address,
         data.tokenAmount.quotient.toString(),
-        now > startDate ? getUnixTime(addMinuites(now, 5)) : startDate,
-        now > endDate ? getUnixTime(addMinuites(now, 30)) : endDate,
+        now > startDate ? getUnixTime(addMinutes(now, 5)) : startDate,
+        now > endDate ? getUnixTime(addMinutes(now, 30)) : endDate,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.startPrice.numerator.toString(),
         data.endPrice.numerator.toString(),
@@ -145,8 +145,8 @@ const useAuctionCreate = () => {
         marketFactoryAddress,
         data.auctionToken.address,
         data.tokenAmount.quotient.toString(),
-        now > startDate ? getUnixTime(addMinuites(now, 5)) : startDate,
-        now > endDate ? getUnixTime(addMinuites(now, 30)) : endDate,
+        now > startDate ? getUnixTime(addMinutes(now, 5)) : startDate,
+        now > endDate ? getUnixTime(addMinutes(now, 30)) : endDate,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.minimumRaised.quotient.toString(),
         account,
@@ -190,8 +190,8 @@ const useAuctionCreate = () => {
         data.auctionToken.address,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.tokenAmount.quotient.toString(),
-        now > startDate ? getUnixTime(addMinuites(now, 5)) : startDate,
-        now > endDate ? getUnixTime(addMinuites(now, 30)) : endDate,
+        now > startDate ? getUnixTime(addMinutes(now, 5)) : startDate,
+        now > endDate ? getUnixTime(addMinutes(now, 30)) : endDate,
         data.fixedPrice.numerator.toString(),
         data.minimumTarget.quotient.toString(),
         account,
