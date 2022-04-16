@@ -16,8 +16,8 @@ import {
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { addMinuites, getUnixTime } from 'date-fns'
 import { useCallback } from 'react'
-
 const useAuctionCreate = () => {
   const { chainId, account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
@@ -93,12 +93,16 @@ const useAuctionCreate = () => {
         'address',
       ]
 
+      const now = Date.now()
+      const startDate = getUnixTime(data.startDate)
+      const endDate = getUnixTime(data.endDate)
+
       const _data = [
         marketFactoryAddress,
         data.auctionToken.address,
         data.tokenAmount.quotient.toString(),
-        data.startDate.getTime() / 1000,
-        data.endDate.getTime() / 1000,
+        now > startDate ? getUnixTime(addMinuites(now, 5)) : startDate,
+        now > endDate ? getUnixTime(addMinuites(now, 30)) : endDate,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.startPrice.numerator.toString(),
         data.endPrice.numerator.toString(),
@@ -132,12 +136,17 @@ const useAuctionCreate = () => {
         'address',
         'address',
       ]
+
+      const now = Date.now()
+      const startDate = getUnixTime(data.startDate)
+      const endDate = getUnixTime(data.endDate)
+
       const _data = [
         marketFactoryAddress,
         data.auctionToken.address,
         data.tokenAmount.quotient.toString(),
-        Date.now() > data.startDate.getTime() ? Date.now() / 1000 + 300 : data.startDate.getTime() / 1000,
-        Date.now() > data.endDate.getTime() ? Date.now() / 1000 + 600 : data.endDate.getTime() / 1000,
+        now > startDate ? getUnixTime(addMinuites(now, 5)) : startDate,
+        now > endDate ? getUnixTime(addMinuites(now, 30)) : endDate,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.minimumRaised.quotient.toString(),
         account,
@@ -172,13 +181,17 @@ const useAuctionCreate = () => {
         'address',
       ]
 
+      const now = Date.now()
+      const startDate = getUnixTime(data.startDate)
+      const endDate = getUnixTime(data.endDate)
+
       const _data = [
         marketFactoryAddress,
         data.auctionToken.address,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.tokenAmount.quotient.toString(),
-        data.startDate.getTime() / 1000,
-        data.endDate.getTime() / 1000,
+        now > startDate ? getUnixTime(addMinuites(now, 5)) : startDate,
+        now > endDate ? getUnixTime(addMinuites(now, 30)) : endDate,
         data.fixedPrice.numerator.toString(),
         data.minimumTarget.quotient.toString(),
         account,
