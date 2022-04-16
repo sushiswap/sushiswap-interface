@@ -86,7 +86,7 @@
     "@sushiswap/kashi-sdk": "1.0.0-canary.68",
     "@sushiswap/limit-order-pair-list": "0.2.17",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.78",
-    "@sushiswap/miso": "1.0.0-canary.46",
+    "@sushiswap/miso": "1.0.0-canary.47",
     "@sushiswap/miso-sdk": "1.0.0-canary.65",
     "@sushiswap/trident": "^1.0.0-canary.36",
     "@sushiswap/trident-sdk": "1.0.0-canary.104",
