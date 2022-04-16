@@ -200,7 +200,7 @@ function getExactInputParams(
     }
   }
 
-  console.log('slippage?', { amountOut: multiRoute.amountOut, slippage })
+  // console.log('slippage?', { amountOut: multiRoute.amountOut, slippage })
 
   let inputParams: ExactInputParams = {
     tokenIn: inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[0].tokenFrom.address,

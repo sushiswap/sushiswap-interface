@@ -72,8 +72,10 @@ const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
         {...(!isLegacy
           ? {
               withPermit: true,
-              permit,
-              onPermit: setBentoPermit,
+              permit: bentoPermit,
+              onPermit: (permit) => {
+                dispatch(setBentoPermit(permit))
+              },
               onPermitError: () => setPermitError(true),
             }
           : { withPermit: false })}
