@@ -66,7 +66,7 @@ export const useAuctionDetails = (auctionAddress?: string) => {
   const contract = useContract(auctionAddress, AUCTION_INTERFACE)
 
   const callDatas = useMemo(() => {
-    if (!contract || !auctionAddress) {
+    if (!contract) {
       return []
     }
     return [
@@ -74,7 +74,7 @@ export const useAuctionDetails = (auctionAddress?: string) => {
       contract.interface.encodeFunctionData('pointList', []),
       contract.interface.encodeFunctionData('wallet', []),
     ]
-  }, [auctionAddress, contract])
+  }, [contract])
 
   const results = useSingleContractWithCallData(contract, callDatas)
 
