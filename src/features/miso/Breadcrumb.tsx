@@ -16,8 +16,9 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ auction }) => {
   const { query } = useRouter()
   const { finalizeAuction } = useAuctionEdit(
     auction?.auctionInfo.addr,
+    auction?.launcherInfo?.address,
     auction?.template,
-    auction?.auctionInfo.liquidityTemplate
+    auction?.launcherInfo?.liquidityTemplate
   )
 
   if (!auction) return <div className="animate-pulse h-2 mb-2 mt-1 bg-dark-800" />

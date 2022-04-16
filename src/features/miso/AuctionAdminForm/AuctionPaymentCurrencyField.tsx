@@ -22,7 +22,7 @@ const AuctionPaymentCurrencyField: FC<AuctionPaymentCurrencyFieldProps> = ({ nam
   const { getValues, setValue } = useFormContext()
   const paymentTokenAddress = useWatch({ name })
   // @ts-ignore TYPE NEEDS FIXING
-  const token = useToken(paymentTokenAddress) ?? NATIVE[chainId || 1]
+  const token = useToken(paymentTokenAddress !== AddressZero ? paymentTokenAddress : undefined) ?? NATIVE[chainId || 1]
 
   if (!chainId) return <></>
 
@@ -56,6 +56,7 @@ const AuctionPaymentCurrencyField: FC<AuctionPaymentCurrencyFieldProps> = ({ nam
       </div>
       <div className="flex flex-col flex-grow">
         <Form.TextField
+          className={paymentTokenAddress === AddressZero ? 'hidden' : ''}
           name={name}
           helperText={
             <>
@@ -64,7 +65,7 @@ const AuctionPaymentCurrencyField: FC<AuctionPaymentCurrencyFieldProps> = ({ nam
                   t`Select the currency you accept as payment during the auction. If you don’t see the ERC-20 token you are looking for, input by pasting the address in the custom field.`
                 )}
               </FormFieldHelperText>
-              <FormFieldHelperText>{i18n._(t`Current selected currency: ${token?.symbol}`)}</FormFieldHelperText>
+              <FormFieldHelperText>{i18n._(t`Selected currency: ${token?.symbol}`)}</FormFieldHelperText>
             </>
           }
           placeholder="0x..."

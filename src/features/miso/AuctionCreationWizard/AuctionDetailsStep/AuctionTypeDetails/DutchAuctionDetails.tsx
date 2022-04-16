@@ -5,21 +5,31 @@ import { Currency, CurrencyAmount, NATIVE, Price, Token } from '@sushiswap/core-
 import Form from 'app/components/Form'
 import FormFieldHelperText from 'app/components/Form/FormFieldHelperText'
 import Typography from 'app/components/Typography'
-import { AuctionCreationWizardInput } from 'app/features/miso/AuctionCreationWizard'
+import { useStore } from 'app/features/miso/context/store'
+import { IAuctionDetails } from 'app/features/miso/context/store/createAuctionDetailsSlice'
+import { useAuctionedToken } from 'app/features/miso/context/store/createTokenDetailsSlice'
 import { tryParseAmount } from 'app/functions'
 import { useToken } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+const useAuctionData = () =>
+  useStore(({ paymentCurrencyAddress, tokenAmount }) => ({
+    paymentCurrencyAddress,
+    tokenAmount,
+  }))
+
 const DutchAuctionDetails: FC = () => {
-  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { watch } = useFormContext<AuctionCreationWizardInput>()
+  const { chainId } = useActiveWeb3React()
+  const { paymentCurrencyAddress, tokenAmount } = useAuctionData()
+  const paymentToken =
+    useToken(paymentCurrencyAddress !== AddressZero ? paymentCurrencyAddress : undefined) ?? NATIVE[chainId || 1]
+  const auctionToken = useAuctionedToken()
+
+  const { watch } = useFormContext<IAuctionDetails>()
   const data = watch()
-  // @ts-ignore TYPE NEEDS FIXING
-  const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
-  const auctionToken = new Token(1, AddressZero, 18, data.tokenSymbol, data.tokenName)
 
   let startPrice: Price<Token, Currency> | undefined
   let endPrice: Price<Token, Currency> | undefined
@@ -32,7 +42,7 @@ const DutchAuctionDetails: FC = () => {
   if (paymentToken && auctionToken && Number(data.startPrice) > 0) {
     startBase = tryParseAmount(data.startPrice?.toString(), paymentToken)
     quote = tryParseAmount('1', auctionToken)
-    amount = tryParseAmount(data.tokenAmount?.toString(), auctionToken)
+    amount = tryParseAmount(tokenAmount?.toString(), auctionToken)
 
     if (startBase && quote) startPrice = new Price({ baseAmount: quote, quoteAmount: startBase })
     if (startPrice && amount) maximumRaised = startPrice.quote(amount)
@@ -41,14 +51,14 @@ const DutchAuctionDetails: FC = () => {
   if (paymentToken && auctionToken && Number(data.endPrice) > 0) {
     endBase = tryParseAmount(data.endPrice?.toString(), paymentToken)
     quote = tryParseAmount('1', auctionToken)
-    amount = tryParseAmount(data.tokenAmount?.toString(), auctionToken)
+    amount = tryParseAmount(tokenAmount?.toString(), auctionToken)
     if (endBase && quote) endPrice = new Price({ baseAmount: quote, quoteAmount: endBase })
     if (endPrice && amount) minimumRaised = endPrice.quote(amount)
   }
 
   return (
     <>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Form.TextField
           {...(paymentToken && {
             endIcon: (
@@ -63,7 +73,7 @@ const DutchAuctionDetails: FC = () => {
           helperText={i18n._(t`The price when the auction will start. This value must be higher than the end price`)}
         />
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Form.TextField
           {...(paymentToken && {
             endIcon: (
@@ -78,7 +88,7 @@ const DutchAuctionDetails: FC = () => {
           helperText={i18n._(t`The price when the auction will meet its end date`)}
         />
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Typography weight={700}>{i18n._(t`Minimum Raised`)}</Typography>
         <Typography className="mt-2">
           {minimumRaised ? minimumRaised.toSignificant(6) : '0.00'} {paymentToken?.symbol}
@@ -89,7 +99,7 @@ const DutchAuctionDetails: FC = () => {
           )}
         </FormFieldHelperText>
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="w-full md:w-1/2">
         <Typography weight={700}>{i18n._(t`Maximum Raised`)}</Typography>
         <Typography className="mt-2">
           {maximumRaised ? maximumRaised?.toExact({}) : '0.00'} {paymentToken?.symbol}

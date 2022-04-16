@@ -3,12 +3,16 @@ import { AddressZero } from '@ethersproject/constants'
 import { CHAIN_KEY, Percent } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { AuctionCreationFormInputFormatted } from 'app/features/miso/AuctionCreationForm'
-import { AuctionCreationWizardInputFormatted } from 'app/features/miso/AuctionCreationWizard'
 import { NATIVE_PAYMENT_TOKEN } from 'app/features/miso/context/constants'
 import useAuctionTemplateMap from 'app/features/miso/context/hooks/useAuctionTemplateMap'
 import { useLiquidityLauncherTemplateMap } from 'app/features/miso/context/hooks/useLiquidityLauncherTemplateMap'
 import useTokenTemplateMap from 'app/features/miso/context/hooks/useTokenTemplateMap'
-import { AuctionTemplate, LiquidityLauncherTemplate, TokenSetup } from 'app/features/miso/context/types'
+import {
+  AuctionCreationWizardInputFormatted,
+  AuctionTemplate,
+  LiquidityLauncherTemplate,
+  TokenSetup,
+} from 'app/features/miso/context/types'
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
@@ -132,8 +136,8 @@ const useAuctionCreate = () => {
         marketFactoryAddress,
         data.auctionToken.address,
         data.tokenAmount.quotient.toString(),
-        data.startDate.getTime() / 1000,
-        data.endDate.getTime() / 1000,
+        Date.now() > data.startDate.getTime() ? Date.now() / 1000 + 300 : data.startDate.getTime() / 1000,
+        Date.now() > data.endDate.getTime() ? Date.now() / 1000 + 600 : data.endDate.getTime() / 1000,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.minimumRaised.quotient.toString(),
         account,

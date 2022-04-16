@@ -1,11 +1,18 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Price, Token } from '@sushiswap/core-sdk'
+import { GetState, SetState } from 'zustand'
+
+export type StoreSlice<T extends object, E extends object = T> = (
+  set: SetState<E extends T ? E : E & T>,
+  get: GetState<E extends T ? E : E & T>
+) => T
 
 export enum LiquidityLauncherTemplate {
   PostAuctionLauncher = 1,
 }
 
 export enum AuctionTemplate {
+  NOT_SET = 0,
   CROWDSALE = 1,
   DUTCH_AUCTION = 2,
   BATCH_AUCTION = 3,
@@ -98,12 +105,15 @@ export interface RawMarketInfo {
 }
 
 export interface RawLauncherInfo {
-  lockTime: BigNumber
+  address: string
   locktime: number
   unlock: BigNumber
   liquidityPercent: BigNumber
   launched: boolean
   liquidityAdded: BigNumber
+  token1Balance: BigNumber
+  token2Balance: BigNumber
+  liquidityTemplate: number
 }
 
 export interface Auction {
@@ -140,12 +150,67 @@ export enum AuctionCategory {
 }
 
 export enum TokenType {
-  FIXED,
-  MINTABLE,
-  SUSHI,
+  FIXED = 1,
+  MINTABLE = 2,
+  SUSHI = 3,
 }
 
 export enum TokenSetup {
+  NOT_SET = 0,
   CREATE = 1,
   PROVIDE = 2,
+}
+
+export interface AuctionCreationWizardInput {
+  tokenSetupType: TokenSetup
+  paymentCurrencyAddress: string
+  startDate: string
+  endDate: string
+  tokenType: TokenType
+  tokenAddress?: string
+  tokenName?: string
+  tokenSymbol?: string
+  tokenSupply?: number
+  tokenAmount: number
+  tokenForLiquidity: number
+  auctionType: AuctionTemplate
+  fixedPrice?: string
+  minimumTarget?: number
+  minimumRaised?: string
+  startPrice?: string
+  endPrice?: string
+  liqLockTime?: number
+  liqPercentage: number
+  liqLauncherEnabled: boolean
+  whitelistEnabled: boolean
+  whitelistAddresses: WhitelistEntry[]
+}
+
+export type AuctionCreationWizardInputFormatted = Omit<
+  AuctionCreationWizardInput,
+  | 'startDate'
+  | 'endDate'
+  | 'tokenSupply'
+  | 'tokenAmount'
+  | 'tokenForLiquidity'
+  | 'fixedPrice'
+  | 'minimumTarget'
+  | 'minimumRaised'
+  | 'startPrice'
+  | 'endPrice'
+> & {
+  paymentCurrency: Currency
+  startDate: Date
+  endDate: Date
+  tokenAmount: CurrencyAmount<Token>
+  tokenSupply?: CurrencyAmount<Token>
+  auctionType: AuctionTemplate
+  fixedPrice?: Price<Token, Currency>
+  minimumTarget?: CurrencyAmount<Currency>
+  minimumRaised?: CurrencyAmount<Currency>
+  startPrice?: Price<Token, Currency>
+  endPrice?: Price<Token, Currency>
+  auctionToken: Token
+  accounts: string[]
+  amounts: string[]
 }

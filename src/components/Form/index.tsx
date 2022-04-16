@@ -1,12 +1,13 @@
 import FormCard, { FormCardProps } from 'app/components/Form/FormCard'
 import FormFieldHelperText, { FormFieldHelperTextProps } from 'app/components/Form/FormFieldHelperText'
+import { FormFieldsProps } from 'app/components/Form/FormLayout'
+import FormFields from 'app/components/Form/FormLayout'
 import FormSection, { FormSectionProps } from 'app/components/Form/FormSection'
 import FormSelectField, { FormSelectFieldProps } from 'app/components/Form/FormSelectField'
 import FormSubmit, { FormSubmitProps } from 'app/components/Form/FormSubmit'
 import FormTextAreaField, { FormTextAreaFieldProps } from 'app/components/Form/FormTextAreaField'
 import FormTextField, { FormTextFieldProps } from 'app/components/Form/FormTextField'
-import FormWizard, { FormWizardProps } from 'app/components/Form/FormWizard'
-import React, { FC, ReactElement } from 'react'
+import React, { FC } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { UseFormReturn } from 'react-hook-form/dist/types'
 
@@ -16,18 +17,17 @@ export const DEFAULT_FORM_FIELD_CLASSNAMES =
 export interface FormProps extends UseFormReturn<any> {
   // @ts-ignore TYPE NEEDS FIXING
   onSubmit(x): void
-  children: ReactElement<FormCardProps>
 }
 
 type Form<P> = FC<P> & {
   Card: FC<FormCardProps>
+  Fields: FC<FormFieldsProps>
   Section: FormSection<FormSectionProps>
   Submit: FC<FormSubmitProps>
   TextField: FC<FormTextFieldProps>
   SelectField: FC<FormSelectFieldProps>
   TextAreaField: FC<FormTextAreaFieldProps>
   HelperText: FC<FormFieldHelperTextProps>
-  Wizard: FC<FormWizardProps>
 }
 
 const Form: Form<FormProps> = ({ children, onSubmit, ...rest }) => {
@@ -39,7 +39,7 @@ const Form: Form<FormProps> = ({ children, onSubmit, ...rest }) => {
 }
 
 Form.Card = FormCard
-Form.Wizard = FormWizard
+Form.Fields = FormFields
 Form.Section = FormSection
 Form.Submit = FormSubmit
 Form.TextField = FormTextField

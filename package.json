@@ -86,8 +86,8 @@
     "@sushiswap/kashi-sdk": "1.0.0-canary.68",
     "@sushiswap/limit-order-pair-list": "0.2.17",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.78",
-    "@sushiswap/miso": "1.0.0-canary.45",
-    "@sushiswap/miso-sdk": "1.0.0-canary.67",
+    "@sushiswap/miso": "1.0.0-canary.46",
+    "@sushiswap/miso-sdk": "1.0.0-canary.65",
     "@sushiswap/trident": "^1.0.0-canary.36",
     "@sushiswap/trident-sdk": "1.0.0-canary.104",
     "@testing-library/jest-dom": "^5.14.0",
@@ -179,7 +179,7 @@
     "react": "^17.0.2",
     "react-device-detect": "^2.1.2",
     "react-dom": "^17.0.2",
-    "react-dropzone": "^11.4.2",
+    "react-dropzone": "^12.0.4",
     "react-feather": "^2.0.9",
     "react-hook-form": "^7.22.1",
     "react-infinite-scroll-component": "^6.1.0",
@@ -213,7 +213,8 @@
     "web3-react-walletconnect-connector": "npm:@web3-react/walletconnect-connector@^7.0.2-alpha.0",
     "web3-react-walletlink-connector": "npm:@web3-react/walletlink-connector@^6.2.13",
     "web3-utils": "^1.7.1",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "zustand": "^3.7.2"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.6",
