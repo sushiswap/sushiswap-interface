@@ -10,6 +10,7 @@ export enum Feature {
   STAKING = 'Staking',
   TRIDENT = 'Trident',
   LIMIT_ORDERS = 'LimitOrders',
+  STOP_LOSSES = 'StopLosses',
   INARI = 'Inari',
   MEOWSHI = 'MEOWSHI',
   VESTING = 'Vesting',
