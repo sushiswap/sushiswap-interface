@@ -129,9 +129,11 @@ function MyApp({ Component, pageProps, fallback, err }) {
       />
       <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
         <Web3ReactProvider getLibrary={getLibrary}>
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
               <ReduxProvider store={store}>
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <PersistGate persistor={persistor}>
                   <>
                     <ListsUpdater />
