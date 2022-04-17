@@ -12,8 +12,9 @@ const AuctionFinalizeModal: FC = () => {
   const { auction } = useAuctionContext()
   const { finalizeAuction } = useAuctionEdit(
     auction?.auctionInfo.addr,
+    auction?.launcherInfo?.address,
     auction?.template,
-    auction?.auctionInfo.liquidityTemplate
+    auction?.launcherInfo?.liquidityTemplate
   )
   const [open, setOpen] = useState(false)
   const [dismissed, setDismissed] = useState(false)

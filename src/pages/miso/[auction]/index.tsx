@@ -1,6 +1,4 @@
-import { isAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
-import Error from 'app/components/Error'
 import { Feature } from 'app/enums'
 import AuctionClaimer from 'app/features/miso/AuctionClaimer'
 import AuctionCommitter from 'app/features/miso/AuctionCommitter'
@@ -17,22 +15,33 @@ import NetworkGuard from 'app/guards/Network'
 import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useActiveWeb3React } from 'app/services/web3'
+import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React from 'react'
 
+function useChainId() {
+  const router = useRouter()
+
+  const { chainId: walletChainId } = useActiveWeb3React()
+  const cookieChainId = Cookies.get('chain-id')
+  const queryChainId = router.query.chainId
+
+  // If no connected wallet
+  // First check if there is a cookie
+  // If one is presen then we know this
+  // user is on a chain specific sub-domain
+}
+
 const MisoAuction = () => {
   const { account } = useActiveWeb3React()
+
   const router = useRouter()
   const { auction: address } = router.query
   const { auction, loading, error } = useAuction(address as string, account ?? AddressZero)
 
   // Redirect to overview on chainId change
   useRedirectOnChainId('/miso')
-
-  if ((!loading && error) || !isAddress(address as string)) {
-    return <Error statusCode={404} />
-  }
 
   return (
     <>

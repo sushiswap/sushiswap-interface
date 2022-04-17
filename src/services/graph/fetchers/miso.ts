@@ -7,6 +7,14 @@ import { GRAPH_HOST } from '../constants'
 export const MISO = {
   [ChainId.KOVAN]: 'sushiswap/kovan-miso',
   [ChainId.HARMONY]: 'sushiswap/miso',
+  [ChainId.MATIC]: 'sushiswap/miso-polygon',
+  [ChainId.ETHEREUM]: 'sushiswap/miso-ethereum',
+  [ChainId.FANTOM]: 'sushiswap/miso-fantom',
+  [ChainId.BSC]: 'sushiswap/miso-bsc',
+  [ChainId.AVALANCHE]: 'sushiswap/miso-avalanche',
+  [ChainId.ARBITRUM]: 'sushiswap/miso-arbitrum',
+  [ChainId.MOONBEAM]: 'sushiswap/miso-moonbeam',
+  [ChainId.MOONRIVER]: 'sushiswap/miso-moonriver',
 }
 
 // @ts-ignore TYPE NEEDS FIXING

@@ -18,7 +18,11 @@ interface ListOperatorProps {
 const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
   const { i18n } = useLingui()
   const [pending, setPending] = useState<boolean>(false)
-  const { updatePermissionList } = useAuctionEdit(auction.auctionInfo.addr, auction.template)
+  const { updatePermissionList } = useAuctionEdit(
+    auction.auctionInfo.addr,
+    auction.launcherInfo?.address,
+    auction.template
+  )
   const [pointListAddress, setPointListAddress] = useState<string>(auction.pointListAddress)
   const [error, setError] = useState<string>()
 

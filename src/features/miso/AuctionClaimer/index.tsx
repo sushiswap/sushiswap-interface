@@ -14,11 +14,24 @@ const AuctionClaimer: FC = () => {
   const { i18n } = useLingui()
   const { auction, loading } = useAuctionContext()
   const [pending, setPending] = useState(false)
-  const { claimTokens, finalizeAuction } = useAuctionEdit(
+  const { claimTokens, finalizeAuction, withdrawDeposits } = useAuctionEdit(
     auction?.auctionInfo.addr,
+    auction?.launcherInfo?.address,
     auction?.template,
-    auction?.auctionInfo.liquidityTemplate
+    auction?.launcherInfo ? auction.launcherInfo.liquidityTemplate : undefined
   )
+
+  const handleWithdrawDeposits = useCallback(async () => {
+    try {
+      setPending(true)
+      const tx = await withdrawDeposits()
+      if (tx?.hash) {
+        await tx.wait()
+      }
+    } finally {
+      setPending(false)
+    }
+  }, [withdrawDeposits])
 
   const handleFinalize = useCallback(async () => {
     try {
@@ -81,8 +94,13 @@ const AuctionClaimer: FC = () => {
               </div>
             ),
           })}
-          onClick={auction.canFinalize ? handleFinalize : handleClick}
-          disabled={(!auction.canWithdraw && !auction.canClaim && !auction.canFinalize) || pending}
+          onClick={
+            auction.canWithdrawDeposits ? handleWithdrawDeposits : auction.canFinalize ? handleFinalize : handleClick
+          }
+          disabled={
+            (!auction.canWithdraw && !auction.canClaim && !auction.canFinalize && !auction.canWithdrawDeposits) ||
+            pending
+          }
           className={classNames(
             auction.canWithdraw ? 'from-blue to-blue' : 'from-blue to-pink',
             'w-full outline-none h-[74px] bg-gradient-to-r from-blue to-pink transition-all disabled:scale-[1] hover:scale-[1.02] !opacity-100 disabled:!opacity-40'
@@ -90,7 +108,9 @@ const AuctionClaimer: FC = () => {
         >
           <div className="flex flex-col">
             <Typography className="text-white" weight={700}>
-              {auction.canFinalize
+              {auction.canWithdrawDeposits
+                ? i18n._(t`Withdraw Deposits`)
+                : auction.canFinalize
                 ? i18n._(t`Finalize Auction`)
                 : auction.canWithdraw
                 ? i18n._(t`Withdraw`)

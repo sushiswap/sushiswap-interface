@@ -12,6 +12,7 @@ const useAuctionTemplateMap = () => {
   const templateIdToLabel = useCallback(
     (id: AuctionTemplate) => {
       return {
+        [AuctionTemplate.NOT_SET]: i18n._(t`Not set`),
         [AuctionTemplate.CROWDSALE]: i18n._(t`Crowdsale`),
         [AuctionTemplate.DUTCH_AUCTION]: i18n._(t`Dutch Auction`),
         [AuctionTemplate.BATCH_AUCTION]: i18n._(t`Batch Auction`),

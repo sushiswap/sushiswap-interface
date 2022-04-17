@@ -14,7 +14,11 @@ interface PermissionListStatusSwitchProps {
 
 const PermissionListStatusSwitch: FC<PermissionListStatusSwitchProps> = ({ auction }) => {
   const { i18n } = useLingui()
-  const { updatePermissionListStatus } = useAuctionEdit(auction.auctionInfo.addr, auction.template)
+  const { updatePermissionListStatus } = useAuctionEdit(
+    auction.auctionInfo.addr,
+    auction?.launcherInfo?.address,
+    auction.template
+  )
   const [pending, setPending] = useState<boolean>(false)
 
   const handlePermissionListStatus = useCallback(

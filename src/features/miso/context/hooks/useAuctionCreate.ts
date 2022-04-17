@@ -3,17 +3,21 @@ import { AddressZero } from '@ethersproject/constants'
 import { CHAIN_KEY, Percent } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { AuctionCreationFormInputFormatted } from 'app/features/miso/AuctionCreationForm'
-import { AuctionCreationWizardInputFormatted } from 'app/features/miso/AuctionCreationWizard'
 import { NATIVE_PAYMENT_TOKEN } from 'app/features/miso/context/constants'
 import useAuctionTemplateMap from 'app/features/miso/context/hooks/useAuctionTemplateMap'
 import { useLiquidityLauncherTemplateMap } from 'app/features/miso/context/hooks/useLiquidityLauncherTemplateMap'
 import useTokenTemplateMap from 'app/features/miso/context/hooks/useTokenTemplateMap'
-import { AuctionTemplate, LiquidityLauncherTemplate, TokenSetup } from 'app/features/miso/context/types'
+import {
+  AuctionCreationWizardInputFormatted,
+  AuctionTemplate,
+  LiquidityLauncherTemplate,
+  TokenSetup,
+} from 'app/features/miso/context/types'
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { addMinutes, getUnixTime } from 'date-fns'
 import { useCallback } from 'react'
-
 const useAuctionCreate = () => {
   const { chainId, account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
@@ -89,12 +93,16 @@ const useAuctionCreate = () => {
         'address',
       ]
 
+      const now = Date.now()
+      const startDate = getUnixTime(data.startDate)
+      const endDate = getUnixTime(data.endDate)
+
       const _data = [
         marketFactoryAddress,
         data.auctionToken.address,
         data.tokenAmount.quotient.toString(),
-        data.startDate.getTime() / 1000,
-        data.endDate.getTime() / 1000,
+        now > startDate ? getUnixTime(addMinutes(now, 5)) : startDate,
+        now > endDate ? getUnixTime(addMinutes(now, 30)) : endDate,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.startPrice.numerator.toString(),
         data.endPrice.numerator.toString(),
@@ -128,12 +136,17 @@ const useAuctionCreate = () => {
         'address',
         'address',
       ]
+
+      const now = Date.now()
+      const startDate = getUnixTime(data.startDate)
+      const endDate = getUnixTime(data.endDate)
+
       const _data = [
         marketFactoryAddress,
         data.auctionToken.address,
         data.tokenAmount.quotient.toString(),
-        data.startDate.getTime() / 1000,
-        data.endDate.getTime() / 1000,
+        now > startDate ? getUnixTime(addMinutes(now, 5)) : startDate,
+        now > endDate ? getUnixTime(addMinutes(now, 30)) : endDate,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.minimumRaised.quotient.toString(),
         account,
@@ -168,13 +181,17 @@ const useAuctionCreate = () => {
         'address',
       ]
 
+      const now = Date.now()
+      const startDate = getUnixTime(data.startDate)
+      const endDate = getUnixTime(data.endDate)
+
       const _data = [
         marketFactoryAddress,
         data.auctionToken.address,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
         data.tokenAmount.quotient.toString(),
-        data.startDate.getTime() / 1000,
-        data.endDate.getTime() / 1000,
+        now > startDate ? getUnixTime(addMinutes(now, 5)) : startDate,
+        now > endDate ? getUnixTime(addMinutes(now, 30)) : endDate,
         data.fixedPrice.numerator.toString(),
         data.minimumTarget.quotient.toString(),
         account,

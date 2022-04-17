@@ -41,6 +41,7 @@ const features: FeatureMap = {
     Feature.LIQUIDITY_MINING,
     Feature.ANALYTICS,
     Feature.BENTOBOX,
+    Feature.MISO,
   ],
   [ChainId.FANTOM_TESTNET]: [Feature.AMM],
   [ChainId.MATIC]: [
@@ -65,6 +66,7 @@ const features: FeatureMap = {
     Feature.LIMIT_ORDERS,
     Feature.STOP_LOSSES,
     Feature.ANALYTICS,
+    Feature.MISO,
   ],
   [ChainId.AVALANCHE_TESTNET]: [Feature.AMM],
   [ChainId.OKEX]: [Feature.AMM],
@@ -72,7 +74,14 @@ const features: FeatureMap = {
   [ChainId.XDAI]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
   [ChainId.MOONRIVER]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.MISO],
   [ChainId.CELO]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
-  [ChainId.ARBITRUM]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
+  [ChainId.ARBITRUM]: [
+    Feature.AMM,
+    Feature.LIQUIDITY_MINING,
+    Feature.ANALYTICS,
+    Feature.BENTOBOX,
+    Feature.KASHI,
+    Feature.MISO,
+  ],
   [ChainId.FUSE]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
   [ChainId.MOONBEAM]: [Feature.AMM, Feature.MISO, Feature.LIQUIDITY_MINING],
 }

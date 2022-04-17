@@ -66,7 +66,7 @@ export const useAuctionDetails = (auctionAddress?: string) => {
   const contract = useContract(auctionAddress, AUCTION_INTERFACE)
 
   const callDatas = useMemo(() => {
-    if (!contract || !auctionAddress) {
+    if (!contract) {
       return []
     }
     return [
@@ -74,7 +74,7 @@ export const useAuctionDetails = (auctionAddress?: string) => {
       contract.interface.encodeFunctionData('pointList', []),
       contract.interface.encodeFunctionData('wallet', []),
     ]
-  }, [auctionAddress, contract])
+  }, [contract])
 
   const results = useSingleContractWithCallData(contract, callDatas)
 
@@ -100,7 +100,13 @@ export const useAuctionDetails = (auctionAddress?: string) => {
 
 export const useAuctionLauncherDetails = (
   launcherAddress?: string
-): { launcherInfo?: RawLauncherInfo; lpTokenAddress?: string } => {
+): {
+  launcherInfo?: RawLauncherInfo
+  liquidityTemplate?: BigNumber
+  lpTokenAddress?: string
+  token1Balance?: BigNumber
+  token2Balance?: BigNumber
+} => {
   const { chainId } = useActiveWeb3React()
   const launcher = useContract(
     launcherAddress,
@@ -114,17 +120,29 @@ export const useAuctionLauncherDetails = (
     }
     return [
       launcher.interface.encodeFunctionData('launcherInfo', []),
+      launcher.interface.encodeFunctionData('liquidityTemplate', []),
       launcher.interface.encodeFunctionData('getLPTokenAddress', []),
+      launcher.interface.encodeFunctionData('getToken1Balance', []),
+      launcher.interface.encodeFunctionData('getToken2Balance', []),
     ]
   }, [launcher, launcherAddress])
 
   const results = useSingleContractWithCallData(launcher, callDatas)
 
   if (launcherAddress && results && Array.isArray(results) && results.length === callDatas.length) {
-    const [{ result: launcherInfo }, { result: lpTokenAddress }] = results
+    const [
+      { result: launcherInfo },
+      { result: liquidityTemplate },
+      { result: lpTokenAddress },
+      { result: token1Balance },
+      { result: token2Balance },
+    ] = results
     return {
       launcherInfo: launcherInfo as any,
+      liquidityTemplate: liquidityTemplate?.[0],
       lpTokenAddress: lpTokenAddress?.[0],
+      token1Balance: token1Balance?.[0],
+      token2Balance: token2Balance?.[0],
     }
   }
 

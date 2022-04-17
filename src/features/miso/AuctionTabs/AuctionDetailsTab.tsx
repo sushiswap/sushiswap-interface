@@ -37,7 +37,6 @@ const AuctionDetailsTab: FC<AuctionDetailsTabProps> = ({ auction, active }) => {
   const totalSupply = useTotalSupply(auction.auctionToken)
   const tokenTemplateIdData = useAuctionTokenTemplateId(auction.auctionToken.address)
   const tokenTemplate = useTokenTemplateMap()
-
   const label = tokenTemplateIdData?.templateId
     ? tokenTemplate.templateIdToLabel(tokenTemplateIdData?.templateId)
     : 'Custom'

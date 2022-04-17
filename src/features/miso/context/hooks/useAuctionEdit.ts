@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 
 export const useAuctionEdit = (
   address?: string,
+  launcherAddress?: string,
   templateId?: number,
   liquidityTemplate?: number,
   listAddress?: string
@@ -17,7 +18,7 @@ export const useAuctionEdit = (
   const addTransaction = useTransactionAdder()
 
   const liquidityLauncherContract = useContract(
-    address,
+    launcherAddress,
     // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PostAuctionLauncher.abi : undefined
   )
@@ -88,11 +89,11 @@ export const useAuctionEdit = (
   }, [account, addTransaction, auctionContract])
 
   const finalizeAuction = useCallback(async () => {
-    if (!auctionContract || !liquidityLauncherContract) return
+    if (!auctionContract) return
 
     try {
       let tx
-      if (liquidityTemplate && liquidityTemplate > 0) {
+      if (liquidityTemplate && liquidityTemplate > 0 && liquidityLauncherContract) {
         tx = await liquidityLauncherContract.finalize()
       } else {
         tx = await auctionContract.finalize()
@@ -103,6 +104,20 @@ export const useAuctionEdit = (
       console.error('finalize auction error: ', e)
     }
   }, [addTransaction, auctionContract, liquidityLauncherContract, liquidityTemplate])
+
+  const withdrawDeposits = useCallback(async () => {
+    if (!liquidityLauncherContract) return
+    if (!(liquidityTemplate && liquidityTemplate > 0)) return
+
+    try {
+      const tx = await liquidityLauncherContract.withdrawDeposits()
+
+      addTransaction(tx, { summary: 'Withdraw Deposits' })
+      return tx
+    } catch (e) {
+      console.error('finalize auction error: ', e)
+    }
+  }, [addTransaction, liquidityLauncherContract, liquidityTemplate])
 
   const updatePermissionList = useCallback(
     async (address: string) => {
@@ -160,6 +175,7 @@ export const useAuctionEdit = (
     finalizeAuction,
     updatePermissionList,
     updatePermissionListStatus,
+    withdrawDeposits,
   }
 }
 

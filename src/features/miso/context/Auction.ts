@@ -284,6 +284,15 @@ export class Auction {
     }
   }
 
+  public get launcherHasFunds(): boolean {
+    if (!this.launcherInfo) return false
+    return this.launcherInfo.token1Balance.gt(0) || this.launcherInfo.token2Balance.gt(0)
+  }
+
+  public get canWithdrawDeposits(): boolean {
+    return !!(this.isOwner && this.launcherInfo?.launched && this.launcherHasFunds)
+  }
+
   public get canFinalize(): boolean {
     if (this.auctionInfo.finalized) return false
     if (this.status !== AuctionStatus.FINISHED) return false
@@ -293,8 +302,8 @@ export class Auction {
     const now = Date.now()
     if (endTime + 60 * 60 * 24 * 7 * 1000 < now) return true
 
-    if (!this.auctionInfo?.liquidityTemplate) return false
-    return this.auctionInfo?.liquidityTemplate > 0
+    if (!this.launcherInfo?.liquidityTemplate) return false
+    return this.launcherInfo?.liquidityTemplate > 0
   }
 
   public get canClaim(): boolean {

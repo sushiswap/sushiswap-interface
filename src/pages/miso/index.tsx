@@ -1,13 +1,12 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import AuctionCard from 'app/features/miso/AuctionCard'
 import { useAuctions } from 'app/features/miso/context/hooks/useAuction'
 import { AuctionStatus } from 'app/features/miso/context/types'
-import { classNames } from 'app/functions'
+import { classNames, featureEnabled } from 'app/functions'
 import NetworkGuard from 'app/guards/Network'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -50,20 +49,17 @@ const Miso = () => {
               {i18n._(t`Use with caution, this is experimental and permissionless. Due dilligence is required.`)}
             </Typography>
           </div>
-          {chainId &&
-            [ChainId.HARMONY, ChainId.KOVAN, ChainId.MOONBEAM, ChainId.MOONRIVER, ChainId.MATIC, ChainId.BSC].includes(
-              chainId
-            ) && (
-              <div className="flex items-center gap-4">
-                <div>
-                  <Link href="/miso/auction" passHref={true}>
-                    <Button color="blue" className="rounded-full">
-                      {i18n._(t`Create Auction`)}
-                    </Button>
-                  </Link>
-                </div>
+          {chainId && featureEnabled(Feature.MISO, chainId) && (
+            <div className="flex items-center gap-4">
+              <div>
+                <Link href="/miso/auction" passHref={true}>
+                  <Button color="blue" className="rounded-full">
+                    {i18n._(t`Create Auction`)}
+                  </Button>
+                </Link>
               </div>
-            )}
+            </div>
+          )}
         </div>
       </MisoHeader>
       <MisoBody>
