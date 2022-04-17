@@ -46,9 +46,7 @@ const Miso = () => {
               {i18n._(t`MISO`)}
             </Typography>
             <Typography weight={700}>
-              {i18n._(
-                t`Minimum Initial SUSHI Offering. Use with caution, this is experimental and permissionless. Due dilligence is required.`
-              )}
+              {i18n._(t`Minimum Initial SUSHI Offering permissionless token launch pad. Due dilligence is required.`)}
             </Typography>
           </div>
           {chainId && featureEnabled(Feature.MISO, chainId) && (
