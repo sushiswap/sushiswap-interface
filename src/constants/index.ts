@@ -84,3 +84,8 @@ export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
 export const DEFAULT_TXN_DISMISS_MS = 25000
 
 export const IS_IN_IFRAME = typeof window !== 'undefined' && window.parent !== window
+
+export const AUTONOMY_REGISTRY_ADDRESSES: { [chainId in ChainId]?: string } = {
+  [ChainId.BSC]: '0x18d087F8D22D409D3CD366AF00BD7AeF0BF225Db',
+  [ChainId.MATIC]: '0x18d087F8D22D409D3CD366AF00BD7AeF0BF225Db',
+}

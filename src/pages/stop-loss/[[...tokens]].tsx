@@ -9,7 +9,6 @@ import { ZERO_PERCENT } from 'app/constants'
 import { Feature } from 'app/enums'
 import LimitOrderApprovalCheck from 'app/features/legacy/limit-order/LimitOrderApprovalCheck'
 import LimitOrderButton from 'app/features/legacy/limit-order/LimitOrderButton'
-import LimitOrderReviewModal from 'app/features/legacy/limit-order/LimitOrderReviewModal'
 import LimitPriceInputPanel from 'app/features/legacy/limit-order/LimitPriceInputPanel'
 import OrderExpirationDropdown from 'app/features/legacy/limit-order/OrderExpirationDropdown'
 import HeaderNew from 'app/features/trade/HeaderNew'
@@ -31,7 +30,9 @@ import { useExpertModeManager } from 'app/state/user/hooks'
 import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
 
-const LimitOrder = () => {
+import StopLossReviewModal from './StopLossReviewModal'
+
+const StopLoss = () => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
@@ -86,7 +87,7 @@ const LimitOrder = () => {
 
   return (
     <>
-      <NextSeo title="Limit Order" />
+      <NextSeo title="Stop Loss" />
       <SwapLayoutCard>
         <LimitOrderApprovalCheck />
         <div className="px-2">
@@ -147,7 +148,7 @@ const LimitOrder = () => {
 
         {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
         <LimitOrderButton trade={trade} parsedAmounts={parsedAmounts} />
-        <LimitOrderReviewModal
+        <StopLossReviewModal
           parsedAmounts={parsedAmounts}
           trade={trade}
           limitPrice={!!rate ? rate : trade?.executionPrice}
@@ -168,7 +169,7 @@ const LimitOrder = () => {
   )
 }
 
-LimitOrder.Guard = NetworkGuard(Feature.LIMIT_ORDERS)
-LimitOrder.Layout = SwapLayout('limit-order-page')
+StopLoss.Guard = NetworkGuard(Feature.LIMIT_ORDERS)
+StopLoss.Layout = SwapLayout('limit-order-page')
 
-export default LimitOrder
+export default StopLoss
