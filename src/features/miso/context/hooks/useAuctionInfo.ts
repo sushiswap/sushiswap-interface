@@ -42,7 +42,15 @@ export const useAuctionHelperInfo = (auctionAddress?: string, marketTemplateId?:
 
   const results = useSingleContractWithCallData(contract, callDatas)
 
-  if (auctionAddress && marketTemplateId && results && Array.isArray(results) && results.length === callDatas.length) {
+  if (
+    contract &&
+    auctionAddress &&
+    marketTemplateId &&
+    results &&
+    Array.isArray(results) &&
+    results.length === callDatas.length &&
+    results.every((el) => !el.error)
+  ) {
     const [{ result: documents }, { result: marketInfo }, { result: auctionInfo }] = results
     return {
       auctionDocuments: arrayToMap(documents?.[0]),
@@ -78,7 +86,14 @@ export const useAuctionDetails = (auctionAddress?: string) => {
 
   const results = useSingleContractWithCallData(contract, callDatas)
 
-  if (auctionAddress && results && Array.isArray(results) && results.length === callDatas.length) {
+  if (
+    contract &&
+    auctionAddress &&
+    results &&
+    Array.isArray(results) &&
+    results.length === callDatas.length &&
+    results.every((el) => !el.error)
+  ) {
     const [{ result: marketTemplate }, { result: pointList }, { result: auctionLauncherAddress }] = results
     return {
       marketTemplateId: marketTemplate?.[0],
@@ -129,7 +144,14 @@ export const useAuctionLauncherDetails = (
 
   const results = useSingleContractWithCallData(launcher, callDatas)
 
-  if (launcherAddress && results && Array.isArray(results) && results.length === callDatas.length) {
+  if (
+    launcher &&
+    launcherAddress &&
+    results &&
+    Array.isArray(results) &&
+    results.length === callDatas.length &&
+    results.every((el) => !el.error)
+  ) {
     const [
       { result: launcherInfo },
       { result: liquidityTemplate },
