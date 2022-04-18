@@ -80,7 +80,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         dispatch(setLimitOrderAttemptingTxn(true))
         await order?.signOrderWithProvider(chainId || 1, library)
 
-        if (limitOrderContract) {
+        if (limitOrderContract && autonomyRegistryContract) {
           const encodedFillOrderData = limitOrderContract.interface.encodeFunctionData('fillOrder', [
             [
               order.maker,
