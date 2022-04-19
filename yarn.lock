@@ -12928,7 +12928,7 @@ web3-provider-engine@16.0.1:
     "@web3-react/types" "^6.0.7"
     tiny-invariant "^1.0.6"
 
-"web3-react-walletlink-connector@npm:@web3-react/walletlink-connector@^6.2.13":
+"web3-react-walletlink-connector@npm:@web3-react/walletlink-connector@^6.2.14":
   version "6.2.14"
   resolved "https://registry.yarnpkg.com/@web3-react/walletlink-connector/-/walletlink-connector-6.2.14.tgz#4adf7b94de5d7018a9fc9e3b6009e78cd33d6e15"
   integrity sha512-F2v1Uu7Nhptt7AaUEJpz69+NVUJxyUfDEA5B/Vr1HkqAL1aJM5gv6B1m4M/VdXKLpmjZ9Kg6X0+VUEyAx1eQ4w==
