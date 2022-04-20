@@ -33,9 +33,12 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+    ">0.3%",
+    "not dead",
+    "not op_mini all",
+    "not IE > 0",
+    "not samsung 4",
+    "not and_uc 12.12"
     ],
     "development": [
       "last 1 chrome version",
@@ -44,8 +47,8 @@
     ]
   },
   "resolutions": {
-    "@walletconnect/ethereum-provider": "1.7.1",
-    "@walletconnect/jsonrpc-provider": "1.0.2"
+    "@walletconnect/ethereum-provider": "1.7.7",
+    "@walletconnect/jsonrpc-provider": "1.0.3"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.7",
