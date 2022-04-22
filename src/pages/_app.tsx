@@ -8,7 +8,7 @@ import Web3ReactManager from 'app/components/Web3ReactManager'
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
 import DefaultLayout from 'app/layouts/Default'
-import { BlockUpdater } from 'app/lib/hooks/useBlockNumber'
+import { BlockNumberProvider } from 'app/lib/hooks/useBlockNumber'
 import { MulticallUpdater } from 'app/lib/state/multicall'
 import store, { persistor } from 'app/state'
 import ApplicationUpdater from 'app/state/application/updater'
@@ -135,24 +135,25 @@ function MyApp({ Component, pageProps, fallback, err }) {
               <ReduxProvider store={store}>
                 {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <PersistGate persistor={persistor}>
-                  <>
-                    <ListsUpdater />
-                    <UserUpdater />
-                    <ApplicationUpdater />
-                    <TransactionUpdater />
-                    <BlockUpdater />
-                    <MulticallUpdater />
-                    <LogsUpdater />
-                  </>
-                  <Provider>
-                    <Layout>
-                      <Guard>
-                        {/*@ts-ignore TYPE NEEDS FIXING*/}
-                        <DefaultSeo {...SEO} />
-                        <Component {...pageProps} err={err} />
-                      </Guard>
-                    </Layout>
-                  </Provider>
+                  <BlockNumberProvider>
+                    <>
+                      <ListsUpdater />
+                      <UserUpdater />
+                      <ApplicationUpdater />
+                      <TransactionUpdater />
+                      <MulticallUpdater />
+                      <LogsUpdater />
+                    </>
+                    <Provider>
+                      <Layout>
+                        <Guard>
+                          {/*@ts-ignore TYPE NEEDS FIXING*/}
+                          <DefaultSeo {...SEO} />
+                          <Component {...pageProps} err={err} />
+                        </Guard>
+                      </Layout>
+                    </Provider>
+                  </BlockNumberProvider>
                 </PersistGate>
               </ReduxProvider>
             </Web3ReactManager>
