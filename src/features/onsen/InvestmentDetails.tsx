@@ -77,7 +77,11 @@ const InvestmentDetails = ({ farm }) => {
   const pendingSushi = usePendingSushi(farm)
   const pendingReward = usePendingReward(farm)
 
-  const positionFiatValue = useUSDCPriceSubgraph(kashiPair ? kashiPair.asset.token : undefined)
+  const kashiAssetPrice = useUSDCPriceSubgraph(kashiPair ? kashiPair.asset.token : undefined)
+
+  const kashiFiatValue = kashiAssetAmount && kashiAssetPrice ? kashiAssetPrice.quote(kashiAssetAmount) : undefined
+
+  const slpFiatValue = Number(stakedAmount?.toExact() ?? 0) * (farm.pair.reserveUSD / farm.pair.totalSupply)
 
   const secondaryRewardOnly = chainId && [ChainId.FUSE].includes(chainId)
 
@@ -109,7 +113,7 @@ const InvestmentDetails = ({ farm }) => {
           <Typography variant="xs" className="flex gap-1 text-secondary">
             {formatNumber(stakedAmount?.toSignificant(6) ?? 0)} {farm.pair.token0.symbol}-{farm.pair.token1.symbol}
             <Typography variant="xs" weight={700} className="text-high-emphesis" component="span">
-              {formatNumber(positionFiatValue?.toSignificant(6) ?? 0, true)}
+              {formatNumber((kashiPair ? kashiFiatValue?.toSignificant(6) : slpFiatValue) ?? 0, true)}
             </Typography>
           </Typography>
         </div>
