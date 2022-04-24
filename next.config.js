@@ -36,18 +36,18 @@ const nextConfig = {
 
     return config
   },
-  experimental: {
-    nextScriptWorkers: true,
-  },
+  // experimental: {
+  //   nextScriptWorkers: true,
+  // },
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
   swcMinify: false,
   reactStrictMode: true,
-  pwa: {
-    dest: 'public',
-    runtimeCaching,
-    disable: process.env.NODE_ENV === 'development',
-  },
+  // pwa: {
+  //   dest: 'public',
+  //   runtimeCaching,
+  //   disable: process.env.NODE_ENV === 'development',
+  // },
   images: {
     loader: 'cloudinary',
     path: 'https://res.cloudinary.com/sushi-cdn/image/fetch/',
@@ -149,7 +149,7 @@ const SentryWebpackPluginOptions = {
 
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
-module.exports = withSentryConfig(withPWA(withBundleAnalyzer(nextConfig)), SentryWebpackPluginOptions)
+module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), SentryWebpackPluginOptions)
 
 // Don't delete this console log, useful to see the config in Vercel deployments
 // console.log('next.config.js', JSON.stringify(module.exports, null, 2))

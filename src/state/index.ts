@@ -23,12 +23,14 @@ const migrations = {
       user: initialState,
     }
   },
-  // 2: (state) => {
-  //   // migration to keep only device state
-  //   return {
-  //     device: state.device,
-  //   }
-  // },
+  // @ts-ignore
+  2: (state) => {
+    // migration to keep only device state
+    return {
+      ...state,
+      lists: undefined,
+    }
+  },
 }
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'slippage']
@@ -36,7 +38,7 @@ const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'slippage']
 const persistConfig = {
   key: 'root',
   whitelist: PERSISTED_KEYS,
-  version: 1,
+  version: 2,
   storage,
   migrate: createMigrate(migrations, { debug: process.env.NODE_ENV === 'development' }),
 }
