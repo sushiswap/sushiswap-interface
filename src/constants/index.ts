@@ -1,4 +1,4 @@
-import { AddressMap, ChainId, JSBI, Percent } from '@sushiswap/core-sdk'
+import { ChainId, JSBI, Percent } from '@sushiswap/core-sdk'
 
 // TODO: Move some of this to config level...
 
@@ -84,9 +84,3 @@ export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
 export const DEFAULT_TXN_DISMISS_MS = 25000
 
 export const IS_IN_IFRAME = typeof window !== 'undefined' && window.parent !== window
-
-export const AUTONOMY_REGISTRY_ADDRESSES: AddressMap = {
-  [ChainId.BSC]: '0x18d087F8D22D409D3CD366AF00BD7AeF0BF225Db',
-  [ChainId.MATIC]: '0x18d087F8D22D409D3CD366AF00BD7AeF0BF225Db',
-  [ChainId.AVALANCHE]: '0x68FCbECa74A7E5D386f74E14682c94DE0e1bC56b',
-}

@@ -1,10 +1,12 @@
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { Signature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import { ADVANCED_RECEIVER_ADDRESS, LimitOrder } from '@sushiswap/limit-order-sdk'
-import { AUTONOMY_REGISTRY_ADDRESSES } from 'app/constants'
-import AUTONOMY_REGISTRY_ABI from 'app/constants/abis/autonomy-registry.json'
+import { LimitOrder, ROUND_UP_RECEIVER_ADDRESS } from '@sushiswap/limit-order-sdk'
+import AUTONOMY_REGISTRY_ABI from 'app/constants/abis/autonomy/registry.json'
+import STOP_LIMIT_ORDER_WRAPPER_ABI from 'app/constants/abis/autonomy/stop-limit-order-wrapper.json'
+import { AUTONOMY_REGISTRY_ADDRESSES, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { ZERO } from 'app/functions'
 import { useContract, useLimitOrderContract } from 'app/hooks'
@@ -14,6 +16,8 @@ import { useAppDispatch } from 'app/state/hooks'
 import { setLimitOrderAttemptingTxn } from 'app/state/limit-order/actions'
 import { OrderExpiration } from 'app/state/limit-order/reducer'
 import { useCallback } from 'react'
+
+import { calculateAmountExternal, IStopLimitOrderReceiverParam } from './utils'
 
 const getEndTime = (orderExpiration: OrderExpiration | string): number => {
   switch (orderExpiration) {
@@ -56,6 +60,11 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
     AUTONOMY_REGISTRY_ABI,
     true
   )
+  const limitOrderWrapperContract = useContract(
+    chainId ? STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId] : undefined,
+    STOP_LIMIT_ORDER_WRAPPER_ABI,
+    true
+  )
   const limitOrderContract = useLimitOrderContract()
 
   const dispatch = useAppDispatch()
@@ -80,8 +89,27 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         dispatch(setLimitOrderAttemptingTxn(true))
         await order?.signOrderWithProvider(chainId || 1, library)
 
-        if (limitOrderContract && autonomyRegistryContract) {
-          const encodedFillOrderData = limitOrderContract.interface.encodeFunctionData('fillOrder', [
+        if (limitOrderContract && autonomyRegistryContract && limitOrderWrapperContract && chainId) {
+          const limitOrderReceiverParam: IStopLimitOrderReceiverParam = calculateAmountExternal(
+            inputAmount.wrapped,
+            outputAmount.wrapped,
+            chainId
+          )
+          if (!limitOrderReceiverParam.isValidPair) {
+            throw 'Unsupported pair'
+          }
+          const data = defaultAbiCoder.encode(
+            ['address[]', 'uint256', 'address', 'bool'],
+            [
+              [order.tokenInAddress, order.tokenOutAddress], // path
+              limitOrderReceiverParam.amountExternal, // amountExternal
+              chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId], // profit receiver
+              limitOrderReceiverParam.keepTokenIn, // keepTokenIn
+            ]
+          )
+
+          const encodedFillOrderData = limitOrderWrapperContract.interface.encodeFunctionData('fillOrder', [
+            0, // fee amount, that will be filled later
             [
               order.maker,
               order.amountInRaw,
@@ -99,19 +127,19 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
             ],
             order.tokenInAddress,
             order.tokenOutAddress,
-            chainId && ADVANCED_RECEIVER_ADDRESS[chainId],
-            [],
+            chainId && ROUND_UP_RECEIVER_ADDRESS[chainId],
+            data,
           ])
           console.log('encoded fillOrder() data: ', JSON.stringify(encodedFillOrderData))
 
           await autonomyRegistryContract.newReq(
-            limitOrderContract.address,
-            AddressZero,
-            encodedFillOrderData,
-            ZERO,
-            false,
-            false,
-            false
+            chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId], // target
+            AddressZero, // referer
+            encodedFillOrderData, // callData
+            ZERO, // ethForCall
+            false, // verifyUser
+            true, // insertFeeAmount
+            false // isAlive
           )
         }
 
