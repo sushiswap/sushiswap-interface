@@ -1,10 +1,7 @@
-import { CheckCircleIcon, ExclamationIcon, ShieldCheckIcon, XCircleIcon } from '@heroicons/react/outline'
-import { BadgeCheckIcon, ChevronDoubleRightIcon, EmojiHappyIcon } from '@heroicons/react/solid'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { CheckCircleIcon, ExclamationIcon, XCircleIcon } from '@heroicons/react/outline'
+import PrivateTransaction from 'app/components/AccountDetails/PrivateTransaction'
 import ExternalLink from 'app/components/ExternalLink'
 import Loader from 'app/components/Loader'
-import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import { PrivateTxState } from 'app/entities/SushiGuard'
 import { classNames, getExplorerLink } from 'app/functions'
@@ -14,7 +11,6 @@ import { useAllTransactions } from 'app/state/transactions/hooks'
 import React, { FC } from 'react'
 
 const Transaction: FC<{ hash: string }> = ({ hash }) => {
-  const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const allTransactions = useAllTransactions()
 
@@ -33,6 +29,7 @@ const Transaction: FC<{ hash: string }> = ({ hash }) => {
   const cancelled = tx?.receipt && tx.receipt.status === 1337
 
   if (!chainId) return null
+  if (privateTx) return <PrivateTransaction tx={tx} />
 
   return (
     <div className="flex flex-col w-full py-1">
@@ -65,47 +62,6 @@ const Transaction: FC<{ hash: string }> = ({ hash }) => {
             {summary ?? hash}
           </Typography>
         </ExternalLink>
-
-        {privateTx && (
-          <>
-            <QuestionHelper
-              text={i18n._(t`This transaction has been sent using SushiGuard`)}
-              icon={<ShieldCheckIcon className="text-green" width={14} />}
-            />
-
-            {privateTx.status && (
-              <>
-                {privateTx.status.receivedAt && (
-                  <QuestionHelper
-                    text={i18n._(t`Transaction successfully received by SushiGuard`)}
-                    icon={<BadgeCheckIcon className="text-green" width={14} />}
-                  />
-                )}
-
-                {privateTx.status.relayedAt && (
-                  <>
-                    <QuestionHelper
-                      text={i18n._(t`Transaction relayed by SushiGuard to downstream miners`)}
-                      icon={
-                        <ChevronDoubleRightIcon
-                          className={privateTx.status.relayFailure ? 'text-red' : 'text-green'}
-                          width={14}
-                        />
-                      }
-                    />
-                  </>
-                )}
-
-                {privateTx.status.minedAt && (
-                  <QuestionHelper
-                    text={i18n._(t`Transaction mined sucessfully`)}
-                    icon={<EmojiHappyIcon className="text-green" width={14} />}
-                  />
-                )}
-              </>
-            )}
-          </>
-        )}
       </div>
     </div>
   )
