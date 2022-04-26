@@ -17,6 +17,9 @@ import {
   setLimitPrice,
   setOrderExpiration,
   setRecipient,
+  setStopLossInvertRate,
+  setStopLossInvertState,
+  setStopPrice,
   switchCurrencies,
   typeInput,
 } from './actions'
@@ -33,6 +36,7 @@ export interface LimitOrderState {
   readonly typedField: Field
   readonly typedValue: string
   readonly limitPrice: string
+  readonly stopPrice: string
   readonly inputCurrencyId: string
   readonly outputCurrencyId: string
   readonly recipient?: string
@@ -46,12 +50,14 @@ export interface LimitOrderState {
   readonly attemptingTxn: boolean
   readonly showReview: boolean
   readonly invertRate: boolean
+  readonly invertStopRate: boolean
 }
 
 const initialState: LimitOrderState = {
   typedField: Field.INPUT,
   typedValue: '',
   limitPrice: '',
+  stopPrice: '',
   inputCurrencyId: 'ETH',
   outputCurrencyId: 'SUSHI',
   recipient: undefined,
@@ -65,6 +71,7 @@ const initialState: LimitOrderState = {
   attemptingTxn: false,
   showReview: false,
   invertRate: false,
+  invertStopRate: false,
 }
 
 export default createReducer<LimitOrderState>(initialState, (builder) =>
@@ -83,6 +90,7 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
             outputCurrencyId,
             fromBentoBalance,
             limitPrice,
+            stopPrice,
             orderExpiration,
           },
         }
@@ -94,6 +102,7 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
         recipient,
         fromBentoBalance,
         limitPrice,
+        stopPrice,
         orderExpiration,
         limitOrderApprovalPending: state.limitOrderApprovalPending,
       })
@@ -101,6 +110,10 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
     .addCase(setLimitPrice, (state, { payload: limitPrice }) => {
       // @ts-ignore TYPE NEEDS FIXING
       state.limitPrice = limitPrice
+    })
+    .addCase(setStopPrice, (state, { payload: stopPrice }) => {
+      // @ts-ignore TYPE NEEDS FIXING
+      state.stopPrice = stopPrice
     })
     .addCase(setLimitOrderApprovalPending, (state, { payload: limitOrderApprovalPending }) => {
       state.limitOrderApprovalPending = limitOrderApprovalPending
@@ -156,6 +169,13 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
     .addCase(setLimitOrderInvertState, (state, { payload: { invertRate, limitPrice } }) => {
       state.invertRate = invertRate
       state.limitPrice = limitPrice
+    })
+    .addCase(setStopLossInvertRate, (state, { payload: invertStopRate }) => {
+      state.invertStopRate = invertStopRate
+    })
+    .addCase(setStopLossInvertState, (state, { payload: { invertStopRate, stopPrice } }) => {
+      state.invertStopRate = invertStopRate
+      state.stopPrice = stopPrice
     })
 )
 

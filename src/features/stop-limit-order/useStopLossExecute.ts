@@ -9,7 +9,7 @@ import STOP_LIMIT_ORDER_WRAPPER_ABI from 'app/constants/abis/autonomy/stop-limit
 import { AUTONOMY_REGISTRY_ADDRESSES, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { ZERO } from 'app/functions'
-import { useContract, useLimitOrderContract } from 'app/hooks'
+import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
@@ -65,7 +65,6 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
     STOP_LIMIT_ORDER_WRAPPER_ABI,
     true
   )
-  const limitOrderContract = useLimitOrderContract()
 
   const dispatch = useAppDispatch()
   const addPopup = useAddPopup()
@@ -89,7 +88,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         dispatch(setLimitOrderAttemptingTxn(true))
         await order?.signOrderWithProvider(chainId || 1, library)
 
-        if (limitOrderContract && autonomyRegistryContract && limitOrderWrapperContract && chainId) {
+        if (autonomyRegistryContract && limitOrderWrapperContract && chainId) {
           const limitOrderReceiverParam: IStopLimitOrderReceiverParam = calculateAmountExternal(
             inputAmount.wrapped,
             outputAmount.wrapped,
@@ -167,7 +166,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         })
       }
     },
-    [account, addPopup, chainId, dispatch, library, autonomyRegistryContract, limitOrderContract]
+    [account, addPopup, chainId, dispatch, library, autonomyRegistryContract, limitOrderWrapperContract]
   )
 
   return {

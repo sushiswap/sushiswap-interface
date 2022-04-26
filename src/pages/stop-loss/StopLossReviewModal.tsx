@@ -7,13 +7,12 @@ import ListPanel from 'app/components/ListPanel'
 import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
+import useStopLossExecute from 'app/features/stop-limit-order/useStopLossExecute'
 import { isAddress, shortenAddress } from 'app/functions'
 import { useAppDispatch } from 'app/state/hooks'
 import { setLimitOrderShowReview } from 'app/state/limit-order/actions'
 import { useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC, useCallback, useMemo, useState } from 'react'
-
-import useStopLossExecute from './useStopLossExecute'
 
 interface StopLossReviewModal {
   trade?: Trade<Currency, Currency, TradeType>

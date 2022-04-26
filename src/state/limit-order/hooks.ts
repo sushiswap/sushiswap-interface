@@ -214,6 +214,19 @@ export const useLimitOrderDerivedLimitPrice: UseLimitOrderDerivedLimitPrice = ()
       : undefined
   }, [inputCurrency, invertRate, limitPrice, outputCurrency])
 }
+export const useStopLossDerivedLimitPrice: UseLimitOrderDerivedLimitPrice = () => {
+  const { stopPrice, invertStopRate } = useLimitOrderState()
+  const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
+
+  return useMemo(() => {
+    const baseAmount = tryParseAmount(invertStopRate ? stopPrice : '1', inputCurrency)
+    const quoteAmount = tryParseAmount(invertStopRate ? '1' : stopPrice, outputCurrency)
+
+    return baseAmount && quoteAmount && inputCurrency && outputCurrency
+      ? new Price({ baseAmount, quoteAmount })
+      : undefined
+  }, [inputCurrency, invertStopRate, stopPrice, outputCurrency])
+}
 
 type UseLimitOrderDerivedParsedAmounts = ({
   rate,
@@ -263,7 +276,7 @@ export const useLimitOrderDerivedTypedInputAmount: UseLimitOrderDerivedTypedInpu
 
 type UseLimitOrderDerivedInputError = ({ trade }: { trade?: Trade<Currency, Currency, TradeType> }) => string
 export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({ trade }) => {
-  const { recipient, orderExpiration, fromBentoBalance, limitPrice, typedValue } = useLimitOrderState()
+  const { recipient, orderExpiration, fromBentoBalance, limitPrice, stopPrice, typedValue } = useLimitOrderState()
   const { account } = useActiveWeb3React()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const recipientLookup = useENS(recipient)
@@ -283,6 +296,8 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
       ? i18n._(t`Enter a valid recipient address`)
       : limitPrice !== LimitPrice.CURRENT && parsedRate?.equalTo(ZERO)
       ? i18n._(t`Select a rate`)
+      : stopPrice !== LimitPrice.CURRENT && parsedRate?.equalTo(ZERO)
+      ? i18n._(t`Select a rate`)
       : !orderExpiration
       ? i18n._(t`Select an order expiration`)
       : !balance
@@ -296,6 +311,7 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
     expertMode,
     inputCurrency,
     limitPrice,
+    stopPrice,
     orderExpiration,
     outputCurrency,
     parsedRate,

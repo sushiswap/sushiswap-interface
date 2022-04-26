@@ -10,7 +10,8 @@ import { Feature } from 'app/enums'
 import LimitOrderApprovalCheck from 'app/features/legacy/limit-order/LimitOrderApprovalCheck'
 import LimitOrderButton from 'app/features/legacy/limit-order/LimitOrderButton'
 import LimitPriceInputPanel from 'app/features/legacy/limit-order/LimitPriceInputPanel'
-import OrderExpirationDropdown from 'app/features/legacy/limit-order/OrderExpirationDropdown'
+import StopPriceInputPanel from 'app/features/stop-limit-order/StopPriceInputPanel'
+// import OrderExpirationDropdown from 'app/features/legacy/limit-order/OrderExpirationDropdown'
 import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import { featureEnabled } from 'app/functions'
@@ -25,6 +26,7 @@ import useLimitOrderDerivedCurrencies, {
   useLimitOrderDerivedParsedAmounts,
   useLimitOrderDerivedTrade,
   useLimitOrderState,
+  useStopLossDerivedLimitPrice,
 } from 'app/state/limit-order/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { NextSeo } from 'next-seo'
@@ -41,6 +43,7 @@ const StopLoss = () => {
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const trade = useLimitOrderDerivedTrade()
   const rate = useLimitOrderDerivedLimitPrice()
+  const stopRate = useStopLossDerivedLimitPrice()
   const parsedAmounts = useLimitOrderDerivedParsedAmounts({ rate, trade })
   const { onSwitchTokens, onCurrencySelection, onUserInput } = useLimitOrderActionHandlers()
 
@@ -121,7 +124,7 @@ const StopLoss = () => {
           />
           <div className="flex gap-3">
             <div className="flex flex-1">
-              <LimitPriceInputPanel trade={trade} limitPrice={!!rate ? rate : trade?.executionPrice} />
+              <StopPriceInputPanel trade={trade} stopPrice={!!stopRate ? stopRate : trade?.executionPrice} />
             </div>
             <SwitchVerticalIcon
               width={18}
@@ -129,8 +132,11 @@ const StopLoss = () => {
               onClick={onSwitchTokens}
             />
             <div className="flex flex-1">
-              <OrderExpirationDropdown />
+              <LimitPriceInputPanel trade={trade} limitPrice={!!rate ? rate : trade?.executionPrice} />
             </div>
+            {/* <div className="flex flex-1">
+              <OrderExpirationDropdown />
+            </div> */}
           </div>
           <SwapAssetPanel
             error={false}

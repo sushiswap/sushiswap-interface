@@ -11,12 +11,18 @@ export enum LimitPrice {
 }
 
 export const setLimitPrice = createAction<string | undefined>('limit-order/setLimitPrice')
+export const setStopPrice = createAction<string | undefined>('limit-order/setStopPrice')
 export const setLimitOrderBentoPermit = createAction<Signature | undefined>('limit-order/setLimitBentoPermit')
 export const setLimitOrderAttemptingTxn = createAction<boolean>('limit-order/setLimitAttemptingTxn')
 export const setLimitOrderInvertRate = createAction<boolean>('limit-order/setLimitOrderInvertRate')
 export const setLimitOrderInvertState = createAction<{ invertRate: boolean; limitPrice: string }>(
   'limit-order/setLimitOrderInvertState'
 )
+export const setStopLossInvertRate = createAction<boolean>('limit-order/setStopLossInvertRate')
+export const setStopLossInvertState = createAction<{ invertStopRate: boolean; stopPrice: string }>(
+  'limit-order/setStopLossInvertState'
+)
+
 export const setOrderExpiration = createAction<
   | {
       value: string
@@ -35,6 +41,7 @@ export const replaceLimitOrderState = createAction<{
   recipient?: string
   fromBentoBalance?: boolean
   limitPrice?: string
+  stopPrice?: string
   orderExpiration?: { value: string; label: string }
 }>('limit-order/replaceLimitOrderState')
 export const selectCurrency = createAction<{
