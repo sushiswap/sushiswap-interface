@@ -1,4 +1,4 @@
-import { CurrencyAmount, Token, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Price, Token, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { BigNumber } from 'ethers'
 
 export const STOP_LIMIT_ORDER_PROFIT_SLIPPAGE = 2 // percent unit
@@ -40,5 +40,32 @@ export function calculateAmountExternal(
     isValidPair: true,
     keepTokenIn,
     amountExternal,
+  }
+}
+
+export interface IStopPriceOracleData {
+  stopPrice: string
+  oracleData: string
+}
+
+export const ZERO_ORACLE_ADDRESS = '0x0000000000000000000000000000000000000000'
+export const ZERO_ORACLE_DATA = '0x00000000000000000000000000000000000000000000000000000000000000'
+
+/**
+ * @dev stopPrice should be inverse value, due to smart contract requirements.
+ *
+ * @param tokenIn
+ * @param tokenOut
+ * @param stopPrice
+ * @returns
+ */
+export function prepareStopPriceOracleData(
+  tokenIn: CurrencyAmount<Token>,
+  tokenOut: CurrencyAmount<Token>,
+  stopPrice: Price<Currency, Currency>
+): IStopPriceOracleData {
+  return {
+    stopPrice: '0',
+    oracleData: ZERO_ORACLE_ADDRESS,
   }
 }

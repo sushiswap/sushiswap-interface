@@ -2,11 +2,15 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { Signature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Price } from '@sushiswap/core-sdk'
 import { LimitOrder, ROUND_UP_RECEIVER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import AUTONOMY_REGISTRY_ABI from 'app/constants/abis/autonomy/registry.json'
 import STOP_LIMIT_ORDER_WRAPPER_ABI from 'app/constants/abis/autonomy/stop-limit-order-wrapper.json'
-import { AUTONOMY_REGISTRY_ADDRESSES, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
+import {
+  AUTONOMY_REGISTRY_ADDRESSES,
+  CHAINLINK_ORACLE_ADDRESS,
+  STOP_LIMIT_ORDER_WRAPPER_ADDRESSES,
+} from 'app/constants/autonomy'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { ZERO } from 'app/functions'
 import { useContract } from 'app/hooks'
@@ -17,7 +21,12 @@ import { setLimitOrderAttemptingTxn } from 'app/state/limit-order/actions'
 import { OrderExpiration } from 'app/state/limit-order/reducer'
 import { useCallback } from 'react'
 
-import { calculateAmountExternal, IStopLimitOrderReceiverParam } from './utils'
+import {
+  calculateAmountExternal,
+  IStopLimitOrderReceiverParam,
+  prepareStopPriceOracleData,
+  ZERO_ORACLE_ADDRESS,
+} from './utils'
 
 const getEndTime = (orderExpiration: OrderExpiration | string): number => {
   switch (orderExpiration) {
@@ -44,6 +53,7 @@ export type ExecutePayload = {
   inputAmount?: CurrencyAmount<Currency>
   outputAmount?: CurrencyAmount<Currency>
   recipient?: string
+  stopPrice?: Price<Currency, Currency> | undefined
 }
 
 export type UseLimitOrderExecuteDeposit = (x: DepositPayload) => Promise<TransactionResponse | undefined>
@@ -71,8 +81,13 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
   const { mutate } = useLimitOrders()
 
   const execute = useCallback<UseLimitOrderExecuteExecute>(
-    async ({ orderExpiration, inputAmount, outputAmount, recipient }) => {
-      if (!inputAmount || !outputAmount || !account || !library) throw new Error('Dependencies unavailable')
+    async ({ orderExpiration, inputAmount, outputAmount, recipient, stopPrice }) => {
+      if (!inputAmount || !outputAmount || !account || !library || !chainId) throw new Error('Dependencies unavailable')
+
+      let oracleData
+      if (stopPrice) {
+        oracleData = prepareStopPriceOracleData(inputAmount.wrapped, outputAmount.wrapped, stopPrice)
+      }
 
       const endTime = getEndTime(orderExpiration)
       const order = new LimitOrder(
@@ -81,7 +96,10 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         outputAmount.wrapped,
         recipient ? recipient : account,
         Math.floor(new Date().getTime() / 1000).toString(),
-        endTime.toString()
+        endTime.toString(),
+        oracleData && oracleData.stopPrice,
+        oracleData && CHAINLINK_ORACLE_ADDRESS[chainId] && ZERO_ORACLE_ADDRESS,
+        oracleData && oracleData.oracleData
       )
 
       try {

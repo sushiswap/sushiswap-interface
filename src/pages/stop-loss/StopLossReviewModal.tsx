@@ -11,7 +11,7 @@ import useStopLossExecute from 'app/features/stop-limit-order/useStopLossExecute
 import { isAddress, shortenAddress } from 'app/functions'
 import { useAppDispatch } from 'app/state/hooks'
 import { setLimitOrderShowReview } from 'app/state/limit-order/actions'
-import { useLimitOrderState } from 'app/state/limit-order/hooks'
+import { useLimitOrderState, useStopLossDerivedLimitPrice } from 'app/state/limit-order/hooks'
 import React, { FC, useCallback, useMemo, useState } from 'react'
 
 interface StopLossReviewModal {
@@ -26,6 +26,7 @@ interface StopLossReviewModal {
 const StopLossReviewModal: FC<StopLossReviewModal> = ({ parsedAmounts, trade, limitPrice }) => {
   const [inverted, setInverted] = useState(false)
   const { showReview, orderExpiration, recipient, attemptingTxn } = useLimitOrderState()
+  const stopRate = useStopLossDerivedLimitPrice()
   const dispatch = useAppDispatch()
   const { i18n } = useLingui()
   const { execute } = useStopLossExecute()
@@ -37,6 +38,7 @@ const StopLossReviewModal: FC<StopLossReviewModal> = ({ parsedAmounts, trade, li
         recipient,
         outputAmount: parsedAmounts.outputAmount,
         inputAmount: parsedAmounts.inputAmount,
+        stopPrice: stopRate,
       })
     }
   }, [execute, orderExpiration.value, parsedAmounts.inputAmount, parsedAmounts.outputAmount, recipient])
