@@ -8,7 +8,8 @@ import { HeadlessUiModal } from 'app/components/Modal'
 import SubmittedModalContent from 'app/components/Modal/SubmittedModalContent'
 import Typography from 'app/components/Typography'
 import { KashiMarketDetailsView, useKashiMarket, useRepayExecute } from 'app/features/kashi/KashiMarket'
-import { unwrappedToken } from 'app/functions'
+import { unwrappedToken, warningSeverity } from 'app/functions'
+import { useIsExpertMode } from 'app/state/user/hooks'
 import React, { FC, useCallback, useState } from 'react'
 
 import { KashiMarketRepayButtonProps } from './KashiMarketRepayButton'
@@ -70,6 +71,10 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
     }
   }, [closePosition, execute, removeAmount, removeToWallet, repayAmount, repayFromWallet, trade])
 
+  const priceImpactSeverity = warningSeverity(trade?.priceImpact)
+
+  const isExpertMode = useIsExpertMode()
+
   return (
     <HeadlessUiModal.Controlled
       isOpen={open}
@@ -122,6 +127,14 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
                     </Typography>
                   </div>
                 </div>
+                <div className="flex flex-col gap-2">
+                  <Typography variant="xs" className="text-secondary">
+                    {i18n._(t`Price Impact`)}
+                  </Typography>
+                  <Typography variant="xs" className="text-high-emphesis">
+                    {trade?.priceImpact?.toFixed(2)}%
+                  </Typography>
+                </div>
               </HeadlessUiModal.BorderedContent>
             </>
           ) : (
@@ -159,8 +172,19 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
             collateralAmount={closePosition ? removeAmountCurrencyAmount : removeAmount}
             borrowAmount={closePosition ? repayAmountCurrencyAmount : repayAmount}
           />
-          <Button loading={attemptingTxn} color="gradient" disabled={attemptingTxn} onClick={_execute}>
-            {closePosition ? i18n._(t`Close Position`) : i18n._(t`Confirm Repay`)}
+          <Button
+            loading={attemptingTxn}
+            color="gradient"
+            disabled={attemptingTxn || (priceImpactSeverity > 3 && !isExpertMode)}
+            onClick={_execute}
+          >
+            {closePosition
+              ? priceImpactSeverity > 3 && !isExpertMode
+                ? i18n._(t`Price Impact Too High`)
+                : priceImpactSeverity > 2
+                ? i18n._(t`Close Position Anyway`)
+                : i18n._(t`Close Position`)
+              : i18n._(t`Confirm Repay`)}
           </Button>
         </div>
       ) : (
