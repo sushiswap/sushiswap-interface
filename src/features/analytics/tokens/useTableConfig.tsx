@@ -2,6 +2,7 @@ import { getAddress } from '@ethersproject/address'
 import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { formatNumber, formatPercent } from 'app/functions'
+import { useAllTokens } from 'app/hooks/Tokens'
 import React, { useMemo } from 'react'
 
 import useTokensAnalytics from '../hooks/useTokensAnalytics'
@@ -10,6 +11,7 @@ import { filterForSearchQuery } from './tokenTableFilters'
 export const useTableConfig = (chainId: number) => {
   // const { data, error, isValidating } = useTokensAnalytics({ chainId })
   const data = useTokensAnalytics({ chainId })
+  const allTokens = useAllTokens()
   const columns = useMemo(
     () => [
       {
@@ -18,17 +20,12 @@ export const useTableConfig = (chainId: number) => {
         maxWidth: 100,
         // @ts-ignore
         Cell: (props) => {
-          const currency = useMemo(
-            () =>
-              new Token(
-                chainId,
-                getAddress(props.value.id),
-                Number(props.value.decimals),
-                props.value.symbol,
-                props.value.name
-              ),
-            [props]
-          )
+          const currency = useMemo(() => {
+            const address = getAddress(props.value.id)
+            return address in allTokens
+              ? allTokens[address]
+              : new Token(chainId, address, Number(props.value.decimals), props.value.symbol, props.value.name)
+          }, [props])
           return (
             <div className="flex items-center gap-2">
               <CurrencyLogo currency={currency ?? undefined} className="!rounded-full" size={36} />

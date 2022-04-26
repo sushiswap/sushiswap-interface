@@ -18,7 +18,6 @@ import { useTableConfig } from './useTableConfig'
 
 const PoolTable: FC<{ chainId: number }> = ({ chainId }) => {
   const { config } = useTableConfig(chainId)
-
   const {
     getTableProps,
     getTableBodyProps,
