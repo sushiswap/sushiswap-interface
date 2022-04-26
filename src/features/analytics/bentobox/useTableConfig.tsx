@@ -3,12 +3,14 @@ import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { Feature } from 'app/enums'
 import { featureEnabled, formatNumber, formatPercent } from 'app/functions'
+import { useAllTokens } from 'app/hooks/Tokens'
 import { useBentoStrategies, useBentoTokens, useNativePrice, useTokens } from 'app/services/graph'
 import React, { useMemo } from 'react'
 
 import { filterForSearchQuery } from './tokenTableFilters'
 
 export const useTableConfig = (chainId: number) => {
+  const allTokens = useAllTokens()
   const { data: nativePrice } = useNativePrice({ chainId })
 
   const bentoBoxTokens = useBentoTokens({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
@@ -82,16 +84,13 @@ export const useTableConfig = (chainId: number) => {
         maxWidth: 100,
         // @ts-ignore
         Cell: (props) => {
+          const address = getAddress(props.value.id)
           const currency = useMemo(
             () =>
-              new Token(
-                chainId,
-                getAddress(props.value.id),
-                Number(props.value.decimals),
-                props.value.symbol,
-                props.value.name
-              ),
-            [props]
+              address in allTokens
+                ? allTokens[address]
+                : new Token(chainId, address, Number(props.value.decimals), props.value.symbol, props.value.name),
+            [props, address]
           )
           return (
             <div className="flex items-center gap-2">
