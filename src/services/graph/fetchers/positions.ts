@@ -1,5 +1,6 @@
 import { ChainId, Token } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/trident-sdk'
+import { AllPoolType } from 'app/features/trident/types'
 import { fetcher, TridentPoolData } from 'app/services/graph'
 import { getTridentPositionsQuery } from 'app/services/graph/queries'
 
@@ -16,12 +17,11 @@ interface TridentPosition {
 export interface TridentPositionRow {
   id: string
   assets: Token[]
-  type: PoolType
+  type: AllPoolType
   swapFeePercent: number
   twapEnabled: boolean
   value: number
   apy: string
-  legacy?: boolean
 }
 
 const formatPositions = (chainId: ChainId, { liquidityPositions }: TridentPositionQueryResult) => {

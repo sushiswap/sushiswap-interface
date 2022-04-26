@@ -1,6 +1,7 @@
 import { getAddress } from '@ethersproject/address'
 import { ChainId, Token } from '@sushiswap/core-sdk'
 import { Fee, PoolType } from '@sushiswap/trident-sdk'
+import { AllPoolType } from 'app/features/trident/types'
 import { GRAPH_HOST, TRIDENT } from 'app/services/graph/constants'
 import {
   getTransactionsForPoolQuery,
@@ -39,7 +40,7 @@ const gqlPoolTypeMap: Record<string, PoolType> = {
 
 export interface TridentPool {
   address: string
-  type: PoolType
+  type: AllPoolType
   volumeUSD: number
   liquidityUSD: number
   transactionCount: number

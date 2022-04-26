@@ -9,12 +9,15 @@ import {
   selectTridentPools,
   setPoolsFarmsOnly,
   setPoolsFeeTiers,
+  setPoolsPoolTypes,
   setPoolsTWAPOnly,
 } from 'app/features/trident/pools/poolsSlice'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { FC, useState } from 'react'
 
-import { removeOrAddFeeTier } from './SearchSidebar'
+import { POOL_TYPES } from '../constants'
+import { UsedPoolType } from '../types'
+import { removeOrAddFeeTier, removeOrAddPoolType } from './SearchSidebar'
 
 const YieldFarmFilter: FC = () => {
   const { farmsOnly } = useAppSelector(selectTridentPools)
@@ -26,7 +29,7 @@ const YieldFarmFilter: FC = () => {
           Yield Farms:
         </Typography>
       </div>
-      <div className="flex flex-row gap-3 items-center" onClick={() => dispatch(setPoolsFarmsOnly(!farmsOnly))}>
+      <div className="flex flex-row items-center gap-3" onClick={() => dispatch(setPoolsFarmsOnly(!farmsOnly))}>
         <Checkbox checked={farmsOnly} />
         <Typography className="text-secondary">Show farms only</Typography>
       </div>
@@ -45,7 +48,7 @@ const TwapOnlyFilter: FC = () => {
           TWAP Oracles:
         </Typography>
       </div>
-      <div className="flex flex-row gap-3 items-center" onClick={() => dispatch(setPoolsTWAPOnly(!showTWAPOnly))}>
+      <div className="flex flex-row items-center gap-3" onClick={() => dispatch(setPoolsTWAPOnly(!showTWAPOnly))}>
         <Checkbox checked={showTWAPOnly} />
         <Typography className="text-secondary">Show oracle pairs only</Typography>
       </div>
@@ -67,11 +70,38 @@ const FeeTierFilter: FC = () => {
       {[Fee.HIGH, Fee.DEFAULT, Fee.MEDIUM, Fee.LOW].map((fee) => (
         <div
           key={fee}
-          className="flex flex-row gap-3 items-center"
+          className="flex flex-row items-center gap-3"
           onClick={() => removeOrAddFeeTier(fee, feeTiers, (feeTiers) => dispatch(setPoolsFeeTiers(feeTiers)))}
         >
           <Checkbox checked={feeTiers.includes(fee)} />
           <Typography className="text-secondary">{fee / 100}%</Typography>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const PoolTypeFilter: FC = () => {
+  const { poolTypes } = useAppSelector(selectTridentPools)
+  const dispatch = useAppDispatch()
+
+  return (
+    <div className="flex flex-col gap-5 p-5">
+      <div className="flex items-center justify-between gap-3">
+        <Typography variant="lg" weight={700} className="text-high-emphesis">
+          By Pool Type:
+        </Typography>
+      </div>
+      {Object.values(UsedPoolType).map((poolType) => (
+        <div
+          key={poolType}
+          className="flex flex-row items-center gap-3"
+          onClick={() =>
+            removeOrAddPoolType(poolType, poolTypes, (poolTypes) => dispatch(setPoolsPoolTypes(poolTypes)))
+          }
+        >
+          <Checkbox checked={poolTypes.includes(poolType)} />
+          <Typography className="text-secondary">{POOL_TYPES[poolType].label}</Typography>
         </div>
       ))}
     </div>
@@ -104,13 +134,16 @@ export const MobileFilter: FC = () => {
           </Button>
         }
       >
-        <div className="bg-dark-700 rounded-t">
+        <div className="rounded-t bg-dark-700">
           {/* To Be Built */}
           {/*<YieldFarmFilter />*/}
-          <div className="bg-dark-800 rounded-t">
+          <div className="rounded-t bg-dark-800">
             <TwapOnlyFilter />
-            <div className="relative bg-dark-900 rounded-t">
+            <div className="relative rounded-t bg-dark-900">
               <FeeTierFilter />
+            </div>
+            <div className="relative rounded-t bg-dark-900">
+              <PoolTypeFilter />
             </div>
           </div>
         </div>

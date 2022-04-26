@@ -1,6 +1,8 @@
 import { Fee } from '@sushiswap/trident-sdk'
 import { TridentPool } from 'app/services/graph/fetchers/pools'
 
+import { AllPoolType } from '../types'
+
 type FilterSymbolsFunc<T> = (arg0: { original: TridentPool }[], arg1: string[], arg2: T) => any[]
 
 export const filterForSearchQueryAndTWAP: FilterSymbolsFunc<{ searchQuery: string; twapEnabled: boolean }> = (
@@ -24,4 +26,9 @@ export const filterForSearchQueryAndTWAP: FilterSymbolsFunc<{ searchQuery: strin
 export const feeTiersFilter: FilterSymbolsFunc<{ feeTiersSelected: Fee[] }> = (rows, id, filterValue) =>
   rows.filter(
     ({ original }) => !filterValue.feeTiersSelected.length || filterValue.feeTiersSelected.includes(original.swapFee)
+  )
+
+export const poolTypesFilter: FilterSymbolsFunc<{ poolTypesSelected: AllPoolType[] }> = (rows, id, filterValue) =>
+  rows.filter(
+    ({ original }) => !filterValue.poolTypesSelected.length || filterValue.poolTypesSelected.includes(original.type)
   )

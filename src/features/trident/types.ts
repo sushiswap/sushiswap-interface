@@ -6,18 +6,20 @@ import { StablePoolState } from 'app/hooks/useTridentStablePools'
 // TODO add last two pool types
 export type PoolUnion = ConstantProductPool | HybridPool
 
-export const poolTypeNameMapper: Record<PoolType, string> = {
+export const poolTypeNameMapper: Record<AllPoolType, string> = {
   ConstantProduct: 'Classic',
   ConcentratedLiquidity: 'Concentrated',
   Hybrid: 'Stable',
   Weighted: 'Index',
+  Legacy: 'Legacy',
 }
 
-export const chipPoolColorMapper: Record<PoolType, ChipColor> = {
+export const chipPoolColorMapper: Record<AllPoolType, ChipColor> = {
   ConstantProduct: 'purple',
   ConcentratedLiquidity: 'green',
   Hybrid: 'yellow',
   Weighted: 'blue',
+  Legacy: 'purple',
 }
 
 export enum LiquidityMode {
@@ -55,3 +57,14 @@ export enum ActiveModal {
   WITHDRAW = 'WITHDRAW',
   DEPOSIT = 'DEPOSIT',
 }
+
+enum LegacyPool {
+  Legacy = 'Legacy',
+}
+
+// Not a nice solution, but TS doesn't support extending enums yet...
+export const AllPoolType = { ...LegacyPool, ...PoolType }
+export type AllPoolType = typeof AllPoolType[keyof typeof AllPoolType]
+
+export const UsedPoolType = { ...LegacyPool, [PoolType['ConstantProduct']]: PoolType['ConstantProduct'] }
+export type UsedPoolType = typeof UsedPoolType[keyof typeof UsedPoolType]

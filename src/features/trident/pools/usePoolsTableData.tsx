@@ -1,15 +1,16 @@
-import { PoolType } from '@sushiswap/trident-sdk'
 import Chip from 'app/components/Chip'
+import Typography from 'app/components/Typography'
 import { formatNumber, formatPercent } from 'app/functions/format'
-import { useOneDayBlock } from 'app/services/graph'
 import { TridentPool } from 'app/services/graph/fetchers/pools'
-import { useGetAllTridentPools, usePoolKpi } from 'app/services/graph/hooks/pools'
+import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { ReactNode, useMemo } from 'react'
+import { UseFiltersOptions, UsePaginationOptions, UseSortByOptions, UseTableOptions } from 'react-table'
 
-import { chipPoolColorMapper, poolTypeNameMapper } from '../types'
+import { AllPoolType, chipPoolColorMapper, poolTypeNameMapper } from '../types'
 import { PoolCell } from './PoolCell'
-import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
+import { feeTiersFilter, filterForSearchQueryAndTWAP, poolTypesFilter } from './poolTableFilters'
+import useAllPools from './useAllPools'
 
 export interface DiscoverPoolsTableColumn {
   Header: string
@@ -19,9 +20,15 @@ export interface DiscoverPoolsTableColumn {
   maxWidth?: number
 }
 
-export const usePoolsTableData = () => {
+type usePoolsTableData = () => {
+  config: UseTableOptions<TridentPool> & UsePaginationOptions<any> & UseFiltersOptions<any> & UseSortByOptions<any>
+  loading: boolean
+  error: any
+}
+
+export const usePoolsTableData: usePoolsTableData = () => {
   const { chainId } = useActiveWeb3React()
-  const { data, error, isValidating } = useGetAllTridentPools({ chainId })
+  const { data, error, isValidating, isDataChanged } = useAllPools({ chainId })
 
   const columns: DiscoverPoolsTableColumn[] = useMemo(() => {
     return [
@@ -38,13 +45,11 @@ export const usePoolsTableData = () => {
         Header: 'Pool Type',
         accessor: 'type',
         maxWidth: 100,
-        Cell: (props: { value: PoolType }) => (
+        Cell: (props: { value: AllPoolType }) => (
           <Chip label={poolTypeNameMapper[props.value]} color={chipPoolColorMapper[props.value]} />
         ),
         // @ts-ignore TYPE NEEDS FIXING
-        filter: (rows, id, filterValue) =>
-          // @ts-ignore TYPE NEEDS FIXING
-          rows.filter((row) => !filterValue.length || filterValue.includes(row.values.type)),
+        filter: poolTypesFilter,
       },
       {
         Header: 'Fee Tier',
@@ -74,30 +79,25 @@ export const usePoolsTableData = () => {
         accessor: 'apy',
         maxWidth: 100,
         // @ts-ignore TYPE NEEDS FIXING
-        Cell: (props) => {
-          const { data: oneDayBlock } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-          const { data: oneDayPoolKpi } = usePoolKpi({
+        Cell: ({ row, value }) => {
+          const { data: stats } = useRollingPoolStats({
             chainId,
-            variables: { block: oneDayBlock, id: data?.[props.row.id].address },
+            variables: {
+              where: {
+                id_in: data?.filter((el) => el.type !== AllPoolType.Legacy)?.map((el) => el.address.toLowerCase()),
+              },
+            },
+            shouldFetch: !!chainId && !!data,
           })
 
-          const percent = // @ts-ignore TYPE NEEDS FIXING
-            (Math.max(
-              0,
-              // @ts-ignore TYPE NEEDS FIXING
-              oneDayPoolKpi
-                ? // @ts-ignore TYPE NEEDS FIXING
-                  data?.[props.row.id]?.volumeUSD - oneDayPoolKpi?.volumeUSD
-                : data?.[props.row.id]?.volumeUSD
-            ) *
-              // @ts-ignore TYPE NEEDS FIXING
-              (data?.[props.row.id]?.swapFee / 10000) *
-              365 *
-              100) /
-            // @ts-ignore TYPE NEEDS FIXING
-            data?.[props.row.id]?.liquidityUSD
+          console.log(stats, stats?.[row.id]?.apy)
+          const apy = row.original.type === AllPoolType.Legacy ? value : stats?.[row.id]?.apy
 
-          return <span>{formatPercent(percent, 'NEW')}</span>
+          return (
+            <Typography weight={700} className="w-full text-right text-high-emphesis">
+              {formatPercent(apy)}
+            </Typography>
+          )
         },
       },
       // {
@@ -117,20 +117,22 @@ export const usePoolsTableData = () => {
   return useMemo(
     () => ({
       config: {
-        columns: columns,
-        data: data ?? [],
+        columns: columns as any,
+        data: data ? data : [],
         initialState: {
           pageSize: 15,
           sortBy: [
-            { id: 'liquidityUSD' as DiscoverPoolsTableColumn['accessor'], desc: true },
-            { id: 'volumeUSD' as DiscoverPoolsTableColumn['accessor'], desc: true },
-          ],
+            { id: 'liquidityUSD', desc: true },
+            { id: 'volumeUSD', desc: true },
+          ] as { id: DiscoverPoolsTableColumn['accessor']; desc: boolean }[],
         },
         autoResetFilters: false,
+        autoResetPage: !isDataChanged,
+        autoResetSortBy: false,
       },
       loading: isValidating,
       error,
     }),
-    [columns, data, error, isValidating]
+    [columns, data, error, isDataChanged, isValidating]
   )
 }

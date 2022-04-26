@@ -1,15 +1,16 @@
 import { Signature } from '@ethersproject/bytes'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Fee, PoolType } from '@sushiswap/trident-sdk'
+import { Fee } from '@sushiswap/trident-sdk'
 import { AppState } from 'app/state'
 
+import { AllPoolType } from '../types'
 import { SelectedAsset } from './SelectedAsset'
 
 export type CreatePoolStep = 1 | 2
 
 export interface CreateState {
   currentStep: CreatePoolStep
-  selectedPoolType: PoolType
+  selectedPoolType?: AllPoolType
   selectedAssets: SelectedAsset[]
   selectedFeeTier?: Fee
   createAnOracle: boolean
@@ -21,7 +22,7 @@ export interface CreateState {
 
 const initialState: CreateState = {
   currentStep: 1,
-  selectedPoolType: PoolType.ConstantProduct,
+  selectedPoolType: undefined,
   selectedAssets: [new SelectedAsset({}), new SelectedAsset({})],
   selectedFeeTier: undefined,
   createAnOracle: false,
@@ -38,7 +39,7 @@ export const poolCreateSlice = createSlice({
     setCreateCurrentStep: (state, action: PayloadAction<CreatePoolStep>) => {
       state.currentStep = action.payload
     },
-    setCreateSelectedPoolType: (state, action: PayloadAction<PoolType>) => {
+    setCreateSelectedPoolType: (state, action: PayloadAction<AllPoolType>) => {
       state.selectedPoolType = action.payload
     },
     setCreateSelectedFeeTier: (state, action: PayloadAction<Fee>) => {
