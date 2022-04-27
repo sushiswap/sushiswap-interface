@@ -2,7 +2,7 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { Signature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, CurrencyAmount, Price } from '@sushiswap/core-sdk'
+import { ChainId, Currency, CurrencyAmount, Price } from '@sushiswap/core-sdk'
 import { LimitOrder, ROUND_UP_RECEIVER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import AUTONOMY_REGISTRY_ABI from 'app/constants/abis/autonomy/registry.json'
 import STOP_LIMIT_ORDER_WRAPPER_ABI from 'app/constants/abis/autonomy/stop-limit-order-wrapper.json'
@@ -145,7 +145,10 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
             ],
             order.tokenInAddress,
             order.tokenOutAddress,
-            chainId && ROUND_UP_RECEIVER_ADDRESS[chainId],
+            chainId &&
+              (chainId == ChainId.AVALANCHE
+                ? '0x802290173908ed30A9642D6872e252Ef4f6e59A2'
+                : ROUND_UP_RECEIVER_ADDRESS[chainId]),
             data,
           ])
           console.log('encoded fillOrder() data: ', JSON.stringify(encodedFillOrderData))
