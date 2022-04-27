@@ -26,11 +26,11 @@ interface StopLossReviewModal {
 const StopLossReviewModal: FC<StopLossReviewModal> = ({ parsedAmounts, trade, limitPrice }) => {
   const [inverted, setInverted] = useState(false)
   const { showReview, orderExpiration, recipient, attemptingTxn } = useLimitOrderState()
-  const stopRate = useStopLossDerivedLimitPrice()
   const dispatch = useAppDispatch()
   const { i18n } = useLingui()
   const { execute } = useStopLossExecute()
 
+  const stopRate = useStopLossDerivedLimitPrice()
   const _execute = useCallback(() => {
     if (parsedAmounts?.inputAmount && parsedAmounts?.outputAmount) {
       execute({
