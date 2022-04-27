@@ -1,4 +1,6 @@
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { Currency, CurrencyAmount, Price, Token, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP, ChainlinkPriceFeedEntry } from 'app/config/oracles/chainlink'
 import { BigNumber } from 'ethers'
 
 export const STOP_LIMIT_ORDER_PROFIT_SLIPPAGE = 2 // percent unit
@@ -51,8 +53,28 @@ export interface IStopPriceOracleData {
 export const ZERO_ORACLE_ADDRESS = '0x0000000000000000000000000000000000000000'
 export const ZERO_ORACLE_DATA = '0x00000000000000000000000000000000000000000000000000000000000000'
 
+interface IChainlinkAggregator {
+  address: string
+  entry: ChainlinkPriceFeedEntry
+}
+
+export function getOracleFeedEntry(currencyAddr: string, chainId: number): IChainlinkAggregator | undefined {
+  const NETWORK_FEED_MAPPING = CHAINLINK_PRICE_FEED_MAP[chainId] // {currency} / USD mapping
+
+  for (const aggregatorAddr of Object.keys(NETWORK_FEED_MAPPING)) {
+    if (NETWORK_FEED_MAPPING[aggregatorAddr].from === currencyAddr) {
+      return {
+        address: aggregatorAddr,
+        entry: NETWORK_FEED_MAPPING[aggregatorAddr],
+      }
+    }
+  }
+
+  return undefined
+}
+
 /**
- * @dev stopPrice should be inverse value, due to smart contract requirements.
+ * @dev stopPrice should be inverse value, due to smart contract issue.
  *
  * @param tokenIn
  * @param tokenOut
@@ -62,10 +84,30 @@ export const ZERO_ORACLE_DATA = '0x000000000000000000000000000000000000000000000
 export function prepareStopPriceOracleData(
   tokenIn: CurrencyAmount<Token>,
   tokenOut: CurrencyAmount<Token>,
-  stopPrice: Price<Currency, Currency>
+  stopPrice: Price<Currency, Currency>,
+  chainId: number
 ): IStopPriceOracleData {
+  const inAggregator = getOracleFeedEntry(tokenIn.currency.address, chainId)
+  const outAggregator = getOracleFeedEntry(tokenOut.currency.address, chainId)
+
+  // if priceFeed does not exists
+  if (!inAggregator || !outAggregator) {
+    return {
+      stopPrice: '',
+      oracleData: ZERO_ORACLE_ADDRESS,
+    }
+  }
+
+  // make stopPrice decimals as 18
+  const decimals = 36 + outAggregator.entry.decimals - inAggregator.entry.decimals - 18
+  const oracleData = defaultAbiCoder.encode(
+    ['address', 'address', 'uint256'], // multiply, divide, decimals
+    [outAggregator.address, inAggregator.address, BigNumber.from(10).pow(decimals)]
+  )
+
+  const inverseStopPrice = parseFloat(stopPrice.invert().toSignificant(18)) * 1e18
   return {
-    stopPrice: '0',
-    oracleData: ZERO_ORACLE_ADDRESS,
+    stopPrice: inverseStopPrice.toString(),
+    oracleData,
   }
 }

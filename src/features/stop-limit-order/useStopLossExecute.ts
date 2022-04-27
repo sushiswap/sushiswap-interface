@@ -86,7 +86,8 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
 
       let oracleData
       if (stopPrice) {
-        oracleData = prepareStopPriceOracleData(inputAmount.wrapped, outputAmount.wrapped, stopPrice)
+        oracleData = prepareStopPriceOracleData(inputAmount.wrapped, outputAmount.wrapped, stopPrice, chainId)
+        console.log('oracleData: ', JSON.stringify(oracleData))
       }
 
       const endTime = getEndTime(orderExpiration)
@@ -98,7 +99,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         Math.floor(new Date().getTime() / 1000).toString(),
         endTime.toString(),
         oracleData && oracleData.stopPrice,
-        oracleData && CHAINLINK_ORACLE_ADDRESS[chainId] && ZERO_ORACLE_ADDRESS,
+        oracleData && oracleData.stopPrice ? CHAINLINK_ORACLE_ADDRESS[chainId] : ZERO_ORACLE_ADDRESS,
         oracleData && oracleData.oracleData
       )
 
