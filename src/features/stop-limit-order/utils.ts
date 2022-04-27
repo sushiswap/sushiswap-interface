@@ -3,7 +3,7 @@ import { Currency, CurrencyAmount, Price, Token, WNATIVE_ADDRESS } from '@sushis
 import { CHAINLINK_PRICE_FEED_MAP, ChainlinkPriceFeedEntry } from 'app/config/oracles/chainlink'
 import { BigNumber } from 'ethers'
 
-export const STOP_LIMIT_ORDER_PROFIT_SLIPPAGE = 2 // percent unit
+export const STOP_LIMIT_ORDER_PROFIT_SLIPPAGE = 20 // percent unit
 
 export function keepTokenIn(tokenIn: string, tokenOut: string, chainId: number): boolean {
   return tokenIn === WNATIVE_ADDRESS[chainId] ? true : false
