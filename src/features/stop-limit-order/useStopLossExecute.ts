@@ -114,7 +114,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
             outputAmount.wrapped,
             chainId
           )
-          if (!limitOrderReceiverParam.isValidPair) {
+          if (!limitOrderReceiverParam.isValidPair || (stopPrice && !oracleData?.stopPrice)) {
             throw new Error('Unsupported pair')
           }
           const data = defaultAbiCoder.encode(
