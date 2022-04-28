@@ -17,7 +17,7 @@ import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
-import { setLimitOrderAttemptingTxn } from 'app/state/limit-order/actions'
+import { clear, setLimitOrderAttemptingTxn } from 'app/state/limit-order/actions'
 import { OrderExpiration } from 'app/state/limit-order/reducer'
 import { useCallback } from 'react'
 
@@ -115,7 +115,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
             chainId
           )
           if (!limitOrderReceiverParam.isValidPair) {
-            throw 'Unsupported pair'
+            throw new Error('Unsupported pair')
           }
           const data = defaultAbiCoder.encode(
             ['address[]', 'uint256', 'address', 'bool'],
@@ -165,25 +165,21 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
           )
         }
 
-        // const resp = await order?.send()
-        // if (resp.success) {
-        //   addPopup({
-        //     txn: { hash: '', summary: 'Limit order created', success: true },
-        //   })
+        addPopup({
+          txn: { hash: '', summary: 'Stop limit order created', success: true },
+        })
 
-        //   await mutate()
-        //   dispatch(clear())
-        // }
+        await mutate()
+        dispatch(clear())
 
         dispatch(setLimitOrderAttemptingTxn(false))
-      } catch (e) {
-        console.log('Error: ', e)
+      } catch (e: any) {
         dispatch(setLimitOrderAttemptingTxn(false))
         addPopup({
           txn: {
             hash: '',
             // @ts-ignore TYPE NEEDS FIXING
-            summary: `Error: ${e?.response?.data?.data}`,
+            summary: `Error: ${e?.message}`,
             success: false,
           },
         })
