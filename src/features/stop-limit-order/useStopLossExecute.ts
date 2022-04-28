@@ -26,6 +26,7 @@ import {
   IStopLimitOrderReceiverParam,
   prepareStopPriceOracleData,
   ZERO_ORACLE_ADDRESS,
+  ZERO_ORACLE_DATA,
 } from './utils'
 
 const getEndTime = (orderExpiration: OrderExpiration | string): number => {
@@ -98,9 +99,9 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         recipient ? recipient : account,
         Math.floor(new Date().getTime() / 1000).toString(),
         endTime.toString(),
-        oracleData && oracleData.stopPrice,
+        oracleData && oracleData.stopPrice ? oracleData.stopPrice : '0',
         oracleData && oracleData.stopPrice ? CHAINLINK_ORACLE_ADDRESS[chainId] : ZERO_ORACLE_ADDRESS,
-        oracleData && oracleData.oracleData
+        oracleData && oracleData.stopPrice ? oracleData.oracleData : ZERO_ORACLE_DATA
       )
 
       try {

@@ -46,7 +46,7 @@ export function calculateAmountExternal(
 }
 
 export interface IStopPriceOracleData {
-  stopPrice: string
+  stopPrice?: string
   oracleData: string
 }
 
@@ -93,8 +93,7 @@ export function prepareStopPriceOracleData(
   // if priceFeed does not exists
   if (!inAggregator || !outAggregator) {
     return {
-      stopPrice: '',
-      oracleData: ZERO_ORACLE_ADDRESS,
+      oracleData: ZERO_ORACLE_DATA,
     }
   }
 
