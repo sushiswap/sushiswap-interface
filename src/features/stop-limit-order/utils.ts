@@ -3,7 +3,7 @@ import { Currency, CurrencyAmount, Price, Token, WNATIVE_ADDRESS } from '@sushis
 import { CHAINLINK_PRICE_FEED_MAP, ChainlinkPriceFeedEntry } from 'app/config/oracles/chainlink'
 import { BigNumber } from 'ethers'
 
-export const STOP_LIMIT_ORDER_PROFIT_SLIPPAGE = 20 // percent unit
+export const STOP_LIMIT_ORDER_PROFIT_SLIPPAGE = 10 // percent unit
 
 export function keepTokenIn(tokenIn: string, tokenOut: string, chainId: number): boolean {
   return tokenIn === WNATIVE_ADDRESS[chainId] ? true : false
@@ -15,7 +15,17 @@ export interface IStopLimitOrderReceiverParam {
   amountExternal: BigNumber
 }
 
-/// @dev now it provides stopLimitOrder for pairs only, coupled with WETH
+/**
+ * @dev It calculates input or output amount, after deducting the fee amount.
+ * stopLimitOrder charges service fee as WETH.
+ * If input token is WETH, then it cuts 10% of input token as service fee, and uses left 90% for swapping.
+ * If output token is WETH, then it use all input token to swap 110% of output token, and uses addition 10% as fee.
+ *
+ * @param tokenIn
+ * @param tokenOut
+ * @param chainId
+ * @returns
+ */
 export function calculateAmountExternal(
   tokenIn: CurrencyAmount<Token>,
   tokenOut: CurrencyAmount<Token>,
@@ -58,6 +68,13 @@ interface IChainlinkAggregator {
   entry: ChainlinkPriceFeedEntry
 }
 
+/**
+ * @dev It returns Chainlink Aggregator address for input currency.
+ *
+ * @param currencyAddr
+ * @param chainId
+ * @returns Chainlink aggregator address, for [currencyAddr] / USD price feed
+ */
 export function getOracleFeedEntry(currencyAddr: string, chainId: number): IChainlinkAggregator | undefined {
   const NETWORK_FEED_MAPPING = CHAINLINK_PRICE_FEED_MAP[chainId] // {currency} / USD mapping
 
