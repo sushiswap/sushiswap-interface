@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Percent } from '@sushiswap/core-sdk'
+import { CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import GradientDot from 'app/components/GradientDot'
 import Typography from 'app/components/Typography'
@@ -98,7 +98,10 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
 
       <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(4, 6))}>
         <Typography weight={700} className="flex items-center text-high-emphesis">
-          {formatPercent(utilization.toFixed(2))} <GradientDot percent={utilization.invert().toFixed(2)} />
+          {formatPercent(utilization.toFixed(2))}{' '}
+          {JSBI.greaterThan(utilization.numerator, ZERO) ? (
+            <GradientDot percent={utilization.invert().toFixed(2)} />
+          ) : null}
         </Typography>
         <Typography variant="xs" className="text-low-emphesis">
           {i18n._(t`utilized`)}
