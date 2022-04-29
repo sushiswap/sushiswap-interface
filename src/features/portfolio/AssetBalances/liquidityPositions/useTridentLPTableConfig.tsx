@@ -1,5 +1,4 @@
 import { PoolType } from '@sushiswap/trident-sdk'
-import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import { PoolCell } from 'app/features/trident/pools/PoolCell'
@@ -102,20 +101,30 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
         Cell: ({ row: { original } }) => {
           if (original.legacy) {
             return (
-              <Link
-                href={{
-                  pathname: `/add`,
-                  query: {
-                    // @ts-ignore TYPE NEEDS FIXING
-                    tokens: original.assets.map((el) => el.address),
-                  },
-                }}
-                passHref={true}
-              >
-                <Button color="blue" size="sm" variant="empty">
-                  Manage
-                </Button>
-              </Link>
+              <div className="space-x-4">
+                <Link
+                  href={{
+                    pathname: `/add`,
+                    query: {
+                      // @ts-ignore TYPE NEEDS FIXING
+                      tokens: original.assets.map((el) => el.address),
+                    },
+                  }}
+                >
+                  <a className="text-sm rounded-full text-blue">Add</a>
+                </Link>
+                <Link
+                  href={{
+                    pathname: `/remove`,
+                    query: {
+                      // @ts-ignore TYPE NEEDS FIXING
+                      tokens: original.assets.map((el) => el.address),
+                    },
+                  }}
+                >
+                  <a className="text-sm rounded-full text-blue">Remove</a>
+                </Link>
+              </div>
             )
           }
 
@@ -130,11 +139,8 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
                   twap: original.twapEnabled,
                 },
               }}
-              passHref={true}
             >
-              <Button color="blue" size="sm" variant="empty">
-                Manage
-              </Button>
+              <a className="text-sm rounded-full text-blue">Manage</a>
             </Link>
           )
         },
