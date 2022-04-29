@@ -9,8 +9,6 @@ import Link from 'next/link'
 import React, { FC, useState } from 'react'
 import Identicon from 'react-blockies'
 
-import { BalancesSum } from './BalancesSum'
-
 interface HeaderDropdownProps {
   hideAccount?: boolean
   chainId: number | undefined
@@ -56,7 +54,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ account, chainId, hideAccount
           )}
         </div>
       </div>
-      <BalancesSum account={account} />
+      {/* <BalancesSum account={account} /> */}
     </>
   )
 }
