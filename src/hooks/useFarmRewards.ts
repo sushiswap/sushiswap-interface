@@ -154,14 +154,14 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               pool.rewardToken.symbol === 'ALCX'
                 ? pool.rewarder.rewardPerSecond / decimals
                 : pool.rewardToken.symbol === 'LDO'
-                ? (19290123456790123 / decimals) * averageBlockTime
+                ? (0 / decimals) * averageBlockTime
                 : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime
 
             const rewardPerDay =
               pool.rewardToken.symbol === 'ALCX'
                 ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
                 : pool.rewardToken.symbol === 'LDO'
-                ? (19290123456790123 / decimals) * averageBlockTime * blocksPerDay
+                ? (0 / decimals) * averageBlockTime * blocksPerDay
                 : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
 
             const rewardPrice = pool.rewardToken.derivedETH * ethPrice
