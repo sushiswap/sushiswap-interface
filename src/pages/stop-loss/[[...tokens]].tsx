@@ -8,8 +8,8 @@ import Typography from 'app/components/Typography'
 import { ZERO_PERCENT } from 'app/constants'
 import { Feature } from 'app/enums'
 import LimitOrderApprovalCheck from 'app/features/legacy/limit-order/LimitOrderApprovalCheck'
-import LimitOrderButton from 'app/features/legacy/limit-order/LimitOrderButton'
-import LimitPriceInputPanel from 'app/features/legacy/limit-order/LimitPriceInputPanel'
+import LimitPriceInputPanel from 'app/features/stop-limit-order/LimitPriceInputPanel'
+import StopLimitOrderButton from 'app/features/stop-limit-order/StopLimitOrderButton'
 import StopPriceInputPanel from 'app/features/stop-limit-order/StopPriceInputPanel'
 // import OrderExpirationDropdown from 'app/features/legacy/limit-order/OrderExpirationDropdown'
 import HeaderNew from 'app/features/trade/HeaderNew'
@@ -153,7 +153,7 @@ const StopLoss = () => {
         </div>
 
         {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
-        <LimitOrderButton trade={trade} parsedAmounts={parsedAmounts} />
+        <StopLimitOrderButton trade={trade} parsedAmounts={parsedAmounts} />
         <StopLossReviewModal
           parsedAmounts={parsedAmounts}
           trade={trade}
