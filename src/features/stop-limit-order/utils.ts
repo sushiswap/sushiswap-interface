@@ -9,17 +9,8 @@ export function keepTokenIn(tokenIn: string, tokenOut: string, chainId: number):
   return tokenIn === WNATIVE_ADDRESS[chainId] ? true : false
 }
 
-export interface IStopLimitOrderReceiverParam {
-  isValidPair: boolean
-  keepTokenIn?: boolean
-  amountExternal: BigNumber
-}
-
 /**
- * @dev It calculates input or output amount, after deducting the fee amount.
- * stopLimitOrder charges service fee as WETH.
- * If input token is WETH, then it cuts 10% of input token as service fee, and uses left 90% for swapping.
- * If output token is WETH, then it use all input token to swap 110% of output token, and uses addition 10% as fee.
+ * @dev StopLimitOrder charges fee from the input token always, and deduct 10% for the fee.
  *
  * @param tokenIn
  * @param tokenOut
@@ -30,29 +21,10 @@ export function calculateAmountExternal(
   tokenIn: CurrencyAmount<Token>,
   tokenOut: CurrencyAmount<Token>,
   chainId: number
-): IStopLimitOrderReceiverParam {
-  const WNATIVE_ADDR = WNATIVE_ADDRESS[chainId]
-  if (WNATIVE_ADDR !== tokenIn.currency.address && WNATIVE_ADDR !== tokenOut.currency.address) {
-    return {
-      isValidPair: false,
-      amountExternal: BigNumber.from(0),
-    }
-  }
-
-  const keepTokenIn = tokenIn.currency.address === WNATIVE_ADDR ? true : false
-  const amountExternal = keepTokenIn
-    ? BigNumber.from(tokenIn.quotient.toString())
-        .mul(100 - STOP_LIMIT_ORDER_PROFIT_SLIPPAGE)
-        .div(100)
-    : BigNumber.from(tokenOut.quotient.toString())
-        .mul(100 + STOP_LIMIT_ORDER_PROFIT_SLIPPAGE)
-        .div(100)
-
-  return {
-    isValidPair: true,
-    keepTokenIn,
-    amountExternal,
-  }
+): BigNumber {
+  return BigNumber.from(tokenIn.quotient.toString())
+    .mul(100 - STOP_LIMIT_ORDER_PROFIT_SLIPPAGE)
+    .div(100)
 }
 
 export interface IStopPriceOracleData {

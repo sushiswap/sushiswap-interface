@@ -21,13 +21,7 @@ import { clear, setLimitOrderAttemptingTxn } from 'app/state/limit-order/actions
 import { OrderExpiration } from 'app/state/limit-order/reducer'
 import { useCallback } from 'react'
 
-import {
-  calculateAmountExternal,
-  IStopLimitOrderReceiverParam,
-  prepareStopPriceOracleData,
-  ZERO_ORACLE_ADDRESS,
-  ZERO_ORACLE_DATA,
-} from './utils'
+import { calculateAmountExternal, prepareStopPriceOracleData, ZERO_ORACLE_ADDRESS, ZERO_ORACLE_DATA } from './utils'
 
 const getEndTime = (orderExpiration: OrderExpiration | string): number => {
   switch (orderExpiration) {
@@ -109,21 +103,17 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         await order?.signOrderWithProvider(chainId || 1, library)
 
         if (autonomyRegistryContract && limitOrderWrapperContract && chainId) {
-          const limitOrderReceiverParam: IStopLimitOrderReceiverParam = calculateAmountExternal(
-            inputAmount.wrapped,
-            outputAmount.wrapped,
-            chainId
-          )
-          if (!limitOrderReceiverParam.isValidPair || (stopPrice && !oracleData?.stopPrice)) {
+          const amountExternal = calculateAmountExternal(inputAmount.wrapped, outputAmount.wrapped, chainId)
+          if (stopPrice && oracleData?.stopPrice == ZERO_ORACLE_DATA) {
             throw new Error('Unsupported pair')
           }
           const data = defaultAbiCoder.encode(
             ['address[]', 'uint256', 'address', 'bool'],
             [
               [order.tokenInAddress, order.tokenOutAddress], // path
-              limitOrderReceiverParam.amountExternal, // amountExternal
+              amountExternal, // amountExternal
               chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId], // profit receiver
-              limitOrderReceiverParam.keepTokenIn, // keepTokenIn
+              true, // keepTokenIn, charge fee, by inputToken always
             ]
           )
 
