@@ -10,7 +10,7 @@ export function keepTokenIn(tokenIn: string, tokenOut: string, chainId: number):
 }
 
 /**
- * @dev StopLimitOrder charges fee from the input token always, and deduct 10% for the fee.
+ * @dev StopLimitOrder charges fee from the output token always, and so swap 110% of output token, and deduct fee.
  *
  * @param tokenIn
  * @param tokenOut
@@ -22,8 +22,8 @@ export function calculateAmountExternal(
   tokenOut: CurrencyAmount<Token>,
   chainId: number
 ): BigNumber {
-  return BigNumber.from(tokenIn.quotient.toString())
-    .mul(100 - STOP_LIMIT_ORDER_PROFIT_SLIPPAGE)
+  return BigNumber.from(tokenOut.quotient.toString())
+    .mul(100 + STOP_LIMIT_ORDER_PROFIT_SLIPPAGE)
     .div(100)
 }
 

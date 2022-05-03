@@ -113,7 +113,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
               [order.tokenInAddress, order.tokenOutAddress], // path
               amountExternal, // amountExternal
               chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId], // profit receiver
-              true, // keepTokenIn, charge fee, by inputToken always
+              false, // keepTokenIn, charge fee, by outputToken always
             ]
           )
 
