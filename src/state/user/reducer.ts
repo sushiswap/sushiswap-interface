@@ -61,7 +61,7 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
-  userUseSushiGuard: false,
+  userUseSushiGuard: true,
 }
 
 export default createReducer(initialState, (builder) =>
