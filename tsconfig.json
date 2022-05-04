@@ -50,6 +50,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "downlevelIteration": true,
+    "importHelpers": true,
     "incremental": true
   },
   "include": ["next-env.d.ts", "sushi-env.d.ts", "**/*.ts", "**/*.tsx"],
