@@ -256,7 +256,7 @@ export default function Stake() {
                     {/* <img className="ml-3 cursor-pointer" src={MoreInfoSymbol} alt={'more info'} /> */}
                   </div>
                   <div className="flex">
-                    <Link href={`https://app.sushi.com/xsushi`}>
+                    <Link href={`https://app.sushi.com/analytics/xsushi`}>
                       <a
                         className={`
                         py-1 px-4 md:py-1.5 md:px-7 rounded
