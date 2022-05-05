@@ -8,15 +8,15 @@ const BAR = {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-const fetcher = async (query, variables = undefined) =>
+const fetcher = async (query, variables?: { [key: string]: any }) =>
   request(`${GRAPH_HOST[ChainId.ETHEREUM]}/subgraphs/name/${BAR[ChainId.ETHEREUM]}`, query, variables)
 
-export const getBar = async (variables = undefined) => {
+export const getBar = async (variables?: { [key: string]: any }) => {
   const { bar } = await fetcher(barQuery, variables)
   return bar
 }
 
-export const getBarHistory = async (variables = undefined) => {
+export const getBarHistory = async (variables?: { [key: string]: any }) => {
   const { histories } = await fetcher(barHistoriesQuery, variables)
   return histories
 }

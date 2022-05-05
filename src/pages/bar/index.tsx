@@ -13,7 +13,16 @@ import { tryParseAmount } from 'app/functions/parse'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useSushiBar from 'app/hooks/useSushiBar'
 import TransactionFailedModal from 'app/modals/TransactionFailedModal'
-import { useFactory, useNativePrice, useOneDayBlock, useTokens } from 'app/services/graph/hooks'
+import {
+  useFactory,
+  useNativePrice,
+  useOneDayBlock,
+  useOneMonthBlock,
+  useOneYearBlock,
+  useSixMonthBlock,
+  useThreeMonthBlock,
+  useTokens,
+} from 'app/services/graph/hooks'
 import { useBar } from 'app/services/graph/hooks/bar'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
@@ -133,17 +142,14 @@ export default function Stake() {
     }
   }
 
-  const { data: block1d } = useOneDayBlock({ chainId: ChainId.ETHEREUM })
+  const { data: block1m } = useOneMonthBlock({ chainId: ChainId.ETHEREUM })
 
-  const exchange = useFactory({ chainId: ChainId.ETHEREUM })
+  const { data: block3m } = useThreeMonthBlock({ chainId: ChainId.ETHEREUM })
 
-  const exchange1d = useFactory({
-    chainId: ChainId.ETHEREUM,
-    variables: {
-      block: block1d,
-    },
-    shouldFetch: !!block1d,
-  })
+  const { data: block6m } = useSixMonthBlock({ chainId: ChainId.ETHEREUM })
+
+  const { data: block1y } = useOneYearBlock({ chainId: ChainId.ETHEREUM })
+
 
   const { data: ethPrice } = useNativePrice({ chainId: ChainId.ETHEREUM })
 
@@ -152,13 +158,39 @@ export default function Stake() {
     variables: { where: { id: XSUSHI.address.toLowerCase() } },
   })?.[0]
 
-  const bar = useBar()
+  const { data: bar } = useBar()
+
+  const { data: bar1m } = useBar({
+    variables: {
+      block: block1m,
+    },
+    shouldFetch: !!block1m,
+  })
+
+  const { data: bar3m } = useBar({
+    variables: {
+      block: block3m,
+    },
+    shouldFetch: !!block3m,
+  })
+
+  const { data: bar6m } = useBar({
+    variables: {
+      block: block6m,
+    },
+    shouldFetch: !!block6m,
+  })
+
+  const { data: bar1y } = useBar({
+    variables: {
+      block: block1y,
+    },
+    shouldFetch: !!block1y,
+  })
 
   const [xSushiPrice] = [xSushi?.derivedETH * ethPrice, xSushi?.derivedETH * ethPrice * bar?.totalSupply]
 
-  const APY1d = aprToApy(
-    (((exchange?.volumeUSD - exchange1d?.volumeUSD) * 0.0005 * 365.25) / (bar?.totalSupply * xSushiPrice)) * 100 ?? 0
-  )
+  const apy1m = (bar?.ratio / bar1m?.ratio - 1) * 12 * 100
 
   return (
     <Container id="bar-page" className="py-4 md:py-8 lg:py-12" maxWidth="full">
@@ -242,11 +274,9 @@ export default function Stake() {
                 </div>
                 <div className="flex flex-col">
                   <p className="mb-1 text-lg font-bold text-right text-high-emphesis md:text-3xl">
-                    {`${APY1d ? APY1d.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
+                    {`${apy1m ? apy1m.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
                   </p>
-                  <p className="w-32 text-sm text-right text-primary md:w-64 md:text-base">
-                    {i18n._(t`Yesterday's APR`)}
-                  </p>
+                  <p className="w-32 text-sm text-right text-primary md:w-64 md:text-base">{i18n._(t`APY 1m`)}</p>
                 </div>
               </div>
             </div>
