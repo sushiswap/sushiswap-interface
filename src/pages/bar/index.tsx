@@ -8,15 +8,12 @@ import Dots from 'app/components/Dots'
 import Input from 'app/components/Input'
 import { XSUSHI } from 'app/config/tokens'
 import { classNames } from 'app/functions'
-import { aprToApy } from 'app/functions/convert/apyApr'
 import { tryParseAmount } from 'app/functions/parse'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useSushiBar from 'app/hooks/useSushiBar'
 import TransactionFailedModal from 'app/modals/TransactionFailedModal'
 import {
-  useFactory,
   useNativePrice,
-  useOneDayBlock,
   useOneMonthBlock,
   useOneYearBlock,
   useSixMonthBlock,
@@ -149,7 +146,6 @@ export default function Stake() {
   const { data: block6m } = useSixMonthBlock({ chainId: ChainId.ETHEREUM })
 
   const { data: block1y } = useOneYearBlock({ chainId: ChainId.ETHEREUM })
-
 
   const { data: ethPrice } = useNativePrice({ chainId: ChainId.ETHEREUM })
 
