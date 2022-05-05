@@ -30,7 +30,6 @@ export default function Buy() {
       // @ts-ignore TYPE NEEDS FIXING
       userAddress: account,
       hostAppName: 'SUSHI',
-      hostLogoUrl: 'http://sushiswap-interface-canary.vercel.app/_next/image?url=%2Flogo.png&w=32&q=75',
       // @ts-ignore TYPE NEEDS FIXING
       defaultAsset: DEFAULT_CRYPTO_CURRENCY[chainId],
     })
