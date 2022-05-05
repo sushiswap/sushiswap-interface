@@ -168,22 +168,22 @@ export default function XSushi() {
 
   const graphs = useMemo(
     () => [
-      {
-        title: 'xSushi Performance',
-        labels: ['Daily APY', 'Daily APR'],
-        data: [
-          // @ts-ignore TYPE NEEDS FIXING
-          data.map((d) => ({
-            date: d.date * 1000,
-            value: d.APY,
-          })),
-          // @ts-ignore TYPE NEEDS FIXING
-          data.map((d) => ({
-            date: d.date * 1000,
-            value: d.APR,
-          })),
-        ],
-      },
+      // {
+      //   title: 'xSushi Performance',
+      //   labels: ['Daily APY', 'Daily APR'],
+      //   data: [
+      //     // @ts-ignore TYPE NEEDS FIXING
+      //     data.map((d) => ({
+      //       date: d.date * 1000,
+      //       value: d.APY,
+      //     })),
+      //     // @ts-ignore TYPE NEEDS FIXING
+      //     data.map((d) => ({
+      //       date: d.date * 1000,
+      //       value: d.APR,
+      //     })),
+      //   ],
+      // },
       {
         title: 'Daily Fees Received on Mainnet',
         labels: ['Fees (USD)'],
