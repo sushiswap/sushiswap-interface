@@ -25,6 +25,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import { useTokenBalance } from 'app/state/wallet/hooks'
 import Image from 'next/image'
+import Link from 'next/link'
 import { NextSeo } from 'next-seo'
 import React, { useState } from 'react'
 
@@ -255,17 +256,16 @@ export default function Stake() {
                     {/* <img className="ml-3 cursor-pointer" src={MoreInfoSymbol} alt={'more info'} /> */}
                   </div>
                   <div className="flex">
-                    <a
-                      href={`https://analytics.sushi.com/bar`}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className={`
+                    <Link href={`https://app.sushi.com/xsushi`}>
+                      <a
+                        className={`
                         py-1 px-4 md:py-1.5 md:px-7 rounded
                         text-xs md:text-sm font-medium md:font-bold text-dark-900
                         bg-yellow hover:bg-opacity-90`}
-                    >
-                      {i18n._(t`View Stats`)}
-                    </a>
+                      >
+                        {i18n._(t`View Stats`)}
+                      </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="flex flex-col">
