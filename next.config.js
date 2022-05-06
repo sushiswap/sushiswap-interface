@@ -1,3 +1,4 @@
+require('v8-compile-cache')
 const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
 const linguiConfig = require('./lingui.config.js')
