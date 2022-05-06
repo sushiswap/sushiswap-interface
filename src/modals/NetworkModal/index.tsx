@@ -250,6 +250,17 @@ export const SUPPORTED_NETWORKS: Record<
     rpcUrls: ['https://rpc.api.moonbeam.network'],
     blockExplorerUrls: ['https://moonbeam.moonscan.io'],
   },
+  [ChainId.OPTIMISM]: {
+    chainId: '0xA',
+    chainName: 'Optimism',
+    nativeCurrency: {
+      name: 'Ether',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: ['https://mainnet.optimism.io'],
+    blockExplorerUrls: ['https://optimistic.etherscan.io'],
+  },
 }
 
 const NetworkModal: FC = () => {
@@ -282,6 +293,7 @@ const NetworkModal: FC = () => {
             ChainId.OKEX,
             ChainId.HECO,
             ChainId.PALM,
+            ChainId.OPTIMISM,
           ]
             .sort((key) => (chainId === key ? -1 : 0))
             .map((key: number, i: number) => {
