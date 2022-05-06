@@ -4,16 +4,10 @@ import { AddressZero } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { ChainId, Currency, CurrencyAmount, Price } from '@sushiswap/core-sdk'
 import { LimitOrder, ROUND_UP_RECEIVER_ADDRESS } from '@sushiswap/limit-order-sdk'
-import AUTONOMY_REGISTRY_ABI from 'app/constants/abis/autonomy/registry.json'
-import STOP_LIMIT_ORDER_WRAPPER_ABI from 'app/constants/abis/autonomy/stop-limit-order-wrapper.json'
-import {
-  AUTONOMY_REGISTRY_ADDRESSES,
-  CHAINLINK_ORACLE_ADDRESS,
-  STOP_LIMIT_ORDER_WRAPPER_ADDRESSES,
-} from 'app/constants/autonomy'
+import { CHAINLINK_ORACLE_ADDRESS, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { ZERO } from 'app/functions'
-import { useContract } from 'app/hooks'
+import { useAutonomyLimitOrderWrapperContract, useAutonomyRegistryContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
@@ -60,16 +54,8 @@ export type UseLimitOrderExecute = () => {
 const useStopLossExecute: UseLimitOrderExecute = () => {
   const { account, chainId, library } = useActiveWeb3React()
 
-  const autonomyRegistryContract = useContract(
-    chainId ? AUTONOMY_REGISTRY_ADDRESSES[chainId] : undefined,
-    AUTONOMY_REGISTRY_ABI,
-    true
-  )
-  const limitOrderWrapperContract = useContract(
-    chainId ? STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId] : undefined,
-    STOP_LIMIT_ORDER_WRAPPER_ABI,
-    true
-  )
+  const autonomyRegistryContract = useAutonomyRegistryContract()
+  const limitOrderWrapperContract = useAutonomyLimitOrderWrapperContract()
 
   const dispatch = useAppDispatch()
   const addPopup = useAddPopup()
@@ -82,7 +68,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
       let oracleData
       if (stopPrice) {
         oracleData = prepareStopPriceOracleData(inputAmount.wrapped, outputAmount.wrapped, stopPrice, chainId)
-        console.log('oracleData: ', JSON.stringify(oracleData))
+        // console.log('oracleData: ', JSON.stringify(oracleData))
       }
 
       const endTime = getEndTime(orderExpiration)
@@ -142,7 +128,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
                 : ROUND_UP_RECEIVER_ADDRESS[chainId]),
             data,
           ])
-          console.log('encoded fillOrder() data: ', JSON.stringify(encodedFillOrderData))
+          // console.log('encoded fillOrder() data: ', JSON.stringify(encodedFillOrderData))
 
           await autonomyRegistryContract.newReq(
             chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId], // target
@@ -156,7 +142,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         }
 
         addPopup({
-          txn: { hash: '', summary: 'Stop limit order created', success: true },
+          txn: { hash: '', summary: 'Stop loss order created', success: true },
         })
 
         await mutate()
