@@ -49,7 +49,7 @@ const useCurrenciesFromURL = (): {
       pathname: router.pathname,
       query: {
         tokens,
-        ...(router.pathname !== '/trident/swap' && {
+        ...(router.pathname !== '/swap' && {
           fee,
           twap,
         }),
@@ -111,7 +111,7 @@ const useCurrenciesFromURL = (): {
         pathname: router.pathname,
         query: {
           tokens,
-          ...(router.pathname !== '/trident/swap' && {
+          ...(router.pathname !== '/swap' && {
             fee,
             twap,
           }),
