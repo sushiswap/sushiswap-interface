@@ -37,7 +37,7 @@ const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency, trident 
         <NavLink
           activeClassName="text-high-emphesis"
           href={{
-            pathname: trident ? '/trident/swap' : '/swap',
+            pathname: '/swap',
             query: getQuery(inputCurrency, outputCurrency),
           }}
         >

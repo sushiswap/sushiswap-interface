@@ -79,7 +79,7 @@ const ClassicLinkButtons: FC = () => {
       <Button color="gradient" className={classNames(poolBalance?.greaterThan(0) && 'col-span-2')}>
         <Link
           href={{
-            pathname: `/trident/swap`,
+            pathname: `/swap`,
             query: {
               // It makes more sense to swap with ETH instead of WETH
               tokens: [
