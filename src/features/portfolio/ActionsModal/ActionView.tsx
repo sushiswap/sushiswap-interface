@@ -29,9 +29,9 @@ const ActionView: FC<ActionViewProps> = ({ onClose }) => {
   const swapActionHandler = useCallback(async () => {
     // @ts-ignore TYPE NEEDS FIXING
     if (featureEnabled(Feature.TRIDENT, chainId)) {
-      if (currency?.isNative) return router.push('/swap')
+      if (currency?.isNative) return router.push('/trident/swap')
       // @ts-ignore TYPE NEEDS FIXING
-      return router.push(`/swap?inputCurrency=${NATIVE[chainId].symbol}&outputCurrency=${currency?.wrapped.address}`)
+      return router.push(`/trident/swap?&tokens=${NATIVE[chainId].symbol}&tokens=${currency?.wrapped.address}`)
     }
 
     if (currency?.isNative) return router.push('/swap')

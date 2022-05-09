@@ -35,12 +35,28 @@ import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
 import { useSwapCallback } from 'app/hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
+import { Banner as BannerType, fetchBanners } from 'app/lib/api'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
 import React, { useCallback, useMemo, useState } from 'react'
 
-import { SwapProps } from '../../swap'
+export async function getServerSideProps() {
+  try {
+    const banners = await fetchBanners()
+    return {
+      props: { banners: banners || [] },
+    }
+  } catch (e) {
+    return {
+      props: { banners: [] },
+    }
+  }
+}
+
+interface SwapProps {
+  banners: BannerType[]
+}
 
 const Swap = ({ banners }: SwapProps) => {
   const { formattedAmounts, trade, priceImpact, isWrap, parsedAmounts, error } = _useSwapPage()
@@ -142,7 +158,7 @@ const Swap = ({ banners }: SwapProps) => {
             onChange={(value) =>
               dispatch(setTridentSwapState({ ...tridentSwapState, value: value || '', typedField: TypedField.A }))
             }
-            onSelect={(currency) => setURLCurrency(currency, 'inputCurrency')}
+            onSelect={(currency) => setURLCurrency(currency, 0)}
           />
           <div className="z-0 flex justify-center -mt-6 -mb-6">
             <div
@@ -182,7 +198,7 @@ const Swap = ({ banners }: SwapProps) => {
               // Change typedField to TypedField.B once exactOut is available
               dispatch(setTridentSwapState({ ...tridentSwapState, value: value || '', typedField: TypedField.A }))
             }}
-            onSelect={(currency) => setURLCurrency(currency, 'outputCurrency')}
+            onSelect={(currency) => setURLCurrency(currency, 1)}
             priceImpact={priceImpact}
             // Remove when exactOut works
             inputDisabled={true}

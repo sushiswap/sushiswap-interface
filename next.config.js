@@ -95,6 +95,10 @@ const nextConfig = {
         destination: '/legacy/add/:token*',
       },
       {
+        source: '/swap',
+        destination: '/legacy/swap',
+      },
+      {
         source: '/open-order',
         destination: '/limit-order/open-order',
       },

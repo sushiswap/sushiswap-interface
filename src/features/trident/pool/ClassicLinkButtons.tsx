@@ -79,11 +79,13 @@ const ClassicLinkButtons: FC = () => {
       <Button color="gradient" className={classNames(poolBalance?.greaterThan(0) && 'col-span-2')}>
         <Link
           href={{
-            pathname: `/swap`,
+            pathname: `/trident/swap`,
             query: {
               // It makes more sense to swap with ETH instead of WETH
-              inputCurrency: isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token0.address),
-              outputCurrency: isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token1.address),
+              tokens: [
+                isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token0.address),
+                isWrappedReturnNativeSymbol(chainId, poolWithState?.pool.token1.address),
+              ],
             },
           }}
           passHref={true}
