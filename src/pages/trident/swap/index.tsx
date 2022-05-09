@@ -142,7 +142,7 @@ const Swap = ({ banners }: SwapProps) => {
             onChange={(value) =>
               dispatch(setTridentSwapState({ ...tridentSwapState, value: value || '', typedField: TypedField.A }))
             }
-            onSelect={(currency) => setURLCurrency(currency, 0)}
+            onSelect={(currency) => setURLCurrency(currency, 'inputCurrency')}
           />
           <div className="z-0 flex justify-center -mt-6 -mb-6">
             <div
@@ -182,7 +182,7 @@ const Swap = ({ banners }: SwapProps) => {
               // Change typedField to TypedField.B once exactOut is available
               dispatch(setTridentSwapState({ ...tridentSwapState, value: value || '', typedField: TypedField.A }))
             }}
-            onSelect={(currency) => setURLCurrency(currency, 1)}
+            onSelect={(currency) => setURLCurrency(currency, 'outputCurrency')}
             priceImpact={priceImpact}
             // Remove when exactOut works
             inputDisabled={true}
