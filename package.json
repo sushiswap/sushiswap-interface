@@ -99,7 +99,7 @@
     "@sushiswap/miso": "1.0.0-canary.47",
     "@sushiswap/miso-sdk": "1.0.0-canary.68",
     "@sushiswap/trident": "^1.0.0-canary.36",
-    "@sushiswap/trident-sdk": "1.0.0-canary.107",
+    "@sushiswap/trident-sdk": "1.0.0-canary.116",
     "@testing-library/jest-dom": "^5.14.0",
     "@testing-library/react": "^12.1.0",
     "@transak/transak-sdk": "^1.0.31",
