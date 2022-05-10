@@ -27,19 +27,21 @@ function OpenOrdersPage() {
       <LimitOrderApprovalCheck />
       <DiscoverHeader />
       <TridentBody>
-        {pending.totalOrders > 0 && approvalState !== BentoApprovalState.APPROVED && (
-          <div className="border border-blue-700/40 bg-blue/10 rounded p-4 flex justify-between gap-6">
-            <Typography variant="sm" className="text-blue-100">
-              {i18n._(t`It seems like you have open orders while the limit order master contract is not yet approved. Please make
+        {pending.totalOrders > 0 &&
+          approvalState !== BentoApprovalState.UNKNOWN &&
+          approvalState !== BentoApprovalState.APPROVED && (
+            <div className="border border-blue-700/40 bg-blue/10 rounded p-4 flex justify-between gap-6">
+              <Typography variant="sm" className="text-blue-100">
+                {i18n._(t`It seems like you have open orders while the limit order master contract is not yet approved. Please make
           sure you have approved the limit order master contract or the order will not execute`)}
-            </Typography>
-            <div className="flex justify-end">
-              <Button onClick={approve} size="sm" color="blue" loading={approvalState === BentoApprovalState.PENDING}>
-                Approve
-              </Button>
+              </Typography>
+              <div className="flex justify-end">
+                <Button onClick={approve} size="sm" color="blue" loading={approvalState === BentoApprovalState.PENDING}>
+                  Approve
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         <OrdersTableToggle />
         <OpenOrders />
