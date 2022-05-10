@@ -307,7 +307,7 @@ export default class KashiCooker {
   borrow(amount: BigNumber, toBento: boolean, toAddress = ''): KashiCooker {
     this.add(
       Action.BORROW,
-      defaultAbiCoder.encode(['int256', 'address'], [amount.add(1), toAddress && toBento ? toAddress : this.account])
+      defaultAbiCoder.encode(['int256', 'address'], [amount, toAddress && toBento ? toAddress : this.account])
     )
     if (!toBento) {
       const useNative = this.pair.asset.token.address === WNATIVE[this.chainId].address
@@ -370,7 +370,7 @@ export default class KashiCooker {
           : ZERO
       )
     }
-    this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [part.sub(1), this.account, false]))
+    this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [part, this.account, false]))
     return this
   }
 
