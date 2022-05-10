@@ -92,7 +92,7 @@
     "@sushiswap/bentobox-sdk": "1.0.0-canary.78",
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
-    "@sushiswap/core-sdk": "1.0.0-canary.94",
+    "@sushiswap/core-sdk": "1.0.0-canary.107",
     "@sushiswap/kashi-sdk": "1.0.0-canary.69",
     "@sushiswap/limit-order-pair-list": "0.2.17",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.79",
