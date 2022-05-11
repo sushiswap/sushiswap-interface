@@ -73,6 +73,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.FUSE]: [WNATIVE[ChainId.FUSE]],
   [ChainId.TELOS]: [WNATIVE[ChainId.TELOS]],
   [ChainId.MOONBEAM]: [WNATIVE[ChainId.MOONBEAM]],
+  [ChainId.OPTIMISM]: [WNATIVE[ChainId.OPTIMISM]],
 }
 
 // used to construct intermediary pairs for trading

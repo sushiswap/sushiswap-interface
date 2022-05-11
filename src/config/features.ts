@@ -80,6 +80,7 @@ const features: FeatureMap = {
   ],
   [ChainId.FUSE]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
   [ChainId.MOONBEAM]: [Feature.AMM, Feature.MISO, Feature.LIQUIDITY_MINING],
+  [ChainId.OPTIMISM]: [Feature.TRIDENT],
 }
 
 export default features

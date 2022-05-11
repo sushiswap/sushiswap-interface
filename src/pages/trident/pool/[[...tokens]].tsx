@@ -32,6 +32,8 @@ const Pool = () => {
 
   const { poolWithState } = usePoolContext()
 
+  console.log('POOL ADDRESS:', poolWithState?.pool?.liquidityToken.address)
+
   return (
     <>
       <NextSeo
