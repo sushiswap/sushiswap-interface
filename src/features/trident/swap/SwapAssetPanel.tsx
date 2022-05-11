@@ -193,7 +193,7 @@ const InputPanel: FC<
           >
             {usdcValue?.greaterThan(ZERO) && <>~{formatNumber(usdcValue?.toFixed(), true, true, 2)} </>}
             {priceImpact && (
-              <span className={priceImpactCss || priceImpactClassName}>({priceImpact?.toSignificant(2)}%)</span>
+              <span className={priceImpactClassName}>({priceImpact?.multiply(-1)?.toSignificant(2)}%)</span>
             )}
           </Typography>
           {/*This acts as a reference to get input width*/}
