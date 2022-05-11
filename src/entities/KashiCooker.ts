@@ -316,7 +316,7 @@ export default class KashiCooker {
         Action.BENTO_WITHDRAW,
         defaultAbiCoder.encode(
           ['address', 'address', 'int256', 'int256'],
-          [useNative ? AddressZero : this.pair.asset.token.address, toAddress || this.account, amount, 0]
+          [useNative ? AddressZero : this.pair.asset.token.address, toAddress || this.account, 0, -2]
         )
       )
     }
