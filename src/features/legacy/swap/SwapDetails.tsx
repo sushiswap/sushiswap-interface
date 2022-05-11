@@ -165,8 +165,7 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
       const severity = warningSeverity(priceImpact)
       console.log({ severity })
       if (severity < 1) return 'text-primary'
-      if (severity < 2) return 'text-yellow'
-      if (severity < 3) return 'text-red'
+      if (severity < 3) return 'text-yellow'
     } else if (typeof priceImpact === 'number') {
       if (priceImpact < 0) return 'text-green'
       if (priceImpact < 0.01) return 'text-primary'

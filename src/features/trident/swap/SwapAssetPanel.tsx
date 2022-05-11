@@ -160,9 +160,8 @@ const InputPanel: FC<
     if (!priceImpact) return undefined
     if (priceImpact.lessThan('0')) return 'text-green'
     const severity = warningSeverity(priceImpact)
-    if (severity < 1) return 'text-green'
-    if (severity < 2) return 'text-yellow'
-    if (severity < 3) return 'text-red'
+    if (severity < 1) return 'text-primary'
+    if (severity < 3) return 'text-yellow'
     return 'text-red'
   }, [priceImpact])
 
