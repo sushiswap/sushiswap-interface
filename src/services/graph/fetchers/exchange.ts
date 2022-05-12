@@ -40,7 +40,7 @@ export const exchange = async (chainId = ChainId.ETHEREUM, query, variables = {}
   // @ts-ignore TYPE NEEDS FIXING
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
-export const getPairs = async (chainId = ChainId.ETHEREUM, variables = undefined, query = pairsQuery) => {
+export const getPairs = async (chainId = ChainId.ETHEREUM, variables: any = undefined, query = pairsQuery) => {
   const { pairs } = await exchange(chainId, query, variables)
   return pairs
 }
