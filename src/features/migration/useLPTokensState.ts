@@ -1,7 +1,6 @@
 import { getAddress } from '@ethersproject/address'
 import { ChainId, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import { useAllTokens } from 'app/hooks/Tokens'
-import { useBoringHelperContract, useDashboardContract, useQuickSwapFactoryContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -20,9 +19,6 @@ export interface LPTokensState {
 
 const useLPTokensState = () => {
   const { account, chainId } = useActiveWeb3React()
-  const boringHelperContract = useBoringHelperContract()
-  const dashboardContract = useDashboardContract()
-  const quickSwapFactoryContract = useQuickSwapFactoryContract()
   const [lpTokens, setLPTokens] = useState<LPToken[]>([])
   const [selectedLPToken, setSelectedLPToken] = useState<LPToken>()
   const [selectedLPTokenAllowed, setSelectedLPTokenAllowed] = useState(false)
@@ -32,168 +28,129 @@ const useLPTokensState = () => {
   const updateLPTokens = useCallback(async () => {
     try {
       updatingLPTokens.current = true
-      if (ChainId.MATIC === chainId) {
-        const LP_TOKENS_LIMIT = 500
-        const length = await quickSwapFactoryContract?.allPairsLength()
-        const pages: number[] = []
-        for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)
-        const pairs = (
-          await Promise.all(
-            pages.map((page) =>
-              boringHelperContract?.getPairs(
-                '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32', // Factory address
-                page,
-                Math.min(page + LP_TOKENS_LIMIT, length.toNumber())
-              )
-            )
-          )
+      if (
+        chainId &&
+        [ChainId.ETHEREUM, ChainId.BSC, ChainId.MATIC, ChainId.FANTOM, ChainId.AVALANCHE, ChainId.MOONBEAM].includes(
+          chainId
         )
-          .flat()
-          .filter((pair) => pair.token0 !== '0x1f6c3E047f529f82f743a7378A212a3d62fAA390')
-
-        const pairAddresses = pairs.map((pair) => pair[0])
-        const pollPairs = await boringHelperContract?.pollPairs(account, pairAddresses)
-        const tokenAddresses = Array.from(
-          new Set(pairs.reduce((a: any, b: any) => a.push(b.token, b.token0, b.token1) && a, []))
-        ).flat()
-        const tokenDetails = (await boringHelperContract?.getTokenInfo(tokenAddresses)).reduce((acc: any, cur: any) => {
-          acc[cur[0]] = cur
-          return acc
-        }, {})
-
-        const data = pairs.map((pair, index) => {
-          const token = new Token(
-            chainId as ChainId,
-            tokenDetails[pair.token].token,
-            tokenDetails[pair.token].decimals,
-            tokenDetails[pair.token].symbol,
-            tokenDetails[pair.token].name
-          )
-
-          const tokenA = tokenDetails[pair.token0]
-          const tokenB = tokenDetails[pair.token1]
-
-          return {
-            address: token.address,
-            decimals: token.decimals,
-            name: token.name,
-            symbol: token.symbol,
-            balance: CurrencyAmount.fromRawAmount(token, pollPairs[index].balance),
-            totalSupply: pair.totalSupply,
-            tokenA: new Token(chainId as ChainId, tokenA.token, tokenA.decimals, tokenA.symbol, tokenA.name),
-            tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name),
-          } as LPToken
-        })
-
-        if (data) setLPTokens(data)
-
-        // MAINNET, BSC
-      } else if (chainId && [ChainId.ETHEREUM, ChainId.BSC].includes(chainId)) {
+      ) {
         const requests: any = {
-          [ChainId.ETHEREUM]: [
-            `https://api.covalenthq.com/v1/${ChainId.ETHEREUM}/address/${String(
+          [ChainId.ETHEREUM]: {
+            uniswap_v2: `https://api.covalenthq.com/v1/${ChainId.ETHEREUM}/xy=k/uniswap_v2/address/${String(
               account
-            ).toLowerCase()}/stacks/uniswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589&page-size=1000`,
-          ],
-          [ChainId.BSC]: [
-            `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
+            ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+          },
+
+          // https://api.covalenthq.com/v1/1/xy=k/uniswap_v2/address/0x8f54C8c2df62c94772ac14CcFc85603742976312/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f
+
+          [ChainId.BSC]: {
+            // `https://api.covalenthq.com/v1/${ChainId.BSC}/xy=k/pancakeswap/address/${String(
+            //   account
+            // ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+            pancakeswap_v2: `https://api.covalenthq.com/v1/${ChainId.BSC}/xy=k/pancakeswap_v2/address/${String(
               account
-            ).toLowerCase()}/stacks/pancakeswap/balances/?key=ckey_cba3674f2ce5450f9d5dd290589&page-size=1000`,
-            `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
+            ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+          },
+
+          [ChainId.MATIC]: {
+            quickswap: `https://api.covalenthq.com/v1/${ChainId.MATIC}/xy=k/quickswap/address/${String(
               account
-            ).toLowerCase()}/stacks/pancakeswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589&page-size=1000`,
-          ],
+            ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+          },
+          [ChainId.FANTOM]: {
+            spiritswap: `https://api.covalenthq.com/v1/${ChainId.FANTOM}/xy=k/spiritswap/address/${String(
+              account
+            ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+            spookyswap: `https://api.covalenthq.com/v1/${ChainId.FANTOM}/xy=k/spookyswap/address/${String(
+              account
+            ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+          },
+          [ChainId.AVALANCHE]: {
+            traderjoe: `https://api.covalenthq.com/v1/${ChainId.AVALANCHE}/xy=k/traderjoe/address/${String(
+              account
+            ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+            pangolin: `https://api.covalenthq.com/v1/${ChainId.AVALANCHE}/xy=k/pangolin/address/${String(
+              account
+            ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+          },
+          [ChainId.MOONBEAM]: {
+            stellaswap: `https://api.covalenthq.com/v1/${ChainId.MOONBEAM}/xy=k/stellaswap/address/${String(
+              account
+            ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+            beamswap: `https://api.covalenthq.com/v1/${ChainId.MOONBEAM}/xy=k/beamswap/address/${String(
+              account
+            ).toLowerCase()}/balances/?quote-currency=USD&format=JSON&key=ckey_07aac227aaed444687021bf548f`,
+          },
         }
 
-        const responses: any = await Promise.all(requests[chainId].map((request: any) => fetch(request)))
+        const responses = await Promise.all(
+          Object.values<string>(requests[chainId]).map((url) => fetch(url).then((response) => response.json()))
+        )
 
-        let userLP = []
+        // const responses = await Promise.all(
+        //   Object.entries<string>(requests[chainId]).map(([key, url]) => fetch(url).then((response) => response.json()))
+        // )
 
-        if (chainId === ChainId.ETHEREUM) {
-          const { data } = await responses[0].json()
-          userLP = data?.['uniswap_v2']?.balances
-            ?.filter((balance: any) => balance.pool_token.balance !== '0')
-            .map((balance: any) => ({
-              ...balance,
-              version: 'v2',
-            }))
-        } else if (chainId === ChainId.BSC) {
-          const { data: dataV1 } = await responses[0].json()
-          const { data: dataV2 } = await responses[1].json()
+        const keys = Object.keys(requests[chainId])
 
-          userLP = [
-            // ...dataV1?.['pancakeswap']?.balances
-            //   ?.filter((balance: any) => balance.pool_token.balance !== '0')
-            //   .map((balance: any) => ({
-            //     ...balance,
-            //     version: 'v1',
-            //   })),
-            ...dataV2?.['pancakeswap']?.balances
-              ?.filter((balance: any) => balance.pool_token.balance !== '0')
-              .map((balance: any) => ({
-                ...balance,
-                version: 'v2',
-              })),
-          ]
-        }
+        const data = responses.map((response, i) => [
+          keys[i],
+          response?.data?.items?.filter((pool_token: any) => pool_token.balance !== '0'),
+        ])
 
-        const tokenDetails = (
-          await dashboardContract?.getTokenInfo(
-            Array.from(
-              new Set(
-                userLP?.reduce(
-                  (a: any, b: any) =>
-                    a.push(b.pool_token.contract_address, b.token_0.contract_address, b.token_1.contract_address) && a,
-                  []
-                )
+        console.log({ data })
+
+        const lpTokens = data?.reduce((previousValue, [dex, items]) => {
+          return [
+            ...previousValue,
+            ...items.map((pair: any) => {
+              console.log(pair)
+              const liquidityToken = new Token(
+                chainId as ChainId,
+                getAddress(pair.pool_token.contract_address),
+                pair.pool_token.contract_decimals,
+                pair.pool_token.contract_ticker_symbol
               )
-            )
-          )
-        )?.reduce((acc: any, cur: any) => {
-          acc[cur[0]] = { ...cur }
-          acc[cur[0]].decimals = acc[cur[0]].decimals.toNumber()
-          return acc
-        }, {})
 
-        const lpTokens = userLP?.map((pair: any) => {
-          const token = new Token(
-            chainId as ChainId,
-            getAddress(pair.pool_token.contract_address),
-            tokenDetails[getAddress(pair.pool_token.contract_address)].decimals,
-            tokenDetails[getAddress(pair.pool_token.contract_address)].symbol,
-            tokenDetails[getAddress(pair.pool_token.contract_address)].name
-          )
-          const tokenA = tokenDetails[getAddress(pair.token_0.contract_address)]
-          const tokenB = tokenDetails[getAddress(pair.token_1.contract_address)]
+              const token0Address = getAddress(pair.token_0.contract_address)
+              const token1Address = getAddress(pair.token_1.contract_address)
 
-          return {
-            address: getAddress(pair.pool_token.contract_address),
-            decimals: token.decimals,
-            name: `${tokenA.symbol}-${tokenB.symbol} LP Token`,
-            symbol: `${tokenA.symbol}-${tokenB.symbol}`,
-            balance: CurrencyAmount.fromRawAmount(token, pair.pool_token.balance),
-            totalSupply: pair.pool_token.total_supply,
-            tokenA:
-              tokens[getAddress(pair.token_0.contract_address)] ||
-              new Token(
-                chainId as ChainId,
-                tokenA.address || tokenA.token,
-                tokenA.decimals,
-                tokenA.symbol,
-                tokenA.name
-              ),
-            tokenB:
-              tokens[getAddress(pair.token_1.contract_address)] ||
-              new Token(
-                chainId as ChainId,
-                tokenB.address || tokenB.token,
-                tokenB.decimals,
-                tokenB.symbol,
-                tokenB.name
-              ),
-            version: pair.version,
-          } as LPToken
-        })
+              const token0 =
+                token0Address in tokens
+                  ? tokens[token0Address]
+                  : new Token(
+                      chainId as ChainId,
+                      token0Address,
+                      pair.token_0.contract_decimals,
+                      pair.token_0.contract_ticker_symbol
+                    )
+
+              const token1 =
+                token1Address in tokens
+                  ? tokens[token1Address]
+                  : new Token(
+                      chainId as ChainId,
+                      token1Address,
+                      pair.token_1.contract_decimals,
+                      pair.token_1.contract_ticker_symbol
+                    )
+
+              return {
+                dex,
+                address: liquidityToken.address,
+                decimals: liquidityToken.decimals,
+                name: `${token0.symbol}-${token1.symbol} LP Token`,
+                symbol: liquidityToken.symbol,
+                balance: CurrencyAmount.fromRawAmount(liquidityToken, pair.pool_token.balance),
+                totalSupply: pair.pool_token.total_supply,
+                tokenA: token0,
+                tokenB: token1,
+                version: pair.version,
+              } as LPToken
+            }),
+          ]
+        }, [])
+
         if (lpTokens) {
           setLPTokens(lpTokens)
         }
@@ -202,13 +159,13 @@ const useLPTokensState = () => {
       setLoading(false)
       updatingLPTokens.current = false
     }
-  }, [chainId, quickSwapFactoryContract, boringHelperContract, account, dashboardContract, tokens])
+  }, [chainId, account, tokens])
 
   useEffect(() => {
-    if (chainId && account && boringHelperContract && !updatingLPTokens.current) {
+    if (chainId && account && !updatingLPTokens.current) {
       updateLPTokens()
     }
-  }, [account, chainId, boringHelperContract, updateLPTokens])
+  }, [account, chainId, updateLPTokens])
 
   return {
     updateLPTokens,

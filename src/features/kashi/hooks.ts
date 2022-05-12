@@ -17,7 +17,7 @@ import { useMemo } from 'react'
 
 import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
 
-const BLACKLISTED_TOKENS = ['0xC6d54D2f624bc83815b49d9c2203b1330B841cA0']
+const BLACKLISTED_TOKENS = ['0xC6d54D2f624bc83815b49d9c2203b1330B841cA0', '0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F']
 
 const BLACKLISTED_ORACLES = [
   '0x8f2CC3376078568a04eBC600ae5F0a036DBfd812',
@@ -168,49 +168,55 @@ export function useKashiMediumRiskLendingPairs(
   // const callStates = useSingleContractMultipleData(kashiRepositoryContract, 'getPair', args, NEVER_RELOAD)
 
   return useMemo(() => {
-    if (!chainId || !result || !rebases || !prices) {
-      return []
-    }
-    return result?.[0]
-      .filter(
-        (pair: BoringHelperKashiPair) =>
-          rebases[pair.collateral] &&
-          rebases[pair.collateral]?.token &&
-          rebases[pair.asset] &&
-          rebases[pair.asset]?.token
+    if (!chainId || !result || !rebases || !prices) return []
+
+    return result?.[0].reduce((acc: KashiMediumRiskLendingPair[], pair: BoringHelperKashiPair) => {
+      if (
+        BLACKLISTED_TOKENS.includes(pair.collateral) ||
+        BLACKLISTED_TOKENS.includes(pair.asset) ||
+        BLACKLISTED_ORACLES.includes(pair.oracle) ||
+        !rebases[pair.collateral] ||
+        !rebases[pair.collateral]?.token ||
+        !rebases[pair.asset] ||
+        !rebases[pair.asset]?.token
+      ) {
+        return acc
+      }
+
+      acc.push(
+        new KashiMediumRiskLendingPair({
+          accrueInfo: {
+            feesEarnedFraction: JSBI.BigInt(pair.accrueInfo.feesEarnedFraction.toString()),
+            lastAccrued: JSBI.BigInt(pair.accrueInfo.lastAccrued),
+            interestPerSecond: JSBI.BigInt(pair.accrueInfo.interestPerSecond.toString()),
+          },
+          // @ts-ignore
+          collateral: rebases[pair.collateral],
+          // @ts-ignore
+          asset: rebases[pair.asset],
+          collateralPrice: prices[pair.collateral],
+          assetPrice: prices[pair.asset],
+          oracle: getOracle(chainId, pair.oracle, pair.oracleData),
+          totalCollateralShare: JSBI.BigInt(pair.totalCollateralShare.toString()),
+          totalAsset: {
+            elastic: JSBI.BigInt(pair.totalAsset.elastic.toString()),
+            base: JSBI.BigInt(pair.totalAsset.base.toString()),
+          },
+          totalBorrow: {
+            elastic: JSBI.BigInt(pair.totalBorrow.elastic.toString()),
+            base: JSBI.BigInt(pair.totalBorrow.base.toString()),
+          },
+          exchangeRate: JSBI.BigInt(pair.currentExchangeRate.toString()),
+          oracleExchangeRate: JSBI.BigInt(pair.oracleExchangeRate.toString()),
+          spotExchangeRate: JSBI.BigInt(pair.spotExchangeRate.toString()),
+          userCollateralShare: JSBI.BigInt(pair.userCollateralShare.toString()),
+          userAssetFraction: JSBI.BigInt(pair.userAssetFraction.toString()),
+          userBorrowPart: JSBI.BigInt(pair.userBorrowPart.toString()),
+        })
       )
-      .map(
-        (pair: BoringHelperKashiPair) =>
-          new KashiMediumRiskLendingPair({
-            accrueInfo: {
-              feesEarnedFraction: JSBI.BigInt(pair.accrueInfo.feesEarnedFraction.toString()),
-              lastAccrued: JSBI.BigInt(pair.accrueInfo.lastAccrued),
-              interestPerSecond: JSBI.BigInt(pair.accrueInfo.interestPerSecond.toString()),
-            },
-            // @ts-ignore
-            collateral: rebases[pair.collateral],
-            // @ts-ignore
-            asset: rebases[pair.asset],
-            collateralPrice: prices[pair.collateral],
-            assetPrice: prices[pair.asset],
-            oracle: getOracle(chainId, pair.oracle, pair.oracleData),
-            totalCollateralShare: JSBI.BigInt(pair.totalCollateralShare.toString()),
-            totalAsset: {
-              elastic: JSBI.BigInt(pair.totalAsset.elastic.toString()),
-              base: JSBI.BigInt(pair.totalAsset.base.toString()),
-            },
-            totalBorrow: {
-              elastic: JSBI.BigInt(pair.totalBorrow.elastic.toString()),
-              base: JSBI.BigInt(pair.totalBorrow.base.toString()),
-            },
-            exchangeRate: JSBI.BigInt(pair.currentExchangeRate.toString()),
-            oracleExchangeRate: JSBI.BigInt(pair.oracleExchangeRate.toString()),
-            spotExchangeRate: JSBI.BigInt(pair.spotExchangeRate.toString()),
-            userCollateralShare: JSBI.BigInt(pair.userCollateralShare.toString()),
-            userAssetFraction: JSBI.BigInt(pair.userAssetFraction.toString()),
-            userBorrowPart: JSBI.BigInt(pair.userBorrowPart.toString()),
-          })
-      )
+
+      return acc
+    }, [])
   }, [chainId, prices, rebases, result])
 }
 

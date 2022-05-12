@@ -2,12 +2,20 @@ import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon, ExternalLinkIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, NATIVE, Token, Trade as LegacyTrade, TradeVersion } from '@sushiswap/core-sdk'
+import {
+  Currency,
+  CurrencyAmount,
+  NATIVE,
+  Percent,
+  Token,
+  Trade as LegacyTrade,
+  TradeVersion,
+} from '@sushiswap/core-sdk'
 import { Trade as TridentTrade } from '@sushiswap/trident-sdk'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
-import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
+import { classNames, computeRealizedLPFeePercent, shortenAddress, warningSeverity } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useFeeData from 'app/hooks/useFeeData'
 import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
@@ -140,12 +148,32 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
 
   const priceImpact = useMemo(() => {
     if (trade instanceof LegacyTrade) {
-      return trade.priceImpact
+      const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
+      const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
+      return priceImpact
     } else if (trade instanceof TridentTrade) {
       return Number(trade.route.priceImpact) * 100
     }
     return 0
   }, [trade])
+
+  const priceImpactClassName = useMemo(() => {
+    if (!priceImpact) return undefined
+
+    if (priceImpact instanceof Percent) {
+      if (priceImpact.lessThan('0')) return 'text-green'
+      const severity = warningSeverity(priceImpact)
+      console.log({ severity })
+      if (severity < 1) return 'text-primary'
+      if (severity < 3) return 'text-yellow'
+    } else if (typeof priceImpact === 'number') {
+      if (priceImpact < 0) return 'text-green'
+      if (priceImpact < 0.01) return 'text-primary'
+      if (priceImpact < 0.03) return 'text-yellow'
+    }
+
+    return 'text-red'
+  }, [priceImpact])
 
   return (
     <div className="flex flex-col divide-y divide-dark-850">
@@ -158,8 +186,10 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient, inputAmount, ou
         </div>
         <div className="flex justify-between gap-4">
           <Typography variant="xs">{i18n._(t`Price Impact`)}</Typography>
-          <Typography variant="xs" className="text-right">
-            {priceImpact?.toFixed(2)}%
+          <Typography variant="xs" className={classNames('text-right', priceImpactClassName)}>
+            {/* {priceImpact?.toFixed(2)}% */}
+            {priceImpact instanceof Percent ? `${priceImpact.multiply(-1).toFixed(2)}%` : null}
+            {typeof priceImpact === 'number' ? `${-priceImpact?.toFixed(2)}%` : null}
           </Typography>
         </div>
         {recipient && isAddress(recipient) && (

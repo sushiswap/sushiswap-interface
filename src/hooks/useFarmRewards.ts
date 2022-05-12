@@ -30,12 +30,15 @@ import {
 } from 'app/services/graph'
 import { useCallback, useMemo } from 'react'
 
+import { useAllTokens } from './Tokens'
+
 export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
   const positions = usePositions(chainId)
   const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const farms = useFarms({ chainId })
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair.toLowerCase()), [farms])
 
+  const allTokens = useAllTokens()
   const { data: swapPairs } = useSushiPairs({
     chainId,
     variables: {
@@ -151,26 +154,31 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               pool.rewardToken.symbol === 'ALCX'
                 ? pool.rewarder.rewardPerSecond / decimals
                 : pool.rewardToken.symbol === 'LDO'
-                ? (19290123456790123 / decimals) * averageBlockTime
+                ? (0 / decimals) * averageBlockTime
                 : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime
 
             const rewardPerDay =
               pool.rewardToken.symbol === 'ALCX'
                 ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
                 : pool.rewardToken.symbol === 'LDO'
-                ? (19290123456790123 / decimals) * averageBlockTime * blocksPerDay
+                ? (0 / decimals) * averageBlockTime * blocksPerDay
                 : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
 
             const rewardPrice = pool.rewardToken.derivedETH * ethPrice
 
+            const address = getAddress(pool.rewardToken.id)
+
             const reward = {
-              currency: new Token(
-                ChainId.ETHEREUM,
-                getAddress(pool.rewardToken.id),
-                Number(pool.rewardToken.decimals),
-                pool.rewardToken.symbol,
-                pool.rewardToken.name
-              ),
+              currency:
+                address in allTokens
+                  ? allTokens[address]
+                  : new Token(
+                      ChainId.ETHEREUM,
+                      getAddress(pool.rewardToken.id),
+                      Number(pool.rewardToken.decimals),
+                      pool.rewardToken.symbol,
+                      pool.rewardToken.name
+                    ),
               rewardPerBlock,
               rewardPerDay,
               rewardPrice,
@@ -267,14 +275,19 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
             const rewardPerDay = rewardPerBlock * blocksPerDay
             const rewardPrice = pool.rewardToken.derivedETH * ethPrice
 
+            const address = getAddress(pool.rewardToken.id)
+
             rewards[1] = {
-              currency: new Token(
-                chainId,
-                getAddress(pool.rewardToken.id),
-                Number(pool.rewardToken.decimals),
-                pool.rewardToken.symbol,
-                pool.rewardToken.name
-              ),
+              currency:
+                address in allTokens
+                  ? allTokens[address]
+                  : new Token(
+                      ChainId.ETHEREUM,
+                      getAddress(pool.rewardToken.id),
+                      Number(pool.rewardToken.decimals),
+                      pool.rewardToken.symbol,
+                      pool.rewardToken.name
+                    ),
               rewardPerBlock,
               rewardPerDay,
               rewardPrice,
@@ -380,6 +393,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       }
     },
     [
+      allTokens,
       averageBlockTime,
       blocksPerDay,
       celoPrice,

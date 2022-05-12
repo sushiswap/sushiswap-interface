@@ -7,7 +7,7 @@ import Typography from 'app/components/Typography'
 import KashiMediumRiskLendingPair from 'app/features/kashi/KashiMediumRiskLendingPair'
 import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features/trident/constants'
 import { classNames, currencyFormatter, formatNumber, formatPercent } from 'app/functions'
-import { useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
+import { useUSDCSubgraphValueWithLoadingIndicator } from 'app/hooks/useUSDCSubgraph'
 import { useRouter } from 'next/router'
 import React, { FC, memo, useMemo, useState } from 'react'
 
@@ -29,7 +29,7 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
     [collateral, market.userCollateralAmount]
   )
   const { value: userCollateralAmountUSD, loading: userCollateralAmountUSDLoading } =
-    useUSDCValueWithLoadingIndicator(userCollateralAmount)
+    useUSDCSubgraphValueWithLoadingIndicator(userCollateralAmount)
 
   // @ts-ignore
   const currentUserBorrowAmount = useMemo(
@@ -37,12 +37,16 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
     [asset, market.currentUserBorrowAmount]
   )
   const { value: currentUserBorrowAmountUSD, loading: currentUserBorrowAmountUSDLoading } =
-    useUSDCValueWithLoadingIndicator(currentUserBorrowAmount)
+    useUSDCSubgraphValueWithLoadingIndicator(currentUserBorrowAmount)
 
-  const liquidationPrice = new Price({
-    baseAmount: currentUserBorrowAmount,
-    quoteAmount: userCollateralAmount.multiply(LTV),
-  })
+  console.log(currentUserBorrowAmount.toExact(), userCollateralAmount.multiply(LTV).toExact())
+
+  const liquidationPrice = currentUserBorrowAmount.greaterThan(0)
+    ? new Price({
+        baseAmount: currentUserBorrowAmount,
+        quoteAmount: userCollateralAmount.multiply(LTV),
+      })
+    : undefined
 
   // invert
   // ? `1 ${totalBorrowed?.currency.symbol} = ${liquidationPrice?.toSignificant(6)} ${
@@ -88,7 +92,7 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
 
       <div className={classNames('flex flex-col !items-end !justify-center', TABLE_TBODY_TD_CLASSNAME(2, 6))}>
         <Typography weight={700} className="text-high-emphesis">
-          {formatNumber(liquidationPrice.invert().toSignificant(6))} {asset.symbol}
+          {liquidationPrice ? formatNumber(liquidationPrice.invert().toSignificant(6)) : '0'} {asset.symbol}
         </Typography>
         <Typography variant="xs" className="text-low-emphesis">
           {collateral.symbol}

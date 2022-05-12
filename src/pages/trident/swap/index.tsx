@@ -35,28 +35,12 @@ import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
 import { useSwapCallback } from 'app/hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
-import { Banner as BannerType, fetchBanners } from 'app/lib/api'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
 import React, { useCallback, useMemo, useState } from 'react'
 
-export async function getServerSideProps() {
-  try {
-    const banners = await fetchBanners()
-    return {
-      props: { banners: banners || [] },
-    }
-  } catch (e) {
-    return {
-      props: { banners: [] },
-    }
-  }
-}
-
-interface SwapProps {
-  banners: BannerType[]
-}
+import { SwapProps } from '../../swap'
 
 const Swap = ({ banners }: SwapProps) => {
   const { formattedAmounts, trade, priceImpact, isWrap, parsedAmounts, error } = _useSwapPage()

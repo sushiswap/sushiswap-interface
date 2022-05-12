@@ -2595,11 +2595,6 @@
   dependencies:
     "@sushiswap/core-sdk" "1.0.0-canary.91"
 
-"@sushiswap/chainlink-token-list@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-token-list/-/chainlink-token-list-0.1.0.tgz#cd63ce07439f8d481111c961d18c99ec39449d95"
-  integrity sha512-OQwr4BIYbF3FlMKYMslYhjGXXzdsduW+CfSTq86tUQZm9okJG4fKBmyA8ZYkZ+oW8dTDRuI5LGGidUYVQUFH7A==
-
 "@sushiswap/chainlink-whitelist@0.2.8":
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.8.tgz#832dc80963b890a2eb02aaaf11ea8b57b2b7dde0"
@@ -2642,11 +2637,6 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
   integrity sha512-6YFT4EKgm0XgfwCBsKx5HrDtRI6EvhZHipjBKegdTV0b2zKuXnmdyZ+RwPCr0mCKq2pKB0qIiqCxfbgXYDlLCQ==
 
-"@sushiswap/default-token-list@27.3.0":
-  version "27.3.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-27.3.0.tgz#430780660abcefcda5461af86626e3f6912756e7"
-  integrity sha512-FCk5oI88fT+s8jUjdLtTWvqG/yiijqfAk+CT9tNr7Gw9kxipQciJgh8pgfYqRhNwWzS4RuSUJn2IrUDzkeiDsA==
-
 "@sushiswap/kashi-sdk@1.0.0-canary.69":
   version "1.0.0-canary.69"
   resolved "https://registry.yarnpkg.com/@sushiswap/kashi-sdk/-/kashi-sdk-1.0.0-canary.69.tgz#d6a3a27d3f7ac508ee5df5a3879100b53f447f9a"
@@ -2687,23 +2677,23 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/miso/-/miso-1.0.0-canary.47.tgz#743f7f57ce28e796b93262eec2ea429942fa2e74"
   integrity sha512-bEDm9ZDE8jh1A+edGnYYH8dTNHytel7sk6k8EKS42Xw0szrjghWMq7HbOQ3PXrMFj2ChDOz/g6G3DZ0JrJasGA==
 
-"@sushiswap/tines@1.0.0-canary.76":
-  version "1.0.0-canary.76"
-  resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-1.0.0-canary.76.tgz#8091dc4af6a4a3eec702cca38b4f4d2bf394de50"
-  integrity sha512-cWULYFQuqasuq8DObd4gdgrxAj1WMYhTBXfVJqzWLW3iMDm38xkGidRp2rFWromEwDK6qX99zDXBIOvF/Il1nA==
+"@sushiswap/tines@1.0.0-canary.78":
+  version "1.0.0-canary.78"
+  resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-1.0.0-canary.78.tgz#60f7c1c814ccd0f50a30fee4e9bfa4514ac47733"
+  integrity sha512-GgVmoqzp+pRh5R/hLIKQbgxLx6JSk85JR0tvrv/6bxajUXmgbwrEuqiqfAYsUYYEURrB38gMYDcHG5UGA/sYdg==
   dependencies:
     "@ethersproject/bignumber" "^5.4.0"
     "@sushiswap/core-sdk" "1.0.0-canary.91"
 
-"@sushiswap/trident-sdk@1.0.0-canary.105":
-  version "1.0.0-canary.105"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.105.tgz#9fc7e27f94575cc24483730b71a1841528dd4944"
-  integrity sha512-YqiB5ZL+dd431Xff32RiKdtDX7Mjpuh8o0oaU8wCPl5TL26ObwAelYZRRcNOy8B9NW3ot9EREF3PdIXDvNMjKA==
+"@sushiswap/trident-sdk@1.0.0-canary.107":
+  version "1.0.0-canary.107"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.107.tgz#afe6e8355b59eda2308a20bef16c027f27ac221d"
+  integrity sha512-mZGiS6CM0ZXolBBJkY5WhJL+OCXBpprqZdx/shjuyNRBI1IHrUaBxhZ5SheFnY5dweAnNamxl0V+0JsQeM1Kbw==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"
     "@sushiswap/core-sdk" "1.0.0-canary.94"
-    "@sushiswap/tines" "1.0.0-canary.76"
+    "@sushiswap/tines" "1.0.0-canary.78"
     "@sushiswap/trident" "1.0.0-canary.36"
     tiny-invariant "^1.1.0"
 
@@ -9543,7 +9533,7 @@ next-unused@^0.0.6:
     ts-loader "^7.0.0"
     typescript "^4.2.3"
 
-next@^12.1.0:
+next@^12.1.5:
   version "12.1.5"
   resolved "https://registry.yarnpkg.com/next/-/next-12.1.5.tgz#7a07687579ddce61ee519493e1c178d83abac063"
   integrity sha512-YGHDpyfgCfnT5GZObsKepmRnne7Kzp7nGrac07dikhutWQug7hHg85/+sPJ4ZW5Q2pDkb+n0FnmLkmd44htIJQ==
@@ -12928,7 +12918,7 @@ web3-provider-engine@16.0.1:
     "@web3-react/types" "^6.0.7"
     tiny-invariant "^1.0.6"
 
-"web3-react-walletlink-connector@npm:@web3-react/walletlink-connector@^6.2.13":
+"web3-react-walletlink-connector@npm:@web3-react/walletlink-connector@^6.2.14":
   version "6.2.14"
   resolved "https://registry.yarnpkg.com/@web3-react/walletlink-connector/-/walletlink-connector-6.2.14.tgz#4adf7b94de5d7018a9fc9e3b6009e78cd33d6e15"
   integrity sha512-F2v1Uu7Nhptt7AaUEJpz69+NVUJxyUfDEA5B/Vr1HkqAL1aJM5gv6B1m4M/VdXKLpmjZ9Kg6X0+VUEyAx1eQ4w==

@@ -14,7 +14,7 @@ import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 export default function Farm(): JSX.Element {
   const { i18n } = useLingui()
@@ -25,12 +25,12 @@ export default function Farm(): JSX.Element {
 
   const type = !router.query.filter ? 'all' : (router.query.filter as string)
 
-  const queryOrActiveAccount = useMemo(
-    () => (router.query.account ? (router.query.account as string) : account),
-    [account, router.query.account]
-  )
+  // const queryOrActiveAccount = useMemo(
+  //   () => (router.query.account ? (router.query.account as string) : account),
+  //   [account, router.query.account]
+  // )
 
-  console.log({ queryOrActiveAccount })
+  // console.log({ queryOrActiveAccount })
 
   const chainId = Number(router.query.chainId)
 

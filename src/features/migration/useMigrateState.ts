@@ -1,5 +1,4 @@
 import { parseUnits } from '@ethersproject/units'
-import { ChainId } from '@sushiswap/core-sdk'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useIsTransactionPending, useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback, useEffect, useState } from 'react'
@@ -22,7 +21,7 @@ export interface MigrateState extends LPTokensState {
 const useMigrateState: () => MigrateState = () => {
   const { library, account, chainId } = useActiveWeb3React()
   const state = useLPTokensState()
-  const { migrate, migrateWithPermit } = useSushiRoll(state?.selectedLPToken?.version)
+  const { migrate, migrateWithPermit } = useSushiRoll(state?.selectedLPToken?.dex)
   const [mode, setMode] = useState<MigrateMode>()
   const [amount, setAmount] = useState('')
   const addTransaction = useTransactionAdder()
@@ -36,23 +35,14 @@ const useMigrateState: () => MigrateState = () => {
   }, [mode])
 
   const onMigrate = useCallback(async () => {
-    if (mode && state.selectedLPToken && account && library) {
-      const units = parseUnits(amount || '0', state.selectedLPToken.decimals)
-      const func = mode === 'approve' ? migrate : migrateWithPermit
+    if (state.selectedLPToken && account && library) {
+      const units = parseUnits(amount, state.selectedLPToken.decimals)
+      // const func = mode === 'approve' ? migrate : migrateWithPermit
+      const func = migrate
       const tx = await func(state.selectedLPToken, units)
 
-      let exchange
-
-      if (chainId === ChainId.ETHEREUM) {
-        exchange = 'Uniswap'
-      } else if (chainId === ChainId.BSC) {
-        exchange = 'PancakeSwap'
-      } else if (chainId === ChainId.MATIC) {
-        exchange = 'QuickSwap'
-      }
-
       addTransaction(tx, {
-        summary: `Migrate ${exchange} ${state.selectedLPToken.symbol} liquidity to SushiSwap`,
+        summary: `Migrate ${state.selectedLPToken.symbol} liquidity to SushiSwap`,
       })
       setPendingMigrationHash(tx.hash)
 

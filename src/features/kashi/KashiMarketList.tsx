@@ -18,7 +18,7 @@ import { KashiMediumRiskLendingPair } from './KashiMediumRiskLendingPair'
 interface KashiMarketList {}
 
 const KashiMarketList: FC<KashiMarketList> = () => {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const addresses = useKashiPairAddresses()
   const markets = useKashiMediumRiskLendingPairs(account, addresses)
 
