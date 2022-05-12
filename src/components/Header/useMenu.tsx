@@ -87,7 +87,7 @@ const useMenu: UseMenu = () => {
           {
             key: 'trident-swap',
             title: i18n._(t`Swap`),
-            link: '/trident/swap',
+            link: '/swap',
           },
           {
             key: 'limit',

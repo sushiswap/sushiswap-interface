@@ -54,7 +54,6 @@ export default function Pool() {
     variables: { block: block1d, where: { id } },
     shouldFetch: !!chainId && !!block1d,
   })
-
   const pair1d = pairs1d?.[0]
 
   const { data: pairs2d } = useSushiPairs({

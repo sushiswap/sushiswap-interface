@@ -25,7 +25,7 @@ const Lending = () => {
       <TridentHeader pattern="bg-chevron">
         <HeaderDropdown account={account} chainId={chainId} />
       </TridentHeader>
-      <TridentBody className="flex flex-col lg:flex-row">
+      <TridentBody>
         <Typography variant="lg" className="text-high-emphesis" weight={700}>
           {i18n._(t`Kashi Borrowing Positions`)}
         </Typography>

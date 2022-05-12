@@ -12,4 +12,14 @@ export default interface LPToken {
   symbol?: string
   decimals?: number
   version?: 'v1' | 'v2'
+  dex?:
+    | 'uniswap_v2'
+    | 'pancakeswap_v2'
+    | 'spookyswap'
+    | 'spiritswap'
+    | 'quickswap'
+    | 'traderjoe'
+    | 'pangolin'
+    | 'stellaswap'
+    | 'beamswap'
 }

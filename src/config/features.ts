@@ -40,6 +40,7 @@ const features: FeatureMap = {
     Feature.ANALYTICS,
     Feature.BENTOBOX,
     Feature.MISO,
+    Feature.MIGRATE,
   ],
   [ChainId.FANTOM_TESTNET]: [Feature.AMM],
   [ChainId.MATIC]: [
@@ -63,6 +64,7 @@ const features: FeatureMap = {
     Feature.LIMIT_ORDERS,
     Feature.ANALYTICS,
     Feature.MISO,
+    Feature.MIGRATE,
   ],
   [ChainId.AVALANCHE_TESTNET]: [Feature.AMM],
   [ChainId.OKEX]: [Feature.AMM],
@@ -79,7 +81,7 @@ const features: FeatureMap = {
     Feature.MISO,
   ],
   [ChainId.FUSE]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
-  [ChainId.MOONBEAM]: [Feature.AMM, Feature.MISO, Feature.LIQUIDITY_MINING],
+  [ChainId.MOONBEAM]: [Feature.AMM, Feature.MISO, Feature.LIQUIDITY_MINING, Feature.MIGRATE],
   [ChainId.OPTIMISM]: [Feature.TRIDENT],
 }
 
