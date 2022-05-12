@@ -1,62 +1,140 @@
-import * as Sentry from '@sentry/nextjs'
-import NextErrorComponent from 'next/error'
+import React from 'react';
+import dynamic from 'next/dynamic';
+import {
+  default as NextApp,
+  AppContext,
+  AppProps,
+  AppInitialProps
+} from 'next/app';
+import { NextComponentType, NextPageContext, NextPage } from 'next';
 
-// @ts-ignore
-const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
-  if (!hasGetInitialPropsRun && err) {
-    // getInitialProps is not called in case of
-    // https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
-    // err via _app.js so it can be captured
-    Sentry.captureException(err)
-    // Flushing is not required in this case as it only happens on the client
-  }
+// FIXME It looks like typings for next/error are wrong
+const ErrorPage = dynamic(() => import('next/error')) as NextComponentType<
+  NextPageContext,
+  {},
+  {}
+>;
 
-  return <NextErrorComponent statusCode={statusCode} />
+export interface PageErrorInitialProps<T = Record<string, any>> {
+  error?: {
+    statusCode: number;
+  } & T;
 }
 
-// @ts-ignore
-MyError.getInitialProps = async ({ res, err, asPath }) => {
-  // @ts-ignore
-  const errorInitialProps = await NextErrorComponent.getInitialProps({
-    res,
-    err,
-  })
+export type ExcludeErrorProps<P> = Pick<
+  P,
+  Exclude<keyof P, keyof PageErrorInitialProps>
+>;
 
-  // Workaround for https://github.com/vercel/next.js/issues/8592, mark when
-  // getInitialProps has run
-  // @ts-ignore
-  errorInitialProps.hasGetInitialPropsRun = true
+/**
+ * Small helper to generate errors object if needed
+ */
+export const generatePageError = function<T extends Record<string, any>>(
+  statusCode: number,
+  params?: T
+): PageErrorInitialProps<T | {}> {
+  return {
+    error: {
+      statusCode,
+      ...(params || {})
+    }
+  };
+};
 
-  // Running on the server, the response object (`res`) is available.
-  //
-  // Next.js will pass an err on the server if a page's data fetching methods
-  // threw or returned a Promise that rejected
-  //
-  // Running on the client (browser), Next.js will provide an err if:
-  //
-  //  - a page's `getInitialProps` threw or returned a Promise that rejected
-  //  - an exception was thrown somewhere in the React lifecycle (render,
-  //    componentDidMount, etc) that was caught by Next.js's React Error
-  //    Boundary. Read more about what types of exceptions are caught by Error
-  //    Boundaries: https://reactjs.org/docs/error-boundaries.html
+/**
+ * This higher-order component is used to render the Error page if a HTTP status
+ * code >400 is thrown by one of the pages.
+ *
+ * To trigger it, just add statusCode to the object returned by getInitialProps
+ *
+ * This solution is based on Tim Neutkens's insights and inspired by Nuxt.js
+ * https://spectrum.chat/next-js/general/error-handling-in-async-getinitialprops~99400c6c-0da8-4de5-aecd-2ecf122e8ad0
+ * https://github.com/nuxt/nuxt.js/issues/895#issuecomment-308682972
+ */
+const withErrorHoC = function(CustomErrorComponent?: NextPage<any>) {
+  const ErrorComponent: NextPage<any> = CustomErrorComponent ?? ErrorPage;
 
-  if (err) {
-    Sentry.captureException(err)
+  // First function returned, the one allowing to pass the App component as a parameter
+  return function<P extends PageErrorInitialProps>(
+    AppComponent: typeof NextApp
+  ) {
+    // The actualy component working as a wrapper around _app
+    return class WithError extends React.Component<
+      P & PageErrorInitialProps & AppProps
+    > {
+      public static getInitialProps = async (appContext: AppContext) => {
+        let appProps: AppInitialProps = {
+          pageProps: {}
+        };
 
-    // Flushing before returning is necessary if deploying to Vercel, see
-    // https://vercel.com/docs/platform/limits#streaming-responses
-    await Sentry.flush(2000)
+        if (AppComponent.getInitialProps) {
+          appProps = await AppComponent.getInitialProps(appContext);
 
-    return errorInitialProps
-  }
+          if (typeof appProps.pageProps === 'undefined') {
+            console.error(
+              'If you have a getInitialProps method in your custom _app.js file, you must explicitly return pageProps. For more information, see: https://github.com/zeit/next.js#custom-app'
+            );
+          }
+        }
 
-  // If this point is reached, getInitialProps was called without any
-  // information about what the error might be. This is unexpected and may
-  // indicate a bug introduced in Next.js, so record it in Sentry
-  Sentry.captureException(new Error(`_error.js getInitialProps missing data at path: ${asPath}`))
-  await Sentry.flush(2000)
+        const { res } = appContext.ctx;
+        const { pageProps } = appProps;
 
-  return errorInitialProps
-}
+        if ('error' in pageProps && res) {
+          if (!('statusCode' in pageProps.error))
+            throw new Error(
+              'The error object should have a "statusCode" property'
+            );
 
-export default MyError
+          if (typeof pageProps.error.statusCode !== 'number')
+            throw new Error('The "statusCode" property should be a number.');
+
+          // We are in an user-defined error, let's fetch the Error component
+          // getInitialProps if needed, and merge them with the error object
+          let errorInitialProps: Record<string, any> = {};
+
+          if (ErrorComponent.getInitialProps) {
+            errorInitialProps = await ErrorComponent.getInitialProps(
+              appContext.ctx
+            );
+
+            appProps.pageProps = {
+              ...errorInitialProps,
+              ...appProps.pageProps
+            };
+          }
+
+          res.statusCode = pageProps.error.statusCode;
+        }
+
+        return appProps;
+      };
+
+      render() {
+        const { pageProps }: AppInitialProps = this.props;
+        const { error } = pageProps;
+
+        if (error && error.statusCode >= 400) {
+          const { error, ...otherPageProps } = pageProps;
+
+          const errorPageProps = {
+            ...otherPageProps,
+            ...error
+          };
+
+          return (
+            <AppComponent
+              {...this.props}
+              Component={ErrorComponent}
+              pageProps={errorPageProps}
+            />
+          );
+        }
+
+        return <AppComponent {...this.props} />;
+      }
+    };
+  };
+};
+
+export default withErrorHoC;
