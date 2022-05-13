@@ -60,7 +60,7 @@ export const getTokenSubset = async (chainId = ChainId.ETHEREUM, variables) => {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getTokens = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getTokens = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
   // console.log('getTokens')
   const { tokens } = await exchange(chainId, tokensQuery, variables)
   return tokens
@@ -97,7 +97,7 @@ export const getTokenPrice = async (chainId = ChainId.ETHEREUM, query, variables
   return token?.derivedETH * nativePrice
 }
 
-export const getNativePrice = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
+export const getNativePrice = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
   // console.log('getEthPrice')
   const data = await getBundle(chainId, undefined, variables)
   return data?.bundles[0]?.ethPrice
