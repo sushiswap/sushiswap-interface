@@ -5,6 +5,7 @@ import { formatNumber } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
+import { UsePaginationOptions, UseSortByOptions } from 'react-table'
 import useSWR from 'swr'
 
 import { filterForSearchQuery } from './poolTableFilters'
@@ -156,7 +157,8 @@ export const useTableConfig = (chainId: number) => {
           ],
         },
         autoResetFilters: false,
-      },
+        autoResetPage: false,
+      } as UseSortByOptions<any> & UsePaginationOptions<any>,
       // loading: isValidating,
       // error,
     }),

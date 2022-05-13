@@ -1,6 +1,6 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { getApy } from 'app/functions'
-import { getBlockDaysAgo, getPairs as getPairs } from 'app/services/graph'
+import { getBlockDaysAgo, getPairs } from 'app/services/graph'
 
 export default async function getAnalyticsPairs(chainId: ChainId) {
   const [block1d, block2d, block1w] = await Promise.all([
