@@ -103,6 +103,7 @@ const useLimitOrders = () => {
     const transform = async (order: Order) => {
       const limitOrder = LimitOrder.getLimitOrder({
         ...order,
+        stopPrice: '0',
         chainId: +order.chainId,
         tokenInDecimals: +order.tokenInDecimals,
         tokenOutDecimals: +order.tokenOutDecimals,
