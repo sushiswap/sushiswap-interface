@@ -14,6 +14,7 @@ import * as MATIC from './tokens/matic'
 import * as MOONBEAM from './tokens/moonbeam'
 import * as MOONRIVER from './tokens/moonriver'
 import * as OKEX from './tokens/okex'
+import * as OPTIMISM from './tokens/optimism'
 import * as PALM from './tokens/palm'
 import * as TELOS from './tokens/telos'
 import * as XDAI from './tokens/xdai'
@@ -221,6 +222,14 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     MOONBEAM.WETH,
     MOONBEAM.WBTC,
     MOONBEAM.FRAX,
+  ],
+  [ChainId.OPTIMISM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.OPTIMISM],
+    OPTIMISM.USDC,
+    OPTIMISM.USDT,
+    OPTIMISM.DAI,
+    OPTIMISM.WBTC,
+    OPTIMISM.LUSD,
   ],
 }
 
@@ -609,6 +618,14 @@ export const COMMON_BASES: ChainTokenList = {
     MOONBEAM.WBTC,
     MOONBEAM.FRAX,
   ],
+  [ChainId.OPTIMISM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.OPTIMISM],
+    OPTIMISM.USDC,
+    OPTIMISM.USDT,
+    OPTIMISM.DAI,
+    OPTIMISM.WBTC,
+    OPTIMISM.LUSD,
+  ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -737,6 +754,14 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     MOONBEAM.WETH,
     MOONBEAM.WBTC,
     MOONBEAM.FRAX,
+  ],
+  [ChainId.OPTIMISM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.OPTIMISM],
+    OPTIMISM.USDC,
+    OPTIMISM.USDT,
+    OPTIMISM.DAI,
+    OPTIMISM.WBTC,
+    OPTIMISM.LUSD,
   ],
 }
 
