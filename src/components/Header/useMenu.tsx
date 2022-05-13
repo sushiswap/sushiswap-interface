@@ -97,7 +97,8 @@ const useMenu: UseMenu = () => {
           },
         ].filter((item) => !item.disabled),
       })
-      menu.push({
+
+      const tridentLiquidity = {
         key: 'liquidity',
         title: i18n._(t`Liquidity`),
         icon: <BeakerIcon width={20} />,
@@ -112,13 +113,18 @@ const useMenu: UseMenu = () => {
             title: i18n._(t`Create`),
             link: '/trident/create',
           },
-          {
-            key: 'trident-migrate',
-            title: i18n._(t`Migrate`),
-            link: '/trident/migrate',
-          },
         ],
-      })
+      }
+
+      if (chainId === ChainId.MATIC) {
+        tridentLiquidity.items.push({
+          key: 'trident-migrate',
+          title: i18n._(t`Migrate`),
+          link: '/trident/migrate',
+        })
+      }
+
+      menu.push(tridentLiquidity)
 
       if (featureEnabled(Feature.AMM, chainId)) {
         menu.push({
