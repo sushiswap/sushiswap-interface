@@ -48,7 +48,7 @@ function _Pools() {
 }
 
 export const getServerSideProps: GetServerSideProps<any> = async ({ query, res }) => {
-  if (typeof query.chainId !== 'string') return { props: {} }
+  if (typeof query.chainId !== 'string') return { props: { fallback: {} } }
 
   res.setHeader('Cache-Control', 'public, s-maxage=10, stale-while-revalidate=59')
 

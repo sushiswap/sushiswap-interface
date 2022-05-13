@@ -11,9 +11,9 @@ export default async function getAnalyticsPairs(chainId: ChainId) {
 
   const [pairs, pairs1d, pairs2d, pairs1w] = await Promise.all([
     getPairs(chainId),
-    getPairs(chainId, { block1d }),
-    getPairs(chainId, { block2d }),
-    getPairs(chainId, { block1w }),
+    getPairs(chainId, { block: block1d }),
+    getPairs(chainId, { block: block2d }),
+    getPairs(chainId, { block: block1w }),
   ])
 
   return (

@@ -12,7 +12,7 @@ import { filterForSearchQuery } from './poolTableFilters'
 export const useTableConfig = (chainId: number) => {
   const allTokens = useAllTokens()
 
-  const { data } = useSWR(`/api/analytics/pairs/${chainId}`, (url: string) =>
+  const { data } = useSWR(chainId ? `/api/analytics/pairs/${chainId}` : null, (url: string) =>
     fetch(url).then((response) => response.json())
   )
 
@@ -105,7 +105,6 @@ export const useTableConfig = (chainId: number) => {
         minWidth: 150,
         // @ts-ignore
         Cell: (props) => {
-          console.log({ props })
           return (
             <>
               {props.value}{' '}
