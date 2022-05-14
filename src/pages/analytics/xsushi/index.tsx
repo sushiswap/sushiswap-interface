@@ -8,7 +8,17 @@ import InfoCard from 'app/features/analytics/bar/InfoCard'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
 import { aprToApy } from 'app/functions/convert/apyApr'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
-import { useDayData, useFactory, useNativePrice, useOneDayBlock, useTokenDayData, useTokens } from 'app/services/graph'
+import {
+  useDayData,
+  useNativePrice,
+  useOneDayBlock,
+  useOneMonthBlock,
+  useOneYearBlock,
+  useSixMonthBlock,
+  useThreeMonthBlock,
+  useTokenDayData,
+  useTokens,
+} from 'app/services/graph'
 import { useBar, useBarHistory } from 'app/services/graph/hooks/bar'
 import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
@@ -36,14 +46,13 @@ export default function XSushi() {
 
   const { data: block1d } = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
-  const exchange = useFactory({ chainId: ChainId.ETHEREUM })
+  const { data: block1m } = useOneMonthBlock({ chainId: ChainId.ETHEREUM })
 
-  const exchange1d = useFactory({
-    chainId: ChainId.ETHEREUM,
-    variables: {
-      block: block1d,
-    },
-  })
+  const { data: block3m } = useThreeMonthBlock({ chainId: ChainId.ETHEREUM })
+
+  const { data: block6m } = useSixMonthBlock({ chainId: ChainId.ETHEREUM })
+
+  const { data: block1y } = useOneYearBlock({ chainId: ChainId.ETHEREUM })
 
   const dayData = useDayData({ chainId: ChainId.ETHEREUM })
 
@@ -70,11 +79,47 @@ export default function XSushi() {
     variables: { where: { token: SUSHI_ADDRESS[ChainId.ETHEREUM].toLowerCase() } },
   })
 
-  const bar = useBar()
+  const { data: bar } = useBar()
 
-  const bar1d = useBar({ variables: { block: block1d }, shouldFetch: !!block1d })
+  const { data: bar1d } = useBar({ variables: { block: block1d }, shouldFetch: !!block1d })
 
-  const barHistory = useBarHistory()
+  const { data: bar1m } = useBar({
+    variables: {
+      block: block1m,
+    },
+    shouldFetch: !!block1m,
+  })
+
+  const { data: bar3m } = useBar({
+    variables: {
+      block: block3m,
+    },
+    shouldFetch: !!block3m,
+  })
+
+  const { data: bar6m } = useBar({
+    variables: {
+      block: block6m,
+    },
+    shouldFetch: !!block6m,
+  })
+
+  const { data: bar1y } = useBar({
+    variables: {
+      block: block1y,
+    },
+    shouldFetch: !!block1y,
+  })
+
+  const apy1m = (bar?.ratio / bar1m?.ratio - 1) * 12 * 100
+
+  const apy3m = (bar?.ratio / bar3m?.ratio - 1) * 4 * 100
+
+  const apy6m = (bar?.ratio / bar6m?.ratio - 1) * 2 * 100
+
+  const apy1y = (bar?.ratio / bar1y?.ratio - 1) * 100
+
+  const { data: barHistory } = useBarHistory()
 
   const [xSushiPrice, xSushiMarketcap] = [
     xSushi?.derivedETH * ethPrice,
@@ -85,6 +130,12 @@ export default function XSushi() {
     xSushi1d?.derivedETH * ethPrice1d,
     xSushi1d?.derivedETH * ethPrice1d * bar1d?.totalSupply,
   ]
+
+  // const APY1d = aprToApy(
+  //   (((exchange?.volumeUSD - exchange1d?.volumeUSD) * 0.0005 * 365.25) / (bar?.totalSupply * xSushiPrice)) * 100 ?? 0
+  // )
+  // // @ts-ignore TYPE NEEDS FIXING
+  // const APY1w = aprToApy(data.slice(-7).reduce((acc, day) => (acc += day.APY), 0) / 7)
 
   const data = useMemo(
     () =>
@@ -115,30 +166,24 @@ export default function XSushi() {
     [barHistory, dayData, sushiDayData, bar]
   )
 
-  const APY1d = aprToApy(
-    (((exchange?.volumeUSD - exchange1d?.volumeUSD) * 0.0005 * 365.25) / (bar?.totalSupply * xSushiPrice)) * 100 ?? 0
-  )
-  // @ts-ignore TYPE NEEDS FIXING
-  const APY1w = aprToApy(data.slice(-7).reduce((acc, day) => (acc += day.APY), 0) / 7)
-
   const graphs = useMemo(
     () => [
-      {
-        title: 'xSushi Performance',
-        labels: ['Daily APY', 'Daily APR'],
-        data: [
-          // @ts-ignore TYPE NEEDS FIXING
-          data.map((d) => ({
-            date: d.date * 1000,
-            value: d.APY,
-          })),
-          // @ts-ignore TYPE NEEDS FIXING
-          data.map((d) => ({
-            date: d.date * 1000,
-            value: d.APR,
-          })),
-        ],
-      },
+      // {
+      //   title: 'xSushi Performance',
+      //   labels: ['Daily APY', 'Daily APR'],
+      //   data: [
+      //     // @ts-ignore TYPE NEEDS FIXING
+      //     data.map((d) => ({
+      //       date: d.date * 1000,
+      //       value: d.APY,
+      //     })),
+      //     // @ts-ignore TYPE NEEDS FIXING
+      //     data.map((d) => ({
+      //       date: d.date * 1000,
+      //       value: d.APR,
+      //     })),
+      //   ],
+      // },
       {
         title: 'Daily Fees Received on Mainnet',
         labels: ['Fees (USD)'],
@@ -198,13 +243,17 @@ export default function XSushi() {
 
       <TridentBody>
         <div className="space-y-5">
-          <div className="grid grid-flow-col gap-4 overflow-auto">
+          <div className="grid grid-flow-col gap-4 overflow-auto grid-col-4">
             <InfoCard text="Price" number={formatNumber(xSushiPrice ?? 0, true)} />
             <InfoCard text="Market Cap" number={formatNumber(xSushiMarketcap ?? 0, true, false)} />
-            <InfoCard text="APY 24h" number={formatPercent(APY1d)} />
-            <InfoCard text="APY 7d" number={formatPercent(APY1w)} />
             <InfoCard text="Total Supply" number={formatNumber(bar?.totalSupply)} />
             <InfoCard text="xSUSHI : SUSHI" number={Number(bar?.ratio ?? 0)?.toFixed(4)} />
+          </div>
+          <div className="grid grid-flow-col gap-4 overflow-auto grid-col-4">
+            <InfoCard text="APY 1m" number={formatPercent(apy1m)} />
+            <InfoCard text="APY 3m" number={formatPercent(apy3m)} />
+            <InfoCard text="APY 6m" number={formatPercent(apy6m)} />
+            <InfoCard text="APY 1y" number={formatPercent(apy1y)} />
           </div>
           <div className="space-y-4">
             {graphs.map((graph, i) => (

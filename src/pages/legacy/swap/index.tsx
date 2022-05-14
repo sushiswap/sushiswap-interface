@@ -36,24 +36,7 @@ import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Banner as BannerType, fetchBanners } from '../../../lib/api'
-
-export async function getServerSideProps() {
-  try {
-    const banners = await fetchBanners()
-    return {
-      props: { banners: banners || [] },
-    }
-  } catch (e) {
-    return {
-      props: { banners: [] },
-    }
-  }
-}
-
-interface SwapProps {
-  banners: BannerType[]
-}
+import { SwapProps } from '../../swap'
 
 const Swap = ({ banners }: SwapProps) => {
   const { i18n } = useLingui()

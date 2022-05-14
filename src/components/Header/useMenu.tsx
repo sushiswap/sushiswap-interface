@@ -78,8 +78,6 @@ const useMenu: UseMenu = () => {
       },
     ]
 
-    const legacy = [...trade, ...liquidity]
-
     if (featureEnabled(Feature.TRIDENT, chainId)) {
       menu.push({
         key: 'trade',
@@ -89,7 +87,7 @@ const useMenu: UseMenu = () => {
           {
             key: 'trident-swap',
             title: i18n._(t`Swap`),
-            link: '/trident/swap',
+            link: '/swap',
           },
           {
             key: 'limit',
@@ -99,7 +97,8 @@ const useMenu: UseMenu = () => {
           },
         ].filter((item) => !item.disabled),
       })
-      menu.push({
+
+      const tridentLiquidity = {
         key: 'liquidity',
         title: i18n._(t`Liquidity`),
         icon: <BeakerIcon width={20} />,
@@ -114,19 +113,27 @@ const useMenu: UseMenu = () => {
             title: i18n._(t`Create`),
             link: '/trident/create',
           },
-          {
-            key: 'trident-migrate',
-            title: i18n._(t`Migrate`),
-            link: '/trident/migrate',
-          },
         ],
-      })
-      menu.push({
-        key: 'Legacy',
-        title: i18n._(t`Legacy`),
-        icon: <SwitchVerticalIcon width={20} />,
-        items: liquidity.filter((item) => !item?.disabled),
-      })
+      }
+
+      if (chainId === ChainId.MATIC) {
+        tridentLiquidity.items.push({
+          key: 'trident-migrate',
+          title: i18n._(t`Migrate`),
+          link: '/trident/migrate',
+        })
+      }
+
+      menu.push(tridentLiquidity)
+
+      if (featureEnabled(Feature.AMM, chainId)) {
+        menu.push({
+          key: 'Legacy',
+          title: i18n._(t`Legacy`),
+          icon: <SwitchVerticalIcon width={20} />,
+          items: liquidity.filter((item) => !item?.disabled),
+        })
+      }
     } else {
       menu.push({
         key: 'trade',
@@ -292,7 +299,7 @@ const useMenu: UseMenu = () => {
     }
 
     if (account) {
-      menu.push({
+      const portfolio = {
         key: 'portfolio',
         title: i18n._(t`Portfolio`),
 
@@ -308,18 +315,22 @@ const useMenu: UseMenu = () => {
             title: 'Liquidity',
             link: `/account/liquidity?account=${account}`,
           },
-          {
-            key: 'lending',
-            title: 'Lending',
-            link: `/account/lending?account=${account}`,
-          },
-          {
-            key: 'borrowing',
-            title: 'Borrowing',
-            link: `/account/borrowing?account=${account}`,
-          },
         ],
-      })
+      }
+
+      if (featureEnabled(Feature.KASHI, chainId)) {
+        portfolio.items.push({
+          key: 'lending',
+          title: 'Lending',
+          link: `/account/lending?account=${account}`,
+        })
+        portfolio.items.push({
+          key: 'borrowing',
+          title: 'Borrowing',
+          link: `/account/borrowing?account=${account}`,
+        })
+      }
+      menu.push(portfolio)
     }
 
     return menu.filter((el) => Object.keys(el).length > 0)

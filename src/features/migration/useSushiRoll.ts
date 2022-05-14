@@ -1,6 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Zero } from '@ethersproject/constants'
-import { ChainId } from '@sushiswap/core-sdk'
 import { useSushiRollContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { signERC2612Permit } from 'eth-permit'
@@ -8,18 +7,12 @@ import { useCallback } from 'react'
 
 import LPToken from './LPToken'
 
-const useSushiRoll = (version: 'v1' | 'v2' = 'v2') => {
+const useSushiRoll = (dex: LPToken['dex']) => {
   const { chainId, library, account } = useActiveWeb3React()
-  const sushiRoll = useSushiRollContract(version)
+  const sushiRoll = useSushiRollContract(dex)
   const ttl = 60 * 20
 
-  let from = ''
-
-  if (chainId === ChainId.ETHEREUM) {
-    from = 'Uniswap'
-  } else if (chainId === ChainId.BSC) {
-    from = 'PancakeSwap'
-  }
+  let from = dex
 
   const migrate = useCallback(
     async (lpToken: LPToken, amount: BigNumber) => {

@@ -205,6 +205,10 @@ const chains: ChainObject = {
     link: 'https://moonbeam.moonscan.io',
     builder: explorers.moonbeam,
   },
+  [ChainId.OPTIMISM]: {
+    link: 'https://optimistic.etherscan.io',
+    builder: explorers.etherscan,
+  },
 }
 
 export function getExplorerLink(

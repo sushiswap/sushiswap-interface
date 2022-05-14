@@ -39,10 +39,14 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
   const { value: currentUserBorrowAmountUSD, loading: currentUserBorrowAmountUSDLoading } =
     useUSDCSubgraphValueWithLoadingIndicator(currentUserBorrowAmount)
 
-  const liquidationPrice = new Price({
-    baseAmount: currentUserBorrowAmount,
-    quoteAmount: userCollateralAmount.multiply(LTV),
-  })
+  console.log(currentUserBorrowAmount.toExact(), userCollateralAmount.multiply(LTV).toExact())
+
+  const liquidationPrice = currentUserBorrowAmount.greaterThan(0)
+    ? new Price({
+        baseAmount: currentUserBorrowAmount,
+        quoteAmount: userCollateralAmount.multiply(LTV),
+      })
+    : undefined
 
   // invert
   // ? `1 ${totalBorrowed?.currency.symbol} = ${liquidationPrice?.toSignificant(6)} ${
@@ -88,7 +92,7 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
 
       <div className={classNames('flex flex-col !items-end !justify-center', TABLE_TBODY_TD_CLASSNAME(2, 6))}>
         <Typography weight={700} className="text-high-emphesis">
-          {formatNumber(liquidationPrice.invert().toSignificant(6))} {asset.symbol}
+          {liquidationPrice ? formatNumber(liquidationPrice.invert().toSignificant(6)) : '0'} {asset.symbol}
         </Typography>
         <Typography variant="xs" className="text-low-emphesis">
           {collateral.symbol}
