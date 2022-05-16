@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { TradeVersion } from '@sushiswap/core-sdk'
+import { Percent, Trade as LegacyTrade, TradeVersion } from '@sushiswap/core-sdk'
+import { Trade as TridentTrade } from '@sushiswap/trident-sdk'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Typography from 'app/components/Typography'
@@ -8,6 +9,7 @@ import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedT
 import { selectTridentSwap, setBentoPermit, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
 import { computeFiatValuePriceImpact, warningSeverity } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
+import confirmPriceImpactWithoutFee from 'app/functions/prices'
 import { useBentoBoxContract, useRouterContract, useTridentRouterContract } from 'app/hooks'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
@@ -34,25 +36,31 @@ const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
   const bentoBox = useBentoBoxContract()
   const fiatValueInput = useUSDCValue(parsedAmounts?.[0])
   const fiatValueOutput = useUSDCValue(parsedAmounts?.[1])
-  const priceImpact = computeFiatValuePriceImpact(fiatValueInput, fiatValueOutput)
+  const computedPriceImpact = computeFiatValuePriceImpact(fiatValueInput, fiatValueOutput)
   const [isExpertMode] = useExpertModeManager()
   const [permitError, setPermitError] = useState<boolean>()
   const [permit, setPermit] = useState<Signature>()
-  const priceImpactSeverity = useMemo(() => {
-    const executionPriceImpact = trade?.priceImpact
-    return warningSeverity(
-      executionPriceImpact && priceImpact
-        ? executionPriceImpact.greaterThan(priceImpact)
+
+  const priceImpact = useMemo(() => {
+    if (trade instanceof LegacyTrade) {
+      const executionPriceImpact = trade?.priceImpact
+      return executionPriceImpact && computedPriceImpact
+        ? executionPriceImpact.greaterThan(computedPriceImpact)
           ? executionPriceImpact
-          : priceImpact
-        : executionPriceImpact ?? priceImpact
-    )
-  }, [priceImpact, trade])
+          : computedPriceImpact
+        : executionPriceImpact ?? computedPriceImpact
+    } else if (trade instanceof TridentTrade) {
+      return new Percent(Math.floor(Number(trade.route.priceImpact) * 10_000), 10_000)
+    }
+  }, [computedPriceImpact, trade])
+
+  const priceImpactSeverity = useMemo(() => warningSeverity(priceImpact), [priceImpact])
 
   const handleClick = useCallback(() => {
-    if (trade) onClick(trade)
+    if (!trade || !priceImpact || !confirmPriceImpactWithoutFee(priceImpact)) return
+    onClick(trade)
     dispatch(setTridentSwapState({ ...tridentSwapState, showReview: true }))
-  }, [dispatch, onClick, trade, tridentSwapState])
+  }, [dispatch, onClick, priceImpact, trade, tridentSwapState])
 
   const isLegacy = getTradeVersion(trade) === TradeVersion.V2TRADE
 
@@ -81,7 +89,8 @@ const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
           : { withPermit: false })}
       >
         {({ approved, loading }) => {
-          const disabled = !!error || !approved || loading || attemptingTxn || priceImpactSeverity > 3
+          const disabled =
+            !!error || !approved || loading || attemptingTxn || (priceImpactSeverity > 3 && !isExpertMode)
           const buttonText = attemptingTxn ? (
             <Dots>{i18n._(t`Swapping`)}</Dots>
           ) : loading ? (
