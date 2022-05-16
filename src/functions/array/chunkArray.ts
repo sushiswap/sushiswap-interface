@@ -1,9 +1,9 @@
-const DEFAULT_CALL_GAS_REQUIRED = 1_000_000
+export const DEFAULT_CALL_GAS_REQUIRED = 1_000_000
 export const DEFAULT_GAS_REQUIRED = 200_000 // the default value for calls that don't specify gasRequired
 
 // chunks array into chunks
 // evenly distributes items among the chunks
-export default function chunkArray<T>(items: T[], chunkGasLimit: number): T[][] {
+export function chunkArray<T>(items: T[], chunkGasLimit: number): T[][] {
   const chunks: T[][] = []
   let currentChunk: T[] = []
   let currentChunkCumulativeGas = 0
