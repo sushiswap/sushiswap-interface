@@ -3,9 +3,10 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { Zero } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
-import * as Sentry from './sentry'
 import { Fraction } from 'app/entities/bignumber'
 import React from 'react'
+
+import * as Sentry from './sentry'
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render')
