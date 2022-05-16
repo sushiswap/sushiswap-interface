@@ -10,7 +10,7 @@ describe('#chunkArray', () => {
     expect(chunkArray([1, 2, 3], 1)).toEqual([[1], [2], [3]])
   })
   it('handles empty array', () => {
-        // @ts-ignore
+    // @ts-ignore
     expect(chunkArray([])).toEqual([])
   })
   it('accepts objects with own gasRequired', () => {
@@ -20,7 +20,7 @@ describe('#chunkArray', () => {
       { item: 3, gasRequired: 50_000_000 },
     ]
     const [item1, item2, item3] = items
-        // @ts-ignore
+    // @ts-ignore
     expect(chunkArray(items)).toEqual([[item1, item2], [item3]])
   })
 })
