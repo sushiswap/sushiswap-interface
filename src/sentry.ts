@@ -14,9 +14,8 @@ export const initSentry = () => {
   if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
     Sentry.init({
       // @note fallback is Sushi's DSN ingest point
-      dsn:
-        process.env.NEXT_PUBLIC_SENTRY_DSN ||
-        'https://e852f945bc774d718d25aa807d8417dd@o960777.ingest.sentry.io/5909166',
+      // prettier-ignore
+      dsn: process.env.NEXT_PUBLIC_SENTRY_DSN || 'https://e852f945bc774d718d25aa807d8417dd@o960777.ingest.sentry.io/5909166',
       // NEXT_PUBLIC_RELEASE_VERSION: Set in production script when releasing, see `git-hash.sh`
       release: process.env.NEXT_PUBLIC_RELEASE_VERSION,
       // fall back production
