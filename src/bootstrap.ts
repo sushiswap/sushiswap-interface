@@ -3,7 +3,7 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { Zero } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
-import * as Sentry from './sentry';
+import * as Sentry from './sentry'
 import { Fraction } from 'app/entities/bignumber'
 import React from 'react'
 
@@ -63,4 +63,4 @@ BigNumber.prototype.max = function (...values: BigNumberish[]): BigNumber {
   return highest
 }
 
-Sentry.initSentry;
+Sentry.initSentry
