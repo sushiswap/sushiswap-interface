@@ -81,6 +81,7 @@ export const useRemoveLiquidityExecute = () => {
       if (receiveETH) {
         actions.push(
           unwrapWETHAction({
+            chainId,
             router,
             amountMinimum: liquidityOutput[indexOfWETH].amount,
             recipient: account,
