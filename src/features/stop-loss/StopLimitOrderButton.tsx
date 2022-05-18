@@ -4,11 +4,13 @@ import { Currency, CurrencyAmount, Trade, TradeType } from '@sushiswap/core-sdk'
 import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
+import { STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import useLimitOrderExecute, { DepositPayload } from 'app/features/legacy/limit-order/useLimitOrderExecute'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract } from 'app/hooks'
 import useENS from 'app/hooks/useENS'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { setFromBentoBalance, setLimitOrderBentoPermit, setLimitOrderShowReview } from 'app/state/limit-order/actions'
 import { useLimitOrderDerivedInputError, useLimitOrderState } from 'app/state/limit-order/hooks'
@@ -28,6 +30,7 @@ const StopLimitOrderButton: FC<StopLimitOrderButton> = ({ trade, parsedAmounts }
   const dispatch = useAppDispatch()
   const { fromBentoBalance, bentoPermit, attemptingTxn, recipient } = useLimitOrderState()
   const { address } = useENS(recipient)
+  const addPopup = useAddPopup()
 
   const error = useLimitOrderDerivedInputError({ trade })
   const { deposit } = useLimitOrderExecute()
@@ -47,6 +50,13 @@ const StopLimitOrderButton: FC<StopLimitOrderButton> = ({ trade, parsedAmounts }
 
   const handler = useCallback(async () => {
     if (!parsedAmounts?.inputAmount) return
+
+    if (chainId && !STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId]) {
+      addPopup({
+        txn: { hash: '', summary: 'Autonomy unsupported!', success: false },
+      })
+      return
+    }
 
     if (fromBentoBalance) {
       dispatch(setLimitOrderShowReview(true))
