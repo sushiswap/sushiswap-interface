@@ -5,6 +5,7 @@ import NavLink from 'app/components/NavLink'
 import Settings from 'app/components/Settings'
 import Typography from 'app/components/Typography'
 import MyOrders from 'app/features/legacy/limit-order/MyOrders'
+import MyStopOrders from 'app/features/stop-loss/MyStopOrders'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 
@@ -30,6 +31,7 @@ const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency, trident 
   const { i18n } = useLingui()
   const { asPath } = useRouter()
   const isLimitOrder = asPath.startsWith('/limit-order')
+  const isStopLoss = asPath.startsWith('/stop-loss')
 
   return (
     <div className="flex items-center justify-between gap-1">
@@ -70,6 +72,7 @@ const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency, trident 
       </div>
       <div className="flex gap-4">
         {isLimitOrder && <MyOrders />}
+        {isStopLoss && <MyStopOrders />}
         <Settings className="!w-6 !h-6" trident={trident} />
       </div>
     </div>
