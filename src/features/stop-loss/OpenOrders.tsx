@@ -20,6 +20,7 @@ import React, { FC, useCallback } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { useOpenOrdersTableConfig } from './useOpenOrdersTableConfig'
+import useStopLossOrders from './useStopLossOrders'
 
 const OpenOrders: FC = () => {
   const { i18n } = useLingui()
@@ -27,6 +28,12 @@ const OpenOrders: FC = () => {
   const { pending, mutate } = useLimitOrders()
   const addTransaction = useTransactionAdder()
   const limitOrderContract = useLimitOrderContract(true)
+
+  const { totalOrders, loading, data } = useStopLossOrders()
+
+  console.log('total orders: ', totalOrders)
+  console.log('loading: ', loading)
+  console.log('data: ', data)
 
   const cancelOrder = useCallback(
     async (limitOrder: LimitOrder, summary: string) => {
