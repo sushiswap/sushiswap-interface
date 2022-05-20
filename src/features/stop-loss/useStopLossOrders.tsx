@@ -1,13 +1,33 @@
+import { Token } from '@sushiswap/core-sdk'
+import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
 import { STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import { useAutonomyLimitOrderWrapperContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import Moralis from 'moralis'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
+interface IToken {
+  chainId: number
+  address: string
+  name: string
+  symbol: string
+  decimals: number
+  logoUrl?: string
+}
+
+interface ITokenList {
+  name: string
+  logoURL?: string
+  keywords: any
+  timestamp: any
+  tokens: IToken[]
+  version: any
+}
 
 interface StopLossOrder {
   id: string | number
-  tokenIn: string
-  tokenOut: string
+  tokenIn: Token | undefined
+  tokenOut: Token | undefined
   stopRate: string
   limitRate: string
 }
@@ -15,7 +35,7 @@ interface StopLossOrder {
 interface State {
   totalOrders: number
   loading: boolean
-  data: StopLossOrder[]
+  data: Array<StopLossOrder | undefined>
 }
 
 const useStopLossOrders = () => {
@@ -27,6 +47,11 @@ const useStopLossOrders = () => {
     loading: true,
     data: [],
   })
+
+  const tokens = useMemo(
+    () => (DEFAULT_TOKEN_LIST as ITokenList).tokens.filter((token) => token.chainId === chainId),
+    [chainId]
+  )
 
   const fetchRegistryHistory = useCallback(async () => {
     console.log('Fetching registry history ...')
@@ -51,13 +76,16 @@ const useStopLossOrders = () => {
     }
   }, [account, chainId])
 
-  const transform = (callData: string, id: number) => {
-    const fillOrderArgs = limitOrderWrapperContract?.interface.decodeFunctionData('fillOrder', callData)
+  const transform = (callData: string, id: number): StopLossOrder | undefined => {
+    if (!chainId) return
 
+    const fillOrderArgs = limitOrderWrapperContract?.interface.decodeFunctionData('fillOrder', callData)
+    const token0 = fillOrderArgs && tokens.find((token) => token.address === fillOrderArgs[2])
+    const token1 = fillOrderArgs && tokens.find((token) => token.address === fillOrderArgs[3])
     const stopLossOrder: StopLossOrder = {
       id,
-      tokenIn: fillOrderArgs && fillOrderArgs[2],
-      tokenOut: fillOrderArgs && fillOrderArgs[3],
+      tokenIn: token0 && new Token(chainId, token0.address, token0.decimals, token0.symbol, token0.name),
+      tokenOut: token1 && new Token(chainId, token1.address, token1.decimals, token1.symbol, token1.name),
       stopRate: '',
       limitRate: '',
     }
@@ -77,8 +105,9 @@ const useStopLossOrders = () => {
         data: fillOrderData,
       })
     }
-
-    initializeOrdersData()
+    if (chainId) {
+      initializeOrdersData()
+    }
   }, [account, chainId])
 
   return state
