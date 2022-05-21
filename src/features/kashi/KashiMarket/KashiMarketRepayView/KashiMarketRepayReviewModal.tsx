@@ -69,10 +69,9 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
     } finally {
       setAttemptingTxn(false)
     }
-  }, [closePosition, execute, removeAmount, removeToWallet, repayAmount, repayFromWallet, trade])
+  }, [closePosition, execute, removeAmount, removeMax, removeToWallet, repayAmount, repayFromWallet, repayMax, trade])
 
   const priceImpactSeverity = warningSeverity(trade?.priceImpact)
-
   const isExpertMode = useIsExpertMode()
 
   return (
@@ -175,7 +174,7 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
           <Button
             loading={attemptingTxn}
             color="gradient"
-            disabled={attemptingTxn || (priceImpactSeverity > 3 && !isExpertMode)}
+            disabled={attemptingTxn || (priceImpactSeverity > 3 && !isExpertMode && closePosition)}
             onClick={_execute}
           >
             {closePosition
