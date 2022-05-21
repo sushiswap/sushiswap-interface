@@ -3,11 +3,8 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { Zero } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
-import { Integrations } from '@sentry/tracing'
 import { Fraction } from 'app/entities/bignumber'
 import React from 'react'
-
-import * as Sentry from './sentry'
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render')
@@ -65,12 +62,12 @@ BigNumber.prototype.max = function (...values: BigNumberish[]): BigNumber {
   return highest
 }
 
-export const initializeSentry = sentry.initialize;
+export const initializeSentry = sentry.initialize
 
-export const DNT = DO_NOT_TRACK_ENABLED;
+export const DNT = DO_NOT_TRACK_ENABLED
 
 export async function logError(err: Error) {
-  sentry.captureException(err);
+  sentry.captureException(err)
 
-  if (window.console && console.error) console.error(err);
+  if (window.console && console.error) console.error(err)
 }
