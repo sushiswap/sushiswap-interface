@@ -65,12 +65,12 @@ BigNumber.prototype.max = function (...values: BigNumberish[]): BigNumber {
   return highest
 }
 
-Sentry.init({
-  dsn: 'https://b3d1f140b36f441da22791ca98210c95@o1029417.ingest.sentry.io/6052500',
-  release: 'sushiswap-interface@2022.05.21',
-  integrations: [new Integrations.BrowserTracing()],
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-})
+export const initializeSentry = sentry.initialize;
+
+export const DNT = DO_NOT_TRACK_ENABLED;
+
+export async function logError(err: Error) {
+  sentry.captureException(err);
+
+  if (window.console && console.error) console.error(err);
+}
