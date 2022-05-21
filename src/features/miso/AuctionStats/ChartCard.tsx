@@ -6,7 +6,6 @@ import Typography from 'app/components/Typography'
 import AuctionChart from 'app/features/miso/AuctionChart'
 import { useAuctionCommitments } from 'app/features/miso/context/hooks/useAuctionCommitments'
 import { classNames, formatBalance } from 'app/functions'
-import { useToken } from 'app/hooks/Tokens'
 import React, { useEffect, useState } from 'react'
 
 import { Auction } from '../context/Auction'
@@ -20,7 +19,6 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
   const { i18n } = useLingui()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Price)
   const { commitments } = useAuctionCommitments(auction)
-  const auctionToken = useToken(auction.auctionInfo.addr)
   const [selectedBlock, setSelectedBlock] = useState(commitments.length ? commitments.length - 1 : 0)
   let cumulativeSum = JSBI.BigInt(0)
   const parsedAuctionCommitments = [...commitments]
@@ -49,7 +47,7 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
           </Typography>
           {parsedAuctionCommitments[selectedBlock] && (
             <Typography className="text-lg text-transparent text-gray-200 bg-clip-text">
-              {formatBalance(parsedAuctionCommitments[selectedBlock]?.y, auctionToken?.decimals)}{' '}
+              {formatBalance(parsedAuctionCommitments[selectedBlock]?.y, auction?.paymentToken?.decimals)}{' '}
               {auction?.commitmentsTotal?.currency.symbol}
             </Typography>
           )}

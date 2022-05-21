@@ -38,7 +38,8 @@ const TradePrice: FC<TradePriceProps> = ({
   const fiatPrice = showInverted ? inputPrice : outputPrice
 
   return (
-    <div
+    <button
+      type="button"
       onClick={flipPrice}
       className={classNames('flex w-full gap-1 cursor-pointer hover:text-white select-none', className)}
     >
@@ -50,7 +51,7 @@ const TradePrice: FC<TradePriceProps> = ({
           </Typography>
         )}
       </Typography>
-    </div>
+    </button>
   )
 }
 

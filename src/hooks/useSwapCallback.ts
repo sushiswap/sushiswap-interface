@@ -349,6 +349,8 @@ export function useSwapCallArguments(
 
   const tridentRouterContract = useTridentRouterContract()
 
+  console.log({ tridentRouterContract })
+
   const argentWalletContract = useArgentWalletContract()
 
   const { rebase } = useBentoRebase(trade?.inputAmount.currency)
@@ -453,6 +455,7 @@ export function useSwapCallArguments(
       if (trade?.outputAmount?.currency.isNative && receiveToWallet)
         actions.push(
           unwrapWETHAction({
+            chainId,
             router: tridentRouterContract,
             recipient,
             amountMinimum: trade?.minimumAmountOut(allowedSlippage).quotient.toString(),
