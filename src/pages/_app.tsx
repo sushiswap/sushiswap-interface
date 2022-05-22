@@ -17,6 +17,7 @@ import LogsUpdater from 'app/state/logs/updater'
 import TransactionUpdater from 'app/state/transactions/updater'
 import UserUpdater from 'app/state/user/updater'
 import * as plurals from 'make-plural/plurals'
+import { NextWebVitalsMetric } from 'next/app'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -27,24 +28,22 @@ import { Provider as ReduxProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Web3ReactProvider } from 'web3-react-core'
 
-import { NextWebVitalsMetric } from 'next/app';
-  
 export function reportWebVitals(metric: NextWebVitalsMetric) {
-  const url = process.env.NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT;
-  
+  const url = process.env.NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT
+
   if (!url) {
-    return;
+    return
   }
-  
+
   const body = JSON.stringify({
     route: window.__NEXT_DATA__.page,
     ...metric,
-  });
-  
+  })
+
   if (navigator.sendBeacon) {
-    navigator.sendBeacon(url, body);
+    navigator.sendBeacon(url, body)
   } else {
-    fetch(url, { body, method: 'POST', keepalive: true });
+    fetch(url, { body, method: 'POST', keepalive: true })
   }
 }
 
