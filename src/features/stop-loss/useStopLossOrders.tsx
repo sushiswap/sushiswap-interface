@@ -4,7 +4,7 @@ import { MORALIS_INFO, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/
 import { useAutonomyLimitOrderWrapperContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import Moralis from 'moralis'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 
 interface IToken {
   chainId: number
@@ -24,7 +24,7 @@ interface ITokenList {
   version: any
 }
 
-interface StopLossOrder {
+export interface StopLossOrder {
   id: string | number
   tokenIn: Token | undefined
   tokenOut: Token | undefined
@@ -32,21 +32,9 @@ interface StopLossOrder {
   limitRate: string
 }
 
-interface State {
-  totalOrders: number
-  loading: boolean
-  data: Array<StopLossOrder | undefined>
-}
-
 const useStopLossOrders = () => {
   const { account, chainId } = useActiveWeb3React()
   const limitOrderWrapperContract = useAutonomyLimitOrderWrapperContract()
-
-  const [state, setState] = useState<State>({
-    totalOrders: 0,
-    loading: true,
-    data: [],
-  })
 
   const tokens = useMemo(
     () => (DEFAULT_TOKEN_LIST as ITokenList).tokens.filter((token) => token.chainId === chainId),
@@ -77,46 +65,30 @@ const useStopLossOrders = () => {
     }
   }, [account, chainId])
 
-  const transform = (callData: string, id: number): StopLossOrder | undefined => {
-    if (!chainId) return
+  const transform = useCallback(
+    (callData: string, id: number): StopLossOrder | undefined => {
+      if (!chainId) return
 
-    const fillOrderArgs = limitOrderWrapperContract?.interface.decodeFunctionData('fillOrder', callData)
-    const token0 = fillOrderArgs && tokens.find((token) => token.address === fillOrderArgs[2])
-    const token1 = fillOrderArgs && tokens.find((token) => token.address === fillOrderArgs[3])
-    const stopLossOrder: StopLossOrder = {
-      id,
-      tokenIn: token0 && new Token(chainId, token0.address, token0.decimals, token0.symbol, token0.name),
-      tokenOut: token1 && new Token(chainId, token1.address, token1.decimals, token1.symbol, token1.name),
-      stopRate: '',
-      limitRate: '',
-    }
+      const fillOrderArgs = limitOrderWrapperContract?.interface.decodeFunctionData('fillOrder', callData)
+      const token0 = fillOrderArgs && tokens.find((token) => token.address === fillOrderArgs[2])
+      const token1 = fillOrderArgs && tokens.find((token) => token.address === fillOrderArgs[3])
+      const stopLossOrder: StopLossOrder = {
+        id,
+        tokenIn: token0 && new Token(chainId, token0.address, token0.decimals, token0.symbol, token0.name),
+        tokenOut: token1 && new Token(chainId, token1.address, token1.decimals, token1.symbol, token1.name),
+        stopRate: '',
+        limitRate: '',
+      }
 
-    return stopLossOrder
+      return stopLossOrder
+    },
+    [limitOrderWrapperContract, tokens]
+  )
+
+  return {
+    fetchRegistryHistory,
+    transform,
   }
-
-  useEffect(() => {
-    const initializeOrdersData = async () => {
-      const callDataHistory: string[] = await fetchRegistryHistory()
-
-      const fillOrderData = callDataHistory.map((callData, index) => transform(callData, index))
-
-      console.log(
-        'fillOrderData: ',
-        fillOrderData.map((order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name)
-      )
-
-      setState({
-        totalOrders: fillOrderData.length,
-        loading: false,
-        data: fillOrderData,
-      })
-    }
-    if (chainId) {
-      initializeOrdersData()
-    }
-  }, [account, chainId])
-
-  return state
 }
 
 export default useStopLossOrders

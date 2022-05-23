@@ -16,11 +16,17 @@ import { useLimitOrderContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Link from 'next/link'
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { useOpenOrdersTableConfig } from './useOpenOrdersTableConfig'
-import useStopLossOrders from './useStopLossOrders'
+import useStopLossOrders, { StopLossOrder } from './useStopLossOrders'
+
+interface OrdersData {
+  loading: boolean
+  totalOrders: number
+  data: Array<StopLossOrder | undefined>
+}
 
 const OpenOrders: FC = () => {
   const { i18n } = useLingui()
@@ -29,11 +35,12 @@ const OpenOrders: FC = () => {
   const addTransaction = useTransactionAdder()
   const limitOrderContract = useLimitOrderContract(true)
 
-  const { totalOrders, loading, data } = useStopLossOrders()
-
-  console.log('total orders: ', totalOrders)
-  console.log('loading: ', loading)
-  console.log('data: ', data)
+  const { fetchRegistryHistory, transform } = useStopLossOrders()
+  const [ordersData, setOrdersData] = useState<OrdersData>({
+    loading: false,
+    totalOrders: 0,
+    data: [],
+  })
 
   const cancelOrder = useCallback(
     async (limitOrder: LimitOrder, summary: string) => {
@@ -63,6 +70,31 @@ const OpenOrders: FC = () => {
     usePagination,
     useFlexLayout
   )
+
+  useEffect(() => {
+    const initOrdersData = async () => {
+      setOrdersData({
+        ...ordersData,
+        loading: true,
+      })
+      console.log('init orders data ...')
+      const callDataHistory: string[] = await fetchRegistryHistory()
+      const fillOrdersData = callDataHistory.map((callData, index) => transform(callData, index))
+
+      setOrdersData({
+        loading: false,
+        totalOrders: fillOrdersData.length,
+        data: fillOrdersData,
+      })
+
+      console.log(
+        'fillOrderData: ',
+        fillOrdersData.map((order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name)
+      )
+    }
+
+    initOrdersData()
+  }, [fetchRegistryHistory, transform])
 
   return (
     <div className="flex flex-col gap-4">
