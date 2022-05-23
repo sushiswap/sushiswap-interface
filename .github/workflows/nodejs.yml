@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -42,10 +42,15 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Install project dependencies
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
         run: yarn --prefer-offline
         id: install
 
       - name: Install project dependencies
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
         run: yarn run build
         id: production
