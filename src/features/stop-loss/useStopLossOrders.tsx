@@ -1,6 +1,6 @@
 import { Token } from '@sushiswap/core-sdk'
 import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
-import { STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
+import { MORALIS_INFO, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import { useAutonomyLimitOrderWrapperContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import Moralis from 'moralis'
@@ -56,8 +56,8 @@ const useStopLossOrders = () => {
   const fetchRegistryHistory = useCallback(async () => {
     console.log('Fetching registry history ...')
     try {
-      Moralis.initialize(process.env.NEXT_PUBLIC_AUTONOMY_MORALIS_KEY || '')
-      Moralis.serverURL = process.env.NEXT_PUBLIC_AUTONOMY_MORALIS_SERVER_URL || ''
+      Moralis.initialize((chainId && MORALIS_INFO[chainId].key) || '')
+      Moralis.serverURL = (chainId && MORALIS_INFO[chainId].serverURL) || ''
 
       const bscRequests = new Moralis.Query('RegistryRequests')
       bscRequests.equalTo('user', account?.toLowerCase())
@@ -72,6 +72,7 @@ const useStopLossOrders = () => {
         })
       )
     } catch (e) {
+      console.log('Error while fetching history from Moralis')
       return []
     }
   }, [account, chainId])
@@ -98,6 +99,11 @@ const useStopLossOrders = () => {
       const callDataHistory: string[] = await fetchRegistryHistory()
 
       const fillOrderData = callDataHistory.map((callData, index) => transform(callData, index))
+
+      console.log(
+        'fillOrderData: ',
+        fillOrderData.map((order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name)
+      )
 
       setState({
         totalOrders: fillOrderData.length,
