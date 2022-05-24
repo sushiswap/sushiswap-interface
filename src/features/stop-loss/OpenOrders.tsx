@@ -25,7 +25,9 @@ import useStopLossOrders, { StopLossOrder } from './useStopLossOrders'
 interface OrdersData {
   loading: boolean
   totalOrders: number
-  data: Array<StopLossOrder | undefined>
+  all: Array<StopLossOrder | undefined>
+  executedOrders: number
+  executed: Array<StopLossOrder | undefined>
 }
 
 const OpenOrders: FC = () => {
@@ -35,11 +37,13 @@ const OpenOrders: FC = () => {
   const addTransaction = useTransactionAdder()
   const limitOrderContract = useLimitOrderContract(true)
 
-  const { fetchRegistryHistory, transform } = useStopLossOrders()
+  const { fetchRegistryHistory, fetchExecutedRegistryHistory, transform } = useStopLossOrders()
   const [ordersData, setOrdersData] = useState<OrdersData>({
     loading: false,
     totalOrders: 0,
-    data: [],
+    all: [],
+    executedOrders: 0,
+    executed: [],
   })
 
   const cancelOrder = useCallback(
@@ -77,19 +81,28 @@ const OpenOrders: FC = () => {
         ...ordersData,
         loading: true,
       })
-      console.log('init orders data ...')
-      const callDataHistory: string[] = await fetchRegistryHistory()
-      const fillOrdersData = callDataHistory.map((callData, index) => transform(callData, index))
+      const allOrdersCallData: string[] = await fetchRegistryHistory()
+      const allOrdersData = allOrdersCallData.map((callData, index) => transform(callData, index))
+
+      const executedOrdersCallData: string[] = await fetchExecutedRegistryHistory()
+      const executedOrdersData = executedOrdersCallData.map((callData, index) => transform(callData, index))
 
       setOrdersData({
         loading: false,
-        totalOrders: fillOrdersData.length,
-        data: fillOrdersData,
+        totalOrders: allOrdersData.length,
+        all: allOrdersData,
+        executedOrders: executedOrdersData.length,
+        executed: executedOrdersData,
       })
 
       console.log(
-        'fillOrderData: ',
-        fillOrdersData.map((order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name)
+        'allOrdersData: ',
+        allOrdersData.map((order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name)
+      )
+
+      console.log(
+        'executedOrdersData: ',
+        executedOrdersData.map((order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name)
       )
     }
 

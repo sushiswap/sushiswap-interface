@@ -42,7 +42,6 @@ const useStopLossOrders = () => {
   )
 
   const fetchRegistryHistory = useCallback(async () => {
-    console.log('Fetching registry history ...')
     try {
       Moralis.initialize((chainId && MORALIS_INFO[chainId].key) || '')
       Moralis.serverURL = (chainId && MORALIS_INFO[chainId].serverURL) || ''
@@ -52,7 +51,26 @@ const useStopLossOrders = () => {
       bscRequests.equalTo('target', chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId].toLowerCase())
       let registryRequests = await bscRequests.find()
 
-      console.log('Requests: ', registryRequests)
+      return await Promise.all(
+        registryRequests.map(async (request) => {
+          return request.get('callData')
+        })
+      )
+    } catch (e) {
+      console.log('Error while fetching history from Moralis')
+      return []
+    }
+  }, [account, chainId])
+
+  const fetchExecutedRegistryHistory = useCallback(async () => {
+    try {
+      Moralis.initialize((chainId && MORALIS_INFO[chainId].key) || '')
+      Moralis.serverURL = (chainId && MORALIS_INFO[chainId].serverURL) || ''
+
+      const bscRequests = new Moralis.Query('RegistryExecutedRequests')
+      bscRequests.equalTo('user', account?.toLowerCase())
+      bscRequests.equalTo('target', chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId].toLowerCase())
+      let registryRequests = await bscRequests.find()
 
       return await Promise.all(
         registryRequests.map(async (request) => {
@@ -87,6 +105,7 @@ const useStopLossOrders = () => {
 
   return {
     fetchRegistryHistory,
+    fetchExecutedRegistryHistory,
     transform,
   }
 }
