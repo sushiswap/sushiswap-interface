@@ -1,10 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { OrderStatus } from '@sushiswap/limit-order-sdk'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
-import { DerivedOrder } from 'app/features/legacy/limit-order/types'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
+import { useCompletedOrdersTableConfig } from 'app/features/stop-loss/useCompletedOrdersTableConfig'
 import {
   TABLE_TABLE_CLASSNAME,
   TABLE_TBODY_TD_CLASSNAME,
@@ -13,64 +12,16 @@ import {
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
-import { useLimitOrderContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Link from 'next/link'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
-import { useOpenOrdersTableConfig } from './useOpenOrdersTableConfig'
-import useStopLossOrders from './useStopLossOrders'
-
-interface OrdersData {
-  loading: boolean
-  totalOrders: number
-  all: Array<DerivedOrder>
-  executedOrders: number
-  executed: Array<DerivedOrder>
-}
-
-const OpenOrders: FC = () => {
+const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const { pending, mutate } = useLimitOrders()
-  const addTransaction = useTransactionAdder()
-  const limitOrderContract = useLimitOrderContract(true)
-
-  const { fetchRegistryHistory, fetchExecutedRegistryHistory, transform } = useStopLossOrders()
-  const [ordersData, setOrdersData] = useState<OrdersData>({
-    loading: false,
-    totalOrders: 0,
-    all: [],
-    executedOrders: 0,
-    executed: [],
-  })
-  /*
-  const cancelOrder = useCallback(
-    async (limitOrder: LimitOrder, summary: string) => {
-      if (!limitOrderContract) return
-
-      const tx = await limitOrderContract.cancelOrder(limitOrder.getTypeHash())
-      if (tx) {
-        addTransaction(tx, {
-          summary,
-        })
-
-        await tx.wait()
-        // @ts-ignore TYPE NEEDS FIXING
-        await mutate((data) => ({ ...data }))
-      }
-    },
-    [addTransaction, limitOrderContract, mutate]
-  )
-  */
-
-  const cancelOrder = () => {
-    console.log('trying to cancel order')
-  }
-
-  const { config } = useOpenOrdersTableConfig({ orders: ordersData.all, cancelOrder })
+  const { completed } = useLimitOrders()
+  const { config } = useCompletedOrdersTableConfig({ orders: completed.data })
 
   // @ts-ignore TYPE NEEDS FIXING
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } = useTable(
@@ -81,47 +32,9 @@ const OpenOrders: FC = () => {
     useFlexLayout
   )
 
-  useEffect(() => {
-    const initOrdersData = async () => {
-      setOrdersData({
-        ...ordersData,
-        loading: true,
-      })
-      const allOrdersCallData: string[] = await fetchRegistryHistory()
-      const allOrdersData = allOrdersCallData
-        .map((callData, index) => transform(callData, index))
-        .filter((order) => order) as DerivedOrder[]
-
-      const executedOrdersCallData: string[] = await fetchExecutedRegistryHistory()
-      const executedOrdersData = executedOrdersCallData
-        .map((callData, index) => transform(callData, index, OrderStatus.FILLED))
-        .filter((order) => order) as DerivedOrder[]
-
-      setOrdersData({
-        loading: false,
-        totalOrders: allOrdersData.length,
-        all: allOrdersData,
-        executedOrders: executedOrdersData.length,
-        executed: executedOrdersData,
-      })
-
-      console.log(
-        'allOrdersData: ',
-        allOrdersData.map((order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name)
-      )
-
-      console.log(
-        'executedOrdersData: ',
-        executedOrdersData.map((order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name)
-      )
-    }
-
-    initOrdersData()
-  }, [fetchRegistryHistory, transform])
-
   return (
-    <div className="flex flex-col gap-4">
-      <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, pending.maxPages > 1 ? 'min-h-[537px]' : '')}>
+    <div className="flex flex-col gap-3">
+      <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, completed.maxPages > 1 ? 'min-h-[537px]' : '')}>
         <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -172,7 +85,7 @@ const OpenOrders: FC = () => {
                     className="text-center text-low-emphesis h-[60px] flex items-center justify-center"
                     component="span"
                   >
-                    {i18n._(t`No open orders`)}
+                    {i18n._(t`No order history`)}
                   </Typography>
                 </td>
               </tr>
@@ -199,15 +112,15 @@ const OpenOrders: FC = () => {
         </table>
       </div>
       <Pagination
-        canPreviousPage={pending.page > 1}
-        canNextPage={pending.page < pending.maxPages}
-        onChange={(page) => pending.setPage(page + 1)}
-        totalPages={pending.maxPages}
-        currentPage={pending.page - 1}
+        canPreviousPage={completed.page > 1}
+        canNextPage={completed.page < completed.maxPages}
+        onChange={(page) => completed.setPage(page + 1)}
+        totalPages={completed.maxPages}
+        currentPage={completed.page - 1}
         pageNeighbours={1}
       />
     </div>
   )
 }
 
-export default OpenOrders
+export default CompletedOrders
