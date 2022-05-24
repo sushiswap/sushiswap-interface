@@ -127,7 +127,10 @@ function MyApp({ Component, pageProps, fallback, err }) {
         name="viewport"
         content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
       />
-
+      <meta
+        name="ui-version"
+        content={`${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}`}
+      />
       {/* Global Site Tag (gtag.js) - Google Analytics */}
       <Script
         strategy="afterInteractive"
