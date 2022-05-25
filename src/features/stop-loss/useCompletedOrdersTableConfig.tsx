@@ -3,10 +3,9 @@ import { OrderStatus } from '@sushiswap/limit-order-sdk'
 import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
+import { DerivedOrder } from 'app/features/legacy/limit-order/types'
 import React, { useMemo, useState } from 'react'
 import { CellProps } from 'react-table'
-
-import { DerivedOrder } from './types'
 
 export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrder[] }) => {
   const data = useMemo(
