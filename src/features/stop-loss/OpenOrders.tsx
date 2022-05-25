@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { LimitOrder } from '@sushiswap/limit-order-sdk'
 import { OrderStatus } from '@sushiswap/limit-order-sdk'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
@@ -17,7 +18,7 @@ import { useLimitOrderContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Link from 'next/link'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { useOpenOrdersTableConfig } from './useOpenOrdersTableConfig'
@@ -46,11 +47,11 @@ const OpenOrders: FC = () => {
     executedOrders: 0,
     executed: [],
   })
-  /*
+
   const cancelOrder = useCallback(
     async (limitOrder: LimitOrder, summary: string) => {
       if (!limitOrderContract) return
-
+      /*
       const tx = await limitOrderContract.cancelOrder(limitOrder.getTypeHash())
       if (tx) {
         addTransaction(tx, {
@@ -61,14 +62,13 @@ const OpenOrders: FC = () => {
         // @ts-ignore TYPE NEEDS FIXING
         await mutate((data) => ({ ...data }))
       }
+*/
+      console.log('canceling order: ', limitOrder.getTypeHash())
+      console.log('start time: ', limitOrder.startTime)
+      console.log('end time: ', limitOrder.endTime)
     },
     [addTransaction, limitOrderContract, mutate]
   )
-  */
-
-  const cancelOrder = () => {
-    console.log('trying to cancel order')
-  }
 
   const { config } = useOpenOrdersTableConfig({ orders: ordersData.all, cancelOrder })
 
@@ -107,7 +107,9 @@ const OpenOrders: FC = () => {
 
       console.log(
         'allOrdersData: ',
-        allOrdersData.map((order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name)
+        allOrdersData.map(
+          (order) => order?.tokenIn?.name + ' > ' + order?.tokenOut?.name + order.limitOrder.amountOut.toSignificant(6)
+        )
       )
 
       console.log(

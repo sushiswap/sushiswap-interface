@@ -156,7 +156,7 @@ export const useOpenOrdersTableConfig = ({
     () => ({
       config: {
         columns: data,
-        data: orders?.filter((order) => Number(order.limitOrder.endTime) * 1000 > Date.now()),
+        data: orders, // orders?.filter((order) => Number(order.limitOrder.endTime) * 1000 > Date.now()),
         defaultColumn,
         // initialState: {
         //   sortBy: [{ id: 'receive', desc: true }],
