@@ -83,6 +83,14 @@ const nextConfig = {
       },
     ]
   },
+  async headeres() {
+    return [
+      {
+        source: '/*',
+        headers: [{ key: 'Web-Build', value: process.env.VERCEL_GIT_COMMIT_SHA }]
+      }
+    ];
+  },
   async rewrites() {
     return [
       {
@@ -139,10 +147,11 @@ const nextConfig = {
   },
 }
 
-
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
 module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), sentryWebpackPluginOptions);
 
 // Don't delete this console log, useful to see the config in Vercel deployments
+console.log('process.env.VERCEL_GIT_COMMIT_SHA: ', process.env.VERCEL_GIT_COMMIT_SHA);
+console.log('process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: ', process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA);
 console.log('next.config.js', JSON.stringify(module.exports, null, 2))
