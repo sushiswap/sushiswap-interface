@@ -62,11 +62,9 @@ const nextConfig = {
    */
   env: {
     /**
-     * 
      * @summary API Key Env Variables
-     *
      */
-    GITHUB_DISPATCH_TOKEN: process.env.GITHUB_DISPATCH_TOKEN,
+    // GITHUB_DISPATCH_TOKEN: process.env.GITHUB_DISPATCH_TOKEN,
     SENTRY_DSN: process.env.SENTRY_DSN,
     NEXT_PUBLIC_SENTRY_DSN: process.env.SENTRY_DSN, // Sentry DSN must be provided to the browser for error reporting to work there
     /**
@@ -77,17 +75,6 @@ const nextConfig = {
     VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_URL: process.env.VERCEL_URL,
     CI: process.env.CI,
-    /**
-    * @const NEXT_PUBLIC_
-    * @summary Dynamicly Generated Values
-    * @see {@link https://vercel.com/docs/v2/build-step/#providing-environment-variables}
-    */
-    NEXT_PUBLIC_APP_DOMAIN: process.env.VERCEL_URL, // Alias
-    NEXT_PUBLIC_APP_BASE_URL: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:8888',
-    NEXT_PUBLIC_APP_BUILD_TIME: date.toString(),
-    NEXT_PUBLIC_APP_BUILD_TIMESTAMP: +date,
-    NEXT_PUBLIC_APP_NAME: packageJson.name,
-    NEXT_PUBLIC_APP_NAME_VERSION: `${packageJson.name}-${APP_RELEASE_TAG}`,
   },
   // experimental: {
   //   nextScriptWorkers: true,
