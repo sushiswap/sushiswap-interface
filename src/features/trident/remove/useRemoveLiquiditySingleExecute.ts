@@ -67,6 +67,7 @@ export const useRemoveLiquiditySingleExecute = () => {
       if (receiveETH)
         actions.push(
           unwrapWETHAction({
+            chainId,
             router,
             amountMinimum: toShareJSBI(rebase, minOutputAmount.quotient).toString(),
             recipient: account,

@@ -74,9 +74,9 @@ const AccountDetails: FC<AccountDetailsProps> = ({
               </Button>
             )}
 
-            {/* <Button variant="outlined" color="blue" size="xs" onClick={deactivate}>
+            <Button variant="outlined" color="blue" size="xs" onClick={openOptions}>
               {i18n._(t`Change`)}
-            </Button> */}
+            </Button>
           </div>
           <div id="web3-account-identifier-row" className="flex flex-col justify-center gap-4">
             <div className="flex items-center gap-4">

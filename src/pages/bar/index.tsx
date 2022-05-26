@@ -8,17 +8,24 @@ import Dots from 'app/components/Dots'
 import Input from 'app/components/Input'
 import { XSUSHI } from 'app/config/tokens'
 import { classNames } from 'app/functions'
-import { aprToApy } from 'app/functions/convert/apyApr'
 import { tryParseAmount } from 'app/functions/parse'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useSushiBar from 'app/hooks/useSushiBar'
 import TransactionFailedModal from 'app/modals/TransactionFailedModal'
-import { useFactory, useNativePrice, useOneDayBlock, useTokens } from 'app/services/graph/hooks'
+import {
+  useNativePrice,
+  useOneMonthBlock,
+  useOneYearBlock,
+  useSixMonthBlock,
+  useThreeMonthBlock,
+  useTokens,
+} from 'app/services/graph/hooks'
 import { useBar } from 'app/services/graph/hooks/bar'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import { useTokenBalance } from 'app/state/wallet/hooks'
 import Image from 'next/image'
+import Link from 'next/link'
 import { NextSeo } from 'next-seo'
 import React, { useState } from 'react'
 
@@ -133,17 +140,13 @@ export default function Stake() {
     }
   }
 
-  const { data: block1d } = useOneDayBlock({ chainId: ChainId.ETHEREUM })
+  const { data: block1m } = useOneMonthBlock({ chainId: ChainId.ETHEREUM })
 
-  const exchange = useFactory({ chainId: ChainId.ETHEREUM })
+  const { data: block3m } = useThreeMonthBlock({ chainId: ChainId.ETHEREUM })
 
-  const exchange1d = useFactory({
-    chainId: ChainId.ETHEREUM,
-    variables: {
-      block: block1d,
-    },
-    shouldFetch: !!block1d,
-  })
+  const { data: block6m } = useSixMonthBlock({ chainId: ChainId.ETHEREUM })
+
+  const { data: block1y } = useOneYearBlock({ chainId: ChainId.ETHEREUM })
 
   const { data: ethPrice } = useNativePrice({ chainId: ChainId.ETHEREUM })
 
@@ -152,13 +155,39 @@ export default function Stake() {
     variables: { where: { id: XSUSHI.address.toLowerCase() } },
   })?.[0]
 
-  const bar = useBar()
+  const { data: bar } = useBar()
+
+  const { data: bar1m } = useBar({
+    variables: {
+      block: block1m,
+    },
+    shouldFetch: !!block1m,
+  })
+
+  const { data: bar3m } = useBar({
+    variables: {
+      block: block3m,
+    },
+    shouldFetch: !!block3m,
+  })
+
+  const { data: bar6m } = useBar({
+    variables: {
+      block: block6m,
+    },
+    shouldFetch: !!block6m,
+  })
+
+  const { data: bar1y } = useBar({
+    variables: {
+      block: block1y,
+    },
+    shouldFetch: !!block1y,
+  })
 
   const [xSushiPrice] = [xSushi?.derivedETH * ethPrice, xSushi?.derivedETH * ethPrice * bar?.totalSupply]
 
-  const APY1d = aprToApy(
-    (((exchange?.volumeUSD - exchange1d?.volumeUSD) * 0.0005 * 365.25) / (bar?.totalSupply * xSushiPrice)) * 100 ?? 0
-  )
+  const apy1m = (bar?.ratio / bar1m?.ratio - 1) * 12 * 100
 
   return (
     <Container id="bar-page" className="py-4 md:py-8 lg:py-12" maxWidth="full">
@@ -222,31 +251,28 @@ export default function Stake() {
                 <div className="flex flex-col">
                   <div className="flex items-center justify-center mb-4 flex-nowrap md:mb-2">
                     <p className="text-sm font-bold whitespace-nowrap md:text-lg md:leading-5 text-high-emphesis">
-                      {i18n._(t`Staking APR`)}{' '}
+                      {i18n._(t`Staking APY`)}{' '}
                     </p>
                     {/* <img className="ml-3 cursor-pointer" src={MoreInfoSymbol} alt={'more info'} /> */}
                   </div>
                   <div className="flex">
-                    <a
-                      href={`https://analytics.sushi.com/bar`}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className={`
+                    <Link href={`https://app.sushi.com/analytics/xsushi`}>
+                      <a
+                        className={`
                         py-1 px-4 md:py-1.5 md:px-7 rounded
                         text-xs md:text-sm font-medium md:font-bold text-dark-900
                         bg-yellow hover:bg-opacity-90`}
-                    >
-                      {i18n._(t`View Stats`)}
-                    </a>
+                      >
+                        {i18n._(t`View Stats`)}
+                      </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="flex flex-col">
                   <p className="mb-1 text-lg font-bold text-right text-high-emphesis md:text-3xl">
-                    {`${APY1d ? APY1d.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
+                    {`${apy1m ? apy1m.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
                   </p>
-                  <p className="w-32 text-sm text-right text-primary md:w-64 md:text-base">
-                    {i18n._(t`Yesterday's APR`)}
-                  </p>
+                  <p className="w-32 text-sm text-right text-primary md:w-64 md:text-base">{i18n._(t`1m APY`)}</p>
                 </div>
               </div>
             </div>

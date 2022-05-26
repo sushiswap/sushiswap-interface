@@ -1,4 +1,3 @@
-import { AddressZero } from '@ethersproject/constants'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import { ChevronDownIcon, XIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
@@ -31,19 +30,12 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
   const { i18n } = useLingui()
   const onPressMax = useCallback(() => {
     if (state.selectedLPToken) {
-      let balance = state.selectedLPToken.balance.quotient
-      if (state.selectedLPToken.address === AddressZero) {
-        // Subtract 0.01 ETH for gas fee
-        const fee = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16))
-        balance = JSBI.greaterThan(balance, fee) ? JSBI.subtract(balance, fee) : ZERO
-      }
-
-      state.setAmount(formatUnits(balance.toString(), state.selectedLPToken.decimals))
+      state.setAmount(formatUnits(state.selectedLPToken.balance.quotient.toString(), state.selectedLPToken.decimals))
     }
   }, [state])
 
   useEffect(() => {
-    if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
+    if (state.lpTokens.length === 0 || !state.selectedLPToken) {
       state.setAmount('')
     }
   }, [state])
@@ -52,15 +44,12 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
     return null
   }
 
-  if (!state.mode || !state.selectedLPToken) {
+  if (!state.selectedLPToken) {
     return (
       <>
-        <Typography variant="sm" className="text-secondary">
-          Amount of Tokens
-        </Typography>
         <div className="p-3 text-center rounded cursor-not-allowed bg-dark-800">
           <Typography variant="lg" className="text-secondary">
-            {state.mode && state.lpTokens.length === 0 ? 'No LP tokens found' : 'Select an LP Token'}
+            {state.lpTokens.length === 0 ? 'No LP tokens found' : 'Select an LP Token'}
           </Typography>
         </div>
       </>
@@ -69,10 +58,11 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
 
   return (
     <>
-      <Typography variant="sm" className="text-secondary">
-        {i18n._(t`Amount of Tokens`)}
-      </Typography>
-
+      <div className="flex justify-between">
+        <div className="text-sm text-secondary">
+          {i18n._(t`Balance`)}: <span className="text-primary">{state.selectedLPToken.balance.toSignificant(4)}</span>
+        </div>
+      </div>
       <div className="relative flex items-center w-full mb-4">
         <Input.Numeric
           className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-pink"
@@ -114,58 +104,10 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
           variant="lg"
           className="text-primary"
         >{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
-        {lpToken.version && <Chip color="purple" label={lpToken.version} />}
+        {lpToken.dex && <Chip color="purple" label={lpToken.dex} />}
       </div>
       {isSelected ? <XIcon width={16} height={16} /> : <ChevronDownIcon width={16} height={16} />}
     </div>
-  )
-}
-
-const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
-  const { i18n } = useLingui()
-  function toggleMode(mode = undefined) {
-    state.setMode(mode !== state.mode ? mode : undefined)
-  }
-
-  const items = [
-    {
-      key: 'permit',
-      text: i18n._(t`Non-hardware Wallet`),
-      description: i18n._(t`Migration is done in one-click using your signature (permit)`),
-    },
-    {
-      key: 'approve',
-      text: i18n._(t`Hardware Wallet`),
-      description: i18n._(t`You need to first approve LP tokens and then migrate it`),
-    },
-  ]
-
-  return (
-    <>
-      {items.reduce((acc: any, { key, text, description }: any) => {
-        if (state.mode === undefined || key === state.mode)
-          acc.push(
-            <div
-              key={key}
-              className="flex items-center justify-between p-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
-              onClick={() => toggleMode(key)}
-            >
-              <div>
-                <div>
-                  <Typography variant="sm">{text}</Typography>
-                </div>
-                <div>
-                  <Typography variant="sm" className="text-secondary">
-                    {description}
-                  </Typography>
-                </div>
-              </div>
-              {key === state.mode ? <XIcon width={16} height={16} /> : <ChevronDownIcon width={16} height={16} />}
-            </div>
-          )
-        return acc
-      }, [])}
-    </>
   )
 }
 
@@ -173,9 +115,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
   const { i18n } = useLingui()
 
   const [error, setError] = useState<MetamaskError>({})
-  const sushiRollContract = useSushiRollContract(
-    state.selectedLPToken?.version ? state.selectedLPToken?.version : undefined
-  )
+  const sushiRollContract = useSushiRollContract(state.selectedLPToken?.dex)
   // console.log(
   //   'sushiRollContract address',
   //   sushiRollContract?.address,
@@ -185,19 +125,12 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
 
   const [approval, approve] = useApproveCallback(state.selectedLPToken?.balance, sushiRollContract?.address)
   const noLiquidityTokens = !!state.selectedLPToken?.balance && state.selectedLPToken?.balance.equalTo(ZERO)
-  const isButtonDisabled = !state.amount
 
   useEffect(() => {
     setError({})
   }, [state.selectedLPToken])
 
-  if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken || !state.amount) {
-    return (
-      <Button fullWidth disabled={true}>
-        Migrate
-      </Button>
-    )
-  }
+  if (!state.selectedLPToken) return null
 
   const insufficientAmount = JSBI.lessThan(
     state.selectedLPToken.balance.quotient,
@@ -207,6 +140,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
   const onPress = async () => {
     setError({})
     try {
+      console.log('onMigrate')
       await state.onMigrate()
     } catch (error) {
       console.log(error)
@@ -223,27 +157,19 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
         <Dots>{i18n._(t`Loading`)}</Dots>
       ) : (
         <>
-          <div className="flex justify-between">
-            <div className="text-sm text-secondary">
-              {i18n._(t`Balance`)}:{' '}
-              <span className="text-primary">{state.selectedLPToken.balance.toSignificant(4)}</span>
-            </div>
-          </div>
-          {state.mode === 'approve' && (
-            <Button
-              fullWidth
-              loading={approval === ApprovalState.PENDING}
-              onClick={approve}
-              disabled={approval !== ApprovalState.NOT_APPROVED || isButtonDisabled}
-            >
-              {approval === ApprovalState.APPROVED ? i18n._(t`Approved`) : i18n._(t`Approve`)}
-            </Button>
-          )}
-          {((state.mode === 'approve' && approval === ApprovalState.APPROVED) || state.mode === 'permit') && (
+          <Button
+            fullWidth
+            loading={approval === ApprovalState.PENDING}
+            onClick={approve}
+            disabled={approval !== ApprovalState.NOT_APPROVED}
+          >
+            {approval === ApprovalState.APPROVED ? i18n._(t`Approved`) : i18n._(t`Approve`)}
+          </Button>
+          {approval === ApprovalState.APPROVED && (
             <Button
               fullWidth
               loading={state.isMigrationPending}
-              disabled={noLiquidityTokens || state.isMigrationPending || isButtonDisabled}
+              disabled={noLiquidityTokens || state.isMigrationPending || !state.amount}
               onClick={onPress}
             >
               {i18n._(t`Migrate`)}
@@ -251,6 +177,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
           )}
         </>
       )}
+
       {error.message && error.code !== USER_REJECTED_TX && (
         <div className="font-medium text-center text-red">{error.message}</div>
       )}
@@ -271,9 +198,9 @@ const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exch
     state.setAmount('')
   }
 
-  if (!state.mode) {
-    return null
-  }
+  // if (!state.mode) {
+  //   return null
+  // }
 
   if (state.lpTokens.length === 0) {
     return <Empty>{i18n._(t`No Liquidity found`)}</Empty>
@@ -313,6 +240,8 @@ export default function Migrate() {
     exchange = 'PancakeSwap'
   } else if (chainId === ChainId.MATIC) {
     exchange = 'QuickSwap'
+  } else if (chainId === ChainId.FANTOM) {
+    exchange = 'SpiritSwap or SpookySwap'
   }
 
   return (
@@ -342,8 +271,6 @@ export default function Migrate() {
             </Typography>
           ) : (
             <>
-              {!state.loading && <Typography variant="lg">{i18n._(t`Your Wallet`)}</Typography>}
-              <MigrateModeSelect state={state} />
               {!state.loading && state.lpTokens.length > 0 && (
                 <div>
                   <Typography variant="lg">{i18n._(t`Your Liquidity`)}</Typography>

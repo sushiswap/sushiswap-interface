@@ -18,18 +18,13 @@ export {
 export function useAllTokenBalances(): { [tokenAddress: string]: CurrencyAmount<Token> | undefined } {
   const { account } = useActiveWeb3React()
   const allTokens = useAllTokens()
-  const balances = useTokenBalances(
-    account ?? undefined,
-    useMemo(() => Object.values(allTokens ?? {}), [allTokens])
-  )
+  const tokens = useMemo(() => Object.values(allTokens ?? {}), [allTokens])
+  const balances = useTokenBalances(account ?? undefined, tokens)
   return balances ?? {}
 }
 
-export function useAllTokenBalancesWithLoadingIndicator(account?: string) {
-  const { account: fallback } = useActiveWeb3React()
+export function useAllTokenBalancesWithLoadingIndicator(account: string) {
   const allTokens = useAllTokens()
-  return useTokenBalancesWithLoadingIndicator(
-    (account || fallback) ?? undefined,
-    useMemo(() => Object.values(allTokens ?? {}), [allTokens])
-  )
+  const tokens = useMemo(() => Object.values(allTokens ?? {}), [allTokens])
+  return useTokenBalancesWithLoadingIndicator(account, tokens)
 }

@@ -14,6 +14,7 @@ import * as MATIC from './tokens/matic'
 import * as MOONBEAM from './tokens/moonbeam'
 import * as MOONRIVER from './tokens/moonriver'
 import * as OKEX from './tokens/okex'
+import * as OPTIMISM from './tokens/optimism'
 import * as PALM from './tokens/palm'
 import * as TELOS from './tokens/telos'
 import * as XDAI from './tokens/xdai'
@@ -73,6 +74,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.FUSE]: [WNATIVE[ChainId.FUSE]],
   [ChainId.TELOS]: [WNATIVE[ChainId.TELOS]],
   [ChainId.MOONBEAM]: [WNATIVE[ChainId.MOONBEAM]],
+  [ChainId.OPTIMISM]: [WNATIVE[ChainId.OPTIMISM]],
 }
 
 // used to construct intermediary pairs for trading
@@ -119,6 +121,14 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     MATIC.SUSHI,
     MATIC.FRAX,
     MATIC.STG,
+  ],
+  [ChainId.MATIC_TESTNET]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MATIC_TESTNET],
+    new Token(ChainId.MATIC_TESTNET, '0x742DfA5Aa70a8212857966D491D67B09Ce7D6ec7', 6, 'USDC', 'USD Coin'),
+  ],
+  [ChainId.RINKEBY]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.RINKEBY],
+    new Token(ChainId.RINKEBY, '0x1717A0D5C8705EE89A8aD6E808268D6A826C97A4', 6, 'USDC', 'USD Coin'),
   ],
   [ChainId.FANTOM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
@@ -220,6 +230,14 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     MOONBEAM.WETH,
     MOONBEAM.WBTC,
     MOONBEAM.FRAX,
+  ],
+  [ChainId.OPTIMISM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.OPTIMISM],
+    OPTIMISM.USDC,
+    OPTIMISM.USDT,
+    OPTIMISM.DAI,
+    OPTIMISM.WBTC,
+    OPTIMISM.LUSD,
   ],
 }
 
@@ -608,6 +626,14 @@ export const COMMON_BASES: ChainTokenList = {
     MOONBEAM.WBTC,
     MOONBEAM.FRAX,
   ],
+  [ChainId.OPTIMISM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.OPTIMISM],
+    OPTIMISM.USDC,
+    OPTIMISM.USDT,
+    OPTIMISM.DAI,
+    OPTIMISM.WBTC,
+    OPTIMISM.LUSD,
+  ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -635,6 +661,14 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     MATIC.USDT,
     MATIC.FRAX,
     MATIC.STG,
+  ],
+  [ChainId.MATIC_TESTNET]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MATIC_TESTNET],
+    new Token(ChainId.MATIC_TESTNET, '0x742DfA5Aa70a8212857966D491D67B09Ce7D6ec7', 6, 'USDC', 'USD Coin'),
+  ],
+  [ChainId.RINKEBY]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.RINKEBY],
+    new Token(ChainId.RINKEBY, '0x1717A0D5C8705EE89A8aD6E808268D6A826C97A4', 6, 'USDC', 'USD Coin'),
   ],
   [ChainId.FANTOM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
@@ -736,6 +770,14 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     MOONBEAM.WETH,
     MOONBEAM.WBTC,
     MOONBEAM.FRAX,
+  ],
+  [ChainId.OPTIMISM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.OPTIMISM],
+    OPTIMISM.USDC,
+    OPTIMISM.USDT,
+    OPTIMISM.DAI,
+    OPTIMISM.WBTC,
+    OPTIMISM.LUSD,
   ],
 }
 

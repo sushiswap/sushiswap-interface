@@ -21,9 +21,11 @@ export const GRAPH_HOST = {
   [ChainId.KOVAN]: THE_GRAPH,
   [ChainId.FUSE]: THE_GRAPH,
   [ChainId.MOONBEAM]: THE_GRAPH,
+  [ChainId.OPTIMISM]: THE_GRAPH,
 }
 
 export const TRIDENT = {
   [ChainId.MATIC]: 'matthewlilley/trident-polygon',
   [ChainId.KOVAN]: 'sushiswap/trident-kovan',
+  [ChainId.OPTIMISM]: 'matthewlilley/trident-optimism',
 }

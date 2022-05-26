@@ -10,7 +10,8 @@ import {
 } from '../constants'
 
 const THIRTY_BIPS_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
-const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
+// const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
+export const ONE_HUNDRED_PERCENT = new Percent('1')
 const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(THIRTY_BIPS_FEE)
 
 const TWENTY_FIVE_BIPS_FEE = new Percent(JSBI.BigInt(25), JSBI.BigInt(10000))
@@ -33,9 +34,11 @@ export function formatExecutionPrice(
       }`
 }
 
+export const ZERO_PERCENT = new Percent('0')
+
 // computes realized lp fee as a percent
-export function computeRealizedLPFeePercent(trade: TradeUnion): Percent | undefined {
-  let percent: Percent
+export function computeRealizedLPFeePercent(trade: TradeUnion): Percent {
+  let percent: Percent = ZERO_PERCENT
   if (trade instanceof Trade) {
     // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
     // e.g. for 3 tokens/2 hops: 1 - ((1 - .03) * (1-.03))
@@ -45,11 +48,8 @@ export function computeRealizedLPFeePercent(trade: TradeUnion): Percent | undefi
         ONE_HUNDRED_PERCENT
       )
     )
-
-    return new Percent(percent.numerator, percent.denominator)
   }
-
-  return undefined
+  return new Percent(percent.numerator, percent.denominator)
 }
 
 // computes price breakdown for the trade

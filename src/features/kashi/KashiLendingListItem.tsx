@@ -1,13 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Percent } from '@sushiswap/core-sdk'
+import { CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import GradientDot from 'app/components/GradientDot'
 import Typography from 'app/components/Typography'
 import KashiMediumRiskLendingPair from 'app/features/kashi/KashiMediumRiskLendingPair'
 import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features/trident/constants'
 import { classNames, currencyFormatter, formatNumber, formatPercent } from 'app/functions'
-import { useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
+import { useUSDCSubgraphValueWithLoadingIndicator } from 'app/hooks/useUSDCSubgraph'
 import { useRouter } from 'next/router'
 import React, { FC, memo, useMemo } from 'react'
 
@@ -24,7 +24,7 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
 
   // @ts-ignore
   const { value: currentAllAssetsUSD, loading: currentAllAssetsUSDLoading } =
-    useUSDCValueWithLoadingIndicator(currentAllAssets)
+    useUSDCSubgraphValueWithLoadingIndicator(currentAllAssets)
 
   // @ts-ignore
   const currentBorrowAmount = useMemo(
@@ -32,7 +32,7 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
     [asset, market]
   )
   const { value: currentBorrowAmountUSD, loading: currentBorrowAmountUSDLoading } =
-    useUSDCValueWithLoadingIndicator(currentBorrowAmount)
+    useUSDCSubgraphValueWithLoadingIndicator(currentBorrowAmount)
 
   // @ts-ignore
   const currentUserAssetAmount = useMemo(
@@ -41,7 +41,7 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
   )
 
   const { value: currentUserAssetAmountUSD, loading: currentUserAssetAmountUSDLoading } =
-    useUSDCValueWithLoadingIndicator(currentUserAssetAmount)
+    useUSDCSubgraphValueWithLoadingIndicator(currentUserAssetAmount)
 
   const currentSupplyAPR = new Percent(market.currentSupplyAPR, 1e18)
 
@@ -98,7 +98,10 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
 
       <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(4, 6))}>
         <Typography weight={700} className="flex items-center text-high-emphesis">
-          {formatPercent(utilization.toFixed(2))} <GradientDot percent={utilization.invert().toFixed(2)} />
+          {formatPercent(utilization.toFixed(2))}{' '}
+          {JSBI.greaterThan(utilization.numerator, ZERO) ? (
+            <GradientDot percent={utilization.invert().toFixed(2)} />
+          ) : null}
         </Typography>
         <Typography variant="xs" className="text-low-emphesis">
           {i18n._(t`utilized`)}

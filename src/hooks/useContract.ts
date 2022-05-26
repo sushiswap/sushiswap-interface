@@ -66,6 +66,7 @@ import IUniswapV2PairABI from 'app/constants/abis/uniswap-v2-pair.json'
 import WETH9_ABI from 'app/constants/abis/weth.json'
 import ZENKO_ABI from 'app/constants/abis/zenko.json'
 import { AUTONOMY_REGISTRY_ADDRESSES, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
+import LPToken from 'app/features/migration/LPToken'
 import { poolEntityMapper } from 'app/features/trident/poolEntityMapper'
 import { getContract } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -176,7 +177,8 @@ const MULTICALL_ADDRESS = {
   [ChainId.GÖRLI]: '0x1F98415757620B543A52E61c46B32eB19261F984',
   [ChainId.KOVAN]: '0x1F98415757620B543A52E61c46B32eB19261F984',
   [ChainId.MATIC]: '0x1F98415757620B543A52E61c46B32eB19261F984',
-  // [ChainId.OPTIMISM]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.MATIC_TESTNET]: '0xdDCbf776dF3dE60163066A5ddDF2277cB445E0F3',
+  [ChainId.OPTIMISM]: '0x1F98415757620B543A52E61c46B32eB19261F984',
   [ChainId.ARBITRUM]: '0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB',
   [ChainId.MOONBEAM]: '0x34c471ddceb20018bbb73f6d13709936fc870acc',
   [ChainId.AVALANCHE]: '0x8C0F842791F03C095b6c633759224FcC9ACe68ea',
@@ -345,27 +347,52 @@ export function useMisoHelperContract(withSignerIfPossible = true): Contract | n
   return useContract(factory?.address, MISO_HELPER_ABI, withSignerIfPossible)
 }
 
-export function useSushiRollContract(version: 'v1' | 'v2' = 'v2'): Contract | null {
+export function useSushiRollContract(dex: LPToken['dex']): Contract | null {
   const { chainId } = useActiveWeb3React()
   let address: string | undefined
   if (chainId) {
     switch (chainId) {
       case ChainId.ETHEREUM:
-        address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
+        if (dex === 'uniswap_v2') {
+          address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
+        }
+
         break
       case ChainId.ROPSTEN:
         address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
         break
       case ChainId.BSC:
-        if (version === 'v1') {
-          address = '0x677978dE066b3f5414eeA56644d9fCa3c75482a1'
-        } else if (version === 'v2') {
+        if (dex === 'pancakeswap_v2') {
           address = '0x2DD1aB1956BeD7C2d938d0d7378C22Fd01135a5e'
         }
         break
       case ChainId.MATIC:
-        address = '0x0053957E18A0994D3526Cf879A4cA7Be88e8936A'
+        if (dex === 'quickswap') {
+          address = '0x0053957E18A0994D3526Cf879A4cA7Be88e8936A'
+        }
         break
+      case ChainId.FANTOM:
+        if (dex === 'spiritswap') {
+          address = '0x2D2ed6871f473Fb9f8958F67C2302360A79fd071'
+        } else if (dex === 'spookyswap') {
+          address = '0xFB232C6D1E3ad48fEdF8A29c7dEf7A33ce43E56a'
+        }
+        break
+      case ChainId.AVALANCHE:
+        if (dex === 'traderjoe') {
+          address = '0x22a2fBd8bd1123bC3307554AD00bBFF4EDAbB1d5'
+        } else if (dex === 'pangolin') {
+          address = '0x34F1cC395BeE698d070f33C1c0f8EC4C1022bcFc'
+        }
+
+      case ChainId.MOONBEAM:
+        if (dex === 'stellaswap') {
+          address = '0xdDCbf776dF3dE60163066A5ddDF2277cB445E0F3'
+        } else if (dex === 'beamswap') {
+          address = '0x67dA5f2FfaDDfF067AB9d5F025F8810634d84287'
+        }
+      // Spookyswap
+      // 0xFB232C6D1E3ad48fEdF8A29c7dEf7A33ce43E56a
     }
   }
   return useContract(address, SUSHIROLL_ABI, true)

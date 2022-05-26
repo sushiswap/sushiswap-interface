@@ -1,6 +1,7 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { Signature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
+import { ChainId } from '@sushiswap/core-sdk'
 import { LiquidityOutput } from 'app/features/trident/types'
 import { StandardSignatureData } from 'app/hooks/useERC20Permit'
 
@@ -109,6 +110,7 @@ export const burnLiquiditySingleAction = ({
 }
 
 interface UnwrapETHAction {
+  chainId: number
   router: Contract
   recipient: string
   amountMinimum: string
@@ -120,8 +122,12 @@ interface UnwrapETHAction {
  * @param recipient recipient of ETH
  * @param liquidityOutput array with minimum output amounts for underlying tokens
  */
-export const unwrapWETHAction = ({ router, recipient, amountMinimum }: UnwrapETHAction) => {
-  return router.interface.encodeFunctionData('unwrapWETH', [amountMinimum, recipient])
+export const unwrapWETHAction = ({ chainId, router, recipient, amountMinimum }: UnwrapETHAction) => {
+  if (chainId === ChainId.MATIC) {
+    return router.interface.encodeFunctionData('unwrapWETH', [amountMinimum, recipient])
+  }
+
+  return router.interface.encodeFunctionData('unwrapWETH', [recipient])
 }
 
 interface SweepNativeToken {

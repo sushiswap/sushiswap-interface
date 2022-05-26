@@ -9,12 +9,13 @@ import Loader from 'app/components/Loader'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { getExplorerLink } from 'app/functions'
-import useAddTokenToMetaMask from 'app/hooks/useAddTokenToMetaMask'
+import useAddToken from 'app/hooks/useAddToken'
+import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useSwapState } from 'app/state/swap/hooks'
 import Lottie from 'lottie-react'
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void
@@ -71,7 +72,19 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
 }) => {
   const { i18n } = useLingui()
   const { library } = useActiveWeb3React()
-  const { addToken, success } = useAddTokenToMetaMask(currencyToAdd)
+  const { addToken, success } = useAddToken(currencyToAdd)
+
+  const isCoinbaseWallet = useIsCoinbaseWallet()
+  const isMetaMask = library?.provider?.isMetaMask
+
+  const isAddTokenSupported = useMemo(() => {
+    return isCoinbaseWallet || isMetaMask
+  }, [isCoinbaseWallet, isMetaMask])
+
+  const providerDisplayName = useMemo(() => {
+    if (isMetaMask) return 'MetaMask'
+    if (isCoinbaseWallet) return 'Coinbase Wallet'
+  }, [isMetaMask, isCoinbaseWallet])
 
   return (
     <div className="flex flex-col gap-4">
@@ -92,10 +105,10 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
         )}
       </HeadlessUiModal.BorderedContent>
 
-      {currencyToAdd && library?.provider?.isMetaMask && (
+      {currencyToAdd && isAddTokenSupported && (
         <Button color="blue" onClick={!success ? addToken : onDismiss}>
           <Typography variant="sm" weight={700}>
-            {!success ? i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`) : i18n._(t`Dismiss`)}
+            {!success ? i18n._(t`Add ${currencyToAdd.symbol} to ${providerDisplayName}`) : i18n._(t`Dismiss`)}
           </Typography>
         </Button>
       )}

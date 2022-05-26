@@ -93,7 +93,7 @@ const useAuctionCreate = () => {
         'address',
       ]
 
-      const now = Date.now()
+      const now = Math.floor(Date.now() / 1000)
       const startDate = getUnixTime(data.startDate)
       const endDate = getUnixTime(data.endDate)
 
@@ -137,7 +137,7 @@ const useAuctionCreate = () => {
         'address',
       ]
 
-      const now = Date.now()
+      const now = Math.floor(Date.now() / 1000)
       const startDate = getUnixTime(data.startDate)
       const endDate = getUnixTime(data.endDate)
 
@@ -181,7 +181,7 @@ const useAuctionCreate = () => {
         'address',
       ]
 
-      const now = Date.now()
+      const now = Math.floor(Date.now() / 1000)
       const startDate = getUnixTime(data.startDate)
       const endDate = getUnixTime(data.endDate)
 

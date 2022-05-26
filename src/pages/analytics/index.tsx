@@ -1,19 +1,15 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
-import { Feature } from 'app/enums'
 import TokenTable from 'app/features/analytics/bentobox/TokenTable'
 import ChartCard from 'app/features/analytics/ChartCard'
-import DashboardTabs from 'app/features/analytics/dashboard/DashboardTabs'
-import FarmTable from 'app/features/analytics/farms/FarmTable'
 import PoolTable from 'app/features/analytics/pools/PoolTable'
-import { featureEnabled } from 'app/functions'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useDayData, useFactory, useOneDayBlock, useTwoDayBlock } from 'app/services/graph'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 const chartTimespans = [
   {
@@ -38,10 +34,6 @@ export default function Analytics(): JSX.Element {
   const { i18n } = useLingui()
   const router = useRouter()
   const chainId = Number(router.query.chainId)
-
-  const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>(
-    featureEnabled(Feature.LIQUIDITY_MINING, chainId) ? 'pools' : 'pairs'
-  )
 
   const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
   const { data: block2d } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
@@ -115,14 +107,9 @@ export default function Analytics(): JSX.Element {
               timespans={chartTimespans}
             />
           </div>
-
-          <DashboardTabs currentType={type} setType={setType} />
           <div className="pt-4">
-            {featureEnabled(Feature.LIQUIDITY_MINING, chainId) && type === 'pools' && (
-              <FarmTable chainId={chainId} farms={farms} />
-            )}
-            {type === 'pairs' && <PoolTable chainId={chainId} />}
-            {type === 'tokens' && <TokenTable chainId={chainId} />}
+            <PoolTable chainId={chainId} />
+            <TokenTable chainId={chainId} />
           </div>
         </div>
       </TridentBody>

@@ -177,27 +177,16 @@ function getExactInputParams(
   let paths: Path[] = []
 
   for (let legIndex = 0; legIndex < routeLegs; ++legIndex) {
-    const recipentAddress = isLastLeg(legIndex, multiRoute) ? senderAddress : multiRoute.legs[legIndex + 1].poolAddress
-
-    if (multiRoute.legs[legIndex].tokenFrom.address === multiRoute.fromToken.address) {
-      const path: Path = {
-        pool: multiRoute.legs[legIndex].poolAddress,
-        data: defaultAbiCoder.encode(
-          ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, legIndex === routeLegs && receiveToWallet]
-        ),
-      }
-      paths.push(path)
-    } else {
-      const path: Path = {
-        pool: multiRoute.legs[legIndex].poolAddress,
-        data: defaultAbiCoder.encode(
-          ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, legIndex === routeLegs && receiveToWallet]
-        ),
-      }
-      paths.push(path)
+    const lastLeg = isLastLeg(legIndex, multiRoute)
+    const recipentAddress = lastLeg ? senderAddress : multiRoute.legs[legIndex + 1].poolAddress
+    const path: Path = {
+      pool: multiRoute.legs[legIndex].poolAddress,
+      data: defaultAbiCoder.encode(
+        ['address', 'address', 'bool'],
+        [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, lastLeg && receiveToWallet]
+      ),
     }
+    paths.push(path)
   }
 
   // console.log('slippage?', { amountOut: multiRoute.amountOut, slippage })
@@ -453,6 +442,7 @@ export function useSwapCallArguments(
       if (trade?.outputAmount?.currency.isNative && receiveToWallet)
         actions.push(
           unwrapWETHAction({
+            chainId,
             router: tridentRouterContract,
             recipient,
             amountMinimum: trade?.minimumAmountOut(allowedSlippage).quotient.toString(),

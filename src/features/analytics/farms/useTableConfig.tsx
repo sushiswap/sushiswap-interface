@@ -2,11 +2,13 @@ import { getAddress } from '@ethersproject/address'
 import { Currency, Token } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import { formatNumber, formatPercent } from 'app/functions'
+import { useAllTokens } from 'app/hooks/Tokens'
 import { useMemo } from 'react'
 
 import { filterForSearchQuery } from './farmTableFilters'
 
 export const useTableConfig = (chainId: number, farms: any) => {
+  const allTokens = useAllTokens()
   const data = useMemo(() => {
     return (
       farms
@@ -38,27 +40,33 @@ export const useTableConfig = (chainId: number, farms: any) => {
         maxWidth: 150,
         // @ts-ignore
         Cell: (props) => {
+          const currency0Address = getAddress(props.value.token0.id)
           const currency0 = useMemo(
             () =>
-              new Token(
-                chainId,
-                getAddress(props.value.token0.id),
-                Number(props.value.token0.decimals),
-                props.value.token0.symbol,
-                props.value.token0.name
-              ),
-            [props]
+              currency0Address in allTokens
+                ? allTokens[currency0Address]
+                : new Token(
+                    chainId,
+                    getAddress(props.value.token0.id),
+                    Number(props.value.token0.decimals),
+                    props.value.token0.symbol,
+                    props.value.token0.name
+                  ),
+            [props, currency0Address]
           )
+          const currency1Address = getAddress(props.value.token1.id)
           const currency1 = useMemo(
             () =>
-              new Token(
-                chainId,
-                getAddress(props.value.token1.id),
-                Number(props.value.token1.decimals),
-                props.value.token1.symbol,
-                props.value.token1.name
-              ),
-            [props]
+              currency1Address in allTokens
+                ? allTokens[currency1Address]
+                : new Token(
+                    chainId,
+                    currency1Address,
+                    Number(props.value.token1.decimals),
+                    props.value.token1.symbol,
+                    props.value.token1.name
+                  ),
+            [props, currency1Address]
           )
           const currencies = useMemo(() => [currency0, currency1], [currency0, currency1])
           return (

@@ -5,26 +5,35 @@ import AuctionBidsTab from 'app/features/miso/AuctionTabs/AuctionBidsTab'
 import AuctionDetailsTab from 'app/features/miso/AuctionTabs/AuctionDetailsTab'
 import { useAuctionContext } from 'app/features/miso/context/AuctionContext'
 import { classNames } from 'app/functions'
-import React, { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 
 import AuctionTabsSkeleton from './AuctionTabsSkeleton'
 
 const AuctionTabs: FC = () => {
   const { i18n } = useLingui()
   const { loading, auction } = useAuctionContext()
-  const tabs = [i18n._(t`Auction Details`), i18n._(t`Commitments`), i18n._(t`About Project`)]
   const [tab, setTab] = useState(0)
+
+  const tabs = useMemo(() => {
+    const documents = auction?.auctionDocuments
+    const isAboutTab = (documents?.description || documents?.bannedCountries || documents?.bannedWarning) ?? false
+
+    const tabs = [i18n._(t`Auction Details`), i18n._(t`Commitments`)]
+    if (isAboutTab) tabs.push(i18n._(t`About Project`))
+
+    return tabs
+  }, [auction, i18n])
 
   if (loading || !auction) return <AuctionTabsSkeleton />
 
   return (
     <div className="flex flex-col gap-4">
       <div
-        className="flex space-x-8 overflow-x-auto overflow-y-hidden whitespace-nowrap border-b border-dark-800 mb-4"
+        className="flex mb-4 space-x-8 overflow-x-auto overflow-y-hidden border-b whitespace-nowrap border-dark-800"
         aria-label="Tabs"
       >
         {tabs.map((_tab, index) => (
-          <div key={_tab} onClick={() => setTab(index)} className="space-y-2 cursor-pointer h-full">
+          <div key={_tab} onClick={() => setTab(index)} className="h-full space-y-2 cursor-pointer">
             <div
               className={classNames(
                 index === tab ? 'text-high-emphesis' : '',
