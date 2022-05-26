@@ -249,5 +249,10 @@
     "entrypoints": [
       "src/pages"
     ]
+  },
+  "nextBundleAnalysis": {
+    "budget": 3584000,
+    "budgetPercentIncreaseRed": 40,
+    "showDetails": true
   }
 }
