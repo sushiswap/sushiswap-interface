@@ -15,6 +15,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
+const packageJson = require('./package');
+const date = new Date();
+const GIT_COMMIT_SHA_SHORT = typeof process.env.GIT_COMMIT_SHA === 'string' && process.env.GIT_COMMIT_SHA.substring(0, 8);
+
 const path = require('path');
 
 const { withSentryConfig } = require('@sentry/nextjs');
@@ -42,6 +46,48 @@ const nextConfig = {
     ]
 
     return config
+  },
+  /**
+   *  @nextjs
+   *  This is used to help provide authentication mechanisms from authorized deployments to the end user.
+   *  Ideally, this will be accessed by wallets on their backend to verify the dapp they are interacting with is authentic and has not
+   *  been flagged as malicious (e.g. supply chain compromise, etc).
+   * 
+   *  @description Environment variables added to JS bundle.
+   *  @summary All env variables defined in ".env*" files that aren't public (those that don't start with "NEXT_PUBLIC_") 
+   *    MUST manually be made available at build time below.
+   *    They're necessary on Vercel for runtime execution (SSR, SSG with revalidate, everything that happens server-side will need those).
+   *
+   *  @see {@link https://nextjs.org/docs/api-reference/next.config.js/environment-variables}
+   */
+  env: {
+    /**
+     * 
+     * @summary API Key Env Variables
+     *
+     */
+    GITHUB_DISPATCH_TOKEN: process.env.GITHUB_DISPATCH_TOKEN,
+    SENTRY_DSN: process.env.SENTRY_DSN,
+    NEXT_PUBLIC_SENTRY_DSN: process.env.SENTRY_DSN, // Sentry DSN must be provided to the browser for error reporting to work there
+    /**
+    * @const VERCEL_
+    * @see {@link https://vercel.com/docs/environment-variables#system-environment-variables}
+    */
+    VERCEL: process.env.VERCEL,
+    VERCEL_ENV: process.env.VERCEL_ENV,
+    VERCEL_URL: process.env.VERCEL_URL,
+    CI: process.env.CI,
+    /**
+    * @const NEXT_PUBLIC_
+    * @summary Dynamicly Generated Values
+    * @see {@link https://vercel.com/docs/v2/build-step/#providing-environment-variables}
+    */
+    NEXT_PUBLIC_APP_DOMAIN: process.env.VERCEL_URL, // Alias
+    NEXT_PUBLIC_APP_BASE_URL: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:8888',
+    NEXT_PUBLIC_APP_BUILD_TIME: date.toString(),
+    NEXT_PUBLIC_APP_BUILD_TIMESTAMP: +date,
+    NEXT_PUBLIC_APP_NAME: packageJson.name,
+    NEXT_PUBLIC_APP_NAME_VERSION: `${packageJson.name}-${APP_RELEASE_TAG}`,
   },
   // experimental: {
   //   nextScriptWorkers: true,
@@ -87,7 +133,7 @@ const nextConfig = {
     return [
       {
         source: '/*',
-        headers: [{ key: 'Web-Build', value: process.env.VERCEL_GIT_COMMIT_SHA }]
+        headers: [{ key: 'Web-Build', value: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA }]
       }
     ];
   },
