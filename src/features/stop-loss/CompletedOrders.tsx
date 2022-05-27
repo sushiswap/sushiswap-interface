@@ -1,8 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
-import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { useCompletedOrdersTableConfig } from 'app/features/stop-loss/useCompletedOrdersTableConfig'
 import {
   TABLE_TABLE_CLASSNAME,
@@ -17,11 +15,13 @@ import Link from 'next/link'
 import React, { FC } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
+import useStopLossOrders from './useStopLossOrders'
+
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const { completed } = useLimitOrders()
-  const { config } = useCompletedOrdersTableConfig({ orders: completed.data })
+  const { loading, executed } = useStopLossOrders()
+  const { config } = useCompletedOrdersTableConfig({ orders: executed })
 
   // @ts-ignore TYPE NEEDS FIXING
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } = useTable(
@@ -34,7 +34,7 @@ const CompletedOrders: FC = () => {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, completed.maxPages > 1 ? 'min-h-[537px]' : '')}>
+      <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
         <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -85,7 +85,7 @@ const CompletedOrders: FC = () => {
                     className="text-center text-low-emphesis h-[60px] flex items-center justify-center"
                     component="span"
                   >
-                    {i18n._(t`No order history`)}
+                    {loading ? i18n._(t`Loading executed orders...`) : i18n._(t`No order history`)}
                   </Typography>
                 </td>
               </tr>
@@ -111,14 +111,6 @@ const CompletedOrders: FC = () => {
           </tfoot>
         </table>
       </div>
-      <Pagination
-        canPreviousPage={completed.page > 1}
-        canNextPage={completed.page < completed.maxPages}
-        onChange={(page) => completed.setPage(page + 1)}
-        totalPages={completed.maxPages}
-        currentPage={completed.page - 1}
-        pageNeighbours={1}
-      />
     </div>
   )
 }

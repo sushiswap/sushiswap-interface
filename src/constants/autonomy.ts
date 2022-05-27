@@ -1,5 +1,7 @@
 import { AddressMap, ChainId } from '@sushiswap/core-sdk'
 
+export const QUERY_REQUEST_LIMIT = 10000
+
 export const AUTONOMY_REGISTRY_ADDRESSES: AddressMap = {
   [ChainId.BSC]: '0x18d087F8D22D409D3CD366AF00BD7AeF0BF225Db',
   [ChainId.AVALANCHE]: '0x68FCbECa74A7E5D386f74E14682c94DE0e1bC56b',

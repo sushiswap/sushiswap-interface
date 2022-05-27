@@ -73,19 +73,6 @@ export const useOpenOrdersTableConfig = ({
         },
       },
       {
-        accessor: 'filledPercent',
-        Header: 'Filled',
-        width: 80,
-        minWidth: 80,
-        Cell: (props: CellProps<DerivedOrder>) => {
-          return (
-            <Typography weight={700} variant="xs" component="span" className="text-high-emphesis">
-              {props.cell.value}%
-            </Typography>
-          )
-        },
-      },
-      {
         accessor: 'timestamp',
         Header: 'Expires',
         width: 150,

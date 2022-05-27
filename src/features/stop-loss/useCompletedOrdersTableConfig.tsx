@@ -63,19 +63,6 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
         },
       },
       {
-        accessor: 'filledPercent',
-        Header: 'Filled',
-        width: 80,
-        minWidth: 80,
-        Cell: (props: CellProps<DerivedOrder>) => {
-          return (
-            <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
-              {props.cell.value}%
-            </Typography>
-          )
-        },
-      },
-      {
         accessor: 'updated',
         Header: 'Created at',
         width: 150,

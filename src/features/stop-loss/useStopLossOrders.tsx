@@ -1,12 +1,12 @@
 import { Price, Token } from '@sushiswap/core-sdk'
 import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
 import { LimitOrder, OrderStatus } from '@sushiswap/limit-order-sdk'
-import { MORALIS_INFO, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
+import { MORALIS_INFO, QUERY_REQUEST_LIMIT, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import { DerivedOrder } from 'app/features/legacy/limit-order/types'
 import { useAutonomyLimitOrderWrapperContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import Moralis from 'moralis'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface IToken {
   chainId: number
@@ -26,6 +26,19 @@ interface ITokenList {
   version: any
 }
 
+interface IRegistryRequest {
+  callData: string
+  uid: string
+}
+
+interface OrdersData {
+  loading: boolean
+  totalOrders: number
+  all: Array<DerivedOrder>
+  executed: Array<DerivedOrder>
+  unexecuted: Array<DerivedOrder>
+}
+
 const useStopLossOrders = () => {
   const { account, chainId } = useActiveWeb3React()
   const limitOrderWrapperContract = useAutonomyLimitOrderWrapperContract()
@@ -35,19 +48,30 @@ const useStopLossOrders = () => {
     [chainId]
   )
 
+  const [ordersData, setOrdersData] = useState<OrdersData>({
+    loading: false,
+    totalOrders: 0,
+    all: [],
+    executed: [],
+    unexecuted: [],
+  })
+
   const fetchRegistryHistory = useCallback(async () => {
     try {
       Moralis.initialize((chainId && MORALIS_INFO[chainId].key) || '')
       Moralis.serverURL = (chainId && MORALIS_INFO[chainId].serverURL) || ''
 
-      const bscRequests = new Moralis.Query('RegistryRequests')
-      bscRequests.equalTo('user', account?.toLowerCase())
-      bscRequests.equalTo('target', chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId].toLowerCase())
-      let registryRequests = await bscRequests.find()
+      const queryRequests = new Moralis.Query('RegistryRequests')
+      queryRequests.equalTo('user', account?.toLowerCase())
+      queryRequests.equalTo('target', chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId].toLowerCase())
+      let registryRequests = await queryRequests.find()
 
       return await Promise.all(
         registryRequests.map(async (request) => {
-          return request.get('callData')
+          return {
+            callData: request.get('callData'),
+            uid: request.get('uid'),
+          }
         })
       )
     } catch (e) {
@@ -61,24 +85,18 @@ const useStopLossOrders = () => {
       Moralis.initialize((chainId && MORALIS_INFO[chainId].key) || '')
       Moralis.serverURL = (chainId && MORALIS_INFO[chainId].serverURL) || ''
 
-      const bscRequests = new Moralis.Query('RegistryExecutedRequests')
-      bscRequests.equalTo('user', account?.toLowerCase())
-      bscRequests.equalTo('target', chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId].toLowerCase())
-      let registryRequests = await bscRequests.find()
-
-      return await Promise.all(
-        registryRequests.map(async (request) => {
-          return request.get('callData')
-        })
-      )
+      const queryExecutes = new Moralis.Query('RegistryExecutedRequests')
+      queryExecutes.limit(QUERY_REQUEST_LIMIT)
+      let execRequests = await queryExecutes.find()
+      return execRequests
     } catch (e) {
-      console.log('Error while fetching history from Moralis')
+      console.log('Error while fetching executed history from Moralis')
       return []
     }
   }, [account, chainId])
 
   const transform = useCallback(
-    (callData: string, id: number, status: OrderStatus = OrderStatus.PENDING): DerivedOrder | undefined => {
+    (callData: string, uid: string, status: OrderStatus = OrderStatus.PENDING): DerivedOrder | undefined => {
       if (!chainId) return
 
       const fillOrderArgs = limitOrderWrapperContract?.interface.decodeFunctionData('fillOrder', callData)
@@ -109,11 +127,11 @@ const useStopLossOrders = () => {
       })
 
       const stopLossOrder: DerivedOrder = {
-        id: `${id}`, // [TODO]
+        id: uid,
         tokenIn: new Token(chainId, token0.address, token0.decimals, token0.symbol, token0.name),
         tokenOut: new Token(chainId, token1.address, token1.decimals, token1.symbol, token1.name),
         limitOrder,
-        filledPercent: '100', // [TODO]
+        filledPercent: '100',
         status,
         rate: new Price({ baseAmount: limitOrder.amountIn, quoteAmount: limitOrder.amountOut }),
       }
@@ -123,11 +141,50 @@ const useStopLossOrders = () => {
     [limitOrderWrapperContract, tokens]
   )
 
-  return {
-    fetchRegistryHistory,
-    fetchExecutedRegistryHistory,
-    transform,
-  }
+  useEffect(() => {
+    const initOrdersData = async () => {
+      if (!account || !chainId) return
+
+      setOrdersData({
+        ...ordersData,
+        loading: true,
+      })
+
+      const executedOrdersCallData = await fetchExecutedRegistryHistory()
+      const executedUids = await Promise.all(
+        executedOrdersCallData.map(async (request) => {
+          return request.get('uid')
+        })
+      )
+
+      const allRequests: IRegistryRequest[] = await fetchRegistryHistory()
+      const allOrdersData = allRequests
+        .map((request) => transform(request.callData, request.uid))
+        .filter((order) => order) as DerivedOrder[]
+
+      const pendingOrdersData = allRequests
+        .filter((request) => !executedUids.includes(request.uid))
+        .map((request) => transform(request.callData, request.uid, OrderStatus.PENDING))
+        .filter((order) => order) as DerivedOrder[]
+
+      const executedOrdersData = allRequests
+        .filter((request) => executedUids.includes(request.uid))
+        .map((request) => transform(request.callData, request.uid, OrderStatus.FILLED))
+        .filter((order) => order) as DerivedOrder[]
+
+      setOrdersData({
+        loading: false,
+        totalOrders: allOrdersData.length,
+        all: allOrdersData,
+        executed: executedOrdersData,
+        unexecuted: pendingOrdersData,
+      })
+    }
+
+    initOrdersData()
+  }, [account, chainId])
+
+  return ordersData
 }
 
 export default useStopLossOrders
