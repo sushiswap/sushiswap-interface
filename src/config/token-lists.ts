@@ -1,6 +1,6 @@
 const BA_LIST = 'https://raw.githubusercontent.com/The-Blockchain-Association/sec-notice-list/master/ba-sec-list.json'
 const YEARN_LIST = 'https://yearn.science/static/tokenlist.json'
-const NFTX_LIST = 'https://nftx.ethereumdb.com/v2/tokenlist/'
+const NFTX_LIST = 'https://tokenlist.nftx.io/'
 const SYNTHETIX_LIST = 'synths.snx.eth'
 const AAVE_LIST = 'tokenlist.aave.eth'
 const CMC_ALL_LIST = 'https://api.coinmarketcap.com/data-api/v3/uniswap/all.json'
@@ -47,4 +47,4 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
 ]
 
 // default lists to be 'active' aka searched across
-export const DEFAULT_ACTIVE_LIST_URLS: string[] = [SUSHI_LIST, CHAINLINK_LIST, GEMINI_LIST]
+export const DEFAULT_ACTIVE_LIST_URLS: string[] = [SUSHI_LIST, CHAINLINK_LIST, GEMINI_LIST, NFTX_LIST]
