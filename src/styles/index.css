@@ -24,6 +24,8 @@ html {
   -moz-osx-font-smoothing: grayscale;
   overflow-y: auto;
   overflow-x: hidden;
+  font-family: 'Play', sans-serif;
+  
 }
 
 html,
@@ -34,6 +36,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--primary);
   color: var(--text-primary);
+  background-color: #161618;
 }
 
 body {
