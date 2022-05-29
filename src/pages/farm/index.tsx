@@ -82,7 +82,7 @@ export default function Farm(): JSX.Element {
           </Typography>
         </div>
         <div className="flex gap-3">
-          <Button id="btn-create-new-pool" size="sm">
+          {/* <Button id="btn-create-new-pool" size="sm">
             <a
               href="https://docs.google.com/document/d/1VcdrqAn1sR8Wa0BSSU-jAl68CfoECR62LCzIyzUpZ_U"
               target="_blank"
@@ -90,7 +90,7 @@ export default function Farm(): JSX.Element {
             >
               {i18n._(t`Apply for Onsen`)}
             </a>
-          </Button>
+          </Button> */}
         </div>
       </TridentHeader>
       <TridentBody>
