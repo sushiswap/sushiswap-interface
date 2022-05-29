@@ -12,7 +12,7 @@ module.exports = {
       backgroundImage: () => ({
         bars: "url('/images/trident/bars-pattern.png')",
         binary: "url('/images/trident/binary-pattern.png')",
-        bubble: "url('/images/trident/bubble-pattern.png')",
+        // bubble: "url('/images/trident/bubble-pattern.png')",
         dots: "url('/images/trident/dots-pattern.png')",
         'x-times-y-is-k': "url('/images/trident/x-times-y-is-k.png')",
         wavy: "url('/images/trident/wavy-pattern.png')",
