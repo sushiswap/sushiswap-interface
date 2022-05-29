@@ -49,6 +49,17 @@ a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+#connect-wallet{
+  background-image: linear-gradient(to right, #00F0FF , #FF00E5, #FFF500);
+  color: white;
+}
+.search-bar-color{
+  background-color: #313132;
+}  
+.background-color-onseen{
+  background-color: #313132;
+
+}
 button:focus {
   outline: none;
 }

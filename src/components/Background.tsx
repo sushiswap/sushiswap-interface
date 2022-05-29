@@ -63,7 +63,7 @@ const Background: FC<Background> = ({ variant }) => {
 
   if (type === ImageType.REPEAT) {
     return (
-      <div className={classNames('absolute inset-0 flex flex-col items-center bg-dark-900/30')}>
+      <div className={classNames('absolute inset-0 flex flex-col items-center background-color-onseen')}>
         <div className={classNames('absolute inset-0 w-full h-full z-0 opacity-10', variant)} />
       </div>
     )
