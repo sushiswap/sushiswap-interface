@@ -1,5 +1,6 @@
 name: 'Next.js Bundle Analysis'
 
+
 on:
   pull_request:
   push:
@@ -7,6 +8,14 @@ on:
       - main # change this if your default branch is named differently
   workflow_dispatch:
 
+env:
+  COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+  PULL_NUMBER: ${{ github.event.pull_request.number }}
+  RUN_ID: ${{ github.run_id }}
+  FORCE_COLOR: 2
+  NEXT_TELEMETRY_DISABLED: 1
+  NODE_OPTIONS: "--max-old-space-size=4096"
+          
 defaults:
   run:
     # change this if your nextjs app does not live at the root of the repo
@@ -16,13 +25,15 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: '14.x'
-
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
+          
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
