@@ -52,7 +52,7 @@ export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables):
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getBentoBox = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getBentoBox = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
   const { bentoBoxes } = await fetcher(chainId, bentoBoxQuery, variables)
 
   return bentoBoxes[0]
@@ -99,7 +99,7 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables: 
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getBentoTokens = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getBentoTokens = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
   const { tokens } = await fetcher(chainId, bentoTokensQuery, variables)
 
   return tokens

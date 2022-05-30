@@ -264,7 +264,7 @@ export const getDayData = async (chainId = ChainId.ETHEREUM, variables = undefin
   return dayDatas
 }
 
-export const getFactory = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
+export const getFactory = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
   const { factories } = await exchange(chainId, factoryQuery, variables)
   return factories[0]
 }
