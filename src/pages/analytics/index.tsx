@@ -50,8 +50,8 @@ function _Analytics(): JSX.Element {
   )
 
   const chartDataWithDates = {
-    liquidity: data!.liquidity.chart.map((day: any) => ({ ...day, x: new Date(day.x * 1000) })),
-    volume: data!.volume.chart.map((day: any) => ({ ...day, x: new Date(day.x * 1000) })),
+    liquidity: data?.liquidity.chart.map((day: any) => ({ ...day, x: new Date(day.x * 1000) })),
+    volume: data?.volume.chart.map((day: any) => ({ ...day, x: new Date(day.x * 1000) })),
   }
 
   return (
@@ -75,8 +75,8 @@ function _Analytics(): JSX.Element {
             <ChartCard
               header="TVL"
               subheader="SUSHI AMM"
-              figure={data!.liquidity.value}
-              change={data!.liquidity.change}
+              figure={data?.liquidity.value ?? 0}
+              change={data?.liquidity.change ?? 0}
               chart={chartDataWithDates.liquidity}
               defaultTimespan="1M"
               timespans={chartTimespans}
@@ -84,8 +84,8 @@ function _Analytics(): JSX.Element {
             <ChartCard
               header="Volume"
               subheader="SUSHI AMM"
-              figure={data!.volume.value}
-              change={data!.volume.change}
+              figure={data?.volume.value ?? 0}
+              change={data?.volume.change ?? 0}
               chart={chartDataWithDates.volume}
               defaultTimespan="1M"
               timespans={chartTimespans}
