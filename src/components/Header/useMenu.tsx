@@ -218,11 +218,11 @@ const useMenu: UseMenu = () => {
     const exploreMenu: MenuItemLeaf[] = []
 
     if (featureEnabled(Feature.STAKING, chainId)) {
-      exploreMenu.push({
-        key: 'sushi-bar',
-        title: i18n._(t`Sushi Bar`),
-        link: '/stake',
-      })
+      menu.push({
+          key: 'Stake',
+          title: i18n._(t`Stake`),
+          link: '/stake',
+        })
     }
 
     if (featureEnabled(Feature.MEOWSHI, chainId)) {
