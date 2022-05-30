@@ -4,7 +4,7 @@ import { AddressZero } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { ChainId, Currency, CurrencyAmount, Price } from '@sushiswap/core-sdk'
 import { LimitOrder, ROUND_UP_RECEIVER_ADDRESS } from '@sushiswap/limit-order-sdk'
-import { CHAINLINK_ORACLE_ADDRESS, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
+import { CHAINLINK_ORACLE_ADDRESS, MORALIS_INFO, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { ZERO } from 'app/functions'
 import { useAutonomyLimitOrderWrapperContract, useAutonomyRegistryContract } from 'app/hooks'
@@ -13,6 +13,8 @@ import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { clear, setLimitOrderAttemptingTxn } from 'app/state/limit-order/actions'
 import { OrderExpiration } from 'app/state/limit-order/reducer'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import Moralis from 'moralis'
 import { useCallback } from 'react'
 
 import { calculateAmountExternal, prepareStopPriceOracleData, ZERO_ORACLE_ADDRESS, ZERO_ORACLE_DATA } from './utils'
@@ -49,6 +51,7 @@ export type UseLimitOrderExecuteDeposit = (x: DepositPayload) => Promise<Transac
 export type UseLimitOrderExecuteExecute = (x: ExecutePayload) => void
 export type UseLimitOrderExecute = () => {
   execute: UseLimitOrderExecuteExecute
+  cancelRequest: (id: string) => void
 }
 
 const useStopLossExecute: UseLimitOrderExecute = () => {
@@ -56,6 +59,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
 
   const autonomyRegistryContract = useAutonomyRegistryContract()
   const limitOrderWrapperContract = useAutonomyLimitOrderWrapperContract()
+  const addTransaction = useTransactionAdder()
 
   const dispatch = useAppDispatch()
   const addPopup = useAddPopup()
@@ -164,7 +168,47 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
     [account, addPopup, chainId, dispatch, library, autonomyRegistryContract, limitOrderWrapperContract]
   )
 
+  const cancelRequest = useCallback(
+    async (requestId: string) => {
+      if (!account || !chainId || !library || !limitOrderWrapperContract || !autonomyRegistryContract)
+        throw new Error('Dependencies unavailable')
+
+      try {
+        Moralis.initialize((chainId && MORALIS_INFO[chainId].key) || '')
+        Moralis.serverURL = (chainId && MORALIS_INFO[chainId].serverURL) || ''
+        const queryRequest = new Moralis.Query('RegistryRequests')
+        queryRequest.equalTo('uid', requestId)
+        let requests = await queryRequest.find()
+
+        const callData = await requests[0].get('callData')
+        console.log('callData: ', callData)
+
+        const tx = await autonomyRegistryContract.cancelHashedReq(requestId, [
+          account,
+          chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId], // target
+          AddressZero, // referer
+          callData, // callData
+          ZERO, // initEthSent
+          ZERO, // ethForCall
+          false, // verifyUser
+          true, // insertFeeAmount
+          false, // payWithAuto
+          false, // isAlive
+        ])
+
+        addTransaction(tx, {
+          summary: 'Stop loss order canceled',
+        })
+        await tx.wait()
+      } catch (e) {
+        console.log('Error while fetching history from Moralis')
+      }
+    },
+    [account, chainId, dispatch, library, limitOrderWrapperContract, autonomyRegistryContract]
+  )
+
   return {
+    cancelRequest,
     execute,
   }
 }

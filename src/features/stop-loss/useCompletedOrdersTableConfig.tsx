@@ -41,6 +41,30 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
         },
       },
       {
+        accessor: 'stopPrice',
+        Header: 'Stop Price',
+        width: 100,
+        minWidth: 100,
+        Cell: (props: CellProps<DerivedOrder>) => {
+          const [invert, setInvert] = useState(false)
+
+          return (
+            <Typography
+              variant="xs"
+              className="flex items-baseline gap-2 cursor-pointer text-secondary"
+              onClick={() => setInvert(!invert)}
+            >
+              <Typography weight={700} variant="xs" component="span" className="text-high-emphesis">
+                {!invert
+                  ? 1e18 / parseFloat(props.cell.row.original.limitOrder.stopPrice)
+                  : parseFloat(props.cell.row.original.limitOrder.stopPrice) / 1e18}
+              </Typography>{' '}
+              {invert ? props.cell.row.original.tokenIn.symbol : props.cell.row.original.tokenOut.symbol}
+            </Typography>
+          )
+        },
+      },
+      {
         accessor: 'rate',
         Header: 'Rate',
         width: 100,

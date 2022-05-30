@@ -14,7 +14,7 @@ export const useOpenOrdersTableConfig = ({
   cancelOrder,
 }: {
   orders?: DerivedOrder[]
-  cancelOrder: (limitOrder: LimitOrder, type: string) => void
+  cancelOrder: (id: string, limitOrder: LimitOrder, type: string) => void
 }) => {
   const { i18n } = useLingui()
 
@@ -47,6 +47,30 @@ export const useOpenOrdersTableConfig = ({
                 {props.cell.row.original.tokenOut.symbol}
               </Typography>
             </div>
+          )
+        },
+      },
+      {
+        accessor: 'stopPrice',
+        Header: 'Stop Price',
+        width: 100,
+        minWidth: 100,
+        Cell: (props: CellProps<DerivedOrder>) => {
+          const [invert, setInvert] = useState(false)
+
+          return (
+            <Typography
+              variant="xs"
+              className="flex items-baseline gap-2 cursor-pointer text-secondary"
+              onClick={() => setInvert(!invert)}
+            >
+              <Typography weight={700} variant="xs" component="span" className="text-high-emphesis">
+                {!invert
+                  ? 1e18 / parseFloat(props.cell.row.original.limitOrder.stopPrice)
+                  : parseFloat(props.cell.row.original.limitOrder.stopPrice) / 1e18}
+              </Typography>{' '}
+              {invert ? props.cell.row.original.tokenIn.symbol : props.cell.row.original.tokenOut.symbol}
+            </Typography>
           )
         },
       },
@@ -125,7 +149,9 @@ export const useOpenOrdersTableConfig = ({
               color="blue"
               variant="empty"
               size="xs"
-              onClick={() => cancelOrder(props.cell.row.original.limitOrder, `Cancel order`)}
+              onClick={() =>
+                cancelOrder(props.cell.row.original.id, props.cell.row.original.limitOrder, `Cancel order`)
+              }
               className="whitespace-nowrap"
             >
               {i18n._(t`Cancel Order`)}

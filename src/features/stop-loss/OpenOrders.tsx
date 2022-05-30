@@ -18,6 +18,7 @@ import React, { FC, useCallback } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { useOpenOrdersTableConfig } from './useOpenOrdersTableConfig'
+import useStopLossExecute from './useStopLossExecute'
 import useStopLossOrders from './useStopLossOrders'
 
 const OpenOrders: FC = () => {
@@ -26,26 +27,14 @@ const OpenOrders: FC = () => {
   const addTransaction = useTransactionAdder()
   const limitOrderContract = useLimitOrderContract(true)
 
+  const { cancelRequest } = useStopLossExecute()
   const { loading, unexecuted } = useStopLossOrders()
 
   const cancelOrder = useCallback(
-    async (limitOrder: LimitOrder, summary: string) => {
+    async (id: string, limitOrder: LimitOrder, summary: string) => {
       if (!limitOrderContract) return
-      /*
-      const tx = await limitOrderContract.cancelOrder(limitOrder.getTypeHash())
-      if (tx) {
-        addTransaction(tx, {
-          summary,
-        })
-
-        await tx.wait()
-        // @ts-ignore TYPE NEEDS FIXING
-        await mutate((data) => ({ ...data }))
-      }
-*/
-      console.log('canceling order: ', limitOrder.getTypeHash())
-      console.log('start time: ', limitOrder.startTime)
-      console.log('end time: ', limitOrder.endTime)
+      console.log('canceling stop-loss request #', id)
+      await cancelRequest(id)
     },
     [addTransaction, limitOrderContract]
   )
