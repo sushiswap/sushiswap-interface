@@ -20,8 +20,8 @@ import useStopLossOrders from './useStopLossOrders'
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const { loading, executed } = useStopLossOrders()
-  const { config } = useCompletedOrdersTableConfig({ orders: executed })
+  const { loading, completed } = useStopLossOrders()
+  const { config } = useCompletedOrdersTableConfig({ orders: completed })
 
   // @ts-ignore TYPE NEEDS FIXING
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } = useTable(

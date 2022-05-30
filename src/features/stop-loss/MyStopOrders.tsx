@@ -3,13 +3,13 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Badge from 'app/components/Badge'
 import QuestionHelper from 'app/components/QuestionHelper'
-import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
+import useStopLossOrders from 'app/features/stop-loss/useStopLossOrders'
 import Link from 'next/link'
 import React, { FC } from 'react'
 
 const MyStopOrders: FC = () => {
   const { i18n } = useLingui()
-  const { pending } = useLimitOrders()
+  const { unexecuted } = useStopLossOrders()
 
   const content = (
     <QuestionHelper
@@ -21,8 +21,8 @@ const MyStopOrders: FC = () => {
   return (
     <Link href="/stop-loss/open">
       <a>
-        {pending.totalOrders > 0 ? (
-          <Badge color="blue" value={pending.totalOrders}>
+        {unexecuted.length > 0 ? (
+          <Badge color="blue" value={unexecuted.length}>
             {content}
           </Badge>
         ) : (

@@ -181,7 +181,6 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         let requests = await queryRequest.find()
 
         const callData = await requests[0].get('callData')
-        console.log('callData: ', callData)
 
         const tx = await autonomyRegistryContract.cancelHashedReq(requestId, [
           account,

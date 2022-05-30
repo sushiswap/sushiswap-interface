@@ -35,7 +35,7 @@ interface OrdersData {
   loading: boolean
   totalOrders: number
   all: Array<DerivedOrder>
-  executed: Array<DerivedOrder>
+  completed: Array<DerivedOrder>
   unexecuted: Array<DerivedOrder>
 }
 
@@ -52,7 +52,7 @@ const useStopLossOrders = () => {
     loading: false,
     totalOrders: 0,
     all: [],
-    executed: [],
+    completed: [],
     unexecuted: [],
   })
 
@@ -91,6 +91,21 @@ const useStopLossOrders = () => {
       return execRequests
     } catch (e) {
       console.log('Error while fetching executed history from Moralis')
+      return []
+    }
+  }, [account, chainId])
+
+  const fetchCanceledRegistryHistory = useCallback(async () => {
+    try {
+      Moralis.initialize((chainId && MORALIS_INFO[chainId].key) || '')
+      Moralis.serverURL = (chainId && MORALIS_INFO[chainId].serverURL) || ''
+
+      const queryCanceled = new Moralis.Query('RegistryCancelRequests')
+      queryCanceled.limit(QUERY_REQUEST_LIMIT)
+      let canceledRequests = await queryCanceled.find()
+      return canceledRequests
+    } catch (e) {
+      console.log('Error while fetching canceled history from Moralis')
       return []
     }
   }, [account, chainId])
@@ -157,26 +172,39 @@ const useStopLossOrders = () => {
         })
       )
 
+      const canceledOrdersCallData = await fetchCanceledRegistryHistory()
+      const canceledUids = await Promise.all(
+        canceledOrdersCallData.map(async (request) => {
+          return request.get('uid')
+        })
+      )
+
       const allRequests: IRegistryRequest[] = await fetchRegistryHistory()
       const allOrdersData = allRequests
         .map((request) => transform(request.callData, request.uid))
         .filter((order) => order) as DerivedOrder[]
 
       const pendingOrdersData = allRequests
-        .filter((request) => !executedUids.includes(request.uid))
+        .filter((request) => !executedUids.includes(request.uid) && !canceledUids.includes(request.uid))
         .map((request) => transform(request.callData, request.uid, OrderStatus.PENDING))
         .filter((order) => order) as DerivedOrder[]
 
-      const executedOrdersData = allRequests
-        .filter((request) => executedUids.includes(request.uid))
-        .map((request) => transform(request.callData, request.uid, OrderStatus.FILLED))
+      const completedOrdersData = allRequests
+        .filter((request) => executedUids.includes(request.uid) || canceledUids.includes(request.uid))
+        .map((request) =>
+          transform(
+            request.callData,
+            request.uid,
+            executedUids.includes(request.uid) ? OrderStatus.FILLED : OrderStatus.CANCELLED
+          )
+        )
         .filter((order) => order) as DerivedOrder[]
 
       setOrdersData({
         loading: false,
         totalOrders: allOrdersData.length,
         all: allOrdersData,
-        executed: executedOrdersData,
+        completed: completedOrdersData,
         unexecuted: pendingOrdersData,
       })
     }
