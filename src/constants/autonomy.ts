@@ -23,11 +23,11 @@ interface MoralisInfo {
 
 export const MORALIS_INFO: { [chainId: number]: MoralisInfo } = {
   [ChainId.AVALANCHE]: {
-    serverURL: 'https://ietd1r5r9bs1.usemoralis.com:2053/server',
-    key: '94CRrkmYxPCfdDQQd4L9gGiem3PKpZsv25fTSwDO',
+    serverURL: process.env.NEXT_PUBLIC_AUTONOMY_MORALIS_URL_AVAX || '',
+    key: process.env.NEXT_PUBLIC_AUTONOMY_MORALIS_KEY_AVAX || '',
   },
   [ChainId.BSC]: {
-    serverURL: 'https://mz4k8ltjvwtm.usemoralis.com:2053/server',
-    key: '0InOR7cWvu3rRwDZRHTDdDZ26Vj7Jc7HOBiYiGWa',
+    serverURL: process.env.NEXT_PUBLIC_AUTONOMY_MORALIS_URL_BSC || '',
+    key: process.env.NEXT_PUBLIC_AUTONOMY_MORALIS_KEY_BSC || '',
   },
 }
