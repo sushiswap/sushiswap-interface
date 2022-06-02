@@ -3,10 +3,13 @@ import { Chef } from 'app/features/onsen/enum'
 import {
   getMasterChefV1Farms,
   getMasterChefV1PairAddreses,
+  getMasterChefV1PoolHistories,
+  getMasterChefV1Pools,
   getMasterChefV1SushiPerBlock,
   getMasterChefV1TotalAllocPoint,
   getMasterChefV2Farms,
   getMasterChefV2PairAddreses,
+  getMasterChefV2Pools,
   getMiniChefFarms,
   getMiniChefPairAddreses,
   getOldMiniChefFarms,
@@ -147,4 +150,54 @@ export function useFarmPairAddresses() {
     () => concat(masterChefV1PairAddresses ?? [], masterChefV2PairAddresses ?? [], miniChefPairAddresses ?? []),
     [masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses]
   )
+}
+
+export function useMasterChefV1FarmsWithUsers({
+  chainId = ChainId.ETHEREUM,
+  variables,
+}: {
+  chainId: ChainId
+  variables: any
+}) {
+  const shouldFetch = chainId && chainId === ChainId.ETHEREUM
+  return useSWR(shouldFetch ? ['masterChefV1Pools', chainId, variables] : null, (_) =>
+    getMasterChefV1Pools(chainId, variables)
+  )
+}
+
+export function useMasterChefV2FarmsWithUsers({
+  chainId = ChainId.ETHEREUM,
+  variables,
+}: {
+  chainId: ChainId
+  variables: any
+}) {
+  const shouldFetch = chainId && chainId === ChainId.ETHEREUM
+  return useSWR(shouldFetch ? ['masterChefV2Pools', chainId, variables] : null, (_) =>
+    getMasterChefV2Pools(chainId, variables)
+  )
+}
+
+export function useFarmsWithUsers({ chainId = ChainId.ETHEREUM, variables }: { chainId: ChainId; variables: any }) {
+  const { data: masterChefV1Pools } = useMasterChefV1FarmsWithUsers({ chainId, variables })
+  const { data: masterChefV2Pools } = useMasterChefV2FarmsWithUsers({ chainId, variables })
+  return useMemo(() => concat(masterChefV1Pools ?? [], masterChefV2Pools ?? []), [masterChefV1Pools, masterChefV2Pools])
+}
+
+export function useMasterChefV1FarmHistories({
+  chainId = ChainId.ETHEREUM,
+  variables,
+}: {
+  chainId: ChainId
+  variables: any
+}) {
+  const shouldFetch = chainId && chainId === ChainId.ETHEREUM
+  return useSWR(shouldFetch ? ['masterChefV1PoolHistories', chainId, variables] : null, (_) =>
+    getMasterChefV1PoolHistories(chainId, variables)
+  )
+}
+
+export function useFarmHistories({ chainId = ChainId.ETHEREUM, variables }: { chainId: ChainId; variables: any }) {
+  const { data: masterChefV1PoolHistories } = useMasterChefV1FarmHistories({ chainId, variables })
+  return useMemo(() => concat(masterChefV1PoolHistories ?? []), [masterChefV1PoolHistories])
 }
