@@ -95,6 +95,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     return (
       <button
+      // id='connect-wallet'
         {...rest}
         ref={ref}
         disabled={disabled || loading}

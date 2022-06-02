@@ -23,7 +23,7 @@ const Footer = () => {
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-start gap-2">
               <div className="">
-                <Image src="https://app.sushi.com/images/logo.svg" alt="Sushi logo" width="28px" height="28px" />
+                {/* <Image src="https://app.sushi.com/images/logo.svg" alt="Exofi logo" width="28px" height="28px" /> */}
               </div>
               <Typography variant="h2" weight={700} className="tracking-[0.02em] scale-y-90 hover:text-high-emphesis">
                 Sushi
