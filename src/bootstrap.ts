@@ -65,7 +65,7 @@ BigNumber.prototype.max = function (...values: BigNumberish[]): BigNumber {
 }
 
 Sentry.init({
-  dsn: 'https://e852f945bc774d718d25aa807d8417dd@o960777.ingest.sentry.io/5909166',
+  dsn: 'https://f58d5ab63dba4cf28c2dbd20b2494ff3@o960777.ingest.sentry.io/5909166',
 
   // Alternatively, use `process.env.npm_package_version` for a dynamic release version
   // if your build tool supports it.
