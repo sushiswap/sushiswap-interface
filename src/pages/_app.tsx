@@ -170,6 +170,7 @@ function MyApp({ Component, pageProps, fallback, err }) {
                         <Guard>
                           {/*@ts-ignore TYPE NEEDS FIXING*/}
                           <DefaultSeo {...SEO} />
+                          {/* Workaround for https://github.com/vercel/next.js/issues/8592 */}
                           <Component {...pageProps} err={err} />
                         </Guard>
                       </Layout>

@@ -1,7 +1,7 @@
-import * as Sentry from '@sentry/nextjs'
 import NextErrorComponent from 'next/error'
 
-// @ts-ignore
+import * as Sentry from '@sentry/nextjs'
+
 const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
   if (!hasGetInitialPropsRun && err) {
     // getInitialProps is not called in case of
@@ -14,9 +14,7 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
   return <NextErrorComponent statusCode={statusCode} />
 }
 
-// @ts-ignore
-MyError.getInitialProps = async ({ res, err, asPath }) => {
-  // @ts-ignore
+MyError.getInitialProps = async ({ res, err }) => {
   const errorInitialProps = await NextErrorComponent.getInitialProps({
     res,
     err,
@@ -24,7 +22,6 @@ MyError.getInitialProps = async ({ res, err, asPath }) => {
 
   // Workaround for https://github.com/vercel/next.js/issues/8592, mark when
   // getInitialProps has run
-  // @ts-ignore
   errorInitialProps.hasGetInitialPropsRun = true
 
   // Running on the server, the response object (`res`) is available.
@@ -51,11 +48,8 @@ MyError.getInitialProps = async ({ res, err, asPath }) => {
   }
 
   // If this point is reached, getInitialProps was called without any
-  // information about what the error might be. This is unexpected and may
-  // indicate a bug introduced in Next.js, so record it in Sentry
-  Sentry.captureException(new Error(`_error.js getInitialProps missing data at path: ${asPath}`))
-  await Sentry.flush(2000)
-
+  // information about what the error might be. This can be caused by
+  // a falsy value being thrown e.g. throw undefined
   return errorInitialProps
 }
 
