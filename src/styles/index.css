@@ -81,7 +81,18 @@ input:focus {
 input[type=datetime-local]::-webkit-calendar-picker-indicator {
   background-image: url('../../public/images/datepicker-icon.svg')
 }
-
+.sushi-icon{
+  background-image: url('../../public/images/fermion.svg')
+}
+#sushi-icon{
+  width: 62px;
+  height: 62px;
+  background-image: url('../../public/images/fermion.svg')
+  
+  /* width="62px"
+  height="62px"
+  objectFit="contain" */
+}
 /* if backdrop support: very transparent and blurred */
 @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
   .backdrop-blur-fallback {
