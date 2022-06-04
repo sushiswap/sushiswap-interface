@@ -2,6 +2,7 @@
 /**
  * @type {import('next').NextConfig}
  **/
+require('v8-compile-cache-lib').install(); // faster builds
 const linguiConfig = require('./lingui.config.js')
 // @ts-ignore
 const defaultTheme = require('tailwindcss/defaultTheme')

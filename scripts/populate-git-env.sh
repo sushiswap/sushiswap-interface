@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # List of environment variables that are automatically populated, if not already set.
 # Those variables are populated this way so that deploying locally and working locally behave identically to staging and production.
 
