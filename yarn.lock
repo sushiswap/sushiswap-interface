@@ -12897,6 +12897,11 @@ typedarray-to-buffer@3.1.5, typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
+typescript-eslint-language-service@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/typescript-eslint-language-service/-/typescript-eslint-language-service-5.0.0.tgz#c8a77b109a25d9908ad2d0c994a282c7494318c3"
+  integrity sha512-QB3YsL+lDOpKwblXuqD9GkzpHhJC2D02e/3OIj38kIe6LSL97cEsUtnsVPqIaofnOsV2glj2T5VLxp5gmLTERQ==
+
 typescript@^3.9.10, typescript@^3.9.5, typescript@^3.9.7:
   version "3.9.10"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.10.tgz#70f3910ac7a51ed6bef79da7800690b19bf778b8"

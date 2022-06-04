@@ -15,11 +15,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const packageJson = require('./package');
+const packageJson = require('./package.json');
 const date = new Date();
 const GIT_COMMIT_SHA_SHORT = typeof process.env.GIT_COMMIT_SHA === 'string' && process.env.GIT_COMMIT_SHA.substring(0, 8);
 
-const path = require('path');
 
 const { withSentryConfig } = require('@sentry/nextjs');
 const sentryWebpackPluginOptions = {
@@ -116,7 +115,7 @@ const nextConfig = {
       },
     ]
   },
-  async headeres() {
+  async headers() {
     return [
       {
         source: '/*',

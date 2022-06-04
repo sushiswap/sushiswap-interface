@@ -50,7 +50,12 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "downlevelIteration": true,
-    "incremental": true
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "typescript-eslint-language-service"
+      }
+    ],
   },
   "include": ["next-env.d.ts", "sushi-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

@@ -14,12 +14,13 @@ echo "VERCEL_ENV: $VERCEL_ENV"
 if [[ "$VERCEL_ENV" == "production" ]] ; then
   # Proceed with the build
   echo "✅ - Build can proceed"
-  exit 1;
-
+  yarn install --frozen-lockfile
+  yarn run postinstall
+  npx next build
 else
   # Don't build
   echo "🛑 - Build cancelled"
-  exit 0;
+  exit 1;
 fi
 
 echo "ERROR: Command not found"
