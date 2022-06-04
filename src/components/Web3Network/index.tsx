@@ -37,13 +37,13 @@ function Web3Network(): JSX.Element | null {
       switchToNetwork({ provider: library.provider, chainId: targetChain })
         .then(() => {
           return router.replace({
-            pathname: window.location.pathname,
+            pathname: router.pathname,
             query: { ...router.query, chainId: targetChain },
           })
         })
         .catch(() => {
           if (chainId) {
-            router.replace({ pathname: window.location.pathname, query: { ...router.query, chainId } })
+            router.replace({ pathname: router.pathname, query: { ...router.query, chainId } })
           }
         })
         .finally(() => {
@@ -59,7 +59,7 @@ function Web3Network(): JSX.Element | null {
     // when network change originates from wallet or dropdown selector, just update URL
     if (chainId !== prevChainId) {
       console.debug('network change from wallet or network modal')
-      router.replace({ pathname: window.location.pathname, query: { ...router.query, chainId } })
+      router.replace({ pathname: router.pathname, query: { ...router.query, chainId } })
     }
   }, [chainId, prevChainId, router])
 
@@ -87,7 +87,7 @@ function Web3Network(): JSX.Element | null {
   // set chainId on initial load if not present
   useEffect(() => {
     if (chainId && !queryChainId) {
-      router.replace({ pathname: window.location.pathname, query: { ...router.query, chainId } })
+      router.replace({ pathname: router.pathname, query: { ...router.query, chainId } })
     }
   }, [chainId, queryChainId, router])
 
