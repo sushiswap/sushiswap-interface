@@ -118,7 +118,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/*',
+        source: '/(.*)',
         headers: [{ key: 'Web-Build', value: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA }]
       }
     ];
