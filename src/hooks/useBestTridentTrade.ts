@@ -27,10 +27,11 @@ import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { PairState, useV2Pairs } from 'app/hooks/useV2Pairs'
 import useBlockNumber from 'app/lib/hooks/useBlockNumber'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch } from 'app/state/hooks'
+import { setRouteInfo } from 'app/state/transactions/actions'
 import { TradeUnion } from 'app/types'
 import { useEffect, useMemo, useState } from 'react'
 
-// import { atom, useSetRecoilState } from 'recoil'
 import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
 import { useGetAllExistedPools } from './useConstantProductPools'
 
@@ -72,11 +73,6 @@ export type RoutingInfo = {
   route?: MultiRoute
 }
 
-// export const routingInfo = atom<RoutingInfo | undefined>({
-//   key: 'routingInfo',
-//   default: undefined,
-// })
-
 /**
  * Returns best trident trade for a desired swap.
  * @param tradeType whether we request an exact output amount or we provide an exact input amount
@@ -92,7 +88,7 @@ export function useBestTridentTrade(
 ): UseBestTridentTradeOutput {
   const { chainId, library } = useActiveWeb3React()
   const blockNumber = useBlockNumber()
-  // const setRoutingInfo = useSetRecoilState(routingInfo)
+  const dispatch = useAppDispatch()
 
   const [gasPrice, setGasPrice] = useState<number>()
 
@@ -165,6 +161,9 @@ export function useBestTridentTrade(
         if (tridentAmountOutput.gt(legacyRoute.amountOutBN)) {
           if (tridentRoute.status === RouteStatus.Success) {
             const priceImpact = tridentRoute.priceImpact
+            dispatch(
+              setRouteInfo({ info: { chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' } })
+            )
             // setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
             return {
               trade: Trade.bestTradeExactIn(tridentRoute, shareSpecified, currencyOut),
@@ -174,6 +173,7 @@ export function useBestTridentTrade(
         } else {
           if (legacyRoute.status === RouteStatus.Success) {
             const priceImpact = legacyRoute.priceImpact
+            dispatch(setRouteInfo({ info: { chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' } }))
             // setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
             const route = convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut)
 
@@ -213,6 +213,9 @@ export function useBestTridentTrade(
         if (tridentAmountOutput.lt(legacyRoute.amountInBN)) {
           if (tridentRoute.status === RouteStatus.Success) {
             const priceImpact = tridentRoute.priceImpact
+            dispatch(
+              setRouteInfo({ info: { chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' } })
+            )
             // setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
             return {
               trade: Trade.bestTradeExactOut(tridentRoute, currencyIn, shareSpecified),
@@ -222,6 +225,7 @@ export function useBestTridentTrade(
         } else {
           if (legacyRoute.status === RouteStatus.Success) {
             const priceImpact = legacyRoute.priceImpact
+            dispatch(setRouteInfo({ info: { chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' } }))
             // setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
             const route = convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut)
             try {
@@ -252,5 +256,6 @@ export function useBestTridentTrade(
     currencyInRebase,
     currencyOutRebase,
     tradeType,
+    dispatch,
   ])
 }
