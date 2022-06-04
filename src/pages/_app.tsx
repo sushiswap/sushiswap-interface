@@ -28,6 +28,15 @@ import { Provider as ReduxProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Web3ReactProvider } from 'web3-react-core'
 
+import SEO from '../config/seo'
+
+/**
+ * NextWebVitalsMetric
+ * @summary Axiom LogDrain
+ * @env NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT
+ * @param metric
+ * @returns reportWebVitals
+ */
 export function reportWebVitals(metric: NextWebVitalsMetric) {
   const url = process.env.NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT
 
@@ -46,34 +55,11 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
     fetch(url, { body, method: 'POST', keepalive: true })
   }
 }
-
-import SEO from '../config/seo'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
-}
-
-import { NextWebVitalsMetric } from 'next/app'
-
-export function reportWebVitals(metric: NextWebVitalsMetric) {
-  const url = process.env.NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT
-
-  if (!url) {
-    return
-  }
-
-  const body = JSON.stringify({
-    route: window.__NEXT_DATA__.page,
-    ...metric,
-  })
-
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon(url, body)
-  } else {
-    fetch(url, { body, method: 'POST', keepalive: true })
-  }
 }
 
 // @ts-ignore TYPE NEEDS FIXING
