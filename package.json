@@ -156,6 +156,7 @@
     "copy-to-clipboard": "^3.3.1",
     "cross-env": "^7.0.3",
     "d3-array": "^3.0.2",
+    "dd-trace": "^2.8.0",
     "eslint": "^7.30.0",
     "eslint-config-next": "^11.1.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
