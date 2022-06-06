@@ -261,6 +261,17 @@ export const SUPPORTED_NETWORKS: Record<
     rpcUrls: ['https://mainnet.optimism.io'],
     blockExplorerUrls: ['https://optimistic.etherscan.io'],
   },
+  [ChainId.KAVA]: {
+    chainId: '0x8AE',
+    chainName: 'Kava',
+    nativeCurrency: {
+      name: 'Kava',
+      symbol: 'KAVA',
+      decimals: 18,
+    },
+    rpcUrls: ['https://evm.kava.io'],
+    blockExplorerUrls: ['https://explorer.kava.io'],
+  },
 }
 
 const NetworkModal: FC = () => {
@@ -291,6 +302,7 @@ const NetworkModal: FC = () => {
             ChainId.TELOS,
             ChainId.CELO,
             ChainId.FUSE,
+            ChainId.KAVA,
             // ChainId.OKEX,
             // ChainId.HECO,
             // ChainId.PALM,

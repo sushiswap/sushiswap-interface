@@ -22,6 +22,8 @@ export const BENTOBOX = {
   [ChainId.MOONBEAM]: 'matthewlilley/bentobox-moonbeam',
   [ChainId.MOONRIVER]: 'matthewlilley/bentobox-moonriver',
   [ChainId.CELO]: 'matthewlilley/bentobox-celo',
+  [ChainId.OPTIMISM]: 'matthewlilley/bentobox-optimism',
+  [ChainId.KAVA]: 'sushiswap/bentobox-kava',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
