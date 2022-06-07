@@ -36,7 +36,7 @@ export default function Farm(): JSX.Element {
 
   const FILTER = {
     // @ts-ignore TYPE NEEDS FIXING
-    all: (farm) => farm.allocPoint !== '0' && farm.chef !== Chef.OLD_FARMS,
+    all: (farm) => (farm.allocPoint !== '0' && farm.chef !== Chef.OLD_FARMS) || farm.rewarder.rewardPerSecond != 0,
     // @ts-ignore TYPE NEEDS FIXING
     portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
     // @ts-ignore TYPE NEEDS FIXING
