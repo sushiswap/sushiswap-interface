@@ -9,7 +9,6 @@ import {
   getMasterChefV2PairAddreses,
   getMiniChefFarms,
   getMiniChefPairAddreses,
-  getOldMiniChefFarms,
 } from 'app/services/graph/fetchers'
 import { useActiveWeb3React } from 'app/services/web3'
 import concat from 'lodash/concat'
@@ -53,23 +52,6 @@ export function useMasterChefV2Farms({ chainId, swrConfig = undefined }: useFarm
   }, [data])
 }
 
-// @ts-ignore TYPE NEEDS FIXING
-export function useOldMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && chainId === ChainId.CELO
-  const { data } = useSWR(
-    shouldFetch ? ['oldMiniChefFarms', chainId] : null,
-    (_, chainId) => getOldMiniChefFarms(chainId),
-    swrConfig
-  )
-
-  return useMemo(() => {
-    if (!data) return []
-    // @ts-ignore TYPE NEEDS FIXING
-    return data.map((data) => ({ ...data, chef: Chef.OLD_FARMS }))
-  }, [data])
-}
-
 export function useMiniChefFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const shouldFetch =
     chainId &&
@@ -100,11 +82,9 @@ export function useFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const masterChefV1Farms = useMasterChefV1Farms({ chainId })
   const masterChefV2Farms = useMasterChefV2Farms({ chainId })
   const miniChefFarms = useMiniChefFarms({ chainId })
-  const oldMiniChefFarms = useOldMiniChefFarms()
   return useMemo(
-    () =>
-      concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms, oldMiniChefFarms).filter((pool) => pool && pool.pair),
-    [masterChefV1Farms, masterChefV2Farms, miniChefFarms, oldMiniChefFarms]
+    () => concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms).filter((pool) => pool && pool.pair),
+    [masterChefV1Farms, masterChefV2Farms, miniChefFarms]
   )
 }
 

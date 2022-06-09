@@ -1,93 +1,21 @@
 import { getAddress } from '@ethersproject/address'
 import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
-import { formatNumber, getApy } from 'app/functions'
+import { formatNumber } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
-import { useOneDayBlock, useOneWeekBlock, useSushiPairs, useTwoDayBlock } from 'app/services/graph'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
+import { UsePaginationOptions, UseSortByOptions } from 'react-table'
+import useSWR from 'swr'
 
 import { filterForSearchQuery } from './poolTableFilters'
 
 export const useTableConfig = (chainId: number) => {
   const allTokens = useAllTokens()
-  const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-  const { data: block2d } = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
-  const { data: block1w } = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
-  const { data: pairs } = useSushiPairs({ chainId })
-  const { data: pairs1d } = useSushiPairs({ variables: { block: block1d }, shouldFetch: !!block1d, chainId })
-  const { data: pairs2d } = useSushiPairs({ variables: { block: block2d }, shouldFetch: !!block2d, chainId })
-
-  const { data: pairs1w } = useSushiPairs({ variables: { block: block1w }, shouldFetch: !!block1w, chainId })
-
-  const data = useMemo(() => {
-    return (
-      pairs
-        // @ts-ignore TYPE NEEDS FIXING
-        ?.map((pair) => {
-          // @ts-ignore TYPE NEEDS FIXING
-          const pair1d = pairs1d?.find((p) => pair.id === p.id) ?? pair
-          // @ts-ignore TYPE NEEDS FIXING
-          const pair2d = pairs2d?.find((p) => pair.id === p.id) ?? pair
-          // @ts-ignore TYPE NEEDS FIXING
-          const pair1w = pairs1w?.find((p) => pair.id === p.id) ?? pair1d
-
-          const volume1d = pair.volumeUSD - pair1d.volumeUSD
-          const volume1w = pair.volumeUSD - pair1w.volumeUSD
-
-          const volume1dChange = pair.volumeUSD - pair1d.volumeUSD - (pair1d.volumeUSD - pair2d.volumeUSD)
-          const volume1dChangePercent =
-            ((pair.volumeUSD - pair1d.volumeUSD) / (pair1d.volumeUSD - pair2d.volumeUSD)) * 100 - 100
-
-          const fees1d = volume1d * 0.003
-          const fees1w = volume1w * 0.003
-
-          const liquidity = pair.reserveUSD
-          const liquidity1d = pair1d.reserveUSD
-
-          const liquidity1dChange = pair.reserveUSD - pair1d.reserveUSD
-          const liquidity1dChangePercent = (pair.reserveUSD / pair1d.reserveUSD) * 100 - 100
-
-          const utilisation1d = ((pair.volumeUSD - pair1d.volumeUSD) / pair?.reserveUSD) * 100
-          const utilisation2d = ((pair1d.volumeUSD - pair2d.volumeUSD) / pair1d?.reserveUSD) * 100
-          const utilisation1dChange = (utilisation1d / utilisation2d) * 100 - 100
-
-          const tx1d = pair.txCount - pair1d.txCount
-          const tx2d = pair1d.txCount - pair2d.txCount
-          const tx1dChange = (tx1d / tx2d) * 100 - 100
-
-          const apy = getApy({ volume: volume1d, liquidity, days: 1 })
-
-          return {
-            pair: {
-              token0: pair.token0,
-              token1: pair.token1,
-              id: pair.id,
-            },
-            liquidity,
-            liquidity1d,
-            liquidity1dChange,
-            liquidity1dChangePercent,
-            volume1d,
-            volume1dChange,
-            volume1dChangePercent,
-            volume1w,
-            fees1d,
-            fees1w,
-            utilisation1d,
-            utilisation2d,
-            utilisation1dChange,
-            tx1d,
-            tx2d,
-            tx1dChange,
-            apy,
-          }
-        })
-        // @ts-ignore TYPE NEEDS FIXING
-        .sort((a, b) => b.liquidityChangeNumber1d - a.liquidityChangeNumber1d)
-    )
-  }, [pairs, pairs1d, pairs1w, pairs2d])
+  const { data } = useSWR(chainId ? `/api/analytics/pairs/${chainId}` : null, (url: string) =>
+    fetch(url).then((response) => response.json())
+  )
 
   const columns = useMemo(
     () => [
@@ -178,7 +106,6 @@ export const useTableConfig = (chainId: number) => {
         minWidth: 150,
         // @ts-ignore
         Cell: (props) => {
-          console.log({ props })
           return (
             <>
               {props.value}{' '}
@@ -230,7 +157,8 @@ export const useTableConfig = (chainId: number) => {
           ],
         },
         autoResetFilters: false,
-      },
+        autoResetPage: false,
+      } as UseSortByOptions<any> & UsePaginationOptions<any>,
       // loading: isValidating,
       // error,
     }),
