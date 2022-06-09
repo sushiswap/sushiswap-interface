@@ -1,6 +1,6 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST } from 'app/services/graph/constants'
-import { barHistoriesQuery, barQuery } from 'app/services/graph/queries/bar'
+import { barHistoriesQuery, barQuery, barUserQuery } from 'app/services/graph/queries/bar'
 import { request } from 'graphql-request'
 
 const BAR = {
@@ -19,4 +19,9 @@ export const getBar = async (variables?: { [key: string]: any }) => {
 export const getBarHistory = async (variables?: { [key: string]: any }) => {
   const { histories } = await fetcher(barHistoriesQuery, variables)
   return histories
+}
+
+export const getBarUser = async (variables?: { [key: string]: any }) => {
+  const { user } = await fetcher(barUserQuery, variables)
+  return user
 }

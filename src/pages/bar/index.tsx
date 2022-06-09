@@ -249,7 +249,7 @@ export default function Stake() {
             <div className="mb-4">
               <div className="flex items-center justify-between w-full h-24 max-w-xl p-4 rounded md:pl-5 md:pr-7 bg-yellow bg-opacity-40">
                 <div className="flex flex-col">
-                  <div className="flex items-center justify-center mb-4 flex-nowrap md:mb-2">
+                  <div className="flex items-center mb-4 flex-nowrap md:mb-2">
                     <p className="text-sm font-bold whitespace-nowrap md:text-lg md:leading-5 text-high-emphesis">
                       {i18n._(t`Staking APY`)}{' '}
                     </p>
@@ -264,6 +264,16 @@ export default function Stake() {
                         bg-yellow hover:bg-opacity-90`}
                       >
                         {i18n._(t`View Stats`)}
+                      </a>
+                    </Link>
+                    <Link href={`/analytics/user`}>
+                      <a
+                        className={`
+                        ml-2 py-1 px-4 md:py-1.5 md:px-7 rounded
+                        text-xs md:text-sm font-medium md:font-bold text-dark-900
+                        bg-yellow hover:bg-opacity-90`}
+                      >
+                        {i18n._(t`User Stats`)}
                       </a>
                     </Link>
                   </div>
