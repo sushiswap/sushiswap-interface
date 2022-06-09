@@ -129,13 +129,25 @@ export default function Pool() {
             </div>
           </div>
           <div className="flex flex-col">
-            <div className="text-secondary">APR</div>
+            <div className="text-secondary">Reward APR</div>
             <div className="flex items-center space-x-2">
               <div className="text-xl font-medium text-high-emphesis">
                 {farm?.tvl !== 0
                   ? farm?.roiPerYear > 10000
                     ? '>10,000%'
-                    : formatPercent(farm?.roiPerYear * 100)
+                    : formatPercent(farm?.rewardAprPerYear * 100)
+                  : 'Infinite'}
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <div className="text-secondary">Fee APY</div>
+            <div className="flex items-center space-x-2">
+              <div className="text-xl font-medium text-high-emphesis">
+                {farm?.tvl !== 0
+                  ? farm?.roiPerYear > 10000
+                    ? '>10,000%'
+                    : formatPercent(farm?.feeApyPerYear * 100)
                   : 'Infinite'}
               </div>
             </div>
