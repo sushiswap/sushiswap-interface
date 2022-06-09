@@ -65,7 +65,6 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
                 <Switch
                   size="sm"
                   id="toggle-expert-mode-button"
-                  // @ts-expect-error
                   checked={expertMode}
                   onChange={
                     expertMode
@@ -94,7 +93,6 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
                   <Switch
                     size="sm"
                     id="toggle-disable-multihop-button"
-                    // @ts-expect-error
                     checked={singleHopOnly}
                     onChange={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
                     checkedIcon={<CheckIcon className="text-dark-700" />}
@@ -115,7 +113,6 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
                   <Switch
                     size="sm"
                     id="toggle-use-sushiguard"
-                    // @ts-expect-error
                     checked={userUseSushiGuard}
                     onChange={() => (userUseSushiGuard ? setUserUseSushiGuard(false) : setUserUseSushiGuard(true))}
                     checkedIcon={<CheckIcon className="text-dark-700" />}
