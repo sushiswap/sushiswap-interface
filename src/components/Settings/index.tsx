@@ -65,6 +65,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
                 <Switch
                   size="sm"
                   id="toggle-expert-mode-button"
+                  // @ts-expect-error
                   checked={expertMode}
                   onChange={
                     expertMode
@@ -93,6 +94,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
                   <Switch
                     size="sm"
                     id="toggle-disable-multihop-button"
+                    // @ts-expect-error
                     checked={singleHopOnly}
                     onChange={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
                     checkedIcon={<CheckIcon className="text-dark-700" />}
@@ -101,18 +103,19 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
                   />
                 </div>
               )}
-              {/*@ts-ignore TYPE NEEDS FIXING*/}
+              {/* // @ts-ignore TYPE NEEDS FIXING*/}
               {featureEnabled(Feature.SUSHIGUARD, chainId ?? -1) && walletSupportsSushiGuard && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <Typography variant="xs" className="text-high-emphesis" weight={700}>
-                      {i18n._(t`SushiGuard Gas Refunder`)}
+                      {i18n._(t`SushiGuard Protector`)}
                     </Typography>
-                    <QuestionHelper text={i18n._(t`SushiGuard refunds up to 95% of transaction costs in 35 blocks.`)} />
+                    <QuestionHelper text={i18n._(t`SushiGuard protects your trades from MEV, like frontrunning.`)} />
                   </div>
                   <Switch
                     size="sm"
                     id="toggle-use-sushiguard"
+                    // @ts-expect-error
                     checked={userUseSushiGuard}
                     onChange={() => (userUseSushiGuard ? setUserUseSushiGuard(false) : setUserUseSushiGuard(true))}
                     checkedIcon={<CheckIcon className="text-dark-700" />}
