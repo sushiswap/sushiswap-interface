@@ -8,13 +8,7 @@ import {
   MINICHEF_ADDRESS,
   SUSHI,
 } from '@sushiswap/core-sdk'
-import { OLD_FARMS } from 'app/config/farms'
-import {
-  useMasterChefContract,
-  useMasterChefV2Contract,
-  useMiniChefContract,
-  useOldFarmsContract,
-} from 'app/hooks/useContract'
+import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from 'app/hooks/useContract'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
 import concat from 'lodash/concat'
@@ -27,15 +21,13 @@ export function useChefContract(chef: Chef) {
   const masterChefContract = useMasterChefContract()
   const masterChefV2Contract = useMasterChefV2Contract()
   const miniChefContract = useMiniChefContract()
-  const oldFarmsContract = useOldFarmsContract()
   const contracts = useMemo(
     () => ({
       [Chef.MASTERCHEF]: masterChefContract,
       [Chef.MASTERCHEF_V2]: masterChefV2Contract,
       [Chef.MINICHEF]: miniChefContract,
-      [Chef.OLD_FARMS]: oldFarmsContract,
     }),
-    [masterChefContract, masterChefV2Contract, miniChefContract, oldFarmsContract]
+    [masterChefContract, masterChefV2Contract, miniChefContract]
   )
   return useMemo(() => {
     return contracts[chef]
@@ -46,15 +38,13 @@ export function useChefContracts(chefs: Chef[]) {
   const masterChefContract = useMasterChefContract()
   const masterChefV2Contract = useMasterChefV2Contract()
   const miniChefContract = useMiniChefContract()
-  const oldFarmsContract = useOldFarmsContract()
   const contracts = useMemo(
     () => ({
       [Chef.MASTERCHEF]: masterChefContract,
       [Chef.MASTERCHEF_V2]: masterChefV2Contract,
       [Chef.MINICHEF]: miniChefContract,
-      [Chef.OLD_FARMS]: oldFarmsContract,
     }),
-    [masterChefContract, masterChefV2Contract, miniChefContract, oldFarmsContract]
+    [masterChefContract, masterChefV2Contract, miniChefContract]
   )
   return chefs.map((chef) => contracts[chef])
 }
@@ -161,8 +151,6 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
     } else if (MINICHEF_ADDRESS[chainId] === contract.address) {
       return Chef.MINICHEF
       // @ts-ignore TYPE NEEDS FIXING
-    } else if (OLD_FARMS[chainId] === contract.address) {
-      return Chef.OLD_FARMS
     }
   }, [chainId, contract])
 
