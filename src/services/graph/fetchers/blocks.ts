@@ -1,7 +1,7 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST } from 'app/services/graph/constants'
 import { blockQuery, blocksQuery, massBlocksQuery } from 'app/services/graph/queries'
-import { getUnixTime, startOfHour, subHours } from 'date-fns'
+import { addSeconds, getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subHours } from 'date-fns'
 import { request } from 'graphql-request'
 
 export const BLOCKS = {
@@ -31,6 +31,22 @@ const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined)
 // @ts-ignore TYPE NEEDS FIXING
 export const getBlock = async (chainId = ChainId.ETHEREUM, variables) => {
   const { blocks } = await fetcher(chainId, blockQuery, variables)
+
+  return { number: Number(blocks?.[0]?.number) }
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export const getBlockDaysAgo = async (chainId = ChainId.ETHEREUM, days) => {
+  const date = startOfSecond(startOfMinute(startOfHour(subDays(Date.now(), days))))
+  const start = getUnixTime(date)
+  const end = getUnixTime(addSeconds(date, 600))
+
+  const { blocks } = await fetcher(chainId, blockQuery, {
+    where: {
+      timestamp_gt: start,
+      timestamp_lt: end,
+    },
+  } as any)
 
   return { number: Number(blocks?.[0]?.number) }
 }

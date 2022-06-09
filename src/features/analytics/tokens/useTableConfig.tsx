@@ -4,13 +4,16 @@ import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { formatNumber, formatPercent } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import React, { useMemo } from 'react'
+import { UsePaginationOptions, UseSortByOptions } from 'react-table'
+import useSWR from 'swr'
 
-import useTokensAnalytics from '../hooks/useTokensAnalytics'
 import { filterForSearchQuery } from './tokenTableFilters'
 
 export const useTableConfig = (chainId: number) => {
-  // const { data, error, isValidating } = useTokensAnalytics({ chainId })
-  const data = useTokensAnalytics({ chainId })
+  const { data } = useSWR(chainId ? `/api/analytics/tokens/${chainId}` : null, (url: string) =>
+    fetch(url).then((response) => response.json())
+  )
+
   const allTokens = useAllTokens()
   const columns = useMemo(
     () => [
@@ -83,7 +86,8 @@ export const useTableConfig = (chainId: number) => {
           ],
         },
         autoResetFilters: false,
-      },
+        autoResetPage: false,
+      } as UseSortByOptions<any> & UsePaginationOptions<any>,
       // loading: isValidating,
       // error,
     }),
