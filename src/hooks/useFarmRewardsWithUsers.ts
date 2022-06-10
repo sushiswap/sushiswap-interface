@@ -29,26 +29,45 @@ import { useCallback, useMemo } from 'react'
 
 import { useAllTokens } from './Tokens'
 
-export function getRewards(
-  chainId: ChainId,
-  pool: any,
-  pair: any,
-  allTokens: any,
-  averageBlockTime: any,
-  blocksPerDay: any,
-  masterChefV1SushiPerBlock: any,
-  masterChefV1TotalAllocPoint: any,
-  sushiPrice: any,
-  ethPrice: any,
-  maticPrice: any,
-  gnoPrice: any,
-  onePrice: any,
-  celoPrice: any,
-  fantomPrice: any,
-  movrPrice: any,
-  fusePrice: any,
+export function getRewards({
+  chainId,
+  pool,
+  pair,
+  allTokens,
+  averageBlockTime,
+  blocksPerDay,
+  masterChefV1SushiPerBlock,
+  masterChefV1TotalAllocPoint,
+  sushiPrice,
+  ethPrice,
+  maticPrice,
+  gnoPrice,
+  onePrice,
+  celoPrice,
+  fantomPrice,
+  movrPrice,
+  fusePrice,
+  glimmerPrice,
+}: {
+  chainId: ChainId
+  pool: any
+  pair: any
+  allTokens: any
+  averageBlockTime: any
+  blocksPerDay: any
+  masterChefV1SushiPerBlock: any
+  masterChefV1TotalAllocPoint: any
+  sushiPrice: any
+  ethPrice: any
+  maticPrice: any
+  gnoPrice: any
+  onePrice: any
+  celoPrice: any
+  fantomPrice: any
+  movrPrice: any
+  fusePrice: any
   glimmerPrice: any
-) {
+}) {
   // TODO: Some subgraphs give sushiPerBlock & sushiPerSecond, and mcv2 gives nothing
   const sushiPerBlock =
     pool?.owner?.sushiPerBlock / 1e18 ||
@@ -393,9 +412,7 @@ export default function useFarmRewardsWithUsers({
 
       const blocksPerHour = 3600 / averageBlockTime
 
-      const { users } = pool
-
-      const rewards = getRewards(
+      const rewards = getRewards({
         chainId,
         pool,
         pair,
@@ -413,8 +430,8 @@ export default function useFarmRewardsWithUsers({
         fantomPrice,
         movrPrice,
         fusePrice,
-        glimmerPrice
-      )
+        glimmerPrice,
+      })
 
       const balance = swapPair ? Number(pool.balance / 1e18) : pool.balance / 10 ** kashiPair.token0.decimals
 
@@ -448,6 +465,7 @@ export default function useFarmRewardsWithUsers({
 
       const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
 
+      const { users } = pool
       const newUsers = (users as any[]).map((user: any) => {
         const amount = swapPair ? Number(user.amount / 1e18) : user.amount / 10 ** kashiPair.token0.decimals
         return {

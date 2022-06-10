@@ -29,6 +29,16 @@ export const useTableConfig = (chainId: number, farms: any) => {
             monthly: farm.roiPerMonth * 100,
             annual: farm.roiPerYear * 100,
           },
+          rewardApr: {
+            daily: farm.rewardAprPerDay * 100,
+            monthly: farm.rewardAprPerMonth * 100,
+            annual: farm.rewardAprPerYear * 100,
+          },
+          feeApy: {
+            daily: farm.feeApyPerDay * 100,
+            monthly: farm.feeApyPerMonth * 100,
+            annual: farm.feeApyPerYear * 100,
+          },
         }))
     )
   }, [farms])
@@ -120,10 +130,18 @@ export const useTableConfig = (chainId: number, farms: any) => {
       },
       {
         Header: 'Reward APR',
-        accessor: 'apr.annual',
+        accessor: 'rewardApr.annual',
         minWidth: 150,
         // @ts-ignore
-        Cell: (props) => formatPercent(props.value, 'NEW'),
+        Cell: (props) => (props.value > 10000 ? '>10,000%' : formatPercent(props.value, 'NEW')),
+        align: 'right',
+      },
+      {
+        Header: 'Fee APY',
+        accessor: 'feeApy.annual',
+        minWidth: 150,
+        // @ts-ignore
+        Cell: (props) => (props.value > 10000 ? '>10,000%' : formatPercent(props.value, 'NEW')),
         align: 'right',
       },
     ],

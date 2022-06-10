@@ -63,7 +63,7 @@ export default function useFarmRewardHistories({
 
       const blocksPerHour = 3600 / averageBlockTime
 
-      const rewards = getRewards(
+      const rewards = getRewards({
         chainId,
         pool,
         pair,
@@ -81,8 +81,8 @@ export default function useFarmRewardHistories({
         fantomPrice,
         movrPrice,
         fusePrice,
-        glimmerPrice
-      )
+        glimmerPrice,
+      })
 
       const balance = swapPair ? Number(pool.balance / 1e18) : pool.balance / 10 ** kashiPair.token0.decimals
       const balanceHistory = swapPair

@@ -62,6 +62,11 @@ export const masterChefV2PoolsQuery = gql`
         id
         totalAllocPoint
       }
+      rewarder {
+        id
+        rewardToken
+        rewardPerSecond
+      }
       users(first: 1000, orderBy: "amount", orderDirection: "desc") {
         id
         address

@@ -39,7 +39,7 @@ export default function Pool() {
 
   const farms = useFarmRewardsWithUsers({ chainId, variables: { where: { pair: id } } })
 
-  const farm = farms.find((reward) => reward.pair.id === id)
+  const farm = farms.find((farm) => farm.pair.id === id)
   const farmHistories = useFarmRewardHistories({ chainId, variables: { where: { pool: farm?.id } } })
 
   // For the charts
@@ -133,7 +133,7 @@ export default function Pool() {
             <div className="flex items-center space-x-2">
               <div className="text-xl font-medium text-high-emphesis">
                 {farm?.tvl !== 0
-                  ? farm?.roiPerYear > 10000
+                  ? farm?.rewardAprPerYear > 100
                     ? '>10,000%'
                     : formatPercent(farm?.rewardAprPerYear * 100)
                   : 'Infinite'}
@@ -145,7 +145,7 @@ export default function Pool() {
             <div className="flex items-center space-x-2">
               <div className="text-xl font-medium text-high-emphesis">
                 {farm?.tvl !== 0
-                  ? farm?.roiPerYear > 10000
+                  ? farm?.feeApyPerYear > 100
                     ? '>10,000%'
                     : formatPercent(farm?.feeApyPerYear * 100)
                   : 'Infinite'}
@@ -156,16 +156,6 @@ export default function Pool() {
       </TridentHeader>
       <TridentBody>
         <div className="grid grid-cols-1 gap-4">
-          {/* <FormattedChartCard
-            format={formatPercent}
-            header="APR"
-            subheader={`${token0?.symbol}/${token1?.symbol}`}
-            figure={chartData.rewardAprPerYear}
-            change={chartData.rewardAprPerYearChange}
-            chart={chartData.rewardAprPerYearChart}
-            defaultTimespan="1M"
-            timespans={chartTimespans}
-          /> */}
           <FormattedChartCard
             header="Users"
             subheader={`${token0?.symbol}/${token1?.symbol}`}

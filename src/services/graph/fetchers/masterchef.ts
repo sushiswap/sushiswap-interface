@@ -153,7 +153,19 @@ export const getMasterChefV1Pools = async (chainId = ChainId.ETHEREUM, variables
 
 export const getMasterChefV2Pools = async (chainId = ChainId.ETHEREUM, variables: any) => {
   const { pools } = await masterChefV2(masterChefV2PoolsQuery, chainId, variables)
-  return pools
+  const tokens = await getTokenSubset(ChainId.ETHEREUM, {
+    // @ts-ignore TYPE NEEDS FIXING
+    tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
+  })
+
+  // @ts-ignore TYPE NEEDS FIXING
+  return pools.map((pool) => ({
+    ...pool,
+    rewardToken: {
+      // @ts-ignore TYPE NEEDS FIXING
+      ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+    },
+  }))
 }
 
 export const getMasterChefV1PoolHistories = async (chainId = ChainId.ETHEREUM, variables: any) => {
