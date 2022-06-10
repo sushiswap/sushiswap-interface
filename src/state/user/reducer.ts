@@ -61,6 +61,7 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
+  /** SushiGuard / OpenMEV  */
   userUseSushiGuard: true,
 }
 

@@ -26,19 +26,10 @@ export const MINICHEF = {
   [ChainId.MOONBEAM]: 'sushiswap/moonbeam-minichef',
 }
 
-export const OLD_MINICHEF = {
-  [ChainId.CELO]: 'sushiswap/celo-minichef',
-}
-
 // @ts-ignore TYPE NEEDS FIXING
 export const miniChef = async (query, chainId = ChainId.ETHEREUM, variables = undefined) =>
   // @ts-ignore TYPE NEEDS FIXING
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MINICHEF[chainId]}`, query, variables)
-
-// @ts-ignore TYPE NEEDS FIXING
-export const oldMiniChef = async (query, chainId = ChainId.ETHEREUM) =>
-  // @ts-ignore TYPE NEEDS FIXING
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${OLD_MINICHEF[chainId]}`, query)
 
 export const MASTERCHEF_V2 = {
   [ChainId.ETHEREUM]: 'sushiswap/master-chefv2',
@@ -105,11 +96,6 @@ export const getMasterChefV2PairAddreses = async () => {
   const { pools } = await masterChefV2(masterChefV2PairAddressesQuery)
   // @ts-ignore
   return pools?.map((pool) => pool.pair)
-}
-
-export const getOldMiniChefFarms = async (chainId = ChainId.ETHEREUM) => {
-  const { pools } = await oldMiniChef(miniChefPoolsQuery, chainId)
-  return pools
 }
 
 export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
