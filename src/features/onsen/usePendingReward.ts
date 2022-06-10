@@ -59,7 +59,7 @@ const usePending = (farm) => {
       cloneRewarder &&
       farm &&
       library &&
-      (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF || farm.chef === Chef.OLD_FARMS)
+      (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF)
     ) {
       fetchPendingReward()
     }

@@ -224,7 +224,7 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
 
   return (
     <Typography role="button" onClick={handleClick} variant="sm" className="flex text-secondary whitespace-nowrap">
-      {i18n._(t`Balance:`)} {balance ? balance.toSignificant(2) : '0.00'}
+      {i18n._(t`Balance:`)} {balance ? balance.toSignificant(6) : '0.00'}
     </Typography>
   )
 }

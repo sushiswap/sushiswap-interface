@@ -36,13 +36,13 @@ export function useBentoStrategies({
   shouldFetch = featureEnabled(Feature.BENTOBOX, chainId),
   swrConfig = undefined,
 }: GraphProps) {
-  const { data } = useSWR(
+  const { data } = useSWR<Awaited<ReturnType<typeof getBentoStrategies>>>(
     shouldFetch ? ['bentoStrategies', chainId, stringify(variables)] : null,
     () => getBentoStrategies(chainId, variables),
     swrConfig
   )
 
-  return data as { token: string; apy: number; targetPercentage: number; utilization: number }[]
+  return data
 }
 
 export function useBentoTokens({

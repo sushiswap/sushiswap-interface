@@ -24,7 +24,6 @@ import MISO from '@sushiswap/miso/exports/all.json'
 import ConstantProductPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/constant-product/ConstantProductPool.sol/ConstantProductPool.json'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 import { Pool, PoolType } from '@sushiswap/trident-sdk'
-import { OLD_FARMS } from 'app/config/farms'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
@@ -416,9 +415,4 @@ export function useDashboardContract(): Contract | null {
 
 export function useQuickSwapFactoryContract(): Contract | null {
   return useContract('0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32', FACTORY_ABI, false)
-}
-
-export function useOldFarmsContract(withSignerIfPossibe?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId ? OLD_FARMS[chainId] : undefined, MINICHEF_ABI, withSignerIfPossibe)
 }
