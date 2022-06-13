@@ -3,12 +3,13 @@ import { ChainId, Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
 import Typography from 'app/components/Typography'
+import UserTable from 'app/features/analytics/farms/user/UserTable'
 import FormattedChartCard from 'app/features/analytics/FormattedChartCard'
-import UserTable from 'app/features/user/UserTable'
+import useFarmRewardHistories from 'app/features/analytics/hooks/useFarmRewardHistories'
+import useFarmRewardsWithUsers from 'app/features/analytics/hooks/useFarmRewardsWithUsers'
 import { formatNumber, formatPercent } from 'app/functions'
-import useFarmRewardHistories from 'app/hooks/useFarmRewardHistories'
-import useFarmRewardsWithUsers from 'app/hooks/useFarmRewardsWithUsers'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
@@ -97,7 +98,27 @@ export default function Pool() {
             <Typography variant="h2" className="text-high-emphesis" weight={700}>
               {token0 && token1 && (
                 <>
-                  {token0?.symbol}/{token1?.symbol}
+                  <Link
+                    href={{
+                      pathname: `/analytics/tokens/${token0?.address}`,
+                      query: {
+                        chainId,
+                      },
+                    }}
+                  >
+                    {token0?.symbol}
+                  </Link>
+                  /
+                  <Link
+                    href={{
+                      pathname: `/analytics/tokens/${token1?.address}`,
+                      query: {
+                        chainId,
+                      },
+                    }}
+                  >
+                    {token1?.symbol}
+                  </Link>
                 </>
               )}
             </Typography>
@@ -115,6 +136,14 @@ export default function Pool() {
             <div className="text-secondary">TVL</div>
             <div className="flex items-center space-x-2">
               <div className="text-xl font-medium text-high-emphesis">{formatNumber(farm?.tvl ?? 0, true)}</div>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <div className="text-secondary">Value</div>
+            <div className="flex items-center space-x-2">
+              <div className="text-xl font-medium text-high-emphesis">
+                {formatNumber(farm?.pair.reserveUSD / farm?.pair.totalSupply, true)}
+              </div>
             </div>
           </div>
           <div className="flex flex-col">
