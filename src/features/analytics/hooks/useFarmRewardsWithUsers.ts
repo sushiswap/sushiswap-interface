@@ -6,6 +6,7 @@ import { Chef, PairType } from 'app/features/onsen/enum'
 import { usePositions } from 'app/features/onsen/hooks'
 import { featureEnabled } from 'app/functions'
 import { aprToApy } from 'app/functions/convert'
+import { useAllTokens } from 'app/hooks/Tokens'
 import {
   useAverageBlockTime,
   useCeloPrice,
@@ -26,8 +27,6 @@ import {
   useSushiPrice,
 } from 'app/services/graph'
 import { useCallback, useMemo } from 'react'
-
-import { useAllTokens } from './Tokens'
 
 export function getRewards({
   chainId,

@@ -154,7 +154,7 @@ export const useTableConfig = (chainId: number, farms: any) => {
         columns,
         data: data ?? [],
         initialState: {
-          sortBy: [{ id: 'apr.annual', desc: true }],
+          sortBy: [{ id: 'rewardApr.annual', desc: true }],
         },
         autoResetFilters: false,
       },
