@@ -54,14 +54,14 @@ export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables):
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getBentoBox = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getBentoBox = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
   const { bentoBoxes } = await fetcher(chainId, bentoBoxQuery, variables)
 
   return bentoBoxes[0]
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
   const { strategies } = await fetcher(chainId, bentoStrategiesQuery, variables)
 
   const SECONDS_IN_YEAR = 60 * 60 * 24 * 365
@@ -97,11 +97,11 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) 
         (Number(strategy.balance / Math.pow(10, strategy.token.decimals)) / Number(strategy.token.rebase.elastic)) *
         100,
     }
-  })
+  }) as { token: string; apy: number; targetPercentage: number; utilization: number }[]
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getBentoTokens = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getBentoTokens = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
   const { tokens } = await fetcher(chainId, bentoTokensQuery, variables)
 
   return tokens
