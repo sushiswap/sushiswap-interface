@@ -3,9 +3,12 @@ import { GRAPH_HOST } from 'app/services/graph/constants'
 import { getTokenSubset } from 'app/services/graph/fetchers/exchange'
 import {
   masterChefV1PairAddressesQuery,
+  masterChefV1PoolHistoriesQuery,
+  masterChefV1PoolsQuery,
   masterChefV1SushiPerBlockQuery,
   masterChefV1TotalAllocPointQuery,
   masterChefV2PairAddressesQuery,
+  masterChefV2PoolsQuery,
   miniChefPairAddressesQuery,
   miniChefPoolsQuery,
   miniChefPoolsQueryV2,
@@ -127,4 +130,31 @@ export const getMiniChefPairAddreses = async (chainId = ChainId.ETHEREUM) => {
   const { pools } = await miniChef(miniChefPairAddressesQuery, chainId)
   // @ts-ignore
   return pools?.map((pool) => pool.pair)
+}
+
+export const getMasterChefV1Pools = async (chainId = ChainId.ETHEREUM, variables: any) => {
+  const { pools } = await masterChefV1(masterChefV1PoolsQuery, chainId, variables)
+  return pools
+}
+
+export const getMasterChefV2Pools = async (chainId = ChainId.ETHEREUM, variables: any) => {
+  const { pools } = await masterChefV2(masterChefV2PoolsQuery, chainId, variables)
+  const tokens = await getTokenSubset(ChainId.ETHEREUM, {
+    // @ts-ignore TYPE NEEDS FIXING
+    tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
+  })
+
+  // @ts-ignore TYPE NEEDS FIXING
+  return pools.map((pool) => ({
+    ...pool,
+    rewardToken: {
+      // @ts-ignore TYPE NEEDS FIXING
+      ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+    },
+  }))
+}
+
+export const getMasterChefV1PoolHistories = async (chainId = ChainId.ETHEREUM, variables: any) => {
+  const { poolHistories } = await masterChefV1(masterChefV1PoolHistoriesQuery, chainId, variables)
+  return poolHistories
 }

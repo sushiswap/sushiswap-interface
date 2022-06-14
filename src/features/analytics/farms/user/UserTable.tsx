@@ -7,17 +7,14 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
-import Link from 'next/link'
 import React, { FC } from 'react'
 // @ts-ignore TYPE NEEDS FIXING
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
-import { SearchCategoryLabel } from './SearchCategoryLabel'
-import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
 import { useTableConfig } from './useTableConfig'
 
-const FarmTable: FC<{ chainId: number; farms: any }> = ({ chainId, farms }) => {
-  const { config } = useTableConfig(chainId, farms)
+const UserTable: FC<{ chainId: number; users: any }> = ({ chainId, users }) => {
+  const { config } = useTableConfig(chainId, users)
 
   const {
     getTableProps,
@@ -42,12 +39,9 @@ const FarmTable: FC<{ chainId: number; farms: any }> = ({ chainId, farms }) => {
     state: { pageIndex, pageSize },
     // @ts-ignore TYPE NEEDS FIXING
   } = useTable(config, useFlexLayout, useFilters, useSortBy, usePagination)
-  useInstantiateTableFeatures(setFilter)
 
   return (
     <div className="flex flex-col gap-2">
-      <SearchCategoryLabel />
-
       <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
         <table {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
@@ -84,27 +78,16 @@ const FarmTable: FC<{ chainId: number; farms: any }> = ({ chainId, farms }) => {
             {page.map((row, i) => {
               prepareRow(row)
               return (
-                <Link
-                  href={{
-                    pathname: `/analytics/farms/${row.original.pair.id}`,
-                    query: {
-                      chainId,
-                    },
-                  }}
-                  key={i}
-                  passHref
-                >
-                  <tr {...row.getRowProps()} key={i} className={TABLE_TBODY_TR_CLASSNAME}>
-                    {/*@ts-ignore TYPE NEEDS FIXING*/}
-                    {row.cells.map((cell, i) => {
-                      return (
-                        <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>
-                          {cell.render('Cell')}
-                        </td>
-                      )
-                    })}
-                  </tr>
-                </Link>
+                <tr {...row.getRowProps()} key={i} className={TABLE_TBODY_TR_CLASSNAME}>
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
+                  {row.cells.map((cell, i) => {
+                    return (
+                      <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>
+                        {cell.render('Cell')}
+                      </td>
+                    )
+                  })}
+                </tr>
               )
             })}
           </tbody>
@@ -123,4 +106,4 @@ const FarmTable: FC<{ chainId: number; farms: any }> = ({ chainId, farms }) => {
   )
 }
 
-export default FarmTable
+export default UserTable
