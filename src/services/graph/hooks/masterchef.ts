@@ -11,6 +11,7 @@ import {
   getMasterChefV2PairAddreses,
   getMasterChefV2Pools,
   getMiniChefFarms,
+  getMiniChefFarmsWithUser,
   getMiniChefPairAddreses,
 } from 'app/services/graph/fetchers'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -168,12 +169,48 @@ export function useMasterChefV2FarmsWithUsers({
   }, [data])
 }
 
+export function useMiniChefFarmsWithUser({
+  chainId,
+  variables,
+  swrConfig = undefined,
+}: {
+  chainId: ChainId
+  variables: any
+  swrConfig?: SWRConfiguration | undefined
+}) {
+  const shouldFetch =
+    chainId &&
+    [
+      ChainId.MATIC,
+      ChainId.XDAI,
+      ChainId.HARMONY,
+      ChainId.ARBITRUM,
+      ChainId.CELO,
+      ChainId.MOONRIVER,
+      ChainId.FUSE,
+      ChainId.FANTOM,
+      ChainId.MOONBEAM,
+    ].includes(chainId)
+  const { data } = useSWR(
+    shouldFetch ? ['miniChefFarmsWithUser', chainId, variables] : null,
+    (_, chainId) => getMiniChefFarmsWithUser(chainId),
+    swrConfig
+  )
+  return useMemo(() => {
+    if (!data) return []
+    // @ts-ignore TYPE NEEDS FIXING
+    return data.map((data) => ({ ...data, chef: Chef.MINICHEF }))
+  }, [data])
+}
+
 export function useFarmsWithUsers({ chainId = ChainId.ETHEREUM, variables }: { chainId: ChainId; variables: any }) {
   const masterChefV1Pools = useMasterChefV1FarmsWithUsers({ chainId, variables })
   const masterChefV2Pools = useMasterChefV2FarmsWithUsers({ chainId, variables })
+  const miniChefFarms = useMiniChefFarmsWithUser({ chainId, variables })
   return useMemo(
-    () => concat(masterChefV1Pools ?? [], masterChefV2Pools ?? []).filter((pool) => pool && pool.pair),
-    [masterChefV1Pools, masterChefV2Pools]
+    () =>
+      concat(masterChefV1Pools ?? [], masterChefV2Pools ?? [], miniChefFarms ?? []).filter((pool) => pool && pool.pair),
+    [masterChefV1Pools, masterChefV2Pools, miniChefFarms]
   )
 }
 

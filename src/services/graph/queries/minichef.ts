@@ -79,3 +79,80 @@ export const miniChefPairAddressesQuery = gql`
     }
   }
 `
+
+export const miniChefPoolsWithUserQuery = gql`
+  query miniChefPoolsQuery(
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $orderBy: String! = "id"
+    $orderDirection: String! = "desc"
+    $block: Block_height
+  ) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, block: $block) {
+      id
+      pair
+      rewarder {
+        id
+        rewardToken
+        rewardPerSecond
+      }
+      allocPoint
+      lastRewardTime
+      accSushiPerShare
+      slpBalance
+      userCount
+      miniChef {
+        id
+        sushiPerSecond
+        totalAllocPoint
+      }
+      users(first: 1000, orderBy: "amount", orderDirection: "desc") {
+        id
+        address
+        amount
+        block
+        rewardDebt
+        sushiHarvested
+      }
+    }
+  }
+`
+
+export const miniChefPoolsWithUserQueryV2 = gql`
+  query miniChefPoolsQuery(
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $orderBy: String! = "id"
+    $orderDirection: String! = "desc"
+    $block: Block_height
+  ) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, block: $block) {
+      id
+      pair
+      rewarder {
+        id
+        rewardToken
+        rewardPerSecond
+        totalAllocPoint
+      }
+      allocPoint
+      lastRewardTime
+      accSushiPerShare
+      slpBalance
+      userCount
+      miniChef {
+        id
+        sushiPerSecond
+        totalAllocPoint
+      }
+      users(first: 1000, orderBy: "amount", orderDirection: "desc") {
+        id
+        address
+        amount
+        block
+        rewardDebt
+        sushiHarvested
+      }
+    }
+  }
+`

@@ -12,6 +12,8 @@ import {
   miniChefPairAddressesQuery,
   miniChefPoolsQuery,
   miniChefPoolsQueryV2,
+  miniChefPoolsWithUserQuery,
+  miniChefPoolsWithUserQueryV2,
   poolsQuery,
   poolsV2Query,
 } from 'app/services/graph/queries'
@@ -152,6 +154,30 @@ export const getMasterChefV2Pools = async (chainId = ChainId.ETHEREUM, variables
       ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
     },
   }))
+}
+
+export const getMiniChefFarmsWithUser = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
+  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM].includes(chainId)
+
+  if (v2Query) {
+    const { pools } = await miniChef(miniChefPoolsWithUserQueryV2, chainId, variables)
+    const tokens = await getTokenSubset(chainId, {
+      // @ts-ignore TYPE NEEDS FIXING
+      tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
+    })
+
+    // @ts-ignore TYPE NEEDS FIXING
+    return pools.map((pool) => ({
+      ...pool,
+      rewardToken: {
+        // @ts-ignore TYPE NEEDS FIXING
+        ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+      },
+    }))
+  } else {
+    const { pools } = await miniChef(miniChefPoolsWithUserQuery, chainId, variables)
+    return pools
+  }
 }
 
 export const getMasterChefV1PoolHistories = async (chainId = ChainId.ETHEREUM, variables: any) => {
