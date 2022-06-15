@@ -10,7 +10,6 @@ import {
   setPriorityFee,
   setRecipient,
   setSushiRelayChallenge,
-  // setMaxPriorityFee,
   switchCurrencies,
   typeInput,
 } from './actions'
@@ -29,14 +28,7 @@ export interface SwapState {
   readonly sushiRelayChallenge?: string
   readonly maxFee?: string | BigNumber | null
   readonly maxPriorityFee?: string | BigNumber | null
-  //  readonly maxPriorityFeePerGas: null | BigNumber;
 }
-/**
-  readonly maxFeePerGas: null | BigNumber;
-  readonly baseFeePerGas?: null | BigNumber;
-  readonly maxPriorityFeePerGas: null | BigNumber;
-  readonly gasPrice: null | BigNumber
- */
 
 /**
  * @interface SwapState
@@ -47,7 +39,6 @@ export interface SwapState {
  * @param maxFee
  * @param maxPriorityFee
  */
-
 const initialState: SwapState = {
   independentField: Field.INPUT,
   typedValue: '',
@@ -60,15 +51,14 @@ const initialState: SwapState = {
   recipient: undefined,
   sushiRelayChallenge: undefined,
   maxFee: undefined,
-
-  maxPriorityFee: BigNumber.from('1750000000') ?? undefined,
+ /** 
+  * @param maxPriorityFee
+  * @summary maxPriorityFee is adjusted to account for MEV bundle pricing
+  * @see {@link https://docs.openmev.org/technical-reference/maxPriorityFee#overview} 
+  */
+  maxPriorityFee: BigNumber.from('1650000000') ?? undefined,
 }
 
-/** 
-   const _maxFeePerGas = expertMode && maxFee ? BigNumber.from(maxFee) : maxFeePerGas
-  const _maxPriorityFee =
-  expertMode && maxPriorityFee ? BigNumber.from(maxPriorityFee) : maxPriorityFeePerGas
- */
 export default createReducer<SwapState>(initialState, (builder) =>
   builder
     .addCase(
