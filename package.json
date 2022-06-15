@@ -99,7 +99,7 @@
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
     "@sushiswap/core-sdk": "1.0.0-canary.108",
-    "@sushiswap/kashi-sdk": "1.0.0-canary.80",
+    "@sushiswap/kashi-sdk": "1.0.0-canary.87",
     "@sushiswap/limit-order-pair-list": "0.2.17",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.89",
     "@sushiswap/miso": "1.0.0-canary.47",
