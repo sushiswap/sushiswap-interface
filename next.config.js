@@ -74,11 +74,6 @@ const nextConfig = {
         destination: '/farm',
         permanent: true,
       },
-      {
-        source: '/analytics',
-        destination: '/analytics/dashboard',
-        permanent: true,
-      },
     ]
   },
   async rewrites() {
