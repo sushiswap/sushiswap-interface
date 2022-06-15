@@ -275,6 +275,16 @@ const useMenu: UseMenu = () => {
           title: 'Pools',
           link: `/analytics/pools`,
         },
+        {
+          key: 'kashi',
+          title: 'Kashi Pairs',
+          link: `/analytics/kashi/pairs`,
+        },
+        {
+          key: 'kashi',
+          title: 'Kashi Tokens',
+          link: `/analytics/kashi/tokens`,
+        },
       ],
     }
 

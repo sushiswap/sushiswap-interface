@@ -58,3 +58,50 @@ export const kashiPairsQuery = gql`
   }
   ${kashiPairFieldsQuery}
 `
+
+export const kashiPairDayDatasQuery = gql`
+  query kashiPairDayDatas($first: Int = 1000, $skip: Int) {
+    kashiPairDayDatas(first: 1000, skip: $skip, orderBy: "date", orderDirection: "desc") {
+      id
+      date
+      pair {
+        id
+        # bentoBox
+        type
+        masterContract
+        owner
+        feeTo
+        name
+        symbol
+        oracle
+        asset
+        collateral
+        exchangeRate
+        totalAssetElastic
+        totalAssetBase
+        totalCollateralShare
+        totalBorrowElastic
+        totalBorrowBase
+        interestPerSecond
+        utilization
+        feesEarnedFraction
+        totalFeesEarnedFraction
+        lastAccrued
+        supplyAPR
+        borrowAPR
+        # transactions
+        # users
+        block
+        timestamp
+      }
+      totalAssetElastic
+      totalAssetBase
+      totalCollateralShare
+      totalBorrowElastic
+      totalBorrowBase
+      avgExchangeRate
+      avgUtilization
+      avgInterestPerSecond
+    }
+  }
+`
