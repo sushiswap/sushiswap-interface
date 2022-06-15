@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
 import {
   Field,
@@ -9,6 +10,7 @@ import {
   setPriorityFee,
   setRecipient,
   setSushiRelayChallenge,
+  // setMaxPriorityFee,
   switchCurrencies,
   typeInput,
 } from './actions'
@@ -25,9 +27,26 @@ export interface SwapState {
   // the typed recipient address or ENS name, or null if swap should go to sender
   readonly recipient?: string
   readonly sushiRelayChallenge?: string
-  readonly maxFee?: string
-  readonly maxPriorityFee?: string
+  readonly maxFee?: string | BigNumber | null
+  readonly maxPriorityFee?: string | BigNumber | null
+  //  readonly maxPriorityFeePerGas: null | BigNumber;
 }
+/**
+  readonly maxFeePerGas: null | BigNumber;
+  readonly baseFeePerGas?: null | BigNumber;
+  readonly maxPriorityFeePerGas: null | BigNumber;
+  readonly gasPrice: null | BigNumber
+ */
+
+/**
+ * @interface SwapState
+ *
+ * @const {initialState}
+ * @param recipient
+ * @param sushiRelayChallenge
+ * @param maxFee
+ * @param maxPriorityFee
+ */
 
 const initialState: SwapState = {
   independentField: Field.INPUT,
@@ -41,9 +60,15 @@ const initialState: SwapState = {
   recipient: undefined,
   sushiRelayChallenge: undefined,
   maxFee: undefined,
-  maxPriorityFee: undefined,
+
+  maxPriorityFee: BigNumber.from('1750000000') ?? undefined,
 }
 
+/** 
+   const _maxFeePerGas = expertMode && maxFee ? BigNumber.from(maxFee) : maxFeePerGas
+  const _maxPriorityFee =
+  expertMode && maxPriorityFee ? BigNumber.from(maxPriorityFee) : maxPriorityFeePerGas
+ */
 export default createReducer<SwapState>(initialState, (builder) =>
   builder
     .addCase(
@@ -57,7 +82,7 @@ export default createReducer<SwapState>(initialState, (builder) =>
             currencyId: outputCurrencyId,
           },
           independentField: field,
-          typedValue: typedValue,
+          typedValue,
           recipient,
         }
       }
@@ -65,21 +90,17 @@ export default createReducer<SwapState>(initialState, (builder) =>
     .addCase(selectCurrency, (state, { payload: { currencyId, field } }) => {
       const otherField = field === Field.INPUT ? Field.OUTPUT : Field.INPUT
       // console.log({ currencyId, other: state[otherField].currencyId, test: state[otherField].currencyId }, currencyId === state[otherField].currencyId)
-      if (currencyId === state[otherField].currencyId) {
-        // the case where we have to swap the order
-        return {
-          ...state,
-          independentField: state.independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT,
-          [field]: { currencyId: currencyId },
-          [otherField]: { currencyId: state[field].currencyId },
-        }
-      } else {
-        // the normal case
-        return {
-          ...state,
-          [field]: { currencyId: currencyId },
-        }
-      }
+      return currencyId === state[otherField].currencyId
+        ? {
+            ...state,
+            independentField: state.independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT,
+            [field]: { currencyId: currencyId },
+            [otherField]: { currencyId: state[field].currencyId },
+          }
+        : {
+            ...state,
+            [field]: { currencyId },
+          }
     })
     .addCase(switchCurrencies, (state) => {
       return {
