@@ -1,5 +1,5 @@
-import { createReducer } from '@reduxjs/toolkit'
 import { BigNumber } from '@ethersproject/bignumber'
+import { createReducer } from '@reduxjs/toolkit'
 
 import {
   Field,
@@ -51,11 +51,11 @@ const initialState: SwapState = {
   recipient: undefined,
   sushiRelayChallenge: undefined,
   maxFee: undefined,
- /** 
-  * @param maxPriorityFee
-  * @summary maxPriorityFee is adjusted to account for MEV bundle pricing
-  * @see {@link https://docs.openmev.org/technical-reference/maxPriorityFee#overview} 
-  */
+  /**
+   * @param maxPriorityFee
+   * @summary maxPriorityFee is adjusted to account for MEV bundle pricing
+   * @see {@link https://docs.openmev.org/technical-reference/maxPriorityFee#overview}
+   */
   maxPriorityFee: BigNumber.from('1650000000') ?? undefined,
 }
 
