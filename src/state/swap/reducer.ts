@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { BigNumber } from '@ethersproject/bignumber'
 
 import {
   Field,
