@@ -20,7 +20,7 @@ import {
 } from 'app/services/graph'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { ExternalLink as LinkIcon } from 'react-feather'
 const chartTimespans = [
   {
@@ -80,6 +80,10 @@ export default function TokenPage() {
   const volumeUSD2d = token1d?.volumeUSD - token2d?.volumeUSD
   const volumeUSD1dChange = (volumeUSD1d / volumeUSD2d) * 100 - 100
 
+  const priceUSD1d = token?.priceUSD - token1d?.priceUSD
+  const priceUSD2d = token1d?.priceUSD - token2d?.priceUSD
+  const priceUSD1dChange = (priceUSD1d / priceUSD2d) * 100 - 100
+
   // The Chart
   const tokenDayData = useTokenDayData({
     chainId,
@@ -100,6 +104,12 @@ export default function TokenPage() {
         ?.sort((a, b) => a.date - b.date)
         /* @ts-ignore TYPE NEEDS FIXING */
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
+
+      priceChart: tokenDayData
+        /* @ts-ignore TYPE NEEDS FIXING */
+        ?.sort((a, b) => a.date - b.date)
+        /* @ts-ignore TYPE NEEDS FIXING */
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.priceUSD) })),
     }),
     [tokenDayData]
   )
@@ -167,6 +177,17 @@ export default function TokenPage() {
               figure={volumeUSD1d}
               change={volumeUSD1dChange}
               chart={chartData.volumeChart}
+              defaultTimespan="1W"
+              timespans={chartTimespans}
+            />
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+            <ChartCard
+              header="Price"
+              subheader={token?.symbol}
+              figure={priceUSD1d}
+              change={priceUSD1dChange}
+              chart={chartData.priceChart}
               defaultTimespan="1W"
               timespans={chartTimespans}
             />
