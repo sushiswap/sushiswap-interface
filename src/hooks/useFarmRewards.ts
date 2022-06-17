@@ -28,6 +28,7 @@ import {
   useSushiPairs,
   useSushiPrice,
 } from 'app/services/graph'
+import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
 import { useCallback, useMemo } from 'react'
 
 import { useAllTokens } from './Tokens'
@@ -48,6 +49,21 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
     },
     shouldFetch: !!farmAddresses,
   })
+
+  console.log('farms here')
+  console.log(farms)
+
+  // new
+  const { data, error, isValidating } = useGetAllTridentPools({ chainId })
+
+  console.log(data)
+
+  const tridentPairs = data?.filter((pool) => {
+    return farmAddresses.includes(pool.address)
+  })
+
+  console.log('test initial trident pairs')
+  console.log(tridentPairs)
 
   const { data: swapPairs1d } = useSushiPairs({
     chainId,
@@ -90,6 +106,11 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
   const map = useCallback(
     // @ts-ignore TYPE NEEDS FIXING
     (pool) => {
+      console.log('yoooooooo')
+      console.log(pool)
+      console.log('tridentPairsyoo')
+      console.log(tridentPairs)
+
       // TODO: Deal with inconsistencies between properties on subgraph
       pool.owner = pool?.owner || pool?.masterChef || pool?.miniChef
       pool.balance = pool?.balance || pool?.slpBalance
@@ -100,15 +121,23 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       const swapPair1d = swapPairs1d?.find((pair) => pair.id === pool.pair)
       // @ts-ignore TYPE NEEDS FIXING
       const kashiPair = kashiPairs?.find((pair) => pair.id === pool.pair)
+      // @ts-ignore TYPE NEEDS FIXING
+      const tridentPair = tridentPairs?.find((pair) => pair.address === pool.pair)
 
-      const pair = swapPair || kashiPair
+      const pair = swapPair || kashiPair || tridentPair
 
-      const type = swapPair ? PairType.SWAP : PairType.KASHI
+      console.log('test pairs')
+      console.log(tridentPair)
+      console.log(pair)
+
+      const type = swapPair ? PairType.SWAP : tridentPair ? PairType.TRIDENT : PairType.KASHI
+      console.log(type)
 
       const blocksPerHour = 3600 / averageBlockTime
 
       function getRewards() {
         // TODO: Some subgraphs give sushiPerBlock & sushiPerSecond, and mcv2 gives nothing
+        console.log('rewarddsssss')
         const sushiPerBlock =
           pool?.owner?.sushiPerBlock / 1e18 ||
           (pool?.owner?.sushiPerSecond / 1e18) * averageBlockTime ||
@@ -247,6 +276,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               rewardPerDay: rewardPerSecond * 86400,
               rewardPrice: glimmerPrice,
             },
+            [ChainId.KAVA]: {
+              currency: NATIVE[ChainId.KAVA],
+              rewardPerBlock,
+              rewardPerDay: rewardPerSecond * 86400,
+              rewardPrice: 1, //todo: need handle this
+            },
           }
 
           if (chainId === ChainId.FUSE) {
@@ -299,11 +334,19 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
       const rewards = getRewards()
 
-      const balance = swapPair ? Number(pool.balance / 1e18) : pool.balance / 10 ** kashiPair.token0.decimals
+      const balance = kashiPair ? pool.balance / 10 ** kashiPair.token0.decimals : Number(pool.balance / 1e18)
 
-      const tvl = swapPair
+      const tvl = kashiPair
+        ? balance * kashiPair.token0.derivedETH * ethPrice
+        : swapPair
         ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
-        : balance * kashiPair.token0.derivedETH * ethPrice
+        : (balance / Number(tridentPair?.liquidity)) * Number(tridentPair?.liquidityUSD)
+
+      console.log('BALaenedlksCheck8888888')
+      console.log(balance)
+      console.log(tvl)
+      console.log(pool.balance)
+      console.log(pool)
 
       const feeApyPerYear =
         swapPair && swapPair1d
@@ -331,6 +374,22 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
       const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
 
+      if (type === PairType.TRIDENT) {
+        pair.id = pair.address
+        pair.token0 = {
+          id: pair.assets[0].tokenInfo.address,
+          name: pair.assets[0].tokenInfo.name,
+          symbol: pair.assets[0].tokenInfo.symbol,
+          decimals: pair.assets[0].tokenInfo.decimals,
+        }
+        pair.token1 = {
+          id: pair.assets[1].tokenInfo.address,
+          name: pair.assets[1].tokenInfo.name,
+          symbol: pair.assets[1].tokenInfo.symbol,
+          decimals: pair.assets[1].tokenInfo.decimals,
+        }
+      }
+
       return {
         ...pool,
         ...position,
@@ -355,6 +414,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
         roiPerYear,
         rewards,
         tvl,
+        chainId,
       }
     },
     [
@@ -378,6 +438,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       sushiPrice,
       swapPairs,
       swapPairs1d,
+      tridentPairs,
     ]
   )
 
@@ -387,10 +448,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
         // @ts-ignore TYPE NEEDS FIXING
         (swapPairs && swapPairs.find((pair) => pair.id === farm.pair)) ||
         // @ts-ignore TYPE NEEDS FIXING
-        (kashiPairs && kashiPairs.find((pair) => pair.id === farm.pair))
+        (kashiPairs && kashiPairs.find((pair) => pair.id === farm.pair)) ||
+        // @ts-ignore TYPE NEEDS FIXING
+        (tridentPairs && tridentPairs.find((pair) => pair.address === farm.pair))
       )
     },
-    [kashiPairs, swapPairs]
+    [kashiPairs, swapPairs, tridentPairs]
   )
 
   return useMemo(() => farms.filter(filter).map(map), [farms, filter, map])

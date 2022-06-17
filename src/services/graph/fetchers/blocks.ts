@@ -20,6 +20,7 @@ export const BLOCKS = {
   [ChainId.FUSE]: 'sushiswap/fuse-blocks',
   [ChainId.KOVAN]: 'blocklytics/kovan-blocks',
   [ChainId.MOONBEAM]: 'sushiswap/moonbeam-blocks',
+  [ChainId.KAVA]: 'sushiswap/kava-blocks', // deploy kava blocks subgraph
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -79,6 +80,8 @@ export const getAverageBlockTime = async (chainId = ChainId.ETHEREUM) => {
       timestamp_lt: getUnixTime(now),
     },
   })
+
+  console.log(blocks)
 
   const averageBlockTime = blocks?.reduce(
     // @ts-ignore TYPE NEEDS FIXING
