@@ -203,7 +203,11 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
           {numeral(
             BigNumber.from(data?.totalAssetElastic)
               .add(BigNumber.from(data.totalBorrowElastic))
-              .div(BigNumber.from('10').pow(Number(data.asset?.decimals || 0) - 2))
+              .div(
+                BigNumber.from('10').pow(
+                  Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
+                )
+              )
               .toNumber() / 100
           ).format('0,.00')}
           &nbsp;
@@ -217,7 +221,11 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
         <div className="text-xs text-gray-400">
           {numeral(
             BigNumber.from(data?.totalAssetElastic)
-              .div(BigNumber.from('10').pow(Number(data.asset?.decimals || 0) - 2))
+              .div(
+                BigNumber.from('10').pow(
+                  Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
+                )
+              )
               .toNumber() / 100
           ).format('0,.00')}
           &nbsp;
@@ -238,7 +246,11 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
         <div className="text-xs text-gray-400">
           {numeral(
             BigNumber.from(data?.totalBorrowElastic)
-              .div(BigNumber.from('10').pow(Number(data.asset?.decimals || 0) - 2))
+              .div(
+                BigNumber.from('10').pow(
+                  Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
+                )
+              )
               .toNumber() / 100
           ).format('0,.00')}
           &nbsp;
