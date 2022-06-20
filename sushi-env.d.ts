@@ -20,6 +20,7 @@ declare global {
       removeAllListeners?: (...args: any[]) => void
       autoRefreshOnNetworkChange?: boolean
     }
+    gamestop?: any
     web3?: Record<string, unknown>
   }
 }
