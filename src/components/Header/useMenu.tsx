@@ -294,6 +294,14 @@ const useMenu: UseMenu = () => {
       })
     }
 
+    if (featureEnabled(Feature.TRIDENT, chainId)) {
+      analyticsMenu.items.push({
+        key: 'trident',
+        title: 'Trident',
+        link: `/analytics/trident`,
+      })
+    }
+
     if (featureEnabled(Feature.ANALYTICS, chainId)) {
       menu.push(analyticsMenu)
     }
