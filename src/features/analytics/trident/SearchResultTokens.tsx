@@ -1,5 +1,4 @@
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import {
   TABLE_TABLE_CLASSNAME,
@@ -8,24 +7,20 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
-import { PoolSortOption } from 'app/features/trident/pools/poolsSlice'
-import { SearchCategoryLabel } from 'app/features/trident/pools/SearchCategoryLabel'
-import { useInstantiateTableFeatures } from 'app/features/trident/pools/useInstantiateTableFeatures'
-import { DiscoverPoolsTableColumn, usePoolsTableData } from 'app/features/trident/pools/usePoolsTableData'
 import Link from 'next/link'
 import React, { FC } from 'react'
 // @ts-ignore TYPE NEEDS FIXING
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
-export const sortTitleMapper: Record<PoolSortOption, DiscoverPoolsTableColumn['accessor']> = {
-  [PoolSortOption.TVL]: 'liquidityUSD',
-  [PoolSortOption.VOLUME]: 'volumeUSD',
-  // [PoolSortOption.APY]: 'apy',
-}
+import { SearchCategoryLabel } from '../tokens/SearchCategoryLabel'
+import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
+import { useTokensTableConfig } from './useTokensTableConfig'
 
-const SearchResultPools: FC = () => {
-  const { i18n } = useLingui()
-  const { config, loading, error } = usePoolsTableData()
+const SearchResultTokens: FC<{ chainId: number }> = ({ chainId }) => {
+  const { config } = useTokensTableConfig(chainId)
+
+  console.log('token config', config)
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -44,13 +39,13 @@ const SearchResultPools: FC = () => {
     // @ts-ignore TYPE NEEDS FIXING
     setFilter,
     // @ts-ignore TYPE NEEDS FIXING
-    toggleSortBy,
+    // toggleSortBy,
     // @ts-ignore TYPE NEEDS FIXING
     state: { pageIndex, pageSize },
     // @ts-ignore TYPE NEEDS FIXING
   } = useTable(config, useFlexLayout, useFilters, useSortBy, useFlexLayout, usePagination)
-  useInstantiateTableFeatures(setFilter, toggleSortBy)
-
+  useInstantiateTableFeatures(setFilter)
+  console.log('tokens', page)
   return (
     <div className="flex flex-col gap-2">
       <SearchCategoryLabel />
@@ -61,21 +56,25 @@ const SearchResultPools: FC = () => {
               <tr {...headerGroup.getHeaderGroupProps()} key={i}>
                 {headerGroup.headers.map((column, i) => (
                   <th
-                    {...column.getHeaderProps()}
+                    // @ts-ignore TYPE NEEDS FIXING
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
                     key={i}
                     className={TABLE_TR_TH_CLASSNAME(i, headerGroup.headers.length)}
                   >
                     {column.render('Header')}
-                    {i === 0 && (
-                      <>
-                        <div
-                          className={`animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue inline-block ml-3 transition ${
-                            loading ? 'opacity-100' : 'opacity-0'
-                          }`}
-                        />
-                        {error && <span className="ml-2 text-sm italic text-red">{i18n._(t`⚠️ Loading Error`)}</span>}
-                      </>
-                    )}
+                    <span className="inline-block ml-1 align-middle">
+                      {/*@ts-ignore TYPE NEEDS FIXING*/}
+                      {column.isSorted ? (
+                        // @ts-ignore TYPE NEEDS FIXING
+                        column.isSortedDesc ? (
+                          <ArrowDownIcon width={12} />
+                        ) : (
+                          <ArrowUpIcon width={12} />
+                        )
+                      ) : (
+                        ''
+                      )}
+                    </span>
                   </th>
                 ))}
               </tr>
@@ -84,23 +83,20 @@ const SearchResultPools: FC = () => {
           <tbody {...getTableBodyProps()}>
             {/*@ts-ignore TYPE NEEDS FIXING*/}
             {page.map((row, i) => {
+              console.log(row)
               prepareRow(row)
-
               return (
                 <Link
                   href={{
-                    pathname: `/analytics/trident/token`,
+                    pathname: `/analytics/trident/tokens/${row.original.id}`,
                     query: {
-                      // @ts-ignore TYPE NEEDS FIXING
-                      tokens: row.original.assets.map((asset) => asset.address),
-                      fee: row.original.swapFee,
-                      twap: row.original.twapEnabled,
+                      chainId,
                     },
                   }}
                   key={i}
                   passHref
                 >
-                  <tr {...row.getRowProps()} className={TABLE_TBODY_TR_CLASSNAME}>
+                  <tr {...row.getRowProps()} key={i} className={TABLE_TBODY_TR_CLASSNAME}>
                     {/*@ts-ignore TYPE NEEDS FIXING*/}
                     {row.cells.map((cell, i) => {
                       return (
@@ -123,10 +119,10 @@ const SearchResultPools: FC = () => {
         gotoPage={gotoPage}
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}
-        loading={loading}
+        loading={!rows.length}
       />
     </div>
   )
 }
 
-export default SearchResultPools
+export default SearchResultTokens

@@ -90,6 +90,7 @@ export const getTridentTokens = async (
 ) => {
   // @ts-ignore TYPE NEEDS FIXING
   const { tokens }: TridentTokenQueryResult = await fetcher(chainId, getTridentTokensQuery, variables)
+  console.log('getTokens', tokens)
   return tokens.map((token) => ({
     id: token.id,
     price: {

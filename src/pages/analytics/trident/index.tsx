@@ -1,10 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import TokenSearch from 'app/features/analytics/tokens/TokenSearch'
 import SearchResultPools from 'app/features/analytics/trident/SearchResultPools'
+import SearchResultTokens from 'app/features/analytics/trident/SearchResultTokens'
 import { PoolSearch } from 'app/features/trident/pools/PoolSearch'
 import { PoolSort } from 'app/features/trident/pools/PoolSort'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 
 const chartTimespans = [
@@ -28,6 +31,8 @@ const chartTimespans = [
 
 function Analytics() {
   const { i18n } = useLingui()
+  const router = useRouter()
+  const chainId = Number(router.query.chainId)
 
   return (
     <>
@@ -48,13 +53,17 @@ function Analytics() {
           <div className="text-2xl font-bold text-high-emphesis">Overview</div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2"></div>
           <div className="flex w-full">
-            <div className="flex flex-col w-full gap-10">
+            <div className="flex flex-col w-full gap-5">
               <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
                 <PoolSearch />
                 <PoolSort />
               </div>
               <SearchResultPools />
             </div>
+          </div>
+          <div className="flex flex-col w-full gap-5">
+            <TokenSearch />
+            <SearchResultTokens chainId={chainId} />
           </div>
         </div>
       </TridentBody>

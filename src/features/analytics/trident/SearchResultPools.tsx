@@ -50,7 +50,7 @@ const SearchResultPools: FC = () => {
     // @ts-ignore TYPE NEEDS FIXING
   } = useTable(config, useFlexLayout, useFilters, useSortBy, useFlexLayout, usePagination)
   useInstantiateTableFeatures(setFilter, toggleSortBy)
-
+  console.log('pools', page)
   return (
     <div className="flex flex-col gap-2">
       <SearchCategoryLabel />
