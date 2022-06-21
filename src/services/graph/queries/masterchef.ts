@@ -60,3 +60,65 @@ export const masterChefV1SushiPerBlockQuery = gql`
     }
   }
 `
+
+export const masterChefV1PoolsQuery = gql`
+  query masterChefV1Pools(
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $where: Pool_filter!
+    $orderBy: String! = "id"
+    $orderDirection: String! = "desc"
+  ) {
+    pools(first: $first, skip: $skip, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+      id
+      allocPoint
+      accSushiPerShare
+      pair
+      balance
+      userCount
+      owner {
+        id
+        sushiPerBlock
+        totalAllocPoint
+      }
+      users(first: 1000, orderBy: "amount", orderDirection: "desc") {
+        id
+        address
+        amount
+        block
+        rewardDebt
+        sushiHarvested
+      }
+    }
+  }
+`
+
+export const masterChefV1PoolHistoriesQuery = gql`
+  query masterChefV1PoolHistories(
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $where: PoolHistory_filter!
+    $orderBy: String! = "timestamp"
+    $orderDirection: String! = "desc"
+  ) {
+    poolHistories(first: $first, skip: $skip, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+      id
+      slpBalance
+      userCount
+      timestamp
+      pool {
+        id
+        allocPoint
+        accSushiPerShare
+        pair
+        balance
+        userCount
+        owner {
+          id
+          sushiPerBlock
+          totalAllocPoint
+        }
+      }
+    }
+  }
+`

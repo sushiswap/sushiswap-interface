@@ -55,6 +55,7 @@ const features: FeatureMap = {
     Feature.LIMIT_ORDERS,
     Feature.STOP_LOSSES,
     Feature.TRIDENT,
+    Feature.TRIDENT_MIGRATION,
     Feature.MISO,
   ],
   [ChainId.MATIC_TESTNET]: [Feature.AMM],

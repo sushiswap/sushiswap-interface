@@ -3,12 +3,17 @@ import { GRAPH_HOST } from 'app/services/graph/constants'
 import { getTokenSubset } from 'app/services/graph/fetchers/exchange'
 import {
   masterChefV1PairAddressesQuery,
+  masterChefV1PoolHistoriesQuery,
+  masterChefV1PoolsQuery,
   masterChefV1SushiPerBlockQuery,
   masterChefV1TotalAllocPointQuery,
   masterChefV2PairAddressesQuery,
+  masterChefV2PoolsQuery,
   miniChefPairAddressesQuery,
   miniChefPoolsQuery,
   miniChefPoolsQueryV2,
+  miniChefPoolsWithUserQuery,
+  miniChefPoolsWithUserQueryV2,
   poolsQuery,
   poolsV2Query,
 } from 'app/services/graph/queries'
@@ -26,19 +31,10 @@ export const MINICHEF = {
   [ChainId.MOONBEAM]: 'sushiswap/moonbeam-minichef',
 }
 
-export const OLD_MINICHEF = {
-  [ChainId.CELO]: 'sushiswap/celo-minichef',
-}
-
 // @ts-ignore TYPE NEEDS FIXING
 export const miniChef = async (query, chainId = ChainId.ETHEREUM, variables = undefined) =>
   // @ts-ignore TYPE NEEDS FIXING
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MINICHEF[chainId]}`, query, variables)
-
-// @ts-ignore TYPE NEEDS FIXING
-export const oldMiniChef = async (query, chainId = ChainId.ETHEREUM) =>
-  // @ts-ignore TYPE NEEDS FIXING
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${OLD_MINICHEF[chainId]}`, query)
 
 export const MASTERCHEF_V2 = {
   [ChainId.ETHEREUM]: 'sushiswap/master-chefv2',
@@ -107,11 +103,6 @@ export const getMasterChefV2PairAddreses = async () => {
   return pools?.map((pool) => pool.pair)
 }
 
-export const getOldMiniChefFarms = async (chainId = ChainId.ETHEREUM) => {
-  const { pools } = await oldMiniChef(miniChefPoolsQuery, chainId)
-  return pools
-}
-
 export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM].includes(chainId)
 
@@ -141,4 +132,55 @@ export const getMiniChefPairAddreses = async (chainId = ChainId.ETHEREUM) => {
   const { pools } = await miniChef(miniChefPairAddressesQuery, chainId)
   // @ts-ignore
   return pools?.map((pool) => pool.pair)
+}
+
+export const getMasterChefV1Pools = async (chainId = ChainId.ETHEREUM, variables: any) => {
+  const { pools } = await masterChefV1(masterChefV1PoolsQuery, chainId, variables)
+  return pools
+}
+
+export const getMasterChefV2Pools = async (chainId = ChainId.ETHEREUM, variables: any) => {
+  const { pools } = await masterChefV2(masterChefV2PoolsQuery, chainId, variables)
+  const tokens = await getTokenSubset(ChainId.ETHEREUM, {
+    // @ts-ignore TYPE NEEDS FIXING
+    tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
+  })
+
+  // @ts-ignore TYPE NEEDS FIXING
+  return pools.map((pool) => ({
+    ...pool,
+    rewardToken: {
+      // @ts-ignore TYPE NEEDS FIXING
+      ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+    },
+  }))
+}
+
+export const getMiniChefFarmsWithUser = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
+  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM].includes(chainId)
+
+  if (v2Query) {
+    const { pools } = await miniChef(miniChefPoolsWithUserQueryV2, chainId, variables)
+    const tokens = await getTokenSubset(chainId, {
+      // @ts-ignore TYPE NEEDS FIXING
+      tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
+    })
+
+    // @ts-ignore TYPE NEEDS FIXING
+    return pools.map((pool) => ({
+      ...pool,
+      rewardToken: {
+        // @ts-ignore TYPE NEEDS FIXING
+        ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+      },
+    }))
+  } else {
+    const { pools } = await miniChef(miniChefPoolsWithUserQuery, chainId, variables)
+    return pools
+  }
+}
+
+export const getMasterChefV1PoolHistories = async (chainId = ChainId.ETHEREUM, variables: any) => {
+  const { poolHistories } = await masterChefV1(masterChefV1PoolHistoriesQuery, chainId, variables)
+  return poolHistories
 }

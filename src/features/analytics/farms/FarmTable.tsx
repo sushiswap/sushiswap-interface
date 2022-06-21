@@ -86,7 +86,7 @@ const FarmTable: FC<{ chainId: number; farms: any }> = ({ chainId, farms }) => {
               return (
                 <Link
                   href={{
-                    pathname: `/analytics/farms/${row.original.id}`,
+                    pathname: `/analytics/farms/${row.original.pair.id}`,
                     query: {
                       chainId,
                     },

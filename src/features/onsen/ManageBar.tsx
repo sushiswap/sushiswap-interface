@@ -10,7 +10,6 @@ import { HeadlessUiModal } from 'app/components/Modal'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
-import { OLD_FARMS } from 'app/config/farms'
 import { useFarmListItemDetailsModal } from 'app/features/onsen/FarmListItemDetails'
 import { setOnsenModalOpen } from 'app/features/onsen/onsenSlice'
 import { classNames, tryParseAmount } from 'app/functions'
@@ -37,9 +36,6 @@ const APPROVAL_ADDRESSES = {
     [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
     [ChainId.FUSE]: MINICHEF_ADDRESS[ChainId.FUSE],
     [ChainId.FANTOM]: MINICHEF_ADDRESS[ChainId.FANTOM],
-  },
-  [Chef.OLD_FARMS]: {
-    [ChainId.CELO]: OLD_FARMS[ChainId.CELO],
   },
 }
 

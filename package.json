@@ -13,7 +13,7 @@
     "inspect": "NODE_OPTIONS='--inspect' next dev",
     "postinstall": "yarn lingui",
     "lingui": "lingui extract --clean --overwrite && lingui compile",
-    "lint": "next lint",
+    "lint": "npx next lint --fix",
     "ngrok": "ngrok http 3000",
     "pre-commit": "lint-staged",
     "prepare": "husky install",
@@ -33,19 +33,25 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      ">0.3%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "not IE > 0",
+      "not samsung 4",
+      "not and_uc 12.12"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "last 2 Edge major versions ",
+      "last 2 iOS major versions ",
+      "not iOS 12.5"
     ]
   },
   "resolutions": {
-    "@walletconnect/ethereum-provider": "1.7.1",
-    "@walletconnect/jsonrpc-provider": "1.0.2"
+    "@walletconnect/ethereum-provider": "1.7.8",
+    "@walletconnect/jsonrpc-provider": "1.0.3"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.7",
@@ -86,9 +92,9 @@
     "@popperjs/core": "^2.10.0",
     "@ramp-network/ramp-instant-sdk": "^2.5.0",
     "@reduxjs/toolkit": "^1.8.0",
-    "@sentry/browser": "^6.15.0",
-    "@sentry/nextjs": "^6.13.0",
-    "@sentry/tracing": "^6.15.0",
+    "@sentry/nextjs": "^7.0.0",
+    "@sentry/react": "^7.0.0",
+    "@sentry/tracing": "^7.0.0",
     "@sushiswap/bentobox-sdk": "1.0.0-canary.89",
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
@@ -129,7 +135,8 @@
     "@visx/scale": "^2.1.0",
     "@visx/shape": "^2.1.0",
     "@visx/text": "^2.1.0",
-    "@walletconnect/ethereum-provider": "^1.7.5",
+    "@walletconnect/ethereum-provider": "^1.7.8",
+    "@walletconnect/jsonrpc-provider": "^1.0.3",
     "@web3-react/core": "^8.0.23-beta.0",
     "@web3-react/eip1193": "^8.0.18-beta.0",
     "@web3-react/empty": "^8.0.12-beta.0",
