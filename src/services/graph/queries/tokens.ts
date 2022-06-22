@@ -51,3 +51,61 @@ export const getTridentTokensQuery = gql`
     }
   }
 `
+
+export const getTridentTokenHourSnapshotsQuery = gql`
+  query tokenHourSnapshots($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: TokenDaySnapshot_filter) {
+    tokenHourSnapshots(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
+      id
+      date
+      liquidityUSD
+      volumeUSD
+      feesUSD
+      priceUSD
+      transactionCount
+    }
+  }
+`
+
+export const getTridentTokenDaySnapshotsQuery = gql`
+  query tokenDaySnapshots($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: TokenDaySnapshot_filter) {
+    tokenDaySnapshots(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
+      id
+      date
+      liquidityUSD
+      volumeUSD
+      feesUSD
+      priceUSD
+      transactionCount
+    }
+  }
+`
+
+export const getTridentTokenKpiQuery = gql`
+  query tridentTokenKpiQuery($id: String!, $block: Block_height, $where: PoolKpi_filter) {
+    poolKpi(id: $id, block: $block, where: $where) {
+      id
+      fees
+      feesUSD
+      volume
+      volumeUSD
+      liquidity
+      liquidityUSD
+      transactionCount
+    }
+  }
+`
+
+export const getTridentTokenKpisQuery = gql`
+  query tokenKpisQuery($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolKpi_filter) {
+    tokenKpis(first: $first, skip: $skip, block: $block, where: $where) {
+      id
+      fees
+      feesUSD
+      volume
+      volumeUSD
+      liquidity
+      liquidityUSD
+      transactionCount
+    }
+  }
+`

@@ -294,16 +294,28 @@ const useMenu: UseMenu = () => {
       })
     }
 
-    if (featureEnabled(Feature.TRIDENT, chainId)) {
-      analyticsMenu.items.push({
-        key: 'trident',
-        title: 'Trident',
-        link: `/analytics/trident`,
-      })
-    }
-
     if (featureEnabled(Feature.ANALYTICS, chainId)) {
+      if (featureEnabled(Feature.TRIDENT, chainId)) {
+        analyticsMenu.items.push({
+          key: 'trident',
+          title: 'Trident',
+          link: `/analytics/trident`,
+        })
+      }
       menu.push(analyticsMenu)
+    } else if (featureEnabled(Feature.TRIDENT, chainId)) {
+      menu.push({
+        key: 'analytics',
+        title: i18n._(t`Analytics`),
+        icon: <TrendingUpIcon width={20} />,
+        items: [
+          {
+            key: 'trident',
+            title: 'Trident',
+            link: `/analytics/trident`,
+          },
+        ],
+      })
     }
 
     if (account) {

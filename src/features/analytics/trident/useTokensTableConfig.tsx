@@ -15,8 +15,6 @@ export const useTokensTableConfig = (chainId: number) => {
     variables: {},
   })
 
-  console.log('trident', chainId, data)
-
   const allTokens = useAllTokens()
   const columns = useMemo(
     () => [
