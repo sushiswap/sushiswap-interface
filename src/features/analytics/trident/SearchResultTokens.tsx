@@ -19,8 +19,6 @@ import { useTokensTableConfig } from './useTokensTableConfig'
 const SearchResultTokens: FC<{ chainId: number }> = ({ chainId }) => {
   const { config } = useTokensTableConfig(chainId)
 
-  console.log('token config', config)
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -45,7 +43,6 @@ const SearchResultTokens: FC<{ chainId: number }> = ({ chainId }) => {
     // @ts-ignore TYPE NEEDS FIXING
   } = useTable(config, useFlexLayout, useFilters, useSortBy, useFlexLayout, usePagination)
   useInstantiateTableFeatures(setFilter)
-  console.log('tokens', page)
   return (
     <div className="flex flex-col gap-2">
       <SearchCategoryLabel />
@@ -83,7 +80,6 @@ const SearchResultTokens: FC<{ chainId: number }> = ({ chainId }) => {
           <tbody {...getTableBodyProps()}>
             {/*@ts-ignore TYPE NEEDS FIXING*/}
             {page.map((row, i) => {
-              console.log(row)
               prepareRow(row)
               return (
                 <Link

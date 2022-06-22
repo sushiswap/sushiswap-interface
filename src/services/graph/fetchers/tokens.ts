@@ -90,28 +90,27 @@ export const getTridentTokens = async (
 ) => {
   // @ts-ignore TYPE NEEDS FIXING
   const { tokens }: TridentTokenQueryResult = await fetcher(chainId, getTridentTokensQuery, variables)
-  console.log('getTokens', tokens)
   return tokens.map((token) => ({
     id: token.id,
     price: {
-      derivedNative: Number(token.price.derivedNative),
-      derivedUSD: Number(token.price.derivedUSD),
+      derivedNative: token.price ? Number(token.price.derivedNative) : 0,
+      derivedUSD: token.price ? Number(token.price.derivedUSD) : 0,
     },
     kpi: {
-      liquidity: Number(token.kpi.liquidity),
-      liquidityNative: Number(token.kpi.liquidityNative),
-      liquidityUSD: Number(token.kpi.liquidityUSD),
-      volume: Number(token.kpi.volume),
-      volumeNative: Number(token.kpi.volumeNative),
-      volumeUSD: Number(token.kpi.volumeUSD),
-      fees: Number(token.kpi.fees),
-      feesNative: Number(token.kpi.feesNative),
-      feesUSD: Number(token.kpi.feesUSD),
-      transactionCount: Number(token.kpi.transactionCount),
+      liquidity: token.kpi ? Number(token.kpi.liquidity) : 0,
+      liquidityNative: token.kpi ? Number(token.kpi.liquidityNative) : 0,
+      liquidityUSD: token.kpi ? Number(token.kpi.liquidityUSD) : 0,
+      volume: token.kpi ? Number(token.kpi.volume) : 0,
+      volumeNative: token.kpi ? Number(token.kpi.volumeNative) : 0,
+      volumeUSD: token.kpi ? Number(token.kpi.volumeUSD) : 0,
+      fees: token.kpi ? Number(token.kpi.fees) : 0,
+      feesNative: token.kpi ? Number(token.kpi.feesNative) : 0,
+      feesUSD: token.kpi ? Number(token.kpi.feesUSD) : 0,
+      transactionCount: token.kpi ? Number(token.kpi.transactionCount) : 0,
     },
     rebase: {
-      base: Number(token.rebase.base),
-      elastic: Number(token.rebase.elastic),
+      base: token.rebase ? Number(token.rebase.base) : 0,
+      elastic: token.rebase ? Number(token.rebase.elastic) : 0,
     },
     symbol: token.symbol,
     name: token.name,

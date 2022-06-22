@@ -15,7 +15,7 @@ export const useTokensTableConfig = (chainId: number) => {
     variables: {},
   })
 
-  console.log('useTokens', chainId, data)
+  console.log('trident', chainId, data)
 
   const allTokens = useAllTokens()
   const columns = useMemo(
@@ -34,7 +34,7 @@ export const useTokensTableConfig = (chainId: number) => {
               : new Token(chainId, address, Number(token.decimals), token.symbol, token.name)
           }, [props])
           return (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 font-bold">
               <CurrencyLogo currency={currency ?? undefined} className="!rounded-full" size={36} />
               {props.row.original.symbol}
             </div>
@@ -76,7 +76,7 @@ export const useTokensTableConfig = (chainId: number) => {
         columns,
         data: data ?? [],
         initialState: {
-          sortBy: [],
+          sortBy: [{ id: 'kpi.liquidityUSD', desc: true }],
         },
         autoResetFilters: false,
         autoResetPage: false,

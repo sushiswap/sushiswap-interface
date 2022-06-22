@@ -50,7 +50,6 @@ const SearchResultPools: FC = () => {
     // @ts-ignore TYPE NEEDS FIXING
   } = useTable(config, useFlexLayout, useFilters, useSortBy, useFlexLayout, usePagination)
   useInstantiateTableFeatures(setFilter, toggleSortBy)
-  console.log('pools', page)
   return (
     <div className="flex flex-col gap-2">
       <SearchCategoryLabel />
@@ -89,7 +88,7 @@ const SearchResultPools: FC = () => {
               return (
                 <Link
                   href={{
-                    pathname: `/analytics/trident/pool`,
+                    pathname: `/analytics/trident/pools`,
                     query: {
                       // @ts-ignore TYPE NEEDS FIXING
                       tokens: row.original.assets.map((asset) => asset.address),

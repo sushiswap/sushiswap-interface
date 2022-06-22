@@ -50,8 +50,6 @@ function Analytics() {
 
       <TridentBody>
         <div className="flex flex-col w-full gap-10">
-          <div className="text-2xl font-bold text-high-emphesis">Overview</div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2"></div>
           <div className="flex w-full">
             <div className="flex flex-col w-full gap-5">
               <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
