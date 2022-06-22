@@ -21,9 +21,6 @@ const FarmListItem: FC<FarmListItem> = ({ farm, onClick }) => {
   const token0 = useCurrency(farm.pair.token0.id) ?? undefined
   const token1 = useCurrency(farm.pair.token1.id) ?? undefined
 
-  console.log('farmsssssss')
-  console.log(farm)
-
   return (
     <div className={classNames(TABLE_TBODY_TR_CLASSNAME, 'grid grid-cols-4')} onClick={onClick}>
       <div className={classNames('flex gap-2', TABLE_TBODY_TD_CLASSNAME(0, 4))}>

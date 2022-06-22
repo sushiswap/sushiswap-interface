@@ -70,7 +70,7 @@ const FarmListItemDetails = ({ farm, onDismiss }) => {
           <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Liquidity ? 'block' : 'hidden')}>
             {farm.pair.type === PairType.KASHI ? (
               <ManageKashiPair farm={farm} />
-            ) : PairType.SWAP ? (
+            ) : farm.pair.type === PairType.SWAP ? (
               <ManageSwapPair farm={farm} />
             ) : (
               <ManageTridentPair farm={farm} />

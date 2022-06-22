@@ -126,7 +126,6 @@ export const getTridentPools = async ({
 }): Promise<TridentPool[]> => {
   // @ts-ignore TYPE NEEDS FIXING
   const result: TridentPoolQueryResult = await fetcher(chainId, getTridentPoolsQuery, variables)
-  console.log(result)
   return formatPools(chainId, result, tokens)
 }
 

@@ -46,9 +46,8 @@ const InformationDisclosure = ({ farm }) => {
               {i18n._(t`Provide liquidity to the`)}
               {` `}
               <Link
-                //href={`/trident/pool/${farm.pair.token0.id}/${farm.pair.token1.id}?fee=${farm.pair.swapFee}&twap=${farm.pair.twapEnabled}&chainId=${farm.chainId}`}
                 href={{
-                  pathname: `/trident/add`,
+                  pathname: `/trident/pool`,
                   query: {
                     tokens: [
                       isWrappedReturnNativeSymbol(farm.chainId, farm.pair.token0.id),

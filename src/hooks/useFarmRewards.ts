@@ -50,20 +50,11 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
     shouldFetch: !!farmAddresses,
   })
 
-  console.log('farms here')
-  console.log(farms)
-
-  // new
   const { data, error, isValidating } = useGetAllTridentPools({ chainId })
-
-  console.log(data)
 
   const tridentPairs = data?.filter((pool) => {
     return farmAddresses.includes(pool.address)
   })
-
-  console.log('test initial trident pairs')
-  console.log(tridentPairs)
 
   const { data: swapPairs1d } = useSushiPairs({
     chainId,
@@ -106,11 +97,6 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
   const map = useCallback(
     // @ts-ignore TYPE NEEDS FIXING
     (pool) => {
-      console.log('yoooooooo')
-      console.log(pool)
-      console.log('tridentPairsyoo')
-      console.log(tridentPairs)
-
       // TODO: Deal with inconsistencies between properties on subgraph
       pool.owner = pool?.owner || pool?.masterChef || pool?.miniChef
       pool.balance = pool?.balance || pool?.slpBalance
@@ -126,18 +112,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
       const pair = swapPair || kashiPair || tridentPair
 
-      console.log('test pairs')
-      console.log(tridentPair)
-      console.log(pair)
-
       const type = swapPair ? PairType.SWAP : tridentPair ? PairType.TRIDENT : PairType.KASHI
-      console.log(type)
 
       const blocksPerHour = 3600 / averageBlockTime
 
       function getRewards() {
         // TODO: Some subgraphs give sushiPerBlock & sushiPerSecond, and mcv2 gives nothing
-        console.log('rewarddsssss')
         const sushiPerBlock =
           pool?.owner?.sushiPerBlock / 1e18 ||
           (pool?.owner?.sushiPerSecond / 1e18) * averageBlockTime ||
@@ -341,12 +321,6 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
         : swapPair
         ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
         : (balance / Number(tridentPair?.liquidity)) * Number(tridentPair?.liquidityUSD)
-
-      console.log('BALaenedlksCheck8888888')
-      console.log(balance)
-      console.log(tvl)
-      console.log(pool.balance)
-      console.log(pool)
 
       const feeApyPerYear =
         swapPair && swapPair1d
