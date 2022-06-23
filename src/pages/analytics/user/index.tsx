@@ -58,23 +58,19 @@ export default function User() {
             <InfoCard text="Market Cap" number={formatNumber(xSushiMarketcap ?? 0, true, false)} />
             <InfoCard text="Total Supply" number={formatNumber(bar?.totalSupply)} />
             <InfoCard text="xSUSHI : SUSHI" number={Number(bar?.ratio ?? 0)?.toFixed(4)} />
-            {user && (
-              <>
-                <InfoCard text="User Staked" number={formatNumber(user.sushiStaked ?? 0)} />
-                <InfoCard
-                  text="User Staked USD"
-                  number={formatNumber((user.sushiStaked * xSushiPrice) / bar?.ratio ?? 0, true, false)}
-                />
-                <InfoCard
-                  text="APR"
-                  number={formatPercent(
-                    ((user.xSushi * xSushiPrice ?? 0) / ((user.sushiStaked * xSushiPrice) / bar?.ratio ?? 1)) * 100
-                  )}
-                />
-                <InfoCard text="xSUSHI" number={formatNumber(user.xSushi)} />
-                <InfoCard text="xSUSHI USD" number={formatNumber(user.xSushi * xSushiPrice ?? 0, true, false)} />
-              </>
-            )}
+            <InfoCard text="User Staked" number={formatNumber(user?.sushiStaked ?? 0)} />
+            <InfoCard
+              text="User Staked USD"
+              number={formatNumber((user?.sushiStaked * xSushiPrice) / bar?.ratio ?? 0, true, false)}
+            />
+            <InfoCard
+              text="APR"
+              number={formatPercent(
+                ((user?.xSushi * xSushiPrice ?? 0) / ((user?.sushiStaked * xSushiPrice) / bar?.ratio ?? 1)) * 100
+              )}
+            />
+            <InfoCard text="xSUSHI" number={formatNumber(user?.xSushi)} />
+            <InfoCard text="xSUSHI USD" number={formatNumber(user?.xSushi * xSushiPrice ?? 0, true, false)} />
           </div>
         </div>
       </TridentBody>
