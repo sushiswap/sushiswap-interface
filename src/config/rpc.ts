@@ -12,7 +12,7 @@ const RPC = {
   [ChainId.FANTOM_TESTNET]: 'https://rpc.testnet.fantom.network',
   [ChainId.MATIC]: 'https://polygon-rpc.com/',
   [ChainId.MATIC_TESTNET]: 'https://rpc-mumbai.matic.today',
-  [ChainId.XDAI]: 'https://rpc.xdaichain.com',
+  [ChainId.XDAI]: 'https://rpc.gnosischain.com',
   [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
   [ChainId.BSC_TESTNET]: 'https://data-seed-prebsc-2-s3.binance.org:8545',
   [ChainId.MOONBEAM_TESTNET]: 'https://rpc.testnet.moonbeam.network',
