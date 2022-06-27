@@ -1,22 +1,80 @@
 import { getAddress } from '@ethersproject/address'
 import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import { formatNumber, formatPercent } from 'app/functions'
+import { Feature } from 'app/enums'
+import { featureEnabled, formatNumber, formatPercent } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
+import { useBentoStrategies, useBentoTokens, useNativePrice, useTokens } from 'app/services/graph'
 import React, { useMemo } from 'react'
-import useSWR from 'swr'
 
-import { AnalyticsBentobox } from './getAnalyticsBentobox'
 import { filterForSearchQuery } from './tokenTableFilters'
 
 export const useTableConfig = (chainId: number) => {
   const allTokens = useAllTokens()
+  const { data: nativePrice } = useNativePrice({ chainId })
 
-  const { data } = useSWR<AnalyticsBentobox>(chainId ? `/api/analytics/bentobox/${chainId}` : null, (url: string) =>
-    fetch(url).then((response) => response.json())
-  )
+  const bentoBoxTokens = useBentoTokens({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
 
-  const bentoBoxTokens = data?.bentoBoxTokens
+  const bentoBoxTokenAddresses = useMemo(() => {
+    if (!bentoBoxTokens || !bentoBoxTokens.length) {
+      return []
+    }
+    // @ts-ignore
+    return bentoBoxTokens.map((token) => token.id)
+  }, [bentoBoxTokens])
+
+  // Get exchange data
+  const tokens = useTokens({
+    chainId,
+    shouldFetch: bentoBoxTokenAddresses && bentoBoxTokenAddresses.length,
+    variables: {
+      where: {
+        id_in: bentoBoxTokenAddresses,
+      },
+    },
+  })
+
+  // Creating map to easily reference TokenId -> Token
+  const tokenIdToPrice = useMemo<
+    Map<string, { derivedETH: number; volumeUSD: number; dayData: Array<{ priceUSD: number }> }>
+  >(() => {
+    // @ts-ignore TYPE NEEDS FIXING
+    return new Map(tokens?.map((token) => [token.id, token]))
+  }, [tokens])
+
+  const strategies = useBentoStrategies({ chainId })
+
+  const data = useMemo<Array<any>>(() => {
+    if (!bentoBoxTokens || !bentoBoxTokens.length || !tokens || !tokens.length) {
+      return []
+    }
+    return (
+      bentoBoxTokens
+        // @ts-ignore
+        .map(({ id, rebase, decimals, symbol, name }) => {
+          const token = tokenIdToPrice.get(id)
+          const supply = rebase.elastic
+          const tokenDerivedETH = token?.derivedETH
+          const price = (tokenDerivedETH ?? 0) * nativePrice
+          const tvl = price * supply
+
+          const strategy = strategies?.find((strategy) => strategy.token === id)
+
+          return {
+            token: {
+              id,
+              symbol,
+              name,
+              decimals,
+            },
+            strategy,
+            price,
+            liquidity: tvl,
+          }
+        })
+        .filter(Boolean)
+    )
+  }, [bentoBoxTokens, tokens, tokenIdToPrice, nativePrice, strategies])
 
   const columns = useMemo(
     () => [
@@ -90,7 +148,7 @@ export const useTableConfig = (chainId: number) => {
     () => ({
       config: {
         columns,
-        data: bentoBoxTokens ?? [],
+        data: data ?? [],
         initialState: {
           sortBy: [
             { id: 'liquidity', desc: true },
@@ -105,6 +163,6 @@ export const useTableConfig = (chainId: number) => {
       // loading: isValidating,
       // error,
     }),
-    [columns, bentoBoxTokens]
+    [columns, data]
   )
 }

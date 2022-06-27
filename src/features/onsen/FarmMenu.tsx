@@ -86,7 +86,10 @@ const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: 
           <MenuLink href={'/farm?filter=sushi'} label={i18n._(t`SushiSwap Farms`)} />
         ) : undefined,
       // @ts-ignore TYPE NEEDS FIXING
-      [FarmFilter.Old]: <MenuLink href={'/farm?filter=old'} label={i18n._(t`Old Farms`)} />,
+      [FarmFilter.Old]:
+        chainId && [ChainId.CELO].includes(chainId) ? (
+          <MenuLink href={'/farm?filter=old'} label={i18n._(t`Old Farms`)} />
+        ) : undefined,
     }
 
     return Object.entries(map).reduce<Record<string, ReactNode>>((acc, [k, v]) => {

@@ -18,16 +18,13 @@ interface DataTuple {
 
 type BarGraphProps = {
   data: DataTuple[]
-  events?: boolean
-  setSelectedIndex: (x: number) => void
-}
-
-interface GraphProps extends BarGraphProps {
   width: number
   height: number
+  events?: boolean
+  setSelectedDatum?: (x: DataTuple) => void
 }
 
-const Graph: FC<GraphProps> = ({ data, width, height, setSelectedIndex }) => {
+const Graph: FC<BarGraphProps> = ({ data, width, height, setSelectedDatum, events = false }) => {
   // bounds
   const xMax = useMemo(() => width, [width])
   const yMax = useMemo(() => height - verticalMargin, [height])
@@ -60,7 +57,7 @@ const Graph: FC<GraphProps> = ({ data, width, height, setSelectedIndex }) => {
   return (
     <svg width={width} height={height}>
       <Group top={verticalMargin / 2}>
-        {data.map((d, index) => {
+        {data.map((d) => {
           const x = getX(d)
           const barWidth = xScale.bandwidth()
           const barHeight = yMax - (yScale(getY(d)) ?? 0)
@@ -74,9 +71,12 @@ const Graph: FC<GraphProps> = ({ data, width, height, setSelectedIndex }) => {
               width={barWidth}
               height={barHeight}
               fill="rgba(0, 160, 233, 1)"
-              onClick={() => setSelectedIndex(index)}
-              onMouseMove={() => setSelectedIndex(index)}
-              onMouseEnter={() => setSelectedIndex(index)}
+              // @ts-ignore TYPE NEEDS FIXING
+              onClick={() => setSelectedDatum(d)}
+              // @ts-ignore TYPE NEEDS FIXING
+              onMouseMove={() => setSelectedDatum(d)}
+              // @ts-ignore TYPE NEEDS FIXING
+              onMouseEnter={() => setSelectedDatum(d)}
             />
           )
         })}
@@ -85,16 +85,8 @@ const Graph: FC<GraphProps> = ({ data, width, height, setSelectedIndex }) => {
   )
 }
 
-const BarGraph: FC<BarGraphProps> = ({ data, setSelectedIndex }) => {
-  if (data)
-    return (
-      <AutoSizer>
-        {/*@ts-ignore TYPE NEEDS FIXING*/}
-        {({ width, height }) => <Graph {...{ data, width, height, setSelectedIndex }} />}
-      </AutoSizer>
-    )
-
-  return <></>
-}
-
-export default BarGraph
+// @ts-ignore TYPE NEEDS FIXING
+export const BarGraph = ({ data, ...rest }) => (
+  // @ts-ignore TYPE NEEDS FIXING
+  <AutoSizer>{({ width, height }) => <Graph data={data} width={width} height={height} {...rest} />}</AutoSizer>
+)

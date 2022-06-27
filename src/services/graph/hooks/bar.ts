@@ -1,4 +1,4 @@
-import { getBar, getBarHistory, getBarUser } from 'app/services/graph/fetchers/bar'
+import { getBar, getBarHistory, getBarUser, getBarXsushi, getBarXsushiUser } from 'app/services/graph/fetchers/bar'
 import stringify from 'fast-json-stable-stringify'
 import useSWR from 'swr'
 
@@ -14,4 +14,16 @@ export function useBarHistory({ variables, shouldFetch = true, swrConfig = undef
 
 export function useBarUser({ variables, shouldFetch = true, swrConfig = undefined }: GraphProps = {}) {
   return useSWR(shouldFetch ? ['barUser', stringify(variables)] : null, () => getBarUser(variables), swrConfig)
+}
+
+export function useBarXsushi({ variables, shouldFetch = true, swrConfig = undefined }: GraphProps = {}) {
+  return useSWR(shouldFetch ? ['barXsushi', stringify(variables)] : null, () => getBarXsushi(variables), swrConfig)
+}
+
+export function useBarXsushiUser({ variables, shouldFetch = true, swrConfig = undefined }: GraphProps = {}) {
+  return useSWR(
+    shouldFetch ? ['barXsushiUser', stringify(variables)] : null,
+    () => getBarXsushiUser(variables),
+    swrConfig
+  )
 }

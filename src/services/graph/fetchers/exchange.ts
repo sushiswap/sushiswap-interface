@@ -26,7 +26,7 @@ export const EXCHANGE = {
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
   [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
-  [ChainId.CELO]: 'sushiswap/celo-exchange',
+  [ChainId.CELO]: 'matthewlilley/celo-exchange',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-exchange',
   [ChainId.MOONRIVER]: 'matthewlilley/moonriver-exchange',
   [ChainId.OKEX]: 'okex-exchange/oec',
@@ -40,7 +40,7 @@ export const exchange = async (chainId = ChainId.ETHEREUM, query, variables = {}
   // @ts-ignore TYPE NEEDS FIXING
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
-export const getPairs = async (chainId = ChainId.ETHEREUM, variables: any = undefined, query = pairsQuery) => {
+export const getPairs = async (chainId = ChainId.ETHEREUM, variables = undefined, query = pairsQuery) => {
   const { pairs } = await exchange(chainId, query, variables)
   return pairs
 }
@@ -60,7 +60,7 @@ export const getTokenSubset = async (chainId = ChainId.ETHEREUM, variables) => {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getTokens = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
+export const getTokens = async (chainId = ChainId.ETHEREUM, variables) => {
   // console.log('getTokens')
   const { tokens } = await exchange(chainId, tokensQuery, variables)
   return tokens
@@ -97,7 +97,7 @@ export const getTokenPrice = async (chainId = ChainId.ETHEREUM, query, variables
   return token?.derivedETH * nativePrice
 }
 
-export const getNativePrice = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
+export const getNativePrice = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   // console.log('getEthPrice')
   const data = await getBundle(chainId, undefined, variables)
   return data?.bundles[0]?.ethPrice
@@ -264,7 +264,7 @@ export const getDayData = async (chainId = ChainId.ETHEREUM, variables = undefin
   return dayDatas
 }
 
-export const getFactory = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
+export const getFactory = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const { factories } = await exchange(chainId, factoryQuery, variables)
   return factories[0]
 }

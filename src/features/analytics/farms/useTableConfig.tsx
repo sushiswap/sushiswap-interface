@@ -1,7 +1,6 @@
 import { getAddress } from '@ethersproject/address'
-import { Token } from '@sushiswap/core-sdk'
-import { CurrencyLogo, CurrencyLogoArray } from 'app/components/CurrencyLogo'
-import Typography from 'app/components/Typography'
+import { Currency, Token } from '@sushiswap/core-sdk'
+import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import { formatNumber, formatPercent } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useMemo } from 'react'
@@ -28,16 +27,6 @@ export const useTableConfig = (chainId: number, farms: any) => {
             daily: farm.roiPerDay * 100,
             monthly: farm.roiPerMonth * 100,
             annual: farm.roiPerYear * 100,
-          },
-          rewardApr: {
-            daily: farm.rewardAprPerDay * 100,
-            monthly: farm.rewardAprPerMonth * 100,
-            annual: farm.rewardAprPerYear * 100,
-          },
-          feeApy: {
-            daily: farm.feeApyPerDay * 100,
-            monthly: farm.feeApyPerMonth * 100,
-            annual: farm.feeApyPerYear * 100,
           },
         }))
     )
@@ -110,38 +99,23 @@ export const useTableConfig = (chainId: number, farms: any) => {
         accessor: 'rewards',
         minWidth: 150,
         // @ts-ignore
-        Cell: (props) => (
-          <div className="flex flex-col !items-end !justify-center">
-            {props.value.map((reward: any, i: number) => (
-              <Typography
-                variant="sm"
-                weight={700}
-                key={i}
-                className="flex gap-1.5 text-high-emphesis justify-center items-center"
-                component="span"
-              >
-                {formatNumber(reward.rewardPerDay)}
-                <CurrencyLogo currency={reward.currency} size={16} />
-              </Typography>
-            ))}
-          </div>
-        ),
+        Cell: (props) => {
+          return (
+            <CurrencyLogoArray
+              currencies={props.value.map((reward: { currency: Currency }) => reward.currency)}
+              size={20}
+              dense
+            />
+          )
+        },
         align: 'right',
       },
       {
         Header: 'Reward APR',
-        accessor: 'rewardApr.annual',
+        accessor: 'apr.annual',
         minWidth: 150,
         // @ts-ignore
-        Cell: (props) => (props.value > 10000 ? '>10,000%' : formatPercent(props.value, 'NEW')),
-        align: 'right',
-      },
-      {
-        Header: 'Fee APY',
-        accessor: 'feeApy.annual',
-        minWidth: 150,
-        // @ts-ignore
-        Cell: (props) => (props.value > 10000 ? '>10,000%' : formatPercent(props.value, 'NEW')),
+        Cell: (props) => formatPercent(props.value, 'NEW'),
         align: 'right',
       },
     ],
@@ -154,7 +128,7 @@ export const useTableConfig = (chainId: number, farms: any) => {
         columns,
         data: data ?? [],
         initialState: {
-          sortBy: [{ id: 'rewardApr.annual', desc: true }],
+          sortBy: [{ id: 'apr.annual', desc: true }],
         },
         autoResetFilters: false,
       },

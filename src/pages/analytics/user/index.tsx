@@ -2,16 +2,18 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
-import { XSUSHI } from 'app/config/tokens'
 import InfoCard from 'app/features/analytics/bar/InfoCard'
-import { formatNumber, formatPercent } from 'app/functions'
+import SushiInOut from 'app/features/analytics/bar/SushiInOut'
+import { formatNumber, formatNumberPeriod, formatPercent } from 'app/functions'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
-import { useNativePrice, useTokens } from 'app/services/graph'
-import { useBar, useBarUser } from 'app/services/graph/hooks/bar'
+import { useBarXsushi, useBarXsushiUser } from 'app/services/graph/hooks/bar'
+import { useBlock } from 'app/services/graph/hooks/blocks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import React from 'react'
+
+// https://thegraph.com/hosted-service/subgraph/jiro-ono/xsushi
+// https://api.thegraph.com/subgraphs/name/jiro-ono/xsushi/graphql
 
 export default function User() {
   const web3 = useActiveWeb3React()
@@ -20,25 +22,49 @@ export default function User() {
 
   const { i18n } = useLingui()
 
-  const { data: ethPrice } = useNativePrice({ chainId: ChainId.ETHEREUM })
+  const { data: xsushi } = useBarXsushi()
+  const { data: xsushiUser } = useBarXsushiUser({
+    variables: { id: account?.toLowerCase() },
+  })
 
-  const xSushi = useTokens({
+  const { data: block } = useBlock({ chainId: ChainId.ETHEREUM })
+
+  const { data: xsushiModified } = useBarXsushi({
+    variables: {
+      id: account?.toLowerCase(),
+      block: {
+        number: Number(xsushiUser?.modifiedAtBlock),
+      },
+    },
+  })
+
+  const { data: blockModified } = useBlock({
     chainId: ChainId.ETHEREUM,
-    variables: { where: { id: XSUSHI.address.toLowerCase() } },
-  })?.[0]
+    variables: {
+      where: {
+        number: xsushiUser?.modifiedAtBlock,
+      },
+    },
+  })
 
-  const { data: bar } = useBar()
+  const sushiBalance = xsushiUser?.balance / 1e18 || 0
+  const avgStakedTime = (sushiBalance == 0 ? 0 : block?.timestamp - blockModified?.timestamp) ?? 0
 
-  const { data: user } = useBarUser({ variables: { id: account }, shouldFetch: !!account })
+  const apr =
+    (sushiBalance === 0
+      ? 0
+      : ((xsushi?.sushiXsushiRatio / (xsushiModified?.sushiXsushiRatio | 1) - 1) /
+          (block?.timestamp - blockModified?.timestamp)) *
+        (365 * 3600 * 24)) ?? 0
 
-  const [xSushiPrice, xSushiMarketcap] = [
-    xSushi?.derivedETH * ethPrice,
-    xSushi?.derivedETH * ethPrice * bar?.totalSupply,
-  ]
+  const xsushiBalance = sushiBalance * xsushi?.xSushiSushiRatio ?? 0
+  const sushiEarnedPercent =
+    (sushiBalance === 0 ? 0 : xsushi?.sushiXsushiRatio / (xsushiModified?.sushiXsushiRatio | 1) - 1) ?? 0
+  const sushiEarned = sushiEarnedPercent * sushiBalance
 
   return (
     <>
-      <NextSeo title={`Farm Analytics`} />
+      <NextSeo title={`User Analytics`} />
 
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
         <div>
@@ -53,25 +79,24 @@ export default function User() {
 
       <TridentBody>
         <div className="space-y-5">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            <InfoCard text="Price" number={formatNumber(xSushiPrice ?? 0, true)} />
-            <InfoCard text="Market Cap" number={formatNumber(xSushiMarketcap ?? 0, true, false)} />
-            <InfoCard text="Total Supply" number={formatNumber(bar?.totalSupply)} />
-            <InfoCard text="xSUSHI : SUSHI" number={Number(bar?.ratio ?? 0)?.toFixed(4)} />
-            <InfoCard text="User Staked" number={formatNumber(user?.sushiStaked ?? 0)} />
+          <Typography variant="h3">{i18n._('Overview')}</Typography>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+            <InfoCard text={i18n._('User SUSHI')} number={formatNumber(sushiBalance, false)} />
+            <InfoCard text={i18n._('User xSUSHI')} number={formatNumber(xsushiBalance, false)} />
+            <InfoCard text={i18n._('SUSHI Earned')} number={formatNumber(sushiEarned, false)} />
+            <InfoCard text={i18n._('% SUSHI Earned')} number={formatPercent(sushiEarnedPercent * 100)} />
             <InfoCard
-              text="User Staked USD"
-              number={formatNumber((user?.sushiStaked * xSushiPrice) / bar?.ratio ?? 0, true, false)}
+              text={i18n._('Average Staked Time')}
+              number={avgStakedTime === 0 ? '-' : formatNumberPeriod(avgStakedTime)}
             />
-            <InfoCard
-              text="APR"
-              number={formatPercent(
-                ((user?.xSushi * xSushiPrice ?? 0) / ((user?.sushiStaked * xSushiPrice) / bar?.ratio ?? 1)) * 100
-              )}
-            />
-            <InfoCard text="xSUSHI" number={formatNumber(user?.xSushi)} />
-            <InfoCard text="xSUSHI USD" number={formatNumber(user?.xSushi * xSushiPrice ?? 0, true, false)} />
+            <InfoCard text={i18n._('Average APR')} number={formatPercent(apr * 100)} />
           </div>
+          {(xsushiUser?.deposits?.length > 0 || xsushiUser?.withdrawals?.length > 0) && (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <SushiInOut title={i18n._('SUSHI In')} xsushi={xsushi} transactions={xsushiUser.deposits} />
+              <SushiInOut title={i18n._('SUSHI Out')} xsushi={xsushi} transactions={xsushiUser.withdrawals} />
+            </div>
+          )}
         </div>
       </TridentBody>
     </>

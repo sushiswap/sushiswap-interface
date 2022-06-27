@@ -293,7 +293,42 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               rewardPrice,
             }
           }
+        } else if (pool.chef === Chef.OLD_FARMS) {
+          const sushiPerSecond =
+            ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
+          const sushiPerBlock = sushiPerSecond * averageBlockTime
+          const sushiPerDay = sushiPerBlock * blocksPerDay
+
+          const rewardPerSecond =
+            ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+
+          const rewardPerBlock = rewardPerSecond * averageBlockTime
+
+          const rewardPerDay = rewardPerBlock * blocksPerDay
+
+          const reward = {
+            [ChainId.CELO]: {
+              currency: NATIVE[ChainId.CELO],
+              rewardPerBlock,
+              rewardPerDay: rewardPerSecond * 86400,
+              rewardPrice: celoPrice,
+            },
+          }
+
+          // @ts-ignore TYPE NEEDS FIXING
+          rewards[0] = {
+            ...defaultReward,
+            rewardPerBlock: sushiPerBlock,
+            rewardPerDay: sushiPerDay,
+          }
+
+          // @ts-ignore TYPE NEEDS FIXING
+          if (chainId in reward) {
+            // @ts-ignore TYPE NEEDS FIXING
+            rewards[1] = reward[chainId]
+          }
         }
+
         return rewards
       }
 

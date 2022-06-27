@@ -1,6 +1,12 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST } from 'app/services/graph/constants'
-import { barHistoriesQuery, barQuery, barUserQuery } from 'app/services/graph/queries/bar'
+import {
+  barHistoriesQuery,
+  barQuery,
+  barUserQuery,
+  barXsushiQuery,
+  barXsushiUserQuery,
+} from 'app/services/graph/queries/bar'
 import { request } from 'graphql-request'
 
 const BAR = {
@@ -23,5 +29,18 @@ export const getBarHistory = async (variables?: { [key: string]: any }) => {
 
 export const getBarUser = async (variables?: { [key: string]: any }) => {
   const { user } = await fetcher(barUserQuery, variables)
+  return user
+}
+
+const fetcherXsushi = async (query: any, variables?: { [key: string]: any }) =>
+  request(`${GRAPH_HOST[ChainId.ETHEREUM]}/subgraphs/name/jiro-ono/xsushi`, query, variables)
+
+export const getBarXsushi = async (variables?: { [key: string]: any }) => {
+  const { xsushi } = await fetcherXsushi(barXsushiQuery, variables)
+  return xsushi
+}
+
+export const getBarXsushiUser = async (variables?: { [key: string]: any }) => {
+  const { user } = await fetcherXsushi(barXsushiUserQuery, variables)
   return user
 }
