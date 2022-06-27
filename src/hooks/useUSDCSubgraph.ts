@@ -14,7 +14,7 @@ export function useUSDCPricesSubgraph(
 ): { [address: string]: Price<Currency, Token> } | undefined {
   const { chainId } = useActiveWeb3React()
 
-  const stablecoin = chainId ? CurrencyAmount.fromRawAmount(USD[chainId], 0).currency : undefined
+  const stablecoin = chainId && USD[chainId] ? CurrencyAmount.fromRawAmount(USD[chainId], 0).currency : undefined
 
   const { data: ethPrice } = useNativePrice({ chainId })
   const tokensLegacy = useTokens({
