@@ -170,6 +170,8 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDT,
     // @ts-ignore TYPE NEEDS FIXING
+    AVALANCHE.USDTe,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WBTC,
     // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WETH,
@@ -711,6 +713,8 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     AVALANCHE.DAI,
     // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
+    AVALANCHE.USDTe,
     // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WBTC,
     // @ts-ignore TYPE NEEDS FIXING
