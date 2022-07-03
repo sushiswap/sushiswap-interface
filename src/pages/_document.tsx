@@ -5,11 +5,29 @@ import { Head, Html, Main, NextScript } from 'next/document'
 const APP_NAME = 'Sushi'
 const APP_DESCRIPTION = 'Swap, yield, lend, borrow, leverage, limit, launch all on one community driven ecosystem'
 
+/**
+ * @export Document
+ * @summary `<Html>`, `<Head>`, `<Main>`, and `<NextScript>` are all required to be
+ * used. You cannot use the normal `<html>`, `<head>`, et al.
+ * Next.js injects additional attributes and/or content to make your
+ * application function as expected.
+ * @see {@link https://nextjs.org/docs/advanced-features/custom-document}
+ */
+
 export default function Document() {
   return (
-    <Html>
+    <Html lang="en">
       <Head>
         <meta name="application-name" content={APP_NAME} />
+        <meta name="ui-version" content={`${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}`} />
+        <meta property="og:type" content="website" key="og:type" />
+
+        <meta property="og:title" content="Sushi" key="og:title" />
+        <meta
+          property="og:description"
+          content="Swap, yield, lend, borrow, leverage, limit, launch and more all on Sushiswap"
+          key="og:description"
+        />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content={APP_NAME} />
