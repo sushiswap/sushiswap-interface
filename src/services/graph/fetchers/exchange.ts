@@ -20,9 +20,9 @@ import { pager } from './pager'
 
 export const EXCHANGE = {
   [ChainId.ETHEREUM]: 'sushiswap/exchange',
-  [ChainId.XDAI]: 'sushiswap/xdai-exchange',
+  [ChainId.XDAI]: 'sushiswap/exchange-gnosis',
   [ChainId.MATIC]: 'sushiswap/matic-exchange',
-  [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
+  [ChainId.FANTOM]: 'sushiswap/exchange-fantom',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
   [ChainId.AVALANCHE]: 'sushiswap/exchange-avalanche',
@@ -31,8 +31,8 @@ export const EXCHANGE = {
   [ChainId.MOONRIVER]: 'sushiswap/exchange-moonriver',
   [ChainId.OKEX]: 'okex-exchange/oec',
   [ChainId.HECO]: 'heco-exchange/heco',
-  [ChainId.FUSE]: 'sushiswap/fuse-exchange',
-  [ChainId.MOONBEAM]: 'sushiswap/moonbeam-exchange',
+  [ChainId.FUSE]: 'sushiswap/exchange-fuse',
+  [ChainId.MOONBEAM]: 'sushiswap/exchange-moonbeam',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
