@@ -105,34 +105,6 @@ const TotakTokenCard = ({
             />
           ))
         )}
-        {/* <div className="pt-6 mt-8 border-t">
-          <div className="flex justify-between">
-            <div>
-              <div className="text-sm font-semibold text-gray-400">
-                24H Supply Volume
-              </div>
-              <div className="mt-2">
-                {isLoading ? (
-                  <div className="w-32 h-5 rounded loading"></div>
-                ) : (
-                  numeral(data.volumeIn24H).format("$0,0.00")
-                )}
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-sm font-semibold text-gray-400">
-                # of {attributes.users}
-              </div>
-              <div className="mt-2">
-                {isLoading ? (
-                  <div className="w-20 h-5 ml-auto rounded loading"></div>
-                ) : (
-                  data.totalUsers
-                )}
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   )

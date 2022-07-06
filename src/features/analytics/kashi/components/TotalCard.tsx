@@ -10,7 +10,6 @@ import Progress from './Progress'
 export type TotalData = {
   amount: BigInt
   volumeIn24H: BigInt
-  totalUsers: BigInt
   topMarkets: KashiPair[]
 }
 

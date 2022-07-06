@@ -8,7 +8,6 @@ import TotalCompareChart from '../components/TotalCompareChart'
 import TotalDayDataChart from '../components/TotalDayDataChart'
 import { useAppContext } from '../context/AppContext'
 import { getKashiPairsDayDataQuery, getKashiPairsQuery } from '../graphql/dashboard'
-import { BentoBox } from '../types/BentoBox'
 import { KashiPair } from '../types/KashiPair'
 import { KashiPairDayData, KashiPairDayDataMap } from '../types/KashiPairDayData'
 
@@ -27,7 +26,6 @@ const KashiPairsView = () => {
 
   const [calculating, setCalculating] = useState(true)
   const [pricesMap, setPricesMap] = useState<{ [key: string]: BigInt }>({})
-  const [bentoBox, setBentoBox] = useState<BentoBox>({} as BentoBox)
   const [kashiPairs, setKashiPairs] = useState<KashiPair[]>([] as KashiPair[])
   const { coinGeckoService, calculateService } = useAppContext()
 
@@ -43,9 +41,6 @@ const KashiPairsView = () => {
 
   useEffect(() => {
     if (dataKashiPairs) {
-      if (dataKashiPairs.bentoBoxes && dataKashiPairs.bentoBoxes.length > 0) {
-        setBentoBox(dataKashiPairs.bentoBoxes[0])
-      }
       if (dataKashiPairs.kashiPairs) {
         setKashiPairsData(dataKashiPairs.kashiPairs)
       }
@@ -133,7 +128,6 @@ const KashiPairsView = () => {
           data={{
             amount: totalAssetsAmount + totalBorrowsAmount,
             volumeIn24H: BigInt(0),
-            totalUsers: bentoBox.totalUsers || BigInt('0'),
             topMarkets: top3MarketsBySupply,
           }}
         />
@@ -144,7 +138,6 @@ const KashiPairsView = () => {
           data={{
             amount: totalAssetsAmount,
             volumeIn24H: BigInt(0),
-            totalUsers: bentoBox.totalUsers || BigInt('0'),
             topMarkets: top3MarketsByAsset,
           }}
         />
@@ -155,7 +148,6 @@ const KashiPairsView = () => {
           data={{
             amount: totalBorrowsAmount,
             volumeIn24H: BigInt(0),
-            totalUsers: bentoBox.totalUsers || BigInt('0'),
             topMarkets: top3MarketsByBorrow,
           }}
         />

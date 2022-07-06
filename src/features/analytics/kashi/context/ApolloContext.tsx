@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloProvider, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { i18n } from '@lingui/core'
 import { ChainId } from '@sushiswap/core-sdk'
 import { useRouter } from 'next/router'
@@ -24,7 +24,7 @@ const bscClient = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-const CLIENTS: { [chainId in ChainId]?: ApolloClient<NormalizedCacheObject> } = {
+const CLIENTS = {
   [ChainId.ETHEREUM]: ethClient,
   [ChainId.ARBITRUM]: arbitrumClient,
   [ChainId.FANTOM]: fantomClient,
@@ -34,6 +34,8 @@ const CLIENTS: { [chainId in ChainId]?: ApolloClient<NormalizedCacheObject> } = 
 export const AnalyticsKashiApolloContextProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
   const chainId = Number(router.query.chainId) as ChainId
+
+  // @ts-ignore
   const client = CLIENTS[chainId]
 
   if (!client) {
