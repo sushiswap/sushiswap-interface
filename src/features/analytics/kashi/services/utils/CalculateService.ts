@@ -73,10 +73,10 @@ class CalculateService {
         totalBorrow = BigNumber.from('0')
 
       if (kashiPair.asset) {
-        totalAsset = BigNumber.from(pricesMap[kashiPair.asset.symbol])
+        totalAsset = BigNumber.from(pricesMap?.[kashiPair.asset.symbol] ?? 0)
           .mul(BigNumber.from(kashiPair.totalAssetElastic))
           .div(BigNumber.from('10').pow(Number(kashiPair.asset.decimals) + 6))
-        totalBorrow = BigNumber.from(pricesMap[kashiPair.asset.symbol])
+        totalBorrow = BigNumber.from(pricesMap?.[kashiPair.asset.symbol] ?? 0)
           .mul(BigNumber.from(kashiPair.totalBorrowElastic))
           .div(BigNumber.from('10').pow(Number(kashiPair.asset.decimals) + 6))
       }
@@ -137,13 +137,13 @@ class CalculateService {
 
     const newTokens = tokens.map((token) => {
       let totalSupply = BigNumber.from('0')
-      totalSupply = BigNumber.from(pricesMap[token.symbol])
+      totalSupply = BigNumber.from(pricesMap[token.symbol] ?? 0)
         .mul(BigNumber.from(token.totalSupplyElastic))
         .div(BigNumber.from('10').pow(Number(token.decimals) + 6))
       sumTotalSupply = sumTotalSupply.add(totalSupply)
       const newToken = {
         ...token,
-        price: pricesMap[token.symbol] || 0,
+        price: (pricesMap[token.symbol] ?? 0) || 0,
         totalSupply: totalSupply.toBigInt(),
       }
       return newToken
@@ -168,10 +168,10 @@ class CalculateService {
         totalBorrow = BigNumber.from('0')
 
       if (kashiPair.pair.asset) {
-        totalAsset = BigNumber.from(pricesMap[kashiPair.pair.asset.symbol])
+        totalAsset = BigNumber.from(pricesMap[kashiPair.pair.asset.symbol] ?? 0)
           .mul(BigNumber.from(kashiPair.totalAssetElastic))
           .div(BigNumber.from('10').pow(Number(kashiPair.pair.asset.decimals) + 6))
-        totalBorrow = BigNumber.from(pricesMap[kashiPair.pair.asset.symbol])
+        totalBorrow = BigNumber.from(pricesMap[kashiPair.pair.asset.symbol] ?? 0)
           .mul(BigNumber.from(kashiPair.totalBorrowElastic))
           .div(BigNumber.from('10').pow(Number(kashiPair.pair.asset.decimals) + 6))
       }
@@ -287,10 +287,10 @@ class CalculateService {
         totalBorrow = BigNumber.from('0')
 
       if (kashiPair.pair.asset) {
-        totalAsset = BigNumber.from(pricesMap[kashiPair.pair.asset.symbol])
+        totalAsset = BigNumber.from(pricesMap[kashiPair.pair.asset.symbol] ?? 0)
           .mul(BigNumber.from(kashiPair.totalAssetElastic))
           .div(BigNumber.from('10').pow(Number(kashiPair.pair.asset.decimals) + 6))
-        totalBorrow = BigNumber.from(pricesMap[kashiPair.pair.asset.symbol])
+        totalBorrow = BigNumber.from(pricesMap[kashiPair.pair.asset.symbol] ?? 0)
           .mul(BigNumber.from(kashiPair.totalBorrowElastic))
           .div(BigNumber.from('10').pow(Number(kashiPair.pair.asset.decimals) + 6))
       }

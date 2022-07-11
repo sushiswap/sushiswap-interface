@@ -122,35 +122,37 @@ const MarketTableRow = ({ data, index }: { data: KashiPairsByToken; index: numbe
   }
 
   return (
-    <tr
-      onClick={() => goto(`/analytics/kashi/tokens/${data.token.id}`)}
-      className="border-t border-l-2 border-transparent cursor-pointer border-t-gray-900 hover:bg-dark-900"
-    >
-      <td className="py-3 pl-8 pr-2">
-        <div className="flex items-center">
-          <img
-            src={tokenUtilService.logo(data.token.symbol)}
-            className="inline-block w-8 h-8 rounded-full min-w-fit min-h-fit"
-            onError={handleLogoError}
-            alt={data.token.symbol}
-          />
-          <div className="ml-2">
-            <div className="font-bold text-gray-50">{tokenUtilService.symbol(data.token.symbol)}</div>
+    <>
+      <tr
+        onClick={() => goto(`/analytics/kashi/tokens/${data.token.id}`)}
+        className="border-t border-l-2 border-transparent cursor-pointer border-t-gray-900 hover:bg-dark-900"
+      >
+        <td className="py-3 pl-8 pr-2">
+          <div className="flex items-center">
+            <img
+              src={tokenUtilService.logo(data.token.symbol)}
+              className="inline-block w-8 h-8 rounded-full min-w-fit min-h-fit"
+              onError={handleLogoError}
+              alt={data.token.symbol}
+            />
+            <div className="ml-2">
+              <div className="font-bold text-gray-50">{tokenUtilService.symbol(data.token.symbol)}</div>
+            </div>
           </div>
-        </div>
-      </td>
-      <td className="px-2 py-3 font-bold text-right text-gray-50">
-        {numeral(BigNumber.from(data.totalAsset).add(BigNumber.from(data.totalBorrow)).toNumber() / 100).format(
-          '$0,.00'
-        )}
-      </td>
-      <td className="px-2 py-3 font-bold text-right text-gray-50">
-        {numeral(BigNumber.from(data.totalAsset).toNumber() / 100).format('$0,.00')}
-      </td>
-      <td className="py-3 pl-2 pr-8 font-bold text-right text-gray-50">
-        {numeral(BigNumber.from(data.totalBorrow).toNumber() / 100).format('$0,.00')}
-      </td>
-    </tr>
+        </td>
+        <td className="px-2 py-3 font-bold text-right text-gray-50">
+          {numeral(BigNumber.from(data.totalAsset).add(BigNumber.from(data.totalBorrow)).toNumber() / 100).format(
+            '$0,.00'
+          )}
+        </td>
+        <td className="px-2 py-3 font-bold text-right text-gray-50">
+          {numeral(BigNumber.from(data.totalAsset).toNumber() / 100).format('$0,.00')}
+        </td>
+        <td className="py-3 pl-2 pr-8 font-bold text-right text-gray-50">
+          {numeral(BigNumber.from(data.totalBorrow).toNumber() / 100).format('$0,.00')}
+        </td>
+      </tr>
+    </>
   )
 }
 
@@ -242,37 +244,39 @@ const TokenMarketTable = ({ loading = false, data = [] }: { loading?: boolean; d
   }
 
   return (
-    <div className="overflow-x-auto">
-      <div className="pb-6">
-        <input
-          type="text"
-          className="w-full p-2 border rounded focus:outline-blue placeholder:text-low-emphesis border-dark-800 bg-dark-900"
-          placeholder={i18n._('Search by Token...')}
-          onChange={handleSearchChange}
-        />
+    <>
+      <div className="overflow-x-auto">
+        <div className="pb-6">
+          <input
+            type="text"
+            className="w-full p-2 border rounded focus:outline-blue placeholder:text-low-emphesis border-dark-800 bg-dark-900"
+            placeholder={i18n._('Search by Token...')}
+            onChange={handleSearchChange}
+          />
+        </div>
+        <table className="w-full token-market-table">
+          <thead>
+            <MarketTableHead onSort={handleSort} orderBy={orderBy} orderDirection={orderDirection} />
+          </thead>
+          {loading ? (
+            <tbody>
+              <MarketTableRowLoading />
+              <MarketTableRowLoading />
+              <MarketTableRowLoading />
+              <MarketTableRowLoading />
+            </tbody>
+          ) : (
+            <tbody>
+              {sortedList
+                .filter((value) => value.token.symbol.toLowerCase().indexOf(search.toLowerCase()) >= 0)
+                .map((data, index) => (
+                  <MarketTableRow key={`${index}`} data={data} index={index} />
+                ))}
+            </tbody>
+          )}
+        </table>
       </div>
-      <table className="w-full token-market-table">
-        <thead>
-          <MarketTableHead onSort={handleSort} orderBy={orderBy} orderDirection={orderDirection} />
-        </thead>
-        {loading ? (
-          <tbody>
-            <MarketTableRowLoading />
-            <MarketTableRowLoading />
-            <MarketTableRowLoading />
-            <MarketTableRowLoading />
-          </tbody>
-        ) : (
-          <tbody>
-            {sortedList
-              .filter((value) => value.token.symbol.toLowerCase().indexOf(search.toLowerCase()) >= 0)
-              .map((data, index) => (
-                <MarketTableRow key={`${index}`} data={data} index={index} />
-              ))}
-          </tbody>
-        )}
-      </table>
-    </div>
+    </>
   )
 }
 export default TokenMarketTable

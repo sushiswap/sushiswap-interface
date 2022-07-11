@@ -10,7 +10,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { useAppContext } from '../context/AppContext'
 import { KashiPair } from '../types/KashiPair'
 
-type OrderBy = 'asset' | 'collateral' | 'totalSupply' | 'totalAsset' | 'supplyAPY' | 'totalBorrow' | 'borrowAPY' | ''
+type OrderBy = 'asset' | 'collateral' | 'totalSupply' | 'totalAsset' | 'supplyAPR' | 'totalBorrow' | 'borrowAPR' | ''
 type OrderDirection = 'asc' | 'desc'
 
 const PairMarketTableHead = ({
@@ -57,30 +57,8 @@ const PairMarketTableHead = ({
         }}
       >
         <span className="cursor-pointer">
-          {i18n._('Total Supply')}
+          {i18n._('TVL')}
           {orderBy === 'totalSupply' && iconByDirection[orderDirection]}
-        </span>
-      </td>
-      <td
-        className="p-2 text-right"
-        onClick={() => {
-          onSort('totalAsset')
-        }}
-      >
-        <span className="cursor-pointer">
-          {i18n._('Total Available')}
-          {orderBy === 'totalAsset' && iconByDirection[orderDirection]}
-        </span>
-      </td>
-      <td
-        className="p-2 text-right"
-        onClick={() => {
-          onSort('supplyAPY')
-        }}
-      >
-        <span className="cursor-pointer">
-          {i18n._('Supply APY')}
-          {orderBy === 'supplyAPY' && iconByDirection[orderDirection]}
         </span>
       </td>
       <td
@@ -90,19 +68,42 @@ const PairMarketTableHead = ({
         }}
       >
         <span className="cursor-pointer">
-          {i18n._('Total Borrow')}
+          {i18n._('Borrowed')}
           {orderBy === 'totalBorrow' && iconByDirection[orderDirection]}
+        </span>
+      </td>
+
+      <td
+        className="p-2 text-right"
+        onClick={() => {
+          onSort('supplyAPR')
+        }}
+      >
+        <span className="cursor-pointer">
+          {i18n._('Supply APR')}
+          {orderBy === 'supplyAPR' && iconByDirection[orderDirection]}
+        </span>
+      </td>
+      <td
+        className="p-2 text-right"
+        onClick={() => {
+          onSort('totalAsset')
+        }}
+      >
+        <span className="cursor-pointer">
+          {i18n._('Available')}
+          {orderBy === 'totalAsset' && iconByDirection[orderDirection]}
         </span>
       </td>
       <td
         className="py-2 pl-2 pr-8 text-right"
         onClick={() => {
-          onSort('borrowAPY')
+          onSort('borrowAPR')
         }}
       >
         <span className="cursor-pointer">
-          {i18n._('Borrow APY')}
-          {orderBy === 'borrowAPY' && iconByDirection[orderDirection]}
+          {i18n._('Borrow APR')}
+          {orderBy === 'borrowAPR' && iconByDirection[orderDirection]}
         </span>
       </td>
     </tr>
@@ -168,108 +169,113 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
   }
 
   return (
-    <tr
-      onClick={() => goto(`/analytics/kashi/pairs/${data.id}`)}
-      className="border-t border-l-2 border-transparent cursor-pointer border-t-gray-900 hover:bg-dark-900"
-    >
-      <td className="py-3 pl-8 pr-2">
-        <div className="md:flex">
-          <div className="flex">
-            <img
-              src={tokenUtilService.logo(data.asset?.symbol)}
-              className="inline-block w-8 h-8 rounded-full"
-              onError={handleLogoError}
-              alt={data?.symbol}
-            />
-            <img
-              src={tokenUtilService.logo(data.collateral?.symbol)}
-              onError={handleLogoError}
-              className="inline-block w-8 h-8 -ml-2 rounded-full"
-              alt={data?.symbol}
-            />
+    <>
+      <tr
+        onClick={() => goto(`/analytics/kashi/pairs/${data.id}`)}
+        className="border-t border-l-2 border-transparent cursor-pointer border-t-gray-900 hover:bg-dark-900"
+      >
+        <td className="py-3 pl-8 pr-2">
+          <div className="md:flex">
+            <div className="flex">
+              <img
+                src={tokenUtilService.logo(data.asset?.symbol)}
+                className="inline-block w-8 h-8 rounded-full"
+                onError={handleLogoError}
+                alt={data?.symbol}
+              />
+              <img
+                src={tokenUtilService.logo(data.collateral?.symbol)}
+                onError={handleLogoError}
+                className="inline-block w-8 h-8 -ml-2 rounded-full"
+                alt={data?.symbol}
+              />
+            </div>
+            <div className="text-sm font-bold md:text-base md:ml-2 text-gray-50">
+              {tokenUtilService.pairSymbol(data.asset?.symbol, data.collateral?.symbol)}
+            </div>
           </div>
-          <div className="text-sm font-bold md:text-base md:ml-2 text-gray-50">
-            {tokenUtilService.pairSymbol(data.asset?.symbol, data.collateral?.symbol)}
+        </td>
+        <td className="px-2 py-3 text-right">
+          <div className="font-bold text-gray-50">
+            {numeral(BigNumber.from(data?.totalAsset).add(BigNumber.from(data.totalBorrow)).toNumber() / 100).format(
+              '$0,.00'
+            )}
           </div>
-        </div>
-      </td>
-      <td className="px-2 py-3 text-right">
-        <div className="font-bold text-gray-50">
-          {numeral(BigNumber.from(data?.totalAsset).add(BigNumber.from(data.totalBorrow)).toNumber() / 100).format(
-            '$0,.00'
-          )}
-        </div>
-        <div className="text-xs text-gray-400">
-          {numeral(
-            BigNumber.from(data?.totalAssetElastic)
-              .add(BigNumber.from(data.totalBorrowElastic))
-              .div(
-                BigNumber.from('10').pow(
-                  Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
+          <div className="text-xs text-gray-400">
+            {numeral(
+              BigNumber.from(data?.totalAssetElastic)
+                .add(BigNumber.from(data.totalBorrowElastic))
+                .div(
+                  BigNumber.from('10').pow(
+                    Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
+                  )
                 )
-              )
-              .toNumber() / 100
-          ).format('0,.00')}
-          &nbsp;
-          {data.asset?.symbol}
-        </div>
-      </td>
-      <td className="px-2 py-3 text-right">
-        <div className="font-bold text-gray-50">
-          {numeral(BigNumber.from(data?.totalAsset).toNumber() / 100).format('$0,.00')}
-        </div>
-        <div className="text-xs text-gray-400">
-          {numeral(
-            BigNumber.from(data?.totalAssetElastic)
-              .div(
-                BigNumber.from('10').pow(
-                  Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
+                .toNumber() / 100
+            ).format('0,.00')}
+            &nbsp;
+            {data.asset?.symbol}
+          </div>
+        </td>
+        <td className="px-2 py-3 text-right">
+          <div className="font-bold text-gray-50">
+            {numeral(BigNumber.from(data?.totalBorrow).toNumber() / 100).format('$0,.00')}
+          </div>
+          <div className="text-xs text-gray-400">
+            {numeral(
+              BigNumber.from(data?.totalBorrowElastic)
+                .div(
+                  BigNumber.from('10').pow(
+                    Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
+                  )
                 )
-              )
-              .toNumber() / 100
-          ).format('0,.00')}
-          &nbsp;
-          {data.asset?.symbol}
-        </div>
-      </td>
-      <td className="px-2 py-3 text-right">
-        <div className="font-bold text-gray-50">
-          {numeral(BigNumber.from(data?.supplyAPR).div(BigNumber.from('1000000000000')).toNumber() / 100000).format(
-            '%0.00'
-          )}
-        </div>
-      </td>
-      <td className="px-2 py-3 text-right">
-        <div className="font-bold text-gray-50">
-          {numeral(BigNumber.from(data?.totalBorrow).toNumber() / 100).format('$0,.00')}
-        </div>
-        <div className="text-xs text-gray-400">
-          {numeral(
-            BigNumber.from(data?.totalBorrowElastic)
-              .div(
-                BigNumber.from('10').pow(
-                  Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
+                .toNumber() / 100
+            ).format('0,.00')}
+            &nbsp;
+            {data.asset?.symbol}
+          </div>
+        </td>
+        <td className="px-2 py-3 text-right">
+          <div className="font-bold text-gray-50">
+            {numeral(BigNumber.from(data?.supplyAPR).div(BigNumber.from('1000000000000')).toNumber() / 100000).format(
+              '%0.00'
+            )}
+          </div>
+          <div className="text-xs text-gray-400">{i18n._(`annualized`)}</div>
+        </td>
+        <td className="px-2 py-3 text-right">
+          <div className="font-bold text-gray-50">
+            {numeral(BigNumber.from(data?.totalAsset).toNumber() / 100).format('$0,.00')}
+          </div>
+          <div className="text-xs text-gray-400">
+            {numeral(
+              BigNumber.from(data?.totalAssetElastic)
+                .div(
+                  BigNumber.from('10').pow(
+                    Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
+                  )
                 )
-              )
-              .toNumber() / 100
-          ).format('0,.00')}
-          &nbsp;
-          {data.asset?.symbol}
-        </div>
-      </td>
-      <td className="py-3 pl-2 pr-8 text-right">
-        <div className="font-bold text-gray-50">
-          {numeral(BigNumber.from(data?.borrowAPR).div(BigNumber.from('1000000000000')).toNumber() / 100000).format(
-            '%0.00'
-          )}
-        </div>
-      </td>
-    </tr>
+                .toNumber() / 100
+            ).format('0,.00')}
+            &nbsp;
+            {data.asset?.symbol}
+          </div>
+        </td>
+
+        <td className="py-3 pl-2 pr-8 text-right">
+          <div className="font-bold text-gray-50">
+            {numeral(BigNumber.from(data?.borrowAPR).div(BigNumber.from('1000000000000')).toNumber() / 100000).format(
+              '%0.00'
+            )}
+          </div>
+          <div className="text-xs text-gray-400">{i18n._(`annualized`)}</div>
+        </td>
+      </tr>
+    </>
   )
 }
 
 const PairMarketTable = ({ loading = false, data = [] }: { loading?: boolean; data: KashiPair[] }) => {
-  const [orderBy, setOrderBy] = useState<OrderBy>('')
+  const [orderBy, setOrderBy] = useState<OrderBy>('totalSupply')
   const [orderDirection, setOrderDirection] = useState<OrderDirection>('desc')
 
   const [fullList, setFullList] = useState<KashiPair[]>([])
@@ -322,11 +328,11 @@ const PairMarketTable = ({ loading = false, data = [] }: { loading?: boolean; da
         desc: (a: KashiPair, b: KashiPair) =>
           BigNumber.from(a.totalBorrow).gte(BigNumber.from(b.totalBorrow)) ? -1 : 1,
       },
-      supplyAPY: {
+      supplyAPR: {
         asc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.supplyAPR).lte(BigNumber.from(b.supplyAPR)) ? -1 : 1),
         desc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.supplyAPR).gte(BigNumber.from(b.supplyAPR)) ? -1 : 1),
       },
-      borrowAPY: {
+      borrowAPR: {
         asc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.borrowAPR).lte(BigNumber.from(b.borrowAPR)) ? -1 : 1),
         desc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.borrowAPR).gte(BigNumber.from(b.borrowAPR)) ? -1 : 1),
       },

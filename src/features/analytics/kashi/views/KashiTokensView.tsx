@@ -1,15 +1,19 @@
-import { useQuery } from '@apollo/client'
+import { useKashiTokens } from 'app/features/kashi/hooks'
+import { useKashiPricesSubgraphWithLoadingIndicator } from 'app/hooks/usePricesSubgraph'
+import { useDataKashiTokensWithLoadingIndicator } from 'app/services/graph/hooks/kashipairs'
+import { useActiveWeb3React } from 'app/services/web3'
 import { BigNumber } from 'ethers'
 import { useEffect, useState } from 'react'
 
 import TokenMarketTable from '../components/TokenMarketTable'
 import TotakTokenCard from '../components/TotalTokenCard'
 import { useAppContext } from '../context/AppContext'
-import { getKashiPairsQuery } from '../graphql/explore'
 import { KashiPairsByToken } from '../types/KashiPair'
 
 const KashiTokensView = () => {
-  const { loading: loadingToken, error, data: dataKashiPairs } = useQuery(getKashiPairsQuery)
+  const { chainId } = useActiveWeb3React()
+  const { loading: loadingToken, data: dataKashiPairs } = useDataKashiTokensWithLoadingIndicator({ chainId })
+
   const [calculating, setCalculating] = useState(true)
   const [totalAsset, setTotalAsset] = useState(BigInt(0))
   const [totalBorrow, setTotalBorrow] = useState(BigInt(0))
@@ -17,10 +21,12 @@ const KashiTokensView = () => {
   const [top3MarketsByAsset, setTop3MarketsByAsset] = useState<KashiPairsByToken[]>([])
   const [top3MarketsByBorrow, setTop3MarketsByBorrow] = useState<KashiPairsByToken[]>([])
 
-  const [pricesMap, setPricesMap] = useState<{ [key: string]: BigInt }>({})
   const [kashiPairsByTokens, setKashiPairsByTokens] = useState<KashiPairsByToken[]>([])
-  const { coinGeckoService, calculateService } = useAppContext()
+  const { calculateService } = useAppContext()
   const loading = loadingToken || calculating
+
+  const tokens = useKashiTokens()
+  const { loading: loadingPrice, data: pricesMap } = useKashiPricesSubgraphWithLoadingIndicator(Object.values(tokens))
 
   useEffect(() => {
     if (dataKashiPairs) {
@@ -28,52 +34,51 @@ const KashiTokensView = () => {
         setDataKashiPairs()
       }
     }
-  }, [dataKashiPairs])
+  }, [dataKashiPairs, loadingPrice])
 
   const setDataKashiPairs = async () => {
-    const { kashiPairs } = dataKashiPairs
-    const symbols = calculateService.extractKashiPairAssetSymbols(kashiPairs)
-    const pricesMap = await coinGeckoService.getPrices(symbols)
-    setPricesMap(pricesMap)
+    if (!loadingPrice) {
+      const { kashiPairs } = dataKashiPairs
 
-    const { kashiPairsByTokens, totalAsset, totalBorrow } = calculateService.calculateKashiPairPricesGroupByAsset(
-      kashiPairs,
-      pricesMap
-    )
-    setCalculating(false)
-    kashiPairsByTokens.sort((a, b) =>
-      BigNumber.from(a.totalAsset)
-        .add(BigNumber.from(a.totalBorrow))
-        .gte(BigNumber.from(b.totalAsset).add(BigNumber.from(b.totalBorrow)))
-        ? -1
-        : 1
-    )
-
-    const kashiPairsByTokensSortedByAsset = [...kashiPairsByTokens].sort((a, b) =>
-      a.totalAsset > b.totalAsset ? -1 : 1
-    )
-
-    const kashiPairsByTokensSortedByBorrow = [...kashiPairsByTokens].sort((a, b) =>
-      a.totalBorrow > b.totalBorrow ? -1 : 1
-    )
-
-    setTop3MarketsBySupply(kashiPairsByTokens.slice(0, kashiPairsByTokens.length < 3 ? kashiPairsByTokens.length : 3))
-    setTop3MarketsByAsset(
-      kashiPairsByTokensSortedByAsset.slice(
-        0,
-        kashiPairsByTokensSortedByAsset.length < 3 ? kashiPairsByTokensSortedByAsset.length : 3
+      const { kashiPairsByTokens, totalAsset, totalBorrow } = calculateService.calculateKashiPairPricesGroupByAsset(
+        kashiPairs,
+        pricesMap
       )
-    )
-    setTop3MarketsByBorrow(
-      kashiPairsByTokensSortedByBorrow.slice(
-        0,
-        kashiPairsByTokensSortedByBorrow.length < 3 ? kashiPairsByTokensSortedByBorrow.length : 3
+      setCalculating(false)
+      kashiPairsByTokens.sort((a, b) =>
+        BigNumber.from(a.totalAsset)
+          .add(BigNumber.from(a.totalBorrow))
+          .gte(BigNumber.from(b.totalAsset).add(BigNumber.from(b.totalBorrow)))
+          ? -1
+          : 1
       )
-    )
 
-    setKashiPairsByTokens(kashiPairsByTokens)
-    setTotalAsset(totalAsset.toBigInt())
-    setTotalBorrow(totalBorrow.toBigInt())
+      const kashiPairsByTokensSortedByAsset = [...kashiPairsByTokens].sort((a, b) =>
+        a.totalAsset > b.totalAsset ? -1 : 1
+      )
+
+      const kashiPairsByTokensSortedByBorrow = [...kashiPairsByTokens].sort((a, b) =>
+        a.totalBorrow > b.totalBorrow ? -1 : 1
+      )
+
+      setTop3MarketsBySupply(kashiPairsByTokens.slice(0, kashiPairsByTokens.length < 3 ? kashiPairsByTokens.length : 3))
+      setTop3MarketsByAsset(
+        kashiPairsByTokensSortedByAsset.slice(
+          0,
+          kashiPairsByTokensSortedByAsset.length < 3 ? kashiPairsByTokensSortedByAsset.length : 3
+        )
+      )
+      setTop3MarketsByBorrow(
+        kashiPairsByTokensSortedByBorrow.slice(
+          0,
+          kashiPairsByTokensSortedByBorrow.length < 3 ? kashiPairsByTokensSortedByBorrow.length : 3
+        )
+      )
+
+      setKashiPairsByTokens(kashiPairsByTokens)
+      setTotalAsset(totalAsset.toBigInt())
+      setTotalBorrow(totalBorrow.toBigInt())
+    }
   }
 
   return (

@@ -1,6 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import { useQuery } from '@apollo/client'
 import { i18n } from '@lingui/core'
+import { useKashiTokens } from 'app/features/kashi/hooks'
+import { useKashiPricesSubgraphWithLoadingIndicator } from 'app/hooks/usePricesSubgraph'
+import { useDataKashiPairWithLoadingIndicator } from 'app/services/graph/hooks/kashipairs'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -11,7 +14,6 @@ import PairSupplyBorrowDayDataChart from '../components/PairSupplyBorrowDayDataC
 import PairSupplyBorrowMonthDataChart from '../components/PairSupplyBorrowMonthDataChart'
 import PairUtilizationDayDataChart from '../components/PairUtilizationDayDataChart'
 import { useAppContext } from '../context/AppContext'
-import { getKashiPairQuery } from '../graphql/pair'
 import { KashiPair } from '../types/KashiPair'
 import { KashiPairDayData, KashiPairDayDataMap } from '../types/KashiPairDayData'
 
@@ -22,43 +24,45 @@ const KashiPairView = () => {
 
   const [kashiPairDayDataMonthly, setKashiPairDayDataMonthly] = useState<KashiPairDayDataMap[]>([])
 
-  const [pricesMap, setPricesMap] = useState<{ [key: string]: BigInt }>({})
-  const { calculateService, coinGeckoService } = useAppContext()
+  const { calculateService } = useAppContext()
 
   const router = useRouter()
   const { id } = router.query
-  const {
-    loading: loadingKashiPairs,
-    error,
-    data: dataKashiPairs,
-  } = useQuery(getKashiPairQuery, { variables: { id }, skip: !id })
+
+  const { chainId } = useActiveWeb3React()
+  const { loading: loadingKashiPairs, data: dataKashiPairs } = useDataKashiPairWithLoadingIndicator({
+    chainId,
+    variables: { id },
+  })
+
+  const tokens = useKashiTokens()
+  const { loading: loadingPrice, data: pricesMap } = useKashiPricesSubgraphWithLoadingIndicator(Object.values(tokens))
 
   useEffect(() => {
     if (dataKashiPairs) {
       setKashiPairData()
     }
-  }, [dataKashiPairs])
+  }, [dataKashiPairs, loadingPrice])
 
   const setKashiPairData = async () => {
-    const { kashiPairs, kashiPairDayDatas }: { kashiPairs: KashiPair[]; kashiPairDayDatas: KashiPairDayData[] } =
-      dataKashiPairs
-    const symbols = calculateService.extractKashiPairAssetSymbols(kashiPairs)
-    const pricesMap = await coinGeckoService.getPrices(symbols)
-    setPricesMap(pricesMap)
+    if (!loadingPrice) {
+      const { kashiPairs, kashiPairDayDatas }: { kashiPairs: KashiPair[]; kashiPairDayDatas: KashiPairDayData[] } =
+        dataKashiPairs
 
-    const { kashiPairs: newKashiPairs } = calculateService.calculateKashiPairPrices(kashiPairs, pricesMap)
+      const { kashiPairs: newKashiPairs } = calculateService.calculateKashiPairPrices(kashiPairs, pricesMap)
 
-    const kashiPair = newKashiPairs[0]
-    setKashiPair(kashiPair)
+      const kashiPair = newKashiPairs[0]
+      setKashiPair(kashiPair)
 
-    const { kashiPairsMaps } = calculateService.calculateKashiPairDayDataPrices(kashiPairDayDatas, pricesMap)
-    setKashiPairDayData(kashiPairsMaps)
+      const { kashiPairsMaps } = calculateService.calculateKashiPairDayDataPrices(kashiPairDayDatas, pricesMap)
+      setKashiPairDayData(kashiPairsMaps)
 
-    const { kashiPairsMaps: kashiPairsMapMonthly } = calculateService.calculateKashiPairDayDataPricesMonthly(
-      kashiPairDayDatas,
-      pricesMap
-    )
-    setKashiPairDayDataMonthly(kashiPairsMapMonthly)
+      const { kashiPairsMaps: kashiPairsMapMonthly } = calculateService.calculateKashiPairDayDataPricesMonthly(
+        kashiPairDayDatas,
+        pricesMap
+      )
+      setKashiPairDayDataMonthly(kashiPairsMapMonthly)
+    }
   }
 
   return (

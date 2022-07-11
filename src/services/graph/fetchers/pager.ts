@@ -28,3 +28,16 @@ export async function pager(endpoint, query, variables = {}) {
   }
   return data
 }
+
+// @ts-ignore TYPE NEEDS FIXING
+export async function pagerRequestOnce(endpoint, query, variables = {}) {
+  if (endpoint.includes('undefined')) return {}
+
+  let data: any = {}
+  const req = await request(endpoint, query, variables)
+
+  Object.keys(req).forEach((key) => {
+    data[key] = data[key] ? [...data[key], ...req[key]] : req[key]
+  })
+  return data
+}

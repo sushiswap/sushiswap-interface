@@ -1,5 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import { useQuery } from '@apollo/client'
+import { useKashiTokens } from 'app/features/kashi/hooks'
+import { useKashiPricesSubgraphWithLoadingIndicator } from 'app/hooks/usePricesSubgraph'
+import {
+  useDataKashiTokensDayDataWithLoadingIndicator,
+  useDataKashiTokenWithLoadingIndicator,
+} from 'app/services/graph/hooks/kashipairs'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -7,7 +13,6 @@ import PairCollateralPieChart from '../components/PairCollateralPieChart'
 import PairSupplyBorrowDayDataChart from '../components/PairSupplyBorrowDayDataChart'
 import TokenCard from '../components/TokenCard'
 import { handleLogoError, useAppContext } from '../context/AppContext'
-import { getKashiPairsDayDataQuery, getTokensQuery } from '../graphql/token'
 import { KashiPair } from '../types/KashiPair'
 import { KashiPairDayDataMap, KashiPairDayDataMapsCollateral } from '../types/KashiPairDayData'
 import { Token } from '../types/Token'
@@ -24,52 +29,55 @@ const KashiTokenView = () => {
   const [kashiPairDayDataMapsCollaterals, setKashiPairDayDataMapsCollaterals] = useState<
     KashiPairDayDataMapsCollateral[]
   >([])
-  const [pricesMap, setPricesMap] = useState<{ [key: string]: BigInt }>({})
-  const { calculateService, coinGeckoService } = useAppContext()
+
+  const { calculateService } = useAppContext()
 
   const router = useRouter()
   const { id } = router.query
-  const {
-    loading: loadingDataToken,
-    error,
-    data: dataToken,
-  } = useQuery(getTokensQuery, { variables: { id }, skip: !id })
+  const { chainId } = useActiveWeb3React()
+  const { loading: loadingDataToken, data: dataToken } = useDataKashiTokenWithLoadingIndicator({
+    chainId,
+    variables: { id },
+  })
 
   const pairIds = kashiPairs.map((kashiPair) => kashiPair.id)
 
-  const { loading: loadingKashiPairDayData, data: dataKashiPairDayData } = useQuery(getKashiPairsDayDataQuery, {
-    variables: { pairIds },
-    skip: pairIds.length === 0,
-  })
+  const { loading: loadingKashiPairDayData, data: dataKashiPairDayData } =
+    useDataKashiTokensDayDataWithLoadingIndicator({
+      chainId,
+      variables: { pairIds },
+    })
+
+  const tokens = useKashiTokens()
+  const { loading: loadingPrice, data: pricesMap } = useKashiPricesSubgraphWithLoadingIndicator(Object.values(tokens))
 
   useEffect(() => {
     if (dataToken) {
       setTokenData()
     }
-  }, [dataToken])
+  }, [dataToken, loadingPrice])
 
   useEffect(() => {
-    const pricesMapKeys = Object.keys(pricesMap)
-    if (pricesMapKeys.length > 0 && dataKashiPairDayData && dataKashiPairDayData.kashiPairDayDatas.length > 0) {
-      const kashiPairDayDataMapsCollaterals = calculateService.calculateKashiPairDayDataPricesByCollateral(
-        dataKashiPairDayData.kashiPairDayDatas,
-        pricesMap
-      )
+    if (!loadingPrice) {
+      const pricesMapKeys = Object.keys(pricesMap)
+      if (pricesMapKeys.length > 0 && dataKashiPairDayData && dataKashiPairDayData.kashiPairDayDatas.length > 0) {
+        const kashiPairDayDataMapsCollaterals = calculateService.calculateKashiPairDayDataPricesByCollateral(
+          dataKashiPairDayData.kashiPairDayDatas,
+          pricesMap
+        )
 
-      const { kashiPairsMaps } = calculateService.calculateKashiPairDayDataPrices(
-        dataKashiPairDayData.kashiPairDayDatas,
-        pricesMap
-      )
-      setKashiPairDayDataMapsCollaterals(kashiPairDayDataMapsCollaterals)
-      setKashiPairDayDataMaps(kashiPairsMaps)
+        const { kashiPairsMaps } = calculateService.calculateKashiPairDayDataPrices(
+          dataKashiPairDayData.kashiPairDayDatas,
+          pricesMap
+        )
+        setKashiPairDayDataMapsCollaterals(kashiPairDayDataMapsCollaterals)
+        setKashiPairDayDataMaps(kashiPairsMaps)
+      }
     }
-  }, [pricesMap, dataKashiPairDayData])
+  }, [dataKashiPairDayData])
 
   const setTokenData = async () => {
     const { tokens, kashiPairs }: { tokens: Token[]; kashiPairs: KashiPair[] } = dataToken
-    const symbols = calculateService.extractKashiPairAssetSymbols(kashiPairs)
-    const pricesMap = await coinGeckoService.getPrices(symbols)
-    setPricesMap(pricesMap)
 
     const { tokens: newTokens } = calculateService.calculateTokenPrices(tokens, pricesMap)
 
@@ -121,7 +129,7 @@ const KashiTokenView = () => {
           )}
         </div>
       </div>
-      <div className="container px-4 mx-auto mb-16 -mt-16">
+      <div className="container mx-auto mb-16">
         <TokenCard data={token} totalAsset={totalAsset} totalBorrow={totalBorrow} containerClass="mb-4" />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <PairCollateralPieChart title="Total Supply" type={'supply'} data={kashiPairs} />
