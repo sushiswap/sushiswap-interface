@@ -294,7 +294,7 @@ export class Auction {
   }
 
   public get canFinalize(): boolean {
-    if (!this.launcherInfo?.launched && this.auctionInfo.finalized) return true
+    if (this.launcherInfo && !this.launcherInfo.launched && this.auctionInfo.finalized) return true
     if (this.auctionInfo.finalized) return false
     if (this.status !== AuctionStatus.FINISHED) return false
     if (this.isOwner) return true

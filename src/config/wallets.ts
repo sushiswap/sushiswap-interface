@@ -4,7 +4,7 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 // import { PortisConnector } from 'web3-react-portis-connector'
 // import { WalletConnectConnector } from 'web3-react-walletconnect-connector'
 // import { WalletLinkConnector } from 'web3-react-walletlink-connector'
-import { NetworkConnector } from 'app/entities/connectors'
+import { GamestopConnector, NetworkConnector } from 'app/entities/connectors'
 import Cookies from 'js-cookie'
 import { InjectedConnector } from 'web3-react-injected-connector'
 
@@ -35,6 +35,8 @@ export const getNetworkConnector = (): NetworkConnector => {
 export const injected = new InjectedConnector({
   supportedChainIds,
 })
+
+export const gamestopConnector = new GamestopConnector({})
 
 export interface WalletInfo {
   connector?: (() => Promise<AbstractConnector>) | AbstractConnector
@@ -216,6 +218,14 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     name: 'Clover',
     iconName: 'clover.svg',
     description: 'Login using Clover hosted wallet',
+    href: null,
+    color: '#269964',
+  },
+  Gamestop: {
+    connector: gamestopConnector,
+    name: 'GameStop',
+    iconName: 'gamestop.png',
+    description: 'Login using GameStop extension wallet',
     href: null,
     color: '#269964',
   },

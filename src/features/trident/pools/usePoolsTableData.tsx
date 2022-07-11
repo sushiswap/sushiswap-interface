@@ -76,6 +76,7 @@ export const usePoolsTableData = () => {
         // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
           const { data: oneDayBlock } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+
           const { data: oneDayPoolKpi } = usePoolKpi({
             chainId,
             variables: { block: oneDayBlock, id: data?.[props.row.id].address },

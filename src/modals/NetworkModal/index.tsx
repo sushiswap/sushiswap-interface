@@ -132,7 +132,7 @@ export const SUPPORTED_NETWORKS: Record<
       symbol: 'xDai',
       decimals: 18,
     },
-    rpcUrls: ['https://rpc.xdaichain.com'],
+    rpcUrls: ['https://rpc.gnosischain.com'],
     blockExplorerUrls: ['https://blockscout.com/poa/xdai'],
   },
   [ChainId.HARMONY]: {
