@@ -219,4 +219,12 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: null,
     color: '#269964',
   },
+  Gamestop: {
+    connector: gamestopConnector,
+    name: 'GameStop',
+    iconName: 'gamestop.png',
+    description: 'Login using GameStop extension wallet',
+    href: null,
+    color: '#269964',
+  },
 }

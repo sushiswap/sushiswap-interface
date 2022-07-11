@@ -119,7 +119,7 @@ export const useTableConfig = (chainId: number, farms: any) => {
         align: 'right',
       },
     ],
-    [chainId]
+    [allTokens, chainId]
   )
 
   return useMemo(

@@ -20,6 +20,7 @@ export const BLOCKS = {
   [ChainId.FUSE]: 'sushiswap/fuse-blocks',
   [ChainId.KOVAN]: 'blocklytics/kovan-blocks',
   [ChainId.MOONBEAM]: 'sushiswap/moonbeam-blocks',
+  [ChainId.OPTIMISM]: 'kybernetwork/optimism-blocks',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
