@@ -185,7 +185,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
             }
             rewards[1] = reward
           }
-        } else if (pool.chef === Chef.MINICHEF && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM) {
+        } else if (
+          pool.chef === Chef.MINICHEF &&
+          chainId !== ChainId.MATIC &&
+          chainId !== ChainId.ARBITRUM &&
+          chainId !== ChainId.XDAI
+        ) {
           const sushiPerSecond =
             ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
           const sushiPerBlock = sushiPerSecond * averageBlockTime
@@ -265,7 +270,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               rewards[1] = reward[chainId]
             }
           }
-        } else if (chainId === ChainId.MATIC || chainId === ChainId.ARBITRUM) {
+        } else if (chainId === ChainId.MATIC || chainId === ChainId.ARBITRUM || chainId === ChainId.XDAI) {
           if (pool.rewarder.rewardPerSecond !== '0') {
             const rewardPerSecond =
               pool.rewarder.totalAllocPoint === '0'

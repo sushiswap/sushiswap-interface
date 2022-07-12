@@ -21,7 +21,7 @@ import { request } from 'graphql-request'
 
 export const MINICHEF = {
   [ChainId.MATIC]: 'jiro-ono/minichef-staging-updates',
-  [ChainId.XDAI]: 'sushiswap/xdai-minichef',
+  [ChainId.XDAI]: 'jiro-ono/gnosis-minichef-staging',
   [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
   [ChainId.ARBITRUM]: 'jiro-ono/arbitrum-minichef-staging',
   [ChainId.CELO]: 'sushiswap/celo-minichef-v2',
@@ -104,7 +104,7 @@ export const getMasterChefV2PairAddreses = async () => {
 }
 
 export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM].includes(chainId)
+  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM, ChainId.XDAI].includes(chainId)
 
   if (v2Query) {
     const { pools } = await miniChef(miniChefPoolsQueryV2, chainId, variables)
@@ -157,7 +157,7 @@ export const getMasterChefV2Pools = async (chainId = ChainId.ETHEREUM, variables
 }
 
 export const getMiniChefFarmsWithUser = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM].includes(chainId)
+  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM, ChainId.XDAI].includes(chainId)
 
   if (v2Query) {
     const { pools } = await miniChef(miniChefPoolsWithUserQueryV2, chainId, variables)
