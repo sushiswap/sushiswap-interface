@@ -33,7 +33,7 @@ export const getBarUser = async (variables?: { [key: string]: any }) => {
 }
 
 const fetcherXsushi = async (query: any, variables?: { [key: string]: any }) =>
-  request(`${GRAPH_HOST[ChainId.ETHEREUM]}/subgraphs/name/jiro-ono/xsushi`, query, variables)
+  request(`https://thegraph.com/hosted-service/subgraph/olastenberg/xsushi`, query, variables)
 
 export const getBarXsushi = async (variables?: { [key: string]: any }) => {
   const { xsushi } = await fetcherXsushi(barXsushiQuery, variables)
