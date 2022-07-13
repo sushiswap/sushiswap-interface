@@ -20,7 +20,7 @@ import { pager } from './pager'
 
 export const EXCHANGE = {
   [ChainId.ETHEREUM]: 'sushiswap/exchange',
-  [ChainId.XDAI]: 'sushiswap/xdai-exchange',
+  [ChainId.XDAI]: 'sushiswap/exchange-gnosis',
   [ChainId.MATIC]: 'sushiswap/matic-exchange',
   [ChainId.FANTOM]: 'sushiswap/exchange-fantom',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
