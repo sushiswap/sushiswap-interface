@@ -10,6 +10,7 @@ import * as FANTOM from './tokens/fantom'
 import * as FUSE from './tokens/fuse'
 import * as HARMONY from './tokens/harmony'
 import * as HECO from './tokens/heco'
+import * as KAVA from './tokens/kava'
 import * as MATIC from './tokens/matic'
 import * as MOONBEAM from './tokens/moonbeam'
 import * as MOONRIVER from './tokens/moonriver'
@@ -18,7 +19,6 @@ import * as OPTIMISM from './tokens/optimism'
 import * as PALM from './tokens/palm'
 import * as TELOS from './tokens/telos'
 import * as XDAI from './tokens/xdai'
-
 type ChainTokenList = {
   readonly [chainId: number]: Token[]
 }
@@ -75,6 +75,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.TELOS]: [WNATIVE[ChainId.TELOS]],
   [ChainId.MOONBEAM]: [WNATIVE[ChainId.MOONBEAM]],
   [ChainId.OPTIMISM]: [WNATIVE[ChainId.OPTIMISM]],
+  [ChainId.KAVA]: [WNATIVE[ChainId.KAVA]],
 }
 
 // used to construct intermediary pairs for trading
@@ -241,6 +242,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     OPTIMISM.WBTC,
     OPTIMISM.LUSD,
   ],
+  [ChainId.KAVA]: [...WRAPPED_NATIVE_ONLY[ChainId.KAVA], KAVA.USDC, KAVA.USDT, KAVA.WETH, KAVA.WBTC, KAVA.DAI],
 }
 
 export const ADDITIONAL_BASES: {
@@ -636,6 +638,7 @@ export const COMMON_BASES: ChainTokenList = {
     OPTIMISM.WBTC,
     OPTIMISM.LUSD,
   ],
+  [ChainId.KAVA]: [...WRAPPED_NATIVE_ONLY[ChainId.KAVA], KAVA.USDC, KAVA.USDT, KAVA.WETH, KAVA.WBTC, KAVA.DAI],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -783,6 +786,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     OPTIMISM.WBTC,
     OPTIMISM.LUSD,
   ],
+  [ChainId.KAVA]: [...WRAPPED_NATIVE_ONLY[ChainId.KAVA], KAVA.USDC, KAVA.USDT, KAVA.WETH, KAVA.WBTC, KAVA.DAI],
 }
 
 export const PINNED_PAIRS: { readonly [chainId: number]: [Token, Token][] } = {

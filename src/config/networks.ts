@@ -22,6 +22,7 @@ const Moonriver = 'https://raw.githubusercontent.com/sushiswap/icons/master/netw
 const Fuse = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/fuse.jpg'
 const Telos = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/telos.jpg'
 const Optimism = 'https://raw.githubusercontent.com/sushiswap/list/master/logos/network-logos/optimism.jpg'
+const Kava = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/kava.svg'
 
 export const NETWORK_ICON: Record<number, string> = {
   [ChainId.ETHEREUM]: Mainnet,
@@ -54,6 +55,7 @@ export const NETWORK_ICON: Record<number, string> = {
   [ChainId.TELOS]: Telos,
   [ChainId.MOONBEAM]: Moonbeam,
   [ChainId.OPTIMISM]: Optimism,
+  [ChainId.KAVA]: Kava,
 }
 
 export const NETWORK_LABEL: Record<number, string> = {
@@ -87,4 +89,5 @@ export const NETWORK_LABEL: Record<number, string> = {
   [ChainId.TELOS]: 'Telos EVM',
   [ChainId.MOONBEAM]: 'Moonbeam',
   [ChainId.OPTIMISM]: 'Optimism',
+  [ChainId.KAVA]: 'Kava',
 }

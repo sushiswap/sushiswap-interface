@@ -22,10 +22,12 @@ export const GRAPH_HOST = {
   [ChainId.FUSE]: THE_GRAPH,
   [ChainId.MOONBEAM]: THE_GRAPH,
   [ChainId.OPTIMISM]: THE_GRAPH,
+  [ChainId.KAVA]: 'https://the-graph.kava.io',
 }
 
 export const TRIDENT = {
   [ChainId.MATIC]: 'matthewlilley/trident-polygon',
   [ChainId.KOVAN]: 'sushiswap/trident-kovan',
   [ChainId.OPTIMISM]: 'olastenberg/trident-optimism',
+  [ChainId.KAVA]: 'sushiswap/trident-kava',
 }
