@@ -21,6 +21,7 @@ import {
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useMovrPrice,
+  useNativePrice,
   useOhmPrice,
   useOneDayBlock,
   useOnePrice,
@@ -72,6 +73,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
   const { data: sushiPrice } = useSushiPrice()
   const { data: ethPrice } = useEthPrice()
+  const { data: nativePrice } = useNativePrice({ chainId })
   const { data: maticPrice } = useMaticPrice()
   const { data: gnoPrice } = useGnoPrice()
   const { data: onePrice } = useOnePrice()
@@ -201,8 +203,6 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
           const rewardPerBlock = rewardPerSecond * averageBlockTime
 
-          const rewardPerDay = rewardPerBlock * blocksPerDay
-
           const reward = {
             [ChainId.MATIC]: {
               currency: NATIVE[ChainId.MATIC],
@@ -275,10 +275,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
             const rewardPerSecond =
               pool.rewarder.totalAllocPoint === '0'
                 ? pool.rewarder.rewardPerSecond / 10 ** pool.rewardToken.decimals
+                : chainId === ChainId.XDAI
+                ? ((pool.rewarder.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
                 : ((pool.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
             const rewardPerBlock = rewardPerSecond * averageBlockTime
             const rewardPerDay = rewardPerBlock * blocksPerDay
-            const rewardPrice = pool.rewardToken.derivedETH * ethPrice
+            const rewardPrice = pool.rewardToken.derivedETH * nativePrice
 
             const address = getAddress(pool.rewardToken.id)
 

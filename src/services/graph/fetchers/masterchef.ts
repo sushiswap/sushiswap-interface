@@ -9,6 +9,7 @@ import {
   masterChefV1TotalAllocPointQuery,
   masterChefV2PairAddressesQuery,
   masterChefV2PoolsQuery,
+  minichefNativeRewarderPoolsQuery,
   miniChefPairAddressesQuery,
   miniChefPoolsQuery,
   miniChefPoolsQueryV2,
@@ -113,12 +114,20 @@ export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = u
       tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
     })
 
+    const nativePools =
+      chainId === ChainId.XDAI ? await miniChef(minichefNativeRewarderPoolsQuery, chainId, variables) : undefined
+
     // @ts-ignore TYPE NEEDS FIXING
     return pools.map((pool) => ({
       ...pool,
       rewardToken: {
         // @ts-ignore TYPE NEEDS FIXING
         ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+      },
+      rewarder: {
+        ...pool.rewarder,
+        // @ts-ignore TYPE NEEDS FIXING
+        ...(nativePools ? nativePools.nativeRewarderPools.find((nativePool) => nativePool.id === pool.id) : undefined),
       },
     }))
   } else {
