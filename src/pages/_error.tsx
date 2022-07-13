@@ -13,13 +13,13 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err, title }) => {
   }
 
   return (
-    <div>
+    <div className="flex items-center justify-center w-full h-full ">
       <Head>
         <title>
           {statusCode ? `${statusCode}: ${title}` : 'Application error: a client-side exception has occurred'}
         </title>
       </Head>
-      <div>
+      <div className="flex items-center justify-center h-full">
         {statusCode ? <h1>{statusCode}</h1> : null}
         <div>
           <h2>
