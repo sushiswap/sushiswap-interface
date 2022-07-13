@@ -1,7 +1,0 @@
-# Ignore all CSS files:
-*.css
-*.json
-*.scss
-*.html
-*.svg
-*.min.js

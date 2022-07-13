@@ -1,10 +1,11 @@
+import { ChainId } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import {
   TABLE_TABLE_CLASSNAME,
   TABLE_TBODY_TR_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
-import { classNames, formatDateAgo, formatNumber, formatNumberScale } from 'app/functions'
+import { classNames, formatDateAgo, formatNumber, formatNumberScale, getExplorerLink } from 'app/functions'
 import { useRouter } from 'next/router'
 
 interface SushiInOutProps {
@@ -21,6 +22,7 @@ export const TABLE_TBODY_TD_CLASSNAME = (i: number, length: number) =>
 
 export default function SushiInOut({ title, xsushi, transactions }: SushiInOutProps) {
   const router = useRouter()
+  const chainId = router.query.chainId as string
   const goto = (route: string) => {
     router.push(route)
   }
@@ -42,7 +44,9 @@ export default function SushiInOut({ title, xsushi, transactions }: SushiInOutPr
               <tr
                 key={index}
                 className={TABLE_TBODY_TR_CLASSNAME}
-                onClick={() => goto(`/analytics/user/transaction/${transaction.id}`)}
+                onClick={() => {
+                  goto(getExplorerLink(Number(chainId) ?? ChainId.ETHEREUM, transaction.id, 'transaction'))
+                }}
               >
                 <td className={TABLE_TBODY_TD_CLASSNAME(0, 3)}>{formatNumber(transaction.amount ?? 0, false)}</td>
                 <td className={TABLE_TBODY_TD_CLASSNAME(1, 3)}>
