@@ -272,6 +272,17 @@ export const SUPPORTED_NETWORKS: Record<
     rpcUrls: ['https://evm.kava.io'],
     blockExplorerUrls: ['https://explorer.kava.io'],
   },
+  [ChainId.KAVA]: {
+    chainId: '0x440',
+    chainName: 'Metis',
+    nativeCurrency: {
+      name: 'Metis',
+      symbol: 'METIS',
+      decimals: 18,
+    },
+    rpcUrls: ['https://andromeda.metis.io/?owner=1088'],
+    blockExplorerUrls: ['https://andromeda-explorer.metis.io/'],
+  },
 }
 
 const NetworkModal: FC = () => {
@@ -299,10 +310,11 @@ const NetworkModal: FC = () => {
             ChainId.BSC,
             ChainId.XDAI,
             ChainId.HARMONY,
+            // ChainId.KAVA,
+            // ChainId.METIS,
             ChainId.TELOS,
             ChainId.CELO,
             ChainId.FUSE,
-            ChainId.KAVA,
             // ChainId.OKEX,
             // ChainId.HECO,
             // ChainId.PALM,

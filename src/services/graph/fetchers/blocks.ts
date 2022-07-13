@@ -21,6 +21,8 @@ export const BLOCKS = {
   [ChainId.KOVAN]: 'blocklytics/kovan-blocks',
   [ChainId.MOONBEAM]: 'sushiswap/moonbeam-blocks',
   [ChainId.OPTIMISM]: 'kybernetwork/optimism-blocks',
+  [ChainId.KAVA]: 'sushiswap/blocks-kava',
+  [ChainId.METIS]: 'sushiswap/blocks-metis',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
