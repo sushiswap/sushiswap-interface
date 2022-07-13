@@ -1,8 +1,9 @@
 import * as Sentry from '@sentry/nextjs'
 import NextErrorComponent from 'next/error'
+import Head from 'next/head'
 
 // @ts-ignore
-const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
+const MyError = ({ statusCode, hasGetInitialPropsRun, err, title }) => {
   if (!hasGetInitialPropsRun && err) {
     // getInitialProps is not called in case of
     // https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
@@ -11,7 +12,30 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
     // Flushing is not required in this case as it only happens on the client
   }
 
-  return <NextErrorComponent statusCode={statusCode} />
+  return (
+    <div>
+      <Head>
+        <title>
+          {statusCode ? `${statusCode}: ${title}` : 'Application error: a client-side exception has occurred'}
+        </title>
+      </Head>
+      <div>
+        {statusCode ? <h1>{statusCode}</h1> : null}
+        <div>
+          <h2>
+            {title || statusCode ? (
+              title
+            ) : (
+              <>
+                Application error: a client-side exception has occurred (see the browser console for more information)
+              </>
+            )}
+            .
+          </h2>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 // @ts-ignore
