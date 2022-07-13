@@ -4,7 +4,7 @@ import { ChainId } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import InfoCard from 'app/features/analytics/bar/InfoCard'
 import SushiInOut from 'app/features/analytics/bar/SushiInOut'
-import { formatNumber, formatNumberPeriod, formatPercent } from 'app/functions'
+import { formatNumber, formatPercent } from 'app/functions'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useBarXsushi, useBarXsushiUser } from 'app/services/graph/hooks/bar'
 import { useBlock } from 'app/services/graph/hooks/blocks'
@@ -47,6 +47,7 @@ export default function User() {
   })
 
   const sushiBalance = xsushiUser?.balance / 1e18 || 0
+  const sushiStaked = xsushi?.sushiStaked
   const avgStakedTime = (sushiBalance == 0 ? 0 : block?.timestamp - blockModified?.timestamp) ?? 0
 
   const apr =
@@ -80,14 +81,15 @@ export default function User() {
         <div className="space-y-5">
           <Typography variant="h3">{i18n._('Overview')}</Typography>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            <InfoCard text={i18n._('User SUSHI')} number={formatNumber(sushiBalance, false)} />
             <InfoCard text={i18n._('User xSUSHI')} number={formatNumber(xsushiBalance, false)} />
+            <InfoCard text={i18n._('Underlying SUSHI')} number={formatNumber(sushiBalance, false)} />
+            <InfoCard text={i18n._('SUSHI Staked')} number={formatNumber(sushiStaked, false)} />
             <InfoCard text={i18n._('SUSHI Earned')} number={formatNumber(sushiEarned, false)} />
             <InfoCard text={i18n._('% SUSHI Earned')} number={formatPercent(sushiEarnedPercent * 100)} />
-            <InfoCard
+            {/* <InfoCard
               text={i18n._('Average Staked Time')}
               number={avgStakedTime === 0 ? '-' : formatNumberPeriod(avgStakedTime)}
-            />
+            /> */}
             <InfoCard text={i18n._('Average APR')} number={formatPercent(apr * 100)} />
           </div>
           {(xsushiUser?.deposits?.length > 0 || xsushiUser?.withdrawals?.length > 0) && (

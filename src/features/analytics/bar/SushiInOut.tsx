@@ -5,6 +5,7 @@ import {
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
 import { classNames, formatDateAgo, formatNumber, formatNumberScale } from 'app/functions'
+import { useRouter } from 'next/router'
 
 interface SushiInOutProps {
   title: string
@@ -19,6 +20,11 @@ export const TABLE_TBODY_TD_CLASSNAME = (i: number, length: number) =>
   classNames('py-3', i === 0 ? 'pl-8 text-left' : 'text-right', i === length - 1 ? 'pr-8' : '')
 
 export default function SushiInOut({ title, xsushi, transactions }: SushiInOutProps) {
+  const router = useRouter()
+  const goto = (route: string) => {
+    router.push(route)
+  }
+
   return (
     <div className="w-full py-3">
       <Typography variant="h3">{title}</Typography>
@@ -33,7 +39,11 @@ export default function SushiInOut({ title, xsushi, transactions }: SushiInOutPr
           </thead>
           <tbody>
             {transactions.map((transaction, index) => (
-              <tr key={index} className={TABLE_TBODY_TR_CLASSNAME}>
+              <tr
+                key={index}
+                className={TABLE_TBODY_TR_CLASSNAME}
+                onClick={() => goto(`/analytics/user/transaction/${transaction.id}`)}
+              >
                 <td className={TABLE_TBODY_TD_CLASSNAME(0, 3)}>{formatNumber(transaction.amount ?? 0, false)}</td>
                 <td className={TABLE_TBODY_TD_CLASSNAME(1, 3)}>
                   {formatNumberScale(transaction.amount * xsushi.xSushiSushiRatio ?? 0)}
