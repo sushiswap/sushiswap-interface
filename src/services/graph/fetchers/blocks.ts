@@ -76,8 +76,8 @@ export const getAverageBlockTime = async (chainId = ChainId.ETHEREUM) => {
   const now = startOfHour(Date.now())
   const blocks = await getBlocks(chainId, {
     where: {
-      timestamp_gt: getUnixTime(subHours(now, 6)),
-      timestamp_lt: getUnixTime(now),
+      timestamp_gt: getUnixTime(subHours(now, 12)),
+      timestamp_lt: getUnixTime(subHours(now, 6)),
     },
   })
 

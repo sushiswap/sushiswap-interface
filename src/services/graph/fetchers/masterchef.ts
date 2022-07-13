@@ -9,6 +9,7 @@ import {
   masterChefV1TotalAllocPointQuery,
   masterChefV2PairAddressesQuery,
   masterChefV2PoolsQuery,
+  minichefNativeRewarderPoolsQuery,
   miniChefPairAddressesQuery,
   miniChefPoolsQuery,
   miniChefPoolsQueryV2,
@@ -21,7 +22,7 @@ import { request } from 'graphql-request'
 
 export const MINICHEF = {
   [ChainId.MATIC]: 'jiro-ono/minichef-staging-updates',
-  [ChainId.XDAI]: 'sushiswap/xdai-minichef',
+  [ChainId.XDAI]: 'jiro-ono/gnosis-minichef-staging',
   [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
   [ChainId.ARBITRUM]: 'jiro-ono/arbitrum-minichef-staging',
   [ChainId.CELO]: 'sushiswap/celo-minichef-v2',
@@ -104,7 +105,7 @@ export const getMasterChefV2PairAddreses = async () => {
 }
 
 export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM].includes(chainId)
+  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM, ChainId.XDAI].includes(chainId)
 
   if (v2Query) {
     const { pools } = await miniChef(miniChefPoolsQueryV2, chainId, variables)
@@ -113,12 +114,20 @@ export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = u
       tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
     })
 
+    const nativePools =
+      chainId === ChainId.XDAI ? await miniChef(minichefNativeRewarderPoolsQuery, chainId, variables) : undefined
+
     // @ts-ignore TYPE NEEDS FIXING
     return pools.map((pool) => ({
       ...pool,
       rewardToken: {
         // @ts-ignore TYPE NEEDS FIXING
         ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+      },
+      rewarder: {
+        ...pool.rewarder,
+        // @ts-ignore TYPE NEEDS FIXING
+        ...(nativePools ? nativePools.nativeRewarderPools.find((nativePool) => nativePool.id === pool.id) : undefined),
       },
     }))
   } else {
@@ -157,7 +166,7 @@ export const getMasterChefV2Pools = async (chainId = ChainId.ETHEREUM, variables
 }
 
 export const getMiniChefFarmsWithUser = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM].includes(chainId)
+  const v2Query = chainId && [ChainId.MATIC, ChainId.ARBITRUM, ChainId.XDAI].includes(chainId)
 
   if (v2Query) {
     const { pools } = await miniChef(miniChefPoolsWithUserQueryV2, chainId, variables)

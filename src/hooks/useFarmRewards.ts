@@ -21,6 +21,7 @@ import {
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useMovrPrice,
+  useNativePrice,
   useOhmPrice,
   useOneDayBlock,
   useOnePrice,
@@ -72,6 +73,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
   const { data: sushiPrice } = useSushiPrice()
   const { data: ethPrice } = useEthPrice()
+  const { data: nativePrice } = useNativePrice({ chainId })
   const { data: maticPrice } = useMaticPrice()
   const { data: gnoPrice } = useGnoPrice()
   const { data: onePrice } = useOnePrice()
@@ -185,7 +187,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
             }
             rewards[1] = reward
           }
-        } else if (pool.chef === Chef.MINICHEF && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM) {
+        } else if (
+          pool.chef === Chef.MINICHEF &&
+          chainId !== ChainId.MATIC &&
+          chainId !== ChainId.ARBITRUM &&
+          chainId !== ChainId.XDAI
+        ) {
           const sushiPerSecond =
             ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
           const sushiPerBlock = sushiPerSecond * averageBlockTime
@@ -195,8 +202,6 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
             ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 
           const rewardPerBlock = rewardPerSecond * averageBlockTime
-
-          const rewardPerDay = rewardPerBlock * blocksPerDay
 
           const reward = {
             [ChainId.MATIC]: {
@@ -265,15 +270,17 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               rewards[1] = reward[chainId]
             }
           }
-        } else if (chainId === ChainId.MATIC || chainId === ChainId.ARBITRUM) {
+        } else if (chainId === ChainId.MATIC || chainId === ChainId.ARBITRUM || chainId === ChainId.XDAI) {
           if (pool.rewarder.rewardPerSecond !== '0') {
             const rewardPerSecond =
               pool.rewarder.totalAllocPoint === '0'
                 ? pool.rewarder.rewardPerSecond / 10 ** pool.rewardToken.decimals
+                : chainId === ChainId.XDAI
+                ? ((pool.rewarder.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
                 : ((pool.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
             const rewardPerBlock = rewardPerSecond * averageBlockTime
             const rewardPerDay = rewardPerBlock * blocksPerDay
-            const rewardPrice = pool.rewardToken.derivedETH * ethPrice
+            const rewardPrice = pool.rewardToken.derivedETH * nativePrice
 
             const address = getAddress(pool.rewardToken.id)
 
