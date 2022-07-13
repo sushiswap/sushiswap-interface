@@ -452,7 +452,7 @@ export default function Stake() {
                             <p className="ml-5 text-base text-primary md:ml-0">{`${weightedApr}%`}</p>
                         </div>
                     </div> */}
-                  {account && (
+                  {/* {account && (
                     <a
                       href={`https://analytics.sushi.com/users/${account}`}
                       target="_blank"
@@ -467,7 +467,7 @@ export default function Stake() {
                     >
                       {i18n._(t`Your SushiBar Stats`)}
                     </a>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
