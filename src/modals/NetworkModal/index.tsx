@@ -272,7 +272,7 @@ export const SUPPORTED_NETWORKS: Record<
     rpcUrls: ['https://evm.kava.io'],
     blockExplorerUrls: ['https://explorer.kava.io'],
   },
-  [ChainId.KAVA]: {
+  [ChainId.METIS]: {
     chainId: '0x440',
     chainName: 'Metis',
     nativeCurrency: {
