@@ -30,7 +30,7 @@ const FormTextAreaField: FC<FormTextAreaFieldProps> = ({ name, label, children, 
   return (
     <>
       <Typography weight={700}>{label}</Typography>
-      <div className="mt-2 flex rounded-md shadow-sm">
+      <div className="flex mt-2 rounded-md shadow-sm">
         <textarea
           {...register(name)}
           {...rest}
@@ -38,7 +38,7 @@ const FormTextAreaField: FC<FormTextAreaFieldProps> = ({ name, label, children, 
         />
       </div>
       {!!errors[name] ? (
-        <FormFieldHelperText className="!text-red">{errors[name].message}</FormFieldHelperText>
+        <FormFieldHelperText className="!text-red">{errors?.[name]?.message}</FormFieldHelperText>
       ) : (
         <FormFieldHelperText>{helperText}</FormFieldHelperText>
       )}
