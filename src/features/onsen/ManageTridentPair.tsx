@@ -1,12 +1,8 @@
-import { t } from '@lingui/macro'
+import { ExternalLinkIcon } from '@heroicons/react/solid'
 import { useLingui } from '@lingui/react'
-import Button from 'app/components/Button'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
-import Typography from 'app/components/Typography'
 import { isWrappedReturnNativeSymbol } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
-import { TridentHeader } from 'app/layouts/Trident'
-import Link from 'next/link'
 import React, { useState } from 'react'
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -20,58 +16,42 @@ const ManageTridentPair = ({ farm }) => {
   console.log(farm)
 
   return (
-    <div className="flex flex-col gap-1">
-      <TridentHeader pattern="bg-chevron" condensed className="lg:py-[22px]">
-        <div className="flex flex-col gap-3 lg:w-8/12 lg:gap-5 lg:pr-6 h-[68px] lg:h-auto">
-          <CurrencyLogoArray currencies={token0 && token1 ? [token0, token1] : []} size={64} dense />
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-row items-center gap-3">
+        <CurrencyLogoArray currencies={token0 && token1 ? [token0, token1] : []} size={36} dense />
+        <div>
+          <div className="text-lg font-bold text-primary">
+            {farm.pair.token0.symbol}/{farm.pair.token1.symbol} {farm.pair.swapFee / 100}%
+          </div>
+          <div className="text-sm text-secondary">Trident Farm</div>
         </div>
-      </TridentHeader>
-      <Typography variant="h2" weight={700} className="text-high-emphesis">
-        {i18n._(t`Add Liquidity`)}
-      </Typography>
-      <Button color="blue" variant="outlined" size="sm" className="!pl-2 !py-1 rounded-full">
-        <Link
-          href={{
-            pathname: `/trident/add`,
-            query: {
-              tokens: [
-                isWrappedReturnNativeSymbol(farm.chainId, farm.pair.token0.id),
-                isWrappedReturnNativeSymbol(farm.chainId, farm.pair.token1.id),
-              ],
-              fee: farm.pair.swapFee,
-              twap: farm.pair.twapEnabled,
-            },
-          }}
-          passHref={true}
-        >
-          <a className="text-sm text-blue">
-            Add {farm.pair.token0.symbol}/{farm.pair.token1.symbol} Liquidity
-          </a>
-        </Link>
-      </Button>
-      <Typography variant="h2" weight={700} className="text-high-emphesis">
-        {i18n._(t`Remove Liquidity`)}
-      </Typography>
-      <Button color="blue" variant="outlined" size="sm" className="!pl-2 !py-1 rounded-full">
-        <Link
-          href={{
-            pathname: `/trident/remove`,
-            query: {
-              tokens: [
-                isWrappedReturnNativeSymbol(farm.chainId, farm.pair.token0.id),
-                isWrappedReturnNativeSymbol(farm.chainId, farm.pair.token1.id),
-              ],
-              fee: farm.pair.swapFee,
-              twap: farm.pair.twapEnabled,
-            },
-          }}
-          passHref={true}
-        >
-          <a className="text-sm text-blue">
-            Remove {farm.pair.token0.symbol}/{farm.pair.token1.symbol} Liquidity
-          </a>
-        </Link>
-      </Button>
+      </div>
+      <a
+        target="_blank"
+        href={`/trident/add/${isWrappedReturnNativeSymbol(
+          farm.chainId,
+          farm.pair.token0.id
+        )}/${isWrappedReturnNativeSymbol(farm.chainId, farm.pair.token1.id)}?fee=${farm.pair.swapFee}&twap=${
+          farm.pair.twapEnabled
+        }`}
+        className="flex items-center justify-between px-8 py-4 text-lg font-bold border rounded text-primary border-dark-700 hover:bg-dark-700"
+        rel="noreferrer"
+      >
+        Add Liquidity <ExternalLinkIcon width={20} height={20} />
+      </a>
+      <a
+        target="_blank"
+        href={`/trident/remove/${isWrappedReturnNativeSymbol(
+          farm.chainId,
+          farm.pair.token0.id
+        )}/${isWrappedReturnNativeSymbol(farm.chainId, farm.pair.token1.id)}?fee=${farm.pair.swapFee}&twap=${
+          farm.pair.twapEnabled
+        }`}
+        className="flex items-center justify-between px-8 py-4 text-lg font-bold border rounded text-primary border-dark-700 hover:bg-dark-700"
+        rel="noreferrer"
+      >
+        Remove Liquidity <ExternalLinkIcon width={20} height={20} />
+      </a>
     </div>
   )
 }
