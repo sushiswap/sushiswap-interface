@@ -29,6 +29,7 @@ import {
   useSushiPairs,
   useSushiPrice,
 } from 'app/services/graph'
+import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
 import { useCallback, useMemo } from 'react'
 
 import { useAllTokens } from './Tokens'
@@ -48,6 +49,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       },
     },
     shouldFetch: !!farmAddresses,
+  })
+
+  const { data, error, isValidating } = useGetAllTridentPools({ chainId })
+
+  const tridentPairs = data?.filter((pool) => {
+    return farmAddresses.includes(pool.address)
   })
 
   const { data: swapPairs1d } = useSushiPairs({
@@ -102,10 +109,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       const swapPair1d = swapPairs1d?.find((pair) => pair.id === pool.pair)
       // @ts-ignore TYPE NEEDS FIXING
       const kashiPair = kashiPairs?.find((pair) => pair.id === pool.pair)
+      // @ts-ignore TYPE NEEDS FIXING
+      const tridentPair = tridentPairs?.find((pair) => pair.address === pool.pair)
 
-      const pair = swapPair || kashiPair
+      const pair = swapPair || kashiPair || tridentPair
 
-      const type = swapPair ? PairType.SWAP : PairType.KASHI
+      const type = swapPair ? PairType.SWAP : tridentPair ? PairType.TRIDENT : PairType.KASHI
 
       const blocksPerHour = 3600 / averageBlockTime
 
@@ -252,6 +261,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               rewardPerDay: rewardPerSecond * 86400,
               rewardPrice: glimmerPrice,
             },
+            [ChainId.KAVA]: {
+              currency: NATIVE[ChainId.KAVA],
+              rewardPerBlock,
+              rewardPerDay: rewardPerSecond * 86400,
+              rewardPrice: 1, //todo: need handle this
+            },
           }
 
           if (chainId === ChainId.FUSE) {
@@ -306,11 +321,13 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
       const rewards = getRewards()
 
-      const balance = swapPair ? Number(pool.balance / 1e18) : pool.balance / 10 ** kashiPair.token0.decimals
+      const balance = kashiPair ? pool.balance / 10 ** kashiPair.token0.decimals : Number(pool.balance / 1e18)
 
-      const tvl = swapPair
+      const tvl = kashiPair
+        ? balance * kashiPair.token0.derivedETH * ethPrice
+        : swapPair
         ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
-        : balance * kashiPair.token0.derivedETH * ethPrice
+        : (balance / Number(tridentPair?.liquidity)) * Number(tridentPair?.liquidityUSD)
 
       const feeApyPerYear =
         swapPair && swapPair1d
@@ -338,6 +355,22 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
       const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
 
+      if (type === PairType.TRIDENT) {
+        pair.id = pair.address
+        pair.token0 = {
+          id: pair.assets[0].tokenInfo.address,
+          name: pair.assets[0].tokenInfo.name,
+          symbol: pair.assets[0].tokenInfo.symbol,
+          decimals: pair.assets[0].tokenInfo.decimals,
+        }
+        pair.token1 = {
+          id: pair.assets[1].tokenInfo.address,
+          name: pair.assets[1].tokenInfo.name,
+          symbol: pair.assets[1].tokenInfo.symbol,
+          decimals: pair.assets[1].tokenInfo.decimals,
+        }
+      }
+
       return {
         ...pool,
         ...position,
@@ -362,6 +395,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
         roiPerYear,
         rewards,
         tvl,
+        chainId,
       }
     },
     [
@@ -385,6 +419,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       sushiPrice,
       swapPairs,
       swapPairs1d,
+      tridentPairs,
     ]
   )
 
@@ -394,10 +429,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
         // @ts-ignore TYPE NEEDS FIXING
         (swapPairs && swapPairs.find((pair) => pair.id === farm.pair)) ||
         // @ts-ignore TYPE NEEDS FIXING
-        (kashiPairs && kashiPairs.find((pair) => pair.id === farm.pair))
+        (kashiPairs && kashiPairs.find((pair) => pair.id === farm.pair)) ||
+        // @ts-ignore TYPE NEEDS FIXING
+        (tridentPairs && tridentPairs.find((pair) => pair.address === farm.pair))
       )
     },
-    [kashiPairs, swapPairs]
+    [kashiPairs, swapPairs, tridentPairs]
   )
 
   return useMemo(() => farms.filter(filter).map(map), [farms, filter, map])

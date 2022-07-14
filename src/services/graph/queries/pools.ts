@@ -19,6 +19,7 @@ const tridentPoolsSubQuery = `
       symbol
       decimals
     }
+    reserve
   }
 `
 
