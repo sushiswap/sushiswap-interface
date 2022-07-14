@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react'
 import { ChainId, Currency, SUSHI, Token } from '@sushiswap/core-sdk'
 import Container from 'app/components/Container'
 import Typography from 'app/components/Typography'
-import { MEOW, XSUSHI } from 'app/config/tokens'
+import { MEOW, XSUSHI } from 'app/config/tokens/ethereum'
 import { Feature } from 'app/enums'
 import CurrencyInputPanel from 'app/features/meowshi/CurrencyInputPanel'
 import HeaderToggle from 'app/features/meowshi/HeaderToggle'
@@ -133,7 +133,7 @@ export default function Meowshi() {
   )
 
   return (
-    <Container id="meowshi-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
+    <Container id="meowshi-page" className="py-4 mx-auto md:py-8 lg:py-12" maxWidth="2xl">
       <NextSeo title={`Meowshi`} />
 
       <div className="z-0 relative mb-[-38px] md:mb-[-54px] ml-0 md:ml-4 flex justify-between gap-6 items-center">

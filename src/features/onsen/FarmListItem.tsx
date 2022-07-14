@@ -27,9 +27,12 @@ const FarmListItem: FC<FarmListItem> = ({ farm, onClick }) => {
         {token0 && token1 && <CurrencyLogoArray currencies={[token0, token1]} dense size={32} />}
         <div className="flex flex-col items-start">
           <Typography weight={700} className="flex gap-1 text-high-emphesis">
-            {farm?.pair?.token0?.symbol}
+            {token0?.symbol}
             <span className="text-low-emphesis">/</span>
-            {farm?.pair?.token1?.symbol}
+            {token1?.symbol}
+            {farm?.pair?.type === PairType.TRIDENT && (
+              <span className="text-low-emphesis">({farm.pair.swapFee / 100}%)</span>
+            )}
           </Typography>
           {farm?.pair?.type === PairType.SWAP && (
             <Typography variant="xs" className="text-low-emphesis">
@@ -39,6 +42,11 @@ const FarmListItem: FC<FarmListItem> = ({ farm, onClick }) => {
           {farm?.pair?.type === PairType.KASHI && (
             <Typography variant="xs" className="text-low-emphesis">
               {i18n._(t`Kashi Farm`)}
+            </Typography>
+          )}
+          {farm?.pair?.type === PairType.TRIDENT && (
+            <Typography variant="xs" className="text-low-emphesis">
+              {i18n._(t`Trident Farm`)}
             </Typography>
           )}
         </div>

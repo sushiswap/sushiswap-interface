@@ -41,10 +41,13 @@ export interface TridentPool {
   address: string
   type: PoolType
   volumeUSD: number
+  liquidity: number
   liquidityUSD: number
   transactionCount: number
   apy: string
   assets: Token[]
+  reserve0: number
+  reserve1: number
   swapFee: Fee
   twapEnabled: boolean
 }
@@ -64,6 +67,7 @@ const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult, tokens: Re
           address: id,
           type: gqlPoolTypeMap[poolType],
           volumeUSD: Number(kpi.volumeUSD),
+          liquidity: Number(kpi.liquidity),
           liquidityUSD: Number(kpi.liquidityUSD),
           apy: '12.34', // TODO: Needs subgraph support
           transactionCount: Number(kpi.transactionCount),
@@ -74,6 +78,8 @@ const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult, tokens: Re
             }
             return new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)
           }),
+          reserve0: assets[0].reserve,
+          reserve1: assets[1].reserve,
           swapFee: Number(swapFee),
           twapEnabled,
         }))
@@ -97,6 +103,7 @@ export interface TridentPoolData {
       name: string
       decimals: string
     }
+    reserve: number
   }[]
 }
 

@@ -22,7 +22,7 @@ export const TridentHeader: FC<TridentHeaderProps> = ({
   condensed,
 }) => {
   return (
-    <header className="relative w-full flex flex-col justify-center items-center">
+    <header className="relative flex flex-col items-center justify-center w-full">
       <Background variant={pattern} />
       <Container
         maxWidth={maxWidth}
@@ -42,7 +42,10 @@ interface TridentBodyProps {
 export const TridentBody: FC<TridentBodyProps> = ({ children, className, maxWidth = '7xl' }) => {
   return (
     <Main>
-      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-10 z-[1] p-6 lg:py-10', className)}>
+      <Container
+        maxWidth={maxWidth}
+        className={classNames('flex flex-col gap-10 z-[1] p-6 lg:py-10 mx-auto', className)}
+      >
         {children}
       </Container>
     </Main>
@@ -53,8 +56,8 @@ const TridentLayout: FC = ({ children = [] }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex flex-col items-center w-full flex flex-grow">
-        <div className="w-full flex-grow flex flex-col">{children}</div>
+      <div className="flex flex-col items-center flex-grow w-full">
+        <div className="flex flex-col flex-grow w-full">{children}</div>
         <Popups />
       </div>
       <Footer />

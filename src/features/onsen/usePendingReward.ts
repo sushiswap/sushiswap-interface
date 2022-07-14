@@ -31,6 +31,7 @@ const usePending = (farm) => {
       [ChainId.FUSE]: complexRewarder,
       [ChainId.FANTOM]: complexRewarder,
       [ChainId.MOONBEAM]: complexRewarder,
+      [ChainId.KAVA]: complexRewarder,
     }),
     [complexRewarder, cloneRewarder]
   )

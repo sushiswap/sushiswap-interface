@@ -13,6 +13,7 @@ export enum Rewarder {
 export enum PairType {
   SWAP,
   KASHI,
+  TRIDENT,
 }
 
 export enum OnsenModalView {

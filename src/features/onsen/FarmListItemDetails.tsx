@@ -14,6 +14,7 @@ import InvestmentDetails from './InvestmentDetails'
 import ManageBar from './ManageBar'
 import ManageKashiPair from './ManageKashiPair'
 import ManageSwapPair from './ManageSwapPair'
+import ManageTridentPair from './ManageTridentPair'
 
 const COLUMN_CONTAINER = 'flex flex-col flex-grow gap-4'
 
@@ -67,7 +68,13 @@ const FarmListItemDetails = ({ farm, onDismiss }) => {
             <InvestmentDetails farm={farm} />
           </div>
           <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Liquidity ? 'block' : 'hidden')}>
-            {farm.pair.type === PairType.KASHI ? <ManageKashiPair farm={farm} /> : <ManageSwapPair farm={farm} />}
+            {farm.pair.type === PairType.KASHI ? (
+              <ManageKashiPair farm={farm} />
+            ) : farm.pair.type === PairType.SWAP ? (
+              <ManageSwapPair farm={farm} />
+            ) : (
+              <ManageTridentPair farm={farm} />
+            )}
           </div>
           <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Staking ? 'block' : 'hidden')}>
             <ManageBar farm={farm} />
