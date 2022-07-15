@@ -77,7 +77,7 @@ export default function PoolFinder() {
   )
 
   return (
-    <Container id="find-pool-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
+    <Container id="find-pool-page" className="py-4 mx-auto space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
       <NextSeo title={`Find Pool`} />
       <div className="p-4 mb-3 space-y-3">
         <Back />

@@ -4,7 +4,7 @@ import { NextSeo } from 'next-seo'
 
 export default function Saave() {
   return (
-    <Container id="saave-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
+    <Container id="saave-page" className="py-4 mx-auto md:py-8 lg:py-12" maxWidth="2xl">
       <NextSeo title={`Saave`} />
       <Container className="text-center">
         <Typography component="h1" variant="h1" className="mb-4">

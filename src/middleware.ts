@@ -30,7 +30,7 @@ const DEFAULT_CHAIN_ID = '1'
 export function middleware(req: NextRequest) {
   // const response = NextResponse.next()
 
-  const chainId = req.cookies['chain-id']
+  const chainId = req.cookies.get('chain-id')
 
   const subdomain = req.headers.get('host')?.split('.')[0]
 
@@ -43,9 +43,9 @@ export function middleware(req: NextRequest) {
 
   if (subdomain && subdomain in SUBDOMAIN_CHAIN_ID) {
     // set the `cookie`
-    res.cookie('chain-id', SUBDOMAIN_CHAIN_ID[subdomain], { sameSite: 'none', secure: true })
+    res.cookies.set('chain-id', SUBDOMAIN_CHAIN_ID[subdomain], { sameSite: 'none', secure: true })
   } else {
-    res.clearCookie('chain-id')
+    res.cookies.delete('chain-id')
   }
 
   // return the res

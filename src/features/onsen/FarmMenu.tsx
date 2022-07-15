@@ -48,6 +48,7 @@ enum FarmFilter {
   Kashi = 'Kashi Farms',
   Sushi = 'Sushi Farms',
   Old = 'Old Farms',
+  Trident = 'Trident Farms',
 }
 
 const filters: Record<string, FarmFilter> = {
@@ -56,6 +57,7 @@ const filters: Record<string, FarmFilter> = {
   kashi: FarmFilter.Kashi,
   old: FarmFilter.Old,
   sushi: FarmFilter.Sushi,
+  trident: FarmFilter.Trident,
 }
 
 const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: number }) => {
@@ -87,6 +89,10 @@ const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: 
         ) : undefined,
       // @ts-ignore TYPE NEEDS FIXING
       [FarmFilter.Old]: <MenuLink href={'/farm?filter=old'} label={i18n._(t`Old Farms`)} />,
+      [FarmFilter.Trident]:
+        chainId && [ChainId.KAVA].includes(chainId) ? (
+          <MenuLink href={'/farm?filter=trident'} label={i18n._(t`Trident Farms`)} />
+        ) : undefined,
     }
 
     return Object.entries(map).reduce<Record<string, ReactNode>>((acc, [k, v]) => {

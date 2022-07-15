@@ -32,6 +32,8 @@ const RPC = {
   [ChainId.TELOS]: 'https://mainnet.telos.net/evm',
   [ChainId.MOONBEAM]: 'https://rpc.api.moonbeam.network',
   [ChainId.OPTIMISM]: 'https://mainnet.optimism.io',
+  [ChainId.KAVA]: 'https://evm.kava.io',
+  [ChainId.METIS]: 'https://andromeda.metis.io/?owner=1088',
 }
 
 export default RPC

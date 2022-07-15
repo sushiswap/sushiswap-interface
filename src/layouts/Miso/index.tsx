@@ -100,7 +100,10 @@ interface MisoBodyProps {
 export const MisoBody: FC<MisoBodyProps> = ({ children, className, maxWidth = '7xl' }) => {
   return (
     <Main>
-      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-10 py-10 px-5 lg:px-6 z-[1]', className)}>
+      <Container
+        maxWidth={maxWidth}
+        className={classNames('flex flex-col gap-10 py-10 px-5 lg:px-6 z-[1] mx-auto', className)}
+      >
         {children}
       </Container>
     </Main>
@@ -111,8 +114,8 @@ const MisoLayout: FC = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex flex-col items-center w-full flex flex-grow">
-        <div className="w-full flex-grow flex flex-col">{children}</div>
+      <div className="flex flex-col items-center flex-grow w-full">
+        <div className="flex flex-col flex-grow w-full">{children}</div>
         <Popups />
       </div>
       <Footer />

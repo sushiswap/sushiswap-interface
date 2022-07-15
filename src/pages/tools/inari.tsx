@@ -39,7 +39,7 @@ const Inari = () => {
   return (
     <>
       <NextSeo title={`Inari`} />
-      <Container maxWidth="5xl" className="flex flex-col gap-8 px-4 py-8">
+      <Container maxWidth="5xl" className="flex flex-col gap-8 px-4 py-8 mx-auto">
         <div className="flex items-center gap-8">
           <div className="min-w-[140px] min-h-[105px]">
             <Image src="https://app.sushi.com/images/inari/neon-sign.png" alt="inari-sign" width={140} height={105} />

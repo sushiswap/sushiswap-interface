@@ -74,7 +74,6 @@ export function useUserInfo(farm, token) {
 // @ts-ignore TYPE NEEDS FIXING
 export function usePendingSushi(farm) {
   const { account, chainId } = useActiveWeb3React()
-
   const contract = useChefContract(farm.chef)
 
   const args = useMemo(() => {

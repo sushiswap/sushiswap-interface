@@ -50,7 +50,7 @@ const FormTextField: FC<FormTextFieldProps> = ({
         )}
       >
         {icon && (
-          <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-dark-800 sm:text-sm">
+          <span className="inline-flex items-center px-3 border border-r-0 rounded-l-md border-dark-800 sm:text-sm">
             {icon}
           </span>
         )}
@@ -70,13 +70,13 @@ const FormTextField: FC<FormTextFieldProps> = ({
           // autoCapitalize="off"
         />
         {endIcon && (
-          <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-dark-800 sm:text-sm">
+          <span className="inline-flex items-center px-3 border border-l-0 rounded-r-md border-dark-800 sm:text-sm">
             {endIcon}
           </span>
         )}
       </div>
       {!!errors[name] ? (
-        <FormFieldHelperText className="!text-red">{errors[name].message}</FormFieldHelperText>
+        <FormFieldHelperText className="!text-red">{errors?.[name]?.message}</FormFieldHelperText>
       ) : error ? (
         <FormFieldHelperText className="!text-red">{error}</FormFieldHelperText>
       ) : typeof helperText === 'string' ? (

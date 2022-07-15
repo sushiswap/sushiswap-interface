@@ -25,7 +25,7 @@ export const SwapLayoutCard: FC<{ className?: string }> = ({ children, className
 export const Layout: FC<Layout> = ({ children, id }) => {
   return (
     <DefaultLayout>
-      <Container id={id} className="py-4 md:py-12 lg:py-[120px] px-2" maxWidth="md">
+      <Container id={id} className="py-4 md:py-12 lg:py-[120px] px-2 mx-auto" maxWidth="md">
         <DoubleGlowShadow>{children}</DoubleGlowShadow>
       </Container>
     </DefaultLayout>

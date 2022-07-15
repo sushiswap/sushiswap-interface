@@ -29,28 +29,23 @@ function Web3Network(): JSX.Element | null {
 
   const handleChainSwitch = useCallback(
     (targetChain: number) => {
-      if (!library?.provider) {
+      if (!library || !library?.provider) {
         setAttemptingSwitchFromUrl(false)
         return
       }
+
       setSwitchedFromUrl(true)
-      switchToNetwork({ provider: library.provider, chainId: targetChain })
-        .then(() => {
-          return router.replace({
-            pathname: router.pathname,
-            query: { ...router.query, chainId: targetChain },
-          })
+
+      if (switchedFromUrl) return
+
+      switchToNetwork({ provider: library.provider, chainId: targetChain }).then(() => {
+        return router.replace({
+          pathname: router.pathname,
+          query: { ...router.query, chainId: targetChain },
         })
-        .catch(() => {
-          if (chainId) {
-            router.replace({ pathname: router.pathname, query: { ...router.query, chainId } })
-          }
-        })
-        .finally(() => {
-          //
-        })
+      })
     },
-    [library?.provider, router, chainId]
+    [library, switchedFromUrl, router]
   )
 
   useEffect(() => {
@@ -65,23 +60,22 @@ function Web3Network(): JSX.Element | null {
 
   useEffect(() => {
     // assume network change originates from URL
-
     const cookieChainId = Cookies.get('chain-id')
-
     const defaultChainId = Number(cookieChainId)
-
     if (
-      chainId &&
-      !attemptingSwitchFromUrl &&
-      !switchedFromUrl &&
-      isWindowVisible &&
-      (!Number.isNaN(defaultChainId) || !Number.isNaN(queryChainId)) &&
-      (chainId !== queryChainId || chainId !== defaultChainId)
-    ) {
-      console.debug('network change from query chainId', { queryChainId, defaultChainId, chainId })
-      setAttemptingSwitchFromUrl(true)
-      handleChainSwitch(defaultChainId ? defaultChainId : queryChainId)
-    }
+      !chainId ||
+      !isWindowVisible ||
+      attemptingSwitchFromUrl ||
+      switchedFromUrl ||
+      (Number.isNaN(defaultChainId) && Number.isNaN(queryChainId)) ||
+      chainId === queryChainId ||
+      chainId === defaultChainId
+    )
+      return
+
+    console.debug('network change from query chainId', { queryChainId, defaultChainId, chainId })
+    setAttemptingSwitchFromUrl(true)
+    handleChainSwitch(defaultChainId ? defaultChainId : queryChainId)
   }, [chainId, handleChainSwitch, switchedFromUrl, queryChainId, isWindowVisible, attemptingSwitchFromUrl])
 
   // set chainId on initial load if not present

@@ -46,7 +46,7 @@ const Vesting = () => {
   return (
     <>
       <NextSeo title={`Vesting`} />
-      <Container maxWidth="5xl" className="flex flex-col gap-8 px-4 py-8">
+      <Container maxWidth="5xl" className="flex flex-col gap-8 px-4 py-8 mx-auto">
         <div className="flex items-center gap-8">
           <VestingLayout />
         </div>

@@ -48,6 +48,8 @@ export default function Farm(): JSX.Element {
       farm.allocPoint !== '0',
     // @ts-ignore TYPE NEEDS FIXING
     old: (farm) => farm.allocPoint === '0',
+    // @ts-ignore TYPE NEEDS FIXING
+    trident: (farm) => farm.pair.type === PairType.TRIDENT && farm.allocPoint !== '0',
   }
 
   const rewards = useFarmRewards({ chainId })
