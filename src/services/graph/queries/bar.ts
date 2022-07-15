@@ -111,6 +111,8 @@ export const barXsushiUserQuery = gql`
       modifiedAtTimestamp
       deposits(first: 1000, orderBy: timestamp, orderBy: desc, orderDirection: desc) {
         amount
+        xSushiSushiRatio
+        sushiXsushiRatio
         block
         id
         timestamp
@@ -118,6 +120,8 @@ export const barXsushiUserQuery = gql`
       }
       withdrawals(first: 1000, orderBy: timestamp, orderBy: desc, orderDirection: desc) {
         amount
+        xSushiSushiRatio
+        sushiXsushiRatio
         block
         id
         timestamp

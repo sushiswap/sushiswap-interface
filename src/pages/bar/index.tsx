@@ -266,7 +266,7 @@ export default function Stake() {
                         {i18n._(t`View Stats`)}
                       </a>
                     </Link>
-                    <Link href={`/analytics/user`}>
+                    <Link href={`/analytics/user?account=${account}`}>
                       <a
                         className={`
                         ml-2 py-1 px-4 md:py-1.5 md:px-7 rounded
