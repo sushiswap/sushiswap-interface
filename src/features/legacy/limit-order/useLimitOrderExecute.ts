@@ -1,18 +1,19 @@
-import { getAddress } from '@ethersproject/address'
 import { Signature } from '@ethersproject/bytes'
-import { AddressZero } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { LimitOrder, STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
-import { calculateGasMargin, ZERO } from 'app/functions'
-import { useBentoBoxContract, useLimitOrderHelperContract } from 'app/hooks'
+import { calculateGasMargin } from 'app/functions'
+import { useBentoBox, useBentoBoxContract, useLimitOrderHelperContract } from 'app/hooks'
+import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { clear, setLimitOrderAttemptingTxn, setLimitOrderBentoPermit } from 'app/state/limit-order/actions'
+import { useLimitOrderDerivedCurrencies } from 'app/state/limit-order/hooks'
 import { OrderExpiration } from 'app/state/limit-order/reducer'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { BigNumber } from 'ethers'
 import { useCallback } from 'react'
 
 const getEndTime = (orderExpiration: OrderExpiration | string): number => {
@@ -51,13 +52,16 @@ export type UseLimitOrderExecute = () => {
 
 const useLimitOrderExecute: UseLimitOrderExecute = () => {
   const { account, chainId, library } = useActiveWeb3React()
+  const { inputCurrency } = useLimitOrderDerivedCurrencies()
+  const { rebase } = useBentoRebase(inputCurrency)
   const dispatch = useAppDispatch()
   const bentoBoxContract = useBentoBoxContract()
   const limitOrderHelperContract = useLimitOrderHelperContract()
   const addTransaction = useTransactionAdder()
-  const limitOrderContractAddress = chainId && STOP_LIMIT_ORDER_ADDRESS[chainId]
+  const limitOrderContractAddress = chainId ? STOP_LIMIT_ORDER_ADDRESS[chainId] : undefined
   const addPopup = useAddPopup()
   const { mutate } = useLimitOrders()
+  const { deposit: _deposit } = useBentoBox(limitOrderContractAddress)
 
   // Deposit to BentoBox and approve BentoBox in one transaction
   const depositAndApprove = useCallback(
@@ -115,8 +119,7 @@ const useLimitOrderExecute: UseLimitOrderExecute = () => {
     async ({ inputAmount, bentoPermit, fromBentoBalance }) => {
       if (!bentoBoxContract || !limitOrderContractAddress || !inputAmount) throw new Error('Dependencies unavailable')
 
-      const batch: string[] = []
-      const amount = inputAmount.quotient.toString()
+      const amount = BigNumber.from(inputAmount.quotient.toString())
 
       // Since the setMasterContractApproval is not payable, we can't batch native deposit and approve
       // For this case, we setup a helper contract
@@ -124,57 +127,25 @@ const useLimitOrderExecute: UseLimitOrderExecute = () => {
         return depositAndApprove({ inputAmount, bentoPermit })
       }
 
-      try {
-        // If we have the permit, add the permit to the batch
-        if (bentoPermit) {
-          const { v, r, s } = bentoPermit
-          batch.push(
-            bentoBoxContract.interface.encodeFunctionData('setMasterContractApproval', [
-              account,
-              limitOrderContractAddress,
-              true,
-              v,
-              r,
-              s,
-            ])
-          )
-        }
-
-        // If we spend from wallet, we have to deposit into bentoBox first
-        if (!fromBentoBalance) {
-          if (inputAmount.currency.isNative) {
-            batch.push(
-              bentoBoxContract.interface.encodeFunctionData('deposit', [AddressZero, account, account, amount, 0])
-            )
-          } else {
-            batch.push(
-              bentoBoxContract.interface.encodeFunctionData('deposit', [
-                getAddress(inputAmount.currency.wrapped.address),
-                account,
-                account,
-                amount,
-                0,
-              ])
-            )
+      if (!fromBentoBalance) {
+        try {
+          if (!rebase) {
+            console.error('Dependencies unavailable')
+            return
           }
+
+          dispatch(setLimitOrderAttemptingTxn(true))
+          const tx = await _deposit(inputAmount.currency, rebase, amount, bentoPermit)
+
+          dispatch(setLimitOrderAttemptingTxn(false))
+          dispatch(setLimitOrderBentoPermit(undefined))
+          return tx
+        } catch (e) {
+          dispatch(setLimitOrderAttemptingTxn(false))
         }
-
-        dispatch(setLimitOrderAttemptingTxn(true))
-        const tx = await bentoBoxContract.batch(batch, true, {
-          value: inputAmount.currency.isNative ? amount : ZERO,
-        })
-
-        await tx.wait()
-        addTransaction(tx, { summary: 'Create limit order' })
-
-        dispatch(setLimitOrderAttemptingTxn(false))
-        dispatch(setLimitOrderBentoPermit(undefined))
-        return tx
-      } catch (e) {
-        dispatch(setLimitOrderAttemptingTxn(false))
       }
     },
-    [account, addTransaction, bentoBoxContract, depositAndApprove, dispatch, limitOrderContractAddress]
+    [_deposit, bentoBoxContract, depositAndApprove, dispatch, limitOrderContractAddress, rebase]
   )
 
   const execute = useCallback<UseLimitOrderExecuteExecute>(
