@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { ChainId, JSBI } from '@sushiswap/core-sdk'
+import { Signature } from 'ethers'
 
 export type Action<T, P = { data: string; value?: BigNumber }> = (x: T) => P
 
@@ -9,6 +10,7 @@ export interface DepositActionPayload {
   bentobox: Contract
   tokenAddress: string
   amount: BigNumber
+  share: BigNumber
   account: string
 }
 
@@ -31,4 +33,19 @@ export interface BatchAction {
   bentobox: Contract
   actions: string[]
   revertOnFail: boolean
+}
+
+export interface TransferAssetAction {
+  bentobox: Contract
+  tokenAddress: string
+  fromAddress: string
+  toAddress: string
+  share: BigNumber
+}
+
+export interface MasterContractApprovalAction {
+  bentobox: Contract
+  account: string
+  masterContract: string
+  permit: Signature
 }

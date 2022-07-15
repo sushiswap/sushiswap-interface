@@ -1,17 +1,36 @@
 import { getAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
 import { WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import { Action, BatchAction, DepositActionPayload, HarvestAction, WithdrawAction } from 'app/hooks/useBentoBox/types'
+import {
+  Action,
+  BatchAction,
+  DepositActionPayload,
+  HarvestAction,
+  MasterContractApprovalAction,
+  TransferAssetAction,
+  WithdrawAction,
+} from 'app/hooks/useBentoBox/types'
+import { BigNumber } from 'ethers'
 
-export const depositAction: Action<DepositActionPayload> = ({ bentobox, tokenAddress, amount, account, chainId }) => {
+export const depositAction: Action<DepositActionPayload> = ({
+  bentobox,
+  tokenAddress,
+  share,
+  amount,
+  account,
+  chainId,
+}) => {
   const checksumAddress = getAddress(tokenAddress)
   if (checksumAddress === WNATIVE_ADDRESS[chainId]) {
     return {
-      data: bentobox.interface.encodeFunctionData('deposit', [AddressZero, account, account, amount, 0]),
+      data: bentobox.interface.encodeFunctionData('deposit', [AddressZero, account, account, 0, share]),
       value: amount,
     }
   } else {
-    return { data: bentobox.interface.encodeFunctionData('deposit', [checksumAddress, account, account, amount, 0]) }
+    return {
+      data: bentobox.interface.encodeFunctionData('deposit', [checksumAddress, account, account, 0, share]),
+      value: BigNumber.from(0),
+    }
   }
 }
 
@@ -32,6 +51,16 @@ export const harvestAction: Action<HarvestAction> = ({ bentobox, tokenAddress, r
   return { data: bentobox.interface.encodeFunctionData('harvest', [tokenAddress, rebalance, 0]) }
 }
 
+export const bentoTransferAssetAction: Action<TransferAssetAction> = ({
+  bentobox,
+  tokenAddress,
+  fromAddress,
+  toAddress,
+  share,
+}) => {
+  return { data: bentobox.interface.encodeFunctionData('transfer', [tokenAddress, fromAddress, toAddress, share]) }
+}
+
 export const batchAction: Action<BatchAction, string | undefined> = ({ bentobox, actions = [], revertOnFail }) => {
   const validated = actions.filter(Boolean)
 
@@ -45,5 +74,17 @@ export const batchAction: Action<BatchAction, string | undefined> = ({ bentobox,
   // Call batch function with valid actions
   if (validated.length > 1) {
     return bentobox.interface.encodeFunctionData('batch', [validated, revertOnFail])
+  }
+}
+
+export const masterContractApproveAction: Action<MasterContractApprovalAction> = ({
+  bentobox,
+  account,
+  masterContract,
+  permit,
+}) => {
+  const { v, r, s } = permit
+  return {
+    data: bentobox.interface.encodeFunctionData('setMasterContractApproval', [account, masterContract, true, v, r, s]),
   }
 }
