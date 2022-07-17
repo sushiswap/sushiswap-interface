@@ -61,6 +61,20 @@ export const miniChefPoolsQueryV2 = gql`
   }
 `
 
+export const minichefNativeRewarderPoolsQuery = gql`
+  query nativeRewarderPools(
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $orderBy: String! = "id"
+    $orderDirection: String! = "desc"
+  ) {
+    nativeRewarderPools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
+      id
+      allocPoint
+    }
+  }
+`
+
 export const miniChefPairAddressesQuery = gql`
   query miniChefPairAddresses(
     $first: Int! = 1000

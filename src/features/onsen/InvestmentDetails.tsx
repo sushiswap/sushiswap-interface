@@ -45,8 +45,6 @@ const InvestmentDetails = ({ farm }) => {
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
 
-  console.log({ farm })
-
   const liquidityToken = useMemo(
     () =>
       chainId
@@ -54,7 +52,11 @@ const InvestmentDetails = ({ farm }) => {
             chainId,
             getAddress(farm.pair.id),
             farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
-            farm.pair.symbol ?? farm.pair.type === PairType.KASHI ? 'KMP' : 'SLP',
+            farm.pair.symbol ?? farm.pair.type === PairType.KASHI
+              ? 'KMP'
+              : farm.pair.type === PairType.SWAP
+              ? 'SLP'
+              : 'SCPLP',
             farm.pair.name
           )
         : undefined,
@@ -82,6 +84,7 @@ const InvestmentDetails = ({ farm }) => {
   const kashiFiatValue = kashiAssetAmount && kashiAssetPrice ? kashiAssetPrice.quote(kashiAssetAmount) : undefined
 
   const slpFiatValue = Number(stakedAmount?.toExact() ?? 0) * (farm.pair.reserveUSD / farm.pair.totalSupply)
+  const scplpFiatValue = Number(stakedAmount?.toExact() ?? 0) * (farm.pair.liquidityUSD / farm.pair.liquidity)
 
   const secondaryRewardOnly = chainId && [ChainId.FUSE].includes(chainId)
 
@@ -113,11 +116,18 @@ const InvestmentDetails = ({ farm }) => {
           <Typography variant="xs" className="flex gap-1 text-secondary">
             {formatNumber(stakedAmount?.toSignificant(6) ?? 0)} {farm.pair.token0.symbol}-{farm.pair.token1.symbol}
             <Typography variant="xs" weight={700} className="text-high-emphesis" component="span">
-              {formatNumber((kashiPair ? kashiFiatValue?.toSignificant(6) : slpFiatValue) ?? 0, true)}
+              {formatNumber(
+                (farm.pair.type === PairType.KASHI
+                  ? kashiFiatValue?.toSignificant(6)
+                  : farm.pair.type === PairType.SWAP
+                  ? slpFiatValue
+                  : scplpFiatValue) ?? 0,
+                true
+              )}
             </Typography>
           </Typography>
         </div>
-        {[PairType.KASHI, PairType.SWAP].includes(farm.pair.type) && (
+        {[PairType.KASHI, PairType.SWAP, PairType.TRIDENT].includes(farm.pair.type) && (
           <div className="flex items-center gap-2">
             {/*@ts-ignore TYPE NEEDS FIXING*/}
             {token0 && <CurrencyLogo currency={token0} size={18} />}
@@ -136,6 +146,12 @@ const InvestmentDetails = ({ farm }) => {
                 symbol={token0?.symbol}
               />
             )}
+            {farm.pair.type === PairType.TRIDENT && (
+              <RewardRow
+                value={formatNumber((farm.pair.reserve0 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.liquidity)}
+                symbol={token0?.symbol}
+              />
+            )}
           </div>
         )}
         {farm.pair.type === PairType.SWAP && (
@@ -143,6 +159,15 @@ const InvestmentDetails = ({ farm }) => {
             {token1 && <CurrencyLogo currency={token1} size={18} />}
             <RewardRow
               value={formatNumber((farm.pair.reserve1 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.totalSupply)}
+              symbol={token1?.symbol}
+            />
+          </div>
+        )}
+        {farm.pair.type === PairType.TRIDENT && (
+          <div className="flex items-center gap-2">
+            {token1 && <CurrencyLogo currency={token1} size={18} />}
+            <RewardRow
+              value={formatNumber((farm.pair.reserve1 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.liquidity)}
               symbol={token1?.symbol}
             />
           </div>
@@ -187,7 +212,7 @@ const InvestmentDetails = ({ farm }) => {
           variant="empty"
           size="sm"
           className="!italic"
-          onClick={() => router.push(`/lend/${farm.pair.id}`)}
+          onClick={() => router.push(`/kashi/${farm.pair.id}`)}
         >
           {i18n._(t`View details on Kashi`)}
         </Button>

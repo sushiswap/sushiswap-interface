@@ -132,7 +132,7 @@ export const SUPPORTED_NETWORKS: Record<
       symbol: 'xDai',
       decimals: 18,
     },
-    rpcUrls: ['https://rpc.xdaichain.com'],
+    rpcUrls: ['https://rpc.gnosischain.com'],
     blockExplorerUrls: ['https://blockscout.com/poa/xdai'],
   },
   [ChainId.HARMONY]: {
@@ -261,6 +261,28 @@ export const SUPPORTED_NETWORKS: Record<
     rpcUrls: ['https://mainnet.optimism.io'],
     blockExplorerUrls: ['https://optimistic.etherscan.io'],
   },
+  [ChainId.KAVA]: {
+    chainId: '0x8AE',
+    chainName: 'Kava',
+    nativeCurrency: {
+      name: 'Kava',
+      symbol: 'KAVA',
+      decimals: 18,
+    },
+    rpcUrls: ['https://evm.kava.io'],
+    blockExplorerUrls: ['https://explorer.kava.io'],
+  },
+  [ChainId.METIS]: {
+    chainId: '0x440',
+    chainName: 'Metis',
+    nativeCurrency: {
+      name: 'Metis',
+      symbol: 'METIS',
+      decimals: 18,
+    },
+    rpcUrls: ['https://andromeda.metis.io/?owner=1088'],
+    blockExplorerUrls: ['https://andromeda-explorer.metis.io/'],
+  },
 }
 
 const NetworkModal: FC = () => {
@@ -278,19 +300,21 @@ const NetworkModal: FC = () => {
         <div className="grid grid-flow-row-dense grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
           {[
             ChainId.ETHEREUM,
-            ChainId.MATIC,
             ChainId.ARBITRUM,
-            ChainId.AVALANCHE,
-            ChainId.MOONBEAM,
-            ChainId.MOONRIVER,
-            ChainId.FANTOM,
-            ChainId.OPTIMISM,
-            ChainId.BSC,
+            ChainId.MATIC,
             ChainId.XDAI,
+            ChainId.FANTOM,
+            ChainId.MOONRIVER,
             ChainId.HARMONY,
+            ChainId.AVALANCHE,
+            ChainId.OPTIMISM,
+            ChainId.MOONBEAM,
+            ChainId.FUSE,
+            ChainId.BSC,
+            // ChainId.KAVA,
+            // ChainId.METIS,
             ChainId.TELOS,
             ChainId.CELO,
-            ChainId.FUSE,
             // ChainId.OKEX,
             // ChainId.HECO,
             // ChainId.PALM,
