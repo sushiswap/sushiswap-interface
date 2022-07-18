@@ -2,6 +2,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Price, Trade, TradeType } from '@sushiswap/core-sdk'
 import Input from 'app/components/Input'
+import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import { useAppDispatch } from 'app/state/hooks'
 import { LimitPrice, setLimitOrderInvertState, setLimitPrice } from 'app/state/limit-order/actions'
@@ -22,8 +23,9 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade, limitPrice }) =
 
   return (
     <div className="flex flex-col gap-1">
-      <Typography variant="sm" className="px-2">
+      <Typography variant="sm" className="px-2 flex items-center">
         {i18n._(t`Limit Rate`)}
+        <QuestionHelper text={i18n._(t`Minimum output amount`)} />
       </Typography>
       <div className="flex justify-between items-baseline bg-dark-900 rounded px-4 py-1.5 border border-dark-700 hover:border-dark-600">
         <Typography weight={700} variant="lg" className="relative flex items-baseline flex-grow gap-3 overflow-hidden">
