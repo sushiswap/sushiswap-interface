@@ -71,14 +71,14 @@ const KashiPairView = () => {
   // if (kashiAsset !== undefined && kashiCollateral !== undefined && chainId !== undefined) {
   const asset = new Token(
     chainId ?? ChainId.ETHEREUM,
-    kashiAsset?.id ?? '',
+    kashiAsset?.id ?? '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     Number(kashiAsset?.decimals ?? 0),
     kashiAsset?.symbol,
     kashiAsset?.name
   )
   const collateral = new Token(
     chainId ?? ChainId.ETHEREUM,
-    kashiCollateral?.id ?? '',
+    kashiCollateral?.id ?? '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     Number(kashiCollateral?.decimals ?? 0),
     kashiCollateral?.symbol,
     kashiCollateral?.name

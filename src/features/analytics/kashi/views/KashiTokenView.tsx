@@ -98,7 +98,7 @@ const KashiTokenView = () => {
 
   const token0 = new TokenSDK(
     chainId ?? ChainId.ETHEREUM,
-    token?.id ?? '',
+    token?.id ?? '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     Number(token?.decimals ?? 0),
     token?.symbol,
     token?.name

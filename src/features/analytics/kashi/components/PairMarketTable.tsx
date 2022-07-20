@@ -175,7 +175,7 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
 
   const asset = new Token(
     chainId ?? ChainId.ETHEREUM,
-    data.asset?.id ?? '',
+    data.asset?.id ?? '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     Number(data.asset?.decimals ?? 0),
     data.asset?.symbol,
     data.asset?.name
@@ -183,7 +183,7 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
 
   const collateral = new Token(
     Number(chainId) ?? ChainId.ETHEREUM,
-    data.collateral?.id ?? '',
+    data.collateral?.id ?? '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     Number(data.collateral?.decimals ?? 0),
     data.collateral?.symbol,
     data.collateral?.name

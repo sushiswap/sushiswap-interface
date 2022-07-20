@@ -11,15 +11,17 @@ const TotalCompareChart = ({ loading, data }: { loading: boolean; data: KashiPai
   const getSeries = () => {
     let seriesData: any[] = []
     data.forEach((item) => {
-      const percent =
-        BigNumber.from(item.totalBorrow)
-          .mul(BigNumber.from('10000'))
-          .div(BigNumber.from(item.totalAsset).add(BigNumber.from(item.totalBorrow)))
-          .toNumber() / 100
-      seriesData.push({
-        x: moment(item.date).valueOf(),
-        y: percent,
-      })
+      if (BigNumber.from(item.totalAsset).add(BigNumber.from(item.totalBorrow)).gt(0)) {
+        const percent =
+          BigNumber.from(item.totalBorrow)
+            .mul(BigNumber.from('10000'))
+            .div(BigNumber.from(item.totalAsset).add(BigNumber.from(item.totalBorrow)))
+            .toNumber() / 100
+        seriesData.push({
+          x: moment(item.date).valueOf(),
+          y: percent,
+        })
+      }
     })
 
     return [
