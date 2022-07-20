@@ -249,8 +249,8 @@ export default class KashiCooker {
     this.add(Action.ADD_ASSET, defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, this.account, false]))
 
     if (burnShare) {
-      this.removeAsset(BigNumber.from(1), true)
-      this.bentoTransferAsset(BigNumber.from(1), '0x000000000000000000000000000000000000dead')
+      this.removeAsset(BigNumber.from(1000), true)
+      this.bentoTransferAsset(BigNumber.from(1000), '0x000000000000000000000000000000000000dead')
     }
 
     return this

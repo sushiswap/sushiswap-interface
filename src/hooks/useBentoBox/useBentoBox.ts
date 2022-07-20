@@ -1,15 +1,24 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { JSBI } from '@sushiswap/core-sdk'
+import { toShare } from '@sushiswap/bentobox-sdk'
+import { Currency, JSBI, Rebase } from '@sushiswap/core-sdk'
 import { ERC20_ABI } from 'app/constants/abis/erc20'
 import { getContract } from 'app/functions'
 import { useBentoBoxContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { Signature } from 'ethers'
 import { useCallback } from 'react'
 
-import { batchAction, depositAction, harvestAction, withdrawAction } from './actions'
+import {
+  batchAction,
+  bentoTransferAssetAction,
+  depositAction,
+  harvestAction,
+  masterContractApproveAction,
+  withdrawAction,
+} from './actions'
 
-const useBentoBox = () => {
+const useBentoBox = (masterContract?: string) => {
   const { account, chainId, library } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const bentobox = useBentoBoxContract(true)
@@ -46,23 +55,76 @@ const useBentoBox = () => {
   )
 
   const deposit = useCallback(
-    async (tokenAddress: string, amount: BigNumber) => {
+    async (token: Currency, rebase: Rebase, amount: BigNumber, permit?: Signature) => {
       if (!amount || !chainId || !account || !bentobox || !library) return
+      const batch: string[] = []
+      let summary = ''
 
       try {
+        const deadBalance = await bentobox.balanceOf(
+          token.wrapped.address,
+          '0x000000000000000000000000000000000000dead'
+        )
+
+        const share = (
+          JSBI.equal(JSBI.BigInt(0), rebase.base) && JSBI.equal(JSBI.BigInt(0), rebase.elastic)
+            ? amount
+            : BigNumber.from(toShare(rebase, JSBI.BigInt(amount)).toString())
+        ).sub(deadBalance.isZero() ? 1000 : 0)
+
+        // Approve
+        if (permit && masterContract) {
+          batch.push(masterContractApproveAction({ bentobox, masterContract, permit, account }).data)
+          summary += 'Approve Master Contract and'
+        }
+
+        const { data: depositData, value: depositValue } = depositAction({
+          bentobox,
+          tokenAddress: token.wrapped.address,
+          account,
+          amount,
+          share,
+          chainId,
+        })
+
+        batch.push(depositData)
+        summary += 'Deposit to Bentobox'
+
+        if (deadBalance.isZero()) {
+          batch.push(
+            bentoTransferAssetAction({
+              bentobox,
+              fromAddress: account,
+              tokenAddress: token.wrapped.address,
+              toAddress: '0x000000000000000000000000000000000000dead',
+              share: BigNumber.from(1),
+            }).data
+          )
+        }
+
         const tx = await library.getSigner().sendTransaction({
           from: account,
           to: bentobox.address,
-          ...depositAction({ bentobox, tokenAddress, account, amount, chainId }),
+          data: batchAction({
+            bentobox,
+            actions: batch,
+            revertOnFail: true,
+          }),
+          value: depositValue,
         })
 
-        if (tx?.hash) return addTransaction(tx, { summary: 'Deposit to Bentobox' })
+        if (tx?.hash) {
+          addTransaction(tx, { summary })
+          await tx.wait()
+        }
+
+        return tx
       } catch (e) {
         console.error('Bentobox deposit error:', e)
         return e
       }
     },
-    [account, addTransaction, bentobox, chainId, library]
+    [account, addTransaction, bentobox, chainId, library, masterContract]
   )
 
   const withdraw = useCallback(
