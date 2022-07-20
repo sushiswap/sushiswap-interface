@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { i18n } from '@lingui/core'
 import { useLingui } from '@lingui/react'
+import { ChainId, Token } from '@sushiswap/core-sdk'
+import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import { BigNumber } from 'ethers'
 import { useRouter } from 'next/router'
 import numeral from 'numeral'
@@ -168,6 +170,22 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
     router.push(route)
   }
 
+  const asset = new Token(
+    ChainId.ETHEREUM,
+    data.asset?.id ?? '',
+    Number(data.asset?.decimals ?? 0),
+    data.asset?.symbol,
+    data.asset?.name
+  )
+
+  const collateral = new Token(
+    ChainId.ETHEREUM,
+    data.collateral?.id ?? '',
+    Number(data.collateral?.decimals ?? 0),
+    data.collateral?.symbol,
+    data.collateral?.name
+  )
+
   return (
     <>
       <tr
@@ -177,18 +195,7 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
         <td className="py-3 pl-8 pr-2">
           <div className="md:flex">
             <div className="flex">
-              <img
-                src={tokenUtilService.logo(data.asset?.symbol)}
-                className="inline-block w-8 h-8 rounded-full"
-                onError={handleLogoError}
-                alt={data?.symbol}
-              />
-              <img
-                src={tokenUtilService.logo(data.collateral?.symbol)}
-                onError={handleLogoError}
-                className="inline-block w-8 h-8 -ml-2 rounded-full"
-                alt={data?.symbol}
-              />
+              <CurrencyLogoArray currencies={[asset, collateral]} dense />
             </div>
             <div className="text-sm font-bold md:text-base md:ml-2 text-gray-50">
               {tokenUtilService.pairSymbol(data.asset?.symbol, data.collateral?.symbol)}

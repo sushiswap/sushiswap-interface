@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { i18n } from '@lingui/core'
+import { ChainId, Token } from '@sushiswap/core-sdk'
+import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import { useKashiTokens } from 'app/features/kashi/hooks'
 import { useKashiPricesSubgraphWithLoadingIndicator } from 'app/hooks/usePricesSubgraph'
 import { useDataKashiPairWithLoadingIndicator } from 'app/services/graph/hooks/kashipairs'
@@ -16,15 +18,12 @@ import PairUtilizationDayDataChart from '../components/PairUtilizationDayDataCha
 import { useAppContext } from '../context/AppContext'
 import { KashiPair } from '../types/KashiPair'
 import { KashiPairDayData, KashiPairDayDataMap } from '../types/KashiPairDayData'
-
 const KashiPairView = () => {
-  const { tokenUtilService, handleLogoError } = useAppContext()
+  const { tokenUtilService, calculateService, handleLogoError } = useAppContext()
   const [kashiPair, setKashiPair] = useState<KashiPair | undefined>()
   const [kashiPairDayData, setKashiPairDayData] = useState<KashiPairDayDataMap[]>([])
 
   const [kashiPairDayDataMonthly, setKashiPairDayDataMonthly] = useState<KashiPairDayDataMap[]>([])
-
-  const { calculateService } = useAppContext()
 
   const router = useRouter()
   const { id } = router.query
@@ -65,6 +64,22 @@ const KashiPairView = () => {
     }
   }
 
+  const kashiAsset = kashiPair?.asset
+  const asset = new Token(
+    ChainId.ETHEREUM,
+    kashiAsset?.id ?? '',
+    Number(kashiAsset?.decimals ?? 0),
+    kashiAsset?.symbol,
+    kashiAsset?.name
+  )
+  const kashiCollateral = kashiPair?.collateral
+  const collateral = new Token(
+    ChainId.ETHEREUM,
+    kashiCollateral?.id ?? '',
+    Number(kashiCollateral?.decimals ?? 0),
+    kashiCollateral?.symbol,
+    kashiCollateral?.name
+  )
   return (
     <>
       <div className="bg-black">
@@ -84,22 +99,7 @@ const KashiPairView = () => {
           ) : (
             <div className="flex items-center col-span-2">
               <div>
-                <img
-                  src={tokenUtilService.logo(kashiPair?.asset?.symbol)}
-                  width="30px"
-                  height="30px"
-                  className="inline-block rounded-full"
-                  onError={handleLogoError}
-                  alt={tokenUtilService.symbol(kashiPair?.symbol)}
-                />
-                <img
-                  src={tokenUtilService.logo(kashiPair?.collateral?.symbol)}
-                  width="30px"
-                  height="30px"
-                  onError={handleLogoError}
-                  className="inline-block -ml-2 rounded-full"
-                  alt={kashiPair?.symbol}
-                />
+                <CurrencyLogoArray currencies={[asset, collateral]} dense />
               </div>
               <div className="ml-2">
                 <h2 className="text-3xl font-medium text-white">

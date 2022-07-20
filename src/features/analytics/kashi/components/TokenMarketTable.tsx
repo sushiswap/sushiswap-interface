@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { i18n } from '@lingui/core'
+import { ChainId, Token } from '@sushiswap/core-sdk'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { BigNumber } from 'ethers'
 import { useRouter } from 'next/router'
 import numeral from 'numeral'
@@ -121,6 +123,14 @@ const MarketTableRow = ({ data, index }: { data: KashiPairsByToken; index: numbe
     router.push(route)
   }
 
+  const asset = new Token(
+    ChainId.ETHEREUM,
+    data.token?.id ?? '',
+    Number(data.token?.decimals ?? 0),
+    data.token?.symbol,
+    data.token?.name
+  )
+
   return (
     <>
       <tr
@@ -129,12 +139,8 @@ const MarketTableRow = ({ data, index }: { data: KashiPairsByToken; index: numbe
       >
         <td className="py-3 pl-8 pr-2">
           <div className="flex items-center">
-            <img
-              src={tokenUtilService.logo(data.token.symbol)}
-              className="inline-block w-8 h-8 rounded-full min-w-fit min-h-fit"
-              onError={handleLogoError}
-              alt={data.token.symbol}
-            />
+            <CurrencyLogo currency={asset ?? undefined} className="!rounded-full" size={30} />
+
             <div className="ml-2">
               <div className="font-bold text-gray-50">{tokenUtilService.symbol(data.token.symbol)}</div>
             </div>

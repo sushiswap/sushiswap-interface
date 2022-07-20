@@ -1,5 +1,3 @@
-import { TOKENS } from '../../config/tokenlist'
-
 class TokenUtilService {
   protected static instance: TokenUtilService
   constructor() {}
@@ -28,12 +26,6 @@ class TokenUtilService {
       return 'FTX Token'
     }
     return name
-  }
-
-  logo(symbol: string | undefined): string | undefined {
-    const realSymbol = this.symbol(symbol)
-    const token = TOKENS.find((token) => realSymbol === token.symbol)
-    return token?.logoURI || ''
   }
 }
 

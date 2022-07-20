@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { ChainId, Token as TokenSDK } from '@sushiswap/core-sdk'
+import { CurrencyLogo, CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import { useKashiTokens } from 'app/features/kashi/hooks'
 import { useKashiPricesSubgraphWithLoadingIndicator } from 'app/hooks/usePricesSubgraph'
 import {
@@ -12,13 +14,12 @@ import { useEffect, useState } from 'react'
 import PairCollateralPieChart from '../components/PairCollateralPieChart'
 import PairSupplyBorrowDayDataChart from '../components/PairSupplyBorrowDayDataChart'
 import TokenCard from '../components/TokenCard'
-import { handleLogoError, useAppContext } from '../context/AppContext'
+import { useAppContext } from '../context/AppContext'
 import { KashiPair } from '../types/KashiPair'
 import { KashiPairDayDataMap, KashiPairDayDataMapsCollateral } from '../types/KashiPairDayData'
 import { Token } from '../types/Token'
 
 const KashiTokenView = () => {
-  const { tokenUtilService } = useAppContext()
   const [token, setToken] = useState<Token | undefined>()
   const [totalAsset, setTotalAsset] = useState<BigInt>(BigInt(0))
   const [totalBorrow, setTotalBorrow] = useState<BigInt>(BigInt(0))
@@ -30,7 +31,7 @@ const KashiTokenView = () => {
     KashiPairDayDataMapsCollateral[]
   >([])
 
-  const { calculateService } = useAppContext()
+  const { calculateService, tokenUtilService } = useAppContext()
 
   const router = useRouter()
   const { id } = router.query
@@ -95,6 +96,14 @@ const KashiTokenView = () => {
     setKashiPairs(newKashiPairs)
   }
 
+  const token0 = new TokenSDK(
+    ChainId.ETHEREUM,
+    token?.id ?? '',
+    Number(token?.decimals ?? 0),
+    token?.symbol,
+    token?.name
+  )
+
   return (
     <>
       <div className="bg-black">
@@ -113,14 +122,7 @@ const KashiTokenView = () => {
           ) : (
             <div className="flex items-center col-span-2">
               <div>
-                <img
-                  src={tokenUtilService.logo(token?.symbol)}
-                  width="30px"
-                  height="30px"
-                  className="inline-block rounded-full"
-                  onError={handleLogoError}
-                  alt={token?.symbol}
-                />
+                <CurrencyLogo currency={token0 ?? undefined} className="!rounded-full" size={30} />
               </div>
               <div className="ml-2">
                 <h2 className="text-3xl font-medium text-white">{tokenUtilService.symbol(token?.symbol)}</h2>
@@ -145,26 +147,18 @@ const KashiTokenView = () => {
             ?.filter((value) => value.kashiPairsMaps.length > 0)
             .map((value) => {
               const { collateral, kashiPairsMaps } = value
+              const token1 = new TokenSDK(
+                ChainId.ETHEREUM,
+                collateral?.id ?? '',
+                Number(collateral?.decimals ?? 0),
+                collateral?.symbol,
+                collateral?.name
+              )
               return (
                 <div key={collateral.id} className="mt-8">
                   <div className="flex items-center col-span-2">
                     <div>
-                      <img
-                        src={tokenUtilService.logo(token?.symbol)}
-                        width="25px"
-                        height="25px"
-                        className="inline-block rounded-full"
-                        onError={handleLogoError}
-                        alt={tokenUtilService.symbol(token?.symbol)}
-                      />
-                      <img
-                        src={tokenUtilService.logo(collateral?.symbol)}
-                        width="25px"
-                        height="25px"
-                        onError={handleLogoError}
-                        className="inline-block -ml-2 rounded-full"
-                        alt={collateral?.symbol}
-                      />
+                      <CurrencyLogoArray currencies={[token0, token1]} dense />
                     </div>
                     <div className="ml-2">
                       <h3 className="text-xl font-medium">
