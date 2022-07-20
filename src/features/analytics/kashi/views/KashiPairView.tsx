@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { i18n } from '@lingui/core'
-import { Token } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import { useKashiTokens } from 'app/features/kashi/hooks'
 import { useKashiPricesSubgraphWithLoadingIndicator } from 'app/hooks/usePricesSubgraph'
@@ -64,26 +64,26 @@ const KashiPairView = () => {
     }
   }
 
-  let asset = undefined
-  let collateral = undefined
+  // let asset = undefined
+  // let collateral = undefined
   const kashiAsset = kashiPair?.asset
   const kashiCollateral = kashiPair?.collateral
-  if (kashiAsset !== undefined && kashiCollateral !== undefined && chainId !== undefined) {
-    asset = new Token(
-      chainId,
-      kashiAsset?.id ?? '',
-      Number(kashiAsset?.decimals ?? 0),
-      kashiAsset?.symbol,
-      kashiAsset?.name
-    )
-    collateral = new Token(
-      chainId,
-      kashiCollateral?.id ?? '',
-      Number(kashiCollateral?.decimals ?? 0),
-      kashiCollateral?.symbol,
-      kashiCollateral?.name
-    )
-  }
+  // if (kashiAsset !== undefined && kashiCollateral !== undefined && chainId !== undefined) {
+  const asset = new Token(
+    chainId ?? ChainId.ETHEREUM,
+    kashiAsset?.id ?? '',
+    Number(kashiAsset?.decimals ?? 0),
+    kashiAsset?.symbol,
+    kashiAsset?.name
+  )
+  const collateral = new Token(
+    chainId ?? ChainId.ETHEREUM,
+    kashiCollateral?.id ?? '',
+    Number(kashiCollateral?.decimals ?? 0),
+    kashiCollateral?.symbol,
+    kashiCollateral?.name
+  )
+  // }
   return (
     <>
       <div className="bg-black">
