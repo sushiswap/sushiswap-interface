@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { i18n } from '@lingui/core'
-import { ChainId, Token } from '@sushiswap/core-sdk'
+import { Token } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import { useKashiTokens } from 'app/features/kashi/hooks'
 import { useKashiPricesSubgraphWithLoadingIndicator } from 'app/hooks/usePricesSubgraph'
@@ -64,27 +64,31 @@ const KashiPairView = () => {
     }
   }
 
+  let asset = undefined
+  let collateral = undefined
   const kashiAsset = kashiPair?.asset
-  const asset = new Token(
-    ChainId.ETHEREUM,
-    kashiAsset?.id ?? '',
-    Number(kashiAsset?.decimals ?? 0),
-    kashiAsset?.symbol,
-    kashiAsset?.name
-  )
   const kashiCollateral = kashiPair?.collateral
-  const collateral = new Token(
-    ChainId.ETHEREUM,
-    kashiCollateral?.id ?? '',
-    Number(kashiCollateral?.decimals ?? 0),
-    kashiCollateral?.symbol,
-    kashiCollateral?.name
-  )
+  if (kashiAsset !== undefined && kashiCollateral !== undefined && chainId !== undefined) {
+    asset = new Token(
+      chainId,
+      kashiAsset?.id ?? '',
+      Number(kashiAsset?.decimals ?? 0),
+      kashiAsset?.symbol,
+      kashiAsset?.name
+    )
+    collateral = new Token(
+      chainId,
+      kashiCollateral?.id ?? '',
+      Number(kashiCollateral?.decimals ?? 0),
+      kashiCollateral?.symbol,
+      kashiCollateral?.name
+    )
+  }
   return (
     <>
       <div className="bg-black">
         <div className="container mx-auto">
-          {!kashiPair ? (
+          {!kashiPair && asset !== undefined && collateral !== undefined ? (
             <div className="flex items-center col-span-2">
               <div>
                 <div className="inline-block w-8 h-8 rounded-full animate-pulse bg-dark-800"></div>

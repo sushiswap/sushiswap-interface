@@ -2,6 +2,7 @@
 import { i18n } from '@lingui/core'
 import { ChainId, Token } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import { useActiveWeb3React } from 'app/services/web3'
 import { BigNumber } from 'ethers'
 import { useRouter } from 'next/router'
 import numeral from 'numeral'
@@ -123,8 +124,10 @@ const MarketTableRow = ({ data, index }: { data: KashiPairsByToken; index: numbe
     router.push(route)
   }
 
+  const { chainId } = useActiveWeb3React()
+
   const asset = new Token(
-    ChainId.ETHEREUM,
+    chainId ?? ChainId.ETHEREUM,
     data.token?.id ?? '',
     Number(data.token?.decimals ?? 0),
     data.token?.symbol,

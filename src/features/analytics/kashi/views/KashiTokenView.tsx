@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { ChainId, Token as TokenSDK } from '@sushiswap/core-sdk'
+import { ChainId, Currency, Token as TokenSDK } from '@sushiswap/core-sdk'
 import { CurrencyLogo, CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import { useKashiTokens } from 'app/features/kashi/hooks'
 import { useKashiPricesSubgraphWithLoadingIndicator } from 'app/hooks/usePricesSubgraph'
@@ -96,14 +96,17 @@ const KashiTokenView = () => {
     setKashiPairs(newKashiPairs)
   }
 
-  const token0 = new TokenSDK(
-    ChainId.ETHEREUM,
-    token?.id ?? '',
-    Number(token?.decimals ?? 0),
-    token?.symbol,
-    token?.name
-  )
+  let token0: Currency | undefined = undefined
 
+  if (token !== undefined) {
+    token0 = new TokenSDK(
+      chainId ?? ChainId.ETHEREUM,
+      token?.id ?? '',
+      Number(token?.decimals ?? 0),
+      token?.symbol,
+      token?.name
+    )
+  }
   return (
     <>
       <div className="bg-black">
