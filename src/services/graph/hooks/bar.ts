@@ -1,4 +1,11 @@
-import { getBar, getBarHistory, getBarUser, getBarXsushi, getBarXsushiUser } from 'app/services/graph/fetchers/bar'
+import {
+  getBar,
+  getBarFeesDaysAgo,
+  getBarHistory,
+  getBarUser,
+  getBarXsushi,
+  getBarXsushiUser,
+} from 'app/services/graph/fetchers/bar'
 import stringify from 'fast-json-stable-stringify'
 import useSWR from 'swr'
 
@@ -26,4 +33,9 @@ export function useBarXsushiUser({ variables, shouldFetch = true, swrConfig = un
     () => getBarXsushiUser(variables),
     swrConfig
   )
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export function useBarFeesDaysAgo({ days = 30, shouldFetch = true, swrConfig = undefined }) {
+  return useSWR(days ? ['barFees', days] : null, (_, days) => getBarFeesDaysAgo(days), swrConfig)
 }
