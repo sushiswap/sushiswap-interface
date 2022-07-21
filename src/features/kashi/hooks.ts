@@ -161,8 +161,6 @@ export function useKashiMediumRiskLendingPairs(
     gasRequired: 20_000_000,
   })
 
-  console.log('result', result)
-
   const { rebases } = useBentoRebases(useMemo(() => Object.values(tokens), [tokens]))
   const prices = useUSDCPricesSubgraph(Object.values(tokens))
   // TODO: for skeleton loading
