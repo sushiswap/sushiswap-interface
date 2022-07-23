@@ -80,3 +80,69 @@ export const barUserQuery = gql`
     }
   }
 `
+
+export const feesQuery = gql`
+  query feesQuery(
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $where: Fee_filter
+    $orderBy: Fee_orderBy! = "createdAtTimestamp"
+    $orderDirection: OrderDirection! = "desc"
+  ) {
+    fees(first: $first, skip: $skip, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+      id
+      amount
+      createdAtTimestamp
+    }
+  }
+`
+
+export const barXsushiQuery = gql`
+  query barXsushiQuery($block: Block_height) {
+    xsushi(id: "xSushi", block: $block) {
+      id
+      sushiHarvested
+      sushiStaked
+      sushiSupply
+      sushiXsushiRatio
+      totalFeeAmount
+      transactionCount
+      userCount
+      xSushiBurned
+      xSushiMinted
+      xSushiSupply
+      xSushiSushiRatio
+    }
+  }
+`
+
+export const barXsushiUserQuery = gql`
+  query barXsushiUserQuery($id: String!, $block: Block_height) {
+    user(id: $id, block: $block) {
+      id
+      balance
+      createdAtBlock
+      createdAtTimestamp
+      modifiedAtBlock
+      modifiedAtTimestamp
+      deposits(first: 1000, orderBy: timestamp, orderBy: desc, orderDirection: desc) {
+        amount
+        xSushiSushiRatio
+        sushiXsushiRatio
+        block
+        id
+        timestamp
+        type
+      }
+      withdrawals(first: 1000, orderBy: timestamp, orderBy: desc, orderDirection: desc) {
+        amount
+        xSushiSushiRatio
+        sushiXsushiRatio
+        block
+        id
+        timestamp
+        type
+      }
+    }
+  }
+`

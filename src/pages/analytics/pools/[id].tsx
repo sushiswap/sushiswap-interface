@@ -142,7 +142,7 @@ function _Pool() {
                 </div>
                 <div className="font-bold">
                   1 {[currency0, currency1][i]?.symbol} = {formatNumber([data.token0.price, data.token1.price][i])}{' '}
-                  {[currency0, currency1][i]?.symbol} ({formatNumber([data.token1, data.token0][i]?.derivedUSD, true)})
+                  {[currency1, currency0][i]?.symbol} ({formatNumber([data.token0, data.token1][i]?.derivedUSD, true)})
                 </div>
               </div>
             ))}
