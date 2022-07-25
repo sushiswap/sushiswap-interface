@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import TokenMarketTable from '../components/TokenMarketTable'
 import TotakTokenCard from '../components/TotalTokenCard'
 import { useAppContext } from '../context/AppContext'
-import { KashiPairsByToken } from '../types/KashiPair'
+import { KashiPairsByTokenNew } from '../types/KashiPair'
 
 const KashiTokensView = () => {
   const { chainId } = useActiveWeb3React()
@@ -17,11 +17,11 @@ const KashiTokensView = () => {
   const [calculating, setCalculating] = useState(true)
   const [totalAsset, setTotalAsset] = useState(BigInt(0))
   const [totalBorrow, setTotalBorrow] = useState(BigInt(0))
-  const [top3MarketsBySupply, setTop3MarketsBySupply] = useState<KashiPairsByToken[]>([])
-  const [top3MarketsByAsset, setTop3MarketsByAsset] = useState<KashiPairsByToken[]>([])
-  const [top3MarketsByBorrow, setTop3MarketsByBorrow] = useState<KashiPairsByToken[]>([])
+  const [top3MarketsBySupply, setTop3MarketsBySupply] = useState<KashiPairsByTokenNew[]>([])
+  const [top3MarketsByAsset, setTop3MarketsByAsset] = useState<KashiPairsByTokenNew[]>([])
+  const [top3MarketsByBorrow, setTop3MarketsByBorrow] = useState<KashiPairsByTokenNew[]>([])
 
-  const [kashiPairsByTokens, setKashiPairsByTokens] = useState<KashiPairsByToken[]>([])
+  const [kashiPairsByTokens, setKashiPairsByTokens] = useState<KashiPairsByTokenNew[]>([])
   const { calculateService } = useAppContext()
   const loading = loadingToken || calculating
 
@@ -40,7 +40,7 @@ const KashiTokensView = () => {
     if (!loadingPrice) {
       const { kashiPairs } = dataKashiPairs
 
-      const { kashiPairsByTokens, totalAsset, totalBorrow } = calculateService.calculateKashiPairPricesGroupByAsset(
+      const { kashiPairsByTokens, totalAsset, totalBorrow } = calculateService.calculateKashiPairPricesGroupByAssetNew(
         kashiPairs,
         pricesMap
       )

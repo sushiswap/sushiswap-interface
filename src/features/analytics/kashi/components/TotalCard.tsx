@@ -4,13 +4,13 @@ import { BigNumber } from 'ethers'
 import numeral from 'numeral'
 
 import { useAppContext } from '../context/AppContext'
-import { KashiPair } from '../types/KashiPair'
+import { KashiPairNew } from '../types/KashiPair'
 import Progress from './Progress'
 
 export type TotalData = {
   amount: BigInt
   volumeIn24H: BigInt
-  topMarkets: KashiPair[]
+  topMarkets: KashiPairNew[]
 }
 
 type AttributesByBorrowType = {
@@ -92,10 +92,12 @@ const TotalCard = ({
               progress={
                 BigNumber.from(
                   borrow === 'borrow'
-                    ? marketData.totalBorrow
+                    ? marketData.totalBorrowAmount
                     : borrow === 'asset'
-                    ? marketData.totalAsset
-                    : BigNumber.from(marketData.totalBorrow).add(BigNumber.from(marketData.totalAsset)).toBigInt()
+                    ? marketData.totalAssetAmount
+                    : BigNumber.from(marketData.totalBorrowAmount)
+                        .add(BigNumber.from(marketData.totalAssetAmount))
+                        .toBigInt()
                 )
                   .mul(BigNumber.from('10000'))
                   .div(BigNumber.from(data.amount))

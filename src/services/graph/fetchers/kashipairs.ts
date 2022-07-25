@@ -16,12 +16,23 @@ const KASHI = {
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
+  [ChainId.MATIC]: 'sushiswap/matic-bentobox',
+}
+
+const KASHINew = {
+  [ChainId.ARBITRUM]: 'sushiswap/kashi-arbitrum',
+  [ChainId.MATIC]: 'sushiswap/kashi-polygon',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
 const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
   // @ts-ignore TYPE NEEDS FIXING
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${KASHI[chainId]}`, query, variables)
+
+// @ts-ignore TYPE NEEDS FIXING
+const fetcherNew = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
+  // @ts-ignore TYPE NEEDS FIXING
+  pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${KASHINew[chainId]}`, query, variables)
 
 // @ts-ignore TYPE NEEDS FIXING
 const fetcherWithLimit = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
@@ -34,7 +45,7 @@ export const getDataKashiPair = async (chainId = ChainId.ETHEREUM, variables = u
 }
 
 export const getDataKashiPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const data = await fetcher(chainId, dataKashiPairsQuery)
+  const data = await fetcherNew(chainId, dataKashiPairsQuery)
   return data
 }
 
@@ -44,12 +55,12 @@ export const getDataKashiPairsDayData = async (chainId = ChainId.ETHEREUM, varia
 }
 
 export const getDataKashiToken = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const data = await fetcher(chainId, kashiTokenQuery, variables)
+  const data = await fetcherNew(chainId, kashiTokenQuery, variables)
   return data
 }
 
 export const getDataKashiTokens = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const data = await fetcher(chainId, kashiTokensQuery)
+  const data = await fetcherNew(chainId, kashiTokensQuery)
   return data
 }
 

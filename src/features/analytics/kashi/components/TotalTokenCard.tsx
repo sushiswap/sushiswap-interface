@@ -3,14 +3,14 @@ import { BigNumber } from 'ethers'
 import numeral from 'numeral'
 
 import { useAppContext } from '../context/AppContext'
-import { KashiPairsByToken } from '../types/KashiPair'
+import { KashiPairsByTokenNew } from '../types/KashiPair'
 import Progress from './Progress'
 
 export type TotalData = {
   amount: BigInt
   volumeIn24H: BigInt
   totalUsers: BigInt
-  topMarkets: KashiPairsByToken[]
+  topMarkets: KashiPairsByTokenNew[]
 }
 
 type AttributesByBorrowType = {

@@ -13,7 +13,7 @@ import TotalCard from '../components/TotalCard'
 import TotalCompareChart from '../components/TotalCompareChart'
 import TotalDayDataChart from '../components/TotalDayDataChart'
 import { useAppContext } from '../context/AppContext'
-import { KashiPair } from '../types/KashiPair'
+import { KashiPairNew } from '../types/KashiPair'
 import { KashiPairDayData, KashiPairDayDataMap } from '../types/KashiPairDayData'
 
 const KashiPairsView = () => {
@@ -36,15 +36,15 @@ const KashiPairsView = () => {
 
   const [calculating, setCalculating] = useState(true)
   //const [pricesMap, setPricesMap] = useState<{ [key: string]: BigInt }>({})
-  const [kashiPairs, setKashiPairs] = useState<KashiPair[]>([] as KashiPair[])
+  const [kashiPairs, setKashiPairs] = useState<KashiPairNew[]>([] as KashiPairNew[])
   const { calculateService } = useAppContext()
 
   const [totalAssetsAmount, setTotalAssetsAmount] = useState(BigInt(0))
   const [totalBorrowsAmount, setTotalBorrowsAmount] = useState(BigInt(0))
 
-  const [top3MarketsBySupply, setTop3MarketsBySupply] = useState<KashiPair[]>([])
-  const [top3MarketsByAsset, setTop3MarketsByAsset] = useState<KashiPair[]>([])
-  const [top3MarketsByBorrow, setTop3MarketsByBorrow] = useState<KashiPair[]>([])
+  const [top3MarketsBySupply, setTop3MarketsBySupply] = useState<KashiPairNew[]>([])
+  const [top3MarketsByAsset, setTop3MarketsByAsset] = useState<KashiPairNew[]>([])
+  const [top3MarketsByBorrow, setTop3MarketsByBorrow] = useState<KashiPairNew[]>([])
 
   const loading = calculating || loadingKashiPairs
   const loadingDayData = loading || loadingKashiPairsDayData0 || loadingKashiPairsDayData1
@@ -60,28 +60,28 @@ const KashiPairsView = () => {
     }
   }, [dataKashiPairs, loadingPrice])
 
-  const setKashiPairsData = async (kashiPairsData: KashiPair[]) => {
+  const setKashiPairsData = async (kashiPairsData: KashiPairNew[]) => {
     if (!loadingPrice) {
       const {
         totalAsset: totalAssetsValue,
         totalBorrow: totalBorrowsValue,
         kashiPairs: newKashiPairs,
-      } = calculateService.calculateKashiPairPrices(kashiPairsData, pricesMap)
+      } = calculateService.calculateKashiPairPricesNew(kashiPairsData, pricesMap)
 
-      const sortedKashiPairsBySupply = [...newKashiPairs].sort((a: KashiPair, b: KashiPair) =>
-        BigNumber.from(a.totalAsset)
-          .add(BigNumber.from(a.totalBorrow))
-          .lte(BigNumber.from(b.totalAsset).add(BigNumber.from(b.totalBorrow)))
+      const sortedKashiPairsBySupply = [...newKashiPairs].sort((a: KashiPairNew, b: KashiPairNew) =>
+        BigNumber.from(a.totalAssetAmount)
+          .add(BigNumber.from(a.totalBorrowAmount))
+          .lte(BigNumber.from(b.totalAssetAmount).add(BigNumber.from(b.totalBorrowAmount)))
           ? 1
           : -1
       )
 
-      const sortedKashiPairsByAsset = [...newKashiPairs].sort((a: KashiPair, b: KashiPair) =>
-        BigNumber.from(a.totalAsset).lte(BigNumber.from(b.totalAsset)) ? 1 : -1
+      const sortedKashiPairsByAsset = [...newKashiPairs].sort((a: KashiPairNew, b: KashiPairNew) =>
+        BigNumber.from(a.totalAssetAmount).lte(BigNumber.from(b.totalAssetAmount)) ? 1 : -1
       )
 
-      const sortedKashiPairsByBorrow = [...newKashiPairs].sort((a: KashiPair, b: KashiPair) =>
-        BigNumber.from(a.totalBorrow).lte(BigNumber.from(b.totalBorrow)) ? 1 : -1
+      const sortedKashiPairsByBorrow = [...newKashiPairs].sort((a: KashiPairNew, b: KashiPairNew) =>
+        BigNumber.from(a.totalBorrowAmount).lte(BigNumber.from(b.totalBorrowAmount)) ? 1 : -1
       )
 
       setCalculating(false)

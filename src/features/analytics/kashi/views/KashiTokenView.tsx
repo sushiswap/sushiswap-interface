@@ -15,16 +15,16 @@ import PairCollateralPieChart from '../components/PairCollateralPieChart'
 import PairSupplyBorrowDayDataChart from '../components/PairSupplyBorrowDayDataChart'
 import TokenCard from '../components/TokenCard'
 import { useAppContext } from '../context/AppContext'
-import { KashiPair } from '../types/KashiPair'
+import { KashiPairNew } from '../types/KashiPair'
 import { KashiPairDayDataMap, KashiPairDayDataMapsCollateral } from '../types/KashiPairDayData'
-import { Token } from '../types/Token'
+import { Token, TokenNew } from '../types/Token'
 
 const KashiTokenView = () => {
   const [token, setToken] = useState<Token | undefined>()
   const [totalAsset, setTotalAsset] = useState<BigInt>(BigInt(0))
   const [totalBorrow, setTotalBorrow] = useState<BigInt>(BigInt(0))
 
-  const [kashiPairs, setKashiPairs] = useState<KashiPair[]>([])
+  const [kashiPairs, setKashiPairs] = useState<KashiPairNew[]>([])
   const [kashiPairDayDataMaps, setKashiPairDayDataMaps] = useState<KashiPairDayDataMap[]>([])
 
   const [kashiPairDayDataMapsCollaterals, setKashiPairDayDataMapsCollaterals] = useState<
@@ -78,9 +78,9 @@ const KashiTokenView = () => {
   }, [dataKashiPairDayData])
 
   const setTokenData = async () => {
-    const { tokens, kashiPairs }: { tokens: Token[]; kashiPairs: KashiPair[] } = dataToken
+    const { tokens, kashiPairs }: { tokens: TokenNew[]; kashiPairs: KashiPairNew[] } = dataToken
 
-    const { tokens: newTokens } = calculateService.calculateTokenPrices(tokens, pricesMap)
+    const { tokens: newTokens } = calculateService.calculateTokenPricesNew(tokens, pricesMap)
 
     const token = newTokens[0]
     setToken(token)
@@ -89,7 +89,7 @@ const KashiTokenView = () => {
       kashiPairs: newKashiPairs,
       totalAsset,
       totalBorrow,
-    } = calculateService.calculateKashiPairPrices(kashiPairs, pricesMap)
+    } = calculateService.calculateKashiPairPricesNew(kashiPairs, pricesMap)
 
     setTotalAsset(totalAsset.toBigInt())
     setTotalBorrow(totalBorrow.toBigInt())

@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 
 import { useAppContext } from '../context/AppContext'
-import { KashiPairsByToken } from '../types/KashiPair'
+import { KashiPairsByTokenNew } from '../types/KashiPair'
 
 type OrderBy = 'symbol' | 'totalSupply' | 'totalAsset' | 'totalBorrow' | ''
 type OrderDirection = 'asc' | 'desc'
@@ -117,7 +117,7 @@ const MarketTableRowLoading = () => (
   </tr>
 )
 
-const MarketTableRow = ({ data, index }: { data: KashiPairsByToken; index: number }) => {
+const MarketTableRow = ({ data, index }: { data: KashiPairsByTokenNew; index: number }) => {
   const { tokenUtilService, handleLogoError } = useAppContext()
   const router = useRouter()
   const goto = (route: string) => {
@@ -165,13 +165,13 @@ const MarketTableRow = ({ data, index }: { data: KashiPairsByToken; index: numbe
   )
 }
 
-const TokenMarketTable = ({ loading = false, data = [] }: { loading?: boolean; data: KashiPairsByToken[] }) => {
+const TokenMarketTable = ({ loading = false, data = [] }: { loading?: boolean; data: KashiPairsByTokenNew[] }) => {
   const [orderBy, setOrderBy] = useState<OrderBy>('')
   const [orderDirection, setOrderDirection] = useState<OrderDirection>('desc')
 
-  const [fullList, setFullList] = useState<KashiPairsByToken[]>([])
-  const [sortedList, setSortedList] = useState<KashiPairsByToken[]>([])
-  const [list, setList] = useState<KashiPairsByToken[]>([])
+  const [fullList, setFullList] = useState<KashiPairsByTokenNew[]>([])
+  const [sortedList, setSortedList] = useState<KashiPairsByTokenNew[]>([])
+  const [list, setList] = useState<KashiPairsByTokenNew[]>([])
   const [isMore, setMore] = useState(false)
   const [search, setSearch] = useState('')
 
@@ -183,19 +183,19 @@ const TokenMarketTable = ({ loading = false, data = [] }: { loading?: boolean; d
     let newSortedList = [...fullList]
     const compareFuncs = {
       symbol: {
-        asc: (a: KashiPairsByToken, b: KashiPairsByToken) =>
+        asc: (a: KashiPairsByTokenNew, b: KashiPairsByTokenNew) =>
           (a.token.symbol.toLowerCase() || '').localeCompare(b.token.symbol.toLowerCase() || ''),
-        desc: (a: KashiPairsByToken, b: KashiPairsByToken) =>
+        desc: (a: KashiPairsByTokenNew, b: KashiPairsByTokenNew) =>
           (b.token.symbol.toLowerCase() || '').localeCompare(a.token.symbol.toLowerCase() || ''),
       },
       totalSupply: {
-        asc: (a: KashiPairsByToken, b: KashiPairsByToken) =>
+        asc: (a: KashiPairsByTokenNew, b: KashiPairsByTokenNew) =>
           BigNumber.from(a.totalAsset)
             .add(BigNumber.from(a.totalBorrow))
             .lte(BigNumber.from(b.totalAsset).add(BigNumber.from(b.totalBorrow)))
             ? -1
             : 1,
-        desc: (a: KashiPairsByToken, b: KashiPairsByToken) =>
+        desc: (a: KashiPairsByTokenNew, b: KashiPairsByTokenNew) =>
           BigNumber.from(a.totalAsset)
             .add(BigNumber.from(a.totalBorrow))
             .gte(BigNumber.from(b.totalAsset).add(BigNumber.from(b.totalBorrow)))
@@ -203,15 +203,15 @@ const TokenMarketTable = ({ loading = false, data = [] }: { loading?: boolean; d
             : 1,
       },
       totalAsset: {
-        asc: (a: KashiPairsByToken, b: KashiPairsByToken) =>
+        asc: (a: KashiPairsByTokenNew, b: KashiPairsByTokenNew) =>
           BigNumber.from(a.totalAsset).lte(BigNumber.from(b.totalAsset)) ? -1 : 1,
-        desc: (a: KashiPairsByToken, b: KashiPairsByToken) =>
+        desc: (a: KashiPairsByTokenNew, b: KashiPairsByTokenNew) =>
           BigNumber.from(a.totalAsset).gte(BigNumber.from(b.totalAsset)) ? -1 : 1,
       },
       totalBorrow: {
-        asc: (a: KashiPairsByToken, b: KashiPairsByToken) =>
+        asc: (a: KashiPairsByTokenNew, b: KashiPairsByTokenNew) =>
           BigNumber.from(a.totalBorrow).lte(BigNumber.from(b.totalBorrow)) ? -1 : 1,
-        desc: (a: KashiPairsByToken, b: KashiPairsByToken) =>
+        desc: (a: KashiPairsByTokenNew, b: KashiPairsByTokenNew) =>
           BigNumber.from(a.totalBorrow).gte(BigNumber.from(b.totalBorrow)) ? -1 : 1,
       },
     }

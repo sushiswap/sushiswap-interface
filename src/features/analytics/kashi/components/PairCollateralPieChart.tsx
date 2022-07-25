@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 import TailwindConfig from '../config/tailwind'
 import { useAppContext } from '../context/AppContext'
-import { KashiPair } from '../types/KashiPair'
+import { KashiPairNew } from '../types/KashiPair'
 
 const PairCollateralPieChart = ({
   containerClass = '',
@@ -17,15 +17,15 @@ const PairCollateralPieChart = ({
   type?: 'supply' | 'asset' | 'borrow'
   containerClass?: string
   title?: string
-  data?: KashiPair[]
+  data?: KashiPairNew[]
 }) => {
   const router = useRouter()
   const { tokenUtilService } = useAppContext()
   const valueFuncs = {
-    supply: (kashiPair: KashiPair) =>
-      BigNumber.from(kashiPair.totalAsset).add(BigNumber.from(kashiPair.totalBorrow)).toNumber() / 100.0,
-    asset: (kashiPair: KashiPair) => BigNumber.from(kashiPair.totalAsset).toNumber() / 100.0,
-    borrow: (kashiPair: KashiPair) => BigNumber.from(kashiPair.totalBorrow).toNumber() / 100.0,
+    supply: (kashiPair: KashiPairNew) =>
+      BigNumber.from(kashiPair.totalAssetAmount).add(BigNumber.from(kashiPair.totalBorrowAmount)).toNumber() / 100.0,
+    asset: (kashiPair: KashiPairNew) => BigNumber.from(kashiPair.totalAssetAmount).toNumber() / 100.0,
+    borrow: (kashiPair: KashiPairNew) => BigNumber.from(kashiPair.totalBorrowAmount).toNumber() / 100.0,
   }
 
   const getSeries = () => {

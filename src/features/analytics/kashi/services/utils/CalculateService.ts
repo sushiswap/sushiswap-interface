@@ -1,9 +1,9 @@
 import { BigNumber } from 'ethers'
 import moment from 'moment'
 
-import { KashiPair, KashiPairsByToken } from '../../types/KashiPair'
+import { KashiPair, KashiPairNew, KashiPairsByToken, KashiPairsByTokenNew } from '../../types/KashiPair'
 import { KashiPairDayData, KashiPairDayDataMap, KashiPairDayDataMapsCollateral } from '../../types/KashiPairDayData'
-import { Token } from '../../types/Token'
+import { Token, TokenNew } from '../../types/Token'
 
 class CalculateService {
   protected static instance: CalculateService
@@ -96,6 +96,38 @@ class CalculateService {
     }
   }
 
+  calculateKashiPairPricesNew(kashiPairs: KashiPairNew[], pricesMap: { [key: string]: BigInt }) {
+    let sumTotalAsset = BigNumber.from('0'),
+      sumTotalBorrow = BigNumber.from('0')
+
+    const newKashiPairs = kashiPairs.map((kashiPair) => {
+      let totalAsset = BigNumber.from('0'),
+        totalBorrow = BigNumber.from('0')
+
+      if (kashiPair.asset) {
+        totalAsset = BigNumber.from(pricesMap?.[kashiPair.asset.symbol] ?? 0)
+          .mul(BigNumber.from(kashiPair.totalAsset?.elastic))
+          .div(BigNumber.from('10').pow(Number(kashiPair.asset.decimals) + 6))
+        totalBorrow = BigNumber.from(pricesMap?.[kashiPair.asset.symbol] ?? 0)
+          .mul(BigNumber.from(kashiPair.totalBorrow?.elastic))
+          .div(BigNumber.from('10').pow(Number(kashiPair.asset.decimals) + 6))
+      }
+      sumTotalAsset = sumTotalAsset.add(totalAsset)
+      sumTotalBorrow = sumTotalBorrow.add(totalBorrow)
+      const newKashiPair = {
+        ...kashiPair,
+        totalAssetAmount: totalAsset.toBigInt(),
+        totalBorrowAmount: totalBorrow.toBigInt(),
+      }
+      return newKashiPair
+    })
+    return {
+      totalAsset: sumTotalAsset,
+      totalBorrow: sumTotalBorrow,
+      kashiPairs: newKashiPairs,
+    }
+  }
+
   calculateKashiPairPricesGroupByAsset(kashiPairs: KashiPair[], pricesMap: { [key: string]: BigInt }) {
     const { totalAsset, totalBorrow, kashiPairs: newKashiPairs } = this.calculateKashiPairPrices(kashiPairs, pricesMap)
 
@@ -132,6 +164,46 @@ class CalculateService {
     }
   }
 
+  calculateKashiPairPricesGroupByAssetNew(kashiPairs: KashiPairNew[], pricesMap: { [key: string]: BigInt }) {
+    const {
+      totalAsset,
+      totalBorrow,
+      kashiPairs: newKashiPairs,
+    } = this.calculateKashiPairPricesNew(kashiPairs, pricesMap)
+
+    const kashiPairsByTokenMap: { [key: string]: KashiPairsByTokenNew } = {}
+    newKashiPairs.forEach((kashiPair) => {
+      const { asset } = kashiPair
+      if (asset) {
+        if (kashiPairsByTokenMap[asset.id]) {
+          const kashiPairsByToken = kashiPairsByTokenMap[asset.id]
+          kashiPairsByToken.kashiPairs.push(kashiPair)
+          kashiPairsByToken.totalAsset = BigNumber.from(kashiPairsByToken.totalAsset)
+            .add(BigNumber.from(kashiPair.totalAssetAmount))
+            .toBigInt()
+
+          kashiPairsByToken.totalBorrow = BigNumber.from(kashiPairsByToken.totalBorrow)
+            .add(BigNumber.from(kashiPair.totalBorrowAmount))
+            .toBigInt()
+        } else {
+          kashiPairsByTokenMap[asset.id] = {
+            token: asset,
+            totalAsset: kashiPair.totalAssetAmount,
+            totalBorrow: kashiPair.totalBorrowAmount,
+            kashiPairs: [kashiPair],
+          }
+        }
+      }
+    })
+
+    const kashiPairsByTokens = Object.values(kashiPairsByTokenMap)
+    return {
+      totalAsset,
+      totalBorrow,
+      kashiPairsByTokens,
+    }
+  }
+
   calculateTokenPrices(tokens: Token[], pricesMap: { [key: string]: BigInt }) {
     let sumTotalSupply = BigNumber.from('0')
 
@@ -139,6 +211,28 @@ class CalculateService {
       let totalSupply = BigNumber.from('0')
       totalSupply = BigNumber.from(pricesMap[token.symbol] ?? 0)
         .mul(BigNumber.from(token.totalSupplyElastic))
+        .div(BigNumber.from('10').pow(Number(token.decimals) + 6))
+      sumTotalSupply = sumTotalSupply.add(totalSupply)
+      const newToken = {
+        ...token,
+        price: (pricesMap[token.symbol] ?? 0) || 0,
+        totalSupply: totalSupply.toBigInt(),
+      }
+      return newToken
+    })
+    return {
+      totalSupply: sumTotalSupply,
+      tokens: newTokens,
+    }
+  }
+
+  calculateTokenPricesNew(tokens: TokenNew[], pricesMap: { [key: string]: BigInt }) {
+    let sumTotalSupply = BigNumber.from('0')
+
+    const newTokens = tokens.map((token) => {
+      let totalSupply = BigNumber.from('0')
+      totalSupply = BigNumber.from(pricesMap[token.symbol] ?? 0)
+        .mul(BigNumber.from(token.rebase?.elastic))
         .div(BigNumber.from('10').pow(Number(token.decimals) + 6))
       sumTotalSupply = sumTotalSupply.add(totalSupply)
       const newToken = {

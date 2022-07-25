@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 
 import { useAppContext } from '../context/AppContext'
-import { KashiPair } from '../types/KashiPair'
+import { KashiPairNew } from '../types/KashiPair'
 
 type OrderBy = 'asset' | 'collateral' | 'totalSupply' | 'totalAsset' | 'supplyAPR' | 'totalBorrow' | 'borrowAPR' | ''
 type OrderDirection = 'asc' | 'desc'
@@ -164,7 +164,7 @@ const PairMarketTableRowLoading = () => (
   </tr>
 )
 
-const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number }) => {
+const PairMarketTableRow = ({ data, index }: { data: KashiPairNew; index: number }) => {
   const { tokenUtilService, handleLogoError } = useAppContext()
   const router = useRouter()
   const goto = (route: string) => {
@@ -207,14 +207,14 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
         </td>
         <td className="px-2 py-3 text-right">
           <div className="font-bold text-gray-50">
-            {numeral(BigNumber.from(data?.totalAsset).add(BigNumber.from(data.totalBorrow)).toNumber() / 100).format(
-              '$0,.00'
-            )}
+            {numeral(
+              BigNumber.from(data?.totalAssetAmount).add(BigNumber.from(data.totalBorrowAmount)).toNumber() / 100
+            ).format('$0,.00')}
           </div>
           <div className="text-xs text-gray-400">
             {numeral(
-              BigNumber.from(data?.totalAssetElastic)
-                .add(BigNumber.from(data.totalBorrowElastic))
+              BigNumber.from(data?.totalAsset?.elastic)
+                .add(BigNumber.from(data.totalBorrow?.elastic))
                 .div(
                   BigNumber.from('10').pow(
                     Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
@@ -228,11 +228,11 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
         </td>
         <td className="px-2 py-3 text-right">
           <div className="font-bold text-gray-50">
-            {numeral(BigNumber.from(data?.totalBorrow).toNumber() / 100).format('$0,.00')}
+            {numeral(BigNumber.from(data?.totalBorrowAmount).toNumber() / 100).format('$0,.00')}
           </div>
           <div className="text-xs text-gray-400">
             {numeral(
-              BigNumber.from(data?.totalBorrowElastic)
+              BigNumber.from(data?.totalBorrow?.elastic)
                 .div(
                   BigNumber.from('10').pow(
                     Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
@@ -246,19 +246,19 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
         </td>
         <td className="px-2 py-3 text-right">
           <div className="font-bold text-gray-50">
-            {numeral(BigNumber.from(data?.supplyAPR).div(BigNumber.from('1000000000000')).toNumber() / 100000).format(
-              '%0.00'
-            )}
+            {numeral(
+              BigNumber.from(data?.kpi?.supplyAPR).div(BigNumber.from('1000000000000')).toNumber() / 100000
+            ).format('%0.00')}
           </div>
           <div className="text-xs text-gray-400">{i18n._(`annualized`)}</div>
         </td>
         <td className="px-2 py-3 text-right">
           <div className="font-bold text-gray-50">
-            {numeral(BigNumber.from(data?.totalAsset).toNumber() / 100).format('$0,.00')}
+            {numeral(BigNumber.from(data?.totalAssetAmount).toNumber() / 100).format('$0,.00')}
           </div>
           <div className="text-xs text-gray-400">
             {numeral(
-              BigNumber.from(data?.totalAssetElastic)
+              BigNumber.from(data?.totalAsset?.elastic)
                 .div(
                   BigNumber.from('10').pow(
                     Number(data.asset?.decimals && Number(data.asset?.decimals) >= 2 ? data.asset?.decimals : 2) - 2
@@ -273,9 +273,9 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
 
         <td className="py-3 pl-2 pr-8 text-right">
           <div className="font-bold text-gray-50">
-            {numeral(BigNumber.from(data?.borrowAPR).div(BigNumber.from('1000000000000')).toNumber() / 100000).format(
-              '%0.00'
-            )}
+            {numeral(
+              BigNumber.from(data?.kpi?.borrowAPR).div(BigNumber.from('1000000000000')).toNumber() / 100000
+            ).format('%0.00')}
           </div>
           <div className="text-xs text-gray-400">{i18n._(`annualized`)}</div>
         </td>
@@ -284,13 +284,13 @@ const PairMarketTableRow = ({ data, index }: { data: KashiPair; index: number })
   )
 }
 
-const PairMarketTable = ({ loading = false, data = [] }: { loading?: boolean; data: KashiPair[] }) => {
+const PairMarketTable = ({ loading = false, data = [] }: { loading?: boolean; data: KashiPairNew[] }) => {
   const [orderBy, setOrderBy] = useState<OrderBy>('totalSupply')
   const [orderDirection, setOrderDirection] = useState<OrderDirection>('desc')
 
-  const [fullList, setFullList] = useState<KashiPair[]>([])
-  const [sortedList, setSortedList] = useState<KashiPair[]>([])
-  const [list, setList] = useState<KashiPair[]>([])
+  const [fullList, setFullList] = useState<KashiPairNew[]>([])
+  const [sortedList, setSortedList] = useState<KashiPairNew[]>([])
+  const [list, setList] = useState<KashiPairNew[]>([])
   const [isMore, setMore] = useState(false)
   const [search, setSearch] = useState('')
   const { tokenUtilService } = useAppContext()
@@ -303,48 +303,54 @@ const PairMarketTable = ({ loading = false, data = [] }: { loading?: boolean; da
     let newSortedList = [...fullList]
     const compareFuncs = {
       asset: {
-        asc: (a: KashiPair, b: KashiPair) =>
+        asc: (a: KashiPairNew, b: KashiPairNew) =>
           (a.asset?.symbol.toLowerCase() || '').localeCompare(b.asset?.symbol.toLowerCase() || ''),
-        desc: (a: KashiPair, b: KashiPair) =>
+        desc: (a: KashiPairNew, b: KashiPairNew) =>
           (b.asset?.symbol.toLowerCase() || '').localeCompare(a.asset?.symbol.toLowerCase() || ''),
       },
       collateral: {
-        asc: (a: KashiPair, b: KashiPair) =>
+        asc: (a: KashiPairNew, b: KashiPairNew) =>
           (a.collateral?.symbol.toLowerCase() || '').localeCompare(b.collateral?.symbol.toLowerCase() || ''),
-        desc: (a: KashiPair, b: KashiPair) =>
+        desc: (a: KashiPairNew, b: KashiPairNew) =>
           (b.collateral?.symbol.toLowerCase() || '').localeCompare(a.collateral?.symbol.toLowerCase() || ''),
       },
       totalSupply: {
-        asc: (a: KashiPair, b: KashiPair) =>
-          BigNumber.from(a.totalAsset)
-            .add(BigNumber.from(a.totalBorrow))
-            .lte(BigNumber.from(b.totalAsset).add(BigNumber.from(b.totalBorrow)))
+        asc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.totalAssetAmount)
+            .add(BigNumber.from(a.totalBorrowAmount))
+            .lte(BigNumber.from(b.totalAssetAmount).add(BigNumber.from(b.totalBorrowAmount)))
             ? -1
             : 1,
-        desc: (a: KashiPair, b: KashiPair) =>
-          BigNumber.from(a.totalAsset)
-            .add(BigNumber.from(a.totalBorrow))
-            .gte(BigNumber.from(b.totalAsset).add(BigNumber.from(b.totalBorrow)))
+        desc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.totalAssetAmount)
+            .add(BigNumber.from(a.totalBorrowAmount))
+            .gte(BigNumber.from(b.totalAssetAmount).add(BigNumber.from(b.totalBorrowAmount)))
             ? -1
             : 1,
       },
       totalAsset: {
-        asc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.totalAsset).lte(BigNumber.from(b.totalAsset)) ? -1 : 1),
-        desc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.totalAsset).gte(BigNumber.from(b.totalAsset)) ? -1 : 1),
+        asc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.totalAssetAmount).lte(BigNumber.from(b.totalAssetAmount)) ? -1 : 1,
+        desc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.totalAssetAmount).gte(BigNumber.from(b.totalAssetAmount)) ? -1 : 1,
       },
       totalBorrow: {
-        asc: (a: KashiPair, b: KashiPair) =>
-          BigNumber.from(a.totalBorrow).lte(BigNumber.from(b.totalBorrow)) ? 1 : -1,
-        desc: (a: KashiPair, b: KashiPair) =>
-          BigNumber.from(a.totalBorrow).gte(BigNumber.from(b.totalBorrow)) ? -1 : 1,
+        asc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.totalBorrowAmount).lte(BigNumber.from(b.totalBorrowAmount)) ? 1 : -1,
+        desc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.totalBorrowAmount).gte(BigNumber.from(b.totalBorrowAmount)) ? -1 : 1,
       },
       supplyAPR: {
-        asc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.supplyAPR).lte(BigNumber.from(b.supplyAPR)) ? -1 : 1),
-        desc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.supplyAPR).gte(BigNumber.from(b.supplyAPR)) ? -1 : 1),
+        asc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.kpi?.supplyAPR).lte(BigNumber.from(b.kpi?.supplyAPR)) ? -1 : 1,
+        desc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.kpi?.supplyAPR).gte(BigNumber.from(b.kpi?.supplyAPR)) ? -1 : 1,
       },
       borrowAPR: {
-        asc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.borrowAPR).lte(BigNumber.from(b.borrowAPR)) ? -1 : 1),
-        desc: (a: KashiPair, b: KashiPair) => (BigNumber.from(a.borrowAPR).gte(BigNumber.from(b.borrowAPR)) ? -1 : 1),
+        asc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.kpi?.borrowAPR).lte(BigNumber.from(b.kpi?.borrowAPR)) ? -1 : 1,
+        desc: (a: KashiPairNew, b: KashiPairNew) =>
+          BigNumber.from(a.kpi?.borrowAPR).gte(BigNumber.from(b.kpi?.borrowAPR)) ? -1 : 1,
       },
     }
 

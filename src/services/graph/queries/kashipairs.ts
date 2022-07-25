@@ -61,12 +61,7 @@ export const kashiPairQuery = gql`
 
 export const dataKashiPairsQuery = gql`
   query GetPairs {
-    bentoBoxes {
-      totalTokens
-      totalKashiPairs
-      totalUsers
-    }
-    kashiPairs(first: 1000, orderBy: totalAssetElastic, orderDirection: desc) {
+    kashiPairs(first: 1000) {
       id
       name
       symbol
@@ -82,15 +77,24 @@ export const dataKashiPairsQuery = gql`
         symbol
         decimals
       }
+      totalAsset {
+        base
+        elastic
+      }
+      totalBorrow {
+        base
+        elastic
+      }
+      kpi {
+        supplyAPR
+        borrowAPR
+        utilization
+        totalFeesEarnedFraction
+      }
       exchangeRate
-      utilization
-      interestPerSecond
-      totalAssetElastic
-      totalAssetBase
-      supplyAPR
-      totalBorrowElastic
-      totalBorrowBase
-      borrowAPR
+      accrueInfo {
+        interestPerSecond
+      }
     }
   }
 `
@@ -147,15 +151,23 @@ export const kashiTokensQuery = gql`
         symbol
         decimals
       }
+      totalAsset {
+        base
+        elastic
+      }
+      totalBorrow {
+        base
+        elastic
+      }
+      kpi {
+        supplyAPR
+        borrowAPR
+        utilization
+      }
+      accrueInfo {
+        interestPerSecond
+      }
       exchangeRate
-      utilization
-      interestPerSecond
-      totalAssetElastic
-      totalAssetBase
-      supplyAPR
-      totalBorrowElastic
-      totalBorrowBase
-      borrowAPR
     }
   }
 `
@@ -167,10 +179,12 @@ export const kashiTokenQuery = gql`
       name
       symbol
       decimals
-      totalSupplyElastic
-      totalSupplyBase
-      block
-      timestamp
+      rebase {
+        base
+        elastic
+      }
+      # block
+      # timestamp
     }
     kashiPairs(first: 1000, where: { asset: $id }) {
       id
@@ -181,28 +195,38 @@ export const kashiTokenQuery = gql`
         name
         symbol
         decimals
-        totalSupplyElastic
-        totalSupplyBase
-        block
-        timestamp
+        rebase {
+          base
+          elastic
+        }
+        # block
+        # timestamp
       }
       collateral {
         id
         name
         symbol
         decimals
-        totalSupplyElastic
-        totalSupplyBase
-        block
-        timestamp
+        rebase {
+          base
+          elastic
+        }
+        # block
+        # timestamp
       }
-      totalAssetElastic
-      totalAssetBase
+      totalAsset {
+        base
+        elastic
+      }
+      totalBorrow {
+        base
+        elastic
+      }
       totalCollateralShare
-      totalBorrowElastic
-      totalBorrowBase
-      supplyAPR
-      borrowAPR
+      kpi {
+        supplyAPR
+        borrowAPR
+      }
     }
   }
 `
