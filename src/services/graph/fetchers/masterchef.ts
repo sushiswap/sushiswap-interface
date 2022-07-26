@@ -31,6 +31,7 @@ export const MINICHEF = {
   [ChainId.FANTOM]: 'sushiswap/fantom-minichef',
   [ChainId.MOONBEAM]: 'sushiswap/moonbeam-minichef',
   [ChainId.KAVA]: 'sushiswap/kava-minichef',
+  [ChainId.METIS]: 'sushiswap/metis-minichef',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -127,8 +128,12 @@ export const getMiniChefFarms = async (chainId = ChainId.ETHEREUM, variables = u
       },
       rewarder: {
         ...pool.rewarder,
-        // @ts-ignore TYPE NEEDS FIXING
-        ...(nativePools ? nativePools.nativeRewarderPools.find((nativePool) => nativePool.id === pool.id) : undefined),
+        native: {
+          ...(nativePools
+            ? // @ts-ignore TYPE NEEDS FIXING
+              nativePools.nativeRewarderPools.find((nativePool) => nativePool.id === pool.id)
+            : undefined),
+        },
       },
     }))
   } else {

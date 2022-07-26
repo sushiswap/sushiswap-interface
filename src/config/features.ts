@@ -85,7 +85,7 @@ const features: FeatureMap = {
   [ChainId.MOONBEAM]: [Feature.AMM, Feature.MISO, Feature.LIQUIDITY_MINING, Feature.MIGRATE],
   [ChainId.OPTIMISM]: [Feature.TRIDENT, Feature.BENTOBOX],
   [ChainId.KAVA]: [Feature.TRIDENT, Feature.BENTOBOX, Feature.LIQUIDITY_MINING],
-  [ChainId.METIS]: [Feature.TRIDENT, Feature.BENTOBOX],
+  [ChainId.METIS]: [Feature.TRIDENT, Feature.BENTOBOX, Feature.LIQUIDITY_MINING],
 }
 
 export default features

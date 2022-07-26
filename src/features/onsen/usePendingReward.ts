@@ -17,6 +17,8 @@ const usePending = (farm) => {
 
   const cloneRewarder = useCloneRewarderContract(farm?.rewarder?.id)
 
+  console.log(farm)
+
   const complexRewarder = useComplexRewarderContract(farm?.rewarder?.id)
 
   const contract = useMemo(
@@ -32,6 +34,7 @@ const usePending = (farm) => {
       [ChainId.FANTOM]: complexRewarder,
       [ChainId.MOONBEAM]: complexRewarder,
       [ChainId.KAVA]: complexRewarder,
+      [ChainId.METIS]: complexRewarder,
     }),
     [complexRewarder, cloneRewarder]
   )
@@ -41,6 +44,8 @@ const usePending = (farm) => {
       try {
         // @ts-ignore TYPE NEEDS FIXING
         const pending = await contract[chainId]?.pendingTokens(farm.id, account, '0')
+
+        console.log(pending)
         // console.log({ farm })
         // todo: do not assume [0] or that rewardToken has 18 decimals (only works w/ mastechefv2 currently)
         const formatted = farm.rewardToken
