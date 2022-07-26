@@ -25,7 +25,7 @@ export default function useAddToken(currencyToAdd: Currency | undefined): {
               address: token.address,
               symbol: token.symbol,
               decimals: token.decimals,
-              image: getCurrencyLogoUrls(token),
+              image: getCurrencyLogoUrls(token)?.[0],
             },
           },
         })
