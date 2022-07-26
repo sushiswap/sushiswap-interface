@@ -23,7 +23,7 @@ export const GRAPH_HOST = {
   [ChainId.MOONBEAM]: THE_GRAPH,
   [ChainId.OPTIMISM]: THE_GRAPH,
   [ChainId.KAVA]: 'https://pvt.graph.kava.io',
-  [ChainId.METIS]: 'https://andromeda.thegraph.metisdevops.link:8000',
+  [ChainId.METIS]: 'https://andromeda.thegraph.metis.io',
 }
 
 export const TRIDENT = {
