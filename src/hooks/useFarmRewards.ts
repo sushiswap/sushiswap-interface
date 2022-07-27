@@ -271,7 +271,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               currency: NATIVE[ChainId.METIS],
               rewardPerBlock,
               rewardPerDay: rewardPerSecond * 86400,
-              rewardPrice: 1, //todo: need handle this
+              rewardPrice: nativePrice, //todo: need handle this
             },
           }
 
@@ -362,7 +362,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
       const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
 
-      if (type === PairType.TRIDENT) {
+      if (type === PairType.TRIDENT && pair.address) {
         pair.id = pair.address
         pair.token0 = {
           id: pair.assets[0].tokenInfo.address,
