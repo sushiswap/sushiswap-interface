@@ -271,7 +271,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               currency: NATIVE[ChainId.METIS],
               rewardPerBlock,
               rewardPerDay: rewardPerSecond * 86400,
-              rewardPrice: nativePrice, //todo: need handle this
+              rewardPrice: 30, //todo: need handle this
             },
           }
 
