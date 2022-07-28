@@ -6,6 +6,7 @@ import Dots from 'app/components/Dots'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
 import { selectTridentSwap } from 'app/features/trident/swap/swapSlice'
 import { useBentoBox, useBentoBoxContract, useWETH9Contract } from 'app/hooks'
+import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppSelector } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
@@ -19,12 +20,13 @@ const WrapButton: FC = () => {
   const wethContract = useWETH9Contract()
   const bentoBox = useBentoBoxContract()
   const { deposit, withdraw } = useBentoBox()
+  const { rebase } = useBentoRebase(chainId ? WNATIVE[chainId] : undefined)
   const addTransaction = useTransactionAdder()
   const { spendFromWallet, receiveToWallet, attemptingTxn } = useAppSelector(selectTridentSwap)
   const { parsedAmounts, error } = useDerivedTridentSwapContext()
 
   const execute = async () => {
-    if (!wethContract || !parsedAmounts?.[0] || !chainId) return
+    if (!wethContract || !parsedAmounts?.[0] || !chainId || !rebase) return
 
     if (spendFromWallet && receiveToWallet) {
       let txReceipt
@@ -52,7 +54,7 @@ const WrapButton: FC = () => {
     }
 
     if (spendFromWallet && !receiveToWallet) {
-      return await deposit(WNATIVE_ADDRESS[chainId], parsedAmounts?.[0]?.quotient.toString().toBigNumber(0))
+      return await deposit(WNATIVE[chainId], rebase, parsedAmounts?.[0]?.quotient.toString().toBigNumber(0))
     }
   }
 

@@ -1,11 +1,10 @@
 import { SwitchVerticalIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent } from '@sushiswap/core-sdk'
+import { Percent, ZERO } from '@sushiswap/core-sdk'
 import limitOrderPairList from '@sushiswap/limit-order-pair-list/dist/limit-order.pairlist.json'
 import RecipientField from 'app/components/RecipientField'
 import Typography from 'app/components/Typography'
-import { ZERO_PERCENT } from 'app/constants'
 import { Feature } from 'app/enums'
 import LimitOrderApprovalCheck from 'app/features/legacy/limit-order/LimitOrderApprovalCheck'
 import LimitOrderButton from 'app/features/legacy/limit-order/LimitOrderButton'
@@ -51,7 +50,7 @@ const LimitOrder = () => {
 
   const inputPanelHelperText = useMemo(() => {
     if (rate && trade) {
-      const { numerator, denominator } = rate.subtract(trade.executionPrice).divide(trade.executionPrice)
+      const { numerator, denominator } = rate.subtract(trade.executionPrice).divide(trade.executionPrice).multiply(-1)
       return new Percent(numerator, denominator)
     }
   }, [rate, trade])
@@ -141,7 +140,7 @@ const LimitOrder = () => {
             onSelect={(outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency)}
             currencies={outputTokenList}
             priceImpact={inputPanelHelperText}
-            priceImpactCss={inputPanelHelperText?.greaterThan(ZERO_PERCENT) ? 'text-green' : 'text-red'}
+            priceImpactCss={inputPanelHelperText?.greaterThan(ZERO) ? 'text-green' : 'text-red'}
           />
         </div>
 

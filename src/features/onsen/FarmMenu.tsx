@@ -90,7 +90,7 @@ const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: 
       // @ts-ignore TYPE NEEDS FIXING
       [FarmFilter.Old]: <MenuLink href={'/farm?filter=old'} label={i18n._(t`Old Farms`)} />,
       [FarmFilter.Trident]:
-        chainId && [ChainId.KAVA].includes(chainId) ? (
+        chainId && [ChainId.KAVA, ChainId.METIS].includes(chainId) ? (
           <MenuLink href={'/farm?filter=trident'} label={i18n._(t`Trident Farms`)} />
         ) : undefined,
     }

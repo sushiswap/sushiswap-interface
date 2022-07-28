@@ -312,7 +312,7 @@ const NetworkModal: FC = () => {
             ChainId.FUSE,
             ChainId.BSC,
             // ChainId.KAVA,
-            // ChainId.METIS,
+            ChainId.METIS,
             ChainId.TELOS,
             ChainId.CELO,
             // ChainId.OKEX,

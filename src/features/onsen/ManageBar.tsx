@@ -37,6 +37,7 @@ const APPROVAL_ADDRESSES = {
     [ChainId.FUSE]: MINICHEF_ADDRESS[ChainId.FUSE],
     [ChainId.FANTOM]: MINICHEF_ADDRESS[ChainId.FANTOM],
     [ChainId.KAVA]: MINICHEF_ADDRESS[ChainId.KAVA],
+    [ChainId.METIS]: MINICHEF_ADDRESS[ChainId.METIS],
   },
 }
 

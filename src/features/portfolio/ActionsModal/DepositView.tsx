@@ -11,6 +11,7 @@ import { useBalancesSelectedCurrency } from 'app/features/portfolio/useBalancesD
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { tryParseAmount } from 'app/functions'
 import { useBentoBox, useBentoBoxContract } from 'app/hooks'
+import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
@@ -24,6 +25,7 @@ interface DepositViewProps {
 const DepositView: FC<DepositViewProps> = ({ onClose, onBack }) => {
   const { account } = useActiveWeb3React()
   const currency = useBalancesSelectedCurrency()
+  const { rebase } = useBentoRebase(currency)
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const walletBalance = useCurrencyBalance(account ?? undefined, currency)
   const { data: bentoBalance } = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
@@ -37,16 +39,16 @@ const DepositView: FC<DepositViewProps> = ({ onClose, onBack }) => {
   if (valuePlusBalance && bentoBalance) valuePlusBalance = valuePlusBalance.add(bentoBalance)
 
   const execute = useCallback(async () => {
-    if (!currency || !value) return
+    if (!currency || !value || !rebase) return
 
     try {
       setAttemptingTxn(true)
-      await deposit(currency.wrapped.address, value.toBigNumber(currency?.decimals))
+      await deposit(currency, rebase, value.toBigNumber(currency?.decimals))
     } finally {
       setAttemptingTxn(false)
       onClose()
     }
-  }, [currency, deposit, onClose, value])
+  }, [currency, deposit, onClose, rebase, value])
 
   const error = !account
     ? i18n._(t`Connect Wallet`)

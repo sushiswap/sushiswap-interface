@@ -6,6 +6,7 @@ import getAnalyticsXsushi, { AnalyticsXsushi } from 'app/features/analytics/xsus
 import InfoCard from 'app/features/analytics/xsushi/InfoCard'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import { useBarFeesDaysAgo } from 'app/services/graph/hooks/bar'
 import { GetServerSideProps } from 'next'
 import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
@@ -96,6 +97,11 @@ function _XSushi() {
     [data]
   )
 
+  const { data: fees1m } = useBarFeesDaysAgo({ days: 30 })
+  const { data: fees3m } = useBarFeesDaysAgo({ days: 90 })
+  const { data: fees6m } = useBarFeesDaysAgo({ days: 180 })
+  //const { data: fees1y } = useBarFeesDaysAgo({ days: 365 })
+
   return (
     <>
       <NextSeo title={`Farm Analytics`} />
@@ -124,6 +130,11 @@ function _XSushi() {
             <InfoCard text="APY 3m" number={formatPercent(data?.apy3m)} />
             <InfoCard text="APY 6m" number={formatPercent(data?.apy6m)} />
             <InfoCard text="APY 1y" number={formatPercent(data?.apy1y)} />
+          </div>
+          <div className="grid grid-flow-col gap-4 overflow-auto grid-col-4">
+            <InfoCard text="Sushi Served 1m" number={formatNumber(fees1m, false)} />
+            <InfoCard text="Sushi Served 3m" number={formatNumber(fees3m, false)} />
+            <InfoCard text="Sushi Served 6m" number={formatNumber(fees6m, false)} />
           </div>
           <div className="space-y-4">
             {graphs.map((graph, i) => (

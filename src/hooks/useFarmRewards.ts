@@ -267,6 +267,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               rewardPerDay: rewardPerSecond * 86400,
               rewardPrice: 1, //todo: need handle this
             },
+            [ChainId.METIS]: {
+              currency: NATIVE[ChainId.METIS],
+              rewardPerBlock,
+              rewardPerDay: rewardPerSecond * 86400,
+              rewardPrice: 30, //todo: need handle this
+            },
           }
 
           if (chainId === ChainId.FUSE) {
@@ -291,7 +297,8 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               pool.rewarder.totalAllocPoint === '0'
                 ? pool.rewarder.rewardPerSecond / 10 ** pool.rewardToken.decimals
                 : chainId === ChainId.XDAI
-                ? ((pool.rewarder.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+                ? ((pool.rewarder.native.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) /
+                  1e18
                 : ((pool.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
             const rewardPerBlock = rewardPerSecond * averageBlockTime
             const rewardPerDay = rewardPerBlock * blocksPerDay
@@ -355,7 +362,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
 
       const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
 
-      if (type === PairType.TRIDENT) {
+      if (type === PairType.TRIDENT && pair.address) {
         pair.id = pair.address
         pair.token0 = {
           id: pair.assets[0].tokenInfo.address,
@@ -414,6 +421,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       masterChefV1TotalAllocPoint,
       maticPrice,
       movrPrice,
+      nativePrice,
       onePrice,
       positions,
       sushiPrice,
