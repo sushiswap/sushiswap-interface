@@ -36,6 +36,7 @@ const migrations = {
     return {
       ...state,
       user: initialUserState,
+      lists: initialListsState,
     }
   },
 }
