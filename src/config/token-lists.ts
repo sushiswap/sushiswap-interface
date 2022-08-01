@@ -14,7 +14,7 @@ const SET_LIST = 'https://raw.githubusercontent.com/SetProtocol/uniswap-tokenlis
 const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
 const WRAPPED_LIST = 'wrapped.tokensoft.eth'
 const ROLL_LIST = 'https://app.tryroll.com/tokens.json'
-const DHEDGE_LIST = 'https://list.dhedge.eth.link'
+// const DHEDGE_LIST = 'https://list.dhedge.eth.link'
 const SUSHI_LIST = 'https://token-list.sushi.com'
 const CHAINLINK_LIST = 'https://token-list.sushi.com/chainlink'
 
@@ -38,7 +38,7 @@ const DEFAULT_LIST_OF_LISTS_TO_DISPLAY: string[] = [
   SET_LIST,
   ROLL_LIST,
   NFTX_LIST,
-  DHEDGE_LIST,
+  // DHEDGE_LIST,
 ]
 
 export const DEFAULT_LIST_OF_LISTS: string[] = [

@@ -38,6 +38,13 @@ const migrations = {
       user: initialUserState,
     }
   },
+  // @ts-ignore
+  5: (state) => {
+    return {
+      ...state,
+      lists: initialListsState,
+    }
+  },
 }
 
 export default migrations
