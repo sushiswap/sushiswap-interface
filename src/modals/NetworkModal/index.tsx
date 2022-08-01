@@ -285,7 +285,7 @@ export const SUPPORTED_NETWORKS: Record<
   },
 }
 
-const NetworkModal: FC = () => {
+const NetworkModal: FC<{ switchNetwork: (targetChain: number) => void }> = ({ switchNetwork }) => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
   const networkModalOpen = useModalOpen(ApplicationModal.NETWORK)
@@ -344,32 +344,7 @@ const NetworkModal: FC = () => {
               return (
                 <button
                   key={i}
-                  onClick={async () => {
-                    console.debug(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
-                    toggleNetworkModal()
-                    const params = SUPPORTED_NETWORKS[key]
-                    try {
-                      await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
-
-                      gtag('event', 'Switch', {
-                        event_category: 'Chain',
-                        event_label: params.chainName,
-                      })
-                    } catch (switchError) {
-                      // This error code indicates that the chain has not been added to MetaMask.
-                      // @ts-ignore TYPE NEEDS FIXING
-                      if (switchError.code === 4902) {
-                        try {
-                          await library?.send('wallet_addEthereumChain', [params, account])
-                        } catch (addError) {
-                          // handle "add" error
-                          console.error(`Add chain error ${addError}`)
-                        }
-                      }
-                      console.error(`Switch chain error ${switchError}`)
-                      // handle other "switch" errors
-                    }
-                  }}
+                  onClick={() => switchNetwork(key)}
                   className={classNames(
                     'bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-dark-700 hover:border-blue'
                   )}
