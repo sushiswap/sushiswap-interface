@@ -84,9 +84,7 @@ function Web3Network(): JSX.Element | null {
 
     console.debug('network change from query chainId', { queryChainId, defaultChainId, chainId })
     setAttemptingSwitchFromUrl(true)
-
     setSwitchedFromUrl(true)
-
     if (switchedFromUrl) return
 
     handleChainSwitch(defaultChainId ? defaultChainId : queryChainId)
@@ -112,8 +110,6 @@ function Web3Network(): JSX.Element | null {
       </div>
       <NetworkModel
         switchNetwork={(targetChain: number) => {
-          setSwitchedFromUrl(false)
-          setAttemptingSwitchFromUrl(false)
           handleChainSwitch(targetChain)
         }}
       />
