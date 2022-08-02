@@ -274,16 +274,33 @@ export const useLimitOrderDerivedTypedInputAmount: UseLimitOrderDerivedTypedInpu
   }, [inputCurrency, outputCurrency, typedField, typedValue])
 }
 
-type UseLimitOrderDerivedInputError = ({ trade }: { trade?: Trade<Currency, Currency, TradeType> }) => string
-export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({ trade }) => {
+type UseLimitOrderDerivedInputError = ({
+  trade,
+  isStopLossOrder,
+}: {
+  trade?: Trade<Currency, Currency, TradeType>
+  isStopLossOrder?: boolean
+}) => string
+export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({ trade, isStopLossOrder }) => {
   const { recipient, orderExpiration, fromBentoBalance, limitPrice, stopPrice, typedValue } = useLimitOrderState()
   const { account } = useActiveWeb3React()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
+  const rate = useLimitOrderDerivedLimitPrice()
+  const stopRate = useStopLossDerivedLimitPrice()
   const recipientLookup = useENS(recipient)
   const to = !recipient ? account : recipientLookup.address
   const parsedRate = useLimitOrderDerivedLimitPrice()
   const balance = useBentoOrWalletBalance(account ?? undefined, inputCurrency, !fromBentoBalance)
   const [expertMode] = useExpertModeManager()
+  const limitPriceOrDefaultPrice = useMemo(() => (limitPrice ? rate : trade?.executionPrice), [limitPrice, trade])
+  const stopPriceOrDefaultPrice = useMemo(() => (stopPrice ? stopRate : trade?.executionPrice), [stopPrice, trade])
+  const isLimitPriceBiggerThanStopPrice = useMemo(
+    () =>
+      limitPriceOrDefaultPrice &&
+      stopPriceOrDefaultPrice &&
+      limitPriceOrDefaultPrice?.toSignificant(6) >= stopPriceOrDefaultPrice?.toSignificant(6),
+    [limitPrice, stopPrice]
+  )
 
   return useMemo(() => {
     return !account
@@ -298,6 +315,8 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
       ? i18n._(t`Select a rate`)
       : stopPrice !== LimitPrice.CURRENT && parsedRate?.equalTo(ZERO)
       ? i18n._(t`Select a rate`)
+      : isStopLossOrder && isLimitPriceBiggerThanStopPrice
+      ? 'Big minimum rate'
       : !orderExpiration
       ? i18n._(t`Select an order expiration`)
       : !balance

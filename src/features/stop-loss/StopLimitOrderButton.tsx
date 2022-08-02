@@ -32,7 +32,7 @@ const StopLimitOrderButton: FC<StopLimitOrderButton> = ({ trade, parsedAmounts }
   const { address } = useENS(recipient)
   const addPopup = useAddPopup()
 
-  const error = useLimitOrderDerivedInputError({ trade })
+  const error = useLimitOrderDerivedInputError({ trade, isStopLossOrder: true })
   const { deposit } = useLimitOrderExecute()
   const bentoboxContract = useBentoBoxContract()
   const masterContractAddress = chainId ? STOP_LIMIT_ORDER_ADDRESS[chainId] : undefined

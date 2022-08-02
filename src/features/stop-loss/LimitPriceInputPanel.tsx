@@ -24,7 +24,7 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade, limitPrice }) =
   return (
     <div className="flex flex-col gap-1">
       <Typography variant="sm" className="px-2 flex items-center">
-        {i18n._(t`Limit Rate`)}
+        {i18n._(t`Minimum Rate`)}
         <QuestionHelper text={i18n._(t`Minimum output amount`)} />
       </Typography>
       <div className="flex justify-between items-baseline bg-dark-900 rounded px-4 py-1.5 border border-dark-700 hover:border-dark-600">
