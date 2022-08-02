@@ -315,8 +315,8 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
       ? i18n._(t`Select a rate`)
       : stopPrice !== LimitPrice.CURRENT && parsedRate?.equalTo(ZERO)
       ? i18n._(t`Select a rate`)
-      : isStopLossOrder && isLimitPriceBiggerThanStopPrice
-      ? 'Big minimum rate'
+      : isStopLossOrder && isLimitPriceBiggerThanStopPrice // for stop-loss orders only
+      ? 'Minimum larger than stop rate'
       : !orderExpiration
       ? i18n._(t`Select an order expiration`)
       : !balance
