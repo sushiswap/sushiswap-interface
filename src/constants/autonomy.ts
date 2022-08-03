@@ -16,6 +16,14 @@ export const CHAINLINK_ORACLE_ADDRESS: AddressMap = {
   [ChainId.AVALANCHE]: '0x232d595594585613F48aaE9c85861E4aB06CE3E5',
 }
 
+type FeeAmountOfEthMap = {
+  [chainId: number]: string
+}
+// it defines minimum amount of fee(ETH unit) that Autonomy wrapper contract charges when to execute orders.
+export const STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM: FeeAmountOfEthMap = {
+  [ChainId.AVALANCHE]: '0.025', // 0.025 AVAX
+}
+
 interface MoralisInfo {
   serverURL: string
   key: string

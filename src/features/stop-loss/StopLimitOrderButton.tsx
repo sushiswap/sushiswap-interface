@@ -4,8 +4,9 @@ import { Currency, CurrencyAmount, Trade, TradeType } from '@sushiswap/core-sdk'
 import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import { STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
+import { STOP_LIMIT_ORDER_WRAPPER_ADDRESSES, STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM } from 'app/constants/autonomy'
 import useLimitOrderExecute, { DepositPayload } from 'app/features/legacy/limit-order/useLimitOrderExecute'
+import { useEstimateEquivalentEthAmount } from 'app/features/stop-loss/useStopLossExecute'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract } from 'app/hooks'
 import useENS from 'app/hooks/useENS'
@@ -14,7 +15,10 @@ import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { setFromBentoBalance, setLimitOrderBentoPermit, setLimitOrderShowReview } from 'app/state/limit-order/actions'
 import { useLimitOrderDerivedInputError, useLimitOrderState } from 'app/state/limit-order/hooks'
+import { useMemo } from 'react'
 import React, { FC, useCallback, useState } from 'react'
+
+import { STOP_LIMIT_ORDER_PROFIT_SLIPPAGE } from './utils'
 
 interface StopLimitOrderButton {
   trade?: Trade<Currency, Currency, TradeType>
@@ -37,6 +41,18 @@ const StopLimitOrderButton: FC<StopLimitOrderButton> = ({ trade, parsedAmounts }
   const bentoboxContract = useBentoBoxContract()
   const masterContractAddress = chainId ? STOP_LIMIT_ORDER_ADDRESS[chainId] : undefined
   const [permitError, setPermitError] = useState(false)
+
+  // check if input token amount is too small, not able to pay autonomy fee
+  // input token amount(ETH unit) should be greater than feeMinimum * 100 / 10
+  // (roughly fee is taken from 10% of total amount)
+  const inputTokenValueOfEth = useEstimateEquivalentEthAmount(parsedAmounts?.inputAmount)
+  const tooSmallAmount = useMemo(
+    () =>
+      chainId &&
+      parseFloat(inputTokenValueOfEth) <
+        (parseFloat(STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM[chainId]) * 100) / STOP_LIMIT_ORDER_PROFIT_SLIPPAGE,
+    [inputTokenValueOfEth]
+  )
 
   const _deposit = useCallback(
     async (payload: DepositPayload) => {
@@ -92,7 +108,13 @@ const StopLimitOrderButton: FC<StopLimitOrderButton> = ({ trade, parsedAmounts }
             })}
       >
         {({ approved, loading }) => {
-          const disabled = !!error || !approved || loading || attemptingTxn || Boolean(recipient && !address && error)
+          const disabled =
+            !!error ||
+            !!tooSmallAmount ||
+            !approved ||
+            loading ||
+            attemptingTxn ||
+            Boolean(recipient && !address && error)
           return (
             <Button
               loading={loading || attemptingTxn}
@@ -101,7 +123,13 @@ const StopLimitOrderButton: FC<StopLimitOrderButton> = ({ trade, parsedAmounts }
               onClick={handler}
               className="rounded-2xl md:rounded"
             >
-              {error ? error : fromBentoBalance ? i18n._(t`Review Stop Limit Order`) : i18n._(t`Confirm Deposit`)}
+              {error
+                ? error
+                : tooSmallAmount
+                ? 'Too small amount'
+                : fromBentoBalance
+                ? i18n._(t`Review Stop Limit Order`)
+                : i18n._(t`Confirm Deposit`)}
             </Button>
           )
         }}
