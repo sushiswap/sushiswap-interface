@@ -1,5 +1,4 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
-import { BigNumber } from '@ethersproject/bignumber'
 import { Signature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
@@ -9,12 +8,7 @@ import { LimitOrder, ROUND_UP_RECEIVER_ADDRESS } from '@sushiswap/limit-order-sd
 import { CHAINLINK_ORACLE_ADDRESS, MORALIS_INFO, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { ZERO } from 'app/functions'
-import {
-  useAutonomyLimitOrderWrapperContract,
-  useAutonomyRegistryContract,
-  useFactoryContract,
-  usePairContract,
-} from 'app/hooks'
+import { useAutonomyLimitOrderWrapperContract, useAutonomyRegistryContract, useRouterContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
@@ -64,49 +58,26 @@ export type UseLimitOrderExecute = () => {
 
 export function useEstimateEquivalentEthAmount(token: CurrencyAmount<Currency> | undefined): string {
   const { chainId } = useActiveWeb3React()
-
-  const [lpAddress, setLpAddress] = useState(AddressZero) // LP with ETH
+  const router = useRouterContract()
   const [equivalentEthAmount, setEquivalentEthAmount] = useState('0')
-
-  const factory = useFactoryContract()
-  const pairContract = usePairContract(lpAddress)
-
-  useEffect(() => {
-    const updateLiquidityPairAddress = async () => {
-      if (!factory || !chainId || !token) return
-      if (token.wrapped.currency.address === WNATIVE_ADDRESS[chainId]) return
-
-      const pairAddress = await factory.getPair(WNATIVE_ADDRESS[chainId], token.wrapped.currency.address)
-      setLpAddress(pairAddress)
-      console.log('pair address: ', pairAddress)
-    }
-
-    updateLiquidityPairAddress()
-  }, [token?.wrapped.currency.address])
 
   useEffect(() => {
     const updateEquivalentEthAmount = async () => {
-      if (!factory || !chainId || !token) return
+      if (!router || !chainId || !token) return
       if (token.wrapped.currency.address === WNATIVE_ADDRESS[chainId]) {
         setEquivalentEthAmount(formatUnits(token.quotient.toString(), 18))
         return
       }
 
-      if (!pairContract || lpAddress === AddressZero) {
-        // lp does not exist
-        return
-      }
-      const token0 = await pairContract.token0()
-      const reserves = await pairContract.getReserves()
-      const ethAmount = BigNumber.from(token.quotient.toString())
-        .mul(token0 !== WNATIVE_ADDRESS[chainId] ? reserves.reserve1 : reserves.reserve0) // eth reserve
-        .div(BigNumber.from(token0 === WNATIVE_ADDRESS[chainId] ? reserves.reserve1 : reserves.reserve0)) // token reserve
-
-      setEquivalentEthAmount(formatUnits(ethAmount, 18))
+      const amountsOut = await router.getAmountsOut(token.quotient.toString(), [
+        token.wrapped.currency.address,
+        WNATIVE_ADDRESS[chainId],
+      ])
+      setEquivalentEthAmount(formatUnits(amountsOut[amountsOut.length - 1], 18))
     }
 
     updateEquivalentEthAmount()
-  }, [token, pairContract])
+  }, [token])
 
   return equivalentEthAmount
 }
