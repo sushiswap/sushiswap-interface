@@ -1119,14 +1119,14 @@ const MAINNET_CHAINLINK_MAPPING = {
     fromDecimals: 18,
     toDecimals: 18,
   },
-  // WAVES / USD
-  '0x9a79fdCd0E326dF6Fa34EA13c05d3106610798E9': {
-    from: '0x1cF4592ebfFd730c7dc92c1bdFFDfc3B9EfCf29a',
-    to: '0x0000000000000000000000000000000000000001',
-    decimals: 8,
-    fromDecimals: 18,
-    toDecimals: 8,
-  },
+  // // WAVES / USD
+  // '0x9a79fdCd0E326dF6Fa34EA13c05d3106610798E9': {
+  //   from: '0x1cF4592ebfFd730c7dc92c1bdFFDfc3B9EfCf29a',
+  //   to: '0x0000000000000000000000000000000000000001',
+  //   decimals: 8,
+  //   fromDecimals: 18,
+  //   toDecimals: 8,
+  // },
   // WNXM / ETH
   '0xe5Dc0A609Ab8bCF15d3f35cFaa1Ff40f521173Ea': {
     from: '0x0d438F3b5175Bebc262bF23753C1E53d03432bDE',
@@ -1143,14 +1143,14 @@ const MAINNET_CHAINLINK_MAPPING = {
     fromDecimals: 18,
     toDecimals: 18,
   },
-  // WOO / ETH
-  '0x926a93B44a887076eDd00257E5D42fafea313363': {
-    from: '0x4691937a7508860F876c9c0a2a617E7d9E945D4B',
-    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    decimals: 18,
-    fromDecimals: 18,
-    toDecimals: 18,
-  },
+  // // WOO / ETH
+  // '0x926a93B44a887076eDd00257E5D42fafea313363': {
+  //   from: '0x4691937a7508860F876c9c0a2a617E7d9E945D4B',
+  //   to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  //   decimals: 18,
+  //   fromDecimals: 18,
+  //   toDecimals: 18,
+  // },
   // XMR / USD
   '0xFA66458Cce7Dd15D8650015c4fce4D278271618F': {
     from: '0x465e07d6028830124BE2E4aA551fBe12805dB0f5',
