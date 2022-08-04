@@ -5,7 +5,12 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { formatUnits } from '@ethersproject/units'
 import { ChainId, Currency, CurrencyAmount, Price, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { LimitOrder, ROUND_UP_RECEIVER_ADDRESS } from '@sushiswap/limit-order-sdk'
-import { CHAINLINK_ORACLE_ADDRESS, MORALIS_INFO, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
+import {
+  CHAINLINK_ORACLE_ADDRESS,
+  MORALIS_INFO,
+  STOP_LIMIT_ORDER_WRAPPER_ADDRESSES,
+  STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM,
+} from 'app/constants/autonomy'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { ZERO } from 'app/functions'
 import { useAutonomyLimitOrderWrapperContract, useAutonomyRegistryContract, useRouterContract } from 'app/hooks'
@@ -13,10 +18,11 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { clear, setLimitOrderAttemptingTxn } from 'app/state/limit-order/actions'
+import { useLimitOrderDerivedLimitPrice, useStopLossDerivedLimitPrice } from 'app/state/limit-order/hooks'
 import { OrderExpiration } from 'app/state/limit-order/reducer'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Moralis from 'moralis'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCallback } from 'react'
 
 import { calculateAmountExternal, prepareStopPriceOracleData, ZERO_ORACLE_ADDRESS, ZERO_ORACLE_DATA } from './utils'
@@ -80,6 +86,42 @@ export function useEstimateEquivalentEthAmount(token: CurrencyAmount<Currency> |
   }, [token])
 
   return equivalentEthAmount
+}
+
+interface DifferenceOfStopAndMinimumRateResult {
+  diffOfStopAndMinRate: CurrencyAmount<Currency> | undefined
+  diffValueOfEth: string
+  tooNarrowMarginOfRates: boolean
+}
+
+// check if difference between stopRate and minimum rate is enough to cover autonomy fee
+export function useDiffOfStopAndMinimumRate({
+  inputAmount,
+}: {
+  inputAmount: CurrencyAmount<Currency> | undefined
+}): DifferenceOfStopAndMinimumRateResult {
+  const { chainId } = useActiveWeb3React()
+  const rate = useLimitOrderDerivedLimitPrice()
+  const stopRate = useStopLossDerivedLimitPrice()
+
+  // get difference of output amounts between stop and minimum rate
+  const diffOfStopAndMinRate = useMemo(() => {
+    if (!stopRate || !rate || !inputAmount || stopRate.equalTo(rate) || stopRate.lessThan(rate)) return undefined
+    return stopRate?.quote(inputAmount).subtract(rate?.quote(inputAmount))
+  }, [rate, stopRate, inputAmount])
+  // get equivalent ETH amount of difference
+  const diffValueOfEth = useEstimateEquivalentEthAmount(diffOfStopAndMinRate)
+  // compare with minimum fee amount
+  const tooNarrowMarginOfRates = useMemo(
+    () => (!!chainId ? parseFloat(diffValueOfEth) < parseFloat(STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM[chainId]) : false),
+    [diffValueOfEth]
+  )
+
+  return {
+    diffOfStopAndMinRate,
+    diffValueOfEth,
+    tooNarrowMarginOfRates,
+  }
 }
 
 const useStopLossExecute: UseLimitOrderExecute = () => {

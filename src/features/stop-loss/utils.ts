@@ -1,13 +1,9 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
-import { Currency, CurrencyAmount, Price, Token, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Price, Token } from '@sushiswap/core-sdk'
 import { CHAINLINK_PRICE_FEED_MAP, ChainlinkPriceFeedEntry } from 'app/config/oracles/chainlink'
 import { BigNumber } from 'ethers'
 
 export const STOP_LIMIT_ORDER_PROFIT_SLIPPAGE = 10 // percent unit
-
-export function keepTokenIn(tokenIn: string, tokenOut: string, chainId: number): boolean {
-  return tokenIn === WNATIVE_ADDRESS[chainId] ? true : false
-}
 
 /**
  * @dev StopLimitOrder charges fee from the output token always, and so swap 110% of output token, and deduct fee.

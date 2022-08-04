@@ -4,9 +4,9 @@ import { Currency, CurrencyAmount, Trade, TradeType } from '@sushiswap/core-sdk'
 import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import { STOP_LIMIT_ORDER_WRAPPER_ADDRESSES, STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM } from 'app/constants/autonomy'
+import { STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import useLimitOrderExecute, { DepositPayload } from 'app/features/legacy/limit-order/useLimitOrderExecute'
-import { useEstimateEquivalentEthAmount } from 'app/features/stop-loss/useStopLossExecute'
+import { useDiffOfStopAndMinimumRate } from 'app/features/stop-loss/useStopLossExecute'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract } from 'app/hooks'
 import useENS from 'app/hooks/useENS'
@@ -14,13 +14,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useAddPopup } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { setFromBentoBalance, setLimitOrderBentoPermit, setLimitOrderShowReview } from 'app/state/limit-order/actions'
-import {
-  useLimitOrderDerivedInputError,
-  useLimitOrderDerivedLimitPrice,
-  useLimitOrderState,
-  useStopLossDerivedLimitPrice,
-} from 'app/state/limit-order/hooks'
-import { useMemo } from 'react'
+import { useLimitOrderDerivedInputError, useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC, useCallback, useState } from 'react'
 
 interface StopLimitOrderButton {
@@ -38,8 +32,6 @@ const StopLimitOrderButton: FC<StopLimitOrderButton> = ({ trade, parsedAmounts }
   const { fromBentoBalance, bentoPermit, attemptingTxn, recipient } = useLimitOrderState()
   const { address } = useENS(recipient)
   const addPopup = useAddPopup()
-  const rate = useLimitOrderDerivedLimitPrice()
-  const stopRate = useStopLossDerivedLimitPrice()
 
   const error = useLimitOrderDerivedInputError({ trade, isStopLossOrder: true })
   const { deposit } = useLimitOrderExecute()
@@ -48,16 +40,9 @@ const StopLimitOrderButton: FC<StopLimitOrderButton> = ({ trade, parsedAmounts }
   const [permitError, setPermitError] = useState(false)
 
   // check if difference between stopRate and minimum rate is enough to cover autonomy fee
-  const diffOfStopAndMinRate = useMemo(() => {
-    if (!stopRate || !rate || !parsedAmounts.inputAmount || stopRate.equalTo(rate) || stopRate.lessThan(rate))
-      return undefined
-    return stopRate?.quote(parsedAmounts.inputAmount).subtract(rate?.quote(parsedAmounts.inputAmount))
-  }, [rate, stopRate, parsedAmounts])
-  const diffValueOfEth = useEstimateEquivalentEthAmount(diffOfStopAndMinRate)
-  const tooNarrowMarginOfRates = useMemo(
-    () => chainId && parseFloat(diffValueOfEth) < parseFloat(STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM[chainId]),
-    [diffValueOfEth]
-  )
+  const { tooNarrowMarginOfRates } = useDiffOfStopAndMinimumRate({
+    inputAmount: parsedAmounts.inputAmount,
+  })
 
   const _deposit = useCallback(
     async (payload: DepositPayload) => {
