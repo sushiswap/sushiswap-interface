@@ -5,24 +5,6 @@ import { BigNumber } from 'ethers'
 
 export const STOP_LIMIT_ORDER_PROFIT_SLIPPAGE = 10 // percent unit
 
-/**
- * @dev StopLimitOrder charges fee from the output token always, and so swap 110% of output token, and deduct fee.
- *
- * @param tokenIn
- * @param tokenOut
- * @param chainId
- * @returns
- */
-export function calculateAmountExternal(
-  tokenIn: CurrencyAmount<Token>,
-  tokenOut: CurrencyAmount<Token>,
-  chainId: number
-): BigNumber {
-  return BigNumber.from(tokenOut.quotient.toString())
-    .mul(100 + STOP_LIMIT_ORDER_PROFIT_SLIPPAGE)
-    .div(100)
-}
-
 export interface IStopPriceOracleData {
   stopPrice?: string
   oracleData: string

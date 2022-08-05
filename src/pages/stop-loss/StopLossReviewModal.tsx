@@ -30,13 +30,10 @@ const StopLossReviewModal: FC<StopLossReviewModal> = ({ parsedAmounts, trade, li
   const { i18n } = useLingui()
   const { execute } = useStopLossExecute()
 
-  const { externalAmount } = useDiffOfStopAndMinimumRate({
+  const { externalAmountForFee } = useDiffOfStopAndMinimumRate({
     inputAmount: parsedAmounts.inputAmount,
   })
-  const amountExternal = parsedAmounts.outputAmount
-  if (parsedAmounts.outputAmount) {
-    amountExternal?.add(CurrencyAmount.fromRawAmount(parsedAmounts.outputAmount?.currency, externalAmount))
-  }
+
   const stopRate = useStopLossDerivedLimitPrice()
   const _execute = useCallback(() => {
     if (parsedAmounts?.inputAmount && parsedAmounts?.outputAmount) {
@@ -44,7 +41,9 @@ const StopLossReviewModal: FC<StopLossReviewModal> = ({ parsedAmounts, trade, li
         orderExpiration: orderExpiration.value,
         recipient,
         outputAmount: parsedAmounts.outputAmount,
-        amountExternal, // outputAmount + feeRelatedAmount
+        amountExternal: parsedAmounts.outputAmount?.add(
+          CurrencyAmount.fromRawAmount(parsedAmounts.outputAmount?.currency, externalAmountForFee)
+        ), // outputAmount + feeRelatedAmount
         inputAmount: parsedAmounts.inputAmount,
         stopPrice: stopRate,
       })

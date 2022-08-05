@@ -97,7 +97,7 @@ interface DifferenceOfStopAndMinimumRateResult {
   diffOfStopAndMinRate: CurrencyAmount<Currency> | undefined
   diffValueOfEth: string
   tooNarrowMarginOfRates: boolean
-  externalAmount: string
+  externalAmountForFee: string
 }
 
 // check if difference between stopRate and minimum rate is enough to cover autonomy fee
@@ -136,7 +136,7 @@ export function useDiffOfStopAndMinimumRate({
     diffOfStopAndMinRate,
     diffValueOfEth,
     tooNarrowMarginOfRates,
-    externalAmount: externalAmountForFee.toString(),
+    externalAmountForFee: externalAmountForFee.toString(),
   }
 }
 
@@ -179,7 +179,6 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         await order?.signOrderWithProvider(chainId || 1, library)
 
         if (autonomyRegistryContract && limitOrderWrapperContract && chainId) {
-          // const amountExternal = calculateAmountExternal(inputAmount.wrapped, outputAmount.wrapped, chainId)
           if (stopPrice && oracleData?.stopPrice == ZERO_ORACLE_DATA) {
             throw new Error('Unsupported pair')
           }
@@ -187,7 +186,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
             ['address[]', 'uint256', 'address', 'bool'],
             [
               [order.tokenInAddress, order.tokenOutAddress], // path
-              amountExternal, // amountExternal
+              amountExternal?.wrapped.quotient.toString(),
               chainId && STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId], // profit receiver
               false, // keepTokenIn, charge fee, by outputToken always
             ]
