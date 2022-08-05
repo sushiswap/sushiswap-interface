@@ -1,4 +1,5 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
+import { BigNumber } from '@ethersproject/bignumber'
 import { Signature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
@@ -25,7 +26,7 @@ import Moralis from 'moralis'
 import { useEffect, useMemo, useState } from 'react'
 import { useCallback } from 'react'
 
-import { calculateAmountExternal, prepareStopPriceOracleData, ZERO_ORACLE_ADDRESS, ZERO_ORACLE_DATA } from './utils'
+import { prepareStopPriceOracleData, ZERO_ORACLE_ADDRESS, ZERO_ORACLE_DATA } from './utils'
 
 const getEndTime = (orderExpiration: OrderExpiration | string): number => {
   switch (orderExpiration) {
@@ -51,6 +52,7 @@ export type ExecutePayload = {
   orderExpiration: OrderExpiration | string
   inputAmount?: CurrencyAmount<Currency>
   outputAmount?: CurrencyAmount<Currency>
+  amountExternal?: CurrencyAmount<Currency>
   recipient?: string
   stopPrice?: Price<Currency, Currency> | undefined
 }
@@ -69,7 +71,10 @@ export function useEstimateEquivalentEthAmount(token: CurrencyAmount<Currency> |
 
   useEffect(() => {
     const updateEquivalentEthAmount = async () => {
-      if (!router || !chainId || !token) return
+      if (!router || !chainId || !token) {
+        setEquivalentEthAmount('0')
+        return
+      }
       if (token.wrapped.currency.address === WNATIVE_ADDRESS[chainId]) {
         setEquivalentEthAmount(formatUnits(token.quotient.toString(), 18))
         return
@@ -92,6 +97,7 @@ interface DifferenceOfStopAndMinimumRateResult {
   diffOfStopAndMinRate: CurrencyAmount<Currency> | undefined
   diffValueOfEth: string
   tooNarrowMarginOfRates: boolean
+  externalAmount: string
 }
 
 // check if difference between stopRate and minimum rate is enough to cover autonomy fee
@@ -117,10 +123,20 @@ export function useDiffOfStopAndMinimumRate({
     [diffValueOfEth]
   )
 
+  const convertIntWithMultiply = (sValue: string) => `${Math.floor(parseFloat(sValue) * 1000000)}`
+  // calculate amount for autonomy fee:  (stopRate - minimumRate) * MIN_FEE_ETH_AMOUNT / equivalentEthAmountOf[stopRate - minimumRate]
+  const externalAmountForFee =
+    !!chainId && !!diffOfStopAndMinRate && parseFloat(diffValueOfEth) > 0
+      ? BigNumber.from(diffOfStopAndMinRate?.quotient.toString())
+          .mul(BigNumber.from(convertIntWithMultiply(STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM[chainId])))
+          .div(BigNumber.from(convertIntWithMultiply(diffValueOfEth)))
+      : 0
+
   return {
     diffOfStopAndMinRate,
     diffValueOfEth,
     tooNarrowMarginOfRates,
+    externalAmount: externalAmountForFee.toString(),
   }
 }
 
@@ -136,7 +152,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
   const { mutate } = useLimitOrders()
 
   const execute = useCallback<UseLimitOrderExecuteExecute>(
-    async ({ orderExpiration, inputAmount, outputAmount, recipient, stopPrice }) => {
+    async ({ orderExpiration, inputAmount, outputAmount, amountExternal, recipient, stopPrice }) => {
       if (!inputAmount || !outputAmount || !account || !library || !chainId) throw new Error('Dependencies unavailable')
 
       let oracleData
@@ -163,7 +179,7 @@ const useStopLossExecute: UseLimitOrderExecute = () => {
         await order?.signOrderWithProvider(chainId || 1, library)
 
         if (autonomyRegistryContract && limitOrderWrapperContract && chainId) {
-          const amountExternal = calculateAmountExternal(inputAmount.wrapped, outputAmount.wrapped, chainId)
+          // const amountExternal = calculateAmountExternal(inputAmount.wrapped, outputAmount.wrapped, chainId)
           if (stopPrice && oracleData?.stopPrice == ZERO_ORACLE_DATA) {
             throw new Error('Unsupported pair')
           }

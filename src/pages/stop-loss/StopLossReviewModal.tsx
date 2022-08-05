@@ -7,7 +7,7 @@ import ListPanel from 'app/components/ListPanel'
 import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
-import useStopLossExecute from 'app/features/stop-loss/useStopLossExecute'
+import useStopLossExecute, { useDiffOfStopAndMinimumRate } from 'app/features/stop-loss/useStopLossExecute'
 import { isAddress, shortenAddress } from 'app/functions'
 import { useAppDispatch } from 'app/state/hooks'
 import { setLimitOrderShowReview } from 'app/state/limit-order/actions'
@@ -30,6 +30,13 @@ const StopLossReviewModal: FC<StopLossReviewModal> = ({ parsedAmounts, trade, li
   const { i18n } = useLingui()
   const { execute } = useStopLossExecute()
 
+  const { externalAmount } = useDiffOfStopAndMinimumRate({
+    inputAmount: parsedAmounts.inputAmount,
+  })
+  const amountExternal = parsedAmounts.outputAmount
+  if (parsedAmounts.outputAmount) {
+    amountExternal?.add(CurrencyAmount.fromRawAmount(parsedAmounts.outputAmount?.currency, externalAmount))
+  }
   const stopRate = useStopLossDerivedLimitPrice()
   const _execute = useCallback(() => {
     if (parsedAmounts?.inputAmount && parsedAmounts?.outputAmount) {
@@ -37,6 +44,7 @@ const StopLossReviewModal: FC<StopLossReviewModal> = ({ parsedAmounts, trade, li
         orderExpiration: orderExpiration.value,
         recipient,
         outputAmount: parsedAmounts.outputAmount,
+        amountExternal, // outputAmount + feeRelatedAmount
         inputAmount: parsedAmounts.inputAmount,
         stopPrice: stopRate,
       })
