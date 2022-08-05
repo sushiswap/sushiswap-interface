@@ -13,8 +13,6 @@ const ManageTridentPair = ({ farm }) => {
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
 
-  console.log(farm)
-
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-row items-center gap-3">
