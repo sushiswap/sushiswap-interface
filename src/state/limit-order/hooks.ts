@@ -292,14 +292,14 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
   const parsedRate = useLimitOrderDerivedLimitPrice()
   const balance = useBentoOrWalletBalance(account ?? undefined, inputCurrency, !fromBentoBalance)
   const [expertMode] = useExpertModeManager()
-  const limitPriceOrDefaultPrice = useMemo(() => (limitPrice ? rate : trade?.executionPrice), [limitPrice, trade])
+  const limitPriceOrDefaultPrice = useMemo(() => (rate ? rate : trade?.executionPrice), [rate, trade])
   const stopPriceOrDefaultPrice = useMemo(() => (stopPrice ? stopRate : trade?.executionPrice), [stopPrice, trade])
   const isLimitPriceBiggerThanStopPrice = useMemo(
     () =>
       limitPriceOrDefaultPrice &&
       stopPriceOrDefaultPrice &&
-      limitPriceOrDefaultPrice?.toSignificant(6) >= stopPriceOrDefaultPrice?.toSignificant(6),
-    [limitPrice, stopPrice]
+      parseFloat(limitPriceOrDefaultPrice?.toSignificant(6)) >= parseFloat(stopPriceOrDefaultPrice?.toSignificant(6)),
+    [limitPriceOrDefaultPrice, stopPriceOrDefaultPrice]
   )
 
   return useMemo(() => {
