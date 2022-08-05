@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
 import { HeadlessUiModal } from 'app/components/Modal'
 import QuestionHelper from 'app/components/QuestionHelper'
 import ToggleButtonGroup from 'app/components/ToggleButton'
@@ -9,7 +8,6 @@ import { classNames } from 'app/functions'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react'
 
-import EmergencyDetails from './EmergencyDetails'
 import { OnsenModalView, PairType } from './enum'
 import InformationDisclosure from './InformationDisclosure'
 import InvestmentDetails from './InvestmentDetails'
@@ -28,7 +26,7 @@ interface FarmListItemDetailsModal {
 const Context = createContext<FarmListItemDetailsModal | undefined>(undefined)
 
 // @ts-ignore TYPE NEEDS FIXING
-const FarmListItemDetails = ({ farm, chainId, onDismiss }) => {
+const FarmListItemDetails = ({ farm, onDismiss }) => {
   const { i18n } = useLingui()
   const { view } = useAppSelector(selectOnsen)
   const dispatch = useAppDispatch()
@@ -63,11 +61,6 @@ const FarmListItemDetails = ({ farm, chainId, onDismiss }) => {
             </ToggleButtonGroup.Button>
             <ToggleButtonGroup.Button value={OnsenModalView.Staking}>{i18n._(t`Staking`)}</ToggleButtonGroup.Button>
             <ToggleButtonGroup.Button value={OnsenModalView.Position}>{i18n._(t`Rewards`)}</ToggleButtonGroup.Button>
-            {chainId === ChainId.HARMONY ? (
-              <ToggleButtonGroup.Button value={OnsenModalView.Emergency}>
-                {i18n._(t`Emergency`)}
-              </ToggleButtonGroup.Button>
-            ) : undefined}
           </ToggleButtonGroup>
 
           {/*Dont unmount following components to make modal more react faster*/}
@@ -85,9 +78,6 @@ const FarmListItemDetails = ({ farm, chainId, onDismiss }) => {
           </div>
           <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Staking ? 'block' : 'hidden')}>
             <ManageBar farm={farm} />
-          </div>
-          <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Emergency ? 'block' : 'hidden')}>
-            <EmergencyDetails farm={farm} />
           </div>
         </div>
       </div>

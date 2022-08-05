@@ -58,25 +58,6 @@ export default function useMasterChef(chef: Chef) {
     [account, chef, contract]
   )
 
-  const emergency = useCallback(
-    async (pid: number) => {
-      try {
-        let tx
-        if (chef === Chef.MASTERCHEF) {
-          tx = await contract?.emergencyWithdraw(pid)
-        } else {
-          tx = await contract?.emergencyWithdraw(pid, account)
-        }
-
-        return tx
-      } catch (e) {
-        console.error(e)
-        return e
-      }
-    },
-    [account, chef, contract]
-  )
-
   const harvest = useCallback(
     async (pid: number) => {
       try {
@@ -114,5 +95,5 @@ export default function useMasterChef(chef: Chef) {
     [account, chef, contract, sushi]
   )
 
-  return { deposit, withdraw, harvest, emergency }
+  return { deposit, withdraw, harvest }
 }
