@@ -21,5 +21,4 @@ export enum OnsenModalView {
   Staking,
   Position,
   AddLiquidityConfirm,
-  Emergency,
 }

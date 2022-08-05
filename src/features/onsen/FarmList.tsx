@@ -116,11 +116,7 @@ const FarmList = ({ farms, term }) => {
         afterLeave={handleDismiss}
       >
         {selectedFarm && (
-          <FarmListItemDetails
-            farm={selectedFarm}
-            chainId={chainId}
-            onDismiss={() => dispatch(setOnsenModalOpen(false))}
-          />
+          <FarmListItemDetails farm={selectedFarm} onDismiss={() => dispatch(setOnsenModalOpen(false))} />
         )}
       </HeadlessUiModal.Controlled>
     </>

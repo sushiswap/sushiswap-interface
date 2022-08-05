@@ -17,6 +17,8 @@ const usePending = (farm) => {
 
   const cloneRewarder = useCloneRewarderContract(farm?.rewarder?.id)
 
+  console.log(farm)
+
   const complexRewarder = useComplexRewarderContract(farm?.rewarder?.id)
 
   const contract = useMemo(
