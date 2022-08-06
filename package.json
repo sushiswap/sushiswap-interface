@@ -32,14 +32,14 @@
     "*.{md,css}": "prettier --write"
   },
   "browserslist": [
-      ">0.3%",
-      "not dead",
-      "not op_mini all",
-      "not IE > 0",
-      "not samsung 4",
-      "not and_uc 12.12",
-      "not iOS 12.5", 
-      "last 1 safari version"
+    ">0.3%",
+    "not dead",
+    "not op_mini all",
+    "not IE > 0",
+    "not samsung 4",
+    "not and_uc 12.12",
+    "not iOS 12.5",
+    "last 1 safari version"
   ],
   "resolutions": {
     "@walletconnect/ethereum-provider": "1.8.0",
@@ -90,7 +90,7 @@
     "@sushiswap/bentobox-sdk": "1.0.0-canary.109",
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
-    "@sushiswap/core-sdk": "1.0.0-canary.128",
+    "@sushiswap/core-sdk": "https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-core-sdk-1.0.0-canary.129.tgz",
     "@sushiswap/kashi-sdk": "1.0.0-canary.100",
     "@sushiswap/limit-order-pair-list": "0.2.17",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.109",
