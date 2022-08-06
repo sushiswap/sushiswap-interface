@@ -2782,6 +2782,13 @@
     "@ethersproject/bignumber" "^5.4.0"
     "@sushiswap/core-sdk" "1.0.0-canary.128"
 
+"@sushiswap/tines@https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-tines-1.0.0-canary.112.tgz":
+  version "1.0.0-canary.112"
+  resolved "https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-tines-1.0.0-canary.112.tgz#c528d049440b4ee33923a91ab47cf49b06e85129"
+  dependencies:
+    "@ethersproject/bignumber" "^5.6.2"
+    "@sushiswap/core-sdk" "1.0.0-canary.128"
+
 "@sushiswap/trident-sdk@1.0.0-canary.137":
   version "1.0.0-canary.137"
   resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.137.tgz#0d9f9977bb3173ee2948cfb58dfe3ec07b25f023"

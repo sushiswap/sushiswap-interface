@@ -43,7 +43,9 @@
   ],
   "resolutions": {
     "@walletconnect/ethereum-provider": "1.8.0",
-    "@walletconnect/jsonrpc-provider": "1.0.5"
+    "@walletconnect/jsonrpc-provider": "1.0.5",
+    "@sushiswap/core-sdk": "https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-core-sdk-1.0.0-canary.129.tgz",
+    "@sushiswap/tines": "https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-tines-1.0.0-canary.112.tgz"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.7",
@@ -96,6 +98,7 @@
     "@sushiswap/limit-order-sdk": "1.0.0-canary.109",
     "@sushiswap/miso": "1.0.0-canary.47",
     "@sushiswap/miso-sdk": "1.0.0-canary.98",
+    "@sushiswap/tines": "https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-tines-1.0.0-canary.112.tgz",
     "@sushiswap/trident": "^1.0.0-canary.40",
     "@sushiswap/trident-sdk": "1.0.0-canary.137",
     "@testing-library/jest-dom": "^5.14.0",
