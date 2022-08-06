@@ -52,6 +52,7 @@
     "downlevelIteration": true,
     "incremental": true
   },
-  "include": ["next-env.d.ts", "sushi-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx"],
+  "files": ["next-env.d.ts", "sushi-env.d.ts"],
   "exclude": ["node_modules"]
 }

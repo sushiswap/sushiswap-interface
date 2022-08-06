@@ -86,7 +86,6 @@ declare module 'jazzicon' {
   export default function (diameter: number, seed: number): HTMLElement
 }
 
-declare module 'formatic'
 
 declare module '@ethersproject/bignumber' {
   interface BigNumber {
