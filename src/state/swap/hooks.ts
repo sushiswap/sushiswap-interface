@@ -160,10 +160,15 @@ export function useSwapActionHandlers(): {
 const BAD_RECIPIENT_ADDRESSES: { [chainId: string]: { [address: string]: true } } = {
   [ChainId.ETHEREUM]: {
     '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac': true, // v2 factory
-    '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F': true, // v2 router 02
+    '0x58a9df4121097760c3b6102e7beece1648ec828b': true, // v2 router 02
   },
 }
 
+export const ROUTER_ADDRESS: { [chainId: string]: { [address: string]: true } } = {
+  [ChainId.ETHEREUM]: {
+    '0x58a9DF4121097760C3B6102e7BeECe1648eC828B': true, // v2 router 02
+  },
+}
 /**
  * Returns true if any of the pairs or tokens in a trade have the given checksummed address
  * @param trade to check for the given address

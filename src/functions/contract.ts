@@ -14,7 +14,27 @@ export declare type AddressMap = {
   [chainId: number]: string;
 };
 
-export declare const ROUTER_ADDRESS = 0x58a9df4121097760c3b6102e7beece1648ec828b
+// OpenMevRouterV01 Address 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F
+export declare const ROUTER_ADDRESS: {
+  [ChainId.ETHEREUM]: {
+    '0x58a9DF4121097760C3B6102e7BeECe1648eC828B': true, // v2 router 02
+  },
+}
+
+0x58a9DF4121097760C3B6102e7BeECe1648eC828B
+
+// Non Checksum     '0x58a9df4121097760c3b6102e7beece1648ec828b'
+// Checksum         '0x58a9DF4121097760C3B6102e7BeECe1648eC828B'
+// 1191 Checksum    '0x58A9DF4121097760C3B6102E7beECE1648EC828b'
+/** 
+export const ROUTER_ADDRESS: { [chainId: string]: { [address: string]: true } } = {
+  [ChainId.ETHEREUM]: {
+    '0x58a9DF4121097760C3B6102e7BeECe1648eC828B': true, // v2 router 02
+  },
+}
+ */
+
+
 // account is not optional
 export function getSigner(library: Web3Provider, account: string): JsonRpcSigner {
   return library.getSigner(account).connectUnchecked()
