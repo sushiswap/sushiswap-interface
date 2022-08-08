@@ -36,7 +36,7 @@ const StopLossReviewModal: FC<StopLossReviewModal> = ({ parsedAmounts, trade, li
 
   const stopRate = useStopLossDerivedLimitPrice()
   const _execute = useCallback(() => {
-    if (parsedAmounts?.inputAmount && parsedAmounts?.outputAmount) {
+    if (parsedAmounts?.inputAmount && parsedAmounts?.outputAmount && parseInt(externalAmountForFee) > 0) {
       execute({
         orderExpiration: orderExpiration.value,
         recipient,
