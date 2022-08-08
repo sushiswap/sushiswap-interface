@@ -239,31 +239,37 @@ const useStopLossOrders = () => {
     initOrdersData()
   }, [account, chainId])
 
-  const setCompletedPage = useCallback((page: number) => {
-    if (page < 1 || page > state.completed.maxPages) return
+  const setCompletedPage = useCallback(
+    (page: number) => {
+      if (page < 1 || page > state.completed.maxPages) return
 
-    setState((prevState) => ({
-      ...prevState,
-      completed: {
-        ...prevState.completed,
-        page,
-        data: prevState.completed.allData.slice(10 * (page - 1), 10 * page),
-      },
-    }))
-  }, [])
+      setState((prevState) => ({
+        ...prevState,
+        completed: {
+          ...prevState.completed,
+          page,
+          data: prevState.completed.allData.slice(10 * (page - 1), 10 * page),
+        },
+      }))
+    },
+    [state.completed]
+  )
 
-  const setPendingPage = useCallback((page: number) => {
-    if (page < 1 || page > state.pending.maxPages) return
+  const setPendingPage = useCallback(
+    (page: number) => {
+      if (page < 1 || page > state.pending.maxPages) return
 
-    setState((prevState) => ({
-      ...prevState,
-      pending: {
-        ...prevState.pending,
-        page,
-        data: prevState.pending.allData.slice(10 * (page - 1), 10 * page),
-      },
-    }))
-  }, [])
+      setState((prevState) => ({
+        ...prevState,
+        pending: {
+          ...prevState.pending,
+          page,
+          data: prevState.pending.allData.slice(10 * (page - 1), 10 * page),
+        },
+      }))
+    },
+    [state.pending]
+  )
 
   return useMemo(
     () => ({
