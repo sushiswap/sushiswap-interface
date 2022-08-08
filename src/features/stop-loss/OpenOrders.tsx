@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { LimitOrder } from '@sushiswap/limit-order-sdk'
+import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
 import {
   TABLE_TABLE_CLASSNAME,
@@ -28,7 +29,7 @@ const OpenOrders: FC = () => {
   const limitOrderContract = useLimitOrderContract(true)
 
   const { cancelRequest } = useStopLossExecute()
-  const { loading, unexecuted } = useStopLossOrders()
+  const { loading, pending, setPendingPage } = useStopLossOrders()
 
   const cancelOrder = useCallback(
     async (id: string, limitOrder: LimitOrder, summary: string) => {
@@ -39,7 +40,7 @@ const OpenOrders: FC = () => {
     [addTransaction, limitOrderContract]
   )
 
-  const { config } = useOpenOrdersTableConfig({ orders: unexecuted, cancelOrder })
+  const { config } = useOpenOrdersTableConfig({ orders: pending.data, cancelOrder })
 
   // @ts-ignore TYPE NEEDS FIXING
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } = useTable(
@@ -129,6 +130,15 @@ const OpenOrders: FC = () => {
           </tfoot>
         </table>
       </div>
+
+      <Pagination
+        canPreviousPage={pending.page > 1}
+        canNextPage={pending.page < pending.maxPages}
+        onChange={(page) => setPendingPage(page + 1)}
+        totalPages={pending.maxPages}
+        currentPage={pending.page - 1}
+        pageNeighbours={1}
+      />
     </div>
   )
 }

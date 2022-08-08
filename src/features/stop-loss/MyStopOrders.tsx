@@ -9,7 +9,7 @@ import React, { FC } from 'react'
 
 const MyStopOrders: FC = () => {
   const { i18n } = useLingui()
-  const { unexecuted } = useStopLossOrders()
+  const { pending } = useStopLossOrders()
 
   const content = (
     <QuestionHelper
@@ -21,8 +21,8 @@ const MyStopOrders: FC = () => {
   return (
     <Link href="/stop-loss/open">
       <a>
-        {unexecuted.length > 0 ? (
-          <Badge color="blue" value={unexecuted.length}>
+        {pending.allData.length > 0 ? (
+          <Badge color="blue" value={pending.allData.length}>
             {content}
           </Badge>
         ) : (

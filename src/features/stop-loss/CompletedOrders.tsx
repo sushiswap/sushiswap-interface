@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
 import { useCompletedOrdersTableConfig } from 'app/features/stop-loss/useCompletedOrdersTableConfig'
 import {
@@ -20,8 +21,8 @@ import useStopLossOrders from './useStopLossOrders'
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const { loading, completed } = useStopLossOrders()
-  const { config } = useCompletedOrdersTableConfig({ orders: completed })
+  const { loading, completed, setCompletedPage } = useStopLossOrders()
+  const { config } = useCompletedOrdersTableConfig({ orders: completed.data })
 
   // @ts-ignore TYPE NEEDS FIXING
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } = useTable(
@@ -111,6 +112,15 @@ const CompletedOrders: FC = () => {
           </tfoot>
         </table>
       </div>
+
+      <Pagination
+        canPreviousPage={completed.page > 1}
+        canNextPage={completed.page < completed.maxPages}
+        onChange={(page) => setCompletedPage(page + 1)}
+        totalPages={completed.maxPages}
+        currentPage={completed.page - 1}
+        pageNeighbours={1}
+      />
     </div>
   )
 }

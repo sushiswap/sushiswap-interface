@@ -32,11 +32,18 @@ interface IRegistryRequest {
 }
 
 interface OrdersData {
+  allData: Array<DerivedOrder>
+  data: Array<DerivedOrder>
+  page: number
+  maxPages: number
+}
+
+interface StopLossOrdersData {
   loading: boolean
   totalOrders: number
   all: Array<DerivedOrder>
-  completed: Array<DerivedOrder>
-  unexecuted: Array<DerivedOrder>
+  pending: OrdersData
+  completed: OrdersData
 }
 
 const useStopLossOrders = () => {
@@ -48,12 +55,22 @@ const useStopLossOrders = () => {
     [chainId]
   )
 
-  const [ordersData, setOrdersData] = useState<OrdersData>({
+  const [state, setState] = useState<StopLossOrdersData>({
     loading: false,
     totalOrders: 0,
     all: [],
-    completed: [],
-    unexecuted: [],
+    pending: {
+      allData: [],
+      data: [],
+      page: 1,
+      maxPages: 1,
+    },
+    completed: {
+      allData: [],
+      data: [],
+      page: 1,
+      maxPages: 1,
+    },
   })
 
   const fetchRegistryHistory = useCallback(async () => {
@@ -160,10 +177,10 @@ const useStopLossOrders = () => {
     const initOrdersData = async () => {
       if (!account || !chainId) return
 
-      setOrdersData({
-        ...ordersData,
+      setState((prevState) => ({
+        ...prevState,
         loading: true,
-      })
+      }))
 
       const executedOrdersCallData = await fetchExecutedRegistryHistory()
       const executedUids = await Promise.all(
@@ -200,19 +217,62 @@ const useStopLossOrders = () => {
         )
         .filter((order) => order) as DerivedOrder[]
 
-      setOrdersData({
+      setState({
         loading: false,
         totalOrders: allOrdersData.length,
         all: allOrdersData,
-        completed: completedOrdersData,
-        unexecuted: pendingOrdersData,
+        completed: {
+          allData: completedOrdersData,
+          data: completedOrdersData.slice(0, 10),
+          page: 1,
+          maxPages: Math.ceil(completedOrdersData.length / 10),
+        },
+        pending: {
+          allData: pendingOrdersData,
+          data: pendingOrdersData.slice(0, 10),
+          page: 1,
+          maxPages: Math.ceil(pendingOrdersData.length / 10),
+        },
       })
     }
 
     initOrdersData()
   }, [account, chainId])
 
-  return ordersData
+  const setCompletedPage = useCallback((page: number) => {
+    if (page < 1 || page > state.completed.maxPages) return
+
+    setState((prevState) => ({
+      ...prevState,
+      completed: {
+        ...prevState.completed,
+        page,
+        data: prevState.completed.allData.slice(10 * (page - 1), 10 * page),
+      },
+    }))
+  }, [])
+
+  const setPendingPage = useCallback((page: number) => {
+    if (page < 1 || page > state.pending.maxPages) return
+
+    setState((prevState) => ({
+      ...prevState,
+      pending: {
+        ...prevState.pending,
+        page,
+        data: prevState.pending.allData.slice(10 * (page - 1), 10 * page),
+      },
+    }))
+  }, [])
+
+  return useMemo(
+    () => ({
+      ...state,
+      setCompletedPage,
+      setPendingPage,
+    }),
+    [setCompletedPage, setPendingPage, state]
+  )
 }
 
 export default useStopLossOrders
