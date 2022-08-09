@@ -23,6 +23,7 @@ const SUBDOMAIN_CHAIN_ID: { [subdomain: string]: string } = {
   [ChainSubdomain.FUSE]: '122',
   [ChainSubdomain.TELOS]: '40',
   [ChainSubdomain.MOONBEAM]: '1284',
+  [ChainSubdomain.ARBITRUM_NOVA]: '42170',
 }
 
 const DEFAULT_CHAIN_ID = '1'

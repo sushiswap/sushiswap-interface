@@ -25,6 +25,7 @@ const BLOCKCHAIN = {
   [ChainId.MOONBEAM]: 'moonbeam',
   [ChainId.KAVA]: 'kava',
   [ChainId.METIS]: 'metis',
+  [ChainId.ARBITRUM_NOVA]: 'arbitrum-nova',
   [ChainId.HARDHAT]: 'hardhat',
 }
 
@@ -116,6 +117,7 @@ const LOGO: Record<ChainId, string> = {
   [ChainId.OPTIMISM]: EthereumLogo,
   [ChainId.KAVA]: KavaLogo,
   [ChainId.METIS]: MetisLogo,
+  [ChainId.ARBITRUM_NOVA]: EthereumLogo,
 }
 
 export interface CurrencyLogoProps {

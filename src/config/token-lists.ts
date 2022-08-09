@@ -1,6 +1,5 @@
 const BA_LIST = 'https://raw.githubusercontent.com/The-Blockchain-Association/sec-notice-list/master/ba-sec-list.json'
-const YEARN_LIST = 'https://yearn.science/static/tokenlist.json'
-const NFTX_LIST = 'https://nftx.ethereumdb.com/v2/tokenlist/'
+const NFTX_LIST = 'https://tokenlist.nftx.io'
 const SYNTHETIX_LIST = 'synths.snx.eth'
 const AAVE_LIST = 'tokenlist.aave.eth'
 const CMC_ALL_LIST = 'https://api.coinmarketcap.com/data-api/v3/uniswap/all.json'
@@ -14,7 +13,7 @@ const SET_LIST = 'https://raw.githubusercontent.com/SetProtocol/uniswap-tokenlis
 const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
 const WRAPPED_LIST = 'wrapped.tokensoft.eth'
 const ROLL_LIST = 'https://app.tryroll.com/tokens.json'
-const DHEDGE_LIST = 'https://list.dhedge.eth.link'
+// const DHEDGE_LIST = 'https://list.dhedge.eth.link'
 const SUSHI_LIST = 'https://token-list.sushi.com'
 const CHAINLINK_LIST = 'https://token-list.sushi.com/chainlink'
 
@@ -27,10 +26,9 @@ const DEFAULT_LIST_OF_LISTS_TO_DISPLAY: string[] = [
   CHAINLINK_LIST,
   COMPOUND_LIST,
   AAVE_LIST,
-  CMC_ALL_LIST,
+  // CMC_ALL_LIST,
   COINGECKO_LIST,
-  UMA_LIST,
-  YEARN_LIST,
+  // UMA_LIST,
   SYNTHETIX_LIST,
   KLEROS_LIST,
   GEMINI_LIST,
@@ -38,7 +36,7 @@ const DEFAULT_LIST_OF_LISTS_TO_DISPLAY: string[] = [
   SET_LIST,
   ROLL_LIST,
   NFTX_LIST,
-  DHEDGE_LIST,
+  // DHEDGE_LIST,
 ]
 
 export const DEFAULT_LIST_OF_LISTS: string[] = [
@@ -47,4 +45,4 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
 ]
 
 // default lists to be 'active' aka searched across
-export const DEFAULT_ACTIVE_LIST_URLS: string[] = [SUSHI_LIST, CHAINLINK_LIST, GEMINI_LIST, NFTX_LIST]
+export const DEFAULT_ACTIVE_LIST_URLS: string[] = [SUSHI_LIST, CHAINLINK_LIST, NFTX_LIST]

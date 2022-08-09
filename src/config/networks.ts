@@ -58,6 +58,7 @@ export const NETWORK_ICON: Record<number, string> = {
   [ChainId.OPTIMISM]: Optimism,
   [ChainId.KAVA]: Kava,
   [ChainId.METIS]: Metis,
+  [ChainId.ARBITRUM_NOVA]: Arbitrum,
 }
 
 export const NETWORK_LABEL: Record<number, string> = {
@@ -93,4 +94,5 @@ export const NETWORK_LABEL: Record<number, string> = {
   [ChainId.OPTIMISM]: 'Optimism',
   [ChainId.KAVA]: 'Kava',
   [ChainId.METIS]: 'Metis',
+  [ChainId.ARBITRUM_NOVA]: 'Arbitrum Nova',
 }

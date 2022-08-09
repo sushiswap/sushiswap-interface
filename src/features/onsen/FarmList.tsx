@@ -48,7 +48,7 @@ const FarmList = ({ farms, term }) => {
 
   const positionIds = positions.map((el) => el.id)
 
-  return items ? (
+  return items.length > 0 ? (
     <>
       <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME)}>
         <div className="grid grid-cols-4 min-w-[768px]">

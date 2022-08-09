@@ -10,7 +10,7 @@ const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'slippage']
 const persistConfig = {
   key: 'root',
   whitelist: PERSISTED_KEYS,
-  version: 3,
+  version: 5,
   storage,
   migrate: createMigrate(migrations, { debug: process.env.NODE_ENV === 'development' }),
 }

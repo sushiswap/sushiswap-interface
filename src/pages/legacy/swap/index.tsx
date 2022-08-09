@@ -41,7 +41,8 @@ const Swap = ({ banners }: SwapProps) => {
   const { i18n } = useLingui()
 
   const loadedUrlParams = useDefaultsFromURLSearch()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
+
   const defaultTokens = useAllTokens()
 
   const [isExpertMode] = useExpertModeManager()
