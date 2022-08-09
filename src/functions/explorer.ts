@@ -217,6 +217,10 @@ const chains: ChainObject = {
     link: 'https://andromeda-explorer.metis.io/',
     builder: explorers.blockscout,
   },
+  [ChainId.ARBITRUM_NOVA]: {
+    link: 'https://nova-explorer.arbitrum.io/',
+    builder: explorers.blockscout,
+  },
 }
 
 export function getExplorerLink(

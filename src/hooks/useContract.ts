@@ -191,6 +191,7 @@ const MULTICALL_ADDRESS = {
   [ChainId.PALM]: '0x4d4A0D45a98AE8EC25b359D93A088A87BC9eF70b',
   [ChainId.KAVA]: '0x67dA5f2FfaDDfF067AB9d5F025F8810634d84287',
   [ChainId.METIS]: '0x67dA5f2FfaDDfF067AB9d5F025F8810634d84287',
+  [ChainId.ARBITRUM_NOVA]: '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
 }
 
 export function useInterfaceMulticall(): Contract | null | undefined {
