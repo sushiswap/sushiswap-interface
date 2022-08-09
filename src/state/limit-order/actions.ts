@@ -22,6 +22,9 @@ export const setStopLossInvertRate = createAction<boolean>('limit-order/setStopL
 export const setStopLossInvertState = createAction<{ invertStopRate: boolean; stopPrice: string }>(
   'limit-order/setStopLossInvertState'
 )
+export const toggleEnableHigherStopRateThanMarketPrice = createAction<void>(
+  'limit-order/toggleEnableHigherStopRateThanMarketPrice'
+)
 
 export const setOrderExpiration = createAction<
   | {

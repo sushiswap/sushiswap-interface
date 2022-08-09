@@ -282,7 +282,15 @@ type UseLimitOrderDerivedInputError = ({
   isStopLossOrder?: boolean
 }) => string
 export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({ trade, isStopLossOrder }) => {
-  const { recipient, orderExpiration, fromBentoBalance, limitPrice, stopPrice, typedValue } = useLimitOrderState()
+  const {
+    enableHigherStopRateThanMarketPrice,
+    recipient,
+    orderExpiration,
+    fromBentoBalance,
+    limitPrice,
+    stopPrice,
+    typedValue,
+  } = useLimitOrderState()
   const { account } = useActiveWeb3React()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const rate = useLimitOrderDerivedLimitPrice()
@@ -301,6 +309,10 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
       parseFloat(limitPriceOrDefaultPrice?.toSignificant(6)) >= parseFloat(stopPriceOrDefaultPrice?.toSignificant(6)),
     [limitPriceOrDefaultPrice, stopPriceOrDefaultPrice]
   )
+  const isStopPriceLargerThanMarketPrice = useMemo(
+    () => !enableHigherStopRateThanMarketPrice && trade && stopRate?.greaterThan(trade?.executionPrice),
+    [stopRate, trade, enableHigherStopRateThanMarketPrice]
+  )
 
   return useMemo(() => {
     return !account
@@ -317,6 +329,8 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
       ? i18n._(t`Select a rate`)
       : isStopLossOrder && isLimitPriceBiggerThanStopPrice // for stop-loss orders only
       ? 'Minimum larger than stop rate'
+      : isStopLossOrder && isStopPriceLargerThanMarketPrice // for stop-loss orders only
+      ? 'Stop rate larger than market price'
       : !orderExpiration
       ? i18n._(t`Select an order expiration`)
       : !balance

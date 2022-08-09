@@ -21,6 +21,7 @@ import {
   setStopLossInvertState,
   setStopPrice,
   switchCurrencies,
+  toggleEnableHigherStopRateThanMarketPrice,
   typeInput,
 } from './actions'
 
@@ -51,6 +52,7 @@ export interface LimitOrderState {
   readonly showReview: boolean
   readonly invertRate: boolean
   readonly invertStopRate: boolean
+  readonly enableHigherStopRateThanMarketPrice: boolean
 }
 
 const initialState: LimitOrderState = {
@@ -72,6 +74,7 @@ const initialState: LimitOrderState = {
   showReview: false,
   invertRate: false,
   invertStopRate: false,
+  enableHigherStopRateThanMarketPrice: false,
 }
 
 export default createReducer<LimitOrderState>(initialState, (builder) =>
@@ -176,6 +179,9 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
     .addCase(setStopLossInvertState, (state, { payload: { invertStopRate, stopPrice } }) => {
       state.invertStopRate = invertStopRate
       state.stopPrice = stopPrice
+    })
+    .addCase(toggleEnableHigherStopRateThanMarketPrice, (state) => {
+      state.enableHigherStopRateThanMarketPrice = !state.enableHigherStopRateThanMarketPrice
     })
 )
 

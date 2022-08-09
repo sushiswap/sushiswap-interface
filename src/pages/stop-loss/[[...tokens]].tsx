@@ -1,9 +1,11 @@
-import { SwitchVerticalIcon } from '@heroicons/react/outline'
+import { CheckIcon, SwitchVerticalIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Percent } from '@sushiswap/core-sdk'
 import limitOrderPairList from '@sushiswap/limit-order-pair-list/dist/limit-order.pairlist.json'
+import CloseIcon from 'app/components/CloseIcon'
 import RecipientField from 'app/components/RecipientField'
+import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import { ZERO_PERCENT } from 'app/constants'
 import { Feature } from 'app/enums'
@@ -19,7 +21,12 @@ import NetworkGuard from 'app/guards/Network'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch } from 'app/state/hooks'
-import { Field, setFromBentoBalance, setRecipient } from 'app/state/limit-order/actions'
+import {
+  Field,
+  setFromBentoBalance,
+  setRecipient,
+  toggleEnableHigherStopRateThanMarketPrice,
+} from 'app/state/limit-order/actions'
 import useLimitOrderDerivedCurrencies, {
   useLimitOrderActionHandlers,
   useLimitOrderDerivedLimitPrice,
@@ -39,7 +46,8 @@ const StopLoss = () => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
   const [isExpertMode] = useExpertModeManager()
-  const { typedField, typedValue, fromBentoBalance, recipient } = useLimitOrderState()
+  const { enableHigherStopRateThanMarketPrice, typedField, typedValue, fromBentoBalance, recipient } =
+    useLimitOrderState()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const trade = useLimitOrderDerivedTrade()
   const rate = useLimitOrderDerivedLimitPrice()
@@ -122,6 +130,24 @@ const StopLoss = () => {
             onSelect={(inputCurrency) => onCurrencySelection(Field.INPUT, inputCurrency)}
             currencies={inputTokenList}
           />
+          {isExpertMode && (
+            <div className="flex justify-between gap-3">
+              <div className="flex items-center">
+                <Typography variant="xs" className="text-high-emphesis" weight={700}>
+                  {i18n._(t`Enable larger stop rate than market price`)}
+                </Typography>
+              </div>
+              <Switch
+                size="sm"
+                id="toggle-expert-mode-button"
+                checked={enableHigherStopRateThanMarketPrice}
+                onChange={() => dispatch(toggleEnableHigherStopRateThanMarketPrice())}
+                checkedIcon={<CheckIcon className="text-dark-700" />}
+                uncheckedIcon={<CloseIcon />}
+                color="gradient"
+              />
+            </div>
+          )}
           <div className="flex gap-3">
             <div className="flex flex-1">
               <StopPriceInputPanel trade={trade} stopPrice={!!stopRate ? stopRate : trade?.executionPrice} />
