@@ -28,3 +28,13 @@ export const DAI = new Token(
   'DAI',
   'Dai Stablecoin'
 )
+
+export const MOON = new Token(ChainId.ARBITRUM_NOVA, '0x0057Ac2d777797d31CD3f8f13bF5e927571D6Ad0', 18, 'MOON', 'Moons')
+
+export const BRICK = new Token(
+  ChainId.ARBITRUM_NOVA,
+  '0x6DcB98f460457fe4952e12779Ba852F82eCC62C1',
+  18,
+  'BRICK',
+  'Bricks'
+)
