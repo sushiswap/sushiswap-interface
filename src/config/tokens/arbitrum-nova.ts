@@ -16,7 +16,7 @@ export const WBTC = new Token(
 )
 export const USDT = new Token(
   ChainId.ARBITRUM_NOVA,
-  '0x52484E1ab2e2B22420a25c20FA49E173a26202Cd',
+  '0xeD9d63a96c27f87B07115b56b2e3572827f21646',
   8,
   'USDT',
   'Tether USD'
