@@ -44,8 +44,7 @@
   "resolutions": {
     "@walletconnect/ethereum-provider": "1.8.0",
     "@walletconnect/jsonrpc-provider": "1.0.5",
-    "@sushiswap/core-sdk": "https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-core-sdk-1.0.0-canary.129.tgz",
-    "@sushiswap/tines": "https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-tines-1.0.0-canary.112.tgz"
+    "@sushiswap/core-sdk": "file:./sushiswap-core-sdk-1.0.0-canary.129.tgz"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.7",
