@@ -16,7 +16,7 @@ export const WBTC = new Token(
 )
 export const USDT = new Token(
   ChainId.ARBITRUM_NOVA,
-  '0x52484E1ab2e2B22420a25c20FA49E173a26202Cd',
+  '0xeD9d63a96c27f87B07115b56b2e3572827f21646',
   8,
   'USDT',
   'Tether USD'
@@ -27,4 +27,14 @@ export const DAI = new Token(
   18,
   'DAI',
   'Dai Stablecoin'
+)
+
+export const MOON = new Token(ChainId.ARBITRUM_NOVA, '0x0057Ac2d777797d31CD3f8f13bF5e927571D6Ad0', 18, 'MOON', 'Moons')
+
+export const BRICK = new Token(
+  ChainId.ARBITRUM_NOVA,
+  '0x6DcB98f460457fe4952e12779Ba852F82eCC62C1',
+  18,
+  'BRICK',
+  'Bricks'
 )

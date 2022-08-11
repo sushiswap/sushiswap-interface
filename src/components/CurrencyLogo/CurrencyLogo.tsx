@@ -35,17 +35,17 @@ export const getCurrencyLogoUrls = (currency: Currency): string[] => {
 
   if (currency.chainId in BLOCKCHAIN) {
     urls.push(
-      // @ts-ignore TYPE NEEDS FIXING
-      `https://raw.githubusercontent.com/sushiswap/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
-        currency.wrapped.address
-      }.jpg`
-    )
-
-    urls.push(
       `https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/${
         // @ts-ignore TYPE NEEDS FIXING
         BLOCKCHAIN[currency.chainId]
       }/${currency.wrapped.address}.jpg`
+    )
+
+    urls.push(
+      // @ts-ignore TYPE NEEDS FIXING
+      `https://raw.githubusercontent.com/sushiswap/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
+        currency.wrapped.address
+      }.jpg`
     )
 
     urls.push(
@@ -139,6 +139,7 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({ currency, size = '
 
     if (currency?.isToken) {
       const defaultUrls = [...getCurrencyLogoUrls(currency)]
+      // console.log({ defaultUrls })
 
       if (currency instanceof WrappedTokenInfo) {
         return [...uriLocations, ...defaultUrls, UNKNOWN_ICON]

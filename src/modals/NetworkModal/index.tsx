@@ -291,7 +291,7 @@ export const SUPPORTED_NETWORKS: Record<
       symbol: 'ETH',
       decimals: 18,
     },
-    rpcUrls: ['https://nova.arbitrum.io/rpc	'],
+    rpcUrls: ['https://a4ba.arbitrum.io/rpc'],
     blockExplorerUrls: ['https://nova-explorer.arbitrum.io/'],
   },
 }
