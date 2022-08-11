@@ -179,6 +179,14 @@ const StopLoss = () => {
         </div>
 
         {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
+
+        <div className="text-xs py-2 flex justify-center">
+          <span className="text-secondary">Powered by</span>&nbsp;
+          <a href="https://www.autonomynetwork.io/" target="_blank" rel="noreferrer">
+            Autonomy Network
+          </a>
+        </div>
+
         <StopLimitOrderButton trade={trade} parsedAmounts={parsedAmounts} />
         <StopLossReviewModal
           parsedAmounts={parsedAmounts}

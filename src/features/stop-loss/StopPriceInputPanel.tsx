@@ -25,7 +25,11 @@ const StopPriceInputPanel: FC<StopPriceInputPanel> = ({ trade, stopPrice }) => {
     <div className="flex flex-col gap-1">
       <Typography variant="sm" className="px-2 flex items-center">
         {i18n._(t`Stop Rate`)}
-        <QuestionHelper text={i18n._(t`Rate required to trigger limit rate`)} />
+        <QuestionHelper
+          text={i18n._(
+            t`Rate required to trigger limit rate. The difference between the output token at the stop and minimum rates is used to pay the execution (gas) fee, therefore it needs to be sufficiently large to be $1 assuming the worst case.`
+          )}
+        />
       </Typography>
       <div className="flex justify-between items-baseline bg-dark-900 rounded px-4 py-1.5 border border-dark-700 hover:border-dark-600">
         <Typography weight={700} variant="lg" className="relative flex items-baseline flex-grow gap-3 overflow-hidden">

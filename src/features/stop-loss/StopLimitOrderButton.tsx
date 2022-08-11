@@ -116,9 +116,9 @@ const StopLimitOrderButton: FC<StopLimitOrderButton> = ({ trade, parsedAmounts }
               {error
                 ? error
                 : tooNarrowMarginOfRates
-                ? 'Too narrow margin of rates'
+                ? 'Rate diff not enough for fee'
                 : fromBentoBalance
-                ? i18n._(t`Review Stop Limit Order`)
+                ? i18n._(t`Create Stop Limit Order`)
                 : i18n._(t`Confirm Deposit`)}
             </Button>
           )
