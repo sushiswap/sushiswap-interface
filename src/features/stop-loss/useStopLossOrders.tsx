@@ -46,6 +46,7 @@ interface StopLossOrdersData {
   completed: OrdersData
 }
 
+// fetch stop-limit orders history from autonomy moralis
 const useStopLossOrders = () => {
   const { account, chainId } = useActiveWeb3React()
   const limitOrderWrapperContract = useAutonomyLimitOrderWrapperContract()

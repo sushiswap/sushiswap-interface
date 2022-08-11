@@ -64,6 +64,7 @@ export type UseLimitOrderExecute = () => {
   cancelRequest: (id: string) => void
 }
 
+// estimate equivalent ETH amount from any input token amount
 export function useEstimateEquivalentEthAmount(token: CurrencyAmount<Currency> | undefined): string {
   const { chainId } = useActiveWeb3React()
   const router = useRouterContract()
@@ -80,6 +81,7 @@ export function useEstimateEquivalentEthAmount(token: CurrencyAmount<Currency> |
         return
       }
 
+      // estimate output amount with uniV2 router
       const amountsOut = await router.getAmountsOut(token.quotient.toString(), [
         token.wrapped.currency.address,
         WNATIVE_ADDRESS[chainId],
@@ -123,13 +125,15 @@ export function useDiffOfStopAndMinimumRate({
     [diffValueOfEth]
   )
 
-  const convertIntWithMultiply = (sValue: string) => `${Math.floor(parseFloat(sValue) * 1000000)}`
+  const convertIntWithMultiply = (s: string) => Math.floor(parseFloat(s) * 1000000) // 1000,000 aims to mitigate loss while in math operation
+  const getBigNumberFromTinyFloat = (s: string) => BigNumber.from(`${convertIntWithMultiply(s)}`)
   // calculate amount for autonomy fee:  (stopRate - minimumRate) * MIN_FEE_ETH_AMOUNT / equivalentEthAmountOf[stopRate - minimumRate]
+  // this will be cumulated to minimum output amount
   const externalAmountForFee =
-    !!chainId && !!diffOfStopAndMinRate && parseFloat(diffValueOfEth) > 0
+    !!chainId && !!diffOfStopAndMinRate && convertIntWithMultiply(diffValueOfEth) > 0
       ? BigNumber.from(diffOfStopAndMinRate?.quotient.toString())
-          .mul(BigNumber.from(convertIntWithMultiply(STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM[chainId])))
-          .div(BigNumber.from(convertIntWithMultiply(diffValueOfEth)))
+          .mul(getBigNumberFromTinyFloat(STOP_LIMIT_ORDER_WRAPPER_FEE_MINIMUM[chainId]))
+          .div(getBigNumberFromTinyFloat(diffValueOfEth))
       : 0
 
   return {
@@ -140,6 +144,7 @@ export function useDiffOfStopAndMinimumRate({
   }
 }
 
+// register stop-limit order into autonomy registry
 const useStopLossExecute: UseLimitOrderExecute = () => {
   const { account, chainId, library } = useActiveWeb3React()
 
