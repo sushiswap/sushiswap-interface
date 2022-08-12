@@ -91,7 +91,7 @@
     "@sushiswap/bentobox-sdk": "1.0.0-canary.109",
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
-    "@sushiswap/core-sdk": "https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-core-sdk-1.0.0-canary.129.tgz",
+    "@sushiswap/core-sdk": "file:./sushiswap-core-sdk-1.0.0-canary.129.tgz",
     "@sushiswap/kashi-sdk": "1.0.0-canary.100",
     "@sushiswap/limit-order-pair-list": "0.2.17",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.109",
