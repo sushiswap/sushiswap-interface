@@ -71,7 +71,7 @@ export function prepareStopPriceOracleData(
     [outAggregator.address, inAggregator.address, BigNumber.from(10).pow(decimals)]
   )
 
-  const inverseStopPrice = parseFloat(stopPrice.invert().toSignificant(18)) * 1e18
+  const inverseStopPrice = Math.floor(parseFloat(stopPrice.invert().toSignificant(18)) * 1e18)
   return {
     stopPrice: inverseStopPrice.toString(),
     oracleData,
