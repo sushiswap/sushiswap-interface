@@ -51,10 +51,18 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
     shouldFetch: !!farmAddresses,
   })
 
-  const { data, error, isValidating } = useGetAllTridentPools({ chainId })
-
-  const tridentPairs = data?.filter((pool) => {
-    return farmAddresses.includes(pool.address)
+  const {
+    data: tridentPairs,
+    error,
+    isValidating,
+  } = useGetAllTridentPools({
+    chainId,
+    variables: {
+      where: {
+        id_in: farmAddresses,
+      },
+    },
+    shouldFetch: !!farmAddresses,
   })
 
   const { data: swapPairs1d } = useSushiPairs({
@@ -112,7 +120,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       // @ts-ignore TYPE NEEDS FIXING
       const tridentPair = tridentPairs?.find((pair) => pair.address === pool.pair)
 
-      const pair = swapPair || kashiPair || tridentPair
+      const pair = swapPair || tridentPair || kashiPair
 
       const type = swapPair ? PairType.SWAP : tridentPair ? PairType.TRIDENT : PairType.KASHI
 
@@ -334,7 +342,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
         ? balance * kashiPair.token0.derivedETH * ethPrice
         : swapPair
         ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
-        : (balance / Number(tridentPair?.liquidity)) * Number(tridentPair?.liquidityUSD)
+        : (balance / (Number(tridentPair?.liquidity) / 1e18)) * Number(tridentPair?.liquidityUSD)
 
       const feeApyPerYear =
         swapPair && swapPair1d
@@ -365,16 +373,18 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       if (type === PairType.TRIDENT && pair.address) {
         pair.id = pair.address
         pair.token0 = {
-          id: pair.assets[0].tokenInfo.address,
-          name: pair.assets[0].tokenInfo.name,
-          symbol: pair.assets[0].tokenInfo.symbol,
-          decimals: pair.assets[0].tokenInfo.decimals,
+          id: pair?.token0?.address,
+          address: pair?.token0?.address,
+          name: pair?.token0?.name,
+          symbol: pair?.token0?.symbol,
+          decimals: pair?.token0?.decimals,
         }
         pair.token1 = {
-          id: pair.assets[1].tokenInfo.address,
-          name: pair.assets[1].tokenInfo.name,
-          symbol: pair.assets[1].tokenInfo.symbol,
-          decimals: pair.assets[1].tokenInfo.decimals,
+          id: pair?.token1?.address,
+          address: pair?.token1?.address,
+          name: pair?.token1?.name,
+          symbol: pair?.token1?.symbol,
+          decimals: pair?.token1?.decimals,
         }
       }
 

@@ -45,7 +45,7 @@ const PoolStats: FC<PoolStatsProps> = () => {
     // },
   ]
 
-  console.log({ stats })
+  // console.log({ stats })
 
   return (
     <div className="flex flex-col gap-3 lg:grid lg:grid-cols-3">

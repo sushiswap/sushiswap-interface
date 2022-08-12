@@ -217,7 +217,7 @@ export const useGetAllTridentPools = ({
   // const allowedAssets = useMemo(() => Object.keys(tokens).map((address) => address.toLowerCase()), [tokens])
   return useSWR<TridentPool[]>(
     shouldFetch ? ['getAllTridentPools', chainId] : null,
-    () => getTridentPools({ chainId, tokens }),
+    () => getTridentPools({ chainId, variables, tokens }),
     swrConfig
   )
 }

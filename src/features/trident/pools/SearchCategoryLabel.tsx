@@ -10,7 +10,7 @@ export const SearchCategoryLabel: FC = () => {
   const { i18n } = useLingui()
   const { searchQuery } = useAppSelector(selectTridentPools)
 
-  console.log({ searchQuery })
+  // console.log({ searchQuery })
   return (
     <div className="flex flex-row items-center justify-between px-2 py-2">
       <Typography variant="base" className="text-high-emphesis" weight={700}>

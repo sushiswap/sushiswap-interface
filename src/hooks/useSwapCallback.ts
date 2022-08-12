@@ -589,7 +589,7 @@ export function useSwapCallback(
     return {
       state: SwapCallbackState.VALID,
       callback: async function onSwap(): Promise<string> {
-        console.log('onSwap callback')
+        // console.log('onSwap callback')
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
           swapCalls.map((call) => {
             const { address, calldata, value } = call
@@ -604,12 +604,12 @@ export function useSwapCallback(
                     value,
                   }
 
-            console.log('SWAP TRANSACTION', { tx, value })
+            // console.log('SWAP TRANSACTION', { tx, value })
 
             return library
               .estimateGas(tx)
               .then((gasEstimate) => {
-                console.log('returning gas estimate')
+                // console.log('returning gas estimate')
                 return {
                   call,
                   gasEstimate,
@@ -659,7 +659,7 @@ export function useSwapCallback(
           call: { address, calldata, value },
         } = bestCallOption
 
-        console.log('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {})
+        // console.log('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {})
 
         const txParams: TransactionRequest = {
           from: account,

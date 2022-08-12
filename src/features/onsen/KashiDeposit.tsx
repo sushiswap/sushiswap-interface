@@ -55,7 +55,7 @@ const KashiDeposit = ({ market, header }: { market: KashiMediumRiskLendingPair; 
   const masterContract = useMemo(() => chainId && KASHI_ADDRESS[chainId], [chainId])
 
   const onDeposit = useCallback(async () => {
-    console.log({ account, library, chainId, masterContract, bentoBoxContract, parsedDepositValue })
+    // console.log({ account, library, chainId, masterContract, bentoBoxContract, parsedDepositValue })
     if (!account || !library || !chainId || !masterContract || !bentoBoxContract || !parsedDepositValue) {
       console.error('Dependencies unavailable')
       return
@@ -111,7 +111,7 @@ const KashiDeposit = ({ market, header }: { market: KashiMediumRiskLendingPair; 
 
   const isValid = !error
 
-  console.log({ tokenApprovalState })
+  // console.log({ tokenApprovalState })
 
   return (
     <>

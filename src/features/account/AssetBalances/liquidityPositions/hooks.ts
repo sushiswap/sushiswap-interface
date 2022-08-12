@@ -85,7 +85,7 @@ export function useLegacyLiquidityPositionsBalances({ account, chainId }: Positi
             const pair = pairs.find((pair: any) => pair.id === position.pair.id)
             const pair1w = pairs1w?.find((pair: any) => pair.id === position.pair.id) ?? pair
 
-            console.log(pair.volumeUSD - pair1w.volumeUSD, pairs1w, pair.reserveUSD)
+            // console.log(pair.volumeUSD - pair1w.volumeUSD, pairs1w, pair.reserveUSD)
 
             return {
               id: position.id,

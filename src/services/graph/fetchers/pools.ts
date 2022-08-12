@@ -10,6 +10,7 @@ import {
   poolKpiQuery,
   poolKpisQuery,
 } from 'app/services/graph/queries'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 
 import { TridentTransactionRawData, tridentTransactionsRawDataFormatter } from '../hooks/transactions/trident'
 import { pager } from './pager'
@@ -45,8 +46,8 @@ export interface TridentPool {
   liquidityUSD: number
   // transactionCount: number
   apy: string
-  token0: Token
-  token1: Token
+  token0: WrappedTokenInfo | Token
+  token1: WrappedTokenInfo | Token
   reserve0: number
   reserve1: number
   swapFee: Fee

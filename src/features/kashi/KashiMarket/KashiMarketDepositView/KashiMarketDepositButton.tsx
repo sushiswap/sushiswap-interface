@@ -39,7 +39,7 @@ export const KashiMarketDepositButton: FC<KashiMarketDepositButtonProps> = ({ sp
     ? i18n._(t`Insufficient balance`)
     : ''
 
-  console.log({ permit })
+  // console.log({ permit })
 
   const buttonText = error ? error : depositAmount?.greaterThan(ZERO) ? i18n._(t`Deposit`) : ''
 

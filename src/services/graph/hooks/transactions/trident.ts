@@ -93,10 +93,10 @@ export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionR
     type: `Swap ${tx.tokenIn.symbol} for ${tx.tokenOut.symbol}`,
   }))
   const mints = rawData.mints.map((tx) => {
-    console.log([
-      Number(tx.amount0) * Number(tx.pair.token0.price.derivedUSD),
-      Number(tx.amount1) * Number(tx.pair.token1.price.derivedUSD),
-    ])
+    // console.log([
+    //   Number(tx.amount0) * Number(tx.pair.token0.price.derivedUSD),
+    //   Number(tx.amount1) * Number(tx.pair.token1.price.derivedUSD),
+    // ])
     return {
       txHash: tx.transaction.id,
       address: tx.recipient,
