@@ -1,1 +1,1 @@
-export { chunkArray } from './chunkArray'
+export * from './chunkArray'
