@@ -21,7 +21,6 @@ export interface TridentPositionRow {
   swapFeePercent: number
   twapEnabled: boolean
   value: number
-  apy: string
   legacy?: boolean
 }
 
