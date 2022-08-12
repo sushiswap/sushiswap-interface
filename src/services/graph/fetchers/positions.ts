@@ -20,7 +20,6 @@ export interface TridentPositionRow {
   swapFeePercent: number
   twapEnabled: boolean
   value: number
-  apy: string
   legacy?: boolean
 }
 
@@ -52,7 +51,6 @@ const formatPositions = (chainId: ChainId, { liquidityPositions }: TridentPositi
       swapFeePercent: Number(pool.swapFee) / 100,
       twapEnabled: Boolean(pool.twapEnabled),
       value: (Number(balance) / Number(pool.kpi.liquidity)) * Number(pool.kpi.liquidityUSD),
-      apy: '',
     }
   })
 }
