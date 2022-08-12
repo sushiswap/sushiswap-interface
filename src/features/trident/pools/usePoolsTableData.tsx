@@ -1,13 +1,11 @@
 import { PoolType } from '@sushiswap/trident-sdk'
 import Chip from 'app/components/Chip'
 import { formatNumber, formatPercent } from 'app/functions/format'
-import { useOneDayBlock } from 'app/services/graph'
 import { TridentPool } from 'app/services/graph/fetchers/pools'
-import { useGetAllTridentPools, usePoolKpi } from 'app/services/graph/hooks/pools'
+import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { ReactNode, useMemo } from 'react'
 
-import { chipPoolColorMapper, poolTypeNameMapper } from '../types'
 import { PoolCell } from './PoolCell'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
 
@@ -23,6 +21,7 @@ export const usePoolsTableData = () => {
   const { chainId } = useActiveWeb3React()
   const { data, error, isValidating } = useGetAllTridentPools({ chainId })
 
+  // @ts-ignore
   const columns: DiscoverPoolsTableColumn[] = useMemo(() => {
     return [
       {
@@ -30,7 +29,7 @@ export const usePoolsTableData = () => {
         accessor: 'assets',
         // @ts-ignore TYPE NEEDS FIXING
         Cell: ({ value, row: { original } }) => {
-          return <PoolCell assets={value} twapEnabled={original.twapEnabled} />
+          return <PoolCell assets={[original.token0, original.token1]} twapEnabled={original.twapEnabled} />
         },
         filter: filterForSearchQueryAndTWAP,
       },
@@ -39,7 +38,8 @@ export const usePoolsTableData = () => {
         accessor: 'type',
         maxWidth: 100,
         Cell: (props: { value: PoolType }) => (
-          <Chip label={poolTypeNameMapper[props.value]} color={chipPoolColorMapper[props.value]} />
+          <Chip label="Classic" color="purple" />
+          // <Chip label={poolTypeNameMapper[props.value]} color={chipPoolColorMapper[props.value]} />
         ),
         // @ts-ignore TYPE NEEDS FIXING
         filter: (rows, id, filterValue) =>
@@ -74,31 +74,33 @@ export const usePoolsTableData = () => {
         accessor: 'apy',
         maxWidth: 100,
         // @ts-ignore TYPE NEEDS FIXING
-        Cell: (props) => {
-          const { data: oneDayBlock } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-          const { data: oneDayPoolKpi } = usePoolKpi({
-            chainId,
-            variables: { block: oneDayBlock, id: data?.[props.row.id].address },
-          })
+        Cell: (props) => <span>{formatPercent(props.value, 'NEW')}</span>,
+        // Cell: (props) => {
+        //   const { data: oneDayBlock } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
-          const percent = // @ts-ignore TYPE NEEDS FIXING
-            (Math.max(
-              0,
-              // @ts-ignore TYPE NEEDS FIXING
-              oneDayPoolKpi
-                ? // @ts-ignore TYPE NEEDS FIXING
-                  data?.[props.row.id]?.volumeUSD - oneDayPoolKpi?.volumeUSD
-                : data?.[props.row.id]?.volumeUSD
-            ) *
-              // @ts-ignore TYPE NEEDS FIXING
-              (data?.[props.row.id]?.swapFee / 10000) *
-              365 *
-              100) /
-            // @ts-ignore TYPE NEEDS FIXING
-            data?.[props.row.id]?.liquidityUSD
+        //   const { data: oneDayPoolKpi } = usePoolKpi({
+        //     chainId,
+        //     variables: { block: oneDayBlock, id: data?.[props.row.id].address },
+        //   })
 
-          return <span>{formatPercent(percent, 'NEW')}</span>
-        },
+        //   const percent = // @ts-ignore TYPE NEEDS FIXING
+        //     (Math.max(
+        //       0,
+        //       // @ts-ignore TYPE NEEDS FIXING
+        //       oneDayPoolKpi
+        //         ? // @ts-ignore TYPE NEEDS FIXING
+        //           data?.[props.row.id]?.volumeUSD - oneDayPoolKpi?.volumeUSD
+        //         : data?.[props.row.id]?.volumeUSD
+        //     ) *
+        //       // @ts-ignore TYPE NEEDS FIXING
+        //       (data?.[props.row.id]?.swapFee / 10000) *
+        //       365 *
+        //       100) /
+        //     // @ts-ignore TYPE NEEDS FIXING
+        //     data?.[props.row.id]?.liquidityUSD
+
+        //   return <span>{formatPercent(percent, 'NEW')}</span>
+        // },
       },
       // {
       //   Header: 'Actions',
@@ -112,7 +114,7 @@ export const usePoolsTableData = () => {
       //   ),
       // },
     ]
-  }, [chainId, data])
+  }, [])
 
   return useMemo(
     () => ({

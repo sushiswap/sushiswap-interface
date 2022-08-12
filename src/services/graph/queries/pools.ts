@@ -3,34 +3,39 @@ import gql from 'graphql-tag'
 const tridentPoolsSubQuery = `
   __typename
   id
-  kpi {
-    volumeUSD
-    liquidity
-    liquidityUSD
-    feesUSD
-    transactionCount
-  }
+  volumeUSD
+  liquidity
+  liquidityUSD
+  feesUSD
+  #transactionCount
   twapEnabled
   swapFee
-  assets {
-    token {
-      id
-      name
-      symbol
-      decimals
-    }
+  token0 {
+    id
+    name
+    symbol
+    decimals
   }
+  token1 {
+    id
+    name
+    symbol
+    decimals
+  }
+  reserve0
+  reserve1
+  apr
 `
 
 // Schema not finalized for: 'concentratedLiquidityPools', 'indexPools', 'hybridPools'
-const allPools = ['constantProductPools']
+const allPools = ['pairs']
 
 export const getTridentPoolsQuery = gql`
   query getTridentsPoolsQuery(
     $first: Int = 1000
     $skip: Int = 0
     $block: Block_height
-    $where: ConstantProductPool_filter
+    $where: Pair_filter
   )
   {
     ${allPools.map(
@@ -44,8 +49,8 @@ export const getTridentPoolsQuery = gql`
 `
 
 export const poolHourSnapshotsQuery = gql`
-  query PoolHourSnapshots($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolHourSnapshot_filter) {
-    poolHourSnapshots(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
+  query PoolHourSnapshots($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PairHourSnapshot_filter) {
+    pairHourSnapshots(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
       id
       date
       liquidityUSD
@@ -57,8 +62,8 @@ export const poolHourSnapshotsQuery = gql`
 `
 
 export const poolDaySnapshotsQuery = gql`
-  query poolDaySnapshots($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolDaySnapshot_filter) {
-    poolDaySnapshots(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
+  query poolDaySnapshots($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PairDaySnapshot_filter) {
+    pairDaySnapshots(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
       id
       date
       liquidityUSD
@@ -71,72 +76,79 @@ export const poolDaySnapshotsQuery = gql`
 
 export const getTransactionsForPoolQuery = gql`
   query poolTransactionsQuery($first: Int = 1000, $skip: Int = 0, $poolAddress: String!) {
-    mints: mints(first: $first, skip: $skip, where: { pool: $poolAddress }) {
+    mints: mints(first: $first, skip: $skip, where: { pair: $poolAddress }) {
       id
-      token0 {
-        symbol
-        price {
-          derivedUSD
+      pair {
+        token0 {
+          symbol
+          price {
+            derivedUSD: lastUsdPrice
+          }
         }
-      }
-      token1 {
-        symbol
-        price {
-          derivedUSD
+        token1 {
+          symbol
+          price {
+            derivedUSD: lastUsdPrice
+          }
         }
       }
       amount0
       amount1
       transaction {
         id
-        timestamp
+        timestamp: createdAtTimestamp
       }
+      origin: sender
       sender
-      recipient
-      origin
+      recipient: to
       logIndex
     }
-    burns: burns(first: $first, skip: $skip, where: { pool: $poolAddress }) {
+    burns: burns(first: $first, skip: $skip, where: { pair: $poolAddress }) {
       id
-      token0 {
-        symbol
-        price {
-          derivedUSD
+      pair {
+        token0 {
+          symbol
+          price {
+            derivedUSD: lastUsdPrice
+          }
         }
-      }
-      token1 {
-        symbol
-        price {
-          derivedUSD
+        token1 {
+          symbol
+          price {
+            derivedUSD: lastUsdPrice
+          }
         }
       }
       transaction {
         id
-        timestamp
+        timestamp: createdAtTimestamp
       }
       amount0
       amount1
+      origin: sender
       sender
-      recipient
-      origin
+      recipient: to
       logIndex
     }
-    swaps: swaps(first: $first, skip: $skip, where: { pool: $poolAddress }) {
+    swaps: swaps(first: $first, skip: $skip, where: { pair: $poolAddress }) {
       amountIn
       amountOut
       transaction {
         id
-        timestamp
+        timestamp: createdAtTimestamp
       }
-      recipient
+      recipient: to
       tokenIn {
         symbol
         price {
-          derivedUSD
+          derivedUSD: lastUsdPrice
         }
       }
       tokenOut {
         symbol
+        price {
+          derivedUSD: lastUsdPrice
+        }
       }
     }
   }
@@ -145,7 +157,7 @@ export const getTransactionsForPoolQuery = gql`
 /* Need support for amountUSD */
 export const getSwapsForPoolQuery = gql`
   query poolSwapQuery($poolAddress: String!) {
-    swaps(where: { pool: $poolAddress }) {
+    swaps(where: { pair: $poolAddress }) {
       amountIn
       amountOut
       transaction {
@@ -182,7 +194,7 @@ export const getTridentPositionsQuery = gql`
     ) {
       id
       balance
-      pool {
+      pair {
         ${tridentPoolsSubQuery}
       }
     }
@@ -190,31 +202,27 @@ export const getTridentPositionsQuery = gql`
 `
 
 export const poolKpiQuery = gql`
-  query poolKpiQuery($id: String!, $block: Block_height, $where: PoolKpi_filter) {
-    poolKpi(id: $id, block: $block, where: $where) {
+  query poolKpiQuery($id: String!, $block: Block_height, $where: Pair_filter) {
+    pairs(id: $id, block: $block, where: $where) {
       id
-      fees
       feesUSD
-      volume
       volumeUSD
       liquidity
       liquidityUSD
-      transactionCount
+      #transactionCount
     }
   }
 `
 
 export const poolKpisQuery = gql`
-  query poolKpisQuery($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolKpi_filter) {
-    poolKpis(first: $first, skip: $skip, block: $block, where: $where) {
+  query poolKpisQuery($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: Pair_filter) {
+    pairs(first: $first, skip: $skip, block: $block, where: $where) {
       id
-      fees
       feesUSD
-      volume
       volumeUSD
       liquidity
       liquidityUSD
-      transactionCount
+      #transactionCount
     }
   }
 `

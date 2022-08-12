@@ -7,7 +7,11 @@ import Desktop from './Desktop'
 const Header: FC = () => {
   const isDesktop = useDesktopMediaQuery()
 
-  return <>{isDesktop ? <Desktop /> : <Mobile />}</>
+  return (
+    <>
+      {isDesktop ? <Desktop /> : <Mobile />}
+    </>
+  )
 }
 
 export default Header

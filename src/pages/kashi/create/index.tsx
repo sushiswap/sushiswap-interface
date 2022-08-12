@@ -164,7 +164,7 @@ export default function Create() {
   }
 
   return (
-    <Container maxWidth="lg" className="py-4 md:py-12 lg:py-[120px] px-2">
+    <Container maxWidth="lg" className="py-4 md:py-12 lg:py-[120px] px-2 mx-auto">
       <SwapLayoutCard>
         <div className="flex flex-col w-full gap-4">
           <div className="flex flex-col gap-2">
@@ -215,7 +215,7 @@ export default function Create() {
             <Typography variant="sm" className="flex items-center">
               {i18n._(t`Oracle`)}
             </Typography>
-            <div className="opacity-40 pointer-events-none flex items-center justify-between h-full px-4 py-2 border rounded bg-dark-900 border-dark-700 hover:border-dark-600">
+            <div className="flex items-center justify-between h-full px-4 py-2 border rounded pointer-events-none opacity-40 bg-dark-900 border-dark-700 hover:border-dark-600">
               <Menu as="div" className="relative inline-block w-full text-left">
                 <Menu.Button className="w-full" disabled>
                   <div className="flex flex-row items-center justify-between">
@@ -242,7 +242,7 @@ export default function Create() {
                       <Typography
                         variant="sm"
                         weight={700}
-                        className="text-primary px-3 py-2 cursor-pointer hover:bg-dark-900/40"
+                        className="px-3 py-2 cursor-pointer text-primary hover:bg-dark-900/40"
                       >
                         ChainLink
                       </Typography>

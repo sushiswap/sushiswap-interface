@@ -8,7 +8,14 @@ export const DAI = new Token(
   'DAI',
   'Dai Stablecoin'
 )
-export const USDT = new Token(ChainId.AVALANCHE, '0xc7198437980c041c805A1EDcbA50c1Ce5db95118', 6, 'USDT', 'Tether USD')
+export const USDTe = new Token(
+  ChainId.AVALANCHE,
+  '0xc7198437980c041c805A1EDcbA50c1Ce5db95118',
+  6,
+  'USDT.e',
+  'Tether USD'
+)
+export const USDT = new Token(ChainId.AVALANCHE, '0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7', 6, 'USDT', 'Tether USD')
 export const WBTC = new Token(
   ChainId.AVALANCHE,
   '0x50b7545627a5162F82A992c33b87aDc75187B218',

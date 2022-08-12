@@ -79,7 +79,7 @@
     "@ethersproject/units": "^5.4.0",
     "@fontsource/dm-sans": "^4.5.0",
     "@gnosis.pm/safe-apps-web3-react": "^0.6.0",
-    "@headlessui/react": "^1.5.0",
+    "@headlessui/react": "1.5.0",
     "@heroicons/react": "^1.0.0",
     "@hookform/resolvers": "^2.8.5",
     "@lingui/cli": "^3.12.1",
@@ -95,17 +95,17 @@
     "@sentry/nextjs": "^7.0.0",
     "@sentry/react": "^7.0.0",
     "@sentry/tracing": "^7.0.0",
-    "@sushiswap/bentobox-sdk": "1.0.0-canary.89",
+    "@sushiswap/bentobox-sdk": "1.0.0-canary.113",
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
-    "@sushiswap/core-sdk": "1.0.0-canary.108",
-    "@sushiswap/kashi-sdk": "1.0.0-canary.80",
+    "@sushiswap/core-sdk": "1.0.0-canary.132",
+    "@sushiswap/kashi-sdk": "1.0.0-canary.104",
     "@sushiswap/limit-order-pair-list": "0.2.17",
-    "@sushiswap/limit-order-sdk": "1.0.0-canary.89",
+    "@sushiswap/limit-order-sdk": "1.0.0-canary.113",
     "@sushiswap/miso": "1.0.0-canary.47",
-    "@sushiswap/miso-sdk": "1.0.0-canary.78",
-    "@sushiswap/trident": "^1.0.0-canary.38",
-    "@sushiswap/trident-sdk": "1.0.0-canary.117",
+    "@sushiswap/miso-sdk": "1.0.0-canary.102",
+    "@sushiswap/trident": "^1.0.0-canary.40",
+    "@sushiswap/trident-sdk": "1.0.0-canary.141",
     "@testing-library/jest-dom": "^5.14.0",
     "@testing-library/react": "^12.1.0",
     "@transak/transak-sdk": "^1.0.31",
@@ -198,7 +198,7 @@
     "react-dom": "^17.0.2",
     "react-dropzone": "^12.0.4",
     "react-feather": "^2.0.9",
-    "react-hook-form": "^7.22.1",
+    "react-hook-form": "7.29.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-popper": "^2.2.5",
     "react-redux": "^7.2.6",
@@ -247,5 +247,10 @@
     "entrypoints": [
       "src/pages"
     ]
+  },
+  "nextBundleAnalysis": {
+    "budget": 3584000,
+    "budgetPercentIncreaseRed": 40,
+    "showDetails": true
   }
 }

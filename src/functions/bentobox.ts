@@ -21,20 +21,36 @@ export function toShare(rebase: Rebase, amount: BigNumber): BigNumber {
   return amount.mulDiv(BigNumber.from(rebase.base.toString()), BigNumber.from(rebase.elastic.toString()))
 }
 
-export function toAmountJSBI(token: Rebase, shares: JSBI): JSBI {
-  return JSBI.GT(token.base, 0) ? JSBI.divide(JSBI.multiply(shares, token.elastic), token.base) : ZERO
+export function toAmountJSBI(rebase: Rebase, shares: JSBI, roundUp = false): JSBI {
+  if (JSBI.EQ(rebase.base, ZERO)) return shares
+
+  const elastic = JSBI.divide(JSBI.multiply(shares, rebase.elastic), rebase.base)
+
+  if (roundUp && JSBI.LT(JSBI.divide(JSBI.multiply(elastic, rebase.base), rebase.elastic), shares)) {
+    return JSBI.add(elastic, JSBI.BigInt(1))
+  }
+
+  return elastic
 }
 
-export function toShareJSBI(token: Rebase, amount: JSBI): JSBI {
-  return JSBI.GT(token.elastic, 0) ? JSBI.divide(JSBI.multiply(amount, token.base), token.elastic) : ZERO
+export function toShareJSBI(rebase: Rebase, amount: JSBI, roundUp = false): JSBI {
+  if (JSBI.EQ(rebase.elastic, ZERO)) return amount
+
+  const base = JSBI.divide(JSBI.multiply(amount, rebase.base), rebase.elastic)
+
+  if (roundUp && JSBI.LT(JSBI.divide(JSBI.multiply(base, rebase.elastic), rebase.base), amount)) {
+    return JSBI.add(base, JSBI.BigInt(1))
+  }
+
+  return base
 }
 
-export function toAmountCurrencyAmount(token: Rebase, shares: CurrencyAmount<Token>) {
-  const amount = toAmountJSBI(token, shares.quotient)
+export function toAmountCurrencyAmount(token: Rebase, shares: CurrencyAmount<Token>, roundUp = false) {
+  const amount = toAmountJSBI(token, shares.quotient, roundUp)
   return CurrencyAmount.fromRawAmount(shares.currency, amount)
 }
 
-export function toShareCurrencyAmount(token: Rebase, amount: CurrencyAmount<Token>) {
-  const share = toShareJSBI(token, amount.quotient)
+export function toShareCurrencyAmount(token: Rebase, amount: CurrencyAmount<Token>, roundUp = false) {
+  const share = toShareJSBI(token, amount.quotient, roundUp)
   return CurrencyAmount.fromRawAmount(amount.currency, share)
 }

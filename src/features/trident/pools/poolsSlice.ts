@@ -5,7 +5,7 @@ import { AppState } from 'app/state'
 export enum PoolSortOption {
   TVL = 'TVL Highest to Lowest',
   VOLUME = 'VOL Highest to Lowest',
-  // APY = 'APY Highest to Lowest',
+  APY = 'APY Highest to Lowest',
 }
 
 export interface PoolsState {
@@ -21,7 +21,7 @@ const initialState: PoolsState = {
   farmsOnly: false,
   showTWAPOnly: false,
   feeTiers: [],
-  sort: PoolSortOption.TVL,
+  sort: PoolSortOption.APY,
 }
 
 export const poolsSlice = createSlice({

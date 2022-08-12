@@ -16,7 +16,7 @@ const KashiPairPage: FC<KashiPairPage> = () => {
   useRedirectOnChainId('/kashi')
 
   return (
-    <Container maxWidth="lg" className="py-4 md:py-12 lg:py-[120px] px-2">
+    <Container maxWidth="lg" className="py-4 md:py-12 lg:py-[120px] px-2 mx-auto">
       {market ? (
         <KashiMarketProvider market={market}>
           <KashiMarket />

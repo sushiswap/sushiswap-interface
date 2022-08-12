@@ -38,17 +38,17 @@ const PoolStats: FC<PoolStatsProps> = () => {
       value: 'liquidity',
       change: 'liquidity24hChange',
     },
-    {
-      label: i18n._(t`Transactions (24H)`),
-      value: 'transactions',
-      change: 'transactions24hChange',
-    },
+    // {
+    //   label: i18n._(t`Transactions (24H)`),
+    //   value: 'transactions',
+    //   change: 'transactions24hChange',
+    // },
   ]
 
-  console.log({ stats })
+  // console.log({ stats })
 
   return (
-    <div className="flex flex-col gap-3 lg:grid lg:grid-cols-4">
+    <div className="flex flex-col gap-3 lg:grid lg:grid-cols-3">
       {items.map(({ label, value, change }, index) => (
         <div
           className="flex flex-row justify-between p-3 border rounded lg:flex-col lg:gap-1 bg-dark-900 border-dark-800 lg:bg-dark-800 lg:border-dark-700"

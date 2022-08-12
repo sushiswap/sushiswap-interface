@@ -8,6 +8,7 @@ import {
   useSushiPairs,
   useTridentLiquidityPositions,
 } from 'app/services/graph'
+import { useTridentPools } from 'app/services/graph/hooks/pools'
 import { useMemo } from 'react'
 
 interface PositionBalances {
@@ -16,11 +17,43 @@ interface PositionBalances {
 }
 
 export function useTridentLiquidityPositionsBalances({ account, chainId }: PositionBalances) {
-  return useTridentLiquidityPositions({
+  const { data: block1w } = useOneWeekBlock({ chainId })
+  const { data: positions } = useTridentLiquidityPositions({
     chainId,
     variables: { where: { user: account?.toLowerCase(), balance_gt: 0 } },
     shouldFetch: !!chainId && !!account,
-  }).data
+  })
+
+  const pairs = useTridentPools({
+    chainId,
+    variables: { where: { id_in: positions?.map(({ id }) => id) } },
+    shouldFetch: !!positions,
+  })
+  const pairs1w = useTridentPools({
+    chainId,
+    variables: { where: { id_in: positions?.map(({ id }) => id) }, block: block1w },
+    shouldFetch: !!positions || !!block1w,
+  })
+
+  return useMemo(
+    () =>
+      !!positions && !!pairs && !!pairs1w
+        ? positions.map((position) => {
+            const pair = pairs.find((pair) => pair.address === position.id)!
+            const pair1w = pairs1w.find((pair) => pair.address === position.id)
+
+            let apy
+            if (pair1w)
+              apy = getApy({ volume: pair.volumeUSD - pair1w.volumeUSD, liquidity: pair.liquidityUSD, days: 7 })
+
+            return {
+              ...position,
+              apy,
+            }
+          })
+        : [],
+    [pairs, pairs1w, positions]
+  )
 }
 
 export function useLegacyLiquidityPositionsBalances({ account, chainId }: PositionBalances) {
@@ -52,7 +85,7 @@ export function useLegacyLiquidityPositionsBalances({ account, chainId }: Positi
             const pair = pairs.find((pair: any) => pair.id === position.pair.id)
             const pair1w = pairs1w?.find((pair: any) => pair.id === position.pair.id) ?? pair
 
-            console.log(pair.volumeUSD - pair1w.volumeUSD, pairs1w, pair.reserveUSD)
+            // console.log(pair.volumeUSD - pair1w.volumeUSD, pairs1w, pair.reserveUSD)
 
             return {
               id: position.id,

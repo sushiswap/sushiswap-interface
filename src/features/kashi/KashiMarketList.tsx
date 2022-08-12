@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Dots from 'app/components/Dots'
 import Search from 'app/components/Search'
 import SortIcon from 'app/components/SortIcon'
 import Typography from 'app/components/Typography'
@@ -141,12 +142,18 @@ const KashiMarketList: FC<KashiMarketList> = () => {
             hasMore={numDisplayed <= items.length}
             loader={null}
           >
-            <>
-              {items.slice(0, numDisplayed).reduce<ReactNode[]>((acc, market, index) => {
-                if (market) acc.push(<KashiMarketListItem market={market} key={index} i18n={i18n} />)
-                return acc
-              }, [])}
-            </>
+            {items.length > 0 ? (
+              <>
+                {items.slice(0, numDisplayed).reduce<ReactNode[]>((acc, market, index) => {
+                  if (market) acc.push(<KashiMarketListItem market={market} key={index} i18n={i18n} />)
+                  return acc
+                }, [])}
+              </>
+            ) : (
+              <div className="flex p-2 sm:justify-center">
+                <Dots>Loading</Dots>
+              </div>
+            )}
           </InfiniteScroll>
         </div>
       </div>

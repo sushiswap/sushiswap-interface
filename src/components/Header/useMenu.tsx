@@ -298,7 +298,7 @@ const useMenu: UseMenu = () => {
       menu.push(analyticsMenu)
     }
 
-    if (account) {
+    if (account && chainId !== ChainId.ARBITRUM_NOVA) {
       const portfolio = {
         key: 'portfolio',
         title: i18n._(t`Portfolio`),

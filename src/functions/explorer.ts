@@ -209,6 +209,18 @@ const chains: ChainObject = {
     link: 'https://optimistic.etherscan.io',
     builder: explorers.etherscan,
   },
+  [ChainId.KAVA]: {
+    link: 'https://explorer.kava.io',
+    builder: explorers.blockscout,
+  },
+  [ChainId.METIS]: {
+    link: 'https://andromeda-explorer.metis.io/',
+    builder: explorers.blockscout,
+  },
+  [ChainId.ARBITRUM_NOVA]: {
+    link: 'https://nova-explorer.arbitrum.io/',
+    builder: explorers.blockscout,
+  },
 }
 
 export function getExplorerLink(

@@ -31,6 +31,21 @@ const migrations = {
       lists: initialListsState,
     }
   },
+  // @ts-ignore
+  4: (state) => {
+    return {
+      ...state,
+      user: initialUserState,
+      lists: initialListsState,
+    }
+  },
+  // @ts-ignore
+  5: (state) => {
+    return {
+      ...state,
+      lists: initialListsState,
+    }
+  },
 }
 
 export default migrations

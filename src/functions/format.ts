@@ -209,3 +209,18 @@ export const formatDate = (date: Date) =>
     '20',
     ''
   )}`
+
+export function formatNumberPeriod(seconds: number) {
+  // console.log(seconds)
+  let hours = Math.floor(seconds / 3600)
+  let days = 0
+  if (hours > 24) {
+    days = Math.floor(hours / 24)
+    hours = hours % 24
+  }
+  const valueHours = hours > 0 ? `${hours} Hour${hours > 1 ? 's' : ''}` : ''
+  const valueDays = days > 0 ? `${days} Day${days > 1 ? 's' : ''}` : ''
+  if (valueDays) return valueDays
+  if (valueHours) return valueHours
+  return '-'
+}

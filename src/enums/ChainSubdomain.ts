@@ -19,4 +19,5 @@ export enum ChainSubdomain {
   FUSE = 'fuse',
   TELOS = 'telos',
   MOONBEAM = 'moonbeam',
+  ARBITRUM_NOVA = 'arbitrum-nova',
 }

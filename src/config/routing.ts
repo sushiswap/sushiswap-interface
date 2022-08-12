@@ -2,6 +2,7 @@
 import { ChainId, SUSHI, Token, WNATIVE } from '@sushiswap/core-sdk'
 
 import * as ARBITRUM from './tokens/arbitrum'
+import * as ARBITRUM_NOVA from './tokens/arbitrum-nova'
 import * as AVALANCHE from './tokens/avalanche'
 import * as BSC from './tokens/bsc'
 import * as CELO from './tokens/celo'
@@ -10,7 +11,9 @@ import * as FANTOM from './tokens/fantom'
 import * as FUSE from './tokens/fuse'
 import * as HARMONY from './tokens/harmony'
 import * as HECO from './tokens/heco'
+import * as KAVA from './tokens/kava'
 import * as MATIC from './tokens/matic'
+import * as METIS from './tokens/metis'
 import * as MOONBEAM from './tokens/moonbeam'
 import * as MOONRIVER from './tokens/moonriver'
 import * as OKEX from './tokens/okex'
@@ -75,6 +78,9 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.TELOS]: [WNATIVE[ChainId.TELOS]],
   [ChainId.MOONBEAM]: [WNATIVE[ChainId.MOONBEAM]],
   [ChainId.OPTIMISM]: [WNATIVE[ChainId.OPTIMISM]],
+  [ChainId.KAVA]: [WNATIVE[ChainId.KAVA]],
+  [ChainId.METIS]: [WNATIVE[ChainId.METIS]],
+  [ChainId.ARBITRUM_NOVA]: [WNATIVE[ChainId.ARBITRUM_NOVA]],
 }
 
 // used to construct intermediary pairs for trading
@@ -170,6 +176,8 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDT,
     // @ts-ignore TYPE NEEDS FIXING
+    AVALANCHE.USDTe,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WBTC,
     // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WETH,
@@ -238,6 +246,15 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     OPTIMISM.DAI,
     OPTIMISM.WBTC,
     OPTIMISM.LUSD,
+  ],
+  [ChainId.KAVA]: [...WRAPPED_NATIVE_ONLY[ChainId.KAVA], KAVA.USDC, KAVA.USDT, KAVA.WETH, KAVA.WBTC, KAVA.DAI],
+  [ChainId.METIS]: [...WRAPPED_NATIVE_ONLY[ChainId.METIS], METIS.USDC, METIS.USDT, METIS.WETH, METIS.DAI, METIS.WBTC],
+  [ChainId.ARBITRUM_NOVA]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM_NOVA],
+    ARBITRUM_NOVA.USDC,
+    ARBITRUM_NOVA.USDT,
+    ARBITRUM_NOVA.DAI,
+    ARBITRUM_NOVA.WBTC,
   ],
 }
 
@@ -634,6 +651,17 @@ export const COMMON_BASES: ChainTokenList = {
     OPTIMISM.WBTC,
     OPTIMISM.LUSD,
   ],
+  [ChainId.KAVA]: [...WRAPPED_NATIVE_ONLY[ChainId.KAVA], KAVA.USDC, KAVA.USDT, KAVA.WETH, KAVA.WBTC, KAVA.DAI],
+  [ChainId.METIS]: [...WRAPPED_NATIVE_ONLY[ChainId.METIS], METIS.USDC, METIS.USDT, METIS.WETH, METIS.DAI, METIS.WBTC],
+  [ChainId.ARBITRUM_NOVA]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM_NOVA],
+    ARBITRUM_NOVA.USDC,
+    ARBITRUM_NOVA.USDT,
+    ARBITRUM_NOVA.DAI,
+    ARBITRUM_NOVA.WBTC,
+    ARBITRUM_NOVA.MOON,
+    ARBITRUM_NOVA.BRICK,
+  ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -712,6 +740,8 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDT,
     // @ts-ignore TYPE NEEDS FIXING
+    AVALANCHE.USDTe,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WBTC,
     // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WETH,
@@ -778,6 +808,15 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     OPTIMISM.DAI,
     OPTIMISM.WBTC,
     OPTIMISM.LUSD,
+  ],
+  [ChainId.KAVA]: [...WRAPPED_NATIVE_ONLY[ChainId.KAVA], KAVA.USDC, KAVA.USDT, KAVA.WETH, KAVA.WBTC, KAVA.DAI],
+  [ChainId.METIS]: [...WRAPPED_NATIVE_ONLY[ChainId.METIS], METIS.USDC, METIS.USDT, METIS.WETH, METIS.DAI, METIS.WBTC],
+  [ChainId.ARBITRUM_NOVA]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM_NOVA],
+    ARBITRUM_NOVA.USDC,
+    ARBITRUM_NOVA.USDT,
+    ARBITRUM_NOVA.DAI,
+    ARBITRUM_NOVA.WBTC,
   ],
 }
 

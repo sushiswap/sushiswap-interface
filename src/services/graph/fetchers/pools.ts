@@ -10,6 +10,7 @@ import {
   poolKpiQuery,
   poolKpisQuery,
 } from 'app/services/graph/queries'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 
 import { TridentTransactionRawData, tridentTransactionsRawDataFormatter } from '../hooks/transactions/trident'
 import { pager } from './pager'
@@ -39,14 +40,19 @@ const gqlPoolTypeMap: Record<string, PoolType> = {
 
 export interface TridentPool {
   address: string
-  type: PoolType
+  // type: PoolType
   volumeUSD: number
+  liquidity: number
   liquidityUSD: number
-  transactionCount: number
+  // transactionCount: number
   apy: string
-  assets: Token[]
+  token0: WrappedTokenInfo | Token
+  token1: WrappedTokenInfo | Token
+  reserve0: number
+  reserve1: number
   swapFee: Fee
   twapEnabled: boolean
+  // apr: string
 }
 
 const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult, tokens: Record<string, Token>): TridentPool[] =>
@@ -54,50 +60,79 @@ const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult, tokens: Re
     .filter(([, pools]) => pools.length)
     .flatMap(([poolType, poolList]: [string, TridentPoolData[]]) =>
       poolList
-        .filter(({ assets }) =>
-          assets.every((asset: any) => {
-            const address = getAddress(asset.token.id)
-            return address in tokens
-          })
-        )
-        .map(({ kpi, assets, swapFee, twapEnabled, id }) => ({
-          address: id,
-          type: gqlPoolTypeMap[poolType],
-          volumeUSD: Number(kpi.volumeUSD),
-          liquidityUSD: Number(kpi.liquidityUSD),
-          apy: '12.34', // TODO: Needs subgraph support
-          transactionCount: Number(kpi.transactionCount),
-          assets: assets.map(({ token }) => {
-            const address = getAddress(token.id)
-            if (address in tokens) {
-              return tokens[address]
+        .filter(({ token0, token1 }) => {
+          const token0Address = getAddress(token0.id)
+          const token1Address = getAddress(token1.id)
+          return token0Address in tokens && token1Address in tokens
+        })
+        .map(
+          ({
+            transactionCount,
+            liquidityUSD,
+            liquidity,
+            volumeUSD,
+            swapFee,
+            twapEnabled,
+            token0: _token0,
+            token1: _token1,
+            reserve0,
+            reserve1,
+            apr,
+            id,
+          }) => {
+            const token0Address = getAddress(_token0.id)
+            const token0 =
+              token0Address in tokens
+                ? tokens[token0Address]
+                : new Token(chainId, token0Address, Number(_token0.decimals), _token0.symbol, _token0.name)
+            const token1Address = getAddress(_token1.id)
+            const token1 =
+              token1Address in tokens
+                ? tokens[token1Address]
+                : new Token(chainId, token1Address, Number(_token1.decimals), _token1.symbol, _token1.name)
+            return {
+              address: id,
+              type: gqlPoolTypeMap[poolType],
+              volumeUSD: Number(volumeUSD),
+              liquidity: Number(liquidity),
+              liquidityUSD: Number(liquidityUSD),
+              apy: apr, // TODO: Needs subgraph support
+              transactionCount: Number(transactionCount),
+              token0,
+              token1,
+              reserve0,
+              reserve1,
+              swapFee: Number(swapFee),
+              twapEnabled,
             }
-            return new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)
-          }),
-          swapFee: Number(swapFee),
-          twapEnabled,
-        }))
+          }
+        )
     )
 
 export interface TridentPoolData {
   __typename: string
   id: string
-  kpi: {
-    volumeUSD: string
-    liquidity: string
-    liquidityUSD: string
-    transactionCount: string
-  }
+  volumeUSD: string
+  liquidity: string
+  liquidityUSD: string
+  transactionCount: string
   twapEnabled: boolean
   swapFee: string
-  assets: {
-    token: {
-      id: string
-      symbol: string
-      name: string
-      decimals: string
-    }
-  }[]
+  token0: {
+    id: string
+    symbol: string
+    name: string
+    decimals: string
+  }
+  token1: {
+    id: string
+    symbol: string
+    name: string
+    decimals: string
+  }
+  reserve0: number
+  reserve1: number
+  apr: string
 }
 
 interface TridentPoolQueryResult {
@@ -172,9 +207,7 @@ export const getTridentPoolTransactions = async (chainId: ChainId = ChainId.ETHE
 
 export interface PoolKpiQueryResult {
   id: string
-  fees: string
   feesUSD: string
-  volume: string
   volumeUSD: string
   liquidity: string
   liquidityUSD: string
@@ -183,29 +216,18 @@ export interface PoolKpiQueryResult {
 
 export interface PoolKpi {
   id: string
-  fees: number
   feesUSD: number
-  volume: number
   volumeUSD: number
   liquidity: number
   liquidityUSD: number
   transactionCount: number
 }
 
-const formatKpi = ({
+const formatKpi = ({ id, feesUSD, volumeUSD, liquidity, liquidityUSD, transactionCount }: PoolKpiQueryResult) => ({
   id,
-  fees,
-  feesUSD,
-  volume,
-  volumeUSD,
-  liquidity,
-  liquidityUSD,
-  transactionCount,
-}: PoolKpiQueryResult) => ({
-  id,
-  fees: Number(fees),
+  // fees: Number(fees),
   feesUSD: Number(feesUSD),
-  volume: Number(volume),
+  // volume: Number(volume),
   volumeUSD: Number(volumeUSD),
   liquidity: Number(liquidity),
   liquidityUSD: Number(liquidityUSD),

@@ -31,7 +31,7 @@ const FormSelectField: FC<FormSelectFieldProps> = ({ name, label, children, help
   return (
     <>
       <Typography weight={700}>{label}</Typography>
-      <div className="mt-2 flex rounded-md shadow-sm">
+      <div className="flex mt-2 rounded-md shadow-sm">
         <select
           {...register(name)}
           {...rest}
@@ -45,7 +45,7 @@ const FormSelectField: FC<FormSelectFieldProps> = ({ name, label, children, help
         </select>
       </div>
       {!!errors[name] ? (
-        <FormFieldHelperText className="!text-red">{errors[name].message}</FormFieldHelperText>
+        <FormFieldHelperText className="!text-red">{errors?.[name]?.message}</FormFieldHelperText>
       ) : (
         <FormFieldHelperText>{helperText}</FormFieldHelperText>
       )}

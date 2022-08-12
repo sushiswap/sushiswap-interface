@@ -30,7 +30,7 @@ export const KashiMarketDepositReviewModal: FC<KashiMarketDepositReviewModal> = 
   const [attemptingTxn, setAttemptingTxn] = useState(false)
   const execute = useDepositExecute()
 
-  console.log('KashiMarketDepositReviewModal', permit)
+  // console.log('KashiMarketDepositReviewModal', permit)
 
   const onClick = useCallback(async () => {
     setAttemptingTxn(true)

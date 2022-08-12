@@ -1,4 +1,4 @@
-import { BarGraph } from 'app/components/BarGraph'
+import BarGraph from 'app/components/BarGraph'
 import Button from 'app/components/Button'
 import LineGraph from 'app/components/LineGraph'
 import Tabs from 'app/components/Tabs'
@@ -43,7 +43,7 @@ const PoolStatsChart = () => {
     chainId,
     variables: {
       first: 168,
-      where: { pool: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
+      where: { pair: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
     },
     shouldFetch: !!poolWithState?.pool && chartTimespans[chartRange] <= chartTimespans['1W'],
   })
@@ -51,7 +51,7 @@ const PoolStatsChart = () => {
   const dayBuckets = usePoolDayBuckets({
     chainId,
     variables: {
-      where: { pool: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
+      where: { pair: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
     },
     shouldFetch: !!poolWithState?.pool && chartTimespans[chartRange] > chartTimespans['1W'],
   })
@@ -110,7 +110,7 @@ const PoolStatsChart = () => {
       </div>
       <div className="w-full h-px bg-gray-700" />
       {graphData && graphData.length > 0 && (
-        <div className="w-full h-40 lg:order-2">
+        <div className="w-full">
           <div className="mt-6">
             <Typography variant="h3" className="text-high-emphesis" weight={700}>
               {/*@ts-ignore TYPE NEEDS FIXING*/}
@@ -121,15 +121,17 @@ const PoolStatsChart = () => {
               {formatDate(new Date(graphData[selectedIndex]?.x))}
             </Typography>
           </div>
-          {isDesktop ? (
-            <LineGraph
-              data={graphData}
-              setSelectedIndex={setSelectedIndex}
-              stroke={{ gradient: { from: '#27B0E6', to: '#FA52A0' } }}
-            />
-          ) : (
-            <BarGraph data={graphData} setSelectedDatum={setSelectedIndex} />
-          )}
+          <div className="h-40">
+            {isDesktop ? (
+              <LineGraph
+                data={graphData}
+                setSelectedIndex={setSelectedIndex}
+                stroke={{ gradient: { from: '#27B0E6', to: '#FA52A0' } }}
+              />
+            ) : (
+              <BarGraph data={graphData} setSelectedIndex={setSelectedIndex} />
+            )}
+          </div>
         </div>
       )}
       <div className="lg:hidden">{chartButtons}</div>
