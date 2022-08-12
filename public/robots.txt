@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://app.sushi.com
+
+# Sitemaps
+Sitemap: https://app.sushi.com/sitemap.xml
