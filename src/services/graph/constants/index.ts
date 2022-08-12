@@ -27,9 +27,9 @@ export const GRAPH_HOST = {
 }
 
 export const TRIDENT = {
-  [ChainId.MATIC]: 'matthewlilley/trident-polygon',
-  [ChainId.KOVAN]: 'sushiswap/trident-kovan',
-  [ChainId.OPTIMISM]: 'olastenberg/trident-optimism',
-  [ChainId.KAVA]: 'sushiswap/trident-kava',
-  [ChainId.METIS]: 'sushiswap/trident-metis',
+  [ChainId.MATIC]: 'sushi-labs/trident-polygon',
+  // [ChainId.KOVAN]: 'sushi-labs/trident-kovan',
+  [ChainId.OPTIMISM]: 'sushi-labs/trident-optimism',
+  // [ChainId.KAVA]: 'sushiswap/trident-kava',
+  [ChainId.METIS]: 'sushi-labs/trident-metis',
 }

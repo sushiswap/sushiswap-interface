@@ -59,7 +59,7 @@ interface TridentTokenQueryResult {
     id: string
     price: {
       derivedNative: string
-      derivedUSD: string
+      lastUsdPrice: string
     }
     kpi: {
       liquidity: string
@@ -94,7 +94,7 @@ export const getTridentTokens = async (
     id: token.id,
     price: {
       derivedNative: Number(token.price.derivedNative),
-      derivedUSD: Number(token.price.derivedUSD),
+      derivedUSD: Number(token.price.lastUsdPrice),
     },
     kpi: {
       liquidity: Number(token.kpi.liquidity),

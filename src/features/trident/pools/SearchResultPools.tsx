@@ -21,7 +21,7 @@ import { DiscoverPoolsTableColumn, usePoolsTableData } from './usePoolsTableData
 export const sortTitleMapper: Record<PoolSortOption, DiscoverPoolsTableColumn['accessor']> = {
   [PoolSortOption.TVL]: 'liquidityUSD',
   [PoolSortOption.VOLUME]: 'volumeUSD',
-  // [PoolSortOption.APY]: 'apy',
+  [PoolSortOption.APY]: 'apy',
 }
 
 const SearchResultPools: FC = () => {
@@ -93,7 +93,8 @@ const SearchResultPools: FC = () => {
                     pathname: `/trident/pool`,
                     query: {
                       // @ts-ignore TYPE NEEDS FIXING
-                      tokens: row.original.assets.map((asset) => asset.address),
+                      tokens: [row.original.token0.address, row.original.token1.address],
+                      // tokens: row.original.assets.map((asset) => asset.address),
                       fee: row.original.swapFee,
                       twap: row.original.twapEnabled,
                     },
