@@ -178,12 +178,12 @@ function getExactInputParams(
 
   for (let legIndex = 0; legIndex < routeLegs; ++legIndex) {
     const lastLeg = isLastLeg(legIndex, multiRoute)
-    const recipentAddress = lastLeg ? senderAddress : multiRoute.legs[legIndex + 1].poolAddress
+    const recipientAddress = lastLeg ? senderAddress : multiRoute.legs[legIndex + 1].poolAddress
     const path: Path = {
       pool: multiRoute.legs[legIndex].poolAddress,
       data: defaultAbiCoder.encode(
         ['address', 'address', 'bool'],
-        [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, lastLeg && receiveToWallet]
+        [multiRoute.legs[legIndex].tokenFrom.address, recipientAddress, lastLeg && receiveToWallet]
       ),
     }
     paths.push(path)
