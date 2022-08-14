@@ -84,7 +84,7 @@ const InvestmentDetails = ({ farm }) => {
   const kashiFiatValue = kashiAssetAmount && kashiAssetPrice ? kashiAssetPrice.quote(kashiAssetAmount) : undefined
 
   const slpFiatValue = Number(stakedAmount?.toExact() ?? 0) * (farm.pair.reserveUSD / farm.pair.totalSupply)
-  const scplpFiatValue = Number(stakedAmount?.toExact() ?? 0) * (farm.pair.liquidityUSD / farm.pair.liquidity)
+  const scplpFiatValue = Number(stakedAmount?.toExact() ?? 0) * (farm.pair.liquidityUSD / (farm.pair.liquidity / 1e18))
 
   const secondaryRewardOnly = chainId && [ChainId.FUSE].includes(chainId)
 

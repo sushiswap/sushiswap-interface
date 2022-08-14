@@ -283,6 +283,17 @@ export const SUPPORTED_NETWORKS: Record<
     rpcUrls: ['https://andromeda.metis.io/?owner=1088'],
     blockExplorerUrls: ['https://andromeda-explorer.metis.io/'],
   },
+  [ChainId.ARBITRUM_NOVA]: {
+    chainId: '0xA4BA',
+    chainName: 'Arbitrum Nova',
+    nativeCurrency: {
+      name: 'Ether',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: ['https://a4ba.arbitrum.io/rpc'],
+    blockExplorerUrls: ['https://nova-explorer.arbitrum.io/'],
+  },
 }
 
 const NetworkModal: FC<{ switchNetwork: (targetChain: number) => void }> = ({ switchNetwork }) => {
@@ -301,6 +312,7 @@ const NetworkModal: FC<{ switchNetwork: (targetChain: number) => void }> = ({ sw
           {[
             ChainId.ETHEREUM,
             ChainId.ARBITRUM,
+            ChainId.ARBITRUM_NOVA,
             ChainId.MATIC,
             ChainId.XDAI,
             ChainId.FANTOM,

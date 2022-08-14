@@ -146,7 +146,7 @@ export const useTridentLPTableConfig = ({ positions, chainId }: TridentLPTableCo
         },
       },
     ],
-    [chainId]
+    [chainId, positions]
   )
 
   const defaultColumn = React.useMemo(() => ({ minWidth: 0 }), [])

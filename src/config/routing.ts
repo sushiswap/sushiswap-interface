@@ -2,6 +2,7 @@
 import { ChainId, SUSHI, Token, WNATIVE } from '@sushiswap/core-sdk'
 
 import * as ARBITRUM from './tokens/arbitrum'
+import * as ARBITRUM_NOVA from './tokens/arbitrum-nova'
 import * as AVALANCHE from './tokens/avalanche'
 import * as BSC from './tokens/bsc'
 import * as CELO from './tokens/celo'
@@ -20,6 +21,7 @@ import * as OPTIMISM from './tokens/optimism'
 import * as PALM from './tokens/palm'
 import * as TELOS from './tokens/telos'
 import * as XDAI from './tokens/xdai'
+
 type ChainTokenList = {
   readonly [chainId: number]: Token[]
 }
@@ -78,6 +80,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.OPTIMISM]: [WNATIVE[ChainId.OPTIMISM]],
   [ChainId.KAVA]: [WNATIVE[ChainId.KAVA]],
   [ChainId.METIS]: [WNATIVE[ChainId.METIS]],
+  [ChainId.ARBITRUM_NOVA]: [WNATIVE[ChainId.ARBITRUM_NOVA]],
 }
 
 // used to construct intermediary pairs for trading
@@ -246,6 +249,13 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ],
   [ChainId.KAVA]: [...WRAPPED_NATIVE_ONLY[ChainId.KAVA], KAVA.USDC, KAVA.USDT, KAVA.WETH, KAVA.WBTC, KAVA.DAI],
   [ChainId.METIS]: [...WRAPPED_NATIVE_ONLY[ChainId.METIS], METIS.USDC, METIS.USDT, METIS.WETH, METIS.DAI, METIS.WBTC],
+  [ChainId.ARBITRUM_NOVA]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM_NOVA],
+    ARBITRUM_NOVA.USDC,
+    ARBITRUM_NOVA.USDT,
+    ARBITRUM_NOVA.DAI,
+    ARBITRUM_NOVA.WBTC,
+  ],
 }
 
 export const ADDITIONAL_BASES: {
@@ -643,6 +653,15 @@ export const COMMON_BASES: ChainTokenList = {
   ],
   [ChainId.KAVA]: [...WRAPPED_NATIVE_ONLY[ChainId.KAVA], KAVA.USDC, KAVA.USDT, KAVA.WETH, KAVA.WBTC, KAVA.DAI],
   [ChainId.METIS]: [...WRAPPED_NATIVE_ONLY[ChainId.METIS], METIS.USDC, METIS.USDT, METIS.WETH, METIS.DAI, METIS.WBTC],
+  [ChainId.ARBITRUM_NOVA]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM_NOVA],
+    ARBITRUM_NOVA.USDC,
+    ARBITRUM_NOVA.USDT,
+    ARBITRUM_NOVA.DAI,
+    ARBITRUM_NOVA.WBTC,
+    ARBITRUM_NOVA.MOON,
+    ARBITRUM_NOVA.BRICK,
+  ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -792,6 +811,13 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ],
   [ChainId.KAVA]: [...WRAPPED_NATIVE_ONLY[ChainId.KAVA], KAVA.USDC, KAVA.USDT, KAVA.WETH, KAVA.WBTC, KAVA.DAI],
   [ChainId.METIS]: [...WRAPPED_NATIVE_ONLY[ChainId.METIS], METIS.USDC, METIS.USDT, METIS.WETH, METIS.DAI, METIS.WBTC],
+  [ChainId.ARBITRUM_NOVA]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM_NOVA],
+    ARBITRUM_NOVA.USDC,
+    ARBITRUM_NOVA.USDT,
+    ARBITRUM_NOVA.DAI,
+    ARBITRUM_NOVA.WBTC,
+  ],
 }
 
 export const PINNED_PAIRS: { readonly [chainId: number]: [Token, Token][] } = {

@@ -8,7 +8,9 @@ type CloudinaryFetchProps = { src: string; width?: number; height?: number; qual
 type ClodunaryImageLoader = (resolverProps: CloudinaryFetchProps) => string
 
 export const cloudinaryLoader: ClodunaryImageLoader = ({ src, width, height }: CloudinaryFetchProps) => {
-  return `https://res.cloudinary.com/sushi-cdn/image/fetch/${width ? `w_${width},` : ''}${
+  return `https://res.cloudinary.com/sushi-cdn/image/fetch/f_auto,fl_sanitize,q_auto,${width ? `w_${width}` : ''}${
     height ? `h_${height},` : ''
-  }f_auto,q_auto,fl_sanitize/${normalizeUrl(src)}`
+  }/${normalizeUrl(src)}`
 }
+
+// f_auto,fl_sanitize,q_auto,w_32

@@ -8,7 +8,7 @@ export const getTridentTokenPricesQuery = gql`
     $where: TokenPrice_filter
   ) {
     tokenPrices(first: $first, skip: $skip, block: $block, where: $where) {
-      derivedUSD
+      lastUsdPrice
     }
   }
 `
@@ -16,7 +16,8 @@ export const getTridentTokenPricesQuery = gql`
 export const getTridentTokenPriceQuery = gql`
   query getTridentTokenPriceQuery($block: Block_height, $id: String!) {
     tokenPrice(block: $block, id: $id) {
-      derivedUSD
+      derivedNative
+      lastUsdPrice
     }
   }
 `
@@ -27,19 +28,19 @@ export const getTridentTokensQuery = gql`
       id
       price {
         derivedNative
-        derivedUSD
+        lastUsdPrice
       }
       kpi {
         liquidity
-        liquidityNative
+        # liquidityNative
         liquidityUSD
-        volume
-        volumeNative
+        # volume
+        # volumeNative
         volumeUSD
-        fees
-        feesNative
-        feesUSD
-        transactionCount
+        # fees
+        # feesNative
+        # feesUSD
+        #transactionCount
       }
       rebase {
         base

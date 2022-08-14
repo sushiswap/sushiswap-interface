@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { createReducer } from '@reduxjs/toolkit'
 
 import {
@@ -25,10 +26,19 @@ export interface SwapState {
   // the typed recipient address or ENS name, or null if swap should go to sender
   readonly recipient?: string
   readonly sushiRelayChallenge?: string
-  readonly maxFee?: string
-  readonly maxPriorityFee?: string
+  readonly maxFee?: string | BigNumber | null
+  readonly maxPriorityFee?: string | BigNumber | null
 }
 
+/**
+ * @interface SwapState
+ *
+ * @const {initialState}
+ * @param recipient
+ * @param sushiRelayChallenge
+ * @param maxFee
+ * @param maxPriorityFee
+ */
 const initialState: SwapState = {
   independentField: Field.INPUT,
   typedValue: '',
@@ -41,7 +51,12 @@ const initialState: SwapState = {
   recipient: undefined,
   sushiRelayChallenge: undefined,
   maxFee: undefined,
-  maxPriorityFee: undefined,
+  /**
+   * @param maxPriorityFee
+   * @summary maxPriorityFee is adjusted to account for MEV bundle pricing
+   * @see {@link https://docs.openmev.org/technical-reference/maxPriorityFee#overview}
+   */
+  maxPriorityFee: BigNumber.from('1650000000') ?? undefined,
 }
 
 export default createReducer<SwapState>(initialState, (builder) =>
@@ -57,7 +72,7 @@ export default createReducer<SwapState>(initialState, (builder) =>
             currencyId: outputCurrencyId,
           },
           independentField: field,
-          typedValue: typedValue,
+          typedValue,
           recipient,
         }
       }
@@ -65,21 +80,17 @@ export default createReducer<SwapState>(initialState, (builder) =>
     .addCase(selectCurrency, (state, { payload: { currencyId, field } }) => {
       const otherField = field === Field.INPUT ? Field.OUTPUT : Field.INPUT
       // console.log({ currencyId, other: state[otherField].currencyId, test: state[otherField].currencyId }, currencyId === state[otherField].currencyId)
-      if (currencyId === state[otherField].currencyId) {
-        // the case where we have to swap the order
-        return {
-          ...state,
-          independentField: state.independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT,
-          [field]: { currencyId: currencyId },
-          [otherField]: { currencyId: state[field].currencyId },
-        }
-      } else {
-        // the normal case
-        return {
-          ...state,
-          [field]: { currencyId: currencyId },
-        }
-      }
+      return currencyId === state[otherField].currencyId
+        ? {
+            ...state,
+            independentField: state.independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT,
+            [field]: { currencyId: currencyId },
+            [otherField]: { currencyId: state[field].currencyId },
+          }
+        : {
+            ...state,
+            [field]: { currencyId },
+          }
     })
     .addCase(switchCurrencies, (state) => {
       return {

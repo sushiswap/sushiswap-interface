@@ -43,7 +43,7 @@ const PoolStatsChart = () => {
     chainId,
     variables: {
       first: 168,
-      where: { pool: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
+      where: { pair: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
     },
     shouldFetch: !!poolWithState?.pool && chartTimespans[chartRange] <= chartTimespans['1W'],
   })
@@ -51,7 +51,7 @@ const PoolStatsChart = () => {
   const dayBuckets = usePoolDayBuckets({
     chainId,
     variables: {
-      where: { pool: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
+      where: { pair: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
     },
     shouldFetch: !!poolWithState?.pool && chartTimespans[chartRange] > chartTimespans['1W'],
   })

@@ -1,3 +1,4 @@
+import { getAddress } from '@ethersproject/address'
 import { ChainId, Token } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/trident-sdk'
 import { fetcher, TridentPoolData } from 'app/services/graph'
@@ -10,7 +11,7 @@ interface TridentPositionQueryResult {
 interface TridentPosition {
   balance: string
   id: string
-  pool: TridentPoolData
+  pair: TridentPoolData
 }
 
 export interface TridentPositionRow {
@@ -20,41 +21,7 @@ export interface TridentPositionRow {
   swapFeePercent: number
   twapEnabled: boolean
   value: number
-  apy: string
   legacy?: boolean
-}
-
-const formatPositions = (chainId: ChainId, { liquidityPositions }: TridentPositionQueryResult) => {
-  return (liquidityPositions || []).map(({ balance, pool }) => {
-    const tokens = pool.assets.map(
-      ({ token: { id, name, symbol, decimals } }) => new Token(chainId, id, Number(decimals), symbol, name)
-    )
-
-    const type =
-      pool.__typename === 'ConstantProductPool'
-        ? PoolType.ConstantProduct
-        : pool.__typename === 'ConcentratedLiquidityPool'
-        ? PoolType.ConcentratedLiquidity
-        : pool.__typename === 'HybridPool'
-        ? PoolType.Hybrid
-        : pool.__typename === 'IndexPool'
-        ? PoolType.Weighted
-        : undefined
-
-    if (!type) {
-      throw new Error('Pool type not recognized')
-    }
-
-    return {
-      id: pool.id,
-      assets: tokens,
-      type,
-      swapFeePercent: Number(pool.swapFee) / 100,
-      twapEnabled: Boolean(pool.twapEnabled),
-      value: (Number(balance) / Number(pool.kpi.liquidity)) * Number(pool.kpi.liquidityUSD),
-      apy: '',
-    }
-  })
 }
 
 export const getTridentPositions = async (
@@ -62,5 +29,18 @@ export const getTridentPositions = async (
   variables: undefined
 ): Promise<TridentPositionRow[]> => {
   const result: TridentPositionQueryResult = await fetcher(chainId, getTridentPositionsQuery, variables)
-  return formatPositions(chainId, result)
+  if (!result?.liquidityPositions) return []
+
+  return result.liquidityPositions.map(({ pair, balance }) => ({
+    id: getAddress(pair.id),
+    assets: [pair.token0, pair.token1].map(
+      ({ id, name, symbol, decimals }) => new Token(chainId, getAddress(id), Number(decimals), symbol, name)
+    ),
+    type: PoolType.ConstantProduct,
+    swapFeePercent: Number(pair.swapFee) / 100,
+    twapEnabled: Boolean(pair.twapEnabled),
+    value: (Number(balance) / Number(pair.liquidity)) * Number(pair.liquidityUSD),
+    apy: pair.apr,
+    legacy: false,
+  }))
 }

@@ -98,13 +98,12 @@ const useLPTokensState = () => {
           response?.data?.items?.filter((pool_token: any) => pool_token.balance !== '0'),
         ])
 
-        console.log({ data })
+        // console.log({ data })
 
         const lpTokens = data?.reduce((previousValue, [dex, items]) => {
           return [
             ...previousValue,
             ...items.map((pair: any) => {
-              console.log(pair)
               const liquidityToken = new Token(
                 chainId as ChainId,
                 getAddress(pair.pool_token.contract_address),

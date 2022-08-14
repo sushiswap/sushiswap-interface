@@ -90,18 +90,32 @@
     "@sentry/nextjs": "^7.0.0",
     "@sentry/react": "^7.0.0",
     "@sentry/tracing": "^7.0.0",
-    "@sushiswap/bentobox-sdk": "1.0.0-canary.109",
+    "@sushiswap/bentobox-sdk": "1.0.0-canary.113",
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
+<<<<<<< HEAD
     "@sushiswap/core-sdk": "file:./sushiswap-core-sdk-1.0.0-canary.129.tgz",
     "@sushiswap/kashi-sdk": "1.0.0-canary.100",
+||||||| f5aa5a57b
+    "@sushiswap/core-sdk": "1.0.0-canary.128",
+    "@sushiswap/kashi-sdk": "1.0.0-canary.100",
+=======
+    "@sushiswap/core-sdk": "1.0.0-canary.132",
+    "@sushiswap/kashi-sdk": "1.0.0-canary.104",
+>>>>>>> 2fd8e7539c70119a33ac645c8de8a74cd0200faa
     "@sushiswap/limit-order-pair-list": "0.2.17",
-    "@sushiswap/limit-order-sdk": "1.0.0-canary.109",
+    "@sushiswap/limit-order-sdk": "1.0.0-canary.113",
     "@sushiswap/miso": "1.0.0-canary.47",
+<<<<<<< HEAD
     "@sushiswap/miso-sdk": "1.0.0-canary.98",
     "@sushiswap/tines": "https://github.com/manifoldfinance/sushiswap-sdk/releases/download/latest/sushiswap-tines-1.0.0-canary.112.tgz",
+||||||| f5aa5a57b
+    "@sushiswap/miso-sdk": "1.0.0-canary.98",
+=======
+    "@sushiswap/miso-sdk": "1.0.0-canary.102",
+>>>>>>> 2fd8e7539c70119a33ac645c8de8a74cd0200faa
     "@sushiswap/trident": "^1.0.0-canary.40",
-    "@sushiswap/trident-sdk": "1.0.0-canary.137",
+    "@sushiswap/trident-sdk": "1.0.0-canary.141",
     "@testing-library/jest-dom": "^5.14.0",
     "@testing-library/react": "^12.1.0",
     "@transak/transak-sdk": "^1.0.31",
@@ -245,9 +259,18 @@
     "entrypoints": [
       "src/pages"
     ]
+<<<<<<< HEAD
   },
   "dependencies": {
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0"
+||||||| f5aa5a57b
+=======
+  },
+  "nextBundleAnalysis": {
+    "budget": 3584000,
+    "budgetPercentIncreaseRed": 40,
+    "showDetails": true
+>>>>>>> 2fd8e7539c70119a33ac645c8de8a74cd0200faa
   }
 }

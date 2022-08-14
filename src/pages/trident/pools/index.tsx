@@ -6,6 +6,7 @@ import { SearchSidebar } from 'app/features/trident/pools/SearchSidebar'
 import TridentLayout, { TridentBody } from 'app/layouts/Trident'
 import { NextSeo } from 'next-seo'
 import React from 'react'
+
 const DiscoverPools = () => {
   return (
     <>
