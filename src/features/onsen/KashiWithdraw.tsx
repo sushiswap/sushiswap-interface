@@ -112,7 +112,7 @@ const KashiWithdraw = ({ market, header }: { market: KashiMediumRiskLendingPair;
 
   const isValid = !error
 
-  console.log({ market })
+  // console.log({ market })
 
   return (
     <>

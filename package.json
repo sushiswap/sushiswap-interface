@@ -99,6 +99,7 @@
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
     "@sushiswap/core-sdk": "1.0.0-canary.132",
+    "@sushiswap/default-token-list": "^31.1.0",
     "@sushiswap/kashi-sdk": "1.0.0-canary.104",
     "@sushiswap/limit-order-pair-list": "0.2.17",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.113",
@@ -178,6 +179,7 @@
     "lottie-react": "2.1.0",
     "madge": "^5.0.1",
     "millify": "^4.0.0",
+    "moralis": "^2.0.1",
     "ms.macro": "^2.0.0",
     "next": "^12.1.5",
     "next-pwa": "5.4.7",
@@ -248,8 +250,9 @@
       "src/pages"
     ]
   },
-  "dependencies": {
-    "@sushiswap/default-token-list": "^28.0.0",
-    "moralis": "^1.7.0"
+  "nextBundleAnalysis": {
+    "budget": 3584000,
+    "budgetPercentIncreaseRed": 40,
+    "showDetails": true
   }
 }

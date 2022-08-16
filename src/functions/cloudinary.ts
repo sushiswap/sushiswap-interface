@@ -12,4 +12,5 @@ export const cloudinaryLoader: ClodunaryImageLoader = ({ src, width, height }: C
     height ? `h_${height},` : ''
   }/${normalizeUrl(src)}`
 }
+
 // f_auto,fl_sanitize,q_auto,w_32

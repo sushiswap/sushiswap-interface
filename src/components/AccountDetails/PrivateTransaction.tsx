@@ -42,7 +42,7 @@ const PrivateTransaction: FC<PrivateTransaction> = ({ tx }) => {
     (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined')
   const cancelled = tx?.receipt && tx.receipt.status === 1337
 
-  console.log(privateTx)
+  // console.log(privateTx)
 
   return (
     <Disclosure as="div">
@@ -147,7 +147,7 @@ const PrivateTransaction: FC<PrivateTransaction> = ({ tx }) => {
             enterTo="transform scale-100 opacity-100"
             unmount={false}
           >
-            <Disclosure.Panel static className="px-1 flex flex-col gap-2 pb-1">
+            <Disclosure.Panel static className="flex flex-col gap-2 px-1 pb-1">
               <PrivateTransactionStep
                 completed={Boolean(privateTx?.status?.receivedAt && privateTx?.status?.relayedAt)}
                 timestamp={privateTx?.status?.receivedAt}
@@ -165,7 +165,7 @@ const PrivateTransaction: FC<PrivateTransaction> = ({ tx }) => {
                   <div className="flex flex-col gap-1">
                     <Typography
                       variant="xxs"
-                      className="text-mono overflow-auto p-2 bg-dark-1000/40 rounded border border-dark-800"
+                      className="p-2 overflow-auto border rounded text-mono bg-dark-1000/40 border-dark-800"
                     >
                       <pre>{JSON.stringify(privateTx?.status?.relayResponses, null, 2)}</pre>
                     </Typography>
@@ -193,7 +193,7 @@ const PrivateTransactionStep: FC<{
   error?: boolean
 }> = ({ timestamp, text, bordered = true, children, completed = false, error = false }) => {
   return (
-    <div className="flex flex-col relative">
+    <div className="relative flex flex-col">
       {bordered && (
         <div
           className={classNames(
@@ -202,7 +202,7 @@ const PrivateTransactionStep: FC<{
           )}
         />
       )}
-      <div className="flex gap-3 items-center">
+      <div className="flex items-center gap-3">
         <div className={classNames(timestamp ? 'bg-blue' : 'bg-dark-700', 'w-[9px] h-[9px] rounded-full')} />
         <Typography
           variant="xs"
@@ -217,7 +217,7 @@ const PrivateTransactionStep: FC<{
         </Typography>
       </div>
       {timestamp && (
-        <div className="flex gap-3 items-center">
+        <div className="flex items-center gap-3">
           <div className="w-[9px] h-[9px] rounded-full" />
           <Typography variant="xxs" className="text-secondary">
             {formatDateAgo(new Date(timestamp))}
@@ -225,9 +225,9 @@ const PrivateTransactionStep: FC<{
         </div>
       )}
       {children && (
-        <div className="flex gap-3 items-center">
+        <div className="flex items-center gap-3">
           <div className="w-[9px] h-[9px] rounded-full" />
-          <div className="p-2 w-full flex flex-col gap-3">{children}</div>
+          <div className="flex flex-col w-full gap-3 p-2">{children}</div>
         </div>
       )}
     </div>

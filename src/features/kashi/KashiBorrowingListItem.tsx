@@ -39,7 +39,7 @@ const KashiLendingListItem: FC<KashiLendingListItem> = ({ market }) => {
   const { value: currentUserBorrowAmountUSD, loading: currentUserBorrowAmountUSDLoading } =
     useUSDCSubgraphValueWithLoadingIndicator(currentUserBorrowAmount)
 
-  console.log(currentUserBorrowAmount.toExact(), userCollateralAmount.multiply(LTV).toExact())
+  // console.log(currentUserBorrowAmount.toExact(), userCollateralAmount.multiply(LTV).toExact())
 
   const liquidationPrice = currentUserBorrowAmount.greaterThan(0)
     ? new Price({

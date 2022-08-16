@@ -211,7 +211,7 @@ export const formatDate = (date: Date) =>
   )}`
 
 export function formatNumberPeriod(seconds: number) {
-  console.log(seconds)
+  // console.log(seconds)
   let hours = Math.floor(seconds / 3600)
   let days = 0
   if (hours > 24) {

@@ -3,16 +3,18 @@ import { formatNumber } from 'app/functions'
 
 export interface Mint {
   id: string
-  token0: {
-    symbol: string
-    price: {
-      derivedUSD: string
+  pair: {
+    token0: {
+      symbol: string
+      price: {
+        derivedUSD: string
+      }
     }
-  }
-  token1: {
-    symbol: string
-    price: {
-      derivedUSD: string
+    token1: {
+      symbol: string
+      price: {
+        derivedUSD: string
+      }
     }
   }
   amount0: string
@@ -28,16 +30,18 @@ export interface Mint {
 
 export interface Burn {
   id: string
-  token0: {
-    symbol: string
-    price: {
-      derivedUSD: string
+  pair: {
+    token0: {
+      symbol: string
+      price: {
+        derivedUSD: string
+      }
     }
-  }
-  token1: {
-    symbol: string
-    price: {
-      derivedUSD: string
+    token1: {
+      symbol: string
+      price: {
+        derivedUSD: string
+      }
     }
   }
   amount0: string
@@ -88,31 +92,39 @@ export function tridentTransactionsRawDataFormatter(rawData: TridentTransactionR
     value: formatNumber(Number(tx.amountIn) * Number(tx.tokenIn.price.derivedUSD), true),
     type: `Swap ${tx.tokenIn.symbol} for ${tx.tokenOut.symbol}`,
   }))
-  const mints = rawData.mints.map((tx) => ({
-    txHash: tx.transaction.id,
-    address: tx.recipient,
-    incomingAmt: `${formatNumber(tx.amount0)} ${tx.token0.symbol}`,
-    outgoingAmt: `${formatNumber(tx.amount1)} ${tx.token1.symbol}`,
-    time: tx.transaction.timestamp,
-    value: formatNumber(
-      Number(tx.amount0) * Number(tx.token0.price.derivedUSD) + Number(tx.amount1) * Number(tx.token1.price.derivedUSD),
-      true
-    ),
-    type: `Mint ${tx.token0.symbol} and ${tx.token1.symbol}`,
-  }))
+  const mints = rawData.mints.map((tx) => {
+    // console.log([
+    //   Number(tx.amount0) * Number(tx.pair.token0.price.derivedUSD),
+    //   Number(tx.amount1) * Number(tx.pair.token1.price.derivedUSD),
+    // ])
+    return {
+      txHash: tx.transaction.id,
+      address: tx.recipient,
+      incomingAmt: `${formatNumber(tx.amount0)} ${tx.pair.token0.symbol}`,
+      outgoingAmt: `${formatNumber(tx.amount1)} ${tx.pair.token1.symbol}`,
+      time: tx.transaction.timestamp,
+      value: formatNumber(
+        Number(tx.amount0) * Number(tx.pair.token0.price.derivedUSD) +
+          Number(tx.amount1) * Number(tx.pair.token1.price.derivedUSD),
+        true
+      ),
+      type: `Mint ${tx.pair.token0.symbol} and ${tx.pair.token1.symbol}`,
+    }
+  })
 
   const burns = rawData.burns.map((tx) => ({
     txHash: tx.transaction.id,
     address: tx.recipient,
-    incomingAmt: `${formatNumber(tx.amount0)} ${tx.token0.symbol}`,
-    outgoingAmt: `${formatNumber(tx.amount1)} ${tx.token1.symbol}`,
+    incomingAmt: `${formatNumber(tx.amount0)} ${tx.pair.token0.symbol}`,
+    outgoingAmt: `${formatNumber(tx.amount1)} ${tx.pair.token1.symbol}`,
     time: tx.transaction.timestamp,
     value: formatNumber(
-      Number(tx.amount0) * Number(tx.token0.price.derivedUSD) + Number(tx.amount1) * Number(tx.token1.price.derivedUSD),
+      Number(tx.amount0) * Number(tx.pair.token0.price.derivedUSD) +
+        Number(tx.amount1) * Number(tx.pair.token1.price.derivedUSD),
       true
     ),
-    type: `Burn ${tx.token0.symbol} and ${tx.token1.symbol}`,
+    type: `Burn ${tx.pair.token0.symbol} and ${tx.pair.token1.symbol}`,
   }))
 
-  return [...swaps, ...mints, ...burns]
+  return [...mints, ...burns]
 }

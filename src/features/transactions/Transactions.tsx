@@ -68,6 +68,8 @@ const _Transactions: FC<TransactionFetcherState> = ({ chainId = ChainId.ETHEREUM
     // @ts-ignore TYPE NEEDS FIXING
   } = useTable(config, useSortBy, usePagination, useFlexLayout)
 
+  // console.log({ loading, error })
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3">
