@@ -179,7 +179,6 @@
     "lottie-react": "2.1.0",
     "madge": "^5.0.1",
     "millify": "^4.0.0",
-    "moralis": "^2.0.1",
     "ms.macro": "^2.0.0",
     "next": "^12.1.5",
     "next-pwa": "5.4.7",
@@ -254,5 +253,8 @@
     "budget": 3584000,
     "budgetPercentIncreaseRed": 40,
     "showDetails": true
+  },
+  "dependencies": {
+    "moralis": "^2.0.1"
   }
 }
