@@ -16,16 +16,14 @@ import {
   useGlimmerPrice,
   useGnoPrice,
   useKashiPairs,
-  useMagicPrice,
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
+  useMetisPrice,
   useMovrPrice,
   useNativePrice,
-  useOhmPrice,
   useOneDayBlock,
   useOnePrice,
-  useSpellPrice,
   useSushiPairs,
   useSushiPrice,
 } from 'app/services/graph'
@@ -92,14 +90,12 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
   const { data: maticPrice } = useMaticPrice()
   const { data: gnoPrice } = useGnoPrice()
   const { data: onePrice } = useOnePrice()
-  const { data: spellPrice } = useSpellPrice()
   const { data: celoPrice } = useCeloPrice()
   const { data: fantomPrice } = useFantomPrice()
   const { data: movrPrice } = useMovrPrice()
-  const { data: ohmPrice } = useOhmPrice()
   const { data: fusePrice } = useFusePrice()
-  const { data: magicPrice } = useMagicPrice()
   const { data: glimmerPrice } = useGlimmerPrice()
+  const { data: metisPrice } = useMetisPrice()
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
 
@@ -279,7 +275,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
               currency: NATIVE[ChainId.METIS],
               rewardPerBlock,
               rewardPerDay: rewardPerSecond * 86400,
-              rewardPrice: 30, //todo: need handle this
+              rewardPrice: metisPrice,
             },
           }
 

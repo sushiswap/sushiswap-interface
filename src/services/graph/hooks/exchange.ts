@@ -18,6 +18,7 @@ import {
   getLiquidityPositions,
   getMagicPrice,
   getMaticPrice,
+  getMetisPrice,
   getMovrPrice,
   getMphPrice,
   getNativePrice,
@@ -77,6 +78,11 @@ export function useGnoPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.XDAI
   return useSWR(shouldFetch ? 'gnoPrice' : null, () => getGnoPrice(), swrConfig)
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export function useMetisPrice(swrConfig: SWRConfiguration = undefined) {
+  return useSWR('metisPrice', () => getMetisPrice(), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
