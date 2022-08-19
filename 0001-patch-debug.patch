@@ -1,0 +1,49 @@
+From 893ee5eaec658c9ae79ab8c75a88ce7b7e68f4cc Mon Sep 17 00:00:00 2001
+From: 0xjanitor <janitor@manifoldfinance.com>
+Date: Fri, 19 Aug 2022 13:21:43 -0700
+Subject: [PATCH] patch debug
+
+---
+ src/config/index.ts | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/src/config/index.ts b/src/config/index.ts
+index fc9175e72..360cbdf20 100644
+--- a/src/config/index.ts
++++ b/src/config/index.ts
+@@ -5,7 +5,9 @@ const config = {
+   defaultChainId: ChainId.ETHEREUM,
+   blockedAddresses: [
+     // SDN OFAC addresses - 08.11.2022
+-  "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
++    // @dev Disabled blockedAddress list 
++    // for DEBUGGING PURPOSES ONLY
++ /* "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+   "0xa0e1c89Ef1a489c9C7dE96311eD5Ce5D32c20E4B",
+   "0x3Cffd56B47B7b41c56258D9C7731ABaDc360E073",
+   "0x53b6936513e738f44FB50d2b9476730C0Ab3Bfc1",
+@@ -34,7 +36,8 @@ const config = {
+   "0x48549a34ae37b12f6a30566245176994e17c6b4a",
+   "0x5512d943ed1f7c8a43f3435c85f7ab68b30121b0",
+   "0xc455f7fd3e0e12afd51fba5c106909934d8a0e4a",
+-  "0x7FF9cFad3877F21d41Da833E2F775dB0569eE3D9"
++  "0x7FF9cFad3877F21d41Da833E2F775dB0569eE3D9" */
++  "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000"
+   ],
+   // Network specific configuration
+   [ChainId.ETHEREUM]: {
+@@ -47,4 +50,9 @@ const config = {
+   },
+ }
+ 
+-export default config
++let hook: any
++if (typeof window !== 'undefined') {
++  hook = (window as any).__WAGMI_DEVTOOLS__
++}
++
++export default config
+\ No newline at end of file
+-- 
+2.36.1
+
