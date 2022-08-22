@@ -114,6 +114,13 @@ export const getGlimmerPrice = async (variables = {}) => {
   })
 }
 
+export const getMetisPrice = async (variables = {}) => {
+  return getTokenPrice(ChainId.ETHEREUM, tokenPriceQuery, {
+    id: '0x9e32b13ce7f2e80a01932b42553652e053d6ed8e',
+    ...variables,
+  })
+}
+
 export const getYggPrice = async (variables = {}) => {
   return getTokenPrice(ChainId.ETHEREUM, tokenPriceQuery, {
     id: '0x25f8087ead173b73d6e8b84329989a8eea16cf73',
