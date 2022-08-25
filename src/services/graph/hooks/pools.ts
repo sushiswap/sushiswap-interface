@@ -214,6 +214,7 @@ export const useGetAllTridentPools = ({
   swrConfig = undefined,
 }: GraphProps) => {
   const tokens = useAllTokens()
+
   // const allowedAssets = useMemo(() => Object.keys(tokens).map((address) => address.toLowerCase()), [tokens])
   return useSWR<TridentPool[]>(
     shouldFetch ? ['getAllTridentPools', chainId] : null,
