@@ -49,7 +49,7 @@ export const masterChefV2 = async (query, chainId = ChainId.ETHEREUM, variables 
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MASTERCHEF_V2[chainId]}`, query, variables)
 
 export const MASTERCHEF_V1 = {
-  [ChainId.ETHEREUM]: 'sushiswap/master-chef',
+  [ChainId.ETHEREUM]: 'jiro-ono/masterchef-staging',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
