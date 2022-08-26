@@ -488,13 +488,13 @@ const MAINNET_CHAINLINK_MAPPING = {
     toDecimals: 18,
   },
   // HEGIC / ETH
-  '0xAf5E8D9Cd9fC85725A83BF23C52f1C39A71588a6': {
-    from: '0x584bC13c7D411c00c01A62e8019472dE68768430',
-    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    decimals: 18,
-    fromDecimals: 18,
-    toDecimals: 18,
-  },
+  // '0xAf5E8D9Cd9fC85725A83BF23C52f1C39A71588a6': {
+  //   from: '0x584bC13c7D411c00c01A62e8019472dE68768430',
+  //   to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  //   decimals: 18,
+  //   fromDecimals: 18,
+  //   toDecimals: 18,
+  // },
   // HEGIC / USD
   '0xBFC189aC214E6A4a35EBC281ad15669619b75534': {
     from: '0x584bC13c7D411c00c01A62e8019472dE68768430',
