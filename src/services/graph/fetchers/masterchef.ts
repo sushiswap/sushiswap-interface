@@ -23,7 +23,7 @@ import { request } from 'graphql-request'
 export const MINICHEF = {
   [ChainId.MATIC]: 'jiro-ono/minichef-staging-updates',
   [ChainId.XDAI]: 'jiro-ono/gnosis-minichef-staging',
-  [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
+  [ChainId.HARMONY]: 'sushiswap/minichef-harmony',
   [ChainId.ARBITRUM]: 'jiro-ono/arbitrum-minichef-staging',
   [ChainId.CELO]: 'sushiswap/celo-minichef-v2',
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-minichef',

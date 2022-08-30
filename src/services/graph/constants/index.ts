@@ -13,7 +13,7 @@ export const GRAPH_HOST = {
   [ChainId.AVALANCHE]: THE_GRAPH,
   [ChainId.CELO]: THE_GRAPH,
   [ChainId.ARBITRUM]: THE_GRAPH,
-  [ChainId.HARMONY]: 'https://sushi.graph.t.hmny.io',
+  [ChainId.HARMONY]: THE_GRAPH,
   [ChainId.OKEX]: HYPER_GRAPH,
   [ChainId.HECO]: HYPER_GRAPH,
   [ChainId.MOONRIVER]: THE_GRAPH,
