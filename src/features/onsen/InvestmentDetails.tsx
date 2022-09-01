@@ -1,8 +1,7 @@
 import { getAddress } from '@ethersproject/address'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { toAmount } from '@sushiswap/bentobox-sdk'
-import { ChainId, CurrencyAmount, Token, ZERO } from '@sushiswap/core-sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { HeadlessUiModal } from 'app/components/Modal'
@@ -70,7 +69,10 @@ const InvestmentDetails = ({ farm }) => {
       kashiPair
         ? CurrencyAmount.fromRawAmount(
             kashiPair.asset.token,
-            stakedAmount?.greaterThan(0) ? toAmount(kashiPair.asset, stakedAmount.quotient) : '0'
+            stakedAmount?.greaterThan(0)
+              ? // Need to convert Kashi Fraction to Amount
+                JSBI.divide(JSBI.multiply(stakedAmount.quotient, kashiPair.currentAllAssets), kashiPair.totalAsset.base)
+              : '0'
           )
         : undefined,
     [kashiPair, stakedAmount]
