@@ -656,13 +656,13 @@ const MAINNET_CHAINLINK_MAPPING = {
     toDecimals: 18,
   },
   // MTA / ETH
-  '0x98334b85De2A8b998Ba844c5521e73D68AD69C00': {
-    from: '0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2',
-    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    decimals: 18,
-    fromDecimals: 18,
-    toDecimals: 18,
-  },
+  // '0x98334b85De2A8b998Ba844c5521e73D68AD69C00': {
+  //   from: '0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2',
+  //   to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  //   decimals: 18,
+  //   fromDecimals: 18,
+  //   toDecimals: 18,
+  // },
   // MTA / USD
   '0xc751E86208F0F8aF2d5CD0e29716cA7AD98B5eF5': {
     from: '0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2',
