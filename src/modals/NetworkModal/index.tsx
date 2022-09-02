@@ -323,7 +323,7 @@ const NetworkModal: FC<{ switchNetwork: (targetChain: number) => void }> = ({ sw
             ChainId.MOONBEAM,
             ChainId.FUSE,
             ChainId.BSC,
-            // ChainId.KAVA,
+            ChainId.KAVA,
             ChainId.METIS,
             ChainId.TELOS,
             ChainId.CELO,
