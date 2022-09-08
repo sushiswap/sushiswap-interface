@@ -43,3 +43,10 @@ export const MAGIC = new Token(ChainId.ARBITRUM, '0x539bdE0d7Dbd336b79148AA74288
 export const FRAX = new Token(ChainId.ARBITRUM, '0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F', 18, 'FRAX', 'Frax')
 export const FXS = new Token(ChainId.ARBITRUM, '0x9d2F299715D94d8A7E6F5eaa8E654E8c74a988A7', 18, 'FXS', 'Frax Share')
 export const STG = new Token(ChainId.ARBITRUM, '0x6694340fc020c5E6B96567843da2df01b2CE1eb6', 18, 'STG', 'StargateToken')
+export const DPX = new Token(
+  ChainId.ARBITRUM,
+  '0x6C2C06790b3E3E3c38e12Ee22F8183b37a13EE55',
+  18,
+  'DPX',
+  'Dopex Governance Token'
+)
