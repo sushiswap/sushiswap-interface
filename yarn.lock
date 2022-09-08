@@ -3037,22 +3037,6 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.8.tgz#832dc80963b890a2eb02aaaf11ea8b57b2b7dde0"
   integrity sha512-YhhGfF/smND4jUdVWuTr3e9Np08zLyxrOfbQ6GkAhmrld4lWBs2sk4TV6oWSBWPbuUb3A2mw203uCnbMHpSoXw==
 
-"@sushiswap/core-sdk@1.0.0-canary.132":
-  version "1.0.0-canary.132"
-  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.132.tgz#8456bbdc8cfff4f48b136bced944e7468923d4ba"
-  integrity sha512-qgZ/GMW37xaApFlDGqU/kMl8t4q55x8jo7eRIeK0BQheYmaoVZ+zNZxVS41RIG0BG09jxh8URxqWDrJDMFALHw==
-  dependencies:
-    "@ethersproject/address" "^5.4.0"
-    "@ethersproject/bignumber" "^5.4.0"
-    "@ethersproject/providers" "^5.4.0"
-    "@ethersproject/solidity" "^5.4.0"
-    big.js "^6.1.1"
-    decimal.js-light "^2.5.0"
-    jsbi "^4.1.0"
-    tiny-invariant "^1.1.0"
-    tiny-warning "^1.0.0"
-    toformat "^2.0.0"
-
 "@sushiswap/core-sdk@1.0.0-canary.133":
   version "1.0.0-canary.133"
   resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.133.tgz#8a6c2566e1ceb23eec7ae0463dd474b1900b6a23"
@@ -3079,14 +3063,14 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-31.1.0.tgz#d8babd1a1bfd0965b325aaae726beede930e7de3"
   integrity sha512-uicM8HGvGaBUd+Rz/XcpLaXJt+3qfIp1IeZnNz/xB9blW7e/UT97gGG5pz2GeHaw/TQLf+2AZYqZgiWGJPmmiA==
 
-"@sushiswap/kashi-sdk@1.0.0-canary.104":
-  version "1.0.0-canary.104"
-  resolved "https://registry.yarnpkg.com/@sushiswap/kashi-sdk/-/kashi-sdk-1.0.0-canary.104.tgz#865fd39ff35cacfd350e4e8e687660e0874a4dc4"
-  integrity sha512-NcuUqm752T7D7oevwCS6B7W0Via0Yv2XlLySHm9aI7PwGH0ZBlz/VD+qxYum1ETkD6kiy2iNhrLTQySCx9/prA==
+"@sushiswap/kashi-sdk@1.0.0-canary.105":
+  version "1.0.0-canary.105"
+  resolved "https://registry.yarnpkg.com/@sushiswap/kashi-sdk/-/kashi-sdk-1.0.0-canary.105.tgz#d1204ba18bd95d42376eb9efef5e44ea3eec1c81"
+  integrity sha512-GcfYMd7T5CeJiPsNf27UMLoC786W0yv3BUuAOaklgQVxb4ZBBuoMe6RhgHJXgxlkIRLpW4VrGoR11Ci6NKmP8A==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/contracts" "^5.4.0"
-    "@sushiswap/bentobox-sdk" "1.0.0-canary.113"
+    "@sushiswap/bentobox-sdk" "1.0.0-canary.114"
 
 "@sushiswap/limit-order-pair-list@0.2.17":
   version "0.2.17"
