@@ -64,17 +64,19 @@ const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency, trident 
             </Typography>
           </NavLink>
         ) : null}
-        <NavLink
-          activeClassName="text-high-emphesis"
-          href={{
-            pathname: '/stop-loss',
-            query: getQuery(inputCurrency, outputCurrency),
-          }}
-        >
-          <Typography weight={700} className="text-secondary hover:text-white">
-            {i18n._(t`Stop`)}
-          </Typography>
-        </NavLink>
+        {featureEnabled(Feature.STOP_LOSSES, chainId) ? (
+          <NavLink
+            activeClassName="text-high-emphesis"
+            href={{
+              pathname: '/stop-loss',
+              query: getQuery(inputCurrency, outputCurrency),
+            }}
+          >
+            <Typography weight={700} className="text-secondary hover:text-white">
+              {i18n._(t`Stop`)}
+            </Typography>
+          </NavLink>
+        ) : null}
       </div>
       <div className="flex gap-4">
         {isLimitOrder && <MyOrders />}
