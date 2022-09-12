@@ -74,6 +74,46 @@ const nextConfig = {
         destination: '/farm',
         permanent: true,
       },
+      {
+        source: '/borrow',
+        destination: '/kashi',
+        permanent: true,
+      },
+      {
+        source: '/lend',
+        destination: '/kashi',
+        permanent: true,
+      },
+      {
+        source: '/inari',
+        destination: '/tools/inari',
+        permanent: true,
+      },
+      {
+        source: '/bento/balances',
+        destination: '/account',
+        permanent: true,
+      },
+      {
+        source: '/home',
+        destination: '/swap',
+        permanent: true,
+      },
+      {
+        source: '/farms',
+        destination: '/farm',
+        permanent: true,
+      },
+      {
+        source: '/pools',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/analytics/dashboard',
+        destination: '/analytics',
+        permanent: true,
+      },
     ]
   },
   async rewrites() {
