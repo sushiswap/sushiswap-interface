@@ -185,8 +185,6 @@ export default function Stake() {
     shouldFetch: !!block1y,
   })
 
-  const [xSushiPrice] = [xSushi?.derivedETH * ethPrice, xSushi?.derivedETH * ethPrice * bar?.totalSupply]
-
   const apy1m = (bar?.ratio / bar1m?.ratio - 1) * 12 * 100
 
   return (

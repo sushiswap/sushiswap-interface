@@ -41,12 +41,12 @@ export const uniswapUserQuery = gql`
 export const bundleFields = gql`
   fragment bundleFields on Bundle {
     id
-    ethPrice
+    nativePrice
   }
 `
 
-export const ethPriceQuery = gql`
-  query ethPriceQuery($id: Int! = 1, $block: Block_height) {
+export const nativePriceQuery = gql`
+  query nativePriceQuery($id: Int! = 1, $block: Block_height) {
     bundles(id: $id, block: $block) {
       ...bundleFields
     }
@@ -58,43 +58,45 @@ export const tokenPriceQuery = gql`
   query tokenPriceQuery($id: String!) {
     token(id: $id) {
       id
-      derivedETH
+      price {
+        derivedNative
+      }
     }
   }
 `
 
-export const dayDataFieldsQuery = gql`
-  fragment dayDataFields on DayData {
+export const factoryDaySnapshotsFieldsQuery = gql`
+  fragment factoryDaySnapshotsFields on FactoryDaySnapshot {
     id
     date
-    volumeETH
+    volumeNative
     volumeUSD
-    untrackedVolume
-    liquidityETH
+    untrackedVolumeUSD
+    liquidityNative
     liquidityUSD
-    txCount
+    transactionCount
   }
 `
 
 // Dashboard...
-export const dayDatasQuery = gql`
-  query dayDatasQuery($first: Int! = 1000, $date: Int! = 0, $where: DayData_filter) {
-    dayDatas(first: $first, orderBy: date, orderDirection: desc, where: $where) {
-      ...dayDataFields
+export const factoryDaySnapshotsQuery = gql`
+  query factoryDaySnapshots($first: Int! = 1000, $date: Int! = 0, $where: FactoryDaySnapshot_filter) {
+    factoryDaySnapshots(first: $first, orderBy: date, orderDirection: desc, where: $where) {
+      ...factoryDaySnapshotsFields
     }
   }
-  ${dayDataFieldsQuery}
+  ${factoryDaySnapshotsFieldsQuery}
 `
 
 // Pairs...
 export const pairFieldsQuery = gql`
   fragment pairFields on Pair {
     id
-    reserveUSD
-    reserveETH
+    liquidityUSD
+    liquidityNative
     volumeUSD
     untrackedVolumeUSD
-    trackedReserveETH
+    trackedLiquidityNative
     token0 {
       ...PairToken
     }
@@ -105,17 +107,18 @@ export const pairFieldsQuery = gql`
     reserve1
     token0Price
     token1Price
-    totalSupply
+    liquidity # totalSupply
     txCount
-    timestamp
   }
   fragment PairToken on Token {
     id
     name
     symbol
     decimals
-    totalSupply
-    derivedETH
+    liquidity
+    price {
+      derivedNative
+    }
   }
 `
 
@@ -144,24 +147,18 @@ export const pairCountQuery = gql`
   }
 `
 
-export const pairDayDatasQuery = gql`
-  query pairDayDatasQuery($first: Int = 1000, $skip: Int, $block: Block_height, $where: PairDayData_filter) {
-    pairDayDatas(first: $first, skip: $skip, orderBy: date, orderDirection: desc, where: $where, block: $block) {
+export const pairDaySnapshotsQuery = gql`
+  query pairDaySnapshotsQuery($first: Int = 1000, $skip: Int, $block: Block_height, $where: PairDaySnapshot_filter) {
+    pairDaySnapshots(first: $first, skip: $skip, orderBy: date, orderDirection: desc, where: $where, block: $block) {
       date
       pair {
         id
       }
-      token0 {
-        derivedETH
-      }
-      token1 {
-        derivedETH
-      }
-      reserveUSD
+      liquidityUSD
       volumeToken0
       volumeToken1
       volumeUSD
-      txCount
+      transactionCount
     }
   }
 `
@@ -170,7 +167,7 @@ export const liquidityPositionsQuery = gql`
   query liquidityPositionSubsetQuery($first: Int! = 1000, $skip: Int, $where: LiquidityPosition_filter) {
     liquidityPositions(first: $first, skip: $skip, where: $where) {
       id
-      liquidityTokenBalance
+      balance
       user {
         id
       }
@@ -187,7 +184,7 @@ export const pairsQuery = gql`
     $first: Int = 1000
     $where: Pair_filter
     $block: Block_height
-    $orderBy: Pair_orderBy = "trackedReserveETH"
+    $orderBy: Pair_orderBy = "trackedLiquidityNative"
     $orderDirection: OrderDirection = "desc"
   ) {
     pairs(
@@ -209,13 +206,13 @@ export const pairsTimeTravelQuery = gql`
     pairs(
       first: $first
       block: $block
-      orderBy: trackedReserveETH
+      orderBy: trackedLiquidityNative
       orderDirection: desc
       where: { id_in: $pairAddresses }
     ) {
       id
-      reserveUSD
-      trackedReserveETH
+      liquidityUSD
+      trackedLiquidityNative
       volumeUSD
       untrackedVolumeUSD
       txCount
@@ -230,13 +227,15 @@ export const tokenFieldsQuery = gql`
     symbol
     name
     decimals
-    totalSupply
     volume
     volumeUSD
     untrackedVolumeUSD
     txCount
     liquidity
-    derivedETH
+    liquidityUSD
+    price {
+      derivedNative
+    }
   }
 `
 
@@ -257,9 +256,9 @@ export const tokenIdsQuery = gql`
   }
 `
 
-export const tokenDayDatasQuery = gql`
-  query tokenDayDatasQuery($first: Int! = 1000, $skip: Int, $block: Block_height, $where: TokenDayData_filter) {
-    tokenDayDatas(first: $first, skip: $skip, orderBy: date, orderDirection: desc, where: $where, block: $block) {
+export const tokenDaySnapshotsQuery = gql`
+  query tokenDaySnapshotsQuery($first: Int! = 1000, $skip: Int, $block: Block_height, $where: TokenDaySnapshot_filter) {
+    tokenDaySnapshots(first: $first, skip: $skip, orderBy: date, orderDirection: desc, where: $where, block: $block) {
       id
       date
       token {
@@ -268,7 +267,7 @@ export const tokenDayDatasQuery = gql`
       volumeUSD
       liquidityUSD
       priceUSD
-      txCount
+      transactionCount
     }
   }
 `
@@ -278,7 +277,7 @@ export const tokenPairsQuery = gql`
     pairs0: pairs(
       first: 1000
       skip: $skip
-      orderBy: reserveUSD
+      orderBy: liquidityUSD
       orderDirection: desc
       where: { token0: $id }
       block: $block
@@ -288,7 +287,7 @@ export const tokenPairsQuery = gql`
     pairs1: pairs(
       first: 1000
       skip: $skip
-      orderBy: reserveUSD
+      orderBy: liquidityUSD
       orderDirection: desc
       where: { token1: $id }
       block: $block
@@ -303,11 +302,6 @@ export const tokensQuery = gql`
   query tokensQuery($first: Int! = 1000, $skip: Int, $block: Block_height, $where: Token_filter) {
     tokens(first: $first, skip: $skip, orderBy: volumeUSD, orderDirection: desc, block: $block, where: $where) {
       ...tokenFields
-      dayData(first: 7, orderBy: date, orderDirection: desc) {
-        id
-        priceUSD
-        date
-      }
     }
   }
   ${tokenFieldsQuery}
@@ -345,20 +339,15 @@ export const transactionsQuery = gql`
       transaction {
         id
       }
-      pair {
-        id
-        token0 {
-          symbol
-        }
-        token1 {
-          symbol
-        }
+      tokenIn {
+        symbol
+      }
+      tokenOut {
+        symbol
       }
       sender
-      amount0In
-      amount0Out
-      amount1In
-      amount1Out
+      amountIn
+      amountOut
       amountUSD
       to
     }

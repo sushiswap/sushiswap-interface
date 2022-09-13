@@ -24,20 +24,20 @@ import {
   getNativePrice,
   getOhmPrice,
   getOnePrice,
-  getPairDayData,
+  getPairDaySnapshots,
   getPairs,
   getPicklePrice,
   getRulerPrice,
   getSpellPrice,
   getSushiPrice,
-  getTokenDayData,
+  getTokenDaySnapshots,
   getTokenPairs,
   getTokens,
   getTruPrice,
   getYggPrice,
 } from '../fetchers'
 import { GraphProps } from '../interfaces'
-import { ethPriceQuery } from '../queries'
+import { nativePriceQuery } from '../queries'
 
 export function useFactory({
   chainId = ChainId.ETHEREUM,
@@ -207,7 +207,7 @@ export function useMagicPrice(swrConfig: SWRConfiguration = undefined) {
 // @ts-ignore TYPE NEEDS FIXING
 export function useBundle(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  return useSWR(chainId ? [chainId, ethPriceQuery, stringify(variables)] : null, () => getBundle(), swrConfig)
+  return useSWR(chainId ? [chainId, nativePriceQuery, stringify(variables)] : null, () => getBundle(), swrConfig)
 }
 
 export function useLiquidityPositions({
@@ -252,28 +252,28 @@ export function useTokens({
   return data
 }
 
-export function usePairDayData({
+export function usePairDaySnapshots({
   chainId = ChainId.ETHEREUM,
   variables,
   shouldFetch = true,
   swrConfig = undefined,
 }: GraphProps) {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['pairDayData', chainId, stringify(variables)] : null,
-    (_, chainId) => getPairDayData(chainId, variables),
+    shouldFetch && !!chainId ? ['pairDaySnapshot', chainId, stringify(variables)] : null,
+    (_, chainId) => getPairDaySnapshots(chainId, variables),
     swrConfig
   )
   return data
 }
 
-export function useTokenDayData(
+export function useTokenDaySnapshots(
   { chainId, variables, shouldFetch = true }: GraphProps,
   // @ts-ignore TYPE NEEDS FIXING
   swrConfig: SWRConfiguration = undefined
 ) {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['tokenDayData', chainId, stringify(variables)] : null,
-    (_, chainId) => getTokenDayData(chainId, variables),
+    shouldFetch && !!chainId ? ['tokenDaySnapshots', chainId, stringify(variables)] : null,
+    (_, chainId) => getTokenDaySnapshots(chainId, variables),
     swrConfig
   )
   return data

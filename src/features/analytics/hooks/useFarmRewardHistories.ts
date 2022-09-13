@@ -28,7 +28,7 @@ export default function useFarmRewardHistories({
     masterChefV1TotalAllocPoint,
     masterChefV1SushiPerBlock,
     sushiPrice,
-    ethPrice,
+    nativePrice,
     maticPrice,
     gnoPrice,
     onePrice,
@@ -73,7 +73,7 @@ export default function useFarmRewardHistories({
         masterChefV1SushiPerBlock,
         masterChefV1TotalAllocPoint,
         sushiPrice,
-        ethPrice,
+        nativePrice,
         maticPrice,
         gnoPrice,
         onePrice,
@@ -90,16 +90,17 @@ export default function useFarmRewardHistories({
         : poolHistory.balance / 10 ** kashiPair.token0.decimals
 
       const tvl = swapPair
-        ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
-        : balance * kashiPair.token0.derivedETH * ethPrice
+        ? (balance / Number(swapPair.liquidity)) * Number(swapPair.liquidityUSD)
+        : balance * kashiPair.token0.price.derivedNative * nativePrice
 
       const tvlHistory = swapPair
-        ? (balanceHistory / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
-        : balanceHistory * kashiPair.token0.derivedETH * ethPrice
+        ? (balanceHistory / Number(swapPair.liquidity)) * Number(swapPair.liquidityUSD)
+        : balanceHistory * kashiPair.token0.price.derivedNative * nativePrice
 
       const feeApyPerYear =
         swapPair && swapPair1d
-          ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.0025 * 365) / pair?.reserveUSD) * 100, 3650) / 100
+          ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.0025 * 365) / pair?.liquidityUSD) * 100, 3650) /
+            100
           : 0
 
       const feeApyPerMonth = feeApyPerYear / 12
@@ -163,7 +164,6 @@ export default function useFarmRewardHistories({
       blocksPerDay,
       celoPrice,
       chainId,
-      ethPrice,
       fantomPrice,
       fusePrice,
       glimmerPrice,
@@ -173,6 +173,7 @@ export default function useFarmRewardHistories({
       masterChefV1TotalAllocPoint,
       maticPrice,
       movrPrice,
+      nativePrice,
       onePrice,
       positions,
       sushiPrice,
