@@ -51,6 +51,7 @@ const features: FeatureMap = {
     Feature.MIGRATE,
     Feature.ANALYTICS,
     Feature.LIMIT_ORDERS,
+    Feature.STOP_LOSSES,
     Feature.TRIDENT,
     Feature.TRIDENT_MIGRATION,
     Feature.MISO,
