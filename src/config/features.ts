@@ -60,7 +60,7 @@ const features: FeatureMap = {
   [ChainId.AVALANCHE]: [
     Feature.AMM,
     Feature.BENTOBOX,
-    // Feature.KASHI,
+    Feature.KASHI,
     Feature.LIMIT_ORDERS,
     Feature.ANALYTICS,
     Feature.MISO,
