@@ -82,9 +82,9 @@ const LOGO: Record<number, string> = {
   [ChainId.GÖRLI]: EthereumLogo,
   [ChainId.FANTOM]: FtmLogo,
   [ChainId.FANTOM_TESTNET]: FtmLogo,
-  [ChainId.POLYGON]: MaticLogo,
-  [ChainId.POLYGON_TESTNET]: MaticLogo,
-  [ChainId.GNOSIS]: xDaiLogo,
+  [ChainId.MATIC]: MaticLogo,
+  [ChainId.MATIC_TESTNET]: MaticLogo,
+  [ChainId.XDAI]: xDaiLogo,
   [ChainId.BSC]: BnbLogo,
   [ChainId.BSC_TESTNET]: BnbLogo,
   [ChainId.AVALANCHE]: AvaxLogo,
@@ -110,6 +110,7 @@ const LOGO: Record<number, string> = {
   [ChainId.ARBITRUM_NOVA]: EthereumLogo,
   [ChainId.METIS]: MetisLogo,
 }
+
 export interface CurrencyLogoProps {
   currency?: Currency
   size?: string | number
