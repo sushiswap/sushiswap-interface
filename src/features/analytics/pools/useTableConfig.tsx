@@ -142,7 +142,7 @@ export const useTableConfig = (chainId: number) => {
         },
       },
     ],
-    [chainId]
+    [allTokens, chainId]
   )
 
   return useMemo(

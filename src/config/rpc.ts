@@ -35,6 +35,7 @@ const RPC = {
   [ChainId.KAVA]: 'https://evm.kava.io',
   [ChainId.METIS]: 'https://andromeda.metis.io/?owner=1088',
   [ChainId.ARBITRUM_NOVA]: 'https://a4ba.arbitrum.io/rpc',
+  [ChainId.BOBA_AVAX]: 'https://avax.boba.network',
 }
 
 export default RPC

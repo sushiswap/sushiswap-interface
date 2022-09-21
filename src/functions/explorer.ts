@@ -214,11 +214,15 @@ const chains: ChainObject = {
     builder: explorers.blockscout,
   },
   [ChainId.METIS]: {
-    link: 'https://andromeda-explorer.metis.io/',
+    link: 'https://andromeda-explorer.metis.io',
     builder: explorers.blockscout,
   },
   [ChainId.ARBITRUM_NOVA]: {
-    link: 'https://nova-explorer.arbitrum.io/',
+    link: 'https://nova-explorer.arbitrum.io',
+    builder: explorers.blockscout,
+  },
+  [ChainId.BOBA_AVAX]: {
+    link: 'https://blockexplorer.avax.boba.network',
     builder: explorers.blockscout,
   },
 }

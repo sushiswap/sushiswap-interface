@@ -55,7 +55,7 @@ export function useTridentStablePools(
           })
         : undefined
     })
-  }, [pools, chainId])
+  }, [chainId, pools, masterDeployer, hybridPoolFactory])
 
   const results = useMultipleContractSingleData(poolAddresses, STABLE_POOL_INTERFACE, 'getReserves')
   return useMemo(() => {

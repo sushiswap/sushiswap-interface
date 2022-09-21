@@ -4,6 +4,7 @@ import { ChainId, SUSHI, Token, WNATIVE } from '@sushiswap/core-sdk'
 import * as ARBITRUM from './tokens/arbitrum'
 import * as ARBITRUM_NOVA from './tokens/arbitrum-nova'
 import * as AVALANCHE from './tokens/avalanche'
+import * as BOBA_AVAX from './tokens/boba-avax'
 import * as BSC from './tokens/bsc'
 import * as CELO from './tokens/celo'
 import * as ETHEREUM from './tokens/ethereum'
@@ -81,6 +82,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.KAVA]: [WNATIVE[ChainId.KAVA]],
   [ChainId.METIS]: [WNATIVE[ChainId.METIS]],
   [ChainId.ARBITRUM_NOVA]: [WNATIVE[ChainId.ARBITRUM_NOVA]],
+  [ChainId.BOBA_AVAX]: [WNATIVE[ChainId.BOBA_AVAX]],
 }
 
 // used to construct intermediary pairs for trading
@@ -257,6 +259,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     ARBITRUM_NOVA.DAI,
     ARBITRUM_NOVA.WBTC,
   ],
+  [ChainId.BOBA_AVAX]: [...WRAPPED_NATIVE_ONLY[ChainId.BOBA_AVAX], BOBA_AVAX.AVAX],
 }
 
 export const ADDITIONAL_BASES: {
@@ -663,6 +666,7 @@ export const COMMON_BASES: ChainTokenList = {
     ARBITRUM_NOVA.MOON,
     ARBITRUM_NOVA.BRICK,
   ],
+  [ChainId.BOBA_AVAX]: [...WRAPPED_NATIVE_ONLY[ChainId.BOBA_AVAX], BOBA_AVAX.AVAX],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -819,6 +823,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     ARBITRUM_NOVA.DAI,
     ARBITRUM_NOVA.WBTC,
   ],
+  [ChainId.BOBA_AVAX]: [...WRAPPED_NATIVE_ONLY[ChainId.BOBA_AVAX], BOBA_AVAX.AVAX],
 }
 
 export const PINNED_PAIRS: { readonly [chainId: number]: [Token, Token][] } = {

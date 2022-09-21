@@ -106,7 +106,7 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
   const isDesktop = useDesktopMediaQuery()
   return (
     <Transition appear show={isOpen} as={Fragment} afterLeave={afterLeave} unmount={unmount}>
-      <Dialog as="div" className="fixed z-50 inset-0" onClose={onDismiss} unmount={unmount}>
+      <Dialog as="div" className="fixed inset-0 z-50" onClose={onDismiss} unmount={unmount}>
         <div className="relative flex items-center justify-center block min-h-screen text-center">
           <Transition.Child
             unmount={false}

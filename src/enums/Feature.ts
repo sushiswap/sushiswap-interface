@@ -15,4 +15,5 @@ export enum Feature {
   MEOWSHI = 'MEOWSHI',
   VESTING = 'Vesting',
   SUSHIGUARD = 'SushiGuard',
+  SUBGRAPH = 'Subgraph',
 }

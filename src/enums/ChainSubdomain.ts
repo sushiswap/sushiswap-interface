@@ -20,4 +20,5 @@ export enum ChainSubdomain {
   TELOS = 'telos',
   MOONBEAM = 'moonbeam',
   ARBITRUM_NOVA = 'arbitrum-nova',
+  BOBA_AVAX = 'boba-avax',
 }

@@ -70,7 +70,7 @@ export const useTableConfig = (chainId: number) => {
         Cell: (props) => formatPercent(props.value),
       },
     ],
-    [chainId]
+    [allTokens, chainId]
   )
 
   return useMemo(
