@@ -303,7 +303,7 @@ export const SUPPORTED_NETWORKS: Record<
       decimals: 18,
     },
     rpcUrls: ['https://avax.boba.network'],
-    blockExplorerUrls: ['(https://blockexplorer.avax.boba.network'],
+    blockExplorerUrls: ['https://blockexplorer.avax.boba.network'],
   },
 }
 
