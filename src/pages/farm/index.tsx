@@ -83,11 +83,7 @@ export default function Farm(): JSX.Element {
         </div>
         <div className="flex gap-3">
           <Button id="btn-create-new-pool" size="sm">
-            <a
-              href="https://docs.google.com/document/d/1VcdrqAn1sR8Wa0BSSU-jAl68CfoECR62LCzIyzUpZ_U"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://rbieu62gj0f.typeform.com/to/KkrPkOFe" target="_blank" rel="noreferrer">
               {i18n._(t`Apply for Onsen`)}
             </a>
           </Button>
