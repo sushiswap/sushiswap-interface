@@ -23,7 +23,7 @@ import { request } from 'graphql-request'
 export const MINICHEF = {
   [ChainId.MATIC]: 'jiro-ono/minichef-staging-updates',
   [ChainId.XDAI]: 'jiro-ono/gnosis-minichef-staging',
-  [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
+  [ChainId.HARMONY]: 'sushiswap/minichef-harmony',
   [ChainId.ARBITRUM]: 'jiro-ono/arbitrum-minichef-staging',
   [ChainId.CELO]: 'sushiswap/celo-minichef-v2',
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-minichef',
@@ -49,7 +49,7 @@ export const masterChefV2 = async (query, chainId = ChainId.ETHEREUM, variables 
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MASTERCHEF_V2[chainId]}`, query, variables)
 
 export const MASTERCHEF_V1 = {
-  [ChainId.ETHEREUM]: 'sushiswap/master-chef',
+  [ChainId.ETHEREUM]: 'jiro-ono/masterchef-staging',
 }
 
 // @ts-ignore TYPE NEEDS FIXING

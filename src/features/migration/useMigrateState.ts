@@ -50,7 +50,7 @@ const useMigrateState: () => MigrateState = () => {
       state.setSelectedLPToken(undefined)
       await state.updateLPTokens()
     }
-  }, [mode, state, account, library, amount, migrate, migrateWithPermit, chainId, addTransaction])
+  }, [state, account, library, amount, migrate, addTransaction])
 
   return {
     ...state,

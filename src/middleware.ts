@@ -24,6 +24,7 @@ const SUBDOMAIN_CHAIN_ID: { [subdomain: string]: string } = {
   [ChainSubdomain.TELOS]: '40',
   [ChainSubdomain.MOONBEAM]: '1284',
   [ChainSubdomain.ARBITRUM_NOVA]: '42170',
+  [ChainSubdomain.BOBA_AVAX]: '43288',
 }
 
 const DEFAULT_CHAIN_ID = '1'

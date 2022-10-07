@@ -58,7 +58,7 @@ export const useTableConfig = (chainId: number, users: any) => {
         align: 'right',
       },
     ],
-    []
+    [chainId]
   )
 
   return useMemo(

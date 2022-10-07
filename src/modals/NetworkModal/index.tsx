@@ -294,6 +294,17 @@ export const SUPPORTED_NETWORKS: Record<
     rpcUrls: ['https://a4ba.arbitrum.io/rpc'],
     blockExplorerUrls: ['https://nova-explorer.arbitrum.io/'],
   },
+  [ChainId.BOBA_AVAX]: {
+    chainId: '0xA918',
+    chainName: 'Boba Avax',
+    nativeCurrency: {
+      name: 'Boba',
+      symbol: 'BOBA',
+      decimals: 18,
+    },
+    rpcUrls: ['https://avax.boba.network'],
+    blockExplorerUrls: ['https://blockexplorer.avax.boba.network'],
+  },
 }
 
 const NetworkModal: FC<{ switchNetwork: (targetChain: number) => void }> = ({ switchNetwork }) => {
@@ -323,10 +334,11 @@ const NetworkModal: FC<{ switchNetwork: (targetChain: number) => void }> = ({ sw
             ChainId.MOONBEAM,
             ChainId.FUSE,
             ChainId.BSC,
-            // ChainId.KAVA,
+            ChainId.KAVA,
             ChainId.METIS,
             ChainId.TELOS,
             ChainId.CELO,
+            ChainId.BOBA_AVAX,
             // ChainId.OKEX,
             // ChainId.HECO,
             // ChainId.PALM,

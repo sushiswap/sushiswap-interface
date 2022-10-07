@@ -322,12 +322,15 @@ const useMenu: UseMenu = () => {
             title: 'Account',
             link: `/account?account=${account}`,
           },
-          {
-            key: 'liquidity',
-            title: 'Liquidity',
-            link: `/account/liquidity?account=${account}`,
-          },
         ],
+      }
+
+      if (featureEnabled(Feature.SUBGRAPH, chainId)) {
+        portfolio.items.push({
+          key: 'liquidity',
+          title: 'Liquidity',
+          link: `/account/liquidity?account=${account}`,
+        })
       }
 
       if (featureEnabled(Feature.KASHI, chainId)) {

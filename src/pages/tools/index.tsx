@@ -27,9 +27,9 @@ export default function Tools() {
   const tools = useMemo(() => TOOLS(i18n), [i18n])
 
   return (
-    <Container id="tools-page" className="py-4 space-y-4 md:py-8 lg:py-12" maxWidth="xl">
+    <Container id="tools-page" className="py-4 m-auto space-y-4 md:py-8 lg:py-12" maxWidth="xl">
       <NextSeo title={`Tools`} />
-      <Typography variant="h1" component="h1">
+      <Typography variant="h1" component="h1" className="text-center">
         Tools
       </Typography>
       <ul className="space-y-4 divide-y-0">

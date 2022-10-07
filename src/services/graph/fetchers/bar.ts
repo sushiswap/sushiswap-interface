@@ -12,7 +12,7 @@ import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays } from 
 import { request } from 'graphql-request'
 
 const BAR = {
-  [ChainId.ETHEREUM]: 'matthewlilley/bar',
+  [ChainId.ETHEREUM]: 'olastenberg/bar',
 }
 
 // @ts-ignore TYPE NEEDS FIXING

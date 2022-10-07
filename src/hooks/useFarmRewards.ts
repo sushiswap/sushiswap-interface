@@ -426,6 +426,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       masterChefV1SushiPerBlock,
       masterChefV1TotalAllocPoint,
       maticPrice,
+      metisPrice,
       movrPrice,
       nativePrice,
       onePrice,
