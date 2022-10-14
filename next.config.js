@@ -60,11 +60,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/',
-        destination: 'https://www.sushi.com/swap',
-        permanent: true,
-      },
-      {
         source: '/swap/:path*',
         destination: 'https://www.sushi.com/swap',
         permanent: true,
