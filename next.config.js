@@ -55,23 +55,43 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/swap',
+        source: '/pools',
+        destination: '/',
         permanent: true,
       },
       {
-        source: '/analytics/pairs/:path*',
-        destination: '/analytics/pools/:path*',
+        source: '/',
+        destination: 'https://www.sushi.com/swap',
+        permanent: true,
+      },
+      {
+        source: '/home',
+        destination: 'https://www.sushi.com/swap',
+        permanent: true,
+      },
+      {
+        source: '/farm/:path*',
+        destination: 'https://www.sushi.com/earn',
         permanent: true,
       },
       {
         source: '/farms/special',
-        destination: '/farm',
+        destination: 'https://www.sushi.com/earn',
         permanent: true,
       },
       {
         source: '/onsen',
-        destination: '/farm',
+        destination: 'https://www.sushi.com/earn',
+        permanent: true,
+      },
+      {
+        source: '/farms',
+        destination: 'https://www.sushi.com/earn',
+        permanent: true,
+      },
+      {
+        source: '/stake',
+        destination: 'https://www.sushi.com/earn',
         permanent: true,
       },
       {
@@ -95,33 +115,19 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/home',
-        destination: '/swap',
-        permanent: true,
-      },
-      {
-        source: '/farms',
-        destination: '/farm',
-        permanent: true,
-      },
-      {
-        source: '/pools',
-        destination: '/',
-        permanent: true,
-      },
-      {
         source: '/analytics/dashboard',
         destination: '/analytics',
+        permanent: true,
+      },
+      {
+        source: '/analytics/pairs/:path*',
+        destination: '/analytics/pools/:path*',
         permanent: true,
       },
     ]
   },
   async rewrites() {
     return [
-      {
-        source: '/stake',
-        destination: '/bar',
-      },
       {
         source: '/add/:token*',
         destination: '/legacy/add/:token*',
@@ -150,7 +156,6 @@ const nextConfig = {
         source: '/migrate',
         destination: '/legacy/migrate',
       },
-      // Kashi
       {
         source: '/me',
         destination: '/user',

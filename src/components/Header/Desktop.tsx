@@ -1,4 +1,3 @@
-import { XIcon } from '@heroicons/react/solid'
 import { NATIVE } from '@sushiswap/core-sdk'
 import Container from 'app/components/Container'
 import { NAV_CLASS } from 'app/components/Header/styles'
@@ -77,36 +76,6 @@ const Desktop: FC = () => {
             </div>
           </Container>
         </nav>
-        {showBanner && (
-          <div className="relative bg-opaque-blue">
-            <div className="px-3 py-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
-              <div className="pr-16 sm:text-center sm:px-16">
-                <p className="font-medium text-white">
-                  <span className="md:hidden">We announced SushiXSwap!</span>
-                  <span className="hidden md:inline">
-                    Big news! We&apos;re excited to announce SushiXSwap, a world first cross-chain AMM.
-                  </span>
-                  <span className="block sm:ml-2 sm:inline-block">
-                    <a href="https://sushi.com/swap" className="font-bold text-white underline">
-                      {' '}
-                      Learn more <span aria-hidden="true">&rarr;</span>
-                    </a>
-                  </span>
-                </p>
-              </div>
-              <div className="absolute inset-y-0 right-0 flex items-start pt-1 pr-1 sm:pt-1 sm:pr-2 sm:items-start">
-                <button
-                  onClick={() => setShowBanner(false)}
-                  type="button"
-                  className="flex p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
-                >
-                  <span className="sr-only">Dismiss</span>
-                  <XIcon className="w-6 h-6 text-white" aria-hidden="true" />
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </header>
       <div style={{ height: HEADER_HEIGHT + 48, minHeight: HEADER_HEIGHT }} />
     </>
