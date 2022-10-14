@@ -65,6 +65,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/swap/:path*',
+        destination: 'https://www.sushi.com/swap',
+        permanent: true,
+      },
+      {
         source: '/home',
         destination: 'https://www.sushi.com/swap',
         permanent: true,
@@ -80,12 +85,12 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/onsen',
+        source: '/onsen/:path*',
         destination: 'https://www.sushi.com/earn',
         permanent: true,
       },
       {
-        source: '/farms',
+        source: '/farms/:path*',
         destination: 'https://www.sushi.com/earn',
         permanent: true,
       },
