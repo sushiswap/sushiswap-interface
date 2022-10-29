@@ -792,13 +792,13 @@ const MAINNET_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   // QQQ / USD
-  '0x6b54e83f44047d2168a195ABA5e9b768762167b5': {
-    from: '0x13B02c8dE71680e71F0820c996E4bE43c2F57d15',
-    to: '0x0000000000000000000000000000000000000001',
-    decimals: 8,
-    fromDecimals: 18,
-    toDecimals: 8,
-  },
+  // '0x6b54e83f44047d2168a195ABA5e9b768762167b5': {
+  //   from: '0x13B02c8dE71680e71F0820c996E4bE43c2F57d15',
+  //   to: '0x0000000000000000000000000000000000000001',
+  //   decimals: 8,
+  //   fromDecimals: 18,
+  //   toDecimals: 8,
+  // },
   // RAI / ETH
   '0x4ad7B025127e89263242aB68F0f9c4E5C033B489': {
     from: '0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919',
