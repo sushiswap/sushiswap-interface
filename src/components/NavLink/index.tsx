@@ -13,8 +13,8 @@ const NavLink = ({ children, exact = false, activeClassName = 'text-high-emphesi
   // pages/[slug].js will be matched via props.as
 
   const isActive = exact
-    ? (props.as || props.href.pathname || props.href) === asPath
-    : asPath.startsWith(props.as || props.href.pathname || props.href)
+    ? props.as === asPath || props.href === asPath || props.href.pathname === asPath
+    : asPath.startsWith(props.as) || asPath.startsWith(props.href) || asPath.startsWith(props.href.pathname)
 
   const className = isActive ? `${childClassName} ${activeClassName}`.trim() : childClassName
 
