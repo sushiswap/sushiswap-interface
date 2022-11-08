@@ -3,6 +3,7 @@ import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { AddressZero } from '@ethersproject/constants'
 import { ChainId, JSBI, KASHI_ADDRESS, Token, ZERO } from '@sushiswap/core-sdk'
+import { NETWORK_LABEL } from 'app/config/networks'
 import { CHAINLINK_PRICE_FEED_MAP, ChainlinkPriceFeedEntry } from 'app/config/oracles/chainlink'
 import { Feature } from 'app/enums'
 import { featureEnabled, getOracle, validateChainlinkOracleData } from 'app/functions'
@@ -166,6 +167,21 @@ export function useKashiMediumRiskLendingPairs(
   const { result, valid, loading, syncing, error } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args, {
     gasRequired: 20_000_000,
   })
+
+  if (error) {
+    // random addy I pulled from etherscan
+    console.log(
+      boringHelperContract?.interface.encodeFunctionData('pollKashiPairs', [
+        '0xfcf383459e08ccb1679f32ae7f22eb0afe974a4c',
+        addresses,
+      ])
+    )
+    throw new Error(
+      `BoringHelper failed: network: ${chainId ? NETWORK_LABEL[chainId] : 'undef'}, boringhelper: ${
+        boringHelperContract?.address
+      }, calldata in console`
+    )
+  }
 
   const { rebases } = useBentoRebases(useMemo(() => Object.values(tokens), [tokens]))
   const prices = useUSDCPricesSubgraph(Object.values(tokens))
