@@ -512,13 +512,13 @@ const MAINNET_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   // HUSD / ETH
-  '0x1B61BAD1495161bCb6C03DDB0E41622c0270bB1A': {
-    from: '0xdF574c24545E5FfEcb9a659c229253D4111d87e1',
-    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    decimals: 18,
-    fromDecimals: 8,
-    toDecimals: 18,
-  },
+  // '0x1B61BAD1495161bCb6C03DDB0E41622c0270bB1A': {
+  //   from: '0xdF574c24545E5FfEcb9a659c229253D4111d87e1',
+  //   to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  //   decimals: 18,
+  //   fromDecimals: 8,
+  //   toDecimals: 18,
+  // },
   // INJ / USD
   '0xaE2EbE3c4D20cE13cE47cbb49b6d7ee631Cd816e': {
     from: '0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30',
