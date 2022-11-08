@@ -3,31 +3,35 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 const SUBDOMAIN_CHAIN_ID: { [subdomain: string]: string } = {
-  [ChainSubdomain.ETHEREUM]: '1',
-  [ChainSubdomain.ROPSTEN]: '3',
-  [ChainSubdomain.RINKEBY]: '4',
-  [ChainSubdomain.GÖRLI]: '5',
-  [ChainSubdomain.KOVAN]: '42',
-  [ChainSubdomain.POLYGON]: '137',
-  [ChainSubdomain.BSC]: '56',
-  [ChainSubdomain.FANTOM]: '250',
-  [ChainSubdomain.GNOSIS]: '100',
-  [ChainSubdomain.ARBITRUM]: '42161',
-  [ChainSubdomain.AVALANCHE]: '43114',
-  [ChainSubdomain.HECO]: '128',
-  [ChainSubdomain.HARMONY]: '1666600000',
-  [ChainSubdomain.OKEX]: '66',
-  [ChainSubdomain.CELO]: '42220',
-  [ChainSubdomain.PALM]: '11297108109',
-  [ChainSubdomain.MOONRIVER]: '1285',
-  [ChainSubdomain.FUSE]: '122',
-  [ChainSubdomain.TELOS]: '40',
-  [ChainSubdomain.MOONBEAM]: '1284',
-  [ChainSubdomain.ARBITRUM_NOVA]: '42170',
-  [ChainSubdomain.BOBA_AVAX]: '43288',
-}
+  [ChainSubdomain.WALLABY]: '31415',
 
-const DEFAULT_CHAIN_ID = '1'
+  // TODO (amiller68): Implement Filecoin Mainnet
+  // [ChainSubdomain.FILECOIN]: '314',
+
+  // Note (al): #WallabyOnly - We will only support Wallaby until we figure out MultiChain
+  // [ChainSubdomain.ETHEREUM]: '1',
+  // [ChainSubdomain.ROPSTEN]: '3',
+  // [ChainSubdomain.RINKEBY]: '4',
+  // [ChainSubdomain.GÖRLI]: '5',
+  // [ChainSubdomain.KOVAN]: '42',
+  // [ChainSubdomain.POLYGON]: '137',
+  // [ChainSubdomain.BSC]: '56',
+  // [ChainSubdomain.FANTOM]: '250',
+  // [ChainSubdomain.GNOSIS]: '100',
+  // [ChainSubdomain.ARBITRUM]: '42161',
+  // [ChainSubdomain.AVALANCHE]: '43114',
+  // [ChainSubdomain.HECO]: '128',
+  // [ChainSubdomain.HARMONY]: '1666600000',
+  // [ChainSubdomain.OKEX]: '66',
+  // [ChainSubdomain.CELO]: '42220',
+  // [ChainSubdomain.PALM]: '11297108109',
+  // [ChainSubdomain.MOONRIVER]: '1285',
+  // [ChainSubdomain.FUSE]: '122',
+  // [ChainSubdomain.TELOS]: '40',
+  // [ChainSubdomain.MOONBEAM]: '1284',
+  // [ChainSubdomain.ARBITRUM_NOVA]: '42170',
+  // [ChainSubdomain.BOBA_AVAX]: '43288',
+}
 
 export function middleware(req: NextRequest) {
   // const response = NextResponse.next()

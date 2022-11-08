@@ -1,8 +1,9 @@
-import { ChainId } from '@sushiswap/core-sdk'
+// TODO (amiller68): #SdkChange / #SdkPublish - Remove this when we have a published sdk
 import useDebounce from 'app/hooks/useDebounce'
 import useIsWindowVisible from 'app/hooks/useIsWindowVisible'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useEffect, useState } from 'react'
+import { ChainId } from 'sdk'
 
 import { useAppDispatch } from '../hooks'
 import { updateChainId } from './reducer'
@@ -27,6 +28,7 @@ export default function Updater(): null {
 
   useEffect(() => {
     if (library && chainId && windowVisible) {
+      console.log('Updating chainId to: ', chainId)
       setActiveChainId(chainId)
     }
   }, [dispatch, chainId, library, windowVisible])

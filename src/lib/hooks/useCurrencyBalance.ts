@@ -1,11 +1,12 @@
 import { Interface } from '@ethersproject/abi'
-import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from '@sushiswap/core-sdk'
 import ERC20_ABI from 'app/constants/abis/erc20.json'
 import { isAddress } from 'app/functions/validate'
 import { useInterfaceMulticall } from 'app/hooks/useContract'
 import { useMultipleContractSingleData, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
+// Note (amiller68): #SdkChange - Using my own declaration of ChainId
+import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from 'sdk'
 
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
@@ -16,6 +17,7 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
   const { chainId } = useActiveWeb3React()
   const multicallContract = useInterfaceMulticall()
 
+  // Validate addresses, returns filtered list of addresses
   const validAddressInputs: [string][] = useMemo(
     () =>
       uncheckedAddresses
@@ -33,6 +35,7 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
   return useMemo(
     () =>
       validAddressInputs.reduce<{ [address: string]: CurrencyAmount<Currency> }>((memo, [address], i) => {
+        console.log('Getting balance for address', address, 'on chain', chainId)
         const value = results?.[i]?.result?.[0]
         if (value && chainId)
           memo[address] = CurrencyAmount.fromRawAmount(NATIVE[chainId], JSBI.BigInt(value.toString()))

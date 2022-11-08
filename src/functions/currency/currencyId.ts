@@ -1,9 +1,11 @@
-import { ChainId, Currency } from '@sushiswap/core-sdk'
+// TODO (amiller68): #SdkChange Not use the SDK's ChainId enum
+import { Currency } from 'sdk'
 
 export function currencyId(currency: Currency): string {
-  if ([ChainId.CELO].includes(currency.chainId)) {
-    return currency.wrapped.address
-  }
+  // Note (amiller68): #WallabyOnly
+  // if ([ChainId.CELO].includes(currency.chainId)) {
+  //   return currency.wrapped.address
+  // }
 
   if (currency.isNative) return 'ETH'
 

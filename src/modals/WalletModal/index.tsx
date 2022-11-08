@@ -7,8 +7,6 @@ import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
-import { OVERLAY_READY } from 'app/entities/connectors/FortmaticConnector'
-import { switchToNetwork } from 'app/functions/network'
 import usePrevious from 'app/hooks/usePrevious'
 import { useModalOpen, useWalletModalToggle } from 'app/state/application/hooks'
 import { ApplicationModal } from 'app/state/application/reducer'
@@ -17,8 +15,11 @@ import { useRouter } from 'next/router'
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { UnsupportedChainIdError, useWeb3React } from 'web3-react-core'
-import { WalletConnectConnector } from 'web3-react-walletconnect-connector'
 
+// Note (al): #MetamaskOnly
+// import { OVERLAY_READY } from 'app/entities/connectors/FortmaticConnector'
+// import { WalletConnectConnector } from 'web3-react-walletconnect-connector'
+// import { switchToNetwork } from 'app/functions/network'
 import Option from './Option'
 import PendingView from './PendingView'
 
@@ -69,14 +70,15 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
     }
   }, [setWalletView, active, error, connector, walletModalOpen, activePrevious, connectorPrevious])
 
+  // Note (al): #MetamaskOnly We deprecated Formatic for now, but we keep this code for future reference
   // close wallet modal if Fortmatic modal is active
-  useEffect(() => {
-    if (connector?.constructor?.name === 'FormaticConnector') {
-      connector.on(OVERLAY_READY, () => {
-        toggleWalletModal()
-      })
-    }
-  }, [toggleWalletModal, connector])
+  // useEffect(() => {
+  //   if (connector?.constructor?.name === 'FormaticConnector') {
+  //     connector.on(OVERLAY_READY, () => {
+  //       toggleWalletModal()
+  //     })
+  //   }
+  // }, [toggleWalletModal, connector])
 
   const handleBack = useCallback(() => {
     setPendingError(undefined)
@@ -111,12 +113,14 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
       setPendingWallet({ connector: conn, id }) // set wallet for pending view
       setWalletView(WALLET_VIEWS.PENDING)
 
+      // note (al): #MetamaskOnly
       // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
-      if (conn instanceof WalletConnectConnector && conn.walletConnectProvider?.wc?.uri) {
-        console.debug('Wallet connector already tried to connect, reset')
-        conn.walletConnectProvider = undefined
-      }
+      // if (conn instanceof WalletConnectConnector && conn.walletConnectProvider?.wc?.uri) {
+      //   console.debug('Wallet connector already tried to connect, reset')
+      //   conn.walletConnectProvider = undefined
+      // }
 
+      // If we have a valid connector, activate it
       if (conn) {
         console.debug('About to activate')
         activate(
@@ -128,17 +132,18 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
         )
           .then(async () => {
             console.debug('Activated, get provider')
-            if (conn instanceof WalletConnectConnector) {
-              const provider = await conn?.getProvider()
-              const chainId = await conn?.getChainId()
-              if (provider && chainId && defaultChainId && (chainId !== queryChainId || chainId !== defaultChainId)) {
-                console.debug('Provider is wallet connect, attempt network switch')
-                switchToNetwork({
-                  provider,
-                  chainId: defaultChainId !== 1 || !queryChainId ? defaultChainId : queryChainId,
-                })
-              }
-            }
+            // Note (al): #MetamaskOnly
+            // if (conn instanceof WalletConnectConnector) {
+            //   const provider = await conn?.getProvider()
+            //   const chainId = await conn?.getChainId()
+            //   if (provider && chainId && defaultChainId && (chainId !== queryChainId || chainId !== defaultChainId)) {
+            //     console.debug('Provider is wallet connect, attempt network switch')
+            //     switchToNetwork({
+            //       provider,
+            //       chainId: defaultChainId !== 1 || !queryChainId ? defaultChainId : queryChainId,
+            //     })
+            //   }
+            // }
           })
 
           .catch((error) => {
@@ -163,25 +168,27 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
 
       // check for mobile options
       if (isMobile) {
+        // Note (al): #MetamaskOnly - We don't support Mobile for now
         // disable portis on mobile for now
-        if (option.name === 'Portis') {
-          return null
-        }
+        // if (option.name === 'Portis') {
+        //   return null
+        // }
 
-        if (!window.web3 && !window.ethereum && option.mobile) {
-          return (
-            <Option
-              onClick={() => tryActivation(option.connector, key)}
-              id={`connect-${key}`}
-              key={key}
-              active={option.connector && option.connector === connector}
-              link={option.href}
-              header={option.name}
-              subheader={null}
-              icon={'https://app.sushi.com' + '/images/wallets/' + option.iconName}
-            />
-          )
-        }
+        // if (!window.web3 && !window.ethereum && option.mobile) {
+        //   return (
+        // <Option
+        //     // onClick={() => tryActivation(option.connector, key)}
+        //     onClick={() => null}
+        //     id={`connect-${key}`}
+        //     key={key}
+        //     active={option.connector && option.connector === connector}
+        //     link={option.href}
+        //     header={option.name}
+        //     subheader={null}
+        //     icon={'https://app.sushi.com' + '/images/wallets/' + option.iconName}
+        // />
+        //   )
+        // }
         return null
       }
 
@@ -248,7 +255,11 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
           <HeadlessUiModal.BorderedContent>
             <Typography variant="xs" weight={700}>
               {error instanceof UnsupportedChainIdError
-                ? i18n._(t`Please connect to the appropriate Ethereum network.`)
+                ? // Note (amiller68): #WallabyOnly
+                  // ? i18n._(t`Please connect to the appropriate Ethereum network.`)
+                  i18n._(t`Please connect to the appropriate Filecoin network. 
+                                    Figswap is deployed on Wallaby, you can find instructions on how to connect to Wallaby through
+                                    your MetaMask wallet here: https://github.com/filecoin-project/testnet-wallaby`)
                 : i18n._(t`Error connecting. Try refreshing the page.`)}
             </Typography>
           </HeadlessUiModal.BorderedContent>

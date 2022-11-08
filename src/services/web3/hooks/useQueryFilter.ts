@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts'
-import { ChainId } from '@sushiswap/core-sdk'
 import stringify from 'fast-json-stable-stringify'
+import { ChainId } from 'sdk'
 import useSWR from 'swr'
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -8,8 +8,9 @@ async function queryFilter(contract: Contract, event, fromBlockOrBlockHash, toBl
   return contract.queryFilter(event, fromBlockOrBlockHash, toBlock)
 }
 
+// TODO (amiller68): #Research What is this? Do we have to set it to Wallaby?
 export function useQueryFilter({
-  chainId = ChainId.ETHEREUM,
+  chainId = ChainId.WALLABY,
   shouldFetch = true,
   // @ts-ignore TYPE NEEDS FIXING
   contract,

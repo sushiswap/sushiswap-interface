@@ -1,6 +1,16 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from 'sdk'
 
 const explorers = {
+  // Note (amiller68): This is the explorer for the Wallaby Testnet
+  glif: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}/?network=wallaby`
+      default:
+        return `${link}/${type}/${data}/?network=wallaby`
+    }
+  },
+
   etherscan: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     switch (type) {
       case 'transaction':
@@ -93,138 +103,145 @@ interface ChainObject {
 }
 
 const chains: ChainObject = {
-  [ChainId.ETHEREUM]: {
-    link: 'https://etherscan.io',
-    builder: explorers.etherscan,
+  [ChainId.WALLABY]: {
+    // TODO (amiller68): Is this the right Testnet Explorer?
+    link: 'https://explorer.glif.io',
+    builder: explorers.glif,
   },
-  [ChainId.ROPSTEN]: {
-    link: 'https://ropsten.etherscan.io',
-    builder: explorers.etherscan,
-  },
-  [ChainId.RINKEBY]: {
-    link: 'https://rinkeby.etherscan.io',
-    builder: explorers.etherscan,
-  },
-  [ChainId.GÖRLI]: {
-    link: 'https://goerli.etherscan.io',
-    builder: explorers.etherscan,
-  },
-  [ChainId.KOVAN]: {
-    link: 'https://kovan.etherscan.io',
-    builder: explorers.etherscan,
-  },
-  [ChainId.MATIC]: {
-    link: 'https://polygonscan.com',
-    builder: explorers.etherscan,
-  },
-  [ChainId.MATIC_TESTNET]: {
-    link: 'https://mumbai.polygonscan.com',
-    builder: explorers.etherscan,
-  },
-  [ChainId.FANTOM]: {
-    link: 'https://ftmscan.com',
-    builder: explorers.etherscan,
-  },
-  [ChainId.FANTOM_TESTNET]: {
-    link: 'https://testnet.ftmscan.com',
-    builder: explorers.etherscan,
-  },
-  [ChainId.XDAI]: {
-    link: 'https://blockscout.com/xdai/mainnet',
-    builder: explorers.blockscout,
-  },
-  [ChainId.BSC]: {
-    link: 'https://bscscan.com',
-    builder: explorers.etherscan,
-  },
-  [ChainId.BSC_TESTNET]: {
-    link: 'https://testnet.bscscan.com',
-    builder: explorers.etherscan,
-  },
-  [ChainId.ARBITRUM]: {
-    link: 'https://arbiscan.io',
-    builder: explorers.etherscan,
-  },
-  [ChainId.MOONBEAM_TESTNET]: {
-    link: 'https://moonbeam-explorer.netlify.app',
-    builder: explorers.blockscout,
-  },
-  [ChainId.AVALANCHE]: {
-    link: 'https://cchain.explorer.avax.network',
-    builder: explorers.blockscout,
-  },
-  [ChainId.AVALANCHE_TESTNET]: {
-    link: 'https://cchain.explorer.avax-test.network',
-    builder: explorers.etherscan,
-  },
-  [ChainId.HECO]: {
-    link: 'https://hecoinfo.com',
-    builder: explorers.etherscan,
-  },
-  [ChainId.HECO_TESTNET]: {
-    link: 'https://testnet.hecoinfo.com',
-    builder: explorers.etherscan,
-  },
-  [ChainId.HARMONY]: {
-    link: 'https://beta.explorer.harmony.one/#',
-    builder: explorers.harmony,
-  },
-  [ChainId.HARMONY_TESTNET]: {
-    link: 'https://explorer.pops.one/#',
-    builder: explorers.harmony,
-  },
-  [ChainId.OKEX]: {
-    link: 'https://www.oklink.com/okexchain',
-    builder: explorers.okex,
-  },
-  [ChainId.OKEX_TESTNET]: {
-    link: 'https://www.oklink.com/okexchain-test',
-    builder: explorers.okex,
-  },
-  [ChainId.CELO]: {
-    link: 'https://explorer.celo.org',
-    builder: explorers.blockscout,
-  },
-  [ChainId.PALM]: {
-    link: '', // ??
-    builder: explorers.blockscout,
-  },
-  [ChainId.MOONRIVER]: {
-    link: 'https://moonriver.moonscan.io',
-    builder: explorers.moonriver,
-  },
-  [ChainId.FUSE]: {
-    link: 'https://explorer.fuse.io',
-    builder: explorers.fuse,
-  },
-  [ChainId.TELOS]: {
-    link: 'https://rpc1.us.telos.net/v2/explore/evm',
-    builder: explorers.telos,
-  },
-  [ChainId.MOONBEAM]: {
-    link: 'https://moonbeam.moonscan.io',
-    builder: explorers.moonbeam,
-  },
-  [ChainId.OPTIMISM]: {
-    link: 'https://optimistic.etherscan.io',
-    builder: explorers.etherscan,
-  },
-  [ChainId.KAVA]: {
-    link: 'https://explorer.kava.io',
-    builder: explorers.blockscout,
-  },
-  [ChainId.METIS]: {
-    link: 'https://andromeda-explorer.metis.io',
-    builder: explorers.blockscout,
-  },
-  [ChainId.ARBITRUM_NOVA]: {
-    link: 'https://nova-explorer.arbitrum.io',
-    builder: explorers.blockscout,
-  },
-  [ChainId.BOBA_AVAX]: {
-    link: 'https://blockexplorer.avax.boba.network',
-    builder: explorers.blockscout,
-  },
+
+  // Note (amiller68): #WallabyOnly
+  // [ChainId.ETHEREUM]: {
+  //   link: 'https://etherscan.io',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.ROPSTEN]: {
+  //   link: 'https://ropsten.etherscan.io',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.RINKEBY]: {
+  //   link: 'https://rinkeby.etherscan.io',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.GÖRLI]: {
+  //   link: 'https://goerli.etherscan.io',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.KOVAN]: {
+  //   link: 'https://kovan.etherscan.io',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.MATIC]: {
+  //   link: 'https://polygonscan.com',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.MATIC_TESTNET]: {
+  //   link: 'https://mumbai.polygonscan.com',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.FANTOM]: {
+  //   link: 'https://ftmscan.com',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.FANTOM_TESTNET]: {
+  //   link: 'https://testnet.ftmscan.com',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.XDAI]: {
+  //   link: 'https://blockscout.com/xdai/mainnet',
+  //   builder: explorers.blockscout,
+  // },
+  // [ChainId.BSC]: {
+  //   link: 'https://bscscan.com',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.BSC_TESTNET]: {
+  //   link: 'https://testnet.bscscan.com',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.ARBITRUM]: {
+  //   link: 'https://arbiscan.io',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.MOONBEAM_TESTNET]: {
+  //   link: 'https://moonbeam-explorer.netlify.app',
+  //   builder: explorers.blockscout,
+  // },
+  // [ChainId.AVALANCHE]: {
+  //   link: 'https://cchain.explorer.avax.network',
+  //   builder: explorers.blockscout,
+  // },
+  // [ChainId.AVALANCHE_TESTNET]: {
+  //   link: 'https://cchain.explorer.avax-test.network',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.HECO]: {
+  //   link: 'https://hecoinfo.com',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.HECO_TESTNET]: {
+  //   link: 'https://testnet.hecoinfo.com',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.HARMONY]: {
+  //   link: 'https://beta.explorer.harmony.one/#',
+  //   builder: explorers.harmony,
+  // },
+  // [ChainId.HARMONY_TESTNET]: {
+  //   link: 'https://explorer.pops.one/#',
+  //   builder: explorers.harmony,
+  // },
+  // [ChainId.OKEX]: {
+  //   link: 'https://www.oklink.com/okexchain',
+  //   builder: explorers.okex,
+  // },
+  // [ChainId.OKEX_TESTNET]: {
+  //   link: 'https://www.oklink.com/okexchain-test',
+  //   builder: explorers.okex,
+  // },
+  // [ChainId.CELO]: {
+  //   link: 'https://explorer.celo.org',
+  //   builder: explorers.blockscout,
+  // },
+  // [ChainId.PALM]: {
+  //   link: '', // ??
+  //   builder: explorers.blockscout,
+  // },
+  // [ChainId.MOONRIVER]: {
+  //   link: 'https://moonriver.moonscan.io',
+  //   builder: explorers.moonriver,
+  // },
+  // [ChainId.FUSE]: {
+  //   link: 'https://explorer.fuse.io',
+  //   builder: explorers.fuse,
+  // },
+  // [ChainId.TELOS]: {
+  //   link: 'https://rpc1.us.telos.net/v2/explore/evm',
+  //   builder: explorers.telos,
+  // },
+  // [ChainId.MOONBEAM]: {
+  //   link: 'https://moonbeam.moonscan.io',
+  //   builder: explorers.moonbeam,
+  // },
+  // [ChainId.OPTIMISM]: {
+  //   link: 'https://optimistic.etherscan.io',
+  //   builder: explorers.etherscan,
+  // },
+  // [ChainId.KAVA]: {
+  //   link: 'https://explorer.kava.io',
+  //   builder: explorers.blockscout,
+  // },
+  // [ChainId.METIS]: {
+  //   link: 'https://andromeda-explorer.metis.io',
+  //   builder: explorers.blockscout,
+  // },
+  // [ChainId.ARBITRUM_NOVA]: {
+  //   link: 'https://nova-explorer.arbitrum.io',
+  //   builder: explorers.blockscout,
+  // },
+  // [ChainId.BOBA_AVAX]: {
+  //   link: 'https://blockexplorer.avax.boba.network',
+  //   builder: explorers.blockscout,
+  // },
 }
 
 export function getExplorerLink(
