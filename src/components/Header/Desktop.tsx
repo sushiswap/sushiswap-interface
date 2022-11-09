@@ -1,13 +1,14 @@
-import { NATIVE } from '@sushiswap/core-sdk'
 import Container from 'app/components/Container'
 import { NAV_CLASS } from 'app/components/Header/styles'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
 import React, { FC } from 'react'
+// import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
+import { CurrencyAmount, JSBI, NATIVE } from 'sdk'
+import useSWR from 'swr'
 
 import Dots from '../Dots'
 import Typography from '../Typography'
@@ -15,15 +16,26 @@ import { NavigationItem } from './NavigationItem'
 
 const HEADER_HEIGHT = 64
 
+const fetcher =
+  (library: any, chainId: any) =>
+  (...args: any[]) => {
+    const [method, ...params] = args
+    console.log(method, params)
+    let ret = library[method](...params)
+    return ret.then((res: any) => CurrencyAmount.fromRawAmount(NATIVE[chainId], JSBI.BigInt(res.toString())))
+  }
+
 const Desktop: FC = () => {
   const menu = useMenu()
   // Note (amiller68): Account: The User's (Eth) Wallet Address | ChainId: The Network ID | Library: The Web3 Provider
   const { account, chainId, library } = useActiveWeb3React()
-  const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
+  // Note (amiller68): #WallbyOnly - Change this back when we learn about MultiContracts on FVM
+  // const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
+  const { data: userFilBalance } = useSWR(['getBalance', account, 'latest'], { fetcher: fetcher(library, chainId) })
   // Note (amiller68): #MetamaskOnly
   // const isCoinbaseWallet = useIsCoinbaseWallet()
   // Note (amiller68): These are unused, but I'm leaving them here for reference
-  const [showBanner, setShowBanner] = React.useState<boolean>(true)
+  // const [showBanner, setShowBanner] = React.useState<boolean>(true)
 
   return (
     <>
@@ -49,8 +61,13 @@ const Desktop: FC = () => {
                   <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
                     {/* TODO (amiller68): #Urgent Need to figure out Research how ABI's work in FVM, and how to make balance calls*/}
                     {/* within the framework laid out in this repo */}
-                    {userEthBalance ? (
-                      `${userEthBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
+                    {/*{userEthBalance ? (*/}
+                    {/*  `${userEthBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`*/}
+                    {/*) : (*/}
+                    {/*  <Dots>FETCHING BALANCE</Dots>*/}
+                    {/*)}*/}
+                    {userFilBalance ? (
+                      `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
                     ) : (
                       <Dots>FETCHING BALANCE</Dots>
                     )}

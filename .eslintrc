@@ -3,6 +3,13 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "simple-import-sort", "unused-imports"],
   "rules": {
+    // Note (amiller68): Not sure what's causing the underlying Lint error, but this is a workaround
+    "react/no-unknown-property": [
+      2,
+      {
+        "ignore": ["jsx"]
+      }
+    ],
     "react/display-name": "off",
     "react-hooks/exhaustive-deps": [
       "warn"
