@@ -25,7 +25,7 @@ const fetcher =
  * don't have time to dig into how these calls should be made in the context of this interface.
  * @param account
  */
-export function useNativeCurrencyBalance(account?: string | null): CurrencyAmount<Currency> | undefined {
+export function useNativeCurrencyBalance(account?: string | undefined): CurrencyAmount<Currency> | undefined {
   const { chainId, library } = useActiveWeb3React()
   const shouldFetch = !!account && !!library && !!chainId
   const { data } = useSWR(shouldFetch ? ['getBalance', account, 'latest'] : null, fetcher(library, chainId))
@@ -73,6 +73,7 @@ const ERC20Interface = new Interface(ERC20_ABI)
 const tokenBalancesGasRequirement = { gasRequired: 125_000 }
 
 /**
+ * TODO (amiller68): Implement workaround for FVM capabilities or look into implementing a multicall contract on the FVM
  * Returns a map of token addresses to their eventually consistent token balances for a single account.
  */
 export function useTokenBalancesWithLoadingIndicator(
@@ -140,18 +141,24 @@ export function useCurrencyBalances(
   )
 
   const tokenBalances = useTokenBalances(account, tokens)
-  const containsETH: boolean = useMemo(() => currencies?.some((currency) => currency?.isNative) ?? false, [currencies])
-  const ethBalance = useNativeCurrencyBalances(useMemo(() => (containsETH ? [account] : []), [containsETH, account]))
+  // Note (amiller68) - #WallabyOnly
+  // const containsETH: boolean = useMemo(() => currencies?.some((currency) => currency?.isNative) ?? false, [currencies])
+  const containsFIL: boolean = useMemo(() => currencies?.some((currency) => currency?.isNative) ?? false, [currencies])
+  // const ethBalance = useNativeCurrencyBalances(useMemo(() => (containsETH ? [account] : []), [containsETH, account]))
+  const filBalance = useNativeCurrencyBalance(
+    useMemo(() => (containsFIL ? account : undefined), [containsFIL, account])
+  )
 
   return useMemo(
     () =>
       currencies?.map((currency) => {
         if (!account || !currency) return undefined
         if (currency.isToken) return tokenBalances[currency.address]
-        if (currency.isNative) return ethBalance[account]
+        // if (currency.isNative) return filBalance[account]
+        if (currency.isNative) return filBalance
         return undefined
       }) ?? [],
-    [account, currencies, ethBalance, tokenBalances]
+    [account, currencies, filBalance, tokenBalances]
   )
 }
 

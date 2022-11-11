@@ -30,6 +30,7 @@ export default function useWrapCallback(
   inputError?: string
 } {
   const { chainId, account } = useActiveWeb3React()
+  // TODO (amiller68): #WallabyOnly - make this work in wallaby
   const wethContract = useWETH9Contract()
   const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
   // we can always parse the amount typed as the input currency, since wrapping is 1:1
