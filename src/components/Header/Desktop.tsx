@@ -3,12 +3,12 @@ import { NAV_CLASS } from 'app/components/Header/styles'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
+import { useNativeCurrencyBalance } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 import Image from 'next/image'
 import React, { FC } from 'react'
 // import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
-import { CurrencyAmount, JSBI, NATIVE } from 'sdk'
-import useSWR from 'swr'
+import { NATIVE } from 'sdk'
 
 import Dots from '../Dots'
 import Typography from '../Typography'
@@ -16,22 +16,15 @@ import { NavigationItem } from './NavigationItem'
 
 const HEADER_HEIGHT = 64
 
-const fetcher =
-  (library: any, chainId: any) =>
-  (...args: any[]) => {
-    const [method, ...params] = args
-    console.log(method, params)
-    let ret = library[method](...params)
-    return ret.then((res: any) => CurrencyAmount.fromRawAmount(NATIVE[chainId], JSBI.BigInt(res.toString())))
-  }
-
 const Desktop: FC = () => {
   const menu = useMenu()
   // Note (amiller68): Account: The User's (Eth) Wallet Address | ChainId: The Network ID | Library: The Web3 Provider
   const { account, chainId, library } = useActiveWeb3React()
   // Note (amiller68): #WallbyOnly - Change this back when we learn about MultiContracts on FVM
   // const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
-  const { data: userFilBalance } = useSWR(['getBalance', account, 'latest'], { fetcher: fetcher(library, chainId) })
+
+  // Note (amiller68): Not sure what the right way to do this is, but this works for now
+  const userFilBalance = useNativeCurrencyBalance(account)
   // Note (amiller68): #MetamaskOnly
   // const isCoinbaseWallet = useIsCoinbaseWallet()
   // Note (amiller68): These are unused, but I'm leaving them here for reference
@@ -67,6 +60,7 @@ const Desktop: FC = () => {
                     {/*  <Dots>FETCHING BALANCE</Dots>*/}
                     {/*)}*/}
                     {userFilBalance ? (
+                      // TODO (amiller68): For some reason the symbol is returning as WFIL, but it should be FIL for Mainnet and tFIL for Wallaby
                       `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
                     ) : (
                       <Dots>FETCHING BALANCE</Dots>

@@ -7,7 +7,9 @@ export function currencyId(currency: Currency): string {
   //   return currency.wrapped.address
   // }
 
-  if (currency.isNative) return 'ETH'
+  // Note (amiller68): #WallabyOnly - Our native currency is FIL or tFIL
+  // if (currency.isNative) return 'ETH'
+  if (currency.isNative) return currency.symbol ?? 'FIL'
 
   if (currency.isToken) return currency.address
 

@@ -26,6 +26,7 @@ import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { useRouter } from 'next/router'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
+import { NATIVE } from 'sdk'
 
 // import {
 //   EstimatedSwapCall,
@@ -53,27 +54,45 @@ export function useSwapActionHandlers(): {
   const outputCurrencyId =
     router.query.outputCurrency || (chainId && chainId in SUSHI_ADDRESS ? SUSHI_ADDRESS[chainId] : undefined)
 
+  // TODO (amiller68): This can be simplified
   const onCurrencySelection = useCallback(
+    // Note (amiller68): Update Router Query
     (field: Field, currency: Currency) => {
       if (field === Field.INPUT) {
         const inputCurrency = currency
+        console.log('Currency Input Selected: ', field, ' | ', currency)
         const newInputCurrencyId = currencyId(inputCurrency)
+        console.log('Currency Input ID: ', newInputCurrencyId)
+        // Note (amiller68): If the new selected currency is the same as the output currency, swap them
         if (outputCurrencyId === newInputCurrencyId) {
+          // If there's an output currency, swap the input and output
           if (outputCurrencyId) {
             router.replace({
               pathname: window.location.pathname,
               query: { ...router.query, inputCurrency: newInputCurrencyId, outputCurrency: inputCurrencyId },
             })
-          } else {
-            router.replace({ pathname: window.location.pathname, query: { ...router.query, inputCurrency: 'ETH' } })
           }
-        } else {
+          // Note (amiller68): Note sure if this ever arises (page doesn't render undefined in deployed version), but
+          // if there's no output currency, just reset state to this default
+          else {
+            // Note (amiller68): #WallabyOnly - We aint got no ETH
+            // router.replace({ pathname: window.location.pathname, query: { ...router.query, inputCurrency: 'ETH' } })
+            // Note (amiller68): #WallabyOnly - I don't have access to chainId, so I will need to do figure out
+            // representing FIL vs tFIL in the interface, maybe. Does this get rid of the output?
+            router.replace({ pathname: window.location.pathname, query: { ...router.query, inputCurrency: 'FIL' } })
+          }
+        }
+        // Note (amiller68): Otherwise if the new currency is different
+        else {
+          // If there's an output currency, just update the input currency
           if (outputCurrencyId) {
             router.replace({
               pathname: window.location.pathname,
               query: { ...router.query, inputCurrency: newInputCurrencyId, outputCurrency: outputCurrencyId },
             })
-          } else {
+          }
+          // Note (amiller68): If there's no output currency, just set the input currency
+          else {
             router.replace({
               pathname: window.location.pathname,
               query: { ...router.query, inputCurrency: newInputCurrencyId },
@@ -81,10 +100,13 @@ export function useSwapActionHandlers(): {
           }
         }
       }
-
+      // Note (amiller68): If the field is the output
       if (field === Field.OUTPUT) {
         const outputCurrency = currency
+        console.log('Currency Output Selected: ', field, ' | ', currency)
         const newOutputCurrencyId = currencyId(outputCurrency)
+        console.log('Currency Input ID: ', newOutputCurrencyId)
+        // Note (amiller68): If the new selected currency is the same as the input currency, swap them
         if (inputCurrencyId === newOutputCurrencyId) {
           if (outputCurrencyId) {
             router.replace({
@@ -94,10 +116,17 @@ export function useSwapActionHandlers(): {
           } else {
             router.replace({
               pathname: window.location.pathname,
-              query: { ...router.query, inputCurrency: 'ETH', outputCurrency: newOutputCurrencyId },
+              // Note (amiller68): #WallabyOnly - We aint got no ETH
+              // query: { ...router.query, inputCurrency: 'ETH', outputCurrency: newOutputCurrencyId },
+              // Note (amiller68): #WallabyOnly - I don't have access to chainId, so need to figure out tFIl vs FIL in
+              // app logic
+              query: { ...router.query, inputCurrency: 'FIL', outputCurrency: newOutputCurrencyId },
             })
           }
-        } else {
+        }
+        // Note (amiller68): Otherwise if the new currency is different
+        else {
+          // Swap the input and output currencies
           if (inputCurrencyId) {
             router.replace({
               pathname: window.location.pathname,
@@ -106,20 +135,31 @@ export function useSwapActionHandlers(): {
           } else {
             router.replace({
               pathname: window.location.pathname,
-              query: { ...router.query, inputCurrency: 'ETH', outputCurrency: newOutputCurrencyId },
+              // query: { ...router.query, inputCurrency: 'ETH', outputCurrency: newOutputCurrencyId },
+              // Note (amiller68): #WallabyOnly - I don't have access to chainId, so need to figure out tFIl vs FIL in
+              // app logic
+              query: { ...router.query, inputCurrency: 'FIL', outputCurrency: newOutputCurrencyId },
             })
           }
         }
       }
+      console.log('Currency Selection Dispatched: ', field, ' | ', currency)
 
+      // Note (amiller68): Update the state
       dispatch(
+        //  Note (amiller68): #WallabyOnly
+        // selectCurrency({
+        //   field,
+        //   currencyId: currency.isToken
+        //     ? currency.address
+        //     : currency.isNative && currency.chainId !== ChainId.CELO
+        //     ? 'ETH'
+        //     : '',
+        // })
+        // TODO (amiller68): #FilecoinMainnet
         selectCurrency({
           field,
-          currencyId: currency.isToken
-            ? currency.address
-            : currency.isNative && currency.chainId !== ChainId.CELO
-            ? 'ETH'
-            : '',
+          currencyId: currency.isToken ? currency.address : currency.isNative ? 'tFIL' : '',
         })
       )
     },
@@ -312,16 +352,23 @@ function validatedRecipient(recipient: any): string | undefined {
 }
 export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.ETHEREUM): SwapState {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
+  console.log('Input Currency: ', inputCurrency)
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
-  const eth = chainId === ChainId.CELO ? WNATIVE_ADDRESS[chainId] : 'ETH'
-  const sushi = chainId === ChainId.BOBA_AVAX ? '0x4200000000000000000000000000000000000023' : SUSHI_ADDRESS[chainId]
+  console.log('Output Currency: ', outputCurrency)
+  // Note (amiller68): #WallabyOnly
+  // const eth = chainId === ChainId.CELO ? WNATIVE_ADDRESS[chainId] : 'ETH'
+  const fil = NATIVE[chainId].symbol ?? 'FIL'
+  // Note (amiller68): #WallabyOnly we don't have a Token, but we can use WFIL
+  // const sushi = chainId === ChainId.BOBA_AVAX ? '0x4200000000000000000000000000000000000023' : SUSHI_ADDRESS[chainId]
+  // TODO (amiller68): #FilecoinMainnet
+  const wfil = WNATIVE_ADDRESS[chainId]
   if (inputCurrency === '' && outputCurrency === '') {
-    inputCurrency = eth
-    outputCurrency = sushi
+    inputCurrency = fil
+    outputCurrency = ''
   } else if (inputCurrency === '') {
-    inputCurrency = outputCurrency === eth ? sushi : eth
+    inputCurrency = outputCurrency === fil ? wfil : fil
   } else if (outputCurrency === '' || inputCurrency === outputCurrency) {
-    outputCurrency = inputCurrency === eth ? sushi : eth
+    outputCurrency = inputCurrency === fil ? wfil : fil
   }
 
   const recipient = validatedRecipient(parsedQs.recipient)
@@ -362,6 +409,7 @@ export function useDefaultsFromURLSearch():
   useEffect(() => {
     if (!chainId) return
     const parsed = queryParametersToSwapState(parsedQs, chainId)
+    console.log('Parsed URL: ', parsed)
 
     dispatch(
       replaceSwapState({

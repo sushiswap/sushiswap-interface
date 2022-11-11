@@ -7,6 +7,30 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 // Note (amiller68): #SdkChange - Using my own declaration of ChainId
 import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from 'sdk'
+import useSWR from 'swr'
+
+// Janky RPC fetcher for use with SWR
+const fetcher =
+  (library: any, chainId: any) =>
+  (...args: any[]) => {
+    const [method, ...params] = args
+    console.log(method, params)
+    let ret = library[method](...params)
+    return ret.then((res: any) => CurrencyAmount.fromRawAmount(NATIVE[chainId], JSBI.BigInt(res.toString())))
+  }
+/**
+ * TODO (amiller68): Look at useCurrencyBalance below and see if we can use that instead
+ * Returns the balance of the input currency for the given account
+ * Uses SWR because I'm not sure how to use the multicall hooks with Filecoin and I
+ * don't have time to dig into how these calls should be made in the context of this interface.
+ * @param account
+ */
+export function useNativeCurrencyBalance(account?: string | null): CurrencyAmount<Currency> | undefined {
+  const { chainId, library } = useActiveWeb3React()
+  const shouldFetch = !!account && !!library && !!chainId
+  const { data } = useSWR(shouldFetch ? ['getBalance', account, 'latest'] : null, fetcher(library, chainId))
+  return data
+}
 
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.

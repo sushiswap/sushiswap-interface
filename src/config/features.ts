@@ -7,7 +7,7 @@ import { ChainId } from 'sdk'
 type FeatureMap = { readonly [chainId in ChainId]?: Feature[] }
 
 const features: FeatureMap = {
-  [ChainId.WALLABY]: [Feature.AMM, Feature.LIQUIDITY_MINING],
+  [ChainId.WALLABY]: [Feature.AMM],
 
   // Note (amiller68): #WallabyOnly - We will only support Wallaby until we figure out MultiChain
   // [ChainId.ETHEREUM]: [

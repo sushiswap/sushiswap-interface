@@ -1,6 +1,7 @@
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+// Note (amiller68): Changing this to 'sdk' causes dependency type mismatch errors stuff
 import { Currency, JSBI, Token, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
 import Banner from 'app/components/Banner'
 import Button from 'app/components/Button'
@@ -385,6 +386,7 @@ const Swap = ({ banners }: SwapProps) => {
                 onSwitchTokens()
               }}
             >
+              {/* TODO (thea): #Frontend Change the ArrowDownIcon to BidirectionArrowIcon or something */}
               <ArrowDownIcon width={14} className="text-high-emphesis hover:text-white" />
             </div>
           </div>
