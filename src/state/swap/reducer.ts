@@ -79,6 +79,7 @@ export default createReducer<SwapState>(initialState, (builder) =>
     )
     .addCase(selectCurrency, (state, { payload: { currencyId, field } }) => {
       const otherField = field === Field.INPUT ? Field.OUTPUT : Field.INPUT
+      console.log('Currency Change Detected')
       // console.log({ currencyId, other: state[otherField].currencyId, test: state[otherField].currencyId }, currencyId === state[otherField].currencyId)
       return currencyId === state[otherField].currencyId
         ? {

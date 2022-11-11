@@ -58,6 +58,10 @@ export function useSwapActionHandlers(): {
   const onCurrencySelection = useCallback(
     // Note (amiller68): Update Router Query
     (field: Field, currency: Currency) => {
+      // TODO (amiller68): Unjank this
+      let currencyChainNativeSymbol: string = NATIVE[currency.chainId].symbol ?? 'FIL'
+      let currencySymbol: string = currency.isToken ? currency.address : currencyChainNativeSymbol
+
       if (field === Field.INPUT) {
         const inputCurrency = currency
         console.log('Currency Input Selected: ', field, ' | ', currency)
@@ -120,7 +124,7 @@ export function useSwapActionHandlers(): {
               // query: { ...router.query, inputCurrency: 'ETH', outputCurrency: newOutputCurrencyId },
               // Note (amiller68): #WallabyOnly - I don't have access to chainId, so need to figure out tFIl vs FIL in
               // app logic
-              query: { ...router.query, inputCurrency: 'FIL', outputCurrency: newOutputCurrencyId },
+              query: { ...router.query, inputCurrency: currencyChainNativeSymbol, outputCurrency: newOutputCurrencyId },
             })
           }
         }
@@ -138,7 +142,7 @@ export function useSwapActionHandlers(): {
               // query: { ...router.query, inputCurrency: 'ETH', outputCurrency: newOutputCurrencyId },
               // Note (amiller68): #WallabyOnly - I don't have access to chainId, so need to figure out tFIl vs FIL in
               // app logic
-              query: { ...router.query, inputCurrency: 'FIL', outputCurrency: newOutputCurrencyId },
+              query: { ...router.query, inputCurrency: currencyChainNativeSymbol, outputCurrency: newOutputCurrencyId },
             })
           }
         }
@@ -159,7 +163,7 @@ export function useSwapActionHandlers(): {
         // TODO (amiller68): #FilecoinMainnet
         selectCurrency({
           field,
-          currencyId: currency.isToken ? currency.address : currency.isNative ? 'tFIL' : '',
+          currencyId: currencySymbol,
         })
       )
     },
@@ -357,6 +361,7 @@ export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId 
   console.log('Output Currency: ', outputCurrency)
   // Note (amiller68): #WallabyOnly
   // const eth = chainId === ChainId.CELO ? WNATIVE_ADDRESS[chainId] : 'ETH'
+  // TODO (amiller68): Make this Generic for Native Currencys on other chains
   const fil = NATIVE[chainId].symbol ?? 'FIL'
   // Note (amiller68): #WallabyOnly we don't have a Token, but we can use WFIL
   // const sushi = chainId === ChainId.BOBA_AVAX ? '0x4200000000000000000000000000000000000023' : SUSHI_ADDRESS[chainId]

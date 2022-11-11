@@ -135,7 +135,7 @@ class MiniRpcProvider implements AsyncSendable {
     Promise.all(
       // Batch the requests into a single Promise.all
       batch.map((item) => {
-        console.log('Sending request', item.request, ' to ', this.url)
+        // console.log('Sending request', item.request, ' to ', this.url)
         return fetch(this.url, {
           method: 'POST',
           headers: { 'content-type': 'application/json', accept: 'application/json' },
@@ -146,10 +146,10 @@ class MiniRpcProvider implements AsyncSendable {
         })
       })
     ).then((responses: (Response | undefined)[]) => {
-      console.log('Got responses', responses)
+      // console.log('Got responses', responses)
       responses.forEach((response, i) => {
         const { resolve, reject, request } = batch[i]
-        console.log('Got response (', i, ') ', response, 'for request', request)
+        // console.log('Got response (', i, ') ', response, 'for request', request)
         // If the response is undefined, it means the request failed
         if (response === undefined) {
           reject(new Error('Failed to fetch'))
@@ -157,20 +157,20 @@ class MiniRpcProvider implements AsyncSendable {
         }
         // Otherwise check the response status
         if (!response.ok) {
-          console.log('Bad response (', i, ') ', response, 'for request', request)
+          // console.log('Bad response (', i, ') ', response, 'for request', request)
           reject(new RequestError(`${response.status}: ${response.statusText}`, -32000))
           return
         }
         // Otherwise parse the response
         response.json().then((result) => {
           if ('error' in result) {
-            console.log('Got error (', i, ') parsing', response, 'for request', request, ': ', result)
+            // console.log('Got error (', i, ') parsing', response, 'for request', request, ': ', result)
             reject(new RequestError(result?.error?.message, result?.error?.code, result?.error?.data))
           } else if ('result' in result && resolve) {
-            console.log('Got result (', i, ') parsing', response, 'for request', request, ': ', result)
+            // console.log('Got result (', i, ') parsing', response, 'for request', request, ': ', result)
             resolve(result.result)
           } else {
-            console.log('Got unexpected result (', i, ') parsing', response, 'for request', request, ': ', result)
+            // console.log('Got unexpected result (', i, ') parsing', response, 'for request', request, ': ', result)
             reject(
               new RequestError(`Received unexpected JSON-RPC response to ${request.method} request.`, -32000, result)
             )

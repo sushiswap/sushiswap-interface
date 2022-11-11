@@ -1,7 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
-import { Currency, NATIVE, Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
@@ -14,6 +13,8 @@ import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchMo
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import React, { KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react'
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { Currency, NATIVE, Token } from 'sdk'
 
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
@@ -82,8 +83,8 @@ export function CurrencySearch({
   // @ts-ignore TYPE NEEDS FIXING
   // Note (amiller68): #WallabyOnly
   // const ether = useMemo(() => chainId && NATIVE[chainId], [chainId])
+  // TODO (amiller68): Make this a Generic Native Currency Type, not just FIL or ETH
   const fil = useMemo(() => chainId && NATIVE[chainId], [chainId])
-  console.log('FIL: ', fil)
 
   const filteredSortedTokensWithETH: Currency[] = useMemo(() => {
     const s = debouncedQuery.toLowerCase().trim()

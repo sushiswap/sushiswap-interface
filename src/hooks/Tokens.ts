@@ -1,6 +1,5 @@
 import { arrayify } from '@ethersproject/bytes'
 import { parseBytes32String } from '@ethersproject/strings'
-import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { createTokenFilterFunction } from 'app/functions/filtering'
 import { isAddress } from 'app/functions/validate'
 // import { NEVER_RELOAD, useSingleCallResult } from 'app/state/multicall-2/hooks'
@@ -11,6 +10,9 @@ import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenL
 import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import { useUserAddedTokens } from 'app/state/user/hooks'
 import { useMemo } from 'react'
+// Note / TODO - #SdkChange / #SdkPublish
+// import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { Currency, NATIVE, Token, WNATIVE } from 'sdk'
 
 import { useBytes32TokenContract, useTokenContract } from './useContract'
 
@@ -186,18 +188,30 @@ export function useToken(tokenAddress?: string | null): Token | undefined | null
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
   const { chainId } = useActiveWeb3React()
 
+  console.log('Using currency', currencyId)
+
   // Since this is used throughout the app, cant change this to NATIVE[chainId]?.symbol
-  const isETH = currencyId?.toUpperCase() === 'ETH'
+  // Note (amiller68): #WallabyOnly
+  // const isETH = currencyId?.toUpperCase() === 'ETH'
+  const isNative = currencyId
+    ? chainId && NATIVE[chainId] && NATIVE[chainId].symbol !== undefined
+      ? currencyId?.toUpperCase() === NATIVE[chainId].symbol?.toUpperCase()
+      : false
+    : false
+
+  console.log(currencyId, 'is native: ', isNative)
+  console.log('NATIVE Symbol: ', chainId ? NATIVE[chainId].symbol : 'NA')
 
   // @ts-ignore TYPE NEEDS FIXING
-  const isDual = [ChainId.CELO].includes(chainId)
+  // Note (amiller68): #WallabyOnly
+  // const isDual = [ChainId.CELO].includes(chainId)
 
-  const useNative = isETH && !isDual
+  const useNative = isNative // && !isDual
 
-  if (isETH && isDual) {
-    // @ts-ignore TYPE NEEDS FIXING
-    currencyId = WNATIVE_ADDRESS[chainId]
-  }
+  // if (isNative && isDual) {
+  //   // @ts-ignore TYPE NEEDS FIXING
+  //   currencyId = WNATIVE_ADDRESS[chainId]
+  // }
 
   const token = useToken(useNative ? undefined : currencyId)
 

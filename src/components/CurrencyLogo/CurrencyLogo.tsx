@@ -40,24 +40,16 @@ export const getCurrencyLogoUrls = (currency: Currency): string[] => {
 
   // TODO (amiller68): Host proper logos on github
   if (currency.chainId in BLOCKCHAIN) {
+    // TODO (amiller68): #FilecoinMainnet
+    // For now, all we need is USDC. It should be hosted here
+    // TODO (amiller68): #Change link to point at correct branch
     urls.push(
-      `https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/network/${
+      `https://raw.githubusercontent.com/banyancomputer/interface/fil-wallet/.github/logos/${
         // @ts-ignore TYPE NEEDS FIXING
         BLOCKCHAIN[currency.chainId]
-      }/${currency.wrapped.address}.jpg`
+      }/${currency.symbol?.toLowerCase()}.svg`
     )
-    urls.push(
-      // @ts-ignore TYPE NEEDS FIXING
-      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
-        currency.wrapped.address
-      }/logo.png`
-    )
-    urls.push(
-      // @ts-ignore TYPE NEEDS FIXING
-      `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
-        currency.wrapped.address
-      }/logo.png`
-    )
+    // TODO (amiller68): Add fallbacks for other tokens
   }
   return urls
 }
@@ -85,6 +77,7 @@ const FilecoinLogo = 'https://cryptologos.cc/logos/filecoin-fil-logo.svg?v=007'
 
 const LOGO: Record<number, string> = {
   [ChainId.WALLABY]: FilecoinLogo,
+
   // Note (amiller68): #WallabyOnly
   // [ChainId.ETHEREUM]: EthereumLogo,
   // [ChainId.KOVAN]: EthereumLogo,

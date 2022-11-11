@@ -19,7 +19,9 @@ const BA_LIST = 'https://raw.githubusercontent.com/The-Blockchain-Association/se
 // // const DHEDGE_LIST = 'https://list.dhedge.eth.link'
 // const SUSHI_LIST = 'https://token-list.sushi.com'
 // const CHAINLINK_LIST = 'https://token-list.sushi.com/chainlink'
-// const FIGSWAP_LIST = 'https://raw.githubusercontent.com/figment-networks/figswap-token-list/main/figswap.tokenlist.json'
+// TODO (amiller68): Add tokens and change to Filecoin mainenet
+const FIGSWAP_LIST =
+  'https://raw.githubusercontent.com/banyancomputer/interface/fil-wallet/.github/figswap-token-list.json'
 
 export const UNSUPPORTED_LIST_URLS: string[] = [BA_LIST]
 
@@ -41,6 +43,7 @@ const DEFAULT_LIST_OF_LISTS_TO_DISPLAY: string[] = [
   // ROLL_LIST,
   // NFTX_LIST,
   // // DHEDGE_LIST,
+  FIGSWAP_LIST,
 ]
 
 export const DEFAULT_LIST_OF_LISTS: string[] = [
@@ -50,4 +53,4 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
 
 // default lists to be 'active' aka searched across
 // export const DEFAULT_ACTIVE_LIST_URLS: string[] = [SUSHI_LIST, CHAINLINK_LIST, NFTX_LIST]
-export const DEFAULT_ACTIVE_LIST_URLS: string[] = []
+export const DEFAULT_ACTIVE_LIST_URLS: string[] = [FIGSWAP_LIST]
