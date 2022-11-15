@@ -26,13 +26,12 @@ export default function Web3Connect({ color = 'gray', size, className = '', ...r
     <Button
       id="connect-wallet"
       onClick={toggleWalletModal}
-      variant="outlined"
       color={color}
       className={classNames(className, '!border-none')}
       size={size}
       {...rest}
     >
-      {i18n._(t`Connect to a wallet`)}
+      {i18n._(t`Connect to MetaMask`)}
     </Button>
   )
 }
