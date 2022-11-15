@@ -175,7 +175,7 @@ export function useMulticall2Contract() {
 }
 
 const MULTICALL_ADDRESS = {
-  // TODO (amiller68): #Research what is this?
+  // TODO (amiller68): #Multicall Add Mutlicall address for Wallaby here
   // [ChainId.WALLABY]: '0x0000000000000000000000000000000000000000',
   // Note (amiller68): #WallabyOnly
   // [ChainId.ETHEREUM]: '0x1F98415757620B543A52E61c46B32eB19261F984',

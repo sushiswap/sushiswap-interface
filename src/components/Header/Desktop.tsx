@@ -24,7 +24,7 @@ const Desktop: FC = () => {
   // const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
 
   // Note (amiller68): Not sure what the right way to do this is, but this works for now
-  const userFilBalance = useNativeCurrencyBalance(account)
+  const userFilBalance = useNativeCurrencyBalance(account ? account : undefined)
   // Note (amiller68): #MetamaskOnly
   // const isCoinbaseWallet = useIsCoinbaseWallet()
   // Note (amiller68): These are unused, but I'm leaving them here for reference

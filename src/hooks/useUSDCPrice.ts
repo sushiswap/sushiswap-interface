@@ -30,12 +30,13 @@ export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> }
 }
 
 /**
+ * TODO (amiller68): #Research what this is for
  * Returns the price in USDC of the input currency
  * @param currency currency to compute the USDC price of
  */
 export default function useUSDCPrice(currency?: Currency): Price<Currency, Token> | undefined {
   const { chainId } = useActiveWeb3React()
-  console.log('useUSDCPrice -> start', currency, chainId)
+  // console.log('useUSDCPrice -> start', currency, chainId)
 
   // TODO (amiller68): #Research - Why is this here? What does it mean?
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined

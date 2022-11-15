@@ -1,5 +1,5 @@
 import { Interface } from '@ethersproject/abi'
-import ERC20_ABI from 'app/constants/abis/erc20.json'
+import { ERC20_ABI } from 'app/constants/abis/erc20'
 import { getContract } from 'app/functions'
 import { isAddress } from 'app/functions/validate'
 import { useInterfaceMulticall } from 'app/hooks/useContract'
@@ -11,7 +11,7 @@ import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from 'sdk'
 import useSWR from 'swr'
 
 // Janky RPC fetcher for use with SWR
-const fetcher =
+const libraryCurrencyFetcher =
   (library: any, chainId: any) =>
   (...args: any[]) => {
     const [method, ...params] = args
@@ -29,7 +29,10 @@ const fetcher =
 export function useNativeCurrencyBalance(account?: string | undefined): CurrencyAmount<Currency> | undefined {
   const { chainId, library } = useActiveWeb3React()
   const shouldFetch = !!account && !!library && !!chainId
-  const { data } = useSWR(shouldFetch ? ['getBalance', account, 'latest'] : null, fetcher(library, chainId))
+  const { data } = useSWR(
+    shouldFetch ? ['getBalance', account, 'latest'] : null,
+    libraryCurrencyFetcher(library, chainId)
+  )
   return data
 }
 
@@ -81,13 +84,13 @@ export function useTokenBalancesWithLoadingIndicator(
   address?: string,
   tokens?: (Token | undefined)[]
 ): [{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }, boolean] {
-  console.log('useTokenBalancesWithLoadingIndicator -> start', address, tokens)
+  // console.log('useTokenBalancesWithLoadingIndicator -> start', address, tokens)
   const validatedTokens: Token[] = useMemo(
     () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
     [tokens]
   )
   const validatedTokenAddresses = useMemo(() => validatedTokens.map((vt) => vt.address), [validatedTokens])
-  console.log('useTokenBalancesWithLoadingIndicator -> validatedTokenAddresses', validatedTokenAddresses)
+  // console.log('useTokenBalancesWithLoadingIndicator -> validatedTokenAddresses', validatedTokenAddresses)
   const balances = useMultipleContractSingleData(
     validatedTokenAddresses,
     ERC20Interface,
@@ -95,15 +98,16 @@ export function useTokenBalancesWithLoadingIndicator(
     useMemo(() => [address], [address]),
     tokenBalancesGasRequirement
   )
-  console.log('useTokenBalancesWithLoadingIndicator -> balances', balances)
+  // console.log('useTokenBalancesWithLoadingIndicator -> balances', balances)
 
   const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances])
-  console.log('useTokenBalancesWithLoadingIndicator -> anyLoading', anyLoading)
+  // console.log('useTokenBalancesWithLoadingIndicator -> anyLoading', anyLoading)
   return useMemo(
     () => [
       address && validatedTokens.length > 0
         ? validatedTokens.reduce<{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }>((memo, token, i) => {
             const value = balances?.[i]?.result?.[0]
+            // console.log('useTokenBalancesWithLoadingIndicator -> value', value)
             const amount = value ? JSBI.BigInt(value.toString()) : undefined
             if (amount) {
               memo[token.address] = CurrencyAmount.fromRawAmount(token, amount)
@@ -117,38 +121,48 @@ export function useTokenBalancesWithLoadingIndicator(
   )
 }
 
+// Janky RPC fetcher for use with SWR
+const contractBalanceFetcher =
+  (address: any, library: any, chainId: any) =>
+  (...args: any[]) => {
+    const [...tokenAddresses] = args
+    return Promise.all(
+      tokenAddresses.map((tokenAddress: string) => {
+        const contract = getContract(tokenAddress, ERC20_ABI, library, address)
+        return contract.balanceOf(address)
+      })
+    ).then((res: any) => res)
+  }
+
 export function useTokenBalancesSequential(
   address?: string,
   tokens?: (Token | undefined)[]
-): [{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }, boolean] {
+): [{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }] {
   const { chainId, library } = useActiveWeb3React()
-  console.log('useTokenBalancesWithLoadingIndicator -> start', address, tokens)
+  // console.log('useTokenBalancesSequential -> start', address, tokens)
   const validatedTokens: Token[] = useMemo(
     () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
     [tokens]
   )
   const validatedTokenAddresses = useMemo(() => validatedTokens.map((vt) => vt.address), [validatedTokens])
 
-  console.log('useTokenBalancesSequential -> validatedTokenAddresses', validatedTokenAddresses)
-  const balances = useMemo(() => {
-    if (address && library && validatedTokenAddresses.length > 0) {
-      return validatedTokenAddresses.map((tokenAddress) => {
-        let tokenContract = getContract(tokenAddress, ERC20_ABI, library, tokenAddress)
-        return tokenContract.balanceOf(address)
-      })
-    }
-    return []
-  }, [address, validatedTokenAddresses])
+  // console.log('useTokenBalancesSequential -> validatedTokenAddresses', validatedTokenAddresses)
+  const all: any = useSWR(
+    !!address && !!library && !!chainId ? validatedTokenAddresses : [],
+    contractBalanceFetcher(address, library, chainId)
+  )
 
-  console.log('useTokenBalancesSequential -> balances', balances)
+  // console.log('useTokenBalancesSequential -> balances', all)
 
-  const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances])
-  console.log('useTokenBalancesWithLoadingIndicator -> anyLoading', anyLoading)
+  const anyLoading: boolean = useMemo(() => all.isValidating, [all])
+  //   const anyLoading: boolean = false
+  // console.log('useTokenBalancesSequential -> anyLoading', anyLoading)
   return useMemo(
     () => [
       address && validatedTokens.length > 0
         ? validatedTokens.reduce<{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }>((memo, token, i) => {
-            const value = balances?.[i]?.result?.[0]
+            const value = all.data?.[i]
+            // console.log('useTokenBalancesSequential -> value for ', token, ':', value)
             const amount = value ? JSBI.BigInt(value.toString()) : undefined
             if (amount) {
               memo[token.address] = CurrencyAmount.fromRawAmount(token, amount)
@@ -156,9 +170,8 @@ export function useTokenBalancesSequential(
             return memo
           }, {})
         : {},
-      anyLoading,
     ],
-    [address, validatedTokens, anyLoading, balances]
+    [address, validatedTokens, anyLoading, all]
   )
 }
 

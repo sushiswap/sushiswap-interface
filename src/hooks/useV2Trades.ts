@@ -71,6 +71,7 @@ export function useV2TradeExactIn(
 }
 
 /**
+ * TODO (amiller68): #Research this hook for implementing swaps/trades
  * Returns the best trade for the token in to the exact amount of token out
  */
 export function useV2TradeExactOut(
@@ -78,7 +79,7 @@ export function useV2TradeExactOut(
   currencyAmountOut?: CurrencyAmount<Currency>,
   { maxHops = MAX_HOPS } = {}
 ): Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null {
-  console.log('allowedPairs -> start', currencyIn, currencyAmountOut, maxHops)
+  // console.log('allowedPairs -> start', currencyIn, currencyAmountOut, maxHops)
   const allowedPairs = useAllCommonPairs(currencyIn, currencyAmountOut?.currency)
 
   return useMemo(() => {

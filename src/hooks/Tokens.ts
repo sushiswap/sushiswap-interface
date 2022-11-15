@@ -188,7 +188,7 @@ export function useToken(tokenAddress?: string | null): Token | undefined | null
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
   const { chainId } = useActiveWeb3React()
 
-  console.log('Using currency', currencyId)
+  // console.log('Using currency', currencyId)
 
   // Since this is used throughout the app, cant change this to NATIVE[chainId]?.symbol
   // Note (amiller68): #WallabyOnly
@@ -199,8 +199,8 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
       : false
     : false
 
-  console.log(currencyId, 'is native: ', isNative)
-  console.log('NATIVE Symbol: ', chainId ? NATIVE[chainId].symbol : 'NA')
+  // console.log(currencyId, 'is native: ', isNative)
+  // console.log('NATIVE Symbol: ', chainId ? NATIVE[chainId].symbol : 'NA')
 
   // @ts-ignore TYPE NEEDS FIXING
   // Note (amiller68): #WallabyOnly
