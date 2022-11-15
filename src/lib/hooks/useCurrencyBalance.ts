@@ -1,5 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 import ERC20_ABI from 'app/constants/abis/erc20.json'
+import { getContract } from 'app/functions'
 import { isAddress } from 'app/functions/validate'
 import { useInterfaceMulticall } from 'app/hooks/useContract'
 import { useMultipleContractSingleData, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
@@ -73,19 +74,20 @@ const ERC20Interface = new Interface(ERC20_ABI)
 const tokenBalancesGasRequirement = { gasRequired: 125_000 }
 
 /**
- * TODO (amiller68): Implement workaround for FVM capabilities or look into implementing a multicall contract on the FVM
+ * TODO (amiller68): #Important Multicall Implement workaround for FVM capabilities or look into implementing a multicall contract on the FVM
  * Returns a map of token addresses to their eventually consistent token balances for a single account.
  */
 export function useTokenBalancesWithLoadingIndicator(
   address?: string,
   tokens?: (Token | undefined)[]
 ): [{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }, boolean] {
+  console.log('useTokenBalancesWithLoadingIndicator -> start', address, tokens)
   const validatedTokens: Token[] = useMemo(
     () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
     [tokens]
   )
   const validatedTokenAddresses = useMemo(() => validatedTokens.map((vt) => vt.address), [validatedTokens])
-
+  console.log('useTokenBalancesWithLoadingIndicator -> validatedTokenAddresses', validatedTokenAddresses)
   const balances = useMultipleContractSingleData(
     validatedTokenAddresses,
     ERC20Interface,
@@ -93,9 +95,55 @@ export function useTokenBalancesWithLoadingIndicator(
     useMemo(() => [address], [address]),
     tokenBalancesGasRequirement
   )
+  console.log('useTokenBalancesWithLoadingIndicator -> balances', balances)
 
   const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances])
+  console.log('useTokenBalancesWithLoadingIndicator -> anyLoading', anyLoading)
+  return useMemo(
+    () => [
+      address && validatedTokens.length > 0
+        ? validatedTokens.reduce<{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }>((memo, token, i) => {
+            const value = balances?.[i]?.result?.[0]
+            const amount = value ? JSBI.BigInt(value.toString()) : undefined
+            if (amount) {
+              memo[token.address] = CurrencyAmount.fromRawAmount(token, amount)
+            }
+            return memo
+          }, {})
+        : {},
+      anyLoading,
+    ],
+    [address, validatedTokens, anyLoading, balances]
+  )
+}
 
+export function useTokenBalancesSequential(
+  address?: string,
+  tokens?: (Token | undefined)[]
+): [{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }, boolean] {
+  const { chainId, library } = useActiveWeb3React()
+  console.log('useTokenBalancesWithLoadingIndicator -> start', address, tokens)
+  const validatedTokens: Token[] = useMemo(
+    () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
+    [tokens]
+  )
+  const validatedTokenAddresses = useMemo(() => validatedTokens.map((vt) => vt.address), [validatedTokens])
+
+  console.log('useTokenBalancesSequential -> validatedTokenAddresses', validatedTokenAddresses)
+  const balances = useMemo(() => {
+    if (address && library && validatedTokenAddresses.length > 0) {
+      return validatedTokenAddresses.map((tokenAddress) => {
+        let tokenContract = getContract(tokenAddress, ERC20_ABI, library, tokenAddress)
+        return tokenContract.balanceOf(address)
+      })
+    }
+    return []
+  }, [address, validatedTokenAddresses])
+
+  console.log('useTokenBalancesSequential -> balances', balances)
+
+  const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances])
+  console.log('useTokenBalancesWithLoadingIndicator -> anyLoading', anyLoading)
   return useMemo(
     () => [
       address && validatedTokens.length > 0
@@ -118,7 +166,8 @@ export function useTokenBalances(
   address?: string,
   tokens?: (Token | undefined)[]
 ): { [tokenAddress: string]: CurrencyAmount<Token> | undefined } {
-  return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
+  // return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
+  return useTokenBalancesSequential(address, tokens)[0]
 }
 
 // get the balance for a single token/account combo
@@ -143,10 +192,13 @@ export function useCurrencyBalances(
   const tokenBalances = useTokenBalances(account, tokens)
   // Note (amiller68) - #WallabyOnly
   // const containsETH: boolean = useMemo(() => currencies?.some((currency) => currency?.isNative) ?? false, [currencies])
-  const containsFIL: boolean = useMemo(() => currencies?.some((currency) => currency?.isNative) ?? false, [currencies])
+  const containsNative: boolean = useMemo(
+    () => currencies?.some((currency) => currency?.isNative) ?? false,
+    [currencies]
+  )
   // const ethBalance = useNativeCurrencyBalances(useMemo(() => (containsETH ? [account] : []), [containsETH, account]))
-  const filBalance = useNativeCurrencyBalance(
-    useMemo(() => (containsFIL ? account : undefined), [containsFIL, account])
+  const nativeBalance = useNativeCurrencyBalance(
+    useMemo(() => (containsNative ? account : undefined), [containsNative, account])
   )
 
   return useMemo(
@@ -155,10 +207,10 @@ export function useCurrencyBalances(
         if (!account || !currency) return undefined
         if (currency.isToken) return tokenBalances[currency.address]
         // if (currency.isNative) return filBalance[account]
-        if (currency.isNative) return filBalance
+        if (currency.isNative) return nativeBalance
         return undefined
       }) ?? [],
-    [account, currencies, filBalance, tokenBalances]
+    [account, currencies, nativeBalance, tokenBalances]
   )
 }
 

@@ -2,11 +2,10 @@
 // TODO (amiller68): #SdkChange / #SdkPublish - Using my own declaration of ChainId
 // import { ChainId, Token, WNATIVE } from 'sdk'
 
-import { ChainId, Token, WNATIVE } from 'sdk'
+import { ChainId, Token, USDC, WNATIVE } from 'sdk'
 
 // Note (amiller68): #WallabyOnly - We will only support Wallaby until we figure out MultiChain
 // TODO (amiller68): #FilecoinMainnet - Add Filecoin Mainnet Tokens where appropriate
-import * as FILECOIN from './tokens/filecoin'
 
 type ChainTokenList = {
   readonly [chainId: number]: Token[]
@@ -79,7 +78,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.WALLABY]: [...WRAPPED_NATIVE_ONLY[ChainId.WALLABY], FILECOIN.WALLABY_WFIL, FILECOIN.WALLABY_USDC],
+  [ChainId.WALLABY]: [...WRAPPED_NATIVE_ONLY[ChainId.WALLABY], USDC[ChainId.WALLABY]],
   // TODO (amiller68): #FilecoinMainnet - Add Filecoin Mainnet
 
   // Note (amiller68): #WallabyOnly - We will only support Wallaby until we figure out MultiChain
@@ -350,7 +349,7 @@ export const CUSTOM_BASES: {
  * Shows up in the currency select for swap and add liquidity
  */
 export const COMMON_BASES: ChainTokenList = {
-  [ChainId.WALLABY]: [...WRAPPED_NATIVE_ONLY[ChainId.WALLABY], FILECOIN.WALLABY_USDC],
+  [ChainId.WALLABY]: [...WRAPPED_NATIVE_ONLY[ChainId.WALLABY], USDC[ChainId.WALLABY]],
   // Note (amiller68): #WallabyOnly
   // [ChainId.ETHEREUM]: [
   //   // @ts-ignore TYPE NEEDS FIXING
@@ -675,9 +674,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.WALLABY]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.WALLABY],
     // @ts-ignore
-    FILECOIN.WALLABY_USDC,
-    // @ts-ignore
-    FILECOIN.WALLABY_WFIL,
+    USDC[ChainId.WALLABY],
   ],
 
   // Note (amiller68): #WallabyOnly
@@ -838,7 +835,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
 export const PINNED_PAIRS: { readonly [chainId: number]: [Token, Token][] } = {
   [ChainId.WALLABY]: [
     // TODO (amiller68): add pinned pairs
-    [FILECOIN.WALLABY_USDC, WNATIVE[ChainId.WALLABY]],
+    [USDC[ChainId.WALLABY], WNATIVE[ChainId.WALLABY]],
   ],
 
   // Note (amiller68): #WallabyOnly

@@ -76,6 +76,7 @@ const Swap = ({ banners }: SwapProps) => {
     inputError: wrapInputError,
   } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue)
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
+  console.log('Swap -> showWrap', showWrap)
   const { address: recipientAddress } = useENSAddress(recipient)
 
   const trade = showWrap ? undefined : v2Trade
@@ -182,6 +183,7 @@ const Swap = ({ banners }: SwapProps) => {
   const sushiGuardEnabled = useSushiGuardFeature()
 
   // the callback to execute the swap
+  // TODO (amiller68): Investigate useSwapCallback
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
     trade,
     allowedSlippage,
@@ -386,7 +388,7 @@ const Swap = ({ banners }: SwapProps) => {
                 onSwitchTokens()
               }}
             >
-              {/* TODO (thea): #Frontend Change the ArrowDownIcon to BidirectionArrowIcon or something */}
+              {/* TODO (thea): #Frontend Change the ArrowDownIcon to BidirectionalArrowIcon or something */}
               <ArrowDownIcon width={14} className="text-high-emphesis hover:text-white" />
             </div>
           </div>
