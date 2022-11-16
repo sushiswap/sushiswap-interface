@@ -1,8 +1,6 @@
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-// Note (amiller68): Changing this to 'sdk' causes dependency type mismatch errors stuff
-import { Currency, JSBI, Token, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
 import Banner from 'app/components/Banner'
 import Button from 'app/components/Button'
 import RecipientField from 'app/components/RecipientField'
@@ -35,6 +33,8 @@ import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, us
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+// Note (amiller68): #SdkChange / #SdkPublish
+import { Currency, JSBI, Token, Trade as V2Trade, TradeType } from 'sdk'
 
 import { SwapProps } from '../../swap'
 
@@ -49,6 +49,21 @@ const Swap = ({ banners }: SwapProps) => {
   const [isExpertMode] = useExpertModeManager()
   const { independentField, typedValue, recipient } = useSwapState()
   const { v2Trade, parsedAmount, currencies, inputError: swapInputError, allowedSlippage, to } = useDerivedSwapInfo()
+  console.log(
+    'Derived swap info',
+    'Trade: ',
+    v2Trade,
+    'Parsed Amount: ',
+    parsedAmount,
+    'Currencies: ',
+    currencies,
+    'Swap Input Error: ',
+    swapInputError,
+    'Allowed Slippage: ',
+    allowedSlippage,
+    'To: ',
+    to
+  )
   const [loadedInputCurrency, loadedOutputCurrency] = [
     useCurrency(loadedUrlParams?.inputCurrencyId),
     useCurrency(loadedUrlParams?.outputCurrencyId),
@@ -76,28 +91,37 @@ const Swap = ({ banners }: SwapProps) => {
     inputError: wrapInputError,
   } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue)
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
-  console.log('Swap -> showWrap', showWrap)
   const { address: recipientAddress } = useENSAddress(recipient)
 
+  // Determine if this is a wrap or a trade
   const trade = showWrap ? undefined : v2Trade
 
   const parsedAmounts = useMemo(
     () =>
+      // Note (amiller68) - If this is a wrap, the amounts are the same
       showWrap
         ? {
             [Field.INPUT]: parsedAmount,
             [Field.OUTPUT]: parsedAmount,
           }
-        : {
+        : // Note (amiller68) - Otherwise, we need to get the amounts from the trade
+          {
             [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
             [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount,
           },
     [independentField, parsedAmount, showWrap, trade]
   )
+  console.log('parsedAmounts', parsedAmounts)
 
+  // TODO (amiller68): #Research priceImpaces and How UDSC is used
+  // Note (amiller68): I don't think useUSDCValue will work until we implement liquidity pools
   const fiatValueInput = useUSDCValue(parsedAmounts[Field.INPUT])
   const fiatValueOutput = useUSDCValue(parsedAmounts[Field.OUTPUT])
+  console.log('fiatValueInput', fiatValueInput)
+  console.log('fiatValueOutput', fiatValueOutput)
+  // Note (amiller68): Determines the price impact of making this trade in fiat value
   const priceImpact = computeFiatValuePriceImpact(fiatValueInput, fiatValueOutput)
+  console.log('priceImpact', priceImpact)
   const { onSwitchTokens, onCurrencySelection, onUserInput } = useSwapActionHandlers()
 
   const isValid = !swapInputError
@@ -267,6 +291,7 @@ const Swap = ({ banners }: SwapProps) => {
   // const priceImpactSeverity = warningSeverity(priceImpactWithoutFee);
   const priceImpactSeverity = useMemo(() => {
     const executionPriceImpact = trade?.priceImpact
+    console.log('Price impact Severity', executionPriceImpact, 'vs', priceImpact)
     return warningSeverity(
       executionPriceImpact && priceImpact
         ? executionPriceImpact.greaterThan(priceImpact)
@@ -275,6 +300,7 @@ const Swap = ({ banners }: SwapProps) => {
         : executionPriceImpact ?? priceImpact
     )
   }, [priceImpact, trade])
+  console.log('Price impact Severity', priceImpactSeverity)
 
   const isArgentWallet = useIsArgentWallet()
 

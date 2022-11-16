@@ -3,7 +3,6 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { ArrowLeftIcon, PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, currencyEquals, WNATIVE } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
 import SettingsTab from 'app/components/Settings'
@@ -35,6 +34,8 @@ import { useExpertModeManager } from 'app/state/user/hooks'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useState } from 'react'
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { Currency, currencyEquals, WNATIVE } from 'sdk'
 
 export default function Add() {
   const { i18n } = useLingui()
@@ -46,7 +47,7 @@ export default function Add() {
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
 
-  const oneCurrencyIsWETH = Boolean(
+  const oneCurrencyIsWNative = Boolean(
     chainId &&
       ((currencyA && currencyEquals(currencyA, WNATIVE[chainId])) ||
         (currencyB && currencyEquals(currencyB, WNATIVE[chainId])))

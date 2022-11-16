@@ -48,7 +48,7 @@ export default function useWrapCallback(
     // Note (amiller68) - #WallabyOnly
     // if (!wethContract || !chainId || !inputCurrency || !outputCurrency || chainId === ChainId.CELO)
     if (!wethContract || !chainId || !inputCurrency || !outputCurrency) {
-      console.log('useWrapCallback -> NOT_APPLICABLE: Bad input')
+      // console.log('useWrapCallback -> NOT_APPLICABLE: Bad input')
       return NOT_APPLICABLE
     }
     const wnative = WNATIVE[chainId]

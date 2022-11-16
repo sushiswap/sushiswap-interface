@@ -2,16 +2,6 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { getCreate2Address } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
 import { keccak256 } from '@ethersproject/solidity'
-import {
-  BENTOBOX_ADDRESS,
-  CHAINLINK_ORACLE_ADDRESS,
-  computePairAddress,
-  Currency,
-  FACTORY_ADDRESS,
-  KASHI_ADDRESS,
-  Pair,
-  Token,
-} from '@sushiswap/core-sdk'
 import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'app/config/routing'
 import { e10 } from 'app/functions'
@@ -21,6 +11,17 @@ import { AppState } from 'app/state'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import {
+  BENTOBOX_ADDRESS,
+  CHAINLINK_ORACLE_ADDRESS,
+  computePairAddress,
+  Currency,
+  FACTORY_ADDRESS,
+  KASHI_ADDRESS,
+  Pair,
+  Token,
+} from 'sdk'
 
 import {
   addSerializedPair,
@@ -173,6 +174,10 @@ export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
   if (tokenA.equals(tokenB)) throw new Error('Tokens cannot be equal')
   if (!FACTORY_ADDRESS[tokenA.chainId]) throw new Error('No V2 factory address on this chain')
 
+  console.log('toV2LiquidityToken', tokenA, tokenB)
+  console.log('Factory address', FACTORY_ADDRESS[tokenA.chainId])
+
+  // TODO / Note (amiller68) - This won't work until we have a factory
   return new Token(
     tokenA.chainId,
     computePairAddress({ factoryAddress: FACTORY_ADDRESS[tokenA.chainId], tokenA, tokenB }),

@@ -12,6 +12,14 @@ Issue / Change Tags:
 Use and collate these to mark groups of issues / changes throughout the project.
 Use them like so:
 
+Demo Feature Roadmap (by priority):
+
+1. Get wrapping and unwrapping working. (almost done, just need to debug / workaround FEVM issues)
+2. Get liquidity adding and removing working. (Not started. Relies on working Liquidity Factory)
+3. Get swaps working. Relies on 1 and 2. Requires. (Research In progress. Relies on Liquidity adding and removing).
+4. Multicaller (Ready to implement with Interface. Need contract on FEVM)
+5. If this works we can deploy SDK and change interface to use it.
+
 ```angular2html
 pattern:
 
@@ -37,4 +45,5 @@ Ongoing TODOs:
 - [ ] `#SdkPublish` Where imports to any sdk needs to updated with published version
 - [ ] `#NewTokens` Implement new tokens as they are added to the SDK. First write documentation on how to do so.
 - [ ] `NetworkModal` Change network modal useflow to add Wallaby network to Metamask or other Wallets if on unnsupported networks
+- [ ] `#Copy` Copy changes to make disclaimers / branding more accurate / better
 -

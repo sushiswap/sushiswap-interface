@@ -1,15 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import {
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  Percent,
-  SUSHI_ADDRESS,
-  Trade as V2Trade,
-  TradeType,
-  WNATIVE_ADDRESS,
-} from '@sushiswap/core-sdk'
 import { currencyId } from 'app/functions'
 import { tryParseAmount } from 'app/functions/parse'
 import { isAddress } from 'app/functions/validate'
@@ -26,6 +16,17 @@ import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { useRouter } from 'next/router'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
+// TODO / NOTE (amiller68): #SdkChange / #SdkPublish
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Percent,
+  SUSHI_ADDRESS,
+  Trade as V2Trade,
+  TradeType,
+  WNATIVE_ADDRESS,
+} from 'sdk'
 import { NATIVE } from 'sdk'
 
 // import {
@@ -202,10 +203,11 @@ export function useSwapActionHandlers(): {
 
 // TODO: Swtich for ours...
 const BAD_RECIPIENT_ADDRESSES: { [chainId: string]: { [address: string]: true } } = {
-  [ChainId.ETHEREUM]: {
-    '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac': true, // v2 factory
-    '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F': true, // v2 router 02
-  },
+  // Note (amiller68) - #WallabyOnly
+  // [ChainId.ETHEREUM]: {
+  //   '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac': true, // v2 factory
+  //   '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F': true, // v2 router 02
+  // },
 }
 
 /**
@@ -256,6 +258,7 @@ export function useDerivedSwapInfo(): {
 
   const isExactIn: boolean = independentField === Field.INPUT
 
+  // Try to parse the amount of the independent field
   const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
 
   const bestTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined, {
@@ -354,7 +357,10 @@ function validatedRecipient(recipient: any): string | undefined {
   if (ADDRESS_REGEX.test(recipient)) return recipient
   return undefined
 }
-export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.ETHEREUM): SwapState {
+// TODO / Note (amiller68) - #WallabyOnly / #FilecoinMainnet
+// Note (amiller68) - Can't we just use config.defaultChainId here or something?
+// export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.ETHEREUM): SwapState {
+export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.WALLABY): SwapState {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
   console.log('Input Currency: ', inputCurrency)
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)

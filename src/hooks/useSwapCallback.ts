@@ -8,17 +8,6 @@ import { arrayify, DataOptions, hexlify, Signature, SignatureLike, splitSignatur
 import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import {
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  Percent,
-  Router as LegacyRouter,
-  SwapParameters,
-  toHex,
-  Trade as LegacyTrade,
-  TradeType,
-} from '@sushiswap/core-sdk'
-import {
   ComplexPathParams,
   ExactInputParams,
   ExactInputSingleParams,
@@ -50,6 +39,18 @@ import { TransactionResponseLight, useTransactionAdder } from 'app/state/transac
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { fetchJsonRpc } from 'lib/jsonrpc'
 import { useMemo } from 'react'
+// TODO / NOTE (amiller68): #SdkChange / #SdkPublish
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Percent,
+  Router as LegacyRouter,
+  SwapParameters,
+  toHex,
+  Trade as LegacyTrade,
+  TradeType,
+} from 'sdk'
 
 import { SUSHIGUARD_RELAY } from '../config/sushiguard'
 import { useArgentWalletContract } from './useArgentWalletContract'
@@ -716,7 +717,10 @@ export function useSwapCallback(
                   value: value ? hexlify(value, hOpts) : undefined,
                   data: data?.toString(),
                 },
-                { common: new Common({ chain: chainId ?? ChainId.ETHEREUM, hardfork: Hardfork.London }) }
+                // Note (amiller68) - #WallabyOnly
+                // TODO (amiller68) - #FilecoinMainnet Can we use config.defaultChainId here?
+                // { common: new Common({ chain: chainId ?? ChainId.ETHEREUM, hardfork: Hardfork.London }) }
+                { common: new Common({ chain: chainId ?? ChainId.WALLABY, hardfork: Hardfork.London }) }
               )
               const txToSign = hexlify(txData.getMessageToSign())
 

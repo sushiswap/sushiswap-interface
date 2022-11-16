@@ -134,10 +134,10 @@ const contractBalanceFetcher =
     ).then((res: any) => res)
   }
 
-export function useTokenBalancesSequential(
+export function useTokenBalancesSequentialWithLoadingIndicator(
   address?: string,
   tokens?: (Token | undefined)[]
-): [{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }] {
+): [{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }, boolean] {
   const { chainId, library } = useActiveWeb3React()
   // console.log('useTokenBalancesSequential -> start', address, tokens)
   const validatedTokens: Token[] = useMemo(
@@ -154,7 +154,7 @@ export function useTokenBalancesSequential(
 
   // console.log('useTokenBalancesSequential -> balances', all)
 
-  const anyLoading: boolean = useMemo(() => all.isValidating, [all])
+  // const anyLoading: boolean = useMemo(() => all.isValidating, [all])
   //   const anyLoading: boolean = false
   // console.log('useTokenBalancesSequential -> anyLoading', anyLoading)
   return useMemo(
@@ -170,8 +170,9 @@ export function useTokenBalancesSequential(
             return memo
           }, {})
         : {},
+      all.isValidating,
     ],
-    [address, validatedTokens, anyLoading, all]
+    [address, validatedTokens, all]
   )
 }
 
@@ -180,7 +181,7 @@ export function useTokenBalances(
   tokens?: (Token | undefined)[]
 ): { [tokenAddress: string]: CurrencyAmount<Token> | undefined } {
   // return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
-  return useTokenBalancesSequential(address, tokens)[0]
+  return useTokenBalancesSequentialWithLoadingIndicator(address, tokens)[0]
 }
 
 // get the balance for a single token/account combo

@@ -1,7 +1,6 @@
 import { PlusIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Loader from 'app/components/Loader'
 import FullPositionCard from 'app/components/PositionCard'
@@ -13,6 +12,8 @@ import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import { NextSeo } from 'next-seo'
 import React from 'react'
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { CurrencyAmount } from 'sdk'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -59,6 +60,7 @@ const Pool = () => {
           </div>
         )}
       </SwapLayoutCard>
+      {/*  TODO (ailler68) - #Copy what disclaimers should we put here? */}
       <Typography variant="xs" className="px-10 mt-5 text-center text-low-emphesis">
         {i18n._(t`Liquidity providers earn a 0.25% fee on all trades proportional to their share of
                         the pool. Fees are added to the pool, accrue in real time and can be claimed by

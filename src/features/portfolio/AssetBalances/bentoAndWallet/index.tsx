@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { NATIVE, ZERO } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import AssetBalances from 'app/features/portfolio/AssetBalances/AssetBalances'
 import { Assets } from 'app/features/portfolio/AssetBalances/types'
@@ -11,6 +10,9 @@ import { useBentoBalancesV2ForAccount } from 'app/state/bentobox/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { useAllTokenBalancesWithLoadingIndicator, useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { useCallback, useMemo } from 'react'
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+// import { NATIVE, ZERO } from '@sushiswap/core-sdk'
+import { NATIVE, ZERO } from 'sdk'
 
 import { useBasicTableConfig } from '../useBasicTableConfig'
 import { useBentoBoxTableConfig } from '../useBentoBoxTableConfig'
@@ -73,7 +75,9 @@ export const WalletBalances = ({ account, chainId }: Balances) => {
   const dispatch = useAppDispatch()
   const [tokenBalances, loading] = useAllTokenBalancesWithLoadingIndicator(account)
 
-  const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
+  // Note (amiller68) - #WallabyOnly
+  // const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
+  const nativeBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
 
   const balances = useMemo(() => {
     return Object.values(tokenBalances).reduce<Assets[]>(
@@ -84,9 +88,9 @@ export const WalletBalances = ({ account, chainId }: Balances) => {
 
         return previousValue
       },
-      ethBalance ? [{ asset: ethBalance }] : []
+      nativeBalance ? [{ asset: nativeBalance }] : []
     )
-  }, [tokenBalances, ethBalance])
+  }, [tokenBalances, nativeBalance])
 
   const { config } = useBasicTableConfig(balances, loading)
 

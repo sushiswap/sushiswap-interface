@@ -1,14 +1,17 @@
-import { Currency, CurrencyAmount, Pair, Trade, TradeType } from '@sushiswap/core-sdk'
+// TODO / NOTE (amiller68) - #SdkChange / #SdkPublish
 import { BETTER_TRADE_LESS_HOPS_THRESHOLD } from 'app/constants'
 import { isTradeBetter } from 'app/functions/trade'
 import { useMemo } from 'react'
+import { Currency, CurrencyAmount, Pair, Trade, TradeType } from 'sdk'
 
 import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
 import { PairState, useV2Pairs } from './useV2Pairs'
 
 function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
+  // Get all common pairs for the two currencies
   const allCurrencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
 
+  // Get populated reservs from the contracts of those pairs
   const allPairs = useV2Pairs(allCurrencyCombinations)
 
   // only pass along valid pairs, non-duplicated pairs
@@ -38,8 +41,12 @@ export function useV2TradeExactIn(
   currencyOut?: Currency,
   { maxHops = MAX_HOPS } = {}
 ): Trade<Currency, Currency, TradeType.EXACT_INPUT> | null {
+  console.log('useV2TradeExactIn -> start')
+  // Get all common pairs for the two currencies
   const allowedPairs = useAllCommonPairs(currencyAmountIn?.currency, currencyOut)
+  console.log('useV2TradeExactIn -> allowedPairs', allowedPairs)
 
+  // Return the best Trade within the Hop Limit
   return useMemo(() => {
     if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
       if (maxHops === 1) {

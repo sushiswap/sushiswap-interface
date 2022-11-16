@@ -1,8 +1,9 @@
 import { Interface } from '@ethersproject/abi'
 import IUniswapV2PairABI from '@sushiswap/core/abi/IUniswapV2Pair.json'
-import { computePairAddress, Currency, CurrencyAmount, FACTORY_ADDRESS, Pair } from '@sushiswap/core-sdk'
 import { useMultipleContractSingleData } from 'app/lib/hooks/multicall'
 import { useMemo } from 'react'
+// TODO / NOTE: #SdkChange
+import { computePairAddress, Currency, CurrencyAmount, FACTORY_ADDRESS, Pair } from 'sdk'
 
 const PAIR_INTERFACE = new Interface(IUniswapV2PairABI)
 
@@ -41,6 +42,8 @@ export function useV2Pairs(currencies: [Currency | undefined, Currency | undefin
     [tokens]
   )
 
+  // TODO (amiller68): WE need to implement Mutlicalls in order to get this working
+  // #Research Do we need to implement getResrves for all our pairs / Tokens?
   const results = useMultipleContractSingleData(pairAddresses, PAIR_INTERFACE, 'getReserves')
 
   return useMemo(() => {

@@ -36,9 +36,9 @@ export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> }
  */
 export default function useUSDCPrice(currency?: Currency): Price<Currency, Token> | undefined {
   const { chainId } = useActiveWeb3React()
-  // console.log('useUSDCPrice -> start', currency, chainId)
+  console.log('useUSDCPrice -> start', currency, chainId)
 
-  // TODO (amiller68): #Research - Why is this here? What does it mean?
+  // Get the currency amount of 1 USD for whatever chain we're on
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined
   const stablecoin = amountOut?.currency
 
@@ -47,6 +47,7 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
   const v2USDCTrade = useV2TradeExactOut(currency, amountOut, {
     maxHops: 2,
   })
+  console.log('useUSDCPrice -> v2USDCTrade', v2USDCTrade)
 
   return useMemo(() => {
     if (!currency || !stablecoin) {
@@ -70,9 +71,12 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
   }, [currency, stablecoin, v2USDCTrade])
 }
 
+// Note (amiller68): This is used in the priceImpact calculation
 export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null) {
+  console.log('useUSDCValue -> start', currencyAmount)
   // Bandaid solution for now, might become permanent
   const price = useUSDCPrice(currencyAmount?.currency)
+  console.log('useUSDCValue -> price', price, 'for', currencyAmount)
 
   return useMemo(() => {
     if (!price || !currencyAmount) return null
