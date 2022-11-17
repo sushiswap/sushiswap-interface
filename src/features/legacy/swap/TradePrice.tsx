@@ -43,7 +43,11 @@ const TradePrice: FC<TradePriceProps> = ({
       onClick={flipPrice}
       className={classNames('flex w-full gap-1 cursor-pointer hover:text-white select-none', className)}
     >
-      <Typography variant="sm" weight={700} className="font-mono flex gap-1 tracking-[0.06em] text-white">
+      <Typography
+        variant="sm"
+        weight={700}
+        className="font-mono flex gap-1 tracking-[0.06em] text-white font-normal text-sm"
+      >
         1 {labelInverted} <span className="text-primary">=</span> {formattedPrice} {label}
       </Typography>
     </button>

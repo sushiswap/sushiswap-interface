@@ -1,19 +1,26 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
-import { ArrowLeftIcon, PlusIcon } from '@heroicons/react/solid'
+import { CogIcon } from '@heroicons/react/outline'
+import { CheckIcon, ExclamationIcon, PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, currencyEquals, WNATIVE } from '@sushiswap/core-sdk'
+import { Currency, currencyEquals, Percent, WNATIVE } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
+import CloseIcon from 'app/components/CloseIcon'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
-import SettingsTab from 'app/components/Settings'
+import { HeadlessUiModal } from 'app/components/Modal'
+import QuestionHelper from 'app/components/QuestionHelper'
+import Switch from 'app/components/Switch'
+import TransactionSettings from 'app/components/TransactionSettings'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { ZERO_PERCENT } from 'app/constants'
 import { ConfirmAddModalBottom } from 'app/features/legacy/liquidity/ConfirmAddModalBottom'
 import LiquidityPrice from 'app/features/legacy/liquidity/LiquidityPrice'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
+import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
+import { classNames } from 'app/functions'
 import { currencyId } from 'app/functions/currency'
 import { calculateGasMargin, calculateSlippageAmount } from 'app/functions/trade'
 import { useCurrency } from 'app/hooks/Tokens'
@@ -26,6 +33,7 @@ import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
+import { useToggleSettingsMenu } from 'app/state/application/hooks'
 import { useAppSelector } from 'app/state/hooks'
 import { Field } from 'app/state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'app/state/mint/hooks'
@@ -35,16 +43,25 @@ import { useExpertModeManager } from 'app/state/user/hooks'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useState } from 'react'
+import { ArrowLeft } from 'react-feather'
 
-export default function Add() {
+type Props = {
+  placeholderSlippage?: Percent
+  trident?: boolean
+  className?: string
+}
+const Add = ({ placeholderSlippage, trident = false, className }: Props) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
   const router = useRouter()
   const tokens = router.query.tokens
   const [currencyIdA, currencyIdB] = (tokens as string[]) || [undefined, undefined]
+  const [expertMode, toggleExpertMode] = useExpertModeManager()
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const toggle = useToggleSettingsMenu()
 
   const oneCurrencyIsWETH = Boolean(
     chainId &&
@@ -70,7 +87,7 @@ export default function Add() {
     error,
   } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
-
+  const [showSettings, setShowSettings] = React.useState(false)
   const isValid = !error
 
   // modal and loading
@@ -286,98 +303,186 @@ export default function Add() {
         }
         pendingText={pendingText}
       />
-      <SwapLayoutCard>
-        <div className="grid items-center grid-cols-3">
-          <ArrowLeftIcon
-            width={24}
-            height={24}
-            className="cursor-pointer text-high-emphesis hover:text-white focus:text-white"
-            onClick={() => router.push('/pool')}
-          />
-          <Typography weight={700} className="text-center whitespace-nowrap text-high-emphesis">
-            {i18n._(t`Add Liquidity`)}
-          </Typography>
-          <SettingsTab className="!w-6 !h-6 justify-self-end" />
-        </div>
-        <div className="flex flex-col gap-3">
+      {showSettings ? (
+        <SwapLayoutCard>
+          <>
+            <div className="flex flex-row">
+              <ArrowLeft
+                width={25}
+                onClick={() => setShowSettings(false)}
+                color={'#746AFB'}
+                className="ml-2 cursor-pointer"
+              />
+              <div className="ml-36 text-white text-lg font-bold"> Settings </div>
+            </div>
+            <div className="flex flex-col gap-4 p-3 mt-4">
+              <TransactionSettings placeholderSlippage={placeholderSlippage} trident={trident} />
+            </div>
+            <div className="flex flex-col gap-3 p-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Typography variant="lg" className="text-high-emphesis" weight={700}>
+                    {i18n._(t`Expert mode`)}
+                  </Typography>
+                  <QuestionHelper
+                    text={i18n._(
+                      t`Bypasses confirmation modals and allows high slippage trades. Use at your own risk.`
+                    )}
+                  />
+                </div>
+                <Switch
+                  size="sm"
+                  id="toggle-expert-mode-button"
+                  checked={expertMode}
+                  onChange={
+                    expertMode
+                      ? () => {
+                          toggleExpertMode()
+                          setShowConfirmation(false)
+                        }
+                      : () => {
+                          toggle()
+                          setShowConfirmation(true)
+                        }
+                  }
+                  checkedIcon={<CheckIcon className="text-dark-700" />}
+                  uncheckedIcon={<CloseIcon />}
+                  color="purple"
+                />
+              </div>
+            </div>
+          </>
+          <div className={classNames(className, 'flex items-center justify-center w-10 h-10 rounded-full')}></div>
+          <HeadlessUiModal.Controlled
+            isOpen={showConfirmation}
+            onDismiss={() => setShowConfirmation(false)}
+            maxWidth="md"
+          >
+            <div className="flex flex-col gap-4">
+              <HeadlessUiModal.Header header={i18n._(t`Confirm`)} onClose={() => setShowConfirmation(false)} />
+              <HeadlessUiModal.BorderedContent className="flex flex-col gap-3">
+                <Typography variant="sm" weight={700} className="text-white">
+                  {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
+                              that often result in bad rates and lost funds.`)}
+                </Typography>
+              </HeadlessUiModal.BorderedContent>
+              <div className="flex flex-col gap-4 items-center">
+                <div className="flex items-center border p-4 w-11/12 text-xs border-[#E8DB31] text-[#E8DB31] bg-[#E8DB31] bg-opacity-25">
+                  <ExclamationIcon className="text-yellow mr-2" width={24} />
+                  Only use this mode if you know what you are doing.
+                </div>
+                <Button
+                  id="confirm-expert-mode"
+                  color="yellow"
+                  variant="filled"
+                  onClick={() => {
+                    toggleExpertMode()
+                    setShowConfirmation(false)
+                  }}
+                >
+                  {i18n._(t`Enable Expert Mode`)}
+                </Button>
+              </div>
+            </div>
+          </HeadlessUiModal.Controlled>
+        </SwapLayoutCard>
+      ) : (
+        <SwapLayoutCard>
+          <div className="flex flex-row p-1 ">
+            <HeaderNew />
+            <CogIcon
+              width={25}
+              onClick={() => setShowSettings(true)}
+              color={'#746AFB'}
+              className="relative ml-[275px] cursor-pointer"
+            />
+          </div>
+          <div className="grid items-center grid-cols-3">{/* add Liquidity */}</div>
+          <div className="flex flex-col gap-3">
+            <SwapAssetPanel
+              header={SwapAssetPanel.Header}
+              spendFromWallet={true}
+              value={formattedAmounts[Field.CURRENCY_A]}
+              onChange={onFieldAInput}
+              onSelect={handleCurrencyASelect}
+              currency={currencies[Field.CURRENCY_A]}
+            />
+          </div>
+          <div className="z-0 flex justify-center -mt-6 -mb-6">
+            <div className="p-1.5 rounded-full bg-dark-800 border shadow-md border-dark-700 hover:border-dark-600">
+              <PlusIcon width={14} className="text-high-emphesis hover:text-white" />
+            </div>
+          </div>
           <SwapAssetPanel
             header={SwapAssetPanel.Header}
             spendFromWallet={true}
-            value={formattedAmounts[Field.CURRENCY_A]}
-            onChange={onFieldAInput}
-            onSelect={handleCurrencyASelect}
-            currency={currencies[Field.CURRENCY_A]}
+            value={formattedAmounts[Field.CURRENCY_B]}
+            onChange={onFieldBInput}
+            onSelect={handleCurrencyBSelect}
+            currency={currencies[Field.CURRENCY_B]}
           />
-        </div>
-        <div className="z-0 flex justify-center -mt-6 -mb-6">
-          <div className="p-1.5 rounded-full bg-dark-800 border shadow-md border-dark-700 hover:border-dark-600">
-            <PlusIcon width={14} className="text-high-emphesis hover:text-white" />
-          </div>
-        </div>
-        <SwapAssetPanel
-          header={SwapAssetPanel.Header}
-          spendFromWallet={true}
-          value={formattedAmounts[Field.CURRENCY_B]}
-          onChange={onFieldBInput}
-          onSelect={handleCurrencyBSelect}
-          currency={currencies[Field.CURRENCY_B]}
-        />
-        {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
-          <LiquidityPrice
-            currencies={currencies}
-            price={price}
-            noLiquidity={noLiquidity}
-            poolTokenPercentage={poolTokenPercentage}
-            className="bg-dark-900"
-          />
-        )}
+          {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
+            <LiquidityPrice
+              currencies={currencies}
+              price={price}
+              noLiquidity={noLiquidity}
+              poolTokenPercentage={poolTokenPercentage}
+              className="bg-dark-900"
+            />
+          )}
 
-        {addIsUnsupported ? (
-          <Button color="red" disabled fullWidth className="rounded-2xl md:rounded">
-            {i18n._(t`Unsupported Asset`)}
-          </Button>
-        ) : !account ? (
-          <Web3Connect color="blue" variant="filled" fullWidth className="rounded-2xl md:rounded" />
-        ) : (
-          <div className="flex flex-col gap-3">
-            {approvalA !== ApprovalState.APPROVED && approvalA !== ApprovalState.UNKNOWN && (
-              <Button
-                loading={approvalA === ApprovalState.PENDING}
-                fullWidth
-                onClick={approveACallback}
-                disabled={approvalA === ApprovalState.PENDING}
-                className="rounded-2xl md:rounded"
-              >
-                {i18n._(t`Approve ${currencies[Field.CURRENCY_A]?.symbol}`)}
-              </Button>
-            )}
-            {approvalB !== ApprovalState.APPROVED && approvalB !== ApprovalState.UNKNOWN && (
-              <Button
-                loading={approvalB === ApprovalState.PENDING}
-                fullWidth
-                onClick={approveBCallback}
-                disabled={approvalB === ApprovalState.PENDING}
-                className="rounded-2xl md:rounded"
-              >
-                {i18n._(t`Approve ${currencies[Field.CURRENCY_B]?.symbol}`)}
-              </Button>
-            )}
-
-            <Button
-              fullWidth
-              onClick={() => {
-                isExpertMode ? onAdd() : setShowConfirm(true)
-              }}
-              disabled={!isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED}
-              className="rounded-2xl md:rounded"
-            >
-              {error ?? i18n._(t`Add Liquidity`)}
+          {addIsUnsupported ? (
+            <Button color="red" disabled fullWidth className="rounded-2xl md:rounded">
+              {i18n._(t`Unsupported Asset`)}
             </Button>
-          </div>
-        )}
+          ) : !account ? (
+            <div className="flex flex-col items-center">
+              <Web3Connect color="purple" variant="filled" fullWidth />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 items-center">
+              {approvalA !== ApprovalState.APPROVED && approvalA !== ApprovalState.UNKNOWN && (
+                <Button
+                  loading={approvalA === ApprovalState.PENDING}
+                  fullWidth
+                  onClick={approveACallback}
+                  disabled={approvalA === ApprovalState.PENDING}
+                  className="rounded-2xl md:rounded"
+                >
+                  {i18n._(t`Approve ${currencies[Field.CURRENCY_A]?.symbol}`)}
+                </Button>
+              )}
+              {approvalB !== ApprovalState.APPROVED && approvalB !== ApprovalState.UNKNOWN && (
+                <Button
+                  loading={approvalB === ApprovalState.PENDING}
+                  fullWidth
+                  onClick={approveBCallback}
+                  disabled={approvalB === ApprovalState.PENDING}
+                  className="rounded-2xl md:rounded"
+                >
+                  {i18n._(t`Approve ${currencies[Field.CURRENCY_B]?.symbol}`)}
+                </Button>
+              )}
 
-        {addIsUnsupported && <UnsupportedCurrencyFooter currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]} />}
-      </SwapLayoutCard>
+              <Button
+                fullWidth
+                onClick={() => {
+                  isExpertMode ? onAdd() : setShowConfirm(true)
+                }}
+                disabled={!isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED}
+                className="rounded-2xl md:rounded"
+              >
+                {error ?? i18n._(t`Add Liquidity`)}
+              </Button>
+            </div>
+          )}
+
+          {addIsUnsupported && (
+            <UnsupportedCurrencyFooter currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]} />
+          )}
+        </SwapLayoutCard>
+      )}
+
       {noLiquidity && (
         <Typography variant="xs" className="px-10 mt-5 text-center text-yellow">
           {i18n._(
@@ -389,15 +494,15 @@ export default function Add() {
         <Typography variant="xs" weight={700} component="span">
           Tip
         </Typography>
-        :{' '}
+        :
         {i18n._(
           t`By adding liquidity you'll earn 0.25% of all trades on this pair
-                proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be
-                claimed by withdrawing your liquidity.`
+          proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be
+          claimed by withdrawing your liquidity.`
         )}
       </Typography>
     </>
   )
 }
-
+export default Add
 Add.Layout = SwapLayout('add-page')

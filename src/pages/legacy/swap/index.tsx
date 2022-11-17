@@ -487,7 +487,7 @@ const Swap = ({
         <SwapLayoutCard>
           <div className="px-2">
             <div className="flex items-center justify-between gap-2 ml-2 mt-1 mb-1">
-              <div className="flex gap-4">
+              <div className="flex mt-4 mb-4">
                 <NavLink
                   activeClassName="text-high-emphesis text-lg"
                   href={{

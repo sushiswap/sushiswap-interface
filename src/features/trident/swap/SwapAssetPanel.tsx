@@ -2,7 +2,6 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Percent } from '@sushiswap/core-sdk'
-import Button from 'app/components/Button'
 import NumericalInput from 'app/components/Input/Numeric'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
@@ -211,7 +210,7 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
       variant="sm"
       className="font-mono flex text-secondary whitespace-nowrap"
     >
-      {i18n._(t`BALANCE:`)} {balance ? balance.toSignificant(6) : '0.00'}
+      {i18n._(t`BALANCE:`)} {balance ? balance.toSignificant(6) : '0'}
     </Typography>
   )
 }
@@ -237,10 +236,12 @@ const SwapAssetPanelHeader: FC<
       {!hideSearchModal && <ChevronDownIcon width={18} />}
     </div>
   ) : (
-    <Button color="blue" variant="filled" size="sm" id={id} className="!rounded-full !px-2 !py-0 !h-[32px] !pl-3">
-      {selectLabel || i18n._(t`Select a Token`)}
-      <ChevronDownIcon width={18} />
-    </Button>
+    <div id={id} className={classNames(hideSearchModal ? '' : 'cursor-pointer', 'flex items-center gap-2 px-2 py-1')}>
+      <Typography variant="sm" className="!text-2xl" weight={700}>
+        {selectLabel || i18n._(t`Select a Token`)}
+      </Typography>
+      {!hideSearchModal && <ChevronDownIcon width={18} />}
+    </div>
   )
 
   return (

@@ -2,13 +2,12 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency } from '@sushiswap/core-sdk'
 import NavLink from 'app/components/NavLink'
-import Settings from 'app/components/Settings'
 import Typography from 'app/components/Typography'
-// import { Feature } from 'app/enums'
-// import { featureEnabled } from 'app/functions'
+import { Feature } from 'app/enums'
+import { featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 
 const getQuery = (input?: Currency, output?: Currency) => {
   if (!input && !output) return
@@ -33,38 +32,34 @@ const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency, trident 
   const { i18n } = useLingui()
   const { asPath } = useRouter()
   const isLimitOrder = asPath.startsWith('/limit-order')
-  const [flip, setFlip] = useState(false)
 
   return (
-    <div className="flex items-center justify-between gap-2 ml-2 mt-1 mb-1">
-      <div className="flex gap-4">
-        <NavLink
-          activeClassName="text-high-emphesis text-lg"
-          href={{
-            pathname: '/swap',
-            query: getQuery(inputCurrency, outputCurrency),
-          }}
-        >
-          <Typography weight={700} className="text-secondary cursor-default	">
-            {i18n._(t`Swap`)}
-          </Typography>
-        </NavLink>
-        {/* {featureEnabled(Feature.LIMIT_ORDERS, chainId) ? (
+    <div className="px-2">
+      <div className="flex items-center justify-between gap-1 mt-4 mb-4">
+        <div className="flex gap-4">
           <NavLink
             activeClassName="text-high-emphesis"
             href={{
-              pathname: '/limit-order',
-              query: getQuery(inputCurrency, outputCurrency),
+              pathname: '/add',
             }}
           >
             <Typography weight={700} className="text-secondary hover:text-white">
-              {i18n._(t`Limit`)}
+              {i18n._(t`Add`)}
             </Typography>
           </NavLink>
-        ) : null} */}
-      </div>
-      <div className="flex gap-4">
-        <Settings className="!w-6 !h-6" trident={trident} />
+          {featureEnabled(Feature.LIMIT_ORDERS, chainId) ? (
+            <NavLink
+              activeClassName="text-high-emphesis"
+              href={{
+                pathname: '/remove',
+              }}
+            >
+              <Typography weight={700} className="text-secondary hover:text-white">
+                {i18n._(t`Remove`)}
+              </Typography>
+            </NavLink>
+          ) : null}
+        </div>
       </div>
     </div>
   )
