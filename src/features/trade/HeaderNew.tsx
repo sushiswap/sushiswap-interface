@@ -2,10 +2,8 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency } from '@sushiswap/core-sdk'
 import NavLink from 'app/components/NavLink'
-import Settings from 'app/components/Settings'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
-import MyOrders from 'app/features/legacy/limit-order/MyOrders'
 import { featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
@@ -36,36 +34,32 @@ const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency, trident 
   const isLimitOrder = asPath.startsWith('/limit-order')
 
   return (
-    <div className="flex items-center justify-between gap-1">
-      <div className="flex gap-4">
-        <NavLink
-          activeClassName="text-high-emphesis"
-          href={{
-            pathname: '/swap',
-            query: getQuery(inputCurrency, outputCurrency),
-          }}
-        >
-          <Typography weight={700} className="text-secondary hover:text-white">
-            {i18n._(t`Swap`)}
-          </Typography>
-        </NavLink>
-        {featureEnabled(Feature.LIMIT_ORDERS, chainId) ? (
+    <div className="px-2">
+      <div className="flex items-center justify-between gap-1 mt-4 mb-4">
+        <div className="flex gap-4">
           <NavLink
             activeClassName="text-high-emphesis"
             href={{
-              pathname: '/limit-order',
-              query: getQuery(inputCurrency, outputCurrency),
+              pathname: '/add',
             }}
           >
             <Typography weight={700} className="text-secondary hover:text-white">
-              {i18n._(t`Limit`)}
+              {i18n._(t`Add`)}
             </Typography>
           </NavLink>
-        ) : null}
-      </div>
-      <div className="flex gap-4">
-        {isLimitOrder && <MyOrders />}
-        <Settings className="!w-6 !h-6" trident={trident} />
+          {featureEnabled(Feature.LIMIT_ORDERS, chainId) ? (
+            <NavLink
+              activeClassName="text-high-emphesis"
+              href={{
+                pathname: '/remove',
+              }}
+            >
+              <Typography weight={700} className="text-secondary hover:text-white">
+                {i18n._(t`Remove`)}
+              </Typography>
+            </NavLink>
+          ) : null}
+        </div>
       </div>
     </div>
   )

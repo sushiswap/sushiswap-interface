@@ -4,8 +4,8 @@ import React, { FC, ReactNode } from 'react'
 import Dots from '../Dots'
 import Loader from '../Loader'
 
-export type ButtonColor = 'red' | 'blue' | 'pink' | 'purple' | 'gradient' | 'gray'
-export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
+export type ButtonColor = 'red' | 'blue' | 'pink' | 'purple' | 'gradient' | 'gray' | 'yellow'
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'default' | 'none'
 export type ButtonVariant = 'outlined' | 'filled' | 'empty'
 
 const DIMENSIONS = {
@@ -17,21 +17,23 @@ const DIMENSIONS = {
 
 const SIZE = {
   xs: 'text-xs rounded-full',
-  sm: 'text-sm rounded-full',
-  md: 'rounded',
+  sm: 'text-xl font-medium rounded-md	w-11/12',
+  // md: 'rounded',
+  md: 'text-xl font-medium rounded-none	w-11/12',
   lg: 'text-lg rounded',
 }
 
 const FILLED = {
-  default:
-    'text-higher-emphesis hover:bg-gradient-to-b hover:from-black/20 focus:to-black/20 focus:bg-gradient-to-b focus:from-black/20 hover:to-black/20 active:bg-gradient-to-b active:from-black/40 active:to-black/40 disabled:pointer-events-none disabled:opacity-40',
-  blue: 'bg-blue border-blue',
+  default: 'text-higher-emphesis disabled:pointer-events-none disabled:opacity-40',
+  // blue: 'bg-blue border-blue',
+  blue: 'bg-[#746AFB] border-blue',
   red: 'bg-red',
   pink: 'bg-pink',
-  purple: 'bg-purple',
-  gradient:
-    '!bg-gradient-to-r from-blue to-pink-600 hover:from-blue/80 hover:to-pink-600/80 focus:from-blue/80 focus:to-pink-600/80 active:from-blue/70 active:to-pink-600/70 focus:border-blue-700',
-  gray: 'bg-dark-700',
+  purple: 'font-mono bg-[#746AFB] border-blue',
+  // find where gradient is, create a purple variant and change to purple
+  gradient: 'bg-[#746AFB] border-blue',
+  gray: 'font-mono bg-[#272727]',
+  yellow: 'bg-[#E8DB31] text-black',
 }
 
 const OUTLINED = {

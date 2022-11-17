@@ -32,7 +32,7 @@ export default function Web3Connect({ color = 'gray', size, className = '', ...r
       size={size}
       {...rest}
     >
-      {i18n._(t`Connect to a wallet`)}
+      {i18n._(t`Connect to MetaMask`)}
     </Button>
   )
 }
