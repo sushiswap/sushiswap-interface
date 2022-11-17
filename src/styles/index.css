@@ -103,3 +103,7 @@ input[type=datetime-local]::-webkit-calendar-picker-indicator {
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
 }
+
+.highcharts-credits {
+  display: none;
+}
