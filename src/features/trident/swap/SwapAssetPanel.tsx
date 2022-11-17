@@ -1,13 +1,11 @@
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Percent, ZERO } from '@sushiswap/core-sdk'
-import Button from 'app/components/Button'
-import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import { Currency, Percent } from '@sushiswap/core-sdk'
 import NumericalInput from 'app/components/Input/Numeric'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
-import { classNames, formatNumber, maxAmountSpend, tryParseAmount, warningSeverity } from 'app/functions'
+import { classNames, maxAmountSpend, tryParseAmount, warningSeverity } from 'app/functions'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
@@ -64,8 +62,8 @@ const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAsse
       <div
         className={classNames(
           disabled ? 'pointer-events-none opacity-40' : '',
-          error ? 'border-red-800 hover:border-red-500' : 'border-dark-700 hover:border-dark-600',
-          'rounded-[14px] border bg-dark-900 p-3 flex flex-col gap-4'
+          error ? 'border-red-800 hover:border-red-500' : 'border-[#292929] hover:border-[#292929]',
+          'rounded-[12px] border bg-[#292929] p-3 flex flex-col gap-1'
         )}
       >
         {header({
@@ -172,37 +170,20 @@ const InputPanel: FC<
   }, [value])
 
   return (
-    <Typography weight={700} variant="h3" className="relative flex items-baseline flex-grow gap-3 overflow-hidden">
+    <Typography
+      weight={700}
+      variant="h3"
+      className="relative flex items-baseline flex-grow gap-3 overflow-hidden text-4xl"
+    >
       <NumericalInput
         ref={ref}
         disabled={inputDisabled}
         value={value || ''}
         onUserInput={onChange}
-        placeholder="0.00"
-        className="leading-[36px] focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
+        placeholder="0"
+        className="font-mono font-light	 leading-[36px] placeholder:text-[#FFF] text-[#FFF] flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
         autoFocus
       />
-      {!ref && (
-        <>
-          <Typography
-            variant="xs"
-            className="text-secondary absolute bottom-1.5 pointer-events-none"
-            component="span"
-            style={{ left: width }}
-          >
-            {usdcValue?.greaterThan(ZERO) && <>~{formatNumber(usdcValue?.toFixed(), true, true, 2)} </>}
-            {priceImpact && (
-              <span className={priceImpactClassName}>({priceImpact?.multiply(-1)?.toSignificant(2)}%)</span>
-            )}
-          </Typography>
-          {/*This acts as a reference to get input width*/}
-          <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">
-            <span ref={span} className="opacity-0 absolute pointer-events-none tracking-[0]">
-              {`${value ? value : '0.00'}`}
-            </span>
-          </Typography>
-        </>
-      )}
     </Typography>
   )
 })
@@ -223,8 +204,13 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
   }, [balance, disabled, onChange])
 
   return (
-    <Typography role="button" onClick={handleClick} variant="sm" className="flex text-secondary whitespace-nowrap">
-      {i18n._(t`Balance:`)} {balance ? balance.toSignificant(6) : '0.00'}
+    <Typography
+      role="button"
+      onClick={handleClick}
+      variant="sm"
+      className="font-mono flex text-secondary whitespace-nowrap"
+    >
+      {i18n._(t`BALANCE:`)} {balance ? balance.toSignificant(6) : '0'}
     </Typography>
   )
 }
@@ -238,29 +224,24 @@ const SwapAssetPanelHeader: FC<
   const { i18n } = useLingui()
 
   const trigger = currency ? (
-    <div
-      id={id}
-      className={classNames(
-        hideSearchModal ? '' : 'bg-dark-800 hover:bg-dark-700 cursor-pointer',
-        'flex items-center gap-2 px-2 py-1 rounded-full shadow-md text-high-emphesis'
-      )}
-    >
-      <CurrencyLogo currency={currency} className="!rounded-full overflow-hidden" size={20} />
+    <div id={id} className={classNames(hideSearchModal ? '' : 'cursor-pointer', 'flex items-center gap-2 px-2 py-1')}>
       {label && (
-        <Typography variant="sm" className="!text-xl" weight={700}>
+        <Typography variant="sm" className="!text-2xl" weight={700}>
           {label}
         </Typography>
       )}
-      <Typography variant="sm" className="!text-xl" weight={700}>
+      <Typography variant="sm" className="!text-2xl" weight={700}>
         {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
       </Typography>
       {!hideSearchModal && <ChevronDownIcon width={18} />}
     </div>
   ) : (
-    <Button color="blue" variant="filled" size="sm" id={id} className="!rounded-full !px-2 !py-0 !h-[32px] !pl-3">
-      {selectLabel || i18n._(t`Select a Token`)}
-      <ChevronDownIcon width={18} />
-    </Button>
+    <div id={id} className={classNames(hideSearchModal ? '' : 'cursor-pointer', 'flex items-center gap-2 px-2 py-1')}>
+      <Typography variant="sm" className="!text-2xl" weight={700}>
+        {selectLabel || i18n._(t`Select a Token`)}
+      </Typography>
+      {!hideSearchModal && <ChevronDownIcon width={18} />}
+    </div>
   )
 
   return (

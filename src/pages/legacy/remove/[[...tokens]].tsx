@@ -1,7 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
-import { ArrowLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
@@ -9,9 +8,9 @@ import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Input from 'app/components/Input'
 import ListPanel from 'app/components/ListPanel'
-import SettingsTab from 'app/components/Settings'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
+import HeaderNew from 'app/features/trade/HeaderNew'
 import { classNames, unwrappedCurrencyAmount } from 'app/functions'
 import { calculateGasMargin, calculateSlippageAmount } from 'app/functions/trade'
 import { useCurrency } from 'app/hooks/Tokens'
@@ -379,18 +378,8 @@ export default function Remove() {
         pendingText={pendingText}
       />
       <SwapLayoutCard>
-        <div className="grid items-center grid-cols-3">
-          <ArrowLeftIcon
-            width={24}
-            height={24}
-            className="cursor-pointer text-high-emphesis hover:text-white focus:text-white"
-            onClick={() => router.push('/pool')}
-          />
-          <Typography weight={700} className="text-center whitespace-nowrap text-high-emphesis">
-            {i18n._(t`Remove Liquidity`)}
-          </Typography>
-          <SettingsTab className="!w-6 !h-6 justify-self-end" />
-        </div>
+        <HeaderNew />
+        <div className="grid items-center grid-cols-3"></div>
         <div className="flex flex-col gap-3">
           <div
             className={classNames(

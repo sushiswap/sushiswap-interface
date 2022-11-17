@@ -1,4 +1,3 @@
-import { ExclamationIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Percent } from '@sushiswap/core-sdk'
@@ -64,9 +63,9 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid gap-2">
+      <div className="grid gap-2 border-b-2 pb-4 border-[#292929]">
         <div className="flex items-center">
-          <Typography variant="xs" weight={700} className="text-high-emphesis">
+          <Typography variant="lg" weight={700} className="text-high-emphesis">
             {i18n._(t`Slippage tolerance`)}
           </Typography>
 
@@ -76,7 +75,19 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
             )}
           />
         </div>
+
         <div className="flex items-center space-x-2">
+          <div>
+            <Button
+              size="sm"
+              color={slippageIsDefault ? 'purple' : 'gray'}
+              // variant="outlined"
+              variant="filled"
+              onClick={() => dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR))}
+            >
+              {i18n._(t`AUTO`)}
+            </Button>
+          </div>
           <div
             className={classNames(
               slippageError === SlippageError.INVALID_INPUT
@@ -86,43 +97,36 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
                 : !slippageIsDefault
                 ? 'border-blue'
                 : 'border-dark-800',
-              'border-2 h-[36px] flex items-center px-2 rounded bg-dark-1000/40'
+              'font-mono h-[36px] w-full flex items-center px-2 rounded-md bg-[#292929]'
             )}
             tabIndex={-1}
           >
-            <div className="flex items-center justify-between gap-1">
-              {slippageError === SlippageError.TOO_LOW || slippageError === SlippageError.TOO_HIGH ? (
-                <ExclamationIcon className="text-yellow" width={24} />
-              ) : null}
-              <input
-                id="text-slippage"
-                className={classNames(
-                  slippageError === SlippageError.INVALID_INPUT ? 'text-red' : '',
-                  'bg-transparent placeholder-low-emphesis min-w-0 w-full font-bold'
-                )}
-                placeholder={placeholderSlippage?.toFixed(2)}
-                value={slippageInput}
-                onChange={(e) => dispatch(setSlippageInput(e.target.value))}
-                onBlur={() =>
-                  slippageError === SlippageError.INVALID_INPUT
-                    ? dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR))
-                    : dispatch(formatSlippageInput())
-                }
-                color={slippageError === SlippageError.INVALID_INPUT ? 'red' : ''}
-                autoComplete="off"
-              />
-              %
+            <div className="relative w-full">
+              <div className="relative w-full">
+                <input
+                  id="text-slippage"
+                  className={classNames(
+                    slippageError === SlippageError.INVALID_INPUT ? 'text-red' : '',
+                    'font-mono bg-transparent placeholder-low-emphesis min-w-0 w-full font-bold'
+                  )}
+                  placeholder={placeholderSlippage?.toFixed(2)}
+                  value={slippageInput}
+                  onChange={(e) => dispatch(setSlippageInput(e.target.value))}
+                  onBlur={() =>
+                    slippageError === SlippageError.INVALID_INPUT
+                      ? dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR))
+                      : dispatch(formatSlippageInput())
+                  }
+                  color={slippageError === SlippageError.INVALID_INPUT ? 'red' : ''}
+                  autoComplete="off"
+                />
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <Typography variant="lg" weight={700} className="font-sans text-white">
+                    {i18n._(t`%`)}
+                  </Typography>
+                </div>
+              </div>
             </div>
-          </div>
-          <div>
-            <Button
-              size="sm"
-              color={slippageIsDefault ? 'blue' : 'gray'}
-              variant="outlined"
-              onClick={() => dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR))}
-            >
-              {i18n._(t`Auto`)}
-            </Button>
           </div>
         </div>
         {slippageError ? (
@@ -146,19 +150,19 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
       </div>
 
       {!trident && (
-        <div className="grid gap-2">
+        <div className="grid gap-2 border-b-2 pb-4 border-[#292929]">
           <div className="flex items-center">
-            <Typography variant="xs" weight={700} className="text-high-emphesis">
+            <Typography variant="lg" weight={700} className="text-high-emphesis">
               {i18n._(t`Transaction deadline`)}
             </Typography>
 
             <QuestionHelper text={i18n._(t`Your transaction will revert if it is pending for more than this long.`)} />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="relative">
             <input
               className={classNames(
                 deadlineError ? 'text-red' : '',
-                'font-bold h-[36px] placeholder-low-emphesis bg-dark-1000/40 border-2 border-dark-800 rounded px-2  max-w-[100px] focus:border-blue'
+                'font-mono font-bold h-[36px] w-full rounded-md placeholder-low-emphesis bg-[#292929] px-2'
               )}
               placeholder={(DEFAULT_DEADLINE_FROM_NOW / 60).toString()}
               value={
@@ -175,9 +179,11 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
               }}
               color={deadlineError ? 'red' : ''}
             />
-            <Typography variant="sm" weight={700} className="text-secondary">
-              {i18n._(t`minutes`)}
-            </Typography>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+              <Typography variant="lg" weight={700} className="font-mono text-white">
+                {i18n._(t`MINUTES`)}
+              </Typography>
+            </div>
           </div>
         </div>
       )}

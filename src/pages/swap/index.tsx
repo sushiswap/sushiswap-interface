@@ -1,3 +1,4 @@
+import { Currency, Percent } from '@sushiswap/core-sdk'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
 import { SwapLayout } from 'app/layouts/SwapLayout'
@@ -9,6 +10,11 @@ import TridentSwap from '../trident/swap'
 
 export interface SwapProps {
   banners: BannerType[]
+  placeholderSlippage?: Percent
+  trident?: boolean
+  className?: string
+  inputCurrency?: Currency
+  outputCurrency?: Currency
 }
 
 export async function getServerSideProps() {

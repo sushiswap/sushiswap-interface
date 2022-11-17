@@ -1,4 +1,4 @@
-import { Currency, Price, ZERO } from '@sushiswap/core-sdk'
+import { Currency, Price } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
 import { useUSDCPrice } from 'app/hooks'
@@ -43,13 +43,12 @@ const TradePrice: FC<TradePriceProps> = ({
       onClick={flipPrice}
       className={classNames('flex w-full gap-1 cursor-pointer hover:text-white select-none', className)}
     >
-      <Typography variant="xs" weight={700} className="flex gap-1 tracking-[0.06em] text-white">
+      <Typography
+        variant="sm"
+        weight={700}
+        className="font-mono flex gap-1 tracking-[0.06em] text-white font-normal text-sm"
+      >
         1 {labelInverted} <span className="text-primary">=</span> {formattedPrice} {label}
-        {fiatPrice?.greaterThan(ZERO) && (
-          <Typography variant="xs" component="span" className="text-secondary">
-            (${fiatPrice?.toSignificant(6)})
-          </Typography>
-        )}
       </Typography>
     </button>
   )
