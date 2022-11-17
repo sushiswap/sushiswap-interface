@@ -74,11 +74,11 @@ const nextConfig = {
         destination: 'https://www.sushi.com/swap',
         permanent: true,
       },
-      {
-        source: '/farm/:path*',
-        destination: 'https://www.sushi.com/earn',
-        permanent: true,
-      },
+      // {
+      //   source: '/farm/:path*',
+      //   destination: 'https://www.sushi.com/earn',
+      //   permanent: true,
+      // },
       {
         source: '/farms/special',
         destination: 'https://www.sushi.com/earn',

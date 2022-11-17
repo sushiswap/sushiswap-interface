@@ -512,13 +512,13 @@ const MAINNET_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   // HUSD / ETH
-  '0x1B61BAD1495161bCb6C03DDB0E41622c0270bB1A': {
-    from: '0xdF574c24545E5FfEcb9a659c229253D4111d87e1',
-    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    decimals: 18,
-    fromDecimals: 8,
-    toDecimals: 18,
-  },
+  // '0x1B61BAD1495161bCb6C03DDB0E41622c0270bB1A': {
+  //   from: '0xdF574c24545E5FfEcb9a659c229253D4111d87e1',
+  //   to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  //   decimals: 18,
+  //   fromDecimals: 8,
+  //   toDecimals: 18,
+  // },
   // INJ / USD
   '0xaE2EbE3c4D20cE13cE47cbb49b6d7ee631Cd816e': {
     from: '0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30',
@@ -792,13 +792,13 @@ const MAINNET_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   // QQQ / USD
-  '0x6b54e83f44047d2168a195ABA5e9b768762167b5': {
-    from: '0x13B02c8dE71680e71F0820c996E4bE43c2F57d15',
-    to: '0x0000000000000000000000000000000000000001',
-    decimals: 8,
-    fromDecimals: 18,
-    toDecimals: 8,
-  },
+  // '0x6b54e83f44047d2168a195ABA5e9b768762167b5': {
+  //   from: '0x13B02c8dE71680e71F0820c996E4bE43c2F57d15',
+  //   to: '0x0000000000000000000000000000000000000001',
+  //   decimals: 8,
+  //   fromDecimals: 18,
+  //   toDecimals: 8,
+  // },
   // RAI / ETH
   '0x4ad7B025127e89263242aB68F0f9c4E5C033B489': {
     from: '0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919',
