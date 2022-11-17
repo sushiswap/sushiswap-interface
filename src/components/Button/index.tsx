@@ -32,7 +32,7 @@ const FILLED = {
   purple: 'font-mono bg-[#746AFB] border-blue',
   // find where gradient is, create a purple variant and change to purple
   gradient: 'bg-[#746AFB] border-blue',
-  gray: 'bg-[#272727]',
+  gray: 'font-mono bg-[#272727]',
   yellow: 'bg-[#E8DB31] text-black',
 }
 

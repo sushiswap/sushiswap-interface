@@ -107,7 +107,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
                   id="text-slippage"
                   className={classNames(
                     slippageError === SlippageError.INVALID_INPUT ? 'text-red' : '',
-                    'bg-transparent placeholder-low-emphesis min-w-0 w-full font-bold'
+                    'font-mono bg-transparent placeholder-low-emphesis min-w-0 w-full font-bold'
                   )}
                   placeholder={placeholderSlippage?.toFixed(2)}
                   value={slippageInput}
@@ -121,7 +121,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
                   autoComplete="off"
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                  <Typography variant="lg" weight={700} className="text-white">
+                  <Typography variant="lg" weight={700} className="font-sans text-white">
                     {i18n._(t`%`)}
                   </Typography>
                 </div>
@@ -180,7 +180,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
               color={deadlineError ? 'red' : ''}
             />
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-              <Typography variant="lg" weight={700} className="text-white">
+              <Typography variant="lg" weight={700} className="font-mono text-white">
                 {i18n._(t`MINUTES`)}
               </Typography>
             </div>

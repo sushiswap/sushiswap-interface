@@ -15,7 +15,7 @@ export const SwapLayoutCard: FC<{ className?: string }> = ({ children, className
   return (
     <div
       className={classNames(
-        'flex flex-col gap-3 grow pt-4 rounded-xl bg-[#1A1A1A] shadow-md shadow-dark-1000',
+        'flex flex-col gap-3 grow pt-4 rounded-xl bg-[#1A1A1A] shadow-md shadow-dark-1000 pb-2',
         className
       )}
     >

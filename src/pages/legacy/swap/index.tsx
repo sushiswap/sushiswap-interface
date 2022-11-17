@@ -1,5 +1,5 @@
 import { CogIcon, ExclamationIcon } from '@heroicons/react/outline'
-import { ArrowDownIcon, CheckIcon } from '@heroicons/react/solid'
+import { CheckIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, JSBI, Token, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
@@ -403,13 +403,16 @@ const Swap = ({
       {showSettings ? (
         <SwapLayoutCard>
           <>
-            <ArrowLeft width={25} onClick={() => setShowSettings(false)} color={'#746AFB'} className="ml-2" />
-            <div className="flex flex-col gap-4 p-3">
-              {/* <Typography variant="lg" className="flex flex-col text-white text-xl items-center" weight={700}>
-                <ArrowLeft width={25} onClick={() => setShowSettings(false)} />
-
-                {i18n._(t`Settings`)}
-              </Typography> */}
+            <div className="flex flex-row">
+              <ArrowLeft
+                width={25}
+                onClick={() => setShowSettings(false)}
+                color={'#746AFB'}
+                className="ml-2 cursor-pointer"
+              />
+              <div className="ml-36 text-white text-lg font-bold"> Settings </div>
+            </div>
+            <div className="flex flex-col gap-4 p-3 mt-4">
               <TransactionSettings placeholderSlippage={placeholderSlippage} trident={trident} />
             </div>
             <div className="flex flex-col gap-3 p-3">
@@ -497,7 +500,7 @@ const Swap = ({
                   </Typography>
                 </NavLink>
               </div>
-              <CogIcon width={25} onClick={() => setShowSettings(true)} color={'#746AFB'} />
+              <CogIcon width={25} onClick={() => setShowSettings(true)} color={'#746AFB'} className="cursor-pointer" />
             </div>
           </div>
           <div className="flex flex-col gap-3">
@@ -509,17 +512,39 @@ const Swap = ({
               onChange={handleTypeInput}
               onSelect={handleInputSelect}
             />
-            <div className="z-0 flex justify-center -mt-6 -mb-6">
+            <div className="z-0 flex justify-center -mt-[30px] -mb-[30px]">
               <div
                 role="button"
                 /// THIS IS WHERE THE ARROW FOR SWAP DIRECTION IS
-                className="p-1.5 rounded-full bg-dark-800 border shadow-md border-dark-700 hover:border-dark-600"
                 onClick={() => {
                   setApprovalSubmitted(false) // reset 2 step UI for approvals
                   onSwitchTokens()
                 }}
               >
-                <ArrowDownIcon width={14} className="text-high-emphesis hover:text-white" />
+                <svg width="40" height="40" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2.0918" y="1.74219" width="50.5" height="50.5" rx="5.25" fill="#292929" />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M29.7754 41.1587C29.7754 41.849 30.335 42.4087 31.0254 42.4087C31.7157 42.4087 32.2754 41.849 32.2754 41.1587L32.2754 20.6602C32.2754 18.8793 34.4277 17.9866 35.6882 19.2446L38.5091 22.0598C38.9977 22.5475 39.7892 22.5467 40.2768 22.0581C40.7645 21.5694 40.7637 20.778 40.2751 20.2903L31.9084 11.9403C31.4198 11.4526 30.6283 11.4534 30.1406 11.9421C29.989 12.094 29.8846 12.2752 29.8274 12.4674C29.7936 12.5808 29.7754 12.701 29.7754 12.8254L29.7754 41.1587Z"
+                    fill="#746AFB"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M24.9082 12.8252C24.9082 12.1348 24.3486 11.5752 23.6582 11.5752C22.9678 11.5752 22.4082 12.1348 22.4082 12.8252L22.4082 33.3237C22.4082 35.1045 20.2559 35.9973 18.9954 34.7393L16.1745 31.9241C15.6859 31.4364 14.8944 31.4372 14.4068 31.9258C13.9191 32.4145 13.9199 33.2059 14.4085 33.6936L22.7752 42.0436C23.2638 42.5313 24.0553 42.5305 24.543 42.0418C24.6946 41.8899 24.799 41.7087 24.8562 41.5164C24.89 41.403 24.9082 41.2829 24.9082 41.1585L24.9082 12.8252Z"
+                    fill="#746AFB"
+                  />
+                  <rect
+                    x="2.0918"
+                    y="1.74219"
+                    width="50.5"
+                    height="50.5"
+                    rx="5.25"
+                    stroke="#1A1A1A"
+                    strokeWidth="2.5"
+                  />
+                </svg>
               </div>
             </div>
             <SwapAssetPanel
