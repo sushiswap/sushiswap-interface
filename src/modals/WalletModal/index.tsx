@@ -7,7 +7,9 @@ import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
+import { switchToNetwork } from 'app/functions/network'
 import usePrevious from 'app/hooks/usePrevious'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useModalOpen, useWalletModalToggle } from 'app/state/application/hooks'
 import { ApplicationModal } from 'app/state/application/reducer'
 import Cookies from 'js-cookie'
@@ -37,6 +39,7 @@ interface WalletModal {
 
 const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactions, ENSName }) => {
   const { active, account, connector, activate, error, deactivate } = useWeb3React()
+  const { chainId, library } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [walletView, setWalletView] = useState(WALLET_VIEWS.ACCOUNT)
   const [pendingWallet, setPendingWallet] = useState<{ connector?: AbstractConnector; id: string }>()
@@ -50,7 +53,11 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
   const router = useRouter()
   const queryChainId = Number(router.query.chainId)
   const cookieChainId = Cookies.get('chain-id')
-  const defaultChainId = cookieChainId ? Number(cookieChainId) : 1
+  //  Note (amiller68) - #WallabyOnly
+  // TODO (amiller68) - #FilecoinMainnet figure out how to get config to work with this
+  // const defaultChainId = cookieChainId ? Number(cookieChainId) : config.defaultChainId
+  const defaultChainId = cookieChainId ? Number(cookieChainId) : 31415
+
   // close on connection, when logged out before
   useEffect(() => {
     if (account && !previousAccount && walletModalOpen) toggleWalletModal()
@@ -87,7 +94,12 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
 
   const handleDeactivate = useCallback(() => {
     deactivate()
-    setWalletView(WALLET_VIEWS.ACCOUNT)
+    // setWalletView(WALLET_VIEWS.ACCOUNT)
+    // Note (amiller68) - #MetamaskOnly - We don't need to switch wallets on disconnect
+    if (walletModalOpen) {
+      console.log('Closing wallet modal')
+      toggleWalletModal()
+    }
   }, [deactivate])
 
   const tryActivation = useCallback(
@@ -146,11 +158,39 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
             // }
           })
 
-          .catch((error) => {
+          .catch(async (error) => {
             console.debug('Error activating', error)
             if (error instanceof UnsupportedChainIdError) {
               // @ts-ignore TYPE NEEDS FIXING
-              activate(conn) // a little janky...can't use setError because the connector isn't set
+              // activate(conn) // a little janky...can't use setError because the connector isn't set
+
+              // TODO / Note (al): #WallabyOnly #FilecoinMainnet
+              // We only support Wallaby for now, so we can knowingly switch users to the correct network
+              // This is different from the commented out code above, which just disconnects the providers
+              console.log('UnsupportedChainIdError, Attempting to switch to Wallaby')
+
+              // Get the provider from the connector
+              const provider = await conn?.getProvider()
+              // Try to switch to the correct network
+              switchToNetwork({
+                provider,
+                //  TODO (amiller68) - #FilecoinMainnet figure out how to get config.defaultChainId to work with this
+                chainId: defaultChainId !== 31415 || !queryChainId ? defaultChainId : queryChainId,
+              }).catch((error) => {
+                console.log('Error switching to Wallaby', error)
+                return
+              })
+              // Attempt to connect one more time
+              // @ts-ignore TYPE NEEDS FIXING
+              activate(conn, (error1) => {
+                console.log('Error activating again', error1)
+              })
+                .then(() => {
+                  console.log('Activated properly on correct Network')
+                })
+                .catch((error2) => {
+                  console.log('Error activating again', error2)
+                })
             } else {
               setPendingError(true)
             }
@@ -257,9 +297,9 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
               {error instanceof UnsupportedChainIdError
                 ? // Note (amiller68): #WallabyOnly
                   // ? i18n._(t`Please connect to the appropriate Ethereum network.`)
-                  i18n._(t`Please connect to the appropriate Filecoin network. 
-                                    Figswap is deployed on Wallaby, you can find instructions on how to connect to Wallaby through
-                                    your MetaMask wallet here: https://github.com/filecoin-project/testnet-wallaby`)
+                  i18n._(
+                    t`Figswap is currently only available on the Wallaby test network for Filecoin. Please reconnect in order to continue.`
+                  )
                 : i18n._(t`Error connecting. Try refreshing the page.`)}
             </Typography>
           </HeadlessUiModal.BorderedContent>

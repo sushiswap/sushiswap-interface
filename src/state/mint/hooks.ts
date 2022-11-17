@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, JSBI, Pair, Percent, Price, Token } from '@sushiswap/core-sdk'
 import { tryParseAmount } from 'app/functions/parse'
 import { useTotalSupply } from 'app/hooks/useTotalSupply'
 import { PairState, useV2Pair } from 'app/hooks/useV2Pairs'
@@ -10,6 +9,8 @@ import { useAppDispatch } from 'app/state/hooks'
 import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+// TODO / Note (amiller68): #SdkChange / #SdkPublish
+import { Currency, CurrencyAmount, JSBI, Pair, Percent, Price, Token } from 'sdk'
 
 import { Field, typeInput } from './actions'
 

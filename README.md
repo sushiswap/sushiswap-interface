@@ -44,6 +44,8 @@ Ongoing TODOs:
 - [ ] `#FilecoinManinnet` Where Implementation of Filecoin is required for Production
 - [ ] `#SdkPublish` Where imports to any sdk needs to updated with published version
 - [ ] `#NewTokens` Implement new tokens as they are added to the SDK. First write documentation on how to do so.
-- [ ] `NetworkModal` Change network modal useflow to add Wallaby network to Metamask or other Wallets if on unnsupported networks
+- [ ] `#NewWallets` Marks where changes are needed in order to re-implement userflow for multiple wallets.
+- [ ] `#NetworkModal` Change network modal useflow to add Wallaby network to Metamask or other Wallets if on unnsupported networks
 - [ ] `#Copy` Copy changes to make disclaimers / branding more accurate / better
+-
 -

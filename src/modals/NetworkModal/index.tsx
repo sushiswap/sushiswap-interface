@@ -331,9 +331,8 @@ const NetworkModal: FC<{ switchNetwork: (targetChain: number) => void }> = ({ sw
     <HeadlessUiModal.Controlled isOpen={networkModalOpen} onDismiss={toggleNetworkModal}>
       <div className="flex flex-col gap-4">
         <HeadlessUiModal.Header header={i18n._(t`Select a network`)} onClose={toggleNetworkModal} />
-        <div className="flex flex-col gap-4">
-          We currently only support the Wallaby Test network on Filecoin. Please switch to Wallaby to continue.
-        </div>
+        {/*  TODO (amiller68) - #Copy #FilecoinMainnet Change this when we launch */}
+        <div className="flex flex-col gap-4">We currently only support the Wallaby Test network on Filecoin.</div>
         {/*  NOTE (amiller68) - #WallbyOnly */}
         {/*<div className="grid grid-flow-row-dense grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">*/}
         {/*  {[*/}
