@@ -1,7 +1,7 @@
 import { Switch as HeadlessUiSwitch } from '@headlessui/react'
 import { classNames } from 'app/functions'
 import { ComponentProps, FC, ReactNode } from 'react'
-type SwitchColor = 'default' | 'gradient'
+type SwitchColor = 'default' | 'gradient' | 'purple'
 
 type SwitchProps = ComponentProps<typeof HeadlessUiSwitch> & {
   size?: 'xs' | 'sm' | 'md'
@@ -16,6 +16,8 @@ const COLOR = {
   default: (checked) => (checked ? 'bg-high-emphesis' : 'bg-high-emphesis'),
   // @ts-ignore TYPE NEEDS FIXING
   gradient: (checked) => (checked ? 'bg-gradient-to-r from-blue to-pink' : 'bg-dark-700'),
+  // @ts-ignore TYPE NEEDS FIXING
+  purple: (checked) => (checked ? 'bg-[#FFF]' : 'bg-[#FFF]'),
 }
 
 const HEIGHT = {
@@ -47,7 +49,9 @@ const Switch: FC<SwitchProps> = ({
       checked={checked}
       onChange={onChange}
       className={classNames(
-        `flex items-center bg-dark-800 border border-dark-700 relative inline-flex flex-shrink-0 rounded-full cursor-pointer ease-in-out duration-200 ${id}`
+        checked
+          ? 'flex items-center bg-[#746AFB] border border-dark-700 relative inline-flex flex-shrink-0 rounded-full cursor-pointer ease-in-out duration-200 ${id}'
+          : `flex items-center bg-[#272727] border border-dark-700 relative inline-flex flex-shrink-0 rounded-full cursor-pointer ease-in-out duration-200 ${id}`
       )}
       style={{ height, width }}
     >

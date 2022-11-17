@@ -7,13 +7,15 @@ import DefaultLayout from './Default'
 
 export interface Layout {
   id: string
+  onShow?: boolean
+  setOnShow?: (open: boolean) => void
 }
 
 export const SwapLayoutCard: FC<{ className?: string }> = ({ children, className }) => {
   return (
     <div
       className={classNames(
-        'flex flex-col gap-3 p-2 md:p-4 pt-4 rounded-[24px] bg-dark-800 shadow-md shadow-dark-1000',
+        'flex flex-col gap-3 grow pt-4 rounded-xl bg-[#1A1A1A] shadow-md shadow-dark-1000',
         className
       )}
     >

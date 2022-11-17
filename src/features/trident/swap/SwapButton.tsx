@@ -111,7 +111,7 @@ const SwapButton: FC<SwapButton> = ({ onClick, spendFromWallet = true }) => {
                 fullWidth
                 id="swap-button"
                 loading={loading}
-                color={priceImpactSeverity > 2 && !error ? 'red' : 'gradient'}
+                color={priceImpactSeverity > 2 && !error ? 'red' : 'purple'}
                 disabled={disabled}
                 onClick={handleClick}
                 className="rounded-2xl md:rounded"
