@@ -313,6 +313,7 @@ const useMenu: UseMenu = () => {
         ],
       }
 
+      // Note (amiller68) - Can't look at Pools until we have subgraph implemented
       if (featureEnabled(Feature.SUBGRAPH, chainId)) {
         portfolio.items.push({
           key: 'liquidity',

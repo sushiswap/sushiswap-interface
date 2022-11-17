@@ -58,6 +58,7 @@ export async function getTokenList(
 
     const json = await response.json()
     if (!tokenListValidator(json)) {
+      console.log("Couldn't validate list")
       const validationErrors: string =
         tokenListValidator.errors?.reduce<string>((memo, error) => {
           const add = `${error.dataPath} ${error.message ?? ''}`

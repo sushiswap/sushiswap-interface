@@ -45,6 +45,7 @@ export const useBentoOrWalletBalances = (
 }
 
 export const useBentoOrWalletBalance = (account?: string, currency?: Currency, fromWallet?: boolean) => {
+  // console.log('useBentoOrWalletBalance: ', account, currency, fromWallet)
   const currencies = useMemo(() => [currency], [currency])
   const flags = useMemo(() => [fromWallet], [fromWallet])
   const balances = useBentoOrWalletBalances(account, currencies, flags)

@@ -13,6 +13,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 function Web3Network(): JSX.Element | null {
   const { chainId, library } = useActiveWeb3React()
+  console.log('chainId', chainId)
 
   const toggleNetworkModal = useNetworkModalToggle()
 
@@ -92,12 +93,16 @@ function Web3Network(): JSX.Element | null {
 
   // set chainId on initial load if not present
   useEffect(() => {
+    console.log('New ChainId: ', chainId)
+    console.log('New Library: ', library)
     if (chainId && !queryChainId) {
       router.replace({ pathname: router.pathname, query: { ...router.query, chainId } }, undefined, { shallow: true })
     }
   }, [chainId, queryChainId, router])
 
-  if (!chainId || !library) return null
+  if (!chainId || !library) {
+    return null
+  }
 
   return (
     <div

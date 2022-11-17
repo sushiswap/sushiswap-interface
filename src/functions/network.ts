@@ -13,6 +13,7 @@ export const switchToNetwork = async ({ provider, chainId }: SwitchNetworkArgume
   console.log(`Switching to chain ${chainId}`)
   const params = SUPPORTED_NETWORKS[chainId]
   try {
+    console.log('switchToNetwork -> params', params)
     await provider.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: params.chainId }],

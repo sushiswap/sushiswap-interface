@@ -1,7 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
-import { ChainId, Currency, NATIVE, Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
@@ -14,6 +13,8 @@ import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchMo
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import React, { KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react'
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { Currency, NATIVE, Token } from 'sdk'
 
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
@@ -80,15 +81,18 @@ export function CurrencySearch({
 
   const filteredSortedTokens = useSortedTokensByQuery(sortedTokens, debouncedQuery)
   // @ts-ignore TYPE NEEDS FIXING
-  const ether = useMemo(() => chainId && ![ChainId.CELO].includes(chainId) && NATIVE[chainId], [chainId])
+  // Note (amiller68): #WallabyOnly
+  // const ether = useMemo(() => chainId && NATIVE[chainId], [chainId])
+  // TODO (amiller68): Make this a Generic Native Currency Type, not just FIL or ETH
+  const fil = useMemo(() => chainId && NATIVE[chainId], [chainId])
 
   const filteredSortedTokensWithETH: Currency[] = useMemo(() => {
     const s = debouncedQuery.toLowerCase().trim()
-    if (s === '' || s === 'e' || s === 'et' || s === 'eth') {
-      return ether ? [ether, ...filteredSortedTokens] : filteredSortedTokens
+    if (s === '' || s === 'f' || s === 'fi' || s === 'fil') {
+      return fil ? [fil, ...filteredSortedTokens] : filteredSortedTokens
     }
     return filteredSortedTokens
-  }, [debouncedQuery, ether, filteredSortedTokens])
+  }, [debouncedQuery, fil, filteredSortedTokens])
 
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
@@ -109,8 +113,8 @@ export function CurrencySearch({
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
         const s = debouncedQuery.toLowerCase().trim()
-        if (s === 'eth' && ether) {
-          handleCurrencySelect(ether)
+        if (s === 'eth' && fil) {
+          handleCurrencySelect(fil)
         } else if (filteredSortedTokensWithETH.length > 0) {
           if (
             filteredSortedTokensWithETH[0].symbol?.toLowerCase() === debouncedQuery.trim().toLowerCase() ||
@@ -121,7 +125,7 @@ export function CurrencySearch({
         }
       }
     },
-    [debouncedQuery, ether, filteredSortedTokensWithETH, handleCurrencySelect]
+    [debouncedQuery, fil, filteredSortedTokensWithETH, handleCurrencySelect]
   )
 
   // if no results on main list, show option to expand into inactive
@@ -156,9 +160,11 @@ export function CurrencySearch({
 
       {searchToken && !searchTokenIsAdded && <ImportRow token={searchToken} onClick={handleImport} />}
       <div className="h-full overflow-hidden overflow-y-auto border rounded border-dark-800 bg-[rgba(0,0,0,0.2)]">
+        {/* Note (amiller68): includeNative seems to always be true based on how 'CurrencySearchModalContext' is defined*/}
         {filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
           <CurrencyList
-            currencies={includeNative ? filteredSortedTokensWithETH : filteredSortedTokens}
+            // currencies={includeNative ? filteredSortedTokensWithETH : filteredSortedTokens}
+            currencies={filteredSortedTokensWithETH}
             otherListTokens={filteredInactiveTokens}
             otherCurrency={otherSelectedCurrency}
           />

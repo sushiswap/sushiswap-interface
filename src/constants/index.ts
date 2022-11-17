@@ -1,4 +1,5 @@
-import { ChainId, JSBI, Percent } from '@sushiswap/core-sdk'
+// TOOD (amiller68): #SdkChange / #SdkPublish - Remove this when we have a published sdk
+import { ChainId, JSBI, Percent } from 'sdk'
 
 // TODO: Move some of this to config level...
 
@@ -63,23 +64,26 @@ export const ZERO_PERCENT = new Percent('0')
 export const ONE_HUNDRED_PERCENT = new Percent('1')
 
 export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
-  [ChainId.ETHEREUM]: 'https://analytics.sushi.com',
-  [ChainId.MATIC]: 'https://analytics-polygon.sushi.com',
-  [ChainId.FANTOM]: 'https://analytics-ftm.sushi.com',
-  [ChainId.BSC]: 'https://analytics-bsc.sushi.com',
-  [ChainId.XDAI]: 'https://analytics-xdai.sushi.com',
-  [ChainId.HARMONY]: 'https://analytics-harmony.sushi.com',
-  [ChainId.ARBITRUM]: 'https://analytics-arbitrum.sushi.com',
-  [ChainId.FUSE]: 'https://analytics-fuse.sushi.com',
-  [ChainId.MOONRIVER]: 'https://analytics-moonriver.sushi.com',
-  [ChainId.CELO]: 'https://analytics-celo.sushi.com',
+  // Note (amiller68): #WallabyOnly
+  // [ChainId.ETHEREUM]: 'https://analytics.sushi.com',
+  // [ChainId.MATIC]: 'https://analytics-polygon.sushi.com',
+  // [ChainId.FANTOM]: 'https://analytics-ftm.sushi.com',
+  // [ChainId.BSC]: 'https://analytics-bsc.sushi.com',
+  // [ChainId.XDAI]: 'https://analytics-xdai.sushi.com',
+  // [ChainId.HARMONY]: 'https://analytics-harmony.sushi.com',
+  // [ChainId.ARBITRUM]: 'https://analytics-arbitrum.sushi.com',
+  // [ChainId.FUSE]: 'https://analytics-fuse.sushi.com',
+  // [ChainId.MOONRIVER]: 'https://analytics-moonriver.sushi.com',
+  // [ChainId.CELO]: 'https://analytics-celo.sushi.com',
 }
 
+// TODO (amiller68): #Research - What is the Activation Block for each chain?
 export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
-  [ChainId.ETHEREUM]: 12965000,
-  [ChainId.ROPSTEN]: 10499401,
-  [ChainId.GÖRLI]: 5062605,
-  [ChainId.RINKEBY]: 8897988,
+  // Note (amiller68): #WallabyOnly
+  // [ChainId.ETHEREUM]: 12965000,
+  // [ChainId.ROPSTEN]: 10499401,
+  // [ChainId.GÖRLI]: 5062605,
+  // [ChainId.RINKEBY]: 8897988,
 }
 
 export const DEFAULT_TXN_DISMISS_MS = 25000

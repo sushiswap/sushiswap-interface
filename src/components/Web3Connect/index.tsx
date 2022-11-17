@@ -23,6 +23,7 @@ export default function Web3Connect({ color = 'gray', size, className = '', ...r
       {error instanceof UnsupportedChainIdError ? i18n._(t`You are on the wrong network`) : i18n._(t`Error`)}
     </div>
   ) : (
+    //  Note (amiller68)
     <Button
       id="connect-wallet"
       onClick={toggleWalletModal}
@@ -32,6 +33,7 @@ export default function Web3Connect({ color = 'gray', size, className = '', ...r
       size={size}
       {...rest}
     >
+      {/* TODO / Note (amiller68) - #NewWallets / #MetamaskOnly - For now the button will read this unitl we start supporting more wallets */}
       {i18n._(t`Connect to MetaMask`)}
     </Button>
   )

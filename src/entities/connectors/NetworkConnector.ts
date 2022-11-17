@@ -28,6 +28,12 @@ interface BatchItem {
   reject: (error: Error) => void
 }
 
+// Note (amiller68): This is a janky way to colocate batch items with individual requests
+// interface ResponseItem {
+//   item: BatchItem,
+//   response: Response | undefined
+// }
+
 class MiniRpcProvider implements AsyncSendable {
   public readonly isMetaMask: false = false
   public readonly chainId: number
@@ -53,8 +59,11 @@ class MiniRpcProvider implements AsyncSendable {
     this.batchWaitTimeMs = batchWaitTimeMs ?? 50
   }
 
+  // Note (amiller68): Lotus FEVM RPCs don't support Batch calls
+  // TODO (amiller68): Unjank this
   public readonly clearBatch = async () => {
     console.debug('Clearing batch', this.batch)
+    // The requests the need to be sent
     let batch = this.batch
 
     batch = batch.filter((b) => {
@@ -73,49 +82,102 @@ class MiniRpcProvider implements AsyncSendable {
 
     this.batch = []
     this.batchTimeoutId = null
-    let response: Response
-    try {
-      response = await fetch(this.url, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', accept: 'application/json' },
-        body: JSON.stringify(batch.map((item) => item.request)),
+
+    // Note (amiller68): Lotus FEVM RPCs don't support Batch calls
+    // let response: Response
+    // try {
+    //   response = await fetch(this.url, {
+    //     method: 'POST',
+    //     headers: { 'content-type': 'application/json', accept: 'application/json' },
+    //     body: JSON.stringify(batch.map((item) => item.request)),
+    //   })
+    // } catch (error) {
+    //   console.log('Error fetching', error, this.url)
+    //   batch.forEach(({ reject }) => {
+    //       reject(new Error('Failed to send batch call'))
+    //     }
+    //   )
+    //   return
+    // }
+    // if (!response.ok) {
+    //   console.log('Error fetching', response, this.url)
+    //   batch.forEach(({ reject }) => reject(new RequestError(`${response.status}: ${response.statusText}`, -32000)))
+    //   return
+    // }
+    // let json
+    // try {
+    //   json = await response.json()
+    // } catch (error) {
+    //   batch.forEach(({ reject }) => reject(new Error('Failed to parse JSON response')))
+    //   return
+    // }
+    // const byKey = batch.reduce<{ [id: number]: BatchItem }>((memo, current) => {
+    //   memo[current.request.id] = current
+    //   return memo
+    // }, {})
+    //
+    // for (const result of json) {
+    //   const {
+    //     resolve,
+    //     reject,
+    //     request: { method },
+    //   } = byKey[result.id]
+    //   if ('error' in result) {
+    //     reject(new RequestError(result?.error?.message, result?.error?.code, result?.error?.data))
+    //   } else if ('result' in result && resolve) {
+    //     resolve(result.result)
+    //   } else {
+    //     reject(new RequestError(`Received unexpected JSON-RPC response to ${method} request.`, -32000, result))
+    //   }
+    // }
+
+    // TODO (amiller68): Unjank this
+    Promise.all(
+      // Batch the requests into a single Promise.all
+      batch.map((item) => {
+        // console.log('Sending request', item.request, ' to ', this.url)
+        return fetch(this.url, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', accept: 'application/json' },
+          body: JSON.stringify(item.request),
+        }).catch((error) => {
+          console.error('Error fetching', error)
+          return undefined
+        })
       })
-    } catch (error) {
-      batch.forEach(({ reject }) => reject(new Error('Failed to send batch call')))
-      return
-    }
-
-    if (!response.ok) {
-      batch.forEach(({ reject }) => reject(new RequestError(`${response.status}: ${response.statusText}`, -32000)))
-      return
-    }
-
-    let json
-    try {
-      json = await response.json()
-    } catch (error) {
-      batch.forEach(({ reject }) => reject(new Error('Failed to parse JSON response')))
-      return
-    }
-    const byKey = batch.reduce<{ [id: number]: BatchItem }>((memo, current) => {
-      memo[current.request.id] = current
-      return memo
-    }, {})
-
-    for (const result of json) {
-      const {
-        resolve,
-        reject,
-        request: { method },
-      } = byKey[result.id]
-      if ('error' in result) {
-        reject(new RequestError(result?.error?.message, result?.error?.code, result?.error?.data))
-      } else if ('result' in result && resolve) {
-        resolve(result.result)
-      } else {
-        reject(new RequestError(`Received unexpected JSON-RPC response to ${method} request.`, -32000, result))
-      }
-    }
+    ).then((responses: (Response | undefined)[]) => {
+      // console.log('Got responses', responses)
+      responses.forEach((response, i) => {
+        const { resolve, reject, request } = batch[i]
+        // console.log('Got response (', i, ') ', response, 'for request', request)
+        // If the response is undefined, it means the request failed
+        if (response === undefined) {
+          reject(new Error('Failed to fetch'))
+          return
+        }
+        // Otherwise check the response status
+        if (!response.ok) {
+          // console.log('Bad response (', i, ') ', response, 'for request', request)
+          reject(new RequestError(`${response.status}: ${response.statusText}`, -32000))
+          return
+        }
+        // Otherwise parse the response
+        response.json().then((result) => {
+          if ('error' in result) {
+            // console.log('Got error (', i, ') parsing', response, 'for request', request, ': ', result)
+            reject(new RequestError(result?.error?.message, result?.error?.code, result?.error?.data))
+          } else if ('result' in result && resolve) {
+            // console.log('Got result (', i, ') parsing', response, 'for request', request, ': ', result)
+            resolve(result.result)
+          } else {
+            // console.log('Got unexpected result (', i, ') parsing', response, 'for request', request, ': ', result)
+            reject(
+              new RequestError(`Received unexpected JSON-RPC response to ${request.method} request.`, -32000, result)
+            )
+          }
+        })
+      })
+    })
   }
 
   public readonly sendAsync = (

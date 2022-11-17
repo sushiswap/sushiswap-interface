@@ -1,10 +1,13 @@
-import { Currency, Token } from '@sushiswap/core-sdk'
+// Note / TODO (amiller68): #SdkChange / #SdkPublish
 import { useActiveWeb3React } from 'app/services/web3'
 import flatMap from 'lodash/flatMap'
 import { useMemo } from 'react'
+import { Currency, Token } from 'sdk'
 
 import { ADDITIONAL_BASES, BASES_TO_CHECK_TRADES_AGAINST, CUSTOM_BASES } from '../config/routing'
 
+// TODO #Research right configuration to use with this hook
+// Pull all possible (intermediate?) trading pairs from the set of tokens
 export function useAllCurrencyCombinations(currencyA?: Currency, currencyB?: Currency): [Token, Token][] {
   const { chainId } = useActiveWeb3React()
 

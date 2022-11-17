@@ -4,7 +4,6 @@ import { CogIcon } from '@heroicons/react/outline'
 import { CheckIcon, ExclamationIcon, PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, currencyEquals, Percent, WNATIVE } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import CloseIcon from 'app/components/CloseIcon'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
@@ -43,6 +42,8 @@ import { useExpertModeManager } from 'app/state/user/hooks'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useState } from 'react'
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { Currency, currencyEquals, WNATIVE } from 'sdk'
 import { ArrowLeft } from 'react-feather'
 
 type Props = {
@@ -63,7 +64,7 @@ const Add = ({ placeholderSlippage, trident = false, className }: Props) => {
   const [showConfirmation, setShowConfirmation] = useState(false)
   const toggle = useToggleSettingsMenu()
 
-  const oneCurrencyIsWETH = Boolean(
+  const oneCurrencyIsWNative = Boolean(
     chainId &&
       ((currencyA && currencyEquals(currencyA, WNATIVE[chainId])) ||
         (currencyB && currencyEquals(currencyB, WNATIVE[chainId])))

@@ -1,14 +1,14 @@
-import { NATIVE } from '@sushiswap/core-sdk'
 import Container from 'app/components/Container'
 import { NAV_CLASS } from 'app/components/Header/styles'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
-import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
+import { useNativeCurrencyBalance } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
 import React, { FC } from 'react'
+// import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
+import { NATIVE } from 'sdk'
 
 import Dots from '../Dots'
 import Typography from '../Typography'
@@ -18,43 +18,64 @@ const HEADER_HEIGHT = 64
 
 const Desktop: FC = () => {
   const menu = useMenu()
+  // Note (amiller68): Account: The User's (Eth) Wallet Address | ChainId: The Network ID | Library: The Web3 Provider
   const { account, chainId, library } = useActiveWeb3React()
-  const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
-  const isCoinbaseWallet = useIsCoinbaseWallet()
-  const [showBanner, setShowBanner] = React.useState<boolean>(true)
+  // Note (amiller68): #WallbyOnly - Change this back when we learn about MultiContracts on FVM
+  // const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
+
+  // Note (amiller68): Not sure what the right way to do this is, but this works for now
+  const userFilBalance = useNativeCurrencyBalance(account ? account : undefined)
+  // Note (amiller68): #MetamaskOnly
+  // const isCoinbaseWallet = useIsCoinbaseWallet()
+  // Note (amiller68): These are unused, but I'm leaving them here for reference
+  // const [showBanner, setShowBanner] = React.useState<boolean>(true)
 
   return (
     <>
       <header className="fixed z-20 hidden w-full lg:block" style={{ height: HEADER_HEIGHT }}>
         <nav className={NAV_CLASS}>
           <Container maxWidth="full" className="mx-auto">
+            {/* Header Contents */}
             <div className="flex items-center justify-between gap-4 px-6">
+              {/* Menu Items */}
               <div className="flex gap-4">
                 <div className="flex items-center w-6 mr-4">
+                  {/* TODO (amiller68): Change Icon*/}
                   <Image src="https://app.sushi.com/images/logo.svg" alt="Sushi logo" width="24px" height="24px" />
                 </div>
                 {menu.map((node) => {
                   return <NavigationItem node={node} key={node.key} />
                 })}
               </div>
-
+              {/* Web3 Status  */}
               <div className="flex items-center justify-end w-auto shadow select-none whitespace-nowrap">
+                {/* Network Balance */}
                 {account && chainId && (
                   <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
-                    {userEthBalance ? (
-                      `${userEthBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
+                    {/* TODO (amiller68): #Urgent Need to figure out Research how ABI's work in FVM, and how to make balance calls*/}
+                    {/* within the framework laid out in this repo */}
+                    {/*{userEthBalance ? (*/}
+                    {/*  `${userEthBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`*/}
+                    {/*) : (*/}
+                    {/*  <Dots>FETCHING BALANCE</Dots>*/}
+                    {/*)}*/}
+                    {userFilBalance ? (
+                      // TODO (amiller68): For some reason the symbol is returning as WFIL, but it should be FIL for Mainnet and tFIL for Wallaby
+                      `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
                     ) : (
-                      <Dots>FETCHING</Dots>
+                      <Dots>FETCHING BALANCE</Dots>
                     )}
                   </Typography>
                 )}
-
-                {library && (library.provider.isMetaMask || isCoinbaseWallet) && (
+                {/* Chain Logo */}
+                {/* Note (amiller68): #MetamaskOnly - For now the provider is Always Metamask */}
+                {/*{library && (library.provider.isMetaMask || isCoinbaseWallet) && (*/}
+                {library && library.provider.isMetaMask && (
                   <div className="hidden sm:inline-block">
                     <Web3Network />
                   </div>
                 )}
-
+                {/* Connect Wallet Button or Wallet info */}
                 <Web3Status />
 
                 {/* <svg

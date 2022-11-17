@@ -1,9 +1,11 @@
-import { Pair } from '@sushiswap/core-sdk'
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
 import { useV2Pairs } from 'app/hooks/useV2Pairs'
+import { useTokenBalancesSequentialWithLoadingIndicator } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'app/state/user/hooks'
-import { useTokenBalancesWithLoadingIndicator } from 'app/state/wallet/hooks'
+// import { useTokenBalancesWithLoadingIndicator } from 'app/state/wallet/hooks'
 import { useMemo } from 'react'
+import { Pair } from 'sdk'
 
 interface V2PairsWithLiquidity {
   loading: boolean
@@ -33,7 +35,9 @@ export const useV2PairsWithLiquidity = (): V2PairsWithLiquidity => {
     () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
     [tokenPairsWithLiquidityTokens]
   )
-  const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
+  // TODO (amiller68): #Multicall - Replace with proper multicall method
+  const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesSequentialWithLoadingIndicator(
+    //useTokenBalancesWithLoadingIndicator(
     account ?? undefined,
     liquidityTokens
   )
