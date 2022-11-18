@@ -31,7 +31,7 @@ export const SUPPORTED_NETWORKS: Record<
       symbol: 'tFIL',
       decimals: 18,
     },
-    rpcUrls: ['https://api.calibration.node.glif.io/rpc/v0'], // TODO (amiller68): #Research Is this correct? Do i need the /rpc/v0?
+    rpcUrls: ['https://wallaby.node.glif.io/rpc/v0'], // TODO (amiller68): #Research Is this correct? Do i need the /rpc/v0?
     blockExplorerUrls: ['https://explorer.glif.io/'],
   },
   // TODO (amilller68): #FileconMainnet

@@ -254,8 +254,6 @@
     "showDetails": true
   },
   "dependencies": {
-    "@chainsafe/filsnap-adapter": "^2.1.2",
-    "@chainsafe/filsnap-types": "^2.1.2",
     "sdk": "../sdk/packages/core-sdk"
   }
 }

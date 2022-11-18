@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import AccountDetails from 'app/components/AccountDetails'
 import Button from 'app/components/Button'
-import ExternalLink from 'app/components/ExternalLink'
+// import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
@@ -23,7 +23,7 @@ import { UnsupportedChainIdError, useWeb3React } from 'web3-react-core'
 // import { WalletConnectConnector } from 'web3-react-walletconnect-connector'
 // import { switchToNetwork } from 'app/functions/network'
 import Option from './Option'
-import PendingView from './PendingView'
+// import PendingView from './PendingView'
 
 enum WALLET_VIEWS {
   OPTIONS,
@@ -100,7 +100,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
       console.log('Closing wallet modal')
       toggleWalletModal()
     }
-  }, [deactivate])
+  }, [deactivate, walletModalOpen, toggleWalletModal])
 
   const tryActivation = useCallback(
     async (connector: (() => Promise<AbstractConnector>) | AbstractConnector | undefined, id: string) => {
@@ -172,12 +172,13 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
               // Get the provider from the connector
               const provider = await conn?.getProvider()
               // Try to switch to the correct network
-              switchToNetwork({
+              await switchToNetwork({
                 provider,
                 //  TODO (amiller68) - #FilecoinMainnet figure out how to get config.defaultChainId to work with this
                 chainId: defaultChainId !== 31415 || !queryChainId ? defaultChainId : queryChainId,
               }).catch((error) => {
                 console.log('Error switching to Wallaby', error)
+                setPendingError(true)
                 return
               })
               // Attempt to connect one more time
@@ -315,38 +316,39 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
           ENSName={ENSName}
           openOptions={() => setWalletView(WALLET_VIEWS.OPTIONS)}
         />
-      ) : (
-        <div className="flex flex-col w-full space-y-4">
-          <HeadlessUiModal.Header
-            header={i18n._(t`Select a wallet`)}
-            onClose={toggleWalletModal}
-            {...(walletView !== WALLET_VIEWS.ACCOUNT && { onBack: handleBack })}
-          />
-          {walletView === WALLET_VIEWS.PENDING ? (
-            <PendingView
-              // @ts-ignore TYPE NEEDS FIXING
-              id={pendingWallet.id}
-              // @ts-ignore TYPE NEEDS FIXING
-              connector={pendingWallet.connector}
-              error={pendingError}
-              setPendingError={setPendingError}
-              tryActivation={tryActivation}
-            />
-          ) : (
-            <div className="grid grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">{options}</div>
-          )}
-          <div className="flex justify-center">
-            <Typography variant="xs" className="text-secondary" component="span">
-              {i18n._(t`New to Ethereum?`)}{' '}
-              <Typography variant="xs" className="text-blue" component="span">
-                <ExternalLink href="https://ethereum.org/wallets/" color="blue">
-                  {i18n._(t`Learn more about wallets`)}
-                </ExternalLink>
-              </Typography>
-            </Typography>
-          </div>
-        </div>
-      )}
+      ) : //  Note (amiller68): #MetamaskOnly - This shouldn't be needed anymore, but leaving it in for now
+      null
+      // <div className="flex flex-col w-full space-y-4">
+      //   <HeadlessUiModal.Header
+      //     header={i18n._(t`Select a wallet`)}
+      //     onClose={toggleWalletModal}
+      //     {...(walletView !== WALLET_VIEWS.ACCOUNT && { onBack: handleBack })}
+      //   />
+      //   {walletView === WALLET_VIEWS.PENDING ? (
+      //     <PendingView
+      //       // @ts-ignore TYPE NEEDS FIXING
+      //       id={pendingWallet.id}
+      //       // @ts-ignore TYPE NEEDS FIXING
+      //       connector={pendingWallet.connector}
+      //       error={pendingError}
+      //       setPendingError={setPendingError}
+      //       tryActivation={tryActivation}
+      //     />
+      //   ) : (
+      //     <div className="grid grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">{options}</div>
+      //   )}
+      //   <div className="flex justify-center">
+      //     <Typography variant="xs" className="text-secondary" component="span">
+      //       {i18n._(t`New to Ethereum?`)}{' '}
+      //       <Typography variant="xs" className="text-blue" component="span">
+      //         <ExternalLink href="https://ethereum.org/wallets/" color="blue">
+      //           {i18n._(t`Learn more about wallets`)}
+      //         </ExternalLink>
+      //       </Typography>
+      //     </Typography>
+      //   </div>
+      // </div>
+      }
     </HeadlessUiModal.Controlled>
   )
 }
