@@ -2771,10 +2771,15 @@
     tiny-invariant "^1.1.0"
     trident-preview "npm:@sushiswap/trident@1.0.0-canary.36"
 
-"@sushiswap/trident@1.0.0-canary.40", "@sushiswap/trident@^1.0.0-canary.40":
+"@sushiswap/trident@1.0.0-canary.40":
   version "1.0.0-canary.40"
   resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.40.tgz#c409c854e4bad69b7ed7154dde0a884ea4f7cdcf"
   integrity sha512-DL+OtlDnMcbWh95qT4hcqMOQtYZxRH69XEjKKkM4HaPjN6XtR0SaT9WLHA7k8huQDuweDZ94aKilSrp1WgcKZQ==
+
+"@sushiswap/trident@^1.0.0-canary.52":
+  version "1.0.0-canary.52"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.52.tgz#c07fecb0fa0d6f67c4f427fd0f003569a5180860"
+  integrity sha512-6yjKn3tdp1is6Y69cZfGY1GxwGjZxhMDDKWJwFUi4h/8R0y1SR6a61B0Qdda2DsVf/NfP4mY1jpQ6wsyrH1GGQ==
 
 "@swc/helpers@0.4.11":
   version "0.4.11"
