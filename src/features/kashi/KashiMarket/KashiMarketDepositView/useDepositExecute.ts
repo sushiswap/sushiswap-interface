@@ -6,6 +6,7 @@ import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, KASHI_ADDRESS } from '@sushiswap/core-sdk'
 import KashiCooker from 'app/entities/KashiCooker'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket'
+import { ZERO } from 'app/functions'
 import { useBentoBoxContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
@@ -53,6 +54,9 @@ export const useDepositExecute: UseDepositExecute = () => {
         market.asset.token.address,
         '0x000000000000000000000000000000000000dead'
       )
+
+      // Always update exchange rate
+      cooker.updateExchangeRate(true, ZERO, ZERO)
 
       cooker.addAsset(BigNumber.from(depositAmount.quotient.toString()), !spendFromWallet, deadBalance.isZero())
       const result = await cooker.cook()
