@@ -6,8 +6,6 @@ Clone the sdk repo right next to the figswap repo.
 add the dependencies to the figswap package.json
 `yarn add @sdk:../sdk/<path to the sdk you need to use>
 
-You need to connect a Metmask wallet to a wallaby account first to use the app without erroring out.
-
 Issue / Change Tags:
 Use and collate these to mark groups of issues / changes throughout the project.
 Use them like so:
@@ -47,5 +45,3 @@ Ongoing TODOs:
 - [ ] `#NewWallets` Marks where changes are needed in order to re-implement userflow for multiple wallets.
 - [ ] `#NetworkModal` Change network modal useflow to add Wallaby network to Metamask or other Wallets if on unnsupported networks
 - [ ] `#Copy` Copy changes to make disclaimers / branding more accurate / better
--
--
