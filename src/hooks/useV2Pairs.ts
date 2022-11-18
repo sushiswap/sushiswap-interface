@@ -3,7 +3,7 @@ import IUniswapV2PairABI from '@sushiswap/core/abi/IUniswapV2Pair.json'
 import { useMultipleContractSingleData } from 'app/lib/hooks/multicall'
 import { useMemo } from 'react'
 // TODO / NOTE: #SdkChange
-import { computePairAddress, Currency, CurrencyAmount, FACTORY_ADDRESS, Pair } from 'sdk'
+import { Currency, CurrencyAmount, Pair } from 'sdk'
 
 const PAIR_INTERFACE = new Interface(IUniswapV2PairABI)
 
@@ -23,18 +23,19 @@ export function useV2Pairs(currencies: [Currency | undefined, Currency | undefin
   const pairAddresses = useMemo(
     () =>
       tokens.reduce<(string | undefined)[]>((acc, [tokenA, tokenB]) => {
-        const address =
-          tokenA &&
-          tokenB &&
-          tokenA.chainId === tokenB.chainId &&
-          !tokenA.equals(tokenB) &&
-          FACTORY_ADDRESS[tokenA.chainId]
-            ? computePairAddress({
-                factoryAddress: FACTORY_ADDRESS[tokenA.chainId],
-                tokenA,
-                tokenB,
-              })
-            : undefined
+        const address = undefined
+        // TODO Note (amiller68): Commenting this out for now unitl #Factory contracts work
+        // tokenA &&
+        // tokenB &&
+        // tokenA.chainId === tokenB.chainId &&
+        // !tokenA.equals(tokenB) &&
+        // FACTORY_ADDRESS[tokenA.chainId]
+        //   ? computePairAddress({
+        //       factoryAddress: FACTORY_ADDRESS[tokenA.chainId],
+        //       tokenA,
+        //       tokenB,
+        //     })
+        //   : undefined
 
         acc.push(address && !acc.includes(address) ? address : undefined)
         return acc

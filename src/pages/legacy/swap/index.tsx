@@ -43,9 +43,9 @@ import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, us
 import { useExpertModeManager, useUserSingleHopOnly, useUserSushiGuard } from 'app/state/user/hooks'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { ArrowLeft } from 'react-feather'
 // Note (amiller68): #SdkChange / #SdkPublish
 import { Currency, JSBI, Token, Trade as V2Trade, TradeType } from 'sdk'
-import { ArrowLeft } from 'react-feather'
 
 import { SwapProps } from '../../swap'
 
@@ -427,7 +427,6 @@ const Swap = ({
         tokens={importTokensNotInDefault}
         onConfirm={handleConfirmTokenWarning}
       />
-
 
       {/* this is the settings menu */}
       {showSettings ? (

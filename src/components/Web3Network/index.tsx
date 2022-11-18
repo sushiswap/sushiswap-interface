@@ -98,7 +98,7 @@ function Web3Network(): JSX.Element | null {
     if (chainId && !queryChainId) {
       router.replace({ pathname: router.pathname, query: { ...router.query, chainId } }, undefined, { shallow: true })
     }
-  }, [chainId, queryChainId, router])
+  }, [chainId, queryChainId, router, library])
 
   if (!chainId || !library) {
     return null
