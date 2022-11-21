@@ -176,7 +176,7 @@ export function useKashiMediumRiskLendingPairs(
         addresses,
       ])
     )
-    throw new Error(
+    console.log(
       `BoringHelper failed: network: ${chainId ? NETWORK_LABEL[chainId] : 'undef'}, boringhelper: ${
         boringHelperContract?.address
       }, calldata in console`
