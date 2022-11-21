@@ -168,13 +168,13 @@ const XDAI_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   // STAKE / USD
-  '0x55f4b2D20d447dB498bCCCde60Fa9a51a3df6D72': {
-    from: '0xb7D311E2Eb55F2f68a9440da38e7989210b9A05e',
-    to: '0x0000000000000000000000000000000000000001',
-    decimals: 8,
-    fromDecimals: 18,
-    toDecimals: 8,
-  },
+  // '0x55f4b2D20d447dB498bCCCde60Fa9a51a3df6D72': {
+  //  from: '0xb7D311E2Eb55F2f68a9440da38e7989210b9A05e',
+  //  to: '0x0000000000000000000000000000000000000001',
+  //  decimals: 8,
+  //  fromDecimals: 18,
+  //  toDecimals: 8,
+  //  },
   // SUSHI / USD
   '0xC0a6Bf8d5D408B091D022C3C0653d4056D4B9c01': {
     from: '0x2995D1317DcD4f0aB89f4AE60F3f020A4F17C7CE',
