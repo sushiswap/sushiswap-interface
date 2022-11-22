@@ -2,9 +2,10 @@ import { SIDE_NAV_CLASS } from 'app/components/Header/styles'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
-// import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import { useNativeCurrencyBalance } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
+// import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
+import Image from 'next/image'
 // import { TOP_NAV_CLASS } from 'app/components/Header/styles'
 // import Link from 'next/link'
 import React, { FC } from 'react'
@@ -43,8 +44,19 @@ const Desktop: FC = () => {
           {/* Header Contents:  */}
           {/* TODO (amiller68): Figswap Logo */}
           <div className="flex items-center w-6 mr-4">
-            {/* TODO (amiller68): Change Icon*/}
-            {/*<Image src="https://app.sushi.com/images/logo.svg" alt="Sushi logo" width="24px" height="24px" />*/}
+            {/* TODO (amiller68): Change Icon Link to Master branch*/}
+            <Image
+              src="https://raw.githubusercontent.com/banyancomputer/interface/wrap-time/.github/logos/figswap/logo.svg"
+              alt="FigSwap Logo"
+              width="24px"
+              height="24px"
+            />
+            <Image
+              src="https://raw.githubusercontent.com/banyancomputer/interface/wrap-time/.github/logos/figswap/banner.svg"
+              alt="FigSwap Banner"
+              width="24px"
+              height="24px"
+            />
           </div>
           {/* TODO: #Figma make Web 3 Status look like design */}
           {/*<div className="flex items-center justify-end w-auto shadow select-none whitespace-nowrap">*/}
