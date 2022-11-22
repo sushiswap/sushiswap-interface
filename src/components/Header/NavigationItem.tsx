@@ -83,6 +83,8 @@ export const NavigationItem: FC<NavigationItem> = ({ node }) => {
                       : 'bg-dark-800 inset-0'
                   )}
                 >
+                  {/*TODO: Figure out why this can be undefined*/}
+                  {/*@ts-ignore*/}
                   {(node as MenuItemNode).items.map((leaf) => (
                     <Link key={leaf.key} href={leaf.link}>
                       <a>

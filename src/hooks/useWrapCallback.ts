@@ -68,16 +68,8 @@ export default function useWrapCallback(
           sufficientBalance && inputAmount
             ? async () => {
                 try {
-                  // TODO (amiller68): Estimate gas correctly or research how to do this with Wallaby / FVM
-                  const gasEstimate = 1000000
-                  console.log('useWrapCallback: deposit to wethContract: gasEstimate: ', gasEstimate)
-                  // TODO (amiller68): Implement Wrapping
                   const txReceipt = await wethContract.deposit({
-                    from: account,
-                    // to: wethContract.address,
                     value: `0x${inputAmount.quotient.toString(16)}`,
-                    gasLimit: 100000000,
-                    gasPrice: gasEstimate,
                   })
                   console.log('useWrapCallback -> WrapCallback: txReceipt: ', txReceipt)
                   addTransaction(txReceipt, {

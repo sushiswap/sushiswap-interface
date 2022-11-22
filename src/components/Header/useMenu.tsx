@@ -129,29 +129,24 @@ const useMenu: UseMenu = () => {
       menu.push({
         key: 'add-liquidity',
         title: i18n._(t`Pool`),
-        link: '/add/ETH/${SUSHI_ADDRESS[chainId]}',
+        link: '/add/',
       })
       // fillers for figswap
-      menu.push({
-        key: 'tokens',
-        title: i18n._(t`Tokens`),
-        link: '',
-      })
-      menu.push({
-        key: 'support',
-        title: i18n._(t`Support`),
-        link: '',
-      })
-      menu.push({
-        key: 'Feedback',
-        title: i18n._(t`Feedback`),
-        link: '',
-      })
-      menu.push({
-        key: '•',
-        title: i18n._(t`•••`),
-        items: liquidity.filter((item) => !item?.disabled),
-      })
+      // menu.push({
+      //   key: 'tokens',
+      //   title: i18n._(t`Tokens`),
+      //   link: '',
+      // })
+      // menu.push({
+      //   key: 'support',
+      //   title: i18n._(t`Support`),
+      //   link: '',
+      // })
+      // menu.push({
+      //   key: 'Feedback',
+      //   title: i18n._(t`Feedback`),
+      //   link: '',
+      // })
     }
 
     // if (featureEnabled(Feature.LIQUIDITY_MINING, chainId)) {
@@ -341,6 +336,13 @@ const useMenu: UseMenu = () => {
       }
       menu.push(portfolio)
     }
+    // Menu close comes at the end
+    // TODO - Make this fold the menu
+    menu.push({
+      key: '•',
+      title: i18n._(t`•••`),
+      items: liquidity.filter((item) => !item?.disabled),
+    })
 
     return menu.filter((el) => Object.keys(el).length > 0)
   }, [account, chainId, i18n])

@@ -2,7 +2,7 @@ import { SIDE_NAV_CLASS } from 'app/components/Header/styles'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
-import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
+// import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import { useNativeCurrencyBalance } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 // import { TOP_NAV_CLASS } from 'app/components/Header/styles'
@@ -30,10 +30,6 @@ const Desktop: FC = () => {
   // Note (amiller68): These are unused, but I'm leaving them here for reference
   // const [showBanner, setShowBanner] = React.useState<boolean>(true)
 
-  const userEthBalance = userFilBalance
-
-  const isCoinbaseWallet = useIsCoinbaseWallet()
-
   return (
     <>
       {/* Note (amiller68): These Divs replace the header so we cna have a sidebar*/}
@@ -43,8 +39,6 @@ const Desktop: FC = () => {
         {/*<header className="fixed z-20 hidden w-full lg:block" style={{ height: HEADER_HEIGHT }}>*/}
         {/* Note (amiller68): Use our new side nav class */}
         {/*  <nav className={TOP_NAV_CLASS}>*/}
-        {/*  <Container className="mx-auto">*/}
-
         <nav className={SIDE_NAV_CLASS} aria-label="Sidebar">
           {/* Header Contents:  */}
           {/* TODO (amiller68): Figswap Logo */}
