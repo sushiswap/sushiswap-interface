@@ -4,6 +4,7 @@ import { CogIcon } from '@heroicons/react/outline'
 import { CheckIcon, ExclamationIcon, PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Percent } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import CloseIcon from 'app/components/CloseIcon'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
@@ -425,6 +426,7 @@ const Add = ({ placeholderSlippage, trident = false, className }: Props) => {
           {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
             <LiquidityPrice
               currencies={currencies}
+              //@ts-ignore
               price={price}
               noLiquidity={noLiquidity}
               poolTokenPercentage={poolTokenPercentage}

@@ -610,7 +610,7 @@ const Swap = ({
             ) : !account ? (
               <div className="flex flex-col items-center">
                 <Web3Connect color="blue" variant="filled" fullWidth className="" />
-                <a href="https://ethereum.org/wallets/" className="flex text-[#746AFB] pt-4 pb-4 text-sm font-bold">
+                <a href="https://ethereum.org/wallets/" className="flex text-[#746AFB] text-sm font-bold">
                   Learn more about wallets
                 </a>
               </div>

@@ -1,8 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { SUPPORTED_WALLETS } from 'app/config/wallets'
-import { classNames } from 'app/functions'
-import { switchToNetwork } from 'app/functions/network'
+// import { SUPPORTED_WALLETS } from 'app/config/wallets'
+// import { classNames } from 'app/functions'
+// import { switchToNetwork } from 'app/functions/network'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import React, { useCallback, useMemo } from 'react'
 import { Activity } from 'react-feather'
@@ -103,12 +103,13 @@ export default function Web3Connect({ color = 'gray', size, className = '', ...r
       // Note (amiller68) - #MetamaskOnly - Just need a callback to connect to metamask, don't need to show the wallet modal
       // onClick={toggleWalletModal}
       onClick={tryActivateMetamask}
-      variant="outlined"
-      color={color}
-      className={classNames(className, '!border-none')}
-      size={size}
+      variant="filled"
+      color="blue"
+      size="md"
       {...rest}
+      className=""
     >
+      {/* TODO / Note (amiller68) - #NewWallets / #MetamaskOnly - For now the button will read this unitl we start supporting more wallets */}
       {i18n._(t`Connect to MetaMask`)}
     </Button>
   ) : (
