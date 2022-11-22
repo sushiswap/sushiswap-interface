@@ -45,7 +45,7 @@ import { NextSeo } from 'next-seo'
 import React, { useCallback, useState } from 'react'
 import { ArrowLeft } from 'react-feather'
 // TODO / Note (amiller68) - #SdkChange / #SdkPublish
-import { Currency, currencyEquals, WNATIVE } from 'sdk'
+import { Currency, currencyEquals, Percent, WNATIVE } from 'sdk'
 
 type Props = {
   placeholderSlippage?: Percent

@@ -1047,18 +1047,6 @@
   dependencies:
     node-stream-zip "^1.13.0"
 
-"@chainsafe/filsnap-adapter@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@chainsafe/filsnap-adapter/-/filsnap-adapter-2.1.2.tgz#d7d56bbfec82f2ab385afc804311354209fca4ac"
-  integrity sha512-gLlgBI9GrjzRwKms5UAxzS1zoBB5ODQpUvK/WK9J6shEIpv559+gI4WrKD5Qi2N24tcql0ICl0kA7+XU+AhDWw==
-  dependencies:
-    "@chainsafe/filsnap-types" "^2.1.2"
-
-"@chainsafe/filsnap-types@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@chainsafe/filsnap-types/-/filsnap-types-2.1.2.tgz#fd5420a250d6e144d6498f48ef59f3901a9631e8"
-  integrity sha512-vjLQYYRF/TtNVW5+7RPjHbjfe4M3hatTbi/f8tfCoNhSL8ZljWgJVy5ofiJhhl8qHTeH943y5kx4yWoJkcQbsw==
-
 "@clover-network/clover-connector@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@clover-network/clover-connector/-/clover-connector-1.0.0.tgz#e56a91e9192831f6036b21799a92734fd2a604e7"

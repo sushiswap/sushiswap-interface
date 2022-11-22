@@ -32,6 +32,7 @@ export const switchToNetwork = async ({ provider, chainId }: SwitchNetworkArgume
         method: 'wallet_addEthereumChain',
         params: [params],
       })
+
       // metamask (only known implementer) automatically switches after a network is added
       // the second call is done here because that behavior is not a part of the spec and cannot be relied upon in the future
       // metamask's behavior when switching to the current network is just to return null (a no-op)

@@ -5,7 +5,6 @@ const RPC = {
   // Note (al): I think The Filsnap has these pre-configured, but including here for reference / completeness
   // TODO (amiller68): #FilecoinMainnet - Add Filecoin Mainnet
   // [ChainId.FILECOIN]: "https://api.node.glif.io/rpc/v0", // Do I need /rpc/v0?
-  // TODO (amiller68): Do I need the /rpc/v0 bit ?
   [ChainId.WALLABY]: 'https://wallaby.node.glif.io/rpc/v0',
 
   // Note (al): #WallabyOnly - We will only support Wallaby until we figure out MultiChain
