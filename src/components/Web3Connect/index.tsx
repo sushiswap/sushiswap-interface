@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { classNames } from 'app/functions'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import React from 'react'
 import { Activity } from 'react-feather'
@@ -24,15 +23,7 @@ export default function Web3Connect({ color = 'gray', size, className = '', ...r
     </div>
   ) : (
     //  Note (amiller68)
-    <Button
-      id="connect-wallet"
-      onClick={toggleWalletModal}
-      variant="outlined"
-      color={color}
-      className={classNames(className, '!border-none')}
-      size={size}
-      {...rest}
-    >
+    <Button id="connect-wallet" onClick={toggleWalletModal} variant="filled" color="blue" size="md" {...rest}>
       {/* TODO / Note (amiller68) - #NewWallets / #MetamaskOnly - For now the button will read this unitl we start supporting more wallets */}
       {i18n._(t`Connect to MetaMask`)}
     </Button>

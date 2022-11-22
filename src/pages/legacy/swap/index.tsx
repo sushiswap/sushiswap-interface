@@ -43,9 +43,9 @@ import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, us
 import { useExpertModeManager, useUserSingleHopOnly, useUserSushiGuard } from 'app/state/user/hooks'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { ArrowLeft } from 'react-feather'
 // Note (amiller68): #SdkChange / #SdkPublish
 import { Currency, JSBI, Token, Trade as V2Trade, TradeType } from 'sdk'
-import { ArrowLeft } from 'react-feather'
 
 import { SwapProps } from '../../swap'
 
@@ -428,7 +428,6 @@ const Swap = ({
         onConfirm={handleConfirmTokenWarning}
       />
 
-
       {/* this is the settings menu */}
       {showSettings ? (
         <SwapLayoutCard>
@@ -611,7 +610,7 @@ const Swap = ({
             ) : !account ? (
               <div className="flex flex-col items-center">
                 <Web3Connect color="blue" variant="filled" fullWidth className="" />
-                <a href="https://ethereum.org/wallets/" className="flex text-[#746AFB] pt-4 pb-4 text-sm font-bold">
+                <a href="https://ethereum.org/wallets/" className="flex text-[#746AFB] text-sm font-bold">
                   Learn more about wallets
                 </a>
               </div>

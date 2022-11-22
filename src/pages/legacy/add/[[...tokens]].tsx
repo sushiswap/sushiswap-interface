@@ -4,6 +4,7 @@ import { CogIcon } from '@heroicons/react/outline'
 import { CheckIcon, ExclamationIcon, PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Percent } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import CloseIcon from 'app/components/CloseIcon'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
@@ -42,9 +43,9 @@ import { useExpertModeManager } from 'app/state/user/hooks'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useState } from 'react'
+import { ArrowLeft } from 'react-feather'
 // TODO / Note (amiller68) - #SdkChange / #SdkPublish
 import { Currency, currencyEquals, WNATIVE } from 'sdk'
-import { ArrowLeft } from 'react-feather'
 
 type Props = {
   placeholderSlippage?: Percent
