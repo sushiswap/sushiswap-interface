@@ -2,7 +2,7 @@ import { Interface } from '@ethersproject/abi'
 import { ERC20_ABI } from 'app/constants/abis/erc20'
 import { getContract } from 'app/functions'
 import { isAddress } from 'app/functions/validate'
-import { useInterfaceMulticall } from 'app/hooks/useContract'
+import { useMulticall2Contract } from 'app/hooks/useContract'
 import { useMultipleContractSingleData, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
@@ -43,7 +43,8 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
   [address: string]: CurrencyAmount<Currency> | undefined
 } {
   const { chainId } = useActiveWeb3React()
-  const multicallContract = useInterfaceMulticall()
+  const multicallContract = useMulticall2Contract() // useInterfaceMulticall()
+  console.log('multicallContract', multicallContract)
 
   // Validate addresses, returns filtered list of addresses
   const validAddressInputs: [string][] = useMemo(
@@ -57,19 +58,22 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
         : [],
     [uncheckedAddresses]
   )
+  console.log('validAddressInputs', validAddressInputs)
 
   const results = useSingleContractMultipleData(multicallContract, 'getEthBalance', validAddressInputs)
+  console.log('results', results)
 
+  const anyLoading: boolean = useMemo(() => results.some((callState) => callState.loading), [results])
   return useMemo(
     () =>
       validAddressInputs.reduce<{ [address: string]: CurrencyAmount<Currency> }>((memo, [address], i) => {
-        console.log('Getting balance for address', address, 'on chain', chainId)
+        console.log('Getting balance for address', address, 'on chain', chainId, 'from results', results)
         const value = results?.[i]?.result?.[0]
         if (value && chainId)
           memo[address] = CurrencyAmount.fromRawAmount(NATIVE[chainId], JSBI.BigInt(value.toString()))
         return memo
       }, {}),
-    [validAddressInputs, chainId, results]
+    [validAddressInputs, chainId, results, anyLoading]
   )
 }
 

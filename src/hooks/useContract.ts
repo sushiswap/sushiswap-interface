@@ -22,6 +22,8 @@ import ENS_ABI from 'app/constants/abis/ens-registrar.json'
 import { ERC20_BYTES32_ABI } from 'app/constants/abis/erc20'
 import ERC20_ABI from 'app/constants/abis/erc20.json'
 import FACTORY_ABI from 'app/constants/abis/factory.json'
+// import MULTICALL2_ABI from 'app/constants/abis/multicall2.json'
+import FIG_MULTICALL2_ABI from 'app/constants/abis/fig-multicall2.json'
 import INARI_ABI from 'app/constants/abis/inari.json'
 import MULTICALL_ABI from 'app/constants/abis/interface-multicall.json'
 import KASHI_REPOSITORY_ABI from 'app/constants/abis/kashi-repository.json'
@@ -34,7 +36,6 @@ import MEOWSHI_ABI from 'app/constants/abis/meowshi.json'
 import MERKLE_DISTRIBUTOR_ABI from 'app/constants/abis/merkle-distributor.json'
 import MINICHEF_ABI from 'app/constants/abis/minichef-v2.json'
 import MISO_HELPER_ABI from 'app/constants/abis/miso-helper.json'
-import MULTICALL2_ABI from 'app/constants/abis/multicall2.json'
 import ROUTER_ABI from 'app/constants/abis/router.json'
 import SUSHI_ABI from 'app/constants/abis/sushi.json'
 import SUSHIROLL_ABI from 'app/constants/abis/sushi-roll.json'
@@ -171,7 +172,8 @@ export function useBoringHelperContract(): Contract | null {
 
 export function useMulticall2Contract() {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId ? MULTICALL2_ADDRESS[chainId] : undefined, MULTICALL2_ABI, false)
+  // return useContract(chainId ? MULTICALL2_ADDRESS[chainId] : undefined, MULTICALL2_ABI, false)
+  return useContract(chainId ? MULTICALL2_ADDRESS[chainId] : undefined, FIG_MULTICALL2_ABI, false)
 }
 
 const MULTICALL_ADDRESS = {

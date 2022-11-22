@@ -2,7 +2,7 @@ import { SIDE_NAV_CLASS } from 'app/components/Header/styles'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
-import { useNativeCurrencyBalance } from 'app/lib/hooks/useCurrencyBalance'
+import { useNativeCurrencyBalances } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 // import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import Image from 'next/image'
@@ -25,7 +25,9 @@ const Desktop: FC = () => {
   // const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
 
   // Note (amiller68): Not sure what the right way to do this is, but this works for now
-  const userFilBalance = useNativeCurrencyBalance(account ? account : undefined)
+  // const userFilBalance = useNativeCurrencyBalance(account ? account : undefined)
+  const userFilBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
+  console.log('userFilBalance', userFilBalance)
   // Note (amiller68): #MetamaskOnly
   // const isCoinbaseWallet = useIsCoinbaseWallet()
   // Note (amiller68): These are unused, but I'm leaving them here for reference
@@ -42,21 +44,21 @@ const Desktop: FC = () => {
         {/*  <nav className={TOP_NAV_CLASS}>*/}
         <nav className={SIDE_NAV_CLASS} aria-label="Sidebar">
           {/* Header Contents:  */}
-          {/* TODO (amiller68): Figswap Logo */}
+          {/* TODO (amiller68): Dyanamically size logo + banner !!!*/}
           <div className="flex items-center w-6 mr-4">
             {/* TODO (amiller68): Change Icon Link to Master branch*/}
             <Image
               src="https://raw.githubusercontent.com/banyancomputer/interface/wrap-time/.github/logos/figswap/logo.svg"
               alt="FigSwap Logo"
-              width="24px"
-              height="24px"
+              width="1000px"
+              height="1000px"
             />
-            <Image
-              src="https://raw.githubusercontent.com/banyancomputer/interface/wrap-time/.github/logos/figswap/banner.svg"
-              alt="FigSwap Banner"
-              width="24px"
-              height="24px"
-            />
+            {/*<Image*/}
+            {/*  src="https://raw.githubusercontent.com/banyancomputer/interface/wrap-time/.github/logos/figswap/banner.svg"*/}
+            {/*  alt="FigSwap Banner"*/}
+            {/*  width="1000px"*/}
+            {/*  height="500px"*/}
+            {/*/>*/}
           </div>
           {/* TODO: #Figma make Web 3 Status look like design */}
           {/*<div className="flex items-center justify-end w-auto shadow select-none whitespace-nowrap">*/}
