@@ -101,18 +101,20 @@ const Desktop: FC = () => {
     //   <div style={{ height: HEADER_HEIGHT + 48, minHeight: HEADER_HEIGHT }} />
     // </>
     <div className="absolute left-0 max-w-sm">
-      <div className="grid grid-rows-4 grid-flow-col h-screen py-6 overflow-x-hidden overflow-y-scroll bg-[#000000] border-r border-r-2 border-[#6E6E6E]">
-        <nav className="grid grid-cols-1 divide-y" aria-label="Sidebar">
+      <div className="h-screen py-6 overflow-x-hidden overflow-y-scroll bg-[#000000] border-r border-r-2 border-[#6E6E6E]">
+        <nav
+          className="grid grid-cols-1 divide-y divide-y-reverse divide-[#6E6E6E] divide-y-[2px] border-none mt-56"
+          aria-label="Sidebar"
+        >
           {/* TODO: Add figswap logo */}
-          <div className="flex flex-col gap-4 px-6">
+          <div className="flex flex-col gap-4 px-6 border-b border-b-2 border-b-[#6E6E6E]">
             {library && (library.provider.isMetaMask || isCoinbaseWallet) && (
               <div className="hidden sm:flex">
                 <Web3Network />
               </div>
             )}
-
             <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center flex-grow w-auto text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap">
+              <div className="flex items-center justify-center flex-grow w-auto text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap pb-8">
                 {account && chainId && userEthBalance && (
                   <Link href={`/account/${account}`} passHref={true}>
                     <a className="hidden px-3 text-high-emphesis text-bold md:block">

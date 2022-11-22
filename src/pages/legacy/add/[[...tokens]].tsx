@@ -426,6 +426,7 @@ const Add = ({ placeholderSlippage, trident = false, className }: Props) => {
           {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
             <LiquidityPrice
               currencies={currencies}
+              //@ts-ignore
               price={price}
               noLiquidity={noLiquidity}
               poolTokenPercentage={poolTokenPercentage}

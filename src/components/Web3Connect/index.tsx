@@ -23,9 +23,17 @@ export default function Web3Connect({ color = 'gray', size, className = '', ...r
     </div>
   ) : (
     //  Note (amiller68)
-    <Button id="connect-wallet" onClick={toggleWalletModal} variant="filled" color="blue" size="md" {...rest}>
+    <Button
+      id="connect-wallet"
+      onClick={toggleWalletModal}
+      variant="filled"
+      color="blue"
+      size="md"
+      {...rest}
+      className=""
+    >
       {/* TODO / Note (amiller68) - #NewWallets / #MetamaskOnly - For now the button will read this unitl we start supporting more wallets */}
-      {i18n._(t`Connect to MetaMask`)}
+      {i18n._(t`Connect Wallet`)}
     </Button>
   )
 }

@@ -149,8 +149,7 @@ const useMenu: UseMenu = () => {
       })
       menu.push({
         key: '•',
-        title: i18n._(t`ho`),
-        icon: <SwitchVerticalIcon width={20} />,
+        title: i18n._(t`•••`),
         items: liquidity.filter((item) => !item?.disabled),
       })
     }
