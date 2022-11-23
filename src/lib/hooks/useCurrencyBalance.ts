@@ -44,6 +44,7 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
 } {
   const { chainId } = useActiveWeb3React()
   const multicallContract = useInterfaceMulticall()
+  console.log('multicallContract', multicallContract)
 
   // Validate addresses, returns filtered list of addresses
   const validAddressInputs: [string][] = useMemo(
@@ -57,19 +58,23 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
         : [],
     [uncheckedAddresses]
   )
+  console.log('validAddressInputs', validAddressInputs)
 
   const results = useSingleContractMultipleData(multicallContract, 'getEthBalance', validAddressInputs)
+  //   const results = multicallContract?.getEthBalance(validAddressInputs[0][0])
+  console.log('results', results)
 
+  const anyLoading: boolean = useMemo(() => results.some((callState) => callState.loading), [results])
   return useMemo(
     () =>
       validAddressInputs.reduce<{ [address: string]: CurrencyAmount<Currency> }>((memo, [address], i) => {
-        console.log('Getting balance for address', address, 'on chain', chainId)
+        console.log('Getting balance for address', address, 'on chain', chainId, 'from results', results)
         const value = results?.[i]?.result?.[0]
         if (value && chainId)
           memo[address] = CurrencyAmount.fromRawAmount(NATIVE[chainId], JSBI.BigInt(value.toString()))
         return memo
       }, {}),
-    [validAddressInputs, chainId, results]
+    [validAddressInputs, chainId, results, anyLoading]
   )
 }
 

@@ -21,7 +21,7 @@ const BA_LIST = 'https://raw.githubusercontent.com/The-Blockchain-Association/se
 // const CHAINLINK_LIST = 'https://token-list.sushi.com/chainlink'
 // TODO (amiller68): Add tokens and change to Filecoin mainenet
 const FIGSWAP_LIST =
-  'https://raw.githubusercontent.com/banyancomputer/interface/fil-wallet/.github/figswap-token-list.json'
+  'https://raw.githubusercontent.com/banyancomputer/interface/wrap-time/.github/figswap-token-list.json'
 
 export const UNSUPPORTED_LIST_URLS: string[] = [BA_LIST]
 

@@ -22,6 +22,7 @@ import ENS_ABI from 'app/constants/abis/ens-registrar.json'
 import { ERC20_BYTES32_ABI } from 'app/constants/abis/erc20'
 import ERC20_ABI from 'app/constants/abis/erc20.json'
 import FACTORY_ABI from 'app/constants/abis/factory.json'
+import FIG_MULTICALL2_ABI from 'app/constants/abis/fig-multicall2.json'
 import INARI_ABI from 'app/constants/abis/inari.json'
 import MULTICALL_ABI from 'app/constants/abis/interface-multicall.json'
 import KASHI_REPOSITORY_ABI from 'app/constants/abis/kashi-repository.json'
@@ -34,7 +35,6 @@ import MEOWSHI_ABI from 'app/constants/abis/meowshi.json'
 import MERKLE_DISTRIBUTOR_ABI from 'app/constants/abis/merkle-distributor.json'
 import MINICHEF_ABI from 'app/constants/abis/minichef-v2.json'
 import MISO_HELPER_ABI from 'app/constants/abis/miso-helper.json'
-import MULTICALL2_ABI from 'app/constants/abis/multicall2.json'
 import ROUTER_ABI from 'app/constants/abis/router.json'
 import SUSHI_ABI from 'app/constants/abis/sushi.json'
 import SUSHIROLL_ABI from 'app/constants/abis/sushi-roll.json'
@@ -54,6 +54,7 @@ import {
   BENTOBOX_ADDRESS,
   BORING_HELPER_ADDRESS,
   CHAIN_KEY,
+  ChainId,
   // Note (amiller68): #WallabyOnly
   // ChainId,
   CHAINLINK_ORACLE_ADDRESS,
@@ -171,12 +172,16 @@ export function useBoringHelperContract(): Contract | null {
 
 export function useMulticall2Contract() {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId ? MULTICALL2_ADDRESS[chainId] : undefined, MULTICALL2_ABI, false)
+  // console.log("Using Multicall2 Contract", chainId, MULTICALL2_ADDRESS[chainId? chainId : 31415])
+  // return useContract(chainId ? MULTICALL2_ADDRESS[chainId] : undefined, MULTICALL2_ABI, false)
+  return useContract(chainId ? MULTICALL2_ADDRESS[chainId] : undefined, FIG_MULTICALL2_ABI, false)
 }
 
 const MULTICALL_ADDRESS = {
   // TODO (amiller68): #Multicall Add Mutlicall address for Wallaby here
-  // [ChainId.WALLABY]: '0x0000000000000000000000000000000000000000',
+  // [ChainId.WALLABY]: '0xd46E0372Df8ACC384871B8715526562c6a054d3f',
+  [ChainId.WALLABY]: '0xf52346ee026f76607cd42fB70C49E92De6917B19',
+
   // Note (amiller68): #WallabyOnly
   // [ChainId.ETHEREUM]: '0x1F98415757620B543A52E61c46B32eB19261F984',
   // [ChainId.ROPSTEN]: '0x1F98415757620B543A52E61c46B32eB19261F984',
@@ -208,7 +213,22 @@ const MULTICALL_ADDRESS = {
 
 // Note (amiller68): Interface for making calls to the multicall contract for on-chain aggregation of calls
 export function useInterfaceMulticall(): Contract | null | undefined {
-  return useContract(MULTICALL_ADDRESS, MULTICALL_ABI, false)
+  // Trigger A revert
+  /*
+  "message execution failed: exit 27, reason: message failed with backtrace:
+  00: f03007 (method 2) -- contract reverted (27)
+  (RetCode=27)"
+
+  next-dev.js?3515:20 Failed to fetch chunk Error: missing revert data in call exception; Transaction reverted without a reason string [ See: https://links.ethers.org/v5-errors-CALL_EXCEPTION ] (data="0x", transaction={"to":"0xd46E0372Df8ACC384871B8715526562c6a054d3f","data":"0x1749e1e300000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000d46e0372df8acc384871b8715526562c6a054d3f00000000000000000000000000000000000000000000000000000000000f4240000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000040f28c97d00000000000000000000000000000000000000000000000000000000000000000000000000000000d46e0372df8acc384871b8715526562c6a054d3f00000000000000000000000000000000000000000000000000000000000f4240000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000244d2301cc0000000000000000000000007b6085e7f63fde5dfa7825e7fe31e37685e5c0dd00000000000000000000000000000000000000000000000000000000","accessList":null}, error={"code":-32603,"message":"Internal JSON-RPC error.","data":{"code":1,"message":"message execution failed: exit 27, reason: message failed with backtrace:\n00: f03007 (method 2) -- contract reverted (27)\n (RetCode=27)"},"stack":"{\n  \"code\": -32603,\n  \"message\": \"Internal JSON-RPC error.\",\n  \"data\": {\n    \"code\": 1,\n    \"message\": \"message execution failed: exit 27, reason: message failed with backtrace:\\n00: f03007 (method 2) -- contract reverted (27)\\n (RetCode=27)\"\n  },\n
+   */
+  // return useContract(MULTICALL_ADDRESS, MULTICALL_ABI, false)
+  // Exception
+  /*
+    next-dev.js?3515:20 Failed to fetch chunk TypeError: multicall.callStatic.multicall is not a function
+     */
+  // return useContract(MULTICALL_ADDRESS, FIG_MULTICALL2_ABI, true)
+  // return useContract(MULTICALL_ADDRESS, FIG_MULTICALL2_ABI, true)
+  return useContract(MULTICALL_ADDRESS, MULTICALL_ABI, true)
 }
 
 export function useSushiContract(withSignerIfPossible = true): Contract | null {

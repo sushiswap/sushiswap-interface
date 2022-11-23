@@ -129,29 +129,24 @@ const useMenu: UseMenu = () => {
       menu.push({
         key: 'add-liquidity',
         title: i18n._(t`Pool`),
-        link: '/add/ETH/${SUSHI_ADDRESS[chainId]}',
+        link: '/add/',
       })
       // fillers for figswap
-      menu.push({
-        key: 'tokens',
-        title: i18n._(t`Tokens`),
-        link: '',
-      })
-      menu.push({
-        key: 'support',
-        title: i18n._(t`Support`),
-        link: '',
-      })
-      menu.push({
-        key: 'Feedback',
-        title: i18n._(t`Feedback`),
-        link: '',
-      })
-      menu.push({
-        key: '•',
-        title: i18n._(t`•••`),
-        items: liquidity.filter((item) => !item?.disabled),
-      })
+      // menu.push({
+      //   key: 'tokens',
+      //   title: i18n._(t`Tokens`),
+      //   link: '',
+      // })
+      // menu.push({
+      //   key: 'support',
+      //   title: i18n._(t`Support`),
+      //   link: '',
+      // })
+      // menu.push({
+      //   key: 'Feedback',
+      //   title: i18n._(t`Feedback`),
+      //   link: '',
+      // })
     }
 
     // if (featureEnabled(Feature.LIQUIDITY_MINING, chainId)) {
@@ -307,40 +302,47 @@ const useMenu: UseMenu = () => {
       const portfolio = {
         key: 'portfolio',
         title: i18n._(t`Portfolio`),
-
         icon: <WalletIcon width={20} />,
-        items: [
-          {
-            key: 'account',
-            title: 'Account',
-            link: `/account?account=${account}`,
-          },
-        ],
+        link: `/account?account=${account}`,
+        // items: [
+        //   {
+        //     key: 'account',
+        //     title: 'Account',
+        //     link: `/account?account=${account}`,
+        //   },
+        // ],
       }
 
       // Note (amiller68) - Can't look at Pools until we have subgraph implemented
-      if (featureEnabled(Feature.SUBGRAPH, chainId)) {
-        portfolio.items.push({
-          key: 'liquidity',
-          title: 'Liquidity',
-          link: `/account/liquidity?account=${account}`,
-        })
-      }
+      // if (featureEnabled(Feature.SUBGRAPH, chainId)) {
+      //   portfolio.items.push({
+      //     key: 'liquidity',
+      //     title: 'Liquidity',
+      //     link: `/account/liquidity?account=${account}`,
+      //   })
+      // }
 
-      if (featureEnabled(Feature.KASHI, chainId)) {
-        portfolio.items.push({
-          key: 'lending',
-          title: 'Lending',
-          link: `/account/lending?account=${account}`,
-        })
-        portfolio.items.push({
-          key: 'borrowing',
-          title: 'Borrowing',
-          link: `/account/borrowing?account=${account}`,
-        })
-      }
+      // if (featureEnabled(Feature.KASHI, chainId)) {
+      //   portfolio.items.push({
+      //     key: 'lending',
+      //     title: 'Lending',
+      //     link: `/account/lending?account=${account}`,
+      //   })
+      //   portfolio.items.push({
+      //     key: 'borrowing',
+      //     title: 'Borrowing',
+      //     link: `/account/borrowing?account=${account}`,
+      //   })
+      // }
       menu.push(portfolio)
     }
+    // Menu close comes at the end
+    // TODO - Make this fold the menu . Also why is there a down arrow on the menu?
+    menu.push({
+      key: '•',
+      title: i18n._(t`•••`),
+      // items: liquidity.filter((item) => !item?.disabled),
+    })
 
     return menu.filter((el) => Object.keys(el).length > 0)
   }, [account, chainId, i18n])
