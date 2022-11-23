@@ -122,5 +122,5 @@ export default function useWrapCallback(
       console.log('useWrapCallback: type: NOT_APPLICABLE')
       return NOT_APPLICABLE
     }
-  }, [wethContract, chainId, inputCurrency, outputCurrency, inputAmount, balance, addTransaction, account])
+  }, [wethContract, chainId, inputCurrency, outputCurrency, inputAmount, balance, addTransaction])
 }
