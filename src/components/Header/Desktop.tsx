@@ -6,6 +6,7 @@ import { useNativeCurrencyBalance } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 // import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import Image from 'next/image'
+import { margin } from 'polished'
 // import { TOP_NAV_CLASS } from 'app/components/Header/styles'
 // import Link from 'next/link'
 import React, { FC } from 'react'
@@ -42,28 +43,35 @@ const Desktop: FC = () => {
         {/*<header className="fixed z-20 hidden w-full lg:block" style={{ height: HEADER_HEIGHT }}>*/}
         {/* Note (amiller68): Use our new side nav class */}
         {/*  <nav className={TOP_NAV_CLASS}>*/}
+        {/* TODO (amiller68): Dyanamically size logo + banner !!!*/}
         <nav className={SIDE_NAV_CLASS} aria-label="Sidebar">
-          {/* Header Contents:  */}
-          {/* TODO (amiller68): Dyanamically size logo + banner !!!*/}
-          <div className="flex items-center w-6 mr-4">
-            {/* TODO (amiller68): Change Icon Link to Master branch*/}
-            <Image
-              src="https://raw.githubusercontent.com/banyancomputer/interface/wrap-time/.github/logos/figswap/logo.svg"
-              alt="FigSwap Logo"
-              width="1000px"
-              height="1000px"
-            />
-            {/*<Image*/}
-            {/*  src="https://raw.githubusercontent.com/banyancomputer/interface/wrap-time/.github/logos/figswap/banner.svg"*/}
-            {/*  alt="FigSwap Banner"*/}
-            {/*  width="1000px"*/}
-            {/*  height="500px"*/}
-            {/*/>*/}
-          </div>
+          {/* NavBar Contents:  */}
           {/* TODO: #Figma make Web 3 Status look like design */}
           {/*<div className="flex items-center justify-end w-auto shadow select-none whitespace-nowrap">*/}
+          {/* Add padding to this div */}
+
+          {/* TODO UNJANK THE HELL OUT OF THIS */}
           <div className="flex flex-col gap-4 px-6 border-b border-b-2 border-b-[#6E6E6E] shadow select-none whitespace-nowrap">
-            <Web3Status />
+            <div style={{ width: '3%', height: '10%', position: 'fixed', top: 0, left: 10 }}>
+              <Image
+                alt="FigSwap Logo"
+                src="https://raw.githubusercontent.com/banyancomputer/interface/master/.github/logos/figswap/logo.svg"
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+            <div style={{ width: '10%', height: '10%', position: 'fixed', top: 5, left: '3.5%' }}>
+              <Image
+                src="https://raw.githubusercontent.com/banyancomputer/interface/master/.github/logos/figswap/banner.svg"
+                alt="FigSwap Banner"
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+
+            <div style={margin(20)}>
+              <Web3Status />
+            </div>
             {/* Network Logo + Balance */}
             {/* Note (amiller68): #MetamaskOnly - For now the provider is Always Metamask */}
             {/*{library && (library.provider.isMetaMask || isCoinbaseWallet) && (*/}
