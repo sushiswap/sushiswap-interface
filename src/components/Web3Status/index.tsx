@@ -56,20 +56,13 @@ function Web3StatusInner() {
             <Loader stroke="white" />
           </div>
         ) : (
-          <div className="relative flex items-center gap-2 cursor-pointer pointer-events-auto">
-            <Typography
-              weight={700}
-              variant="sm"
-              className="px-2 py-5 font-bold rounded-full text-inherit hover:text-white"
-            >
-              {ENSName ? ENSName.toUpperCase() : shortenAddress(account)}
-            </Typography>
-
+          <div className="flex p-2 rounded-lg hover:bg-[#2E2E2E] hover:text-white">
             <Davatar
               size={24}
               address={account}
               defaultComponent={
                 <Image
+                  // the chef logo for wallet --> change to smiley
                   src="https://app.sushi.com/images/chef.svg"
                   alt="Sushi Chef"
                   width={24}
@@ -79,6 +72,15 @@ function Web3StatusInner() {
               }
               provider={library}
             />
+            <div className="relative flex items-center gap-2 cursor-pointer pointer-events-auto">
+              <Typography
+                weight={700}
+                variant="sm"
+                className="font-mono px-1 uppercase tracking-tighter font-medium rounded-full text-xl"
+              >
+                {ENSName ? ENSName.toUpperCase() : shortenAddress(account)}
+              </Typography>
+            </div>
           </div>
         )}
         {/* {!hasPendingTransactions && connector && (
