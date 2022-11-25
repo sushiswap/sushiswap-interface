@@ -120,8 +120,8 @@ const Desktop: FC = () => {
             {library && account && chainId && (
               // <div className="hidden sm:inline-block">
               // <div className="hidden sm:flex">
-              <div className="flex items-center gap-2 justify-center flex-grow w-auto text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap">
-                <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
+              <div className="flex items-center gap-2 justify-center flex-grow w-auto text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap border">
+                <Typography weight={700} variant="sm" className="font-mono py-5 font-medium text-lg">
                   {userFilBalance ? (
                     `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
                   ) : (
