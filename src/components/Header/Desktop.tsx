@@ -51,7 +51,7 @@ const Desktop: FC = () => {
           {/* Add padding to this div */}
 
           {/* TODO UNJANK THE HELL OUT OF THIS */}
-          <div className="flex flex-col gap-4 px-6 border-b border-b-2 border-b-[#6E6E6E] shadow select-none whitespace-nowrap">
+          <div className="flex flex-col px-6 select-none whitespace-nowrap">
             {/* <div style={{ width: '3%', height: '10%', position: 'fixed', top: 0, left: 10 }}>
               <Image
                 alt="FigSwap Logo"
@@ -121,15 +121,21 @@ const Desktop: FC = () => {
               // <div className="hidden sm:inline-block">
               // <div className="hidden sm:flex">
               <div className="flex items-center gap-2 justify-center flex-grow w-auto text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap">
-                <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
-                  {userFilBalance ? (
-                    `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
-                  ) : (
-                    <Dots>BALANCE</Dots>
-                  )}
-                </Typography>
-                <div className="hidden sm:flex">
-                  <Web3Network />
+                <div className="flex items-center">
+                  <div className="hidden sm:flex">
+                    <Web3Network />
+                  </div>
+                  <Typography
+                    weight={700}
+                    variant="sm"
+                    className="font-mono px-1 font-medium tracking-tighter text-xl rounded-full"
+                  >
+                    {userFilBalance ? (
+                      `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
+                    ) : (
+                      <Dots>BALANCE</Dots>
+                    )}
+                  </Typography>
                 </div>
               </div>
             )}

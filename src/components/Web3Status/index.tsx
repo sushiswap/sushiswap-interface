@@ -56,7 +56,7 @@ function Web3StatusInner() {
             <Loader stroke="white" />
           </div>
         ) : (
-          <div className="flex p-2 rounded-lg hover:bg-[#2E2E2E] hover:text-white">
+          <>
             <Davatar
               size={24}
               address={account}
@@ -81,7 +81,7 @@ function Web3StatusInner() {
                 {ENSName ? ENSName.toUpperCase() : shortenAddress(account)}
               </Typography>
             </div>
-          </div>
+          </>
         )}
         {/* {!hasPendingTransactions && connector && (
           <StatusIcon connector={connector} account={account} provider={library} />
