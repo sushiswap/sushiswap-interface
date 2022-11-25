@@ -10,32 +10,6 @@ import { useMemo } from 'react'
 import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from 'sdk'
 import useSWR from 'swr'
 
-// Janky RPC fetcher for use with SWR
-const libraryCurrencyFetcher =
-  (library: any, chainId: any) =>
-  (...args: any[]) => {
-    const [method, ...params] = args
-    console.log(method, params)
-    let ret = library[method](...params)
-    return ret.then((res: any) => CurrencyAmount.fromRawAmount(NATIVE[chainId], JSBI.BigInt(res.toString())))
-  }
-/**
- * TODO (amiller68): Look at useCurrencyBalance below and see if we can use that instead
- * Returns the balance of the input currency for the given account
- * Uses SWR because I'm not sure how to use the multicall hooks with Filecoin and I
- * don't have time to dig into how these calls should be made in the context of this interface.
- * @param account
- */
-export function useNativeCurrencyBalance(account?: string | undefined): CurrencyAmount<Currency> | undefined {
-  const { chainId, library } = useActiveWeb3React()
-  const shouldFetch = !!account && !!library && !!chainId
-  const { data } = useSWR(
-    shouldFetch ? ['getBalance', account, 'latest'] : null,
-    libraryCurrencyFetcher(library, chainId)
-  )
-  return data
-}
-
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
  */
@@ -44,7 +18,6 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
 } {
   const { chainId } = useActiveWeb3React()
   const multicallContract = useInterfaceMulticall()
-  console.log('multicallContract', multicallContract)
 
   // Validate addresses, returns filtered list of addresses
   const validAddressInputs: [string][] = useMemo(
@@ -58,23 +31,18 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
         : [],
     [uncheckedAddresses]
   )
-  console.log('validAddressInputs', validAddressInputs)
 
   const results = useSingleContractMultipleData(multicallContract, 'getEthBalance', validAddressInputs)
-  //   const results = multicallContract?.getEthBalance(validAddressInputs[0][0])
-  console.log('results', results)
 
-  const anyLoading: boolean = useMemo(() => results.some((callState) => callState.loading), [results])
   return useMemo(
     () =>
       validAddressInputs.reduce<{ [address: string]: CurrencyAmount<Currency> }>((memo, [address], i) => {
-        console.log('Getting balance for address', address, 'on chain', chainId, 'from results', results)
         const value = results?.[i]?.result?.[0]
         if (value && chainId)
           memo[address] = CurrencyAmount.fromRawAmount(NATIVE[chainId], JSBI.BigInt(value.toString()))
         return memo
       }, {}),
-    [validAddressInputs, chainId, results, anyLoading]
+    [validAddressInputs, chainId, results]
   )
 }
 
@@ -185,8 +153,7 @@ export function useTokenBalances(
   address?: string,
   tokens?: (Token | undefined)[]
 ): { [tokenAddress: string]: CurrencyAmount<Token> | undefined } {
-  // return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
-  return useTokenBalancesSequentialWithLoadingIndicator(address, tokens)[0]
+  return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
 }
 
 // get the balance for a single token/account combo
@@ -215,17 +182,16 @@ export function useCurrencyBalances(
     () => currencies?.some((currency) => currency?.isNative) ?? false,
     [currencies]
   )
-  // const ethBalance = useNativeCurrencyBalances(useMemo(() => (containsETH ? [account] : []), [containsETH, account]))
-  const nativeBalance = useNativeCurrencyBalance(
-    useMemo(() => (containsNative ? account : undefined), [containsNative, account])
+  const nativeBalances = useNativeCurrencyBalances(
+    useMemo(() => (containsNative ? [account] : []), [containsNative, account])
   )
+  const nativeBalance = nativeBalances?.[account ?? '']
 
   return useMemo(
     () =>
       currencies?.map((currency) => {
         if (!account || !currency) return undefined
         if (currency.isToken) return tokenBalances[currency.address]
-        // if (currency.isNative) return filBalance[account]
         if (currency.isNative) return nativeBalance
         return undefined
       }) ?? [],

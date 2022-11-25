@@ -12,10 +12,10 @@ Use them like so:
 
 Demo Feature Roadmap (by priority):
 
-1. Get wrapping and unwrapping working. (almost done, just need to debug / workaround FEVM issues)
+1. Get wrapping and unwrapping working. (done)
 2. Get liquidity adding and removing working. (Not started. Relies on working Liquidity Factory)
-3. Get swaps working. Relies on 1 and 2. Requires. (Research In progress. Relies on Liquidity adding and removing).
-4. Multicaller (Ready to implement with Interface. Need contract on FEVM)
+3. Get swaps working. Relies on 1 and 2. (Research In progress. Relies on Liquidity adding and removing).
+4. Multicaller (Done)
 5. If this works we can deploy SDK and change interface to use it.
 
 ```angular2html
@@ -37,11 +37,19 @@ import { ChainId } from `../sdk/core-sdk/ChainId`
 
 `#WallabyOnly`: Designates where a line supporting chains other than Wallaby has been deprecated and commented out - Should be used with #FilecoinMainnet TODO tag for guiding Mainnet implementation
 
-Ongoing TODOs:
+Backend TODOs and Tags:
 
 - [ ] `#FilecoinManinnet` Where Implementation of Filecoin is required for Production
 - [ ] `#SdkPublish` Where imports to any sdk needs to updated with published version
-- [ ] `#NewTokens` Implement new tokens as they are added to the SDK. First write documentation on how to do so.
-- [ ] `#NewWallets` Marks where changes are needed in order to re-implement userflow for multiple wallets.
-- [ ] `#NetworkModal` Change network modal useflow to add Wallaby network to Metamask or other Wallets if on unnsupported networks
+- [ ] `#Contributing` Write up documentation for contributing to the project (Mininmum specs for implementing different features on different chains, Adding new chains, tokens, etc)
+
+Front End TODOs and Tags:
+
+- [ ] `#NetworkModal` Change login userflow to match Vitaly's designs (open intermediary modal to hide page, deprecate wrong network modal, add disconnect to bottom of sidebar)
+- [ ] `#LogoBanner` Implement a re-sizable logo banner for the top of the page / sidebar
+- [ ] `#AccountButtons` Change account info buttons to match Vitaly's designs
+- [ ] `#SideBar` Change sidebar to match Vitaly's designs (Logo, spacing, account info, etc)
+- [ ] `#MobileHeaderReady` Implement folding header that renders based on useDesktopMediaQuery
+- [ ] `#Footer` Implement footer that renders based at +100vh
+- [ ] `SwapSettingsAnimation` Implement animation for swap settings
 - [ ] `#Copy` Copy changes to make disclaimers / branding more accurate / better

@@ -1,5 +1,5 @@
 import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { useTokenBalances, useTokenBalancesSequentialWithLoadingIndicator } from 'lib/hooks/useCurrencyBalance'
+import { useTokenBalances, useTokenBalancesWithLoadingIndicator } from 'lib/hooks/useCurrencyBalance'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'services/web3'
 
@@ -26,7 +26,5 @@ export function useAllTokenBalances(): { [tokenAddress: string]: CurrencyAmount<
 export function useAllTokenBalancesWithLoadingIndicator(account: string) {
   const allTokens = useAllTokens()
   const tokens = useMemo(() => Object.values(allTokens ?? {}), [allTokens])
-  // Note (amiller68) - #Multicall changing this unitl we implement multicalls on Wallaby
-  // return useTokenBalancesWithLoadingIndicator(account, tokens)
-  return useTokenBalancesSequentialWithLoadingIndicator(account, tokens)
+  return useTokenBalancesWithLoadingIndicator(account, tokens)
 }

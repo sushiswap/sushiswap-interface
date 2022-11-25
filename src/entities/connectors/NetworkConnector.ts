@@ -28,12 +28,6 @@ interface BatchItem {
   reject: (error: Error) => void
 }
 
-// Note (amiller68): This is a janky way to colocate batch items with individual requests
-// interface ResponseItem {
-//   item: BatchItem,
-//   response: Response | undefined
-// }
-
 class MiniRpcProvider implements AsyncSendable {
   public readonly isMetaMask: false = false
   public readonly chainId: number
@@ -135,7 +129,7 @@ class MiniRpcProvider implements AsyncSendable {
     Promise.all(
       // Batch the requests into a single Promise.all
       batch.map((item) => {
-        // console.log('Sending request', item.request, ' to ', this.url)
+        console.log('Sending request', item.request, ' to ', this.url)
         return fetch(this.url, {
           method: 'POST',
           headers: { 'content-type': 'application/json', accept: 'application/json' },

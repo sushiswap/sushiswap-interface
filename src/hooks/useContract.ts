@@ -24,7 +24,6 @@ import ERC20_ABI from 'app/constants/abis/erc20.json'
 import FACTORY_ABI from 'app/constants/abis/factory.json'
 import FIG_MULTICALL2_ABI from 'app/constants/abis/fig-multicall2.json'
 import INARI_ABI from 'app/constants/abis/inari.json'
-import MULTICALL_ABI from 'app/constants/abis/interface-multicall.json'
 import KASHI_REPOSITORY_ABI from 'app/constants/abis/kashi-repository.json'
 import LIMIT_ORDER_ABI from 'app/constants/abis/limit-order.json'
 import LIMIT_ORDER_HELPER_ABI from 'app/constants/abis/limit-order-helper.json'
@@ -54,9 +53,6 @@ import {
   BENTOBOX_ADDRESS,
   BORING_HELPER_ADDRESS,
   CHAIN_KEY,
-  ChainId,
-  // Note (amiller68): #WallabyOnly
-  // ChainId,
   CHAINLINK_ORACLE_ADDRESS,
   ENS_REGISTRAR_ADDRESS,
   FACTORY_ADDRESS,
@@ -177,58 +173,10 @@ export function useMulticall2Contract() {
   return useContract(chainId ? MULTICALL2_ADDRESS[chainId] : undefined, FIG_MULTICALL2_ABI, false)
 }
 
-const MULTICALL_ADDRESS = {
-  // TODO (amiller68): #Multicall Add Mutlicall address for Wallaby here
-  // [ChainId.WALLABY]: '0xd46E0372Df8ACC384871B8715526562c6a054d3f',
-  [ChainId.WALLABY]: '0xf52346ee026f76607cd42fB70C49E92De6917B19',
-
-  // Note (amiller68): #WallabyOnly
-  // [ChainId.ETHEREUM]: '0x1F98415757620B543A52E61c46B32eB19261F984',
-  // [ChainId.ROPSTEN]: '0x1F98415757620B543A52E61c46B32eB19261F984',
-  // [ChainId.RINKEBY]: '0x1F98415757620B543A52E61c46B32eB19261F984',
-  // [ChainId.GÖRLI]: '0x1F98415757620B543A52E61c46B32eB19261F984',
-  // [ChainId.KOVAN]: '0x1F98415757620B543A52E61c46B32eB19261F984',
-  // [ChainId.MATIC]: '0x1F98415757620B543A52E61c46B32eB19261F984',
-  // [ChainId.MATIC_TESTNET]: '0xdDCbf776dF3dE60163066A5ddDF2277cB445E0F3',
-  // [ChainId.OPTIMISM]: '0x1F98415757620B543A52E61c46B32eB19261F984',
-  // [ChainId.ARBITRUM]: '0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB',
-  // [ChainId.MOONBEAM]: '0x34c471ddceb20018bbb73f6d13709936fc870acc',
-  // [ChainId.AVALANCHE]: '0x8C0F842791F03C095b6c633759224FcC9ACe68ea',
-  // [ChainId.BSC]: '0x47A307e3167820daf22a377D777371753758f59c',
-  // [ChainId.FANTOM]: '0xB1395e098c0a847CC719Bcf1Fc8114421a9F8232',
-  // [ChainId.CELO]: '0x3d0B3b816DC1e0825808F27510eF7Aa5E3136D75',
-  // [ChainId.HARMONY]: '0xaAB49386BFcB605F853763Ea382B91C9c83b9Ac5',
-  // [ChainId.MOONRIVER]: '0x8C8BF5Dea280A1eC68219D66E8A21E60585830F5',
-  // [ChainId.XDAI]: '0x2B75358D07417D4e895c952Ca84A44E63AEBE3Dd',
-  // [ChainId.TELOS]: '0x64e1E895866B3126f8f2E2912B475FDB35b2F315',
-  // [ChainId.FUSE]: '0x393B6DC9B00E18314888678721eC0e923FC5f49D',
-  // [ChainId.OKEX]: '0x8C8BF5Dea280A1eC68219D66E8A21E60585830F5',
-  // [ChainId.HECO]: '0x64e1E895866B3126f8f2E2912B475FDB35b2F315',
-  // [ChainId.PALM]: '0x4d4A0D45a98AE8EC25b359D93A088A87BC9eF70b',
-  // [ChainId.KAVA]: '0x67dA5f2FfaDDfF067AB9d5F025F8810634d84287',
-  // [ChainId.METIS]: '0x67dA5f2FfaDDfF067AB9d5F025F8810634d84287',
-  // [ChainId.ARBITRUM_NOVA]: '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
-  // [ChainId.BOBA_AVAX]: '0x67dA5f2FfaDDfF067AB9d5F025F8810634d84287',
-}
-
 // Note (amiller68): Interface for making calls to the multicall contract for on-chain aggregation of calls
 export function useInterfaceMulticall(): Contract | null | undefined {
-  // Trigger A revert
-  /*
-  "message execution failed: exit 27, reason: message failed with backtrace:
-  00: f03007 (method 2) -- contract reverted (27)
-  (RetCode=27)"
-
-  next-dev.js?3515:20 Failed to fetch chunk Error: missing revert data in call exception; Transaction reverted without a reason string [ See: https://links.ethers.org/v5-errors-CALL_EXCEPTION ] (data="0x", transaction={"to":"0xd46E0372Df8ACC384871B8715526562c6a054d3f","data":"0x1749e1e300000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000d46e0372df8acc384871b8715526562c6a054d3f00000000000000000000000000000000000000000000000000000000000f4240000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000040f28c97d00000000000000000000000000000000000000000000000000000000000000000000000000000000d46e0372df8acc384871b8715526562c6a054d3f00000000000000000000000000000000000000000000000000000000000f4240000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000244d2301cc0000000000000000000000007b6085e7f63fde5dfa7825e7fe31e37685e5c0dd00000000000000000000000000000000000000000000000000000000","accessList":null}, error={"code":-32603,"message":"Internal JSON-RPC error.","data":{"code":1,"message":"message execution failed: exit 27, reason: message failed with backtrace:\n00: f03007 (method 2) -- contract reverted (27)\n (RetCode=27)"},"stack":"{\n  \"code\": -32603,\n  \"message\": \"Internal JSON-RPC error.\",\n  \"data\": {\n    \"code\": 1,\n    \"message\": \"message execution failed: exit 27, reason: message failed with backtrace:\\n00: f03007 (method 2) -- contract reverted (27)\\n (RetCode=27)\"\n  },\n
-   */
-  // return useContract(MULTICALL_ADDRESS, MULTICALL_ABI, false)
-  // Exception
-  /*
-    next-dev.js?3515:20 Failed to fetch chunk TypeError: multicall.callStatic.multicall is not a function
-     */
-  // return useContract(MULTICALL_ADDRESS, FIG_MULTICALL2_ABI, true)
-  // return useContract(MULTICALL_ADDRESS, FIG_MULTICALL2_ABI, true)
-  return useContract(MULTICALL_ADDRESS, MULTICALL_ABI, true)
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? MULTICALL2_ADDRESS[chainId] : undefined, FIG_MULTICALL2_ABI, false)
 }
 
 export function useSushiContract(withSignerIfPossible = true): Contract | null {

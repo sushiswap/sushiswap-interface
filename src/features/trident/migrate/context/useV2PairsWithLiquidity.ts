@@ -1,9 +1,8 @@
 // TODO / Note (amiller68) - #SdkChange / #SdkPublish
 import { useV2Pairs } from 'app/hooks/useV2Pairs'
-import { useTokenBalancesSequentialWithLoadingIndicator } from 'app/lib/hooks/useCurrencyBalance'
+import { useTokenBalancesWithLoadingIndicator } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'app/state/user/hooks'
-// import { useTokenBalancesWithLoadingIndicator } from 'app/state/wallet/hooks'
 import { useMemo } from 'react'
 import { Pair } from 'sdk'
 
@@ -36,7 +35,7 @@ export const useV2PairsWithLiquidity = (): V2PairsWithLiquidity => {
     [tokenPairsWithLiquidityTokens]
   )
   // TODO (amiller68): #Multicall - Replace with proper multicall method
-  const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesSequentialWithLoadingIndicator(
+  const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
     //useTokenBalancesWithLoadingIndicator(
     account ?? undefined,
     liquidityTokens
