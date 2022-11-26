@@ -20,7 +20,7 @@ import SwapGasFeeInputs from 'app/features/legacy/swap/SwapGasFeeInputs'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
 // import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
-import { classNames } from 'app/functions'
+// import { classNames } from 'app/functions'
 import confirmPriceImpactWithoutFee from 'app/functions/prices'
 import { warningSeverity } from 'app/functions/prices'
 import { computeFiatValuePriceImpact } from 'app/functions/trade'
@@ -431,19 +431,24 @@ const Swap = ({
       {/* this is the settings menu */}
       {showSettings ? (
         <SwapLayoutCard>
-          <>
-            <div className="flex flex-row">
-              <ArrowLeft
-                width={25}
-                onClick={() => setShowSettings(false)}
-                color={'#746AFB'}
-                className="ml-2 cursor-pointer"
-              />
-              <div className="ml-36 text-white text-lg font-bold"> Settings </div>
+          <div className="px-2">
+            <div className="flex items-center justify-between gap-2 ml-2 mt-1 mb-1">
+              <div className="flex mt-4 mb-4">
+                <ArrowLeft
+                  width={25}
+                  onClick={() => setShowSettings(false)}
+                  color={'#746AFB'}
+                  className="ml-2 cursor-pointer"
+                />
+                <div className="ml-36 text-white text-lg font-bold"> Settings </div>
+              </div>
             </div>
+          </div>
+          <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-4 p-3 mt-4">
               <TransactionSettings placeholderSlippage={placeholderSlippage} trident={trident} />
             </div>
+
             <div className="flex flex-col gap-3 p-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -476,41 +481,40 @@ const Swap = ({
                   color="purple"
                 />
               </div>
-            </div>
-          </>
-          <div className={classNames(className, 'flex items-center justify-center w-10 h-10 rounded-full')}></div>
-          <HeadlessUiModal.Controlled
-            isOpen={showConfirmation}
-            onDismiss={() => setShowConfirmation(false)}
-            maxWidth="md"
-          >
-            <div className="flex flex-col gap-4">
-              <HeadlessUiModal.Header header={i18n._(t`Confirm`)} onClose={() => setShowConfirmation(false)} />
-              <HeadlessUiModal.BorderedContent className="flex flex-col gap-3">
-                <Typography variant="sm" weight={700} className="text-white">
-                  {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
+              <HeadlessUiModal.Controlled
+                isOpen={showConfirmation}
+                onDismiss={() => setShowConfirmation(false)}
+                maxWidth="md"
+              >
+                <div className="flex flex-col gap-4">
+                  <HeadlessUiModal.Header header={i18n._(t`Confirm`)} onClose={() => setShowConfirmation(false)} />
+                  <HeadlessUiModal.BorderedContent className="flex flex-col gap-3">
+                    <Typography variant="sm" weight={700} className="text-white">
+                      {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
                                 that often result in bad rates and lost funds.`)}
-                </Typography>
-              </HeadlessUiModal.BorderedContent>
-              <div className="flex flex-col gap-4 items-center">
-                <div className="flex items-center border p-4 w-11/12 text-xs border-[#E8DB31] text-[#E8DB31] bg-[#E8DB31] bg-opacity-25">
-                  <ExclamationIcon className="text-yellow mr-2" width={24} />
-                  Only use this mode if you know what you are doing.
+                    </Typography>
+                  </HeadlessUiModal.BorderedContent>
+                  <div className="flex flex-col gap-4 items-center">
+                    <div className="flex items-center border p-4 w-11/12 text-xs border-[#E8DB31] text-[#E8DB31] bg-[#E8DB31] bg-opacity-25">
+                      <ExclamationIcon className="text-yellow mr-2" width={24} />
+                      Only use this mode if you know what you are doing.
+                    </div>
+                    <Button
+                      id="confirm-expert-mode"
+                      color="yellow"
+                      variant="filled"
+                      onClick={() => {
+                        toggleExpertMode()
+                        setShowConfirmation(false)
+                      }}
+                    >
+                      {i18n._(t`Enable Expert Mode`)}
+                    </Button>
+                  </div>
                 </div>
-                <Button
-                  id="confirm-expert-mode"
-                  color="yellow"
-                  variant="filled"
-                  onClick={() => {
-                    toggleExpertMode()
-                    setShowConfirmation(false)
-                  }}
-                >
-                  {i18n._(t`Enable Expert Mode`)}
-                </Button>
-              </div>
+              </HeadlessUiModal.Controlled>
             </div>
-          </HeadlessUiModal.Controlled>
+          </div>
         </SwapLayoutCard>
       ) : (
         <SwapLayoutCard>
@@ -609,7 +613,7 @@ const Swap = ({
               </Button>
             ) : !account ? (
               <div className="flex flex-col items-center">
-                <Web3Connect color="blue" variant="filled" fullWidth className="" />
+                <Web3Connect color="blue" variant="filled" fullWidth />
                 <a href="https://ethereum.org/wallets/" className="flex text-[#746AFB] text-sm font-bold">
                   Learn more about wallets
                 </a>
@@ -674,7 +678,7 @@ const Swap = ({
                 )}
               </div>
             ) : (
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center p-3">
                 <Button
                   color={isValid && priceImpactSeverity > 2 && !swapCallbackError ? 'red' : 'gradient'}
                   fullWidth

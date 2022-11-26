@@ -25,42 +25,42 @@ interface HeaderNewProps {
   inputCurrency?: Currency
   outputCurrency?: Currency
   trident?: boolean
+  icon: JSX.Element
 }
 
-const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency, trident = false }) => {
+const HeaderNew: FC<HeaderNewProps> = ({ icon, inputCurrency, outputCurrency, trident = false }) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { asPath } = useRouter()
   const isLimitOrder = asPath.startsWith('/limit-order')
 
   return (
-    <div className="px-2">
-      <div className="flex items-center justify-between gap-1 mt-4 mb-4">
-        <div className="flex gap-4">
+    <div className="flex items-center justify-between gap-2 ml-2 mt-1 mb-1">
+      <div className="flex mt-4 mb-4">
+        <NavLink
+          activeClassName="text-high-emphesis"
+          href={{
+            pathname: '/add',
+          }}
+        >
+          <Typography weight={700} className="text-secondary hover:text-white">
+            {i18n._(t`Add`)}
+          </Typography>
+        </NavLink>
+        {featureEnabled(Feature.LIMIT_ORDERS, chainId) ? (
           <NavLink
             activeClassName="text-high-emphesis"
             href={{
-              pathname: '/add',
+              pathname: '/remove',
             }}
           >
             <Typography weight={700} className="text-secondary hover:text-white">
-              {i18n._(t`Add`)}
+              {i18n._(t`Remove`)}
             </Typography>
           </NavLink>
-          {featureEnabled(Feature.LIMIT_ORDERS, chainId) ? (
-            <NavLink
-              activeClassName="text-high-emphesis"
-              href={{
-                pathname: '/remove',
-              }}
-            >
-              <Typography weight={700} className="text-secondary hover:text-white">
-                {i18n._(t`Remove`)}
-              </Typography>
-            </NavLink>
-          ) : null}
-        </div>
+        ) : null}
       </div>
+      {icon}
     </div>
   )
 }
