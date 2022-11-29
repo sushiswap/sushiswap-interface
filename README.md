@@ -45,11 +45,13 @@ Backend TODOs and Tags:
 
 Front End TODOs and Tags:
 
-- [ ] `#NetworkModal` Change login userflow to match Vitaly's designs (open intermediary modal to hide page, deprecate wrong network modal, add disconnect to bottom of sidebar)
-- [ ] `#LogoBanner` Implement a re-sizable logo banner for the top of the page / sidebar
+- [x] `#LogoBanner` Implement a re-sizable logo banner for the top of the page / sidebar
+- [ ] `#LogoBackground` logo motif on background of pages
 - [ ] `#AccountButtons` Change account info buttons to match Vitaly's designs
-- [ ] `#SideBar` Change sidebar to match Vitaly's designs (Logo, spacing, account info, etc)
+- [ ] `#DisconnectButton` Add a disconnect button in the sidenav
 - [ ] `#MobileHeaderReady` Implement folding header that renders based on useDesktopMediaQuery
 - [ ] `#Footer` Implement footer that renders based at +100vh
-- [ ] `SwapSettingsAnimation` Implement animation for swap settings
-- [ ] `#Copy` Copy changes to make disclaimers / branding more accurate / better
+- [ ] `#PortfolioRender` Portfolio renders under the nav bar, we should fix this.
+- [ ] `#NetworkModal` Change login userflow to match Vitaly's designs (open intermediary modal to hide page, deprecate wrong network modal, add disconnect to bottom of sidebar)
+- [ ] `#SwapSettingsAnimation` Implement animation for swap settings (low priority)
+- [ ] `#Copy` Copy changes to make disclaimers / branding more accurate / better (low priority)
