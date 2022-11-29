@@ -2,7 +2,6 @@ import { SIDE_NAV_CLASS } from 'app/components/Header/styles'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
-import { useNativeCurrencyBalances } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 // import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 // import Image from 'next/image'
@@ -10,10 +9,7 @@ import { margin } from 'polished'
 // import { TOP_NAV_CLASS } from 'app/components/Header/styles'
 // import Link from 'next/link'
 import React, { FC } from 'react'
-import { NATIVE } from 'sdk'
 
-import Dots from '../Dots'
-import Typography from '../Typography'
 import { NavigationItem } from './NavigationItem'
 
 const HEADER_HEIGHT = 64
@@ -22,31 +18,18 @@ const Desktop: FC = () => {
   const menu = useMenu()
   // Note (amiller68): Account: The User's (Eth) Wallet Address | ChainId: The Network ID | Library: The Web3 Provider
   const { account, chainId, library } = useActiveWeb3React()
-  // Note (amiller68): #WallbyOnly - Change this back when we learn about MultiContracts on FVM
-  // const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
 
-  // Note (amiller68): Not sure what the right way to do this is, but this works for now
-  // const userFilBalance = useNativeCurrencyBalance(account ? account : undefined)
-  const userFilBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
-  console.log('userFilBalance', userFilBalance)
   // Note (amiller68): #MetamaskOnly
   // const isCoinbaseWallet = useIsCoinbaseWallet()
-  // Note (amiller68): These are unused, but I'm leaving them here for reference
-  // const [showBanner, setShowBanner] = React.useState<boolean>(true)
 
   return (
     <>
-      {/* Note (amiller68): These Divs replace the header so we cna have a sidebar*/}
+      {/* Note (amiller68): These Divs replace the header so we can have a sidebar*/}
       {/*<div className="absolute left-0 max-w-sm h-screen py-6 overflow-x-hidden overflow-y-scroll bg-[#000000] border-r border-r-2 border-[#6E6E6E]">*/}
-      {/* Note (amiller68): Took out the 'overflow-y-scroll' bit - scroll bar doesnt show up anymore :)*/}
       <div className="absolute left-0 max-w-sm h-screen py-6 overflow-x-hidden bg-[#000000] border-r border-r-2 border-[#6E6E6E]">
         {/*<header className="fixed z-20 hidden w-full lg:block" style={{ height: HEADER_HEIGHT }}>*/}
-        {/* Note (amiller68): Use our new side nav class */}
-        {/*  <nav className={TOP_NAV_CLASS}>*/}
-        {/* TODO (amiller68): Dyanamically size logo + banner !!!*/}
         <nav className={SIDE_NAV_CLASS} aria-label="Sidebar">
           {/* NavBar Contents:  */}
-          {/* TODO: #Figma make Web 3 Status look like design */}
           {/*<div className="flex items-center justify-end w-auto shadow select-none whitespace-nowrap">*/}
           {/* Add padding to this div */}
 
@@ -70,6 +53,7 @@ const Desktop: FC = () => {
             </div> */}
 
             <div className="flex absolute top-0 mt-4">
+              {/* TODO (amiller68): #LogoBanner Reference Actual SVG using raw.githubusercontent link */}
               <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M19.384 31.5565C21.8195 29.1001 20.0756 24.9301 16.6736 24.9301H1.39862C-0.0446968 31.5545 3.46571 38.5403 9.90823 41.1136L19.384 31.5565ZM17.167 42.1099C18.3935 42.1214 19.8507 42.1214 21.599 42.1214C24.2966 42.1214 26.2974 42.1213 27.8202 42.0796C29.3544 42.0376 30.3321 41.9543 31.0088 41.8082C40.5653 39.7459 45.1727 28.692 39.9165 20.3528C39.5443 19.7623 38.9167 18.9999 37.8706 17.8672C36.8322 16.7427 35.4291 15.3037 33.5376 13.3639L21.599 1.12043L19.0289 3.75612L35.6646 20.5347C36.4648 21.3417 36.4648 22.6464 35.6646 23.4535L17.167 42.1099ZM19.384 12.4316L14.94 7.94948L9.66027 13.364C9.08319 13.9558 8.497 14.5282 7.91609 15.0954C6.59355 16.3867 5.29837 17.6512 4.20038 19.0581H16.6736C20.0756 19.0581 21.8195 14.8881 19.384 12.4316Z"
@@ -114,23 +98,11 @@ const Desktop: FC = () => {
             <div style={margin(20)}>
               <Web3Status />
             </div>
-            {/* Network Logo + Balance */}
             {/* Note (amiller68): #MetamaskOnly - For now the provider is Always Metamask */}
             {/*{library && (library.provider.isMetaMask || isCoinbaseWallet) && (*/}
             {library && account && chainId && (
-              // <div className="hidden sm:inline-block">
-              // <div className="hidden sm:flex">
-              <div className="flex items-center gap-2 justify-center flex-grow w-auto text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap">
-                <Typography weight={700} variant="sm" className="px-2 py-5 font-bold">
-                  {userFilBalance ? (
-                    `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}`
-                  ) : (
-                    <Dots>BALANCE</Dots>
-                  )}
-                </Typography>
-                <div className="hidden sm:flex">
-                  <Web3Network />
-                </div>
+              <div style={margin(20)}>
+                <Web3Network />
               </div>
             )}
           </div>
