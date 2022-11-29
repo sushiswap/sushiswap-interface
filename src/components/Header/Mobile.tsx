@@ -1,6 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
-import { NATIVE } from '@sushiswap/core-sdk'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
@@ -10,14 +9,17 @@ import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { FC, Fragment, useState } from 'react'
+// TODO / Note (amiller68): #SdkChange / SdkPublish
+import { NATIVE } from 'sdk'
 
 import { NavigationItem } from './NavigationItem'
 
 const Mobile: FC = () => {
   const menu = useMenu()
   const { account, chainId, library } = useActiveWeb3React()
-  const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
+  const userFilBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
   const [open, setOpen] = useState(false)
+  // Note (amiller68): #MetamaskOnly
   const isCoinbaseWallet = useIsCoinbaseWallet()
 
   return (
@@ -77,11 +79,11 @@ const Mobile: FC = () => {
 
                         <div className="flex items-center gap-2">
                           <div className="flex items-center justify-center flex-grow w-auto text-sm font-bold border-2 rounded shadow cursor-pointer pointer-events-auto select-none border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap">
-                            {account && chainId && userEthBalance && (
+                            {account && chainId && userFilBalance && (
                               <Link href={`/account/${account}`} passHref={true}>
                                 <a className="hidden px-3 text-high-emphesis text-bold md:block">
                                   {/*@ts-ignore*/}
-                                  {userEthBalance?.toSignificant(4)} {NATIVE[chainId || 1].symbol}
+                                  {userFilBalance?.toSignificant(4)} {NATIVE[chainId || 1].symbol}
                                 </a>
                               </Link>
                             )}
