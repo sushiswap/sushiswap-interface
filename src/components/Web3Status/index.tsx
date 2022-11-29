@@ -20,24 +20,19 @@ import Web3Connect from '../Web3Connect'
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
   return b.addedTime - a.addedTime
 }
+
 // TODO (amiller68): #AccountButtons make Web 3 Status look like design
 function Web3StatusInner() {
   const { i18n } = useLingui()
   const { account, library } = useWeb3React()
-
   const { ENSName, loading } = useENSName(account ?? undefined)
-
   const allTransactions = useAllTransactions()
-
   const sortedRecentTransactions = useMemo(() => {
     const txs = Object.values(allTransactions)
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
-
   const pending = sortedRecentTransactions.filter(isTxPending).map((tx) => tx.hash)
-
   const hasPendingTransactions = !!pending.length
-
   const toggleWalletModal = useWalletModalToggle()
 
   if (account) {

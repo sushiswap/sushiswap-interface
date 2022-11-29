@@ -25,6 +25,7 @@ const Desktop: FC = () => {
   return (
     <>
       {/* Note (amiller68): These Divs replace the header so we can have a sidebar*/}
+
       <div className="absolute left-0 max-w-sm h-screen py-6 overflow-x-hidden bg-[#000000] border-r border-r-2 border-[#6E6E6E]">
         {/*<header className="fixed z-20 hidden w-full lg:block" style={{ height: HEADER_HEIGHT }}>*/}
         <div className="flex justify-center p-4">
