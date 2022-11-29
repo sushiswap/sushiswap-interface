@@ -1,16 +1,14 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
-import useMenu, {MenuItem} from 'app/components/Header/useMenu'
-import Web3Network, {Web3NetworkIcon} from 'app/components/Web3Network'
+// TODO / Note (amiller68): #SdkChange / SdkPublish
+import { SIDE_NAV_CLASS } from 'app/components/Header/styles'
+import useMenu, { MenuItem } from 'app/components/Header/useMenu'
+import Web3Network, { Web3NetworkIcon } from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
-import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useNativeCurrencyBalances } from 'app/state/wallet/hooks'
 import Link from 'next/link'
-import React, { FC, Fragment, useMemo, useState } from 'react'
-// TODO / Note (amiller68): #SdkChange / SdkPublish
-import { SIDE_NAV_CLASS } from 'app/components/Header/styles'
-
+import React, { FC, Fragment, useState } from 'react'
 
 import { NavigationItem } from './NavigationItem'
 
@@ -106,15 +104,15 @@ const Mobile: FC = () => {
                   <div className="w-screen max-w-sm">
                     {/* <div className="flex flex-col h-full py-6 overflow-x-hidden shadow-xl bg-dark-800"> */}
                     <div className="absolute left-0 max-w-sm h-screen py-6 overflow-x-hidden bg-[#000000] border-r border-r-2 border-[#6E6E6E]">
-                    <div className="mb-8 flex flex-col select-none whitespace-nowrap m-4">
-                          <Web3Status />
-                          {library && account && chainId && (
-                            <div className="">
-                              <Web3Network />
-                            </div>
-                          )}
-                        </div>
-                      <nav className={SIDE_NAV_CLASS} aria-label="Sidebar">                        
+                      <div className="mb-8 flex flex-col select-none whitespace-nowrap m-4">
+                        <Web3Status />
+                        {library && account && chainId && (
+                          <div className="">
+                            <Web3Network />
+                          </div>
+                        )}
+                      </div>
+                      <nav className={SIDE_NAV_CLASS} aria-label="Sidebar">
                         {/* Menu Items */}
                         {menu.map((node: MenuItem) => {
                           return <NavigationItem node={node} key={node.key} />
@@ -142,7 +140,6 @@ const Mobile: FC = () => {
         </Transition.Root>
       </header>
     </>
-        
   )
 }
 

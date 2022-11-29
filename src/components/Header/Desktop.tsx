@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react'
 import { SIDE_NAV_CLASS } from 'app/components/Header/styles'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
@@ -5,9 +6,6 @@ import Web3Status from 'app/components/Web3Status'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import React, { FC } from 'react'
-import Button from '../Button'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
 
 import { NavigationItem } from './NavigationItem'
 
@@ -28,7 +26,7 @@ const Desktop: FC = () => {
 
       <div className="absolute left-0 max-w-sm h-screen py-6 bg-[#000000] border-r border-r-2 border-[#6E6E6E]">
         {/*<header className="fixed z-20 hidden w-full lg:block" style={{ height: HEADER_HEIGHT }}>*/}
-        <Link href='/'>
+        <Link href="/">
           <div className="flex justify-center p-4">
             {/* TODO (amiller68): #LogoBanner Reference Actual SVG using raw.githubusercontent link */}
             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -108,7 +106,6 @@ const Desktop: FC = () => {
           {menu.map((node) => {
             return <NavigationItem node={node} key={node.key} />
           })}
-           
         </nav>
         {/* TODO (amiller68): Disconnect Button */}
         {/* {library && account && chainId && (

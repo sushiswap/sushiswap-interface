@@ -12,7 +12,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
 import { NATIVE } from 'sdk'
-import config from 'app/config'
 
 import Dots from '../Dots'
 import Typography from '../Typography'
@@ -104,7 +103,7 @@ export function Web3NetworkIcon(): JSX.Element | null {
 
   return (
     <div>
-      <div 
+      <div
         className="grid items-center grid-flow-col justify-center h-[36px] w-[36px] text-sm rounded pointer-events-auto auto-cols-max text-secondary"
         onClick={() => toggleNetworkModal()}
       >
