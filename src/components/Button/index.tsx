@@ -11,7 +11,7 @@ export type ButtonVariant = 'outlined' | 'filled' | 'empty'
 const DIMENSIONS = {
   xs: 'px-2 h-[28px] !border',
   sm: 'px-3 h-[36px]',
-  md: 'px-4 h-[52px]',
+  md: 'h-[52px]',
   lg: 'px-6 h-[60px]',
 }
 
@@ -19,7 +19,7 @@ const SIZE = {
   xs: 'text-xs rounded-full',
   sm: 'text-xl font-medium rounded-md	w-11/12',
   // md: 'rounded',
-  md: 'text-lg font-medium rounded-none	w-11/12',
+  md: 'text-lg font-medium rounded-none',
   lg: 'text-lg rounded',
 }
 

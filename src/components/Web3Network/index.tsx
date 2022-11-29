@@ -121,11 +121,22 @@ function Web3Network(): JSX.Element | null {
         {/*@ts-ignore TYPE NEEDS FIXING*/}
         <Image src={NETWORK_ICON[chainId]} alt="Switch Network" className="rounded-full" width="24px" height="24px" />
       </div>
-      <div className="relative flex items-center gap-2 cursor-pointer pointer-events-auto">
+      {/* <div className="relative flex items-center gap-2 cursor-pointer pointer-events-auto">
+
         <Typography
           weight={700}
           variant="sm"
           className="font-mono px-1 uppercase tracking-tighter font-medium rounded-full text-xl"
+        >
+          {userFilBalance ? `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}` : <Dots>BALANCE</Dots>}
+        </Typography>
+      </div> */}
+      
+      <div className="flex items-center gap-2 justify-center flex-grow w-auto text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap hover:bg-[#2E2E2E] hover:text-white p-2 rounded-lg p-0.5">
+        <Typography
+          weight={700}
+          variant="sm"
+          className="font-mono px-1 font-medium tracking-tighter text-xl rounded-full"
         >
           {userFilBalance ? `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}` : <Dots>BALANCE</Dots>}
         </Typography>

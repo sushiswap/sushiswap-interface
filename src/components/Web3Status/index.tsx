@@ -39,7 +39,7 @@ function Web3StatusInner() {
     return (
       <div
         id="web3-status-connected"
-        className="flex items-center gap-2 text-sm rounded-lg text-primary"
+        className="flex items-center gap-2 text-sm rounded-lg hover:bg-[#2E2E2E] hover:text-white p-4"
         onClick={toggleWalletModal}
       >
         {hasPendingTransactions ? (
@@ -50,7 +50,7 @@ function Web3StatusInner() {
             <Loader stroke="white" />
           </div>
         ) : (
-          <div className="flex p-2 rounded-lg hover:bg-[#2E2E2E] hover:text-white">
+          <>
             <Davatar
               size={24}
               address={account}
@@ -76,7 +76,7 @@ function Web3StatusInner() {
                 {ENSName ? ENSName.toUpperCase() : shortenAddress(account)}
               </Typography>
             </div>
-          </div>
+          </>
         )}
       </div>
     )

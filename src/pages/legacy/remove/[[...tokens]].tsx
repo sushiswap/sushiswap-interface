@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
+import { CogIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
@@ -8,9 +9,9 @@ import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Input from 'app/components/Input'
 import ListPanel from 'app/components/ListPanel'
+import NavLink from 'app/components/NavLink'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
-import HeaderNew from 'app/features/trade/HeaderNew'
 import { classNames, unwrappedCurrencyAmount } from 'app/functions'
 import { calculateGasMargin, calculateSlippageAmount } from 'app/functions/trade'
 import { useCurrency } from 'app/hooks/Tokens'
@@ -48,6 +49,9 @@ export default function Remove() {
   const { pair, parsedAmounts, error } = useDerivedBurnInfo(currencyA ?? undefined, currencyB ?? undefined)
   const { onUserInput: _onUserInput } = useBurnActionHandlers()
   const isValid = !error
+
+  //show settings
+  const [showSettings, setShowSettings] = React.useState(false)
 
   // modal and loading
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
@@ -378,8 +382,34 @@ export default function Remove() {
         pendingText={pendingText}
       />
       <SwapLayoutCard>
-        <HeaderNew />
-        <div className="grid items-center grid-cols-3"></div>
+        <div className="px-2">
+          <div className="flex items-center justify-between gap-2 ml-2 mt-1 mb-1 cursor-pointer	">
+            <div className="flex gap-2 mt-4 mb-4 cursor-pointer">
+              <NavLink
+                activeClassName="text-high-emphesis text-lg"
+                href={{
+                  pathname: '/add',
+                }}
+              >
+                <Typography weight={700} className="text-secondary cursor-pointer	hover:text-white">
+                  {i18n._(t`Add`)}
+                </Typography>
+              </NavLink>
+              <NavLink
+                activeClassName="text-high-emphesis text-lg"
+                href={{
+                  pathname: '/remove',
+                }}
+              >
+                <Typography weight={700} className="text-secondary cursor-pointer	hover:text-white">
+                  {i18n._(t`Remove`)}
+                </Typography>
+              </NavLink>
+            </div>
+            <CogIcon width={25} onClick={() => setShowSettings(true)} color={'#746AFB'} className="cursor-pointer" />
+          </div>
+        </div>
+
         <div className="flex flex-col gap-3">
           <div
             className={classNames(
