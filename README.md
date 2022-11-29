@@ -41,6 +41,7 @@ Backend TODOs and Tags:
 
 - [ ] `#FilecoinManinnet` Where Implementation of Filecoin is required for Production
 - [ ] `#SdkPublish` Where imports to any sdk needs to updated with published version
+- [ ] For some reason there's a lingering Invalid Hash error that keeps raising randomly in dev mode. We need to fix this.
 - [ ] `#Contributing` Write up documentation for contributing to the project (Mininmum specs for implementing different features on different chains, Adding new chains, tokens, etc)
 
 Front End TODOs and Tags:

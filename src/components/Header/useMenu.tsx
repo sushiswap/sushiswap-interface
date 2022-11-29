@@ -12,7 +12,8 @@ import { NATIVE } from 'sdk'
 export interface MenuItemLeaf {
   key: string
   title: string
-  link: string
+  link?: string
+  action?: () => void // Only really used by the collapse button
   icon?: ReactNode // Get rendered in the Mobile sidebar if set
   disabled?: boolean
 }
@@ -29,8 +30,8 @@ export interface MenuItemNode {
 export type MenuItem = MenuItemLeaf | MenuItemNode
 export type Menu = MenuItem[]
 
-type UseMenu = () => Menu
-const useMenu: UseMenu = () => {
+type UseMenu = (collapse?: () => void) => Menu
+const useMenu: UseMenu = (collapse?: () => void) => {
   const { i18n } = useLingui()
   const { chainId, account } = useActiveWeb3React()
   const nativeSymbol: string = useMemo(() => {
@@ -176,6 +177,15 @@ const useMenu: UseMenu = () => {
         key: 'portfolio',
         title: i18n._(t`Portfolio`),
         items: portfolio.filter((item) => !item?.disabled),
+      })
+    }
+
+    // If this is a mobile menu, add a collapse button
+    if (collapse !== undefined) {
+      menu.push({
+        key: '•',
+        title: `•••`,
+        action: collapse
       })
     }
 
