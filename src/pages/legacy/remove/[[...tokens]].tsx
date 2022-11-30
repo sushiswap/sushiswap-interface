@@ -7,6 +7,7 @@ import { useLingui } from '@lingui/react'
 import { ChainId, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import { percentToRemove } from 'app/components/Header/styles'
 import Input from 'app/components/Input'
 import ListPanel from 'app/components/ListPanel'
 import NavLink from 'app/components/NavLink'
@@ -413,7 +414,7 @@ export default function Remove() {
         <div className="flex flex-col gap-3 p-3">
           <div
             className={classNames(
-              inputError ? 'border-red/40 hover:border-red' : 'border-[#292929] border-[2px]',
+              inputError ? 'border-red/40 hover:border-red' : 'border-[#292929] border-[2px] rounded-sm',
               'flex flex-col gap-1 bg-[#1A1A1A] px-4 py-2 border'
             )}
           >
@@ -427,13 +428,24 @@ export default function Remove() {
                 className="relative flex items-baseline flex-grow gap-3 overflow-hidden text-high-emphesis"
               >
                 <Input.Percent
-                  className="leading-[32px] focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
+                  className="leading-[32px] pl-2 focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-[#292929] rounded-sm text-inherit disabled:cursor-not-allowed"
                   value={innerLiquidityPercentage}
                   onUserInput={setInnerLiquidityPercentage}
                   placeholder="0%"
                   id="liquidity-percent"
                 />
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <Typography variant="lg" weight={700} className="font-sans text-white">
+                    {i18n._(t`%`)}
+                  </Typography>
+                </div>
               </Typography>
+            </div>
+            <div className="grid grid-cols-4 gap-1">
+              <div className={percentToRemove}>25%</div>
+              <div className={percentToRemove}>50%</div>
+              <div className={percentToRemove}>75%</div>
+              <div className={percentToRemove}>MAX</div>
             </div>
           </div>
           <div className="flex flex-col items-center">
@@ -446,7 +458,7 @@ export default function Remove() {
               />
             </svg>
           </div>
-          <div className="flex-col overflow-hidden border-[#292929] border-[2px] bg-[#1A1A1A]">
+          <div className="grid grid-col divide-y divide-y-2 divide-[#292929] overflow-hidden border-[#292929] border-[2px] bg-[#1A1A1A] rounded-sm">
             <div className="flex items-center justify-between px-4 py-2 overflow-hidden bg-[#1A1A1A]">
               <Typography variant="lg" weight={700} className="bg-[#1A1A1A]">
                 {i18n._(t`You will receive`)}
@@ -480,7 +492,7 @@ export default function Remove() {
               )}
             </div>
             {currencyAmounts.map((currencyAmount, index) => (
-              <ListPanel.CurrencyAmountItem amount={currencyAmount} key={index} size="xs" hideIfZero={false} />
+              <ListPanel.CurrencyAmountItem amount={currencyAmount} key={index} size="h3" hideIfZero={false} />
             ))}
           </div>
           {!account ? (

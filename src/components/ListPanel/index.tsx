@@ -120,7 +120,7 @@ const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, size, hideCurre
   return (
     <div className="flex flex-row gap-1.5 lg:gap-3 items-center">
       {startAdornment && startAdornment}
-      {!hideCurrencyLogo && <CurrencyLogo currency={amount?.currency} size={20} className="rounded-full" />}
+      {!hideCurrencyLogo && <CurrencyLogo currency={amount?.currency} size={32} className="rounded-full" />}
       <Typography variant={size || 'sm'} className="text-high-emphesis" weight={700}>
         {amount?.greaterThan(ZERO) ? amount?.toSignificant(6) : '0.00'} {amount?.currency.symbol}
       </Typography>
@@ -130,7 +130,7 @@ const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, size, hideCurre
 
 const ListPanelItemRight: FC = ({ children }) => {
   return (
-    <Typography variant="xs" weight={400} className="text-right">
+    <Typography variant="h3" weight={400} className="text-right text-white">
       {children}
     </Typography>
   )
