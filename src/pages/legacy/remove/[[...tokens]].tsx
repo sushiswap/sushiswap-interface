@@ -7,6 +7,7 @@ import { useLingui } from '@lingui/react'
 import { ChainId, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import { percentToRemove } from 'app/components/Header/styles'
 import Input from 'app/components/Input'
 import ListPanel from 'app/components/ListPanel'
 import NavLink from 'app/components/NavLink'
@@ -410,14 +411,14 @@ export default function Remove() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 p-3">
           <div
             className={classNames(
-              inputError ? 'border-red/40 hover:border-red' : 'border-dark-700 hover:border-dark-600',
-              'flex flex-col gap-1 bg-dark-900 px-4 py-2 rounded border'
+              inputError ? 'border-red/40 hover:border-red' : 'border-[#292929] border-[2px] rounded-sm',
+              'flex flex-col gap-1 bg-[#1A1A1A] px-4 py-2 border'
             )}
           >
-            <Typography variant="sm" weight={700}>
+            <Typography variant="lg" weight={700}>
               {i18n._(t`Percent to remove`)}
             </Typography>
             <div className="flex items-center gap-1">
@@ -427,19 +428,40 @@ export default function Remove() {
                 className="relative flex items-baseline flex-grow gap-3 overflow-hidden text-high-emphesis"
               >
                 <Input.Percent
-                  className="leading-[32px] focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
+                  className="leading-[32px] pl-2 focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-[#292929] rounded-sm text-inherit disabled:cursor-not-allowed"
                   value={innerLiquidityPercentage}
                   onUserInput={setInnerLiquidityPercentage}
                   placeholder="0%"
                   id="liquidity-percent"
                 />
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <Typography variant="lg" weight={700} className="font-sans text-white">
+                    {i18n._(t`%`)}
+                  </Typography>
+                </div>
               </Typography>
             </div>
+            <div className="grid grid-cols-4 gap-1">
+              <div className={percentToRemove}>25%</div>
+              <div className={percentToRemove}>50%</div>
+              <div className={percentToRemove}>75%</div>
+              <div className={percentToRemove}>MAX</div>
+            </div>
           </div>
-          <div className="flex-col overflow-hidden border rounded bg-dark-900 border-dark-700">
-            <div className="flex items-center justify-between px-4 py-2 overflow-hidden bg-dark-900">
-              <Typography variant="sm" weight={700} className="text-high-emphesis">
-                {i18n._(t`You'll receive`)}
+          <div className="flex flex-col items-center">
+            <svg width="25" height="26" viewBox="0 0 32 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M15.1238 30.2C15.6101 30.6781 16.39 30.6781 16.8763 30.2V30.2L30.8923 16.422C31.3846 15.9381 31.3914 15.1466 30.9074 14.6543V14.6543C30.4234 14.162 29.632 14.1552 29.1397 14.6392L24.0542 19.6384C21.5246 22.125 17.2501 20.333 17.2501 16.7859V1.25C17.2501 0.559644 16.6904 0 16.0001 0V0C15.3097 0 14.7501 0.559644 14.7501 1.25V16.7858C14.7501 20.333 10.4755 22.125 7.94594 19.6384L2.86042 14.6392C2.3681 14.1552 1.57667 14.162 1.09271 14.6543V14.6543C0.608755 15.1466 0.61553 15.9381 1.10785 16.422L15.1238 30.2V30.2Z"
+                fill="#424242"
+              />
+            </svg>
+          </div>
+          <div className="grid grid-col divide-y divide-y-2 divide-[#292929] overflow-hidden border-[#292929] border-[2px] bg-[#1A1A1A] rounded-sm">
+            <div className="flex items-center justify-between px-4 py-2 overflow-hidden bg-[#1A1A1A]">
+              <Typography variant="lg" weight={700} className="bg-[#1A1A1A]">
+                {i18n._(t`You will receive`)}
               </Typography>
               {chainId && (oneCurrencyIsWETH || oneCurrencyIsETH) && (
                 <Typography variant="xs" weight={700}>
@@ -470,7 +492,7 @@ export default function Remove() {
               )}
             </div>
             {currencyAmounts.map((currencyAmount, index) => (
-              <ListPanel.CurrencyAmountItem amount={currencyAmount} key={index} size="xs" hideIfZero={false} />
+              <ListPanel.CurrencyAmountItem amount={currencyAmount} key={index} size="h3" hideIfZero={false} />
             ))}
           </div>
           {!account ? (
