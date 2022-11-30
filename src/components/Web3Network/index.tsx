@@ -16,18 +16,12 @@ import { NATIVE } from 'sdk'
 import Dots from '../Dots'
 import Typography from '../Typography'
 
-function Web3Network(): JSX.Element | null {
-  const { chainId, library, account } = useActiveWeb3React()
-  console.log('chainId', chainId)
-
+export function Web3NetworkIcon(): JSX.Element | null {
+  const { chainId, library } = useActiveWeb3React()
   const toggleNetworkModal = useNetworkModalToggle()
-
   const [attemptingSwitchFromUrl, setAttemptingSwitchFromUrl] = useState(false)
-
   const [switchedFromUrl, setSwitchedFromUrl] = useState(false)
-
   const router = useRouter()
-
   const isWindowVisible = useIsWindowVisible()
 
   const prevChainId = usePrevious(chainId)
@@ -35,8 +29,6 @@ function Web3Network(): JSX.Element | null {
   const queryChainId = Number(router.query.chainId)
 
   const networkModalOpen = useModalOpen(ApplicationModal.NETWORK)
-
-  const userFilBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
 
   const handleChainSwitch = useCallback(
     (targetChain: number) => {
@@ -100,8 +92,6 @@ function Web3Network(): JSX.Element | null {
 
   // set chainId on initial load if not present
   useEffect(() => {
-    console.log('New ChainId: ', chainId)
-    console.log('New Library: ', library)
     if (chainId && !queryChainId) {
       router.replace({ pathname: router.pathname, query: { ...router.query, chainId } }, undefined, { shallow: true })
     }
@@ -112,26 +102,38 @@ function Web3Network(): JSX.Element | null {
   }
 
   return (
-    <div
-      // className="flex items-center text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap"
-      className="flex p-2 rounded-lg hover:bg-[#2E2E2E] hover:text-white"
-      onClick={() => toggleNetworkModal()}
-    >
-      <div className="grid items-center grid-flow-col justify-center h-[36px] w-[36px] text-sm rounded pointer-events-auto auto-cols-max text-secondary">
+    <div>
+      <div
+        className="grid items-center grid-flow-col justify-center h-[36px] w-[36px] text-sm rounded pointer-events-auto auto-cols-max text-secondary"
+        onClick={() => toggleNetworkModal()}
+      >
         {/*@ts-ignore TYPE NEEDS FIXING*/}
         <Image src={NETWORK_ICON[chainId]} alt="Switch Network" className="rounded-full" width="24px" height="24px" />
       </div>
-      {/* <div className="relative flex items-center gap-2 cursor-pointer pointer-events-auto">
+      <NetworkModal
+        switchNetwork={(targetChain: number) => {
+          handleChainSwitch(targetChain)
+        }}
+      />
+    </div>
+  )
+}
 
-        <Typography
-          weight={700}
-          variant="sm"
-          className="font-mono px-1 uppercase tracking-tighter font-medium rounded-full text-xl"
-        >
-          {userFilBalance ? `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}` : <Dots>BALANCE</Dots>}
-        </Typography>
-      </div> */}
-      
+function Web3Network(): JSX.Element | null {
+  const { account, chainId, library } = useActiveWeb3React()
+
+  const userFilBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
+
+  if (!chainId || !library) {
+    return null
+  }
+
+  return (
+    <div
+      // className="flex items-center text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap"
+      className="flex p-2 rounded-lg hover:bg-[#2E2E2E] hover:text-white"
+    >
+      <Web3NetworkIcon />
       <div className="flex items-center gap-2 justify-center flex-grow w-auto text-sm font-bold cursor-pointer pointer-events-auto select-none whitespace-nowrap hover:bg-[#2E2E2E] hover:text-white p-2 rounded-lg p-0.5">
         <Typography
           weight={700}
@@ -141,11 +143,6 @@ function Web3Network(): JSX.Element | null {
           {userFilBalance ? `${userFilBalance?.toSignificant(4)} ${NATIVE[chainId].symbol}` : <Dots>BALANCE</Dots>}
         </Typography>
       </div>
-      <NetworkModal
-        switchNetwork={(targetChain: number) => {
-          handleChainSwitch(targetChain)
-        }}
-      />
     </div>
   )
 }

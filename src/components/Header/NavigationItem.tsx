@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { FC, Fragment, useCallback, useRef } from 'react'
 
+
 interface NavigationItem {
   node: MenuItem
 }
@@ -42,7 +43,23 @@ export const NavigationItem: FC<NavigationItem> = ({ node }) => {
         {node.title}
       </Typography>
     )
+  } else if (node && node.hasOwnProperty('action')) {
+    const { action } = node as MenuItemLeaf
+    return (
+      <Typography
+        onClick={action}
+        weight={700}
+        variant="sm"
+        className={classNames(
+          'hover:text-white active:text-white text-xl font-bold py-5 px-4 flex gap-3'
+        )}
+      >
+        {!isDesktop && node.icon}
+        {node.title}
+      </Typography>
+    )
   }
+
 
   return (
     <Popover key={node.key} className="relative flex">
@@ -74,10 +91,11 @@ export const NavigationItem: FC<NavigationItem> = ({ node }) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Popover.Panel className="z-10 w-full absolute w-40 translate-y-[-8px] translate-x-[-8px]">
+              <Popover.Panel className="z-10 w-full absolute w-40 translate-y-[-8px] translate-x-[8px]">
+                {/* TODO (amiller68): Restyle Dropdown Panel */}
                 <div
                   className={classNames(
-                    'shadow-md shadow-black/40 border border-dark-700 rounded overflow-hidden',
+                    'shadow-md shadow-black/40 border border-dark-700  overflow-hidden whitespace-nowrap',
                     !touchDevice
                       ? "backdrop-blur-fallback before:z-[-1] before:rounded before:absolute before:w-full before:h-full before:content-[''] before:backdrop-blur-[20px] bg-white bg-opacity-[0.02]"
                       : 'bg-dark-800 inset-0'

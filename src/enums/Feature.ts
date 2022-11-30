@@ -1,19 +1,12 @@
 export enum Feature {
+  // Note (amilller68): What we are currently implementing
   AMM = 'AMM',
-  AMM_V2 = 'AMM V2',
+
+  // TODO (amiller68): More Features we want to implement :) !
   LIQUIDITY_MINING = 'Liquidity Mining',
-  BENTOBOX = 'BentoBox',
-  KASHI = 'Kashi',
-  MISO = 'MISO',
   ANALYTICS = 'Analytics',
-  MIGRATE = 'Migrate',
   STAKING = 'Staking',
-  TRIDENT = 'Trident',
-  TRIDENT_MIGRATION = 'Trident Migration',
   LIMIT_ORDERS = 'LimitOrders',
-  INARI = 'Inari',
-  MEOWSHI = 'MEOWSHI',
   VESTING = 'Vesting',
-  SUSHIGUARD = 'SushiGuard',
   SUBGRAPH = 'Subgraph',
 }
