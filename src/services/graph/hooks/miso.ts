@@ -1,7 +1,7 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { Contract } from '@ethersproject/contracts'
 import { Listener, Web3Provider } from '@ethersproject/providers'
-import { CurrencyAmount } from '@sushiswap/core-sdk'
+import { CurrencyAmount } from '@figswap/core-sdk'
 import { Auction } from 'app/features/miso/context/Auction'
 import { TOPIC_ADDED_COMMITMENT } from 'app/features/miso/context/constants'
 import { AuctionCommitment } from 'app/features/miso/context/types'

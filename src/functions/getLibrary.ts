@@ -1,5 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers'
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import ms from 'ms.macro'
 
 const NETWORK_POLLING_INTERVALS: { [chainId: number]: number } = {

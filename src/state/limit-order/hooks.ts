@@ -1,5 +1,3 @@
-import { i18n } from '@lingui/core'
-import { t } from '@lingui/macro'
 import {
   ChainId,
   Currency,
@@ -11,7 +9,9 @@ import {
   TradeType,
   WNATIVE_ADDRESS,
   ZERO,
-} from '@sushiswap/core-sdk'
+} from '@figswap/core-sdk'
+import { i18n } from '@lingui/core'
+import { t } from '@lingui/macro'
 import { isAddress, tryParseAmount } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'

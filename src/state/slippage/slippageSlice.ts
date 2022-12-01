@@ -1,5 +1,5 @@
+import { Percent } from '@figswap/core-sdk'
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Percent } from '@sushiswap/core-sdk'
 import { AppState } from 'app/state'
 
 export const GLOBAL_DEFAULT_SLIPPAGE_PERCENT = new Percent(50, 10_000) // .5%

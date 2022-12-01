@@ -1,31 +1,12 @@
-// TOOD (amiller68): #SdkChange / #SdkPublish - Remove this when we have a published sdk
-import { ChainId, JSBI, Percent } from 'sdk'
+import { ChainId, JSBI, Percent } from '@figswap/core-sdk'
 
 // TODO: Move some of this to config level...
 
 // TODO: update weekly with new constant
 export const WEEKLY_MERKLE_ROOT =
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-13/merkle-10959148-11550728.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-14/merkle-10959148-11596364.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-15/merkle-10959148-11641996.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-16/merkle-10959148-11687577.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-17/merkle-10959148-11733182.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-18/merkle-10959148-11778625.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-19/merkle-10959148-11824101.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-20/merkle-10959148-11869658.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-21/merkle-10959148-11915191.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-22/merkle-10959148-11960663.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-23/merkle-10959148-12006121.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-24/merkle-10959148-12051484.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-24/protocol-claim.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-24/merkle-10959148-12051484-2.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-25/merkle-10959148-12096934.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-26/merkle-10959148-12142433.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-27/merkle-10959148-12171394.json'
   'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-28/merkle.json'
 
 export const PROTOCOL_MERKLE_ROOT =
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/protocol/merkle-10959148-12171394.json'
   'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/protocol-02/merkle-10959148-12171394.json'
 
 export const NetworkContextName = 'NETWORK'
@@ -64,26 +45,14 @@ export const ZERO_PERCENT = new Percent('0')
 export const ONE_HUNDRED_PERCENT = new Percent('1')
 
 export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
-  // Note (amiller68): #WallabyOnly
+  // Note (amiller68): We don't have a separate analytics page on FigSwap, keeping this here for now for reference.
   // [ChainId.ETHEREUM]: 'https://analytics.sushi.com',
-  // [ChainId.MATIC]: 'https://analytics-polygon.sushi.com',
-  // [ChainId.FANTOM]: 'https://analytics-ftm.sushi.com',
-  // [ChainId.BSC]: 'https://analytics-bsc.sushi.com',
-  // [ChainId.XDAI]: 'https://analytics-xdai.sushi.com',
-  // [ChainId.HARMONY]: 'https://analytics-harmony.sushi.com',
-  // [ChainId.ARBITRUM]: 'https://analytics-arbitrum.sushi.com',
-  // [ChainId.FUSE]: 'https://analytics-fuse.sushi.com',
-  // [ChainId.MOONRIVER]: 'https://analytics-moonriver.sushi.com',
-  // [ChainId.CELO]: 'https://analytics-celo.sushi.com',
 }
 
 // TODO (amiller68): #Research - What is the Activation Block for each chain?
 export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
-  // Note (amiller68): #WallabyOnly
+  // This is the block number for the EIP-1559 activation on Ethereum Mainnet
   // [ChainId.ETHEREUM]: 12965000,
-  // [ChainId.ROPSTEN]: 10499401,
-  // [ChainId.GÖRLI]: 5062605,
-  // [ChainId.RINKEBY]: 8897988,
 }
 
 export const DEFAULT_TXN_DISMISS_MS = 25000

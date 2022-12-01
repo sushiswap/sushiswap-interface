@@ -1,3 +1,5 @@
+// TODO / Note (amiller68): #SdkChange /#SdkPublish
+import { NATIVE } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import config from 'app/config'
@@ -5,8 +7,6 @@ import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { ReactNode, useMemo } from 'react'
-// TODO / Note (amiller68): #SdkChange /#SdkPublish
-import { NATIVE } from 'sdk'
 
 // Use this struct to define menu items (lead to pages)
 export interface MenuItemLeaf {
@@ -34,7 +34,7 @@ type UseMenu = (collapse?: () => void) => Menu
 const useMenu: UseMenu = (collapse?: () => void) => {
   const { i18n } = useLingui()
   const { chainId, account } = useActiveWeb3React()
-  const nativeSymbol: string = useMemo(() => {
+  const nativeSymbol = useMemo(() => {
     let symbol = NATIVE[chainId ?? config.defaultChainId].symbol
     return symbol ?? 'undefined'
   }, [chainId])
@@ -97,7 +97,7 @@ const useMenu: UseMenu = (collapse?: () => void) => {
     }
 
     return menu.filter((el) => Object.keys(el).length > 0)
-  }, [account, chainId, i18n, nativeSymbol])
+  }, [account, chainId, i18n, collapse])
 }
 
 export default useMenu

@@ -1,5 +1,5 @@
 import { getAddress } from '@ethersproject/address'
-import { Token } from '@sushiswap/core-sdk'
+import { Token } from '@figswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { formatNumber, formatPercent } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'

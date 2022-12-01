@@ -1,10 +1,10 @@
 // TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { Currency, NATIVE, WNATIVE } from '@figswap/core-sdk'
 import { tryParseAmount } from 'app/functions/parse'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import { useMemo } from 'react'
-import { Currency, NATIVE, WNATIVE } from 'sdk'
 
 import { useWETH9Contract } from './useContract'
 

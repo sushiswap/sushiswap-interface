@@ -1,3 +1,5 @@
+// Note (amiller68): #SdkChange / #SdkPublish
+import { Currency, JSBI, Token, Trade as V2Trade, TradeType } from '@figswap/core-sdk'
 import { CogIcon, ExclamationIcon } from '@heroicons/react/outline'
 import { CheckIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
@@ -44,8 +46,6 @@ import { useExpertModeManager, useUserSingleHopOnly, useUserSushiGuard } from 'a
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ArrowLeft } from 'react-feather'
-// Note (amiller68): #SdkChange / #SdkPublish
-import { Currency, JSBI, Token, Trade as V2Trade, TradeType } from 'sdk'
 
 import { SwapProps } from '../../swap'
 

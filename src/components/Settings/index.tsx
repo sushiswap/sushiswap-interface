@@ -1,7 +1,7 @@
+import { Percent } from '@figswap/core-sdk'
 import { CheckIcon, CogIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import CloseIcon from 'app/components/CloseIcon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'

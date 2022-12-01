@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { getAverageBlockTime, getBlock, getMassBlocks } from 'app/services/graph/fetchers'
 import {
   addSeconds,

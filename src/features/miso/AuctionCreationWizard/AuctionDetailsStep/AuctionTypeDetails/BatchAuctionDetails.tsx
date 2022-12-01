@@ -1,7 +1,7 @@
 import { AddressZero } from '@ethersproject/constants'
+import { NATIVE } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { NATIVE } from '@sushiswap/core-sdk'
 import Form from 'app/components/Form'
 import Typography from 'app/components/Typography'
 import { useStore } from 'app/features/miso/context/store'

@@ -1,4 +1,6 @@
 import { Interface } from '@ethersproject/abi'
+// Note (amiller68): #SdkChange - Using my own declaration of ChainId
+import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from '@figswap/core-sdk'
 import { ERC20_ABI } from 'app/constants/abis/erc20'
 import { getContract } from 'app/functions'
 import { isAddress } from 'app/functions/validate'
@@ -6,8 +8,6 @@ import { useInterfaceMulticall } from 'app/hooks/useContract'
 import { useMultipleContractSingleData, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
-// Note (amiller68): #SdkChange - Using my own declaration of ChainId
-import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from 'sdk'
 import useSWR from 'swr'
 
 /**
@@ -18,6 +18,7 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
 } {
   const { chainId } = useActiveWeb3React()
   const multicallContract = useInterfaceMulticall()
+  console.log('multicallContract', multicallContract)
 
   // Validate addresses, returns filtered list of addresses
   const validAddressInputs: [string][] = useMemo(

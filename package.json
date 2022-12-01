@@ -1,5 +1,5 @@
 {
-  "name": "sushiswap-interface",
+  "name": "figswap-interface",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -98,7 +98,7 @@
     "@sushiswap/bentobox-sdk": "1.0.0-canary.119",
     "@sushiswap/chainlink-whitelist": "0.2.8",
     "@sushiswap/core": "^2.0.0-canary.1",
-    "@sushiswap/core-sdk": "1.0.0-canary.138",
+    "@figswap/core-sdk": "0.0.0-canary.0",
     "@sushiswap/kashi-sdk": "1.0.0-canary.110",
     "@sushiswap/limit-order-pair-list": "0.2.17",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.119",
@@ -253,7 +253,5 @@
     "budgetPercentIncreaseRed": 40,
     "showDetails": true
   },
-  "dependencies": {
-    "sdk": "../sdk/packages/core-sdk"
-  }
+  "dependencies": {}
 }

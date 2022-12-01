@@ -1,4 +1,4 @@
-import { CurrencyAmount } from '@sushiswap/core-sdk'
+import { CurrencyAmount } from '@figswap/core-sdk'
 import { useAddLiquidityDerivedCurrencyAmounts } from 'app/features/trident/add/useAddLiquidityDerivedState'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from 'app/functions'

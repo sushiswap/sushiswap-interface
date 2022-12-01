@@ -1,6 +1,6 @@
+import { CurrencyAmount, Percent } from '@figswap/core-sdk'
 import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import { CurrencyAmount, Percent } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { KashiMarketActions } from 'app/features/kashi/KashiMarket'

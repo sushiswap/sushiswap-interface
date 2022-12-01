@@ -1,4 +1,4 @@
-import { JSBI, Pair } from '@sushiswap/core-sdk'
+import { JSBI, Pair } from '@figswap/core-sdk'
 import SumUSDCValues from 'app/features/trident/SumUSDCValues'
 import { classNames } from 'app/functions'
 import { useTotalSupply } from 'app/hooks/useTotalSupply'

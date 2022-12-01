@@ -1,7 +1,7 @@
+import { Currency, CurrencyAmount, NATIVE, Price, Token } from '@figswap/core-sdk'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, NATIVE, Price, Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Form from 'app/components/Form'
 import AuctionCreationFormGeneralDetails from 'app/features/miso/AuctionCreationForm/AuctionCreationFormGeneralDetails'

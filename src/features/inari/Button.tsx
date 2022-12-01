@@ -1,6 +1,6 @@
+import { ZERO } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ZERO } from '@sushiswap/core-sdk'
 import Button, { ButtonProps } from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import ProgressSteps from 'app/components/ProgressSteps'

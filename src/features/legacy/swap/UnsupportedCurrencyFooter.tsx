@@ -1,7 +1,7 @@
+import { Currency } from '@figswap/core-sdk'
 import { ExternalLinkIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'

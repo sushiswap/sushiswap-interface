@@ -1,7 +1,7 @@
+import { Currency, CurrencyAmount, Percent, Price, Trade, TradeType, ZERO } from '@figswap/core-sdk'
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Percent, Price, Trade, TradeType, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import ListPanel from 'app/components/ListPanel'
 import { HeadlessUiModal } from 'app/components/Modal'

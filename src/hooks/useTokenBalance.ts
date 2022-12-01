@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import { WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { WNATIVE_ADDRESS } from '@figswap/core-sdk'
 import ERC20_ABI from 'app/constants/abis/erc20.json'
 import { isAddress } from 'app/functions/validate'
 import useBlockNumber from 'app/lib/hooks/useBlockNumber'

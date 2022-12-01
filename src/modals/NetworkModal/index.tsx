@@ -1,3 +1,6 @@
+// TODO (amiller68): #SdkChange / #SdkPublish
+// import { ChainId } from '@figswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
@@ -5,9 +8,6 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks'
 import { ApplicationModal } from 'app/state/application/reducer'
 import React, { FC } from 'react'
-// TODO (amiller68): #SdkChange / #SdkPublish
-// import { ChainId } from '@sushiswap/core-sdk'
-import { ChainId } from 'sdk'
 
 export const SUPPORTED_NETWORKS: Record<
   number,

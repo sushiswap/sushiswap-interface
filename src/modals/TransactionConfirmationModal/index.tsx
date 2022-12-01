@@ -1,3 +1,5 @@
+// Note: #SdkChange / #SdkPublish
+import { ChainId, Currency } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import loadingRollingCircle from 'app/animation/loading-rolling-circle.json'
@@ -15,8 +17,6 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useSwapState } from 'app/state/swap/hooks'
 import Lottie from 'lottie-react'
 import React, { FC, useMemo } from 'react'
-// Note: #SdkChange / #SdkPublish
-import { ChainId, Currency } from 'sdk'
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void

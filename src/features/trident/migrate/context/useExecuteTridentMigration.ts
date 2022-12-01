@@ -1,6 +1,6 @@
+import { CurrencyAmount, Token } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import { approveSLPAction, batchAction } from 'app/features/trident/actions'
 import { handleMigrationError, missingMigrationDependencies } from 'app/features/trident/migrate/context/errorPopups'
 import { selectTridentMigrations, setMigrationTxHash } from 'app/features/trident/migrate/context/migrateSlice'

@@ -1,7 +1,7 @@
+import { ChainId } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk'
-import { ChainId } from '@sushiswap/core-sdk'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback } from 'react'
 

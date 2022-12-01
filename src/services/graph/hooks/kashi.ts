@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { getKashiPairs } from 'app/services/graph/fetchers'
 import stringify from 'fast-json-stable-stringify'
 import useSWR from 'swr'

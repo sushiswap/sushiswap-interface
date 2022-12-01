@@ -1,12 +1,12 @@
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
+// TODO / Note (amiller68): #SdkChange / #SdkPublish
+// import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, Trade as V2Trade, TradeType } from '@figswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, Trade as V2Trade, TradeType } from '@figswap/core-sdk'
 import { calculateGasMargin } from 'app/functions/trade'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useHasPendingApproval, useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback, useMemo } from 'react'
-// TODO / Note (amiller68): #SdkChange / #SdkPublish
-// import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
-import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, Trade as V2Trade, TradeType } from 'sdk'
 
 import { useTokenContract } from './useContract'
 import { useTokenAllowance } from './useTokenAllowance'

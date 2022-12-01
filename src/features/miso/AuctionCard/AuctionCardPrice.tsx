@@ -1,4 +1,4 @@
-import { Currency, Price, Token } from '@sushiswap/core-sdk'
+import { Currency, Price, Token } from '@figswap/core-sdk'
 import { formatNumber } from 'app/functions'
 import useInterval from 'app/hooks/useInterval'
 import { FC, useState } from 'react'

@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 // TODO / NOTE: #SdkChange / #SdkPublish
-import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Token, Trade, TradeType } from 'sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Token, Trade, TradeType } from '@figswap/core-sdk'
 
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants'
 

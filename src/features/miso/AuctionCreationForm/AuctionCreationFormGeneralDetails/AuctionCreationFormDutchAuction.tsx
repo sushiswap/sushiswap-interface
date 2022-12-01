@@ -1,6 +1,6 @@
+import { Currency, CurrencyAmount, NATIVE, Price, Token } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, NATIVE, Price, Token } from '@sushiswap/core-sdk'
 import Form from 'app/components/Form'
 import FormFieldHelperText from 'app/components/Form/FormFieldHelperText'
 import Typography from 'app/components/Typography'

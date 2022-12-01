@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { BENTOBOX_ADDRESS, KASHI_ADDRESS, WNATIVE_ADDRESS } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { BENTOBOX_ADDRESS, KASHI_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import { HeadlessUiModal } from 'app/components/Modal'

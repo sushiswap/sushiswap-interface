@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { Fraction } from 'app/entities/bignumber'
 import { useCloneRewarderContract, useComplexRewarderContract } from 'app/hooks/useContract'
 import useBlockNumber from 'app/lib/hooks/useBlockNumber'

@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, JSBI, Percent, Price, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, Price, Token } from '@figswap/core-sdk'
 import {
   AuctionCreationFormInputFormatted,
   AuctionCreationFormInputValidated,

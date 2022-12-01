@@ -1,6 +1,6 @@
+import { NATIVE, Percent, WNATIVE } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { NATIVE, Percent, WNATIVE } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import AssetSelect from 'app/components/AssetSelect'
 import Button from 'app/components/Button'

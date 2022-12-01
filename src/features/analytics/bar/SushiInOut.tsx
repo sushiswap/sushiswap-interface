@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import ExternalLink from 'app/components/ExternalLink'
 import Typography from 'app/components/Typography'
 import {

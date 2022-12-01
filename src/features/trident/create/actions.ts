@@ -1,7 +1,7 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
-import { Currency, CurrencyAmount, Rebase, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Rebase, Token } from '@figswap/core-sdk'
 import { computeConstantProductPoolAddress, Fee } from '@sushiswap/trident-sdk'
 import { SelectedAsset, SpendSource } from 'app/features/trident/create/SelectedAsset'
 import { toShareJSBI } from 'app/functions'

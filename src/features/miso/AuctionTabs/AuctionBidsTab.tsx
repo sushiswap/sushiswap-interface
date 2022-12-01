@@ -1,7 +1,7 @@
+import { Currency, CurrencyAmount } from '@figswap/core-sdk'
 import { Switch } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import ExternalLink from 'app/components/ExternalLink'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'

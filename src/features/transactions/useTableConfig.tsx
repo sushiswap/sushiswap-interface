@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { formatDateAgo, getExplorerLink } from 'app/functions'
 import React, { useMemo } from 'react'
 

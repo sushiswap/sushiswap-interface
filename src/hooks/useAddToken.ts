@@ -1,4 +1,4 @@
-import { Currency, Token } from '@sushiswap/core-sdk'
+import { Currency, Token } from '@figswap/core-sdk'
 import { getCurrencyLogoUrls } from 'app/components/CurrencyLogo/CurrencyLogo'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useState } from 'react'

@@ -9,4 +9,5 @@ export enum Feature {
   LIMIT_ORDERS = 'LimitOrders',
   VESTING = 'Vesting',
   SUBGRAPH = 'Subgraph',
+  SUSHIGUARD = 'SushiGuard',
 }

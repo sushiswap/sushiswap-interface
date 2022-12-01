@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { DEFAULT_TXN_DISMISS_MS } from 'app/constants'
 import LibUpdater from 'lib/hooks/transactions/updater'
 import { useCallback, useMemo } from 'react'

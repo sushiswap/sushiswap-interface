@@ -1,5 +1,5 @@
 // TODO (amiller68): #SdkChange Not use the SDK's ChainId enum
-import { Currency } from 'sdk'
+import { Currency } from '@figswap/core-sdk'
 
 export function currencyId(currency: Currency): string {
   // Note (amiller68): #WallabyOnly

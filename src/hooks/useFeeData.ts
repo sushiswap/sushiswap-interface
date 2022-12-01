@@ -1,5 +1,5 @@
 import { FeeData } from '@ethersproject/abstract-provider'
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { EIP_1559_ACTIVATION_BLOCK } from 'app/constants'
 import useBlockNumber from 'app/lib/hooks/useBlockNumber'
 import { useActiveWeb3React } from 'app/services/web3'

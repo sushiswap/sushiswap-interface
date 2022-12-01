@@ -1,3 +1,15 @@
+// TODO / NOTE (amiller68): #SdkChange / #SdkPublish
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Percent,
+  SUSHI_ADDRESS,
+  Trade as V2Trade,
+  TradeType,
+  WNATIVE_ADDRESS,
+} from '@figswap/core-sdk'
+import { NATIVE } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { currencyId } from 'app/functions'
@@ -16,18 +28,6 @@ import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { useRouter } from 'next/router'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
-// TODO / NOTE (amiller68): #SdkChange / #SdkPublish
-import {
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  Percent,
-  SUSHI_ADDRESS,
-  Trade as V2Trade,
-  TradeType,
-  WNATIVE_ADDRESS,
-} from 'sdk'
-import { NATIVE } from 'sdk'
 
 // import {
 //   EstimatedSwapCall,

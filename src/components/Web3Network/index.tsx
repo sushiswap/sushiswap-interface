@@ -1,3 +1,4 @@
+import { NATIVE } from '@figswap/core-sdk'
 import { NETWORK_ICON } from 'app/config/networks'
 import { switchToNetwork } from 'app/functions/network'
 import useIsWindowVisible from 'app/hooks/useIsWindowVisible'
@@ -11,7 +12,6 @@ import Cookies from 'js-cookie'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
-import { NATIVE } from 'sdk'
 
 import Dots from '../Dots'
 import Typography from '../Typography'

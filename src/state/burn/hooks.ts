@@ -1,6 +1,6 @@
+import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token, ZERO } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token, ZERO } from '@sushiswap/core-sdk'
 import { tryParseAmount } from 'app/functions/parse'
 import { useTotalSupply } from 'app/hooks/useTotalSupply'
 import { useV2Pair } from 'app/hooks/useV2Pairs'

@@ -1,7 +1,7 @@
+import { Currency } from '@figswap/core-sdk'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency } from '@sushiswap/core-sdk'
 import selectCoinAnimation from 'app/animation/select-coin.json'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
@@ -11,7 +11,6 @@ import { classNames } from 'app/functions'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useTokenBalance } from 'app/state/wallet/hooks'
 import Lottie from 'lottie-react'
 import React, { FC, ReactNode, useState } from 'react'
@@ -118,8 +117,6 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect, currenci
 const BalancePanel = ({ currency }: { currency: Currency }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { data: balance } = useBentoBalanceV2(currency?.wrapped.address)
-  const bentoUSDC = useUSDCValue(balance)
   const wallet = useTokenBalance(account ?? undefined, currency?.wrapped)
   const walletUSDC = useUSDCValue(wallet)
 
@@ -161,16 +158,7 @@ const BalancePanel = ({ currency }: { currency: Currency }) => {
                 />
               </svg>
             </div>
-            <Typography variant="xs" weight={400} className="text-secondary">
-              {i18n._(t`In Bento:`)}
-            </Typography>
-            <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {balance?.greaterThan('0') ? balance?.toSignificant(6) : '0.0000'}
-            </Typography>
           </div>
-          <Typography variant="sm" weight={700} className="text-right text-high-emphesis">
-            ≈${bentoUSDC?.greaterThan('0') ? bentoUSDC.toSignificant(6) : '0.0000'}
-          </Typography>
         </div>,
       ]}
     />

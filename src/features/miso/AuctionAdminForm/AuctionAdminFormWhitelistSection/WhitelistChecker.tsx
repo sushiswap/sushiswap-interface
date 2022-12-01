@@ -1,6 +1,6 @@
+import { Currency, ZERO } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, ZERO } from '@sushiswap/core-sdk'
 import Form, { DEFAULT_FORM_FIELD_CLASSNAMES } from 'app/components/Form'
 import Typography from 'app/components/Typography'
 import { isAddressValidator, pipeline } from 'app/features/miso/AuctionAdminForm/validators'

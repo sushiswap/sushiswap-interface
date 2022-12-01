@@ -1,5 +1,5 @@
-import { ChainId, CurrencyAmount, JSBI, Token, TradeType } from '@sushiswap/core-sdk'
-import { Pair, Route, Trade } from '@sushiswap/core-sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, TradeType } from '@figswap/core-sdk'
+import { Pair, Route, Trade } from '@figswap/core-sdk'
 import { computeRealizedLPFeeAmount } from 'app/functions/prices'
 
 describe('prices', () => {

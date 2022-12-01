@@ -1,3 +1,5 @@
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { CurrencyAmount, JSBI, Pair, Percent, Token } from '@figswap/core-sdk'
 import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { PlusIcon } from '@heroicons/react/solid'
@@ -14,8 +16,6 @@ import { useTokenBalance } from 'app/state/wallet/hooks'
 import { useRouter } from 'next/router'
 import { FC } from 'preact/compat'
 import React, { Fragment } from 'react'
-// TODO / Note (amiller68) - #SdkChange / #SdkPublish
-import { CurrencyAmount, JSBI, Pair, Percent, Token } from 'sdk'
 
 import Button from '../Button'
 import { CurrencyLogoArray } from '../CurrencyLogo'

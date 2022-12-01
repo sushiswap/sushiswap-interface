@@ -1,6 +1,6 @@
+import { NATIVE, WNATIVE } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { NATIVE, WNATIVE } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Divider from 'app/components/Divider'

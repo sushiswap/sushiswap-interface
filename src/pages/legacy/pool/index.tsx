@@ -1,3 +1,4 @@
+import { CurrencyAmount } from '@figswap/core-sdk'
 import { PlusIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -12,8 +13,6 @@ import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import { NextSeo } from 'next-seo'
 import React from 'react'
-// TODO / Note (amiller68) - #SdkChange / #SdkPublish
-import { CurrencyAmount } from 'sdk'
 
 const Pool = () => {
   const { i18n } = useLingui()

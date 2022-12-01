@@ -3,8 +3,6 @@ import { useLingui } from '@lingui/react'
 import { DiscordIcon, InstagramIcon, MediumIcon, TwitterIcon } from 'app/components/Icon'
 import LanguageSwitch from 'app/components/LanguageSwitch'
 import Typography from 'app/components/Typography'
-import { Feature } from 'app/enums'
-import { featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -52,7 +50,7 @@ const Footer = () => {
             <Typography variant="xs" weight={700} className="mt-2.5 hover:text-high-emphesis">
               {i18n._(t`Products`)}
             </Typography>
-            <Link href={featureEnabled(Feature.TRIDENT, chainId) ? '/trident/pools' : '/legacy/pool'} passHref={true}>
+            <Link href={'/legacy/pool'} passHref={true}>
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">
                 {i18n._(t`Liquidity Pools`)}
               </Typography>

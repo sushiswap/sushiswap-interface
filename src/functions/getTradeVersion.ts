@@ -1,7 +1,7 @@
 // TODO / Note (amiller68): #SdkChange / #SdkPublish
-// import { Currency, Trade as V2Trade, TradeType, TradeVersion } from '@sushiswap/core-sdk'
+// import { Currency, Trade as V2Trade, TradeType, TradeVersion } from '@figswap/core-sdk'
+import { Currency, Trade as V2Trade, TradeType, TradeVersion } from '@figswap/core-sdk'
 import { Trade as V3Trade } from '@sushiswap/trident-sdk'
-import { Currency, Trade as V2Trade, TradeType, TradeVersion } from 'sdk'
 
 export function getTradeVersion(
   trade?: V2Trade<Currency, Currency, TradeType> | V3Trade<Currency, Currency, TradeType>

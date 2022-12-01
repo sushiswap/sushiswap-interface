@@ -1,4 +1,24 @@
 import { Contract } from '@ethersproject/contracts'
+// Note / TODO (amiller68): #SdkChange / #SdkPublish- Using my own declaration of ChainId
+import {
+  BAR_ADDRESS,
+  // BENTOBOX_ADDRESS,
+  BORING_HELPER_ADDRESS,
+  CHAIN_KEY,
+  CHAINLINK_ORACLE_ADDRESS,
+  ENS_REGISTRAR_ADDRESS,
+  FACTORY_ADDRESS,
+  MAKER_ADDRESS,
+  MASTERCHEF_ADDRESS,
+  MASTERCHEF_V2_ADDRESS,
+  MERKLE_DISTRIBUTOR_ADDRESS,
+  MINICHEF_ADDRESS,
+  MULTICALL2_ADDRESS,
+  ROUTER_ADDRESS,
+  SUSHI_ADDRESS,
+  TIMELOCK_ADDRESS,
+  WNATIVE_ADDRESS,
+} from '@figswap/core-sdk'
 import { LIMIT_ORDER_HELPER_ADDRESS, STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import ConstantProductPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/constant-product/ConstantProductPool.sol/ConstantProductPool.json'
@@ -47,26 +67,6 @@ import { poolEntityMapper } from 'app/features/trident/poolEntityMapper'
 import { getContract } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
-// Note / TODO (amiller68): #SdkChange / #SdkPublish- Using my own declaration of ChainId
-import {
-  BAR_ADDRESS,
-  BENTOBOX_ADDRESS,
-  BORING_HELPER_ADDRESS,
-  CHAIN_KEY,
-  CHAINLINK_ORACLE_ADDRESS,
-  ENS_REGISTRAR_ADDRESS,
-  FACTORY_ADDRESS,
-  MAKER_ADDRESS,
-  MASTERCHEF_ADDRESS,
-  MASTERCHEF_V2_ADDRESS,
-  MERKLE_DISTRIBUTOR_ADDRESS,
-  MINICHEF_ADDRESS,
-  MULTICALL2_ADDRESS,
-  ROUTER_ADDRESS,
-  SUSHI_ADDRESS,
-  TIMELOCK_ADDRESS,
-  WNATIVE_ADDRESS,
-} from 'sdk'
 
 const UNI_FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
 
@@ -89,7 +89,6 @@ export function useContract<T extends Contract = Contract>(
     else address = addressOrAddressMap[chainId]
     if (!address) return null
     try {
-      // Note (amiller68): #WallabyOnly As far as I know there's not a Multicall contract for Wallaby
       return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
     } catch (error) {
       console.error('Failed to get contract', error)
@@ -226,7 +225,8 @@ export function useTimelockContract(): Contract | null {
 
 export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId ? BENTOBOX_ADDRESS[chainId] : undefined, BENTOBOX_ABI, withSignerIfPossible)
+  // return useContract(chainId ? BENTOBOX_ADDRESS[chainId] : undefined, BENTOBOX_ABI, withSignerIfPossible)
+  return useContract(undefined, BENTOBOX_ABI, withSignerIfPossible)
 }
 
 export function useChainlinkOracle(): Contract | null {

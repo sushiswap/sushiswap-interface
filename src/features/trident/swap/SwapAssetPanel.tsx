@@ -1,7 +1,7 @@
+import { Currency, Percent } from '@figswap/core-sdk'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Percent } from '@sushiswap/core-sdk'
 import NumericalInput from 'app/components/Input/Numeric'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'

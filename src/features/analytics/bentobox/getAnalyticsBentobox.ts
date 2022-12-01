@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
 import { getBentoBox, getBentoStrategies, getBentoTokens, getNativePrice, getTokens } from 'app/services/graph'

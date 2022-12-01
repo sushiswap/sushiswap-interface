@@ -1,4 +1,4 @@
-import { ChainId } from 'sdk'
+import { ChainId } from '@figswap/core-sdk'
 
 const explorers = {
   // Note (amiller68): This is the explorer for the Wallaby Testnet

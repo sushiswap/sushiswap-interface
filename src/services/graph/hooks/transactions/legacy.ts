@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { Transactions } from 'app/features/transactions/types'
 import { formatNumber } from 'app/functions'
 import { getTransactions } from 'app/services/graph/fetchers'

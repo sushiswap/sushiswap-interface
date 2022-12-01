@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts'
+import { ChainId } from '@figswap/core-sdk'
 import stringify from 'fast-json-stable-stringify'
-import { ChainId } from 'sdk'
 import useSWR from 'swr'
 
 // @ts-ignore TYPE NEEDS FIXING

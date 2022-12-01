@@ -1,7 +1,7 @@
+import { ZERO } from '@figswap/core-sdk'
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ZERO } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import { BentoboxIcon } from 'app/components/Icon'
@@ -13,7 +13,6 @@ import { tryParseAmount } from 'app/functions'
 import { useBentoBox, useBentoBoxContract } from 'app/hooks'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { FC, useCallback, useState } from 'react'
 
@@ -28,7 +27,6 @@ const DepositView: FC<DepositViewProps> = ({ onClose, onBack }) => {
   const { rebase } = useBentoRebase(currency)
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const walletBalance = useCurrencyBalance(account ?? undefined, currency)
-  const { data: bentoBalance } = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
   const { deposit } = useBentoBox()
   const [value, setValue] = useState<string>()
   const { i18n } = useLingui()
@@ -36,7 +34,6 @@ const DepositView: FC<DepositViewProps> = ({ onClose, onBack }) => {
 
   const valueCA = currency ? tryParseAmount(value, currency) : undefined
   let valuePlusBalance = valueCA?.wrapped
-  if (valuePlusBalance && bentoBalance) valuePlusBalance = valuePlusBalance.add(bentoBalance)
 
   const execute = useCallback(async () => {
     if (!currency || !value || !rebase) return
@@ -81,7 +78,7 @@ const DepositView: FC<DepositViewProps> = ({ onClose, onBack }) => {
         </div>
         <div className="flex flex-col gap-1">
           <Typography variant="h3" className={value ? 'text-high-emphesis' : 'text-secondary'} weight={700}>
-            {(valuePlusBalance || bentoBalance)?.toSignificant(6)}
+            {(valuePlusBalance)?.toSignificant(6)}
           </Typography>
           <Typography variant="xxs" className="text-secondary">
             {i18n._(t`Total in BentoBox`)}

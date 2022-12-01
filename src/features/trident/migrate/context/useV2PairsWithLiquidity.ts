@@ -1,10 +1,10 @@
 // TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { Pair } from '@figswap/core-sdk'
 import { useV2Pairs } from 'app/hooks/useV2Pairs'
 import { useTokenBalancesWithLoadingIndicator } from 'app/lib/hooks/useCurrencyBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'app/state/user/hooks'
 import { useMemo } from 'react'
-import { Pair } from 'sdk'
 
 interface V2PairsWithLiquidity {
   loading: boolean

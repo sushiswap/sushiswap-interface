@@ -1,6 +1,6 @@
+import { ChainId } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
 // @ts-ignore TYPE NEEDS FIXING
 import transakSDK from '@transak/transak-sdk'
 import { useActiveWeb3React } from 'app/services/web3'

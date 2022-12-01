@@ -5,12 +5,10 @@ import {
   JSBI,
   MaxUint256,
   Percent,
-  SUSHI,
   Token,
   Trade as V2Trade,
   TradeType,
-} from '@sushiswap/core-sdk'
-import { DAI, USDC } from 'app/config/tokens/ethereum'
+} from '@figswap/core-sdk'
 import { useSingleCallResult } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
@@ -40,42 +38,17 @@ const PERMITTABLE_TOKENS: {
     [checksummedTokenAddress: string]: PermitInfo
   }
 } = {
-  [1]: {
-    [USDC.address]: { type: PermitType.AMOUNT, name: 'USD Coin', version: '2' },
-    [DAI.address]: {
-      type: PermitType.ALLOWED,
-      name: 'Dai Stablecoin',
-      version: '1',
-    },
-    // @ts-ignore TYPE NEEDS FIXING
-    [SUSHI[1].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
-  },
-  [4]: {
-    ['0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735']: {
-      type: PermitType.ALLOWED,
-      name: 'Dai Stablecoin',
-      version: '1',
-    },
-    // @ts-ignore TYPE NEEDS FIXING
-    [SUSHI[4].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
-  },
-  [3]: {
-    // @ts-ignore TYPE NEEDS FIXING
-    [SUSHI[3].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
-    ['0x07865c6E87B9F70255377e024ace6630C1Eaa37F']: {
-      type: PermitType.AMOUNT,
-      name: 'USD Coin',
-      version: '2',
-    },
-  },
-  [5]: {
-    // @ts-ignore TYPE NEEDS FIXING
-    [SUSHI[5].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
-  },
-  [42]: {
-    // @ts-ignore TYPE NEEDS FIXING
-    [SUSHI[42].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
-  },
+  // We don't have permittable functionality on FEVM yet, but keeping this here for future reference
+  // [1]: {
+  //   [USDC.address]: { type: PermitType.AMOUNT, name: 'USD Coin', version: '2' },
+  //   [DAI.address]: {
+  //     type: PermitType.ALLOWED,
+  //     name: 'Dai Stablecoin',
+  //     version: '1',
+  //   },
+  //   // @ts-ignore TYPE NEEDS FIXING
+  //   [SUSHI[1].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
+  // },
 }
 
 export enum UseERC20PermitState {

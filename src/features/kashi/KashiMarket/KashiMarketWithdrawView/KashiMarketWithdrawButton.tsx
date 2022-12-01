@@ -1,7 +1,7 @@
 import { Signature } from '@ethersproject/bytes'
+import { Currency, CurrencyAmount, KASHI_ADDRESS, ZERO } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, KASHI_ADDRESS, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { KashiMarketWithdrawReviewModal, useKashiMarket } from 'app/features/kashi/KashiMarket'

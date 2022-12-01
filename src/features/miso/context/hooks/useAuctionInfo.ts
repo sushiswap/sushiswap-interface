@@ -1,6 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
-import { CHAIN_KEY } from '@sushiswap/core-sdk'
+import { CHAIN_KEY } from '@figswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
 import { AuctionTemplate, RawLauncherInfo } from 'app/features/miso/context/types'

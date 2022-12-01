@@ -2,15 +2,6 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { getCreate2Address } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
 import { keccak256 } from '@ethersproject/solidity'
-import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'app/config/routing'
-import { e10 } from 'app/functions'
-import { useAllTokens } from 'app/hooks/Tokens'
-import { useActiveWeb3React } from 'app/services/web3'
-import { AppState } from 'app/state'
-import { useAppDispatch, useAppSelector } from 'app/state/hooks'
-import { useCallback, useMemo } from 'react'
-import { useSelector } from 'react-redux'
 // TODO / Note (amiller68) - #SdkChange / #SdkPublish
 import {
   BENTOBOX_ADDRESS,
@@ -21,7 +12,16 @@ import {
   KASHI_ADDRESS,
   Pair,
   Token,
-} from 'sdk'
+} from '@figswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'app/config/routing'
+import { e10 } from 'app/functions'
+import { useAllTokens } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3'
+import { AppState } from 'app/state'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { useCallback, useMemo } from 'react'
+import { useSelector } from 'react-redux'
 
 import {
   addSerializedPair,

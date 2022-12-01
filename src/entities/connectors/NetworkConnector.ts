@@ -53,11 +53,9 @@ class MiniRpcProvider implements AsyncSendable {
     this.batchWaitTimeMs = batchWaitTimeMs ?? 50
   }
 
-  // Note (amiller68): Lotus FEVM RPCs don't support Batch calls
-  // TODO (amiller68): Unjank this
+  // Note (amiller68): Lotus FEVM RPCs don't support Batch calls. See issue: https://github.com/filecoin-project/ref-fvm/issues/1047
+  // TODO (amiller68): Implement batch calls against Lotus FEVM RPCs
   public readonly clearBatch = async () => {
-    console.debug('Clearing batch', this.batch)
-    // The requests the need to be sent
     let batch = this.batch
 
     batch = batch.filter((b) => {
@@ -77,7 +75,12 @@ class MiniRpcProvider implements AsyncSendable {
     this.batch = []
     this.batchTimeoutId = null
 
-    // Note (amiller68): Lotus FEVM RPCs don't support Batch calls
+    /*
+     * Note (amiller68): Lotus FEVM RPCs don't support Batch calls
+      * See issue: https://github.com/filecoin-project/ref-fvm/issues/1047
+      * In order to reimplement batch calls, uncomment the code below and remove my janky replacement 
+      * below
+    */
     // let response: Response
     // try {
     //   response = await fetch(this.url, {
@@ -125,7 +128,7 @@ class MiniRpcProvider implements AsyncSendable {
     //   }
     // }
 
-    // TODO (amiller68): Unjank this
+    // TODO (amiller68): Unjank this by uncommenting the code above and removing from here ->
     Promise.all(
       // Batch the requests into a single Promise.all
       batch.map((item) => {
@@ -172,6 +175,7 @@ class MiniRpcProvider implements AsyncSendable {
         })
       })
     })
+    // <- to here
   }
 
   public readonly sendAsync = (

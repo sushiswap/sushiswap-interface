@@ -1,4 +1,4 @@
-import { CHAIN_KEY } from '@sushiswap/core-sdk'
+import { CHAIN_KEY } from '@figswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { useContract } from 'app/hooks'
 import { useSingleContractMultipleData } from 'app/lib/hooks/multicall'

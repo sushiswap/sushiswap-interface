@@ -1,4 +1,4 @@
-import { CurrencyAmount, Percent, ZERO } from '@sushiswap/core-sdk'
+import { CurrencyAmount, Percent, ZERO } from '@figswap/core-sdk'
 import { ZERO_PERCENT } from 'app/constants'
 import { useAddLiquidityDerivedCurrencyAmounts } from 'app/features/trident/add/useAddLiquidityDerivedState'
 import { usePoolContext } from 'app/features/trident/PoolContext'

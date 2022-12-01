@@ -1,7 +1,7 @@
+import { ZERO } from '@figswap/core-sdk'
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ZERO } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import { WalletIcon } from 'app/components/Icon'
@@ -11,7 +11,6 @@ import { useBalancesSelectedCurrency } from 'app/features/portfolio/useBalancesD
 import { tryParseAmount } from 'app/functions'
 import { useBentoBox } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalanceV2, useBentoShareForAccount } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { FC, useCallback, useState } from 'react'
 
@@ -26,8 +25,6 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
   const { withdraw } = useBentoBox()
   const currency = useBalancesSelectedCurrency()
   const walletBalance = useCurrencyBalance(account ?? undefined, currency)
-  const share = useBentoShareForAccount(account ?? undefined, currency?.wrapped.address)
-  const { data: bentoBalance } = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
 
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const [inputState, setInputState] = useState<{ value?: string; isMax: boolean }>({ value: undefined, isMax: false })
@@ -42,7 +39,7 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
     try {
       setAttemptingTxn(true)
       if (inputState.isMax) {
-        await withdraw(currency?.wrapped.address, inputState.value.toBigNumber(currency?.decimals), share)
+        // await withdraw(currency?.wrapped.address, inputState.value.toBigNumber(currency?.decimals), walletBalance)
       } else {
         await withdraw(currency?.wrapped.address, inputState.value.toBigNumber(currency?.decimals))
       }
@@ -50,15 +47,15 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
       setAttemptingTxn(false)
       onClose()
     }
-  }, [currency, inputState.value, inputState.isMax, withdraw, share, onClose])
+  }, [currency, inputState.value, inputState.isMax, withdraw, onClose])
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
     : !valueCA?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
-    : !bentoBalance
+    : !walletBalance
     ? i18n._(t`Loading balance`)
-    : valueCA?.greaterThan(bentoBalance)
+    : valueCA?.greaterThan(walletBalance)
     ? i18n._(t`Insufficient ${valueCA.currency.symbol} balance`)
     : ''
 

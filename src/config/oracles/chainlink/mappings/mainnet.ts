@@ -1,3 +1,4 @@
+// This is an example of chainlink oracle mappings on Ethereum mainnet:
 const MAINNET_CHAINLINK_MAPPING = {
   // 1INCH / ETH
   '0x72AFAECF99C9d9C8215fF44C77B94B99C28741e8': {

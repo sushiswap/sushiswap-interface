@@ -1,4 +1,4 @@
-import { Currency, JSBI, Rebase, Token } from '@sushiswap/core-sdk'
+import { Currency, JSBI, Rebase, Token } from '@figswap/core-sdk'
 import { useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useMemo } from 'react'
 

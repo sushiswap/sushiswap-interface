@@ -1,6 +1,6 @@
+import { Currency, Price, Trade, TradeType } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Price, Trade, TradeType } from '@sushiswap/core-sdk'
 import Input from 'app/components/Input'
 import Typography from 'app/components/Typography'
 import { useAppDispatch } from 'app/state/hooks'

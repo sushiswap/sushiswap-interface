@@ -1,6 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
-import { CHAIN_KEY, Percent } from '@sushiswap/core-sdk'
+import { CHAIN_KEY, Percent } from '@figswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { AuctionCreationFormInputFormatted } from 'app/features/miso/AuctionCreationForm'
 import { NATIVE_PAYMENT_TOKEN } from 'app/features/miso/context/constants'

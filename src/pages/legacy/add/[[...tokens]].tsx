@@ -1,11 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { Currency, currencyEquals, Percent, WNATIVE } from '@figswap/core-sdk'
 import { CogIcon } from '@heroicons/react/outline'
 import { CheckIcon, ExclamationIcon, PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 // Note (amiller68) - #SdkChange / #SdkPublish
-// import { Percent } from '@sushiswap/core-sdk'
+// import { Percent } from '@figswap/core-sdk'
 import Button from 'app/components/Button'
 import CloseIcon from 'app/components/CloseIcon'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
@@ -44,8 +46,6 @@ import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import React, { useCallback, useState } from 'react'
 import { ArrowLeft } from 'react-feather'
-// TODO / Note (amiller68) - #SdkChange / #SdkPublish
-import { Currency, currencyEquals, Percent, WNATIVE } from 'sdk'
 
 type Props = {
   placeholderSlippage?: Percent

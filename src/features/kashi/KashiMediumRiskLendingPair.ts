@@ -1,4 +1,3 @@
-import { toAmount, toShare } from '@sushiswap/bentobox-sdk'
 import {
   Currency,
   CurrencyAmount,
@@ -10,7 +9,8 @@ import {
   toElastic,
   Token,
   ZERO,
-} from '@sushiswap/core-sdk'
+} from '@figswap/core-sdk'
+import { toAmount, toShare } from '@sushiswap/bentobox-sdk'
 import { accrue, AccrueInfo, computePairAddress, interestAccrue, takeFee } from '@sushiswap/kashi-sdk'
 
 import { accrueTotalAssetWithFee } from './functions'

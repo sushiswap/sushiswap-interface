@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount } from '@figswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { currencyFormatter } from 'app/functions'

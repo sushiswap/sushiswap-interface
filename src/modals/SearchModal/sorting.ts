@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Token } from '@figswap/core-sdk'
 import { useAllTokenBalances } from 'app/state/wallet/hooks'
 
 // compare two token amounts with highest one coming first

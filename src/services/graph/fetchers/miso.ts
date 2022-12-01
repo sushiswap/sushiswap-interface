@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { pager } from 'app/services/graph'
 import { misoCommitmentsQuery } from 'app/services/graph/queries/miso'
 

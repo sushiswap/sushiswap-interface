@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Percent } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent } from '@figswap/core-sdk'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { useRemoveLiquidityDerivedSLPAmount } from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
 import { calculateSlippageAmount, toAmountCurrencyAmount } from 'app/functions'

@@ -7,7 +7,7 @@ import {
   MASTERCHEF_V2_ADDRESS,
   MINICHEF_ADDRESS,
   SUSHI,
-} from '@sushiswap/core-sdk'
+} from '@figswap/core-sdk'
 import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from 'app/hooks/useContract'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'app/lib/hooks/multicall'
 import { useActiveWeb3React } from 'app/services/web3'

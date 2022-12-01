@@ -2,7 +2,7 @@
 
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import { Token } from '@sushiswap/core-sdk'
+import { Token } from '@figswap/core-sdk'
 import { TokenAddressMap } from 'app/state/lists/hooks'
 
 /**

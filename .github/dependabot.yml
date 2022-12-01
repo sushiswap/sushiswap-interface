@@ -16,7 +16,7 @@ updates:
       - dependency-name: '@sushiswap/bentobox-sdk'
       - dependency-name: '@sushiswap/chainlink-whitelist'
       - dependency-name: '@sushiswap/core'
-      - dependency-name: '@sushiswap/core-sdk'
+      - dependency-name: '@figswap/core-sdk'
       - dependency-name: '@sushiswap/default-token-list'
       - dependency-name: '@sushiswap/kashi-sdk'
       - dependency-name: '@sushiswap/limit-order-pair-list'

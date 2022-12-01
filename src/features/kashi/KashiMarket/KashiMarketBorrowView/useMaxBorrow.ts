@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, JSBI, Percent, TradeType, ZERO } from '@sushiswap/core-sdk'
-import { Trade as LegacyTrade } from '@sushiswap/core-sdk/dist/entities/Trade'
+import { Currency, CurrencyAmount, JSBI, Percent, TradeType, ZERO } from '@figswap/core-sdk'
+import { Trade as LegacyTrade } from '@figswap/core-sdk/dist/entities/Trade'
 import { LTV, PADDING } from 'app/features/kashi/constants'
 import KashiMediumRiskLendingPair from 'app/features/kashi/KashiMediumRiskLendingPair'
 import { computeRealizedLPFeePercent } from 'app/functions'

@@ -1,6 +1,6 @@
+import { Currency, CurrencyAmount, Trade, TradeType } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Trade, TradeType } from '@sushiswap/core-sdk'
 import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'

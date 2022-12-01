@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Price, Trade as LegacyTrade, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Price, Trade as LegacyTrade, TradeType, ZERO } from '@figswap/core-sdk'
 import { LTV } from 'app/features/kashi/constants'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket'
 import { unwrappedToken } from 'app/functions'

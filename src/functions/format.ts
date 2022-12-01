@@ -3,7 +3,7 @@
 import { getAddress } from '@ethersproject/address'
 import { BigNumberish } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@figswap/core-sdk'
 // @ts-ignore TYPE NEEDS FIXING
 import Numeral from 'numeral'
 

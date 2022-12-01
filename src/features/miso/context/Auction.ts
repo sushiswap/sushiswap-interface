@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, Token, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, Token, ZERO } from '@figswap/core-sdk'
 import { ZERO_PERCENT } from 'app/constants'
 import {
   AuctionDocument,

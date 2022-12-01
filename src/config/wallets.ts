@@ -1,14 +1,13 @@
+import { ChainId } from '@figswap/core-sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import config from 'app/config'
 import { NetworkConnector } from 'app/entities/connectors'
 import Cookies from 'js-cookie'
-// Note (amiller68): #SdkChange / #SdkPublish - Using my own declaration of ChainId
-import { ChainId } from 'sdk'
 import { InjectedConnector } from 'web3-react-injected-connector'
 
 import RPC from './rpc'
 
-// Note (amiller68): #MetasmaskOnly
+// Note (amiller68): #MetasmaskOnly - I deprecated these wallet options, but use this tag to find them later and reimplement them
 // import { GamestopConnector } from './gamestop-connector'
 // import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react'
 // import { PortisConnector } from 'web3-react-portis-connector'

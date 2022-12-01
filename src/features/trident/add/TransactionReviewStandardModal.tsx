@@ -1,6 +1,6 @@
+import { CurrencyAmount } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'

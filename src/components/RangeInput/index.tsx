@@ -1,6 +1,6 @@
+import { Currency } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency } from '@sushiswap/core-sdk'
 import { FC } from 'react'
 
 import { classNames } from '../../functions'

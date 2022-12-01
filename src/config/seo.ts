@@ -1,15 +1,16 @@
 const SEO = {
-  defaultTitle: 'Sushi',
-  titleTemplate: '%s | Sushi',
-  description: 'Swap, yield, lend, borrow, leverage, limit, launch all on one community driven ecosystem',
+  defaultTitle: 'FigSwap',
+  titleTemplate: '%s | Fig',
+  description: 'Swap and yield on the FEVM',
   openGraph: {
     type: 'website',
-    url: 'https://app.sushi.com/',
-    site_name: 'Sushi',
+    // TODO (amiller68): use a real image
+    url: 'https://app.figswap.com/',
+    site_name: 'FigSwap',
   },
   twitter: {
-    handle: '@SushiSwap',
-    site: '@SushiSwap',
+    handle: '@FigSwap',
+    site: '@FigSwap',
     cardType: 'summary_large_image',
   },
 }

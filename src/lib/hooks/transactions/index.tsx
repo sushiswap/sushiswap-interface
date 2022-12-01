@@ -1,4 +1,4 @@
-import { Token } from '@sushiswap/core-sdk'
+import { Token } from '@figswap/core-sdk'
 import { useAtomValue, useUpdateAtom } from 'jotai/utils'
 import { Transaction, TransactionInfo, transactionsAtom, TransactionType } from 'lib/state/transactions'
 import ms from 'ms.macro'

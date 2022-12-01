@@ -1,5 +1,5 @@
 import { getAddress } from '@ethersproject/address'
-import { ChainId, Token } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@figswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
 import Typography from 'app/components/Typography'

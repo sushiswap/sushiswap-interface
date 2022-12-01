@@ -1,6 +1,6 @@
+import { Percent, Trade as LegacyTrade, TradeVersion } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent, Trade as LegacyTrade, TradeVersion } from '@sushiswap/core-sdk'
 import { Trade as TridentTrade } from '@sushiswap/trident-sdk'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'

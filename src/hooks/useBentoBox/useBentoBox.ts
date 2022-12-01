@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { Currency, JSBI, Rebase } from '@figswap/core-sdk'
 import { toShare } from '@sushiswap/bentobox-sdk'
-import { Currency, JSBI, Rebase } from '@sushiswap/core-sdk'
 import { ERC20_ABI } from 'app/constants/abis/erc20'
 import { getContract } from 'app/functions'
 import { useBentoBoxContract } from 'app/hooks'

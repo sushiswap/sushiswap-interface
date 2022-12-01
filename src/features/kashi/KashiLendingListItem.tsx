@@ -1,6 +1,6 @@
+import { CurrencyAmount, JSBI, Percent, ZERO } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import GradientDot from 'app/components/GradientDot'
 import Typography from 'app/components/Typography'

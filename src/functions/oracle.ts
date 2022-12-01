@@ -1,6 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
-import { ChainId, CHAINLINK_ORACLE_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, CHAINLINK_ORACLE_ADDRESS } from '@figswap/core-sdk'
 import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
 import { ChainlinkOracle, Oracle } from 'app/features/kashi/oracles'
 

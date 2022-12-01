@@ -1,6 +1,6 @@
+import { CurrencyAmount, Percent } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Percent } from '@sushiswap/core-sdk'
 import GradientDot from 'app/components/GradientDot'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'

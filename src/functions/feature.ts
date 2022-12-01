@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import features from 'app/config/features'
 import { Feature } from 'app/enums'
 

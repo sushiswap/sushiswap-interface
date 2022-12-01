@@ -1,6 +1,6 @@
+import { Percent } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent } from '@sushiswap/core-sdk'
 import CopyHelper from 'app/components/AccountDetails/Copy'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'

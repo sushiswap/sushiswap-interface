@@ -1,7 +1,7 @@
 import { Signature } from '@ethersproject/bytes'
+import { CurrencyAmount } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { HeadlessUiModal } from 'app/components/Modal'

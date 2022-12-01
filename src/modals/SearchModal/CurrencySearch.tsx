@@ -1,3 +1,5 @@
+// TODO / Note (amiller68) - #SdkChange / #SdkPublish
+import { Currency, NATIVE, Token } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
@@ -13,8 +15,6 @@ import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchMo
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import React, { KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react'
-// TODO / Note (amiller68) - #SdkChange / #SdkPublish
-import { Currency, NATIVE, Token } from 'sdk'
 
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'

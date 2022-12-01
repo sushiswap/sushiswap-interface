@@ -2,7 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 import portfolio from 'app/features/portfolio/portfolioSlice'
 import multicall from 'app/lib/state/multicall'
 
-import onsen from '../features/onsen/onsenSlice'
+// import onsen from '../features/onsen/onsenSlice'
 import tridentAdd from '../features/trident/add/addSlice'
 import tridentCreate from '../features/trident/create/createSlice'
 import tridentMigrations from '../features/trident/migrate/context/migrateSlice'
@@ -12,14 +12,11 @@ import tridentSwap from '../features/trident/swap/swapSlice'
 import application from './application/reducer'
 import burn from './burn/reducer'
 import create from './create/reducer'
-import farms from './farms/slice'
-import inari from './inari/reducer'
 import limitOrder from './limit-order/reducer'
 import lists from './lists/reducer'
 import logs from './logs/slice'
 import mint from './mint/reducer'
 import pools from './pools/slice'
-// import multicall from './multicall-2/reducer'
 import slippage from './slippage/slippageSlice'
 import swap from './swap/reducer'
 import tokens from './tokens/slice'
@@ -31,13 +28,10 @@ const reducer = combineReducers({
   burn,
   user,
   create,
-  inari,
   limitOrder,
   lists,
   mint,
-  // multicall,
   multicall: multicall.reducer,
-  onsen,
   slippage,
   swap,
   logs,
@@ -51,7 +45,6 @@ const reducer = combineReducers({
   tridentMigrations,
   tokens,
   pools,
-  farms,
 })
 
 export default reducer

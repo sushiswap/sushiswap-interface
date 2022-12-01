@@ -1,5 +1,5 @@
+import { CHAIN_KEY, ChainId, NATIVE, Token } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
-import { CHAIN_KEY, ChainId, NATIVE, Token } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { NATIVE_PAYMENT_TOKEN } from 'app/features/miso/context/constants'
 import {

@@ -1,6 +1,6 @@
+import { Currency } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency } from '@sushiswap/core-sdk'
 import NavLink from 'app/components/NavLink'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'

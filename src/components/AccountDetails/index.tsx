@@ -10,8 +10,8 @@ import { useAppDispatch } from 'app/state/hooks'
 import { clearAllTransactions } from 'app/state/transactions/actions'
 import React, { FC, useCallback, useMemo } from 'react'
 import { ExternalLink as LinkIcon } from 'react-feather'
-import { WalletLinkConnector } from 'web3-react-walletlink-connector'
 
+// import { WalletLinkConnector } from 'web3-react-walletlink-connector'
 import Button from '../Button'
 import ExternalLink from '../ExternalLink'
 import Typography from '../Typography'
@@ -67,15 +67,17 @@ const AccountDetails: FC<AccountDetailsProps> = ({
         <HeadlessUiModal.BorderedContent className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             {connectorName}
-            {connector !== injected && !(connector instanceof WalletLinkConnector) && (
+            {/* Note (amiller68) - #MetamaskOnly: I don't think disconnecting works with Injected Providers like Metamask */}
+            {/* {connector !== injected && !(connector instanceof WalletLinkConnector) && ( */}
+            {connector !== injected && (
               <Button variant="outlined" color="blue" size="xs" onClick={deactivate}>
                 {i18n._(t`Disconnect`)}
               </Button>
             )}
-
-            <Button variant="outlined" color="blue" size="xs" onClick={openOptions}>
+            {/* Note (amiller68) - #MetamaskOnly - let them open the wallet modal from here */}
+            {/* <Button variant="outlined" color="blue" size="xs" onClick={openOptions}>
               {i18n._(t`Change`)}
-            </Button>
+            </Button> */}
           </div>
           <div id="web3-account-identifier-row" className="flex flex-col justify-center gap-4">
             <div className="flex items-center gap-4">

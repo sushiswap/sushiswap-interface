@@ -1,4 +1,4 @@
-import { Percent } from '@sushiswap/core-sdk'
+import { Percent } from '@figswap/core-sdk'
 
 import { ALLOWED_PRICE_IMPACT_HIGH, PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN } from '../../../constants'
 

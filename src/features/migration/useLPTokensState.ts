@@ -1,5 +1,5 @@
 import { getAddress } from '@ethersproject/address'
-import { ChainId, CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import { ChainId, CurrencyAmount, Token } from '@figswap/core-sdk'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useEffect, useRef, useState } from 'react'

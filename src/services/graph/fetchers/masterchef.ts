@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { GRAPH_HOST } from 'app/services/graph/constants'
 import { getTokenSubset } from 'app/services/graph/fetchers/exchange'
 import {

@@ -8,7 +8,7 @@ import {
   Trade as LegacyTrade,
   TradeType,
   WNATIVE,
-} from '@sushiswap/core-sdk'
+} from '@figswap/core-sdk'
 import {
   ConstantProductPool,
   convertTinesSingleRouteToLegacyRoute,

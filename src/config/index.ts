@@ -1,7 +1,4 @@
-import { ChainId } from 'sdk'
-// Note (al): #SdkChange - See ../sdk/core-sdk/enums/ChainId.ts
-// import { ChainId } from '@sushiswap/core-sdk'
-// TODO (amiller68): #SdkPublish Reference published sdk
+import { ChainId } from '@figswap/core-sdk'
 
 const config = {
   // Global configuration

@@ -1,6 +1,6 @@
+import { NATIVE, WNATIVE, WNATIVE_ADDRESS } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { NATIVE, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'

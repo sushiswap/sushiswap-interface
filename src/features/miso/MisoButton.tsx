@@ -1,6 +1,6 @@
+import { CurrencyAmount, NativeCurrency, Token } from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, NativeCurrency, Token } from '@sushiswap/core-sdk'
 import LoadingCircle from 'app/animation/loading-circle.json'
 import Button from 'app/components/Button'
 import { Auction } from 'app/features/miso/context/Auction'

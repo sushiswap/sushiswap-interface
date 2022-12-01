@@ -3,7 +3,7 @@ const runtimeCaching = require('next-pwa/cache')
 const linguiConfig = require('./lingui.config.js')
 const defaultTheme = require('tailwindcss/defaultTheme')
 
-const { ChainId } = require('@sushiswap/core-sdk')
+const { ChainId } = require('@figswap/core-sdk')
 
 const { locales, sourceLocale } = linguiConfig
 const { screens } = defaultTheme
@@ -64,61 +64,6 @@ const nextConfig = {
         destination: '/swap',
         permanent: true,
       },
-      // {
-      //   source: '/swap/:path*',
-      //   destination: 'https://www.sushi.com/swap',
-      //   permanent: true,
-      // },
-      {
-        source: '/home',
-        destination: 'https://www.sushi.com/swap',
-        permanent: true,
-      },
-      // {
-      //   source: '/farm/:path*',
-      //   destination: 'https://www.sushi.com/earn',
-      //   permanent: true,
-      // },
-      {
-        source: '/farms/special',
-        destination: 'https://www.sushi.com/earn',
-        permanent: true,
-      },
-      {
-        source: '/onsen/:path*',
-        destination: 'https://www.sushi.com/earn',
-        permanent: true,
-      },
-      {
-        source: '/farms/:path*',
-        destination: 'https://www.sushi.com/earn',
-        permanent: true,
-      },
-      {
-        source: '/stake',
-        destination: 'https://www.sushi.com/earn',
-        permanent: true,
-      },
-      {
-        source: '/borrow',
-        destination: '/kashi',
-        permanent: true,
-      },
-      {
-        source: '/lend',
-        destination: '/kashi',
-        permanent: true,
-      },
-      {
-        source: '/inari',
-        destination: '/tools/inari',
-        permanent: true,
-      },
-      {
-        source: '/bento/balances',
-        destination: '/account',
-        permanent: true,
-      },
       {
         source: '/analytics/dashboard',
         destination: '/analytics',
@@ -158,10 +103,6 @@ const nextConfig = {
         destination: '/legacy/find',
       },
       {
-        source: '/migrate',
-        destination: '/legacy/migrate',
-      },
-      {
         source: '/me',
         destination: '/user',
       },
@@ -174,11 +115,7 @@ const nextConfig = {
   },
   // serverRuntimeConfig: {},
   publicRuntimeConfig: {
-    breakpoints: screens,
-
-    [ChainId.ETHEREUM]: {
-      features: [],
-    },
+    breakpoints: screens
   },
 }
 

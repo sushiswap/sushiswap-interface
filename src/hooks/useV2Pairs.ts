@@ -1,9 +1,9 @@
 import { Interface } from '@ethersproject/abi'
+// TODO / NOTE: #SdkChange
+import { Currency, CurrencyAmount, Pair } from '@figswap/core-sdk'
 import IUniswapV2PairABI from '@sushiswap/core/abi/IUniswapV2Pair.json'
 import { useMultipleContractSingleData } from 'app/lib/hooks/multicall'
 import { useMemo } from 'react'
-// TODO / NOTE: #SdkChange
-import { Currency, CurrencyAmount, Pair } from 'sdk'
 
 const PAIR_INTERFACE = new Interface(IUniswapV2PairABI)
 

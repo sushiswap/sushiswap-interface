@@ -1,5 +1,8 @@
 import { arrayify } from '@ethersproject/bytes'
 import { parseBytes32String } from '@ethersproject/strings'
+// Note / TODO - #SdkChange / #SdkPublish
+// import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS } from '@figswap/core-sdk'
+import { Currency, NATIVE, Token, WNATIVE } from '@figswap/core-sdk'
 import { createTokenFilterFunction } from 'app/functions/filtering'
 import { isAddress } from 'app/functions/validate'
 // import { NEVER_RELOAD, useSingleCallResult } from 'app/state/multicall-2/hooks'
@@ -10,9 +13,6 @@ import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenL
 import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import { useUserAddedTokens } from 'app/state/user/hooks'
 import { useMemo } from 'react'
-// Note / TODO - #SdkChange / #SdkPublish
-// import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import { Currency, NATIVE, Token, WNATIVE } from 'sdk'
 
 import { useBytes32TokenContract, useTokenContract } from './useContract'
 

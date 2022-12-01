@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, ZERO } from '@figswap/core-sdk'
 import { classNames, formatNumber } from 'app/functions'
 import { useUSDCValueSubgraph } from 'app/hooks/useUSDCSubgraph'
 import React, { FC, ReactNode } from 'react'

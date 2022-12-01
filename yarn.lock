@@ -1742,6 +1742,22 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
+"@figswap/core-sdk@^0.0.0-canary.0":
+  version "0.0.0-canary.0"
+  resolved "https://registry.yarnpkg.com/@figswap/core-sdk/-/core-sdk-0.0.0-canary.0.tgz#801ba3bd20d3056e8b317c896ef59d72922091d2"
+  integrity sha512-yLacEvWMIs5ONhb+OmCsBosqaXxbRUbT2tqjWJla0y+Q5a0VH+9z0XqMNcu4RK6yAkxsS3/uL2SZ/ifQwCZMkg==
+  dependencies:
+    "@ethersproject/address" "^5.4.0"
+    "@ethersproject/bignumber" "^5.4.0"
+    "@ethersproject/providers" "^5.4.0"
+    "@ethersproject/solidity" "^5.4.0"
+    big.js "^6.1.1"
+    decimal.js-light "^2.5.0"
+    jsbi "^4.1.0"
+    tiny-invariant "^1.1.0"
+    tiny-warning "^1.0.0"
+    toformat "^2.0.0"
+
 "@findeth/abi@^0.3.0":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@findeth/abi/-/abi-0.3.1.tgz#fe9a25211bc0c840c8bc53f937fd9af7278b9dab"
@@ -2757,16 +2773,16 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/bentobox-sdk/-/bentobox-sdk-1.0.0-canary.119.tgz#4bd97fd40ffd3710a84df18f3ff9d5fd7f5929b3"
   integrity sha512-6tUqDJY7wdI0KRNDHuBRFryje9n2/zyc/P/LTR0ovzLuc0PLjxP3vXj18M0Yz6lzZkf3/46ACynf5Y9DHKYr0Q==
   dependencies:
-    "@sushiswap/core-sdk" "1.0.0-canary.138"
+    "@figswap/core-sdk" "1.0.0-canary.138"
 
 "@sushiswap/chainlink-whitelist@0.2.8":
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.8.tgz#832dc80963b890a2eb02aaaf11ea8b57b2b7dde0"
   integrity sha512-YhhGfF/smND4jUdVWuTr3e9Np08zLyxrOfbQ6GkAhmrld4lWBs2sk4TV6oWSBWPbuUb3A2mw203uCnbMHpSoXw==
 
-"@sushiswap/core-sdk@1.0.0-canary.138":
+"@figswap/core-sdk@1.0.0-canary.138":
   version "1.0.0-canary.138"
-  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.138.tgz#0951635f3d1dc199a4a663dfb5f71afa65a437d8"
+  resolved "https://registry.yarnpkg.com/@figswap/core-sdk/-/core-sdk-1.0.0-canary.138.tgz#0951635f3d1dc199a4a663dfb5f71afa65a437d8"
   integrity sha512-AIhSCpQSdcdNYEAkl0bkr3951f7sYMxu1RsAC3XyqOGEwMdJ4q+rF4XJA8nSTM6TeNZ1NwnH0K40cdg5YYiqJQ==
   dependencies:
     "@ethersproject/address" "^5.4.0"
@@ -2811,7 +2827,7 @@
     "@ethersproject/experimental" "^5.4.0"
     "@ethersproject/signing-key" "^5.4.0"
     "@ethersproject/transactions" "^5.4.0"
-    "@sushiswap/core-sdk" "1.0.0-canary.138"
+    "@figswap/core-sdk" "1.0.0-canary.138"
     eip-712 "^0.4.0"
     isomorphic-unfetch "^3.0.0"
 
@@ -2831,7 +2847,7 @@
   integrity sha512-OZkft3Nbhhxhx/zX4o303wggE2j73Wnz0x7JnZ9w1id6Kn8EWGOE9bVu6MLj4kI90+FXJg7NZluXypAOrz21VQ==
   dependencies:
     "@ethersproject/bignumber" "^5.4.0"
-    "@sushiswap/core-sdk" "1.0.0-canary.138"
+    "@figswap/core-sdk" "1.0.0-canary.138"
 
 "@sushiswap/trident-sdk@1.0.0-canary.147":
   version "1.0.0-canary.147"
@@ -2840,7 +2856,7 @@
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"
-    "@sushiswap/core-sdk" "1.0.0-canary.138"
+    "@figswap/core-sdk" "1.0.0-canary.138"
     "@sushiswap/tines" "1.0.0-canary.125"
     "@sushiswap/trident" "1.0.0-canary.40"
     tiny-invariant "^1.1.0"
@@ -12075,7 +12091,7 @@ scrypt-js@3.0.1, scrypt-js@^3.0.0:
   integrity sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA==
 
 sdk@../sdk/packages/core-sdk:
-  version "0.0.0-canary.7"
+  version "0.0.0-canary.0"
   dependencies:
     "@ethersproject/address" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"

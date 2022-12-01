@@ -1,7 +1,7 @@
+import { CHAIN_KEY } from '@figswap/core-sdk'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CHAIN_KEY } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import Button from 'app/components/Button'
 import Form from 'app/components/Form'

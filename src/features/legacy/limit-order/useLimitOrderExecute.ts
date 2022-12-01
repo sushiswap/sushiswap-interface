@@ -1,6 +1,6 @@
 import { Signature } from '@ethersproject/bytes'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount } from '@figswap/core-sdk'
 import { LimitOrder, STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { calculateGasMargin } from 'app/functions'

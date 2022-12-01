@@ -1,7 +1,7 @@
 // TODO / Note (amiller68): #SdkChange / #SdkPublish
-// import { ChainId, Currency, CurrencyAmount, JSBI, Percent, Trade, TradeType } from '@sushiswap/core-sdk'
+// import { ChainId, Currency, CurrencyAmount, JSBI, Percent, Trade, TradeType } from '@figswap/core-sdk'
+import { ChainId, Currency, CurrencyAmount, JSBI, Percent, Trade, TradeType } from '@figswap/core-sdk'
 import { TradeUnion } from 'app/types'
-import { ChainId, Currency, CurrencyAmount, JSBI, Percent, Trade, TradeType } from 'sdk'
 
 import {
   ALLOWED_PRICE_IMPACT_HIGH,

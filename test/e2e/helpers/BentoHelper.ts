@@ -1,5 +1,5 @@
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { BENTOBOX_ADDRESS, ChainId } from '@sushiswap/core-sdk'
+import { BENTOBOX_ADDRESS, ChainId } from '@figswap/core-sdk'
 import { Contract, Signer, utils, Wallet } from 'ethers'
 
 import { ADDRESSES } from '../constants/Index'

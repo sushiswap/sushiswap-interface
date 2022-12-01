@@ -1,5 +1,5 @@
 import { TransactionReceipt } from '@ethersproject/abstract-provider'
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId } from '@figswap/core-sdk'
 import { SUSHIGUARD_RELAY } from 'app/config/sushiguard'
 import { PrivateTxState, PrivateTxStatus } from 'app/entities/SushiGuard'
 import { fetchJsonRpc } from 'app/lib/jsonrpc'
@@ -62,8 +62,8 @@ export function shouldCheckPrivateTx(lastBlockNumber: number, tx: Transaction): 
 }
 
 const RETRY_OPTIONS_BY_CHAIN_ID: { [chainId: number]: RetryOptions } = {
-  [ChainId.HARMONY]: { n: 10, minWait: 250, maxWait: 1000 },
-  [ChainId.ARBITRUM]: { n: 10, minWait: 250, maxWait: 1000 },
+  // Note (amiller68): We don't use this on FEVM, but I'll leave an example here for future reference
+  // [ChainId.ARBITRUM]: { n: 10, minWait: 250, maxWait: 1000 },
 }
 
 const DEFAULT_RETRY_OPTIONS: RetryOptions = { n: 1, minWait: 0, maxWait: 0 }
@@ -108,6 +108,7 @@ export default function Updater({
   const getPrivateTxStatus = useCallback(
     (hash: string) => {
       if (!chainId) throw new Error('No chainId')
+
       if (!SUSHIGUARD_RELAY[chainId as ChainId])
         throw new Error('SushiGuard is not available for the selected network.')
       const retryOptions = RETRY_OPTIONS_BY_CHAIN_ID[chainId] ?? DEFAULT_RETRY_OPTIONS

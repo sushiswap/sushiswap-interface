@@ -1,4 +1,4 @@
-import { Currency, Percent, Trade, TradeType } from '@sushiswap/core-sdk'
+import { Currency, Percent, Trade, TradeType } from '@figswap/core-sdk'
 import { Trade as TridentTrade } from '@sushiswap/trident-sdk'
 import { useAppSelector } from 'app/state/hooks'
 import { selectSlippageWithDefault } from 'app/state/slippage/slippageSlice'

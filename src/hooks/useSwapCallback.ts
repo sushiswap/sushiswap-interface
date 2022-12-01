@@ -6,6 +6,18 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { isBigNumberish } from '@ethersproject/bignumber/lib/bignumber'
 import { arrayify, DataOptions, hexlify, Signature, SignatureLike, splitSignature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
+// TODO / NOTE (amiller68): #SdkChange / #SdkPublish
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Percent,
+  Router as LegacyRouter,
+  SwapParameters,
+  toHex,
+  Trade as LegacyTrade,
+  TradeType,
+} from '@figswap/core-sdk'
 import { t } from '@lingui/macro'
 import {
   ComplexPathParams,
@@ -39,18 +51,6 @@ import { TransactionResponseLight, useTransactionAdder } from 'app/state/transac
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { fetchJsonRpc } from 'lib/jsonrpc'
 import { useMemo } from 'react'
-// TODO / NOTE (amiller68): #SdkChange / #SdkPublish
-import {
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  Percent,
-  Router as LegacyRouter,
-  SwapParameters,
-  toHex,
-  Trade as LegacyTrade,
-  TradeType,
-} from 'sdk'
 
 import { SUSHIGUARD_RELAY } from '../config/sushiguard'
 import { useArgentWalletContract } from './useArgentWalletContract'

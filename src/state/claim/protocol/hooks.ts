@@ -1,6 +1,6 @@
 import { getAddress, isAddress } from '@ethersproject/address'
 import { TransactionResponse } from '@ethersproject/providers'
-import { ChainId, Currency, CurrencyAmount, JSBI, SUSHI } from '@sushiswap/core-sdk'
+import { ChainId, Currency, CurrencyAmount, JSBI, SUSHI } from '@figswap/core-sdk'
 import { PROTOCOL_MERKLE_ROOT as MERKLE_ROOT } from 'app/constants'
 import { calculateGasMargin } from 'app/functions/trade'
 import { useProtocolMerkleDistributorContract as useMerkleDistributorContract } from 'app/hooks/useContract'

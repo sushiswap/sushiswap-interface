@@ -1,5 +1,5 @@
 import { getAddress } from '@ethersproject/address'
-import { Token as CoreToken } from '@sushiswap/core-sdk'
+import { Token as CoreToken } from '@figswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import LineGraph from 'app/components/LineGraph'
 import Table, { Column } from 'app/components/Table'

@@ -1,5 +1,4 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
+import { Currency, CurrencyAmount, Token } from '@figswap/core-sdk'
 import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { useMemo } from 'react'
 
@@ -15,10 +14,9 @@ export const useBentoOrWalletBalances = (
   )
 
   const balance = useCurrencyBalances(account, currencies)
-  const { data: bentoBalance } = useBentoBalancesV2(tokenAddresses)
 
   return useMemo(() => {
-    if (!currencies.every((el) => !!el) || !bentoBalance) {
+    if (!currencies.every((el) => !!el)) {
       return []
     }
 
@@ -29,11 +27,7 @@ export const useBentoOrWalletBalances = (
 
       let element: CurrencyAmount<Currency> | undefined
       const tokenBalanceFromWallet = fromWallet?.[index]
-      if (tokenBalanceFromWallet === false) {
-        element = bentoBalance.find((el) => el?.currency.wrapped.address === cur.wrapped.address)
-      } else {
-        element = balance.find((el) => el?.currency.wrapped.address === cur.wrapped.address)
-      }
+      element = balance.find((el) => el?.currency.wrapped.address === cur.wrapped.address)
 
       if (!element) {
         element = CurrencyAmount.fromRawAmount(cur.wrapped, '0')
@@ -41,7 +35,7 @@ export const useBentoOrWalletBalances = (
 
       return element
     }, [])
-  }, [currencies, bentoBalance, fromWallet, balance])
+  }, [currencies, fromWallet, balance])
 }
 
 export const useBentoOrWalletBalance = (account?: string, currency?: Currency, fromWallet?: boolean) => {

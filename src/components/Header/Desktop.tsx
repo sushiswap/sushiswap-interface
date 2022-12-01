@@ -26,7 +26,7 @@ const Desktop: FC = () => {
 
       <div className="absolute left-0 max-w-sm h-screen py-6 bg-[#000000] border-r border-r-2 border-[#6E6E6E]">
         {/*<header className="fixed z-20 hidden w-full lg:block" style={{ height: HEADER_HEIGHT }}>*/}
-        <Link href="/">
+        <Link href="/" passHref>
           <div className="flex justify-center p-4">
             {/* TODO (amiller68): #LogoBanner Reference Actual SVG using raw.githubusercontent link */}
             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">

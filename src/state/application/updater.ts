@@ -1,9 +1,9 @@
 // TODO (amiller68): #SdkChange / #SdkPublish - Remove this when we have a published sdk
+import { ChainId } from '@figswap/core-sdk'
 import useDebounce from 'app/hooks/useDebounce'
 import useIsWindowVisible from 'app/hooks/useIsWindowVisible'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useEffect, useState } from 'react'
-import { ChainId } from 'sdk'
 
 import { useAppDispatch } from '../hooks'
 import { updateChainId } from './reducer'

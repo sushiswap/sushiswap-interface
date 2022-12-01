@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@figswap/core-sdk'
 import { ConstantProductPool, PoolState } from '@sushiswap/trident-sdk'
 import useCurrenciesFromURL from 'app/features/trident/useCurrenciesFromURL'
 import { toAmountCurrencyAmount } from 'app/functions'
