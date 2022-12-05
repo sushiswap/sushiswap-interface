@@ -1,14 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import QuestionHelper from 'app/components/QuestionHelper'
 import ToggleButtonGroup from 'app/components/ToggleButton'
-import Typography from 'app/components/Typography'
-import {
-  KashiMarketBorrowView,
-  KashiMarketDepositView,
-  KashiMarketRepayView,
-  KashiMarketWithdrawView,
-} from 'app/features/kashi/KashiMarket'
+import { KashiMarketRepayView, KashiMarketWithdrawView } from 'app/features/kashi/KashiMarket'
 import { SwapLayoutCard } from 'app/layouts/SwapLayout'
 import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
@@ -26,7 +19,7 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
   const { i18n } = useLingui()
   const router = useRouter()
 
-  const [view, setView] = useState((router.query.view as string) || KashiMarketView.BORROW)
+  const [view, setView] = useState((router.query.view as string) || KashiMarketView.REPAY)
 
   return (
     <SwapLayoutCard>
@@ -38,7 +31,7 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
           variant="filled"
           className="flex flex-grow bg-dark-800"
         >
-          <ToggleButtonGroup.Button value={KashiMarketView.BORROW}>
+          {/* <ToggleButtonGroup.Button value={KashiMarketView.BORROW}>
             {i18n._(t`Borrow`)}
             <QuestionHelper
               gap={false}
@@ -53,9 +46,9 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
                 </div>
               }
             />
-          </ToggleButtonGroup.Button>
+          </ToggleButtonGroup.Button> */}
           <ToggleButtonGroup.Button value={KashiMarketView.REPAY}>{i18n._(t`Repay`)}</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value={KashiMarketView.DEPOSIT}>
+          {/* <ToggleButtonGroup.Button value={KashiMarketView.DEPOSIT}>
             {i18n._(t`Deposit`)}
             <QuestionHelper
               gap={false}
@@ -70,12 +63,12 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
                 </div>
               }
             />
-          </ToggleButtonGroup.Button>
+          </ToggleButtonGroup.Button> */}
           <ToggleButtonGroup.Button value={KashiMarketView.WITHDRAW}>{i18n._(t`Withdraw`)}</ToggleButtonGroup.Button>
         </ToggleButtonGroup>
-        {view === KashiMarketView.BORROW && <KashiMarketBorrowView />}
+        {/* {view === KashiMarketView.BORROW && <KashiMarketBorrowView />} */}
         {view === KashiMarketView.REPAY && <KashiMarketRepayView />}
-        {view === KashiMarketView.DEPOSIT && <KashiMarketDepositView />}
+        {/* {view === KashiMarketView.DEPOSIT && <KashiMarketDepositView />} */}
         {view === KashiMarketView.WITHDRAW && <KashiMarketWithdrawView />}
       </div>
     </SwapLayoutCard>
