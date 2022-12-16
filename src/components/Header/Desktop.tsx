@@ -81,7 +81,7 @@ const Desktop: FC = () => {
             <div className="pr-16 sm:px-16 sm:text-center">
               <p className="font-medium text-white">
                 <span className="hidden md:inline">
-                  Kashi 1.0 is being depreciated. Deposits and Borrows are disabled in the UI.
+                  Kashi 1.0 is being deprecated. Deposits and Borrows are disabled in the UI.
                 </span>
               </p>
             </div>
