@@ -128,13 +128,13 @@ const MATIC_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   // MFT / USD
-  '0x6E53C1c22427258BE55aE985a65c0C87BB631F9C': {
-    from: '0x91cA694d2B293f70Fe722fbA7d8A5259188959c3',
-    to: '0x0000000000000000000000000000000000000001',
-    decimals: 8,
-    fromDecimals: 18,
-    toDecimals: 8,
-  },
+  // '0x6E53C1c22427258BE55aE985a65c0C87BB631F9C': {
+  //   from: '0x91cA694d2B293f70Fe722fbA7d8A5259188959c3',
+  //   to: '0x0000000000000000000000000000000000000001',
+  //   decimals: 8,
+  //   fromDecimals: 18,
+  //   toDecimals: 8,
+  // },
   // MKR / ETH
   '0x807b59d12520830D1864286FA0271c27baa94197': {
     from: '0x6f7C932e7684666C9fd1d44527765433e01fF61d',
