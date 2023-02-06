@@ -5,7 +5,7 @@ import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { KashiMarketActions } from 'app/features/kashi/KashiMarket'
 import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features/trident/constants'
-import { classNames, formatNumber, formatPercent } from 'app/functions'
+import { classNames, formatNumber } from 'app/functions'
 import Link from 'next/link'
 import React, { FC, memo, useMemo } from 'react'
 
