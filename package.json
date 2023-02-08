@@ -104,7 +104,7 @@
     "@sushiswap/limit-order-sdk": "1.0.0-canary.119",
     "@sushiswap/miso": "1.0.0-canary.47",
     "@sushiswap/miso-sdk": "1.0.0-canary.108",
-    "@sushiswap/trident": "^1.0.0-canary.40",
+    "@sushiswap/trident": "^1.0.0-canary.54",
     "@sushiswap/trident-sdk": "1.0.0-canary.147",
     "@testing-library/jest-dom": "^5.14.0",
     "@testing-library/react": "^12.1.0",
