@@ -214,11 +214,9 @@ export default function Stake() {
                             </div> */}
             </div>
             <div className="max-w-lg pr-3 mb-2 text-sm leading-5 text-gray-500 md:text-base md:mb-4 md:pr-0">
-              {i18n._(t`For every swap on the exchange on every chain, 0.045% of the swap fees are distributed as SUSHI
-                                proportional to your share of the SushiBar and 0.005% is distributed to the Sushi Treasury. When your SUSHI is staked into the SushiBar, you receive
-                                xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.
-                                Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited
-                                SUSHI and any additional from fees.`)}
+              {i18n._(
+                t`Fees for xSushi have been temporarily disabled for a year starting Dec 22nd 2022 following the Kanpai vote to redirect fees to the Treaury. xSushi will still be used in governance proposals.`
+              )}
             </div>
             {/* <div className="flex">
                             <div className="mr-14 md:mr-9">
