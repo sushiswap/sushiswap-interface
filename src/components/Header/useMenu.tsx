@@ -221,7 +221,7 @@ const useMenu: UseMenu = () => {
       exploreMenu.push({
         key: 'sushi-bar',
         title: i18n._(t`Sushi Bar`),
-        link: '/stake',
+        link: '/bar',
       })
     }
 
