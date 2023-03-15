@@ -215,7 +215,7 @@ export default function Stake() {
             </div>
             <div className="max-w-lg pr-3 mb-2 text-sm leading-5 text-gray-500 md:text-base md:mb-4 md:pr-0">
               {i18n._(
-                t`Fees for xSushi have been temporarily disabled for a year starting Dec 22nd 2022 following the Kanpai vote to redirect fees to the Treaury. xSushi will still be used in governance proposals.`
+                t`Fees for xSushi have been temporarily disabled for a year starting Dec 22nd 2022 following the Kanpai vote to redirect fees to the Treasury. xSushi will still be used in governance proposals.`
               )}
             </div>
             {/* <div className="flex">
