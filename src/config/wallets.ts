@@ -180,20 +180,20 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#4A6C9B',
     mobile: true,
   },
-  // Torus: {
-  //   connector: async () => {
-  //     const TorusConnector = (await import('web3-react/torus-connector')).TorusConnector
-  //     return new TorusConnector({
-  //       chainId: 1,
-  //     })
-  //   },
-  //   name: 'Torus',
-  //   iconName: 'torus.png',
-  //   description: 'Login using Torus hosted wallet',
-  //   href: null,
-  //   color: '#315CF5',
-  //   mobile: true,
-  // },
+  Torus: {
+    connector: async () => {
+      const TorusConnector = (await import('@web3-react/torus-connector')).TorusConnector
+      return new TorusConnector({
+        chainId: 1,
+      })
+    },
+    name: 'Torus',
+    iconName: 'torus.png',
+    description: 'Login using Torus hosted wallet',
+    href: null,
+    color: '#315CF5',
+    mobile: true,
+  },
   Binance: {
     connector: async () => {
       const BscConnector = (await import('@binance-chain/bsc-connector')).BscConnector
