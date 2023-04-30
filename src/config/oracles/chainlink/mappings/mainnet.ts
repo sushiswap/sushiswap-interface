@@ -904,13 +904,13 @@ const MAINNET_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   // SFI / ETH
-  '0xeA286b2584F79Cd4D322Fe107d9683971c890596': {
-    from: '0xb753428af26E81097e7fD17f40c88aaA3E04902c',
-    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    decimals: 18,
-    fromDecimals: 18,
-    toDecimals: 18,
-  },
+  // '0xeA286b2584F79Cd4D322Fe107d9683971c890596': {
+  //   from: '0xb753428af26E81097e7fD17f40c88aaA3E04902c',
+  //   to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  //   decimals: 18,
+  //   fromDecimals: 18,
+  //   toDecimals: 18,
+  // },
   // SNX / ETH
   '0x79291A9d692Df95334B1a0B3B4AE6bC606782f8c': {
     from: '0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F',
@@ -928,13 +928,13 @@ const MAINNET_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   // SRM / ETH
-  '0x050c048c9a0CD0e76f166E2539F87ef2acCEC58f': {
-    from: '0x476c5E26a75bd202a9683ffD34359C0CC15be0fF',
-    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    decimals: 18,
-    fromDecimals: 6,
-    toDecimals: 18,
-  },
+  // '0x050c048c9a0CD0e76f166E2539F87ef2acCEC58f': {
+  //   from: '0x476c5E26a75bd202a9683ffD34359C0CC15be0fF',
+  //   to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  //   decimals: 18,
+  //   fromDecimals: 6,
+  //   toDecimals: 18,
+  // },
   // STAKE / ETH
   '0xa1FFC11Eaa62d34C3B3272270AEcF9D879773B32': {
     from: '0x0Ae055097C6d159879521C384F1D2123D1f195e6',
