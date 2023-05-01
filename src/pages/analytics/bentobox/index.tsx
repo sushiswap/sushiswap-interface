@@ -29,7 +29,7 @@ function _BentoBox(): JSX.Element {
 
   return (
     <>
-      <NextSeo title={`BentoBox Anlytics`} />
+      <NextSeo title={`BentoBox Analytics`} />
       <DiscoverHeader />
       <TridentBody>
         <div className="text-2xl font-bold text-high-emphesis">KPIs</div>
