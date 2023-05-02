@@ -42,14 +42,14 @@ export default async function getAnalyticsPairs({ chainId, first }: getAnalytics
         const fees1d = volume1d * 0.003
         const fees1w = volume1w * 0.003
 
-        const liquidity = pair.reserveUSD
-        const liquidity1d = pair1d.reserveUSD
+        const liquidity = pair.liquidityUSD
+        const liquidity1d = pair1d.liquidityUSD
 
-        const liquidity1dChange = pair.reserveUSD - pair1d.reserveUSD
-        const liquidity1dChangePercent = (pair.reserveUSD / pair1d.reserveUSD) * 100 - 100 ?? 0
+        const liquidity1dChange = pair.liquidityUSD - pair1d.liquidityUSD
+        const liquidity1dChangePercent = (pair.liquidityUSD / pair1d.liquidityUSD) * 100 - 100 ?? 0
 
-        const utilisation1d = ((pair.volumeUSD - pair1d.volumeUSD) / pair?.reserveUSD) * 100 ?? 0
-        const utilisation2d = ((pair1d.volumeUSD - pair2d.volumeUSD) / pair1d?.reserveUSD) * 100 ?? 0
+        const utilisation1d = ((pair.volumeUSD - pair1d.volumeUSD) / pair?.liquidityUSD) * 100 ?? 0
+        const utilisation2d = ((pair1d.volumeUSD - pair2d.volumeUSD) / pair1d?.liquidityUSD) * 100 ?? 0
         const utilisation1dChange = (utilisation1d / utilisation2d) * 100 - 100 ?? 0
 
         const tx1d = pair.txCount - pair1d.txCount

@@ -13,7 +13,7 @@ import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import {
   useNativePrice,
   useOneDayBlock,
-  useTokenDayData,
+  useTokenDaySnapshots,
   useTokenPairs,
   useTokens,
   useTwoDayBlock,
@@ -67,14 +67,14 @@ export default function TokenPage() {
 
   // Token Pairs
   const tokenPairs = useTokenPairs({ chainId, variables: { id } })
-
+  console.log(tokenPairs)
   // For the Info Cards
-  const price = token?.derivedETH * nativePrice
-  const priceChange = ((token?.derivedETH * nativePrice) / (token1d?.derivedETH * nativePrice1d)) * 100 - 100
+  const price = token?.price.derivedNative * nativePrice
+  const priceChange =
+    ((token?.price.derivedNative * nativePrice) / (token1d?.price.derivedNative * nativePrice1d)) * 100 - 100
 
-  const liquidityUSD = token?.liquidity * token?.derivedETH * nativePrice
-  const liquidityUSDChange =
-    ((token?.liquidity * price) / (token1d?.liquidity * token1d?.derivedETH * nativePrice1d)) * 100 - 100
+  const liquidityUSD = token?.liquidityUSD
+  const liquidityUSDChange = (token?.liquidityUSD / token1d?.liquidityUSD) * 100 - 100
 
   const volumeUSD1d = token?.volumeUSD - token1d?.volumeUSD
   const volumeUSD2d = token1d?.volumeUSD - token2d?.volumeUSD
@@ -85,33 +85,33 @@ export default function TokenPage() {
   const priceUSD1dChange = (priceUSD1d / priceUSD2d) * 100 - 100
 
   // The Chart
-  const tokenDayData = useTokenDayData({
+  const tokenDaySnapshots = useTokenDaySnapshots({
     chainId,
-    variables: { where: { token: id.toLowerCase() } },
+    variables: { where: { token: id?.toLowerCase() } },
     shouldFetch: !!id && !!chainId,
   })
 
   const chartData = useMemo(
     () => ({
-      liquidityChart: tokenDayData
+      liquidityChart: tokenDaySnapshots
         /* @ts-ignore TYPE NEEDS FIXING */
         ?.sort((a, b) => a.date - b.date)
         /* @ts-ignore TYPE NEEDS FIXING */
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.liquidityUSD) })),
 
-      volumeChart: tokenDayData
+      volumeChart: tokenDaySnapshots
         /* @ts-ignore TYPE NEEDS FIXING */
         ?.sort((a, b) => a.date - b.date)
         /* @ts-ignore TYPE NEEDS FIXING */
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
 
-      priceChart: tokenDayData
+      priceChart: tokenDaySnapshots
         /* @ts-ignore TYPE NEEDS FIXING */
         ?.sort((a, b) => a.date - b.date)
         /* @ts-ignore TYPE NEEDS FIXING */
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.priceUSD) })),
     }),
-    [tokenDayData]
+    [tokenDaySnapshots]
   )
 
   const currency = token

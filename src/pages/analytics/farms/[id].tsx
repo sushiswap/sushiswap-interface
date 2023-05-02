@@ -142,7 +142,7 @@ export default function Pool() {
             <div className="text-secondary">Value</div>
             <div className="flex items-center space-x-2">
               <div className="text-xl font-medium text-high-emphesis">
-                {formatNumber(farm?.pair.reserveUSD / farm?.pair.totalSupply, true)}
+                {formatNumber(farm?.pair.liquidityUSD / farm?.pair.liquidity, true)}
               </div>
             </div>
           </div>

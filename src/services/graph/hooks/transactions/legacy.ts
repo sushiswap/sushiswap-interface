@@ -7,19 +7,15 @@ import { useMemo } from 'react'
 import useSWR from 'swr'
 
 export interface LegacyTransactions {
-  amount0In: string
-  amount0Out: string
-  amount1In: string
-  amount1Out: string
+  amountIn: string
+  amountOut: string
   amountUSD: string
   id: string
-  pair: {
-    token0: {
-      symbol: string
-    }
-    token1: {
-      symbol: string
-    }
+  tokenIn: {
+    symbol: string
+  }
+  tokenOut: {
+    symbol: string
   }
   sender: string
   timestamp: string
@@ -29,18 +25,11 @@ export interface LegacyTransactions {
 
 export const legacyTransactionDataFormatter = (rawData: LegacyTransactions[]): Transactions[] => {
   return rawData.map((tx) => {
-    const props =
-      tx.amount0In === '0'
-        ? {
-            type: `Swap ${tx.pair.token1.symbol} for ${tx.pair.token0.symbol}`,
-            incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
-          }
-        : {
-            type: `Swap ${tx.pair.token0.symbol} for ${tx.pair.token1.symbol}`,
-            incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
-          }
+    const props = {
+      type: `Swap ${tx.tokenIn.symbol} for ${tx.tokenOut.symbol}`,
+      incomingAmt: `${formatNumber(tx.amountIn)} ${tx.tokenIn.symbol}`,
+      outgoingAmt: `${formatNumber(tx.amountOut)} ${tx.tokenOut.symbol}`,
+    }
     return {
       value: formatNumber(tx.amountUSD, true),
       address: tx.to,
