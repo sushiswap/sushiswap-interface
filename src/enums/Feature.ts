@@ -11,6 +11,7 @@ export enum Feature {
   TRIDENT = 'Trident',
   TRIDENT_MIGRATION = 'Trident Migration',
   LIMIT_ORDERS = 'LimitOrders',
+  STOP_LOSSES = 'StopLosses',
   INARI = 'Inari',
   MEOWSHI = 'MEOWSHI',
   VESTING = 'Vesting',

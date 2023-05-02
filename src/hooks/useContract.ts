@@ -28,6 +28,8 @@ import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
 } from 'app/constants/abis/argent-wallet-detector'
+import AUTONOMY_REGISTRY_ABI from 'app/constants/abis/autonomy/registry.json'
+import STOP_LIMIT_ORDER_WRAPPER_ABI from 'app/constants/abis/autonomy/stop-limit-order-wrapper.json'
 import BAR_ABI from 'app/constants/abis/bar.json'
 import BENTOBOX_ABI from 'app/constants/abis/bentobox.json'
 import BORING_HELPER_ABI from 'app/constants/abis/boring-helper.json'
@@ -62,6 +64,7 @@ import UNI_FACTORY_ABI from 'app/constants/abis/uniswap-v2-factory.json'
 import IUniswapV2PairABI from 'app/constants/abis/uniswap-v2-pair.json'
 import WETH9_ABI from 'app/constants/abis/weth.json'
 import ZENKO_ABI from 'app/constants/abis/zenko.json'
+import { AUTONOMY_REGISTRY_ADDRESSES, STOP_LIMIT_ORDER_WRAPPER_ADDRESSES } from 'app/constants/autonomy'
 import LPToken from 'app/features/migration/LPToken'
 import { poolEntityMapper } from 'app/features/trident/poolEntityMapper'
 import { getContract } from 'app/functions'
@@ -419,4 +422,18 @@ export function useDashboardContract(): Contract | null {
 
 export function useQuickSwapFactoryContract(): Contract | null {
   return useContract('0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32', FACTORY_ABI, false)
+}
+
+export function useAutonomyRegistryContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? AUTONOMY_REGISTRY_ADDRESSES[chainId] : undefined, AUTONOMY_REGISTRY_ABI, true)
+}
+
+export function useAutonomyLimitOrderWrapperContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(
+    chainId ? STOP_LIMIT_ORDER_WRAPPER_ADDRESSES[chainId] : undefined,
+    STOP_LIMIT_ORDER_WRAPPER_ABI,
+    true
+  )
 }

@@ -214,6 +214,19 @@ export const useLimitOrderDerivedLimitPrice: UseLimitOrderDerivedLimitPrice = ()
       : undefined
   }, [inputCurrency, invertRate, limitPrice, outputCurrency])
 }
+export const useStopLossDerivedLimitPrice: UseLimitOrderDerivedLimitPrice = () => {
+  const { stopPrice, invertStopRate } = useLimitOrderState()
+  const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
+
+  return useMemo(() => {
+    const baseAmount = tryParseAmount(invertStopRate ? stopPrice : '1', inputCurrency)
+    const quoteAmount = tryParseAmount(invertStopRate ? '1' : stopPrice, outputCurrency)
+
+    return baseAmount && quoteAmount && inputCurrency && outputCurrency
+      ? new Price({ baseAmount, quoteAmount })
+      : undefined
+  }, [inputCurrency, invertStopRate, stopPrice, outputCurrency])
+}
 
 type UseLimitOrderDerivedParsedAmounts = ({
   rate,
@@ -261,16 +274,45 @@ export const useLimitOrderDerivedTypedInputAmount: UseLimitOrderDerivedTypedInpu
   }, [inputCurrency, outputCurrency, typedField, typedValue])
 }
 
-type UseLimitOrderDerivedInputError = ({ trade }: { trade?: Trade<Currency, Currency, TradeType> }) => string
-export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({ trade }) => {
-  const { recipient, orderExpiration, fromBentoBalance, limitPrice, typedValue } = useLimitOrderState()
+type UseLimitOrderDerivedInputError = ({
+  trade,
+  isStopLossOrder,
+}: {
+  trade?: Trade<Currency, Currency, TradeType>
+  isStopLossOrder?: boolean
+}) => string
+export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({ trade, isStopLossOrder }) => {
+  const {
+    enableHigherStopRateThanMarketPrice,
+    recipient,
+    orderExpiration,
+    fromBentoBalance,
+    limitPrice,
+    stopPrice,
+    typedValue,
+  } = useLimitOrderState()
   const { account } = useActiveWeb3React()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
+  const rate = useLimitOrderDerivedLimitPrice()
+  const stopRate = useStopLossDerivedLimitPrice()
   const recipientLookup = useENS(recipient)
   const to = !recipient ? account : recipientLookup.address
   const parsedRate = useLimitOrderDerivedLimitPrice()
   const balance = useBentoOrWalletBalance(account ?? undefined, inputCurrency, !fromBentoBalance)
   const [expertMode] = useExpertModeManager()
+  const limitPriceOrDefaultPrice = useMemo(() => (rate ? rate : trade?.executionPrice), [rate, trade])
+  const stopPriceOrDefaultPrice = useMemo(() => (stopPrice ? stopRate : trade?.executionPrice), [stopPrice, trade])
+  const isLimitPriceBiggerThanStopPrice = useMemo(
+    () =>
+      limitPriceOrDefaultPrice &&
+      stopPriceOrDefaultPrice &&
+      parseFloat(limitPriceOrDefaultPrice?.toSignificant(6)) >= parseFloat(stopPriceOrDefaultPrice?.toSignificant(6)),
+    [limitPriceOrDefaultPrice, stopPriceOrDefaultPrice]
+  )
+  const isStopPriceLargerThanMarketPrice = useMemo(
+    () => !enableHigherStopRateThanMarketPrice && trade && stopRate?.greaterThan(trade?.executionPrice),
+    [stopRate, trade, enableHigherStopRateThanMarketPrice]
+  )
 
   return useMemo(() => {
     return !account
@@ -283,6 +325,14 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
       ? i18n._(t`Enter a valid recipient address`)
       : limitPrice !== LimitPrice.CURRENT && parsedRate?.equalTo(ZERO)
       ? i18n._(t`Select a rate`)
+      : stopPrice !== LimitPrice.CURRENT && parsedRate?.equalTo(ZERO)
+      ? i18n._(t`Select a rate`)
+      : isStopLossOrder && (!rate || !stopRate)
+      ? i18n._(t`Fill all inputs to continue`) // for stop-loss orders only
+      : isStopLossOrder && isLimitPriceBiggerThanStopPrice // for stop-loss orders only
+      ? 'Minimum larger than stop rate'
+      : isStopLossOrder && isStopPriceLargerThanMarketPrice // for stop-loss orders only
+      ? 'Stop rate larger than market price'
       : !orderExpiration
       ? i18n._(t`Select an order expiration`)
       : !balance
@@ -296,6 +346,7 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
     expertMode,
     inputCurrency,
     limitPrice,
+    stopPrice,
     orderExpiration,
     outputCurrency,
     parsedRate,

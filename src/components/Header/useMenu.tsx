@@ -47,6 +47,12 @@ const useMenu: UseMenu = () => {
         link: '/limit-order',
         disabled: !featureEnabled(Feature.LIMIT_ORDERS, chainId),
       },
+      {
+        key: 'stop',
+        title: i18n._(t`Stop loss`),
+        link: '/stop-loss',
+        disabled: !featureEnabled(Feature.STOP_LOSSES, chainId),
+      },
     ]
 
     const liquidity = [
@@ -94,6 +100,12 @@ const useMenu: UseMenu = () => {
             title: i18n._(t`Limit order`),
             link: '/limit-order',
             disabled: !featureEnabled(Feature.LIMIT_ORDERS, chainId),
+          },
+          {
+            key: 'stop',
+            title: i18n._(t`Stop loss`),
+            link: '/stop-loss',
+            disabled: !featureEnabled(Feature.STOP_LOSSES, chainId),
           },
         ].filter((item) => !item.disabled),
       })
