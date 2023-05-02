@@ -9,9 +9,9 @@ import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { featureEnabled } from 'app/functions'
 import useBentoMasterApproveCallback, { BentoApprovalState } from 'app/hooks/useBentoMasterApproveCallback'
 import { useActiveWeb3React } from 'app/services/web3'
-// @ts-ignore
-import cookie from 'cookie-cutter'
 import React, { FC, useState } from 'react'
+// @ts-ignore
+import cookie from 'tiny-cookies'
 
 const LimitOrderApprovalCheck: FC = () => {
   const { i18n } = useLingui()

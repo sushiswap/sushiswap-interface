@@ -9,10 +9,10 @@ import { NETWORK_ICON, NETWORK_LABEL } from 'app/config/networks'
 import { Feature } from 'app/enums'
 import { SUPPORTED_NETWORKS } from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
-// @ts-ignore TYPE NEEDS FIXING
-import cookie from 'cookie-cutter'
 import Image from 'next/image'
 import React, { FC, Fragment } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
+import cookie from 'tiny-cookies'
 
 interface NetworkGuardProps {
   feature: Feature
