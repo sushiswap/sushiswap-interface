@@ -20,6 +20,20 @@ export const SNX = new Token(
 export const COMP = new Token(ChainId.ETHEREUM, '0xc00e94Cb662C3520282E6f5717214004A7f26888', 18, 'COMP', 'Compound')
 export const GALA = new Token(ChainId.ETHEREUM, '0x15D4c048F83bd7e37d49eA4C83a07267Ec4203dA', 8, 'GALA', 'Gala')
 export const ENJ = new Token(ChainId.ETHEREUM, '0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c', 18, 'ENJ', 'Enjin Coin')
+export const SUSHI = new Token(
+  ChainId.ETHEREUM,
+  '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+  18,
+  'SUSHI',
+  'SushiToken'
+)
+export const WETH = new Token(
+  ChainId.ETHEREUM,
+  '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  18,
+  'WETH',
+  'Wrapped Ether'
+)
 export const TWO = new Token(ChainId.ETHEREUM, '0x1e0275806C3CD0bDb5C99916A064d36b5e8eAE8d', 18, 'TWO', 'TwoCoin')
 
 export const ALPHA = new Token(
