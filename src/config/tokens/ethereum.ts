@@ -1,6 +1,41 @@
 import { ChainId, Token } from '@sushiswap/core-sdk'
 
 // Default Ethereum chain tokens
+export const AAVE = new Token(ChainId.ETHEREUM, '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9', 18, 'AAVE', 'Aave')
+export const LINK = new Token(
+  ChainId.ETHEREUM,
+  '0x514910771AF9Ca656af840dff83E8264EcF986CA',
+  18,
+  'LINK',
+  'ChainLink Token'
+)
+export const MKR = new Token(ChainId.ETHEREUM, '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2', 18, 'MKR', 'Maker')
+export const SNX = new Token(
+  ChainId.ETHEREUM,
+  '0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F',
+  18,
+  'SNX',
+  'Synthetix Network Token'
+)
+export const COMP = new Token(ChainId.ETHEREUM, '0xc00e94Cb662C3520282E6f5717214004A7f26888', 18, 'COMP', 'Compound')
+export const GALA = new Token(ChainId.ETHEREUM, '0x15D4c048F83bd7e37d49eA4C83a07267Ec4203dA', 8, 'GALA', 'Gala')
+export const ENJ = new Token(ChainId.ETHEREUM, '0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c', 18, 'ENJ', 'Enjin Coin')
+export const SUSHI = new Token(
+  ChainId.ETHEREUM,
+  '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+  18,
+  'SUSHI',
+  'SushiToken'
+)
+export const WETH = new Token(
+  ChainId.ETHEREUM,
+  '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  18,
+  'WETH',
+  'Wrapped Ether'
+)
+export const TWO = new Token(ChainId.ETHEREUM, '0x1e0275806C3CD0bDb5C99916A064d36b5e8eAE8d', 18, 'TWO', 'TwoCoin')
+
 export const ALPHA = new Token(
   ChainId.ETHEREUM,
   '0xa1faa113cbE53436Df28FF0aEe54275c13B40975',

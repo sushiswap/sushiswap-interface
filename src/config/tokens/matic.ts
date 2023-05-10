@@ -31,3 +31,30 @@ export const MIM = new Token(
 export const ICE = new Token(ChainId.MATIC, '0x4e1581f01046eFDd7a1a2CDB0F82cdd7F71F2E59', 18, 'ICE', 'IceToken')
 export const gOHM = new Token(ChainId.MATIC, '0xd8cA34fd379d9ca3C6Ee3b3905678320F5b45195', 18, 'gOHM', 'Governance OHM')
 export const STG = new Token(ChainId.MATIC, '0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590', 18, 'STG', 'StargateToken')
+
+export const THREE = new Token(ChainId.MATIC, '0x9B034262e0095210ab9ddec60199741a8a1FbFe7', 18, 'THREE', 'Three Coin')
+export const LINK = new Token(
+  ChainId.MATIC,
+  '0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39',
+  18,
+  'LINK',
+  'ChainLink Token'
+)
+export const MANA = new Token(
+  ChainId.MATIC,
+  '0xA1c57f48F0Deb89f569dFbE6E2B7f46D33606fD4',
+  18,
+  'MANA',
+  'Decentraland MANA'
+)
+export const SNX = new Token(
+  ChainId.MATIC,
+  '0x50B728D8D964fd00C2d0AAD81718b71311feF68a',
+  18,
+  'SNX',
+  'Synthetix Network Token'
+)
+export const CRV = new Token(ChainId.MATIC, '0x172370d5Cd63279eFa6d502DAB29171933a610AF', 18, 'CRV', 'Curve DAO Token')
+export const YFI = new Token(ChainId.MATIC, '0xb8cb8a7F4C2885C03e57E973C74827909Fdc2032', 18, 'YFI', 'yearn.finance')
+export const ENJ = new Token(ChainId.MATIC, '0x7eC26842F195c852Fa843bB9f6D8B583a274a157', 18, 'ENJ', 'Enjin Coin')
+export const XSUSHI = new Token(ChainId.MATIC, '0x6811079E3c63ED96Eb005384d7E7ec8810E3D521', 18, 'XSUSHI', 'xSUSHI')
