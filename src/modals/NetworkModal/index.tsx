@@ -226,7 +226,7 @@ export const SUPPORTED_NETWORKS: Record<
       decimals: 18,
     },
     rpcUrls: ['https://mainnet.telos.net/evm'],
-    blockExplorerUrls: ['https://rpc1.us.telos.net/v2/explore'],
+    blockExplorerUrls: ['https://teloscan.io'],
   },
   [ChainId.PALM]: {
     chainId: '0x2A15C308D',
