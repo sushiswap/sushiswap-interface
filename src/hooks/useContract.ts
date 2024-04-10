@@ -22,7 +22,7 @@ import {
 import { LIMIT_ORDER_HELPER_ADDRESS, STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import ConstantProductPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/constant-product/ConstantProductPool.sol/ConstantProductPool.json'
-import TRIDENT from '@sushiswap/trident/exports/all.json'
+import TRIDENT from '@sushiswap/trident/exports/exports.json'
 import { Pool, PoolType } from '@sushiswap/trident-sdk'
 import {
   ARGENT_WALLET_DETECTOR_ABI,

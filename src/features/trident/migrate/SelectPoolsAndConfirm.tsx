@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import EXPORTS from '@sushiswap/trident/exports/all.json'
+import EXPORTS from '@sushiswap/trident/exports/exports.json'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import { LoadingSpinner } from 'app/components/LoadingSpinner'
