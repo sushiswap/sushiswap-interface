@@ -55,48 +55,44 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/pools',
-        destination: '/',
-        permanent: true,
-      },
-      {
         source: '/',
-        destination: '/swap',
+        destination: 'https://www.sushi.com/swap',
         permanent: true,
       },
-      // {
-      //   source: '/swap/:path*',
-      //   destination: 'https://www.sushi.com/swap',
-      //   permanent: true,
-      // },
+
+      {
+        source: '/swap',
+        destination: 'https://www.sushi.com/swap',
+        permanent: true,
+      },
       {
         source: '/home',
         destination: 'https://www.sushi.com/swap',
         permanent: true,
       },
-      // {
-      //   source: '/farm/:path*',
-      //   destination: 'https://www.sushi.com/earn',
-      //   permanent: true,
-      // },
+      {
+        source: '/pools',
+        destination: 'https://www.sushi.com/pool',
+        permanent: true,
+      },
       {
         source: '/farms/special',
-        destination: 'https://www.sushi.com/earn',
+        destination: 'https://www.sushi.com/pool',
         permanent: true,
       },
       {
         source: '/onsen/:path*',
-        destination: 'https://www.sushi.com/earn',
+        destination: 'https://www.sushi.com/pool',
         permanent: true,
       },
       {
         source: '/farms/:path*',
-        destination: 'https://www.sushi.com/earn',
+        destination: 'https://www.sushi.com/pool',
         permanent: true,
       },
       {
         source: '/stake',
-        destination: 'https://www.sushi.com/earn',
+        destination: 'https://www.sushi.com/pool',
         permanent: true,
       },
       {
@@ -120,15 +116,10 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/analytics/dashboard',
-        destination: '/analytics',
+        source: '/analytics/:path*',
+        destination: 'https://www.sushi.com/analytics',
         permanent: true,
-      },
-      {
-        source: '/analytics/pairs/:path*',
-        destination: '/analytics/pools/:path*',
-        permanent: true,
-      },
+      }
     ]
   },
   async rewrites() {
