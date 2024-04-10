@@ -108,7 +108,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/analytics/:path*',
+        source: '/analytics/*',
         destination: 'https://www.sushi.com/analytics',
         permanent: true,
       }
