@@ -65,7 +65,7 @@ const explorers = {
   telos: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     switch (type) {
       case 'transaction':
-        return `${link}/transaction/${data}`
+        return `${link}/tx/${data}`
       case 'token':
         return `${link}/address/${data}`
       case 'address':
@@ -198,7 +198,7 @@ const chains: ChainObject = {
     builder: explorers.fuse,
   },
   [ChainId.TELOS]: {
-    link: 'https://rpc1.us.telos.net/v2/explore/evm',
+    link: 'https://teloscan.io',
     builder: explorers.telos,
   },
   [ChainId.MOONBEAM]: {
