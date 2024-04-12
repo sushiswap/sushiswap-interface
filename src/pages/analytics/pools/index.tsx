@@ -26,7 +26,7 @@ function _Pools() {
 
   return (
     <>
-      <NextSeo title={`Pool Anlytics`} />
+      <NextSeo title={`Pool Analytics`} />
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
         <div>
           <Typography variant="h2" className="text-high-emphesis" weight={700}>

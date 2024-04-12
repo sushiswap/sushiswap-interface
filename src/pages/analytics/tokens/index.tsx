@@ -23,7 +23,7 @@ function _Tokens() {
 
   return (
     <>
-      <NextSeo title={`Token Anlytics`} />
+      <NextSeo title={`Token Analytics`} />
       <DiscoverHeader />
       <TridentBody>
         <div className="flex flex-col w-full gap-10">
