@@ -36,18 +36,15 @@ export default async function getAnalyticsTokens({ chainId, first }: getAnalytic
           name: token.name,
           decimals: token.decimals,
         },
-        liquidity: token.liquidity * token.derivedETH * nativePrice,
+        liquidity: token.liquidityUSD,
         volume1d: token.volumeUSD - token1d.volumeUSD,
         volume1w: token.volumeUSD - token1w.volumeUSD,
-        price: token.derivedETH * nativePrice,
+        price: token.price.derivedNative * nativePrice,
         strategy,
-        change1d: ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100,
-        change1w: ((token.derivedETH * nativePrice) / (token1w.derivedETH * nativePrice1w)) * 100 - 100,
-        graph: token.dayData
-          .slice(0)
-          .reverse()
-          // @ts-ignore TYPE NEEDS FIXING
-          .map((day, i) => ({ x: i, y: Number(day.priceUSD) })),
+        change1d:
+          ((token.price.derivedNative * nativePrice) / (token1d.price.derivedNative * nativePrice1d)) * 100 - 100,
+        change1w:
+          ((token.price.derivedNative * nativePrice) / (token1w.price.derivedNative * nativePrice1w)) * 100 - 100,
       }
     })
   )

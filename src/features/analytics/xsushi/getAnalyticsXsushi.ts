@@ -13,7 +13,7 @@ export default async function getAnalyticsXsushi() {
     getBlockDaysAgo(ChainId.ETHEREUM, 365),
   ])
 
-  const [ethPrice, [xSushi], bar, bar1m, bar3m, bar6m, bar1y, barHistory] = await Promise.all([
+  const [nativePrice, [xSushi], bar, bar1m, bar3m, bar6m, bar1y, barHistory] = await Promise.all([
     getNativePrice(ChainId.ETHEREUM),
     getTokens(ChainId.ETHEREUM, { first: 1, where: { id: XSUSHI.address.toLowerCase() } }),
     getBar(),
@@ -33,8 +33,8 @@ export default async function getAnalyticsXsushi() {
   const apy1y = (bar.ratio / bar1y.ratio - 1) * 100
 
   const [xSushiPrice, xSushiMarketcap] = [
-    xSushi?.derivedETH * ethPrice,
-    xSushi?.derivedETH * ethPrice * bar?.totalSupply,
+    xSushi?.price.derivedNative * nativePrice,
+    xSushi?.price.derivedNative * nativePrice * bar?.totalSupply,
   ]
 
   const chart = barHistory.map((barDay: any, i: number) => {

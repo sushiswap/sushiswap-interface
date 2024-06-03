@@ -1,13 +1,13 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST } from 'app/services/graph/constants'
 import {
-  dayDatasQuery,
-  ethPriceQuery,
+  factoryDaySnapshotsQuery,
   factoryQuery,
   liquidityPositionsQuery,
-  pairDayDatasQuery,
+  nativePriceQuery,
+  pairDaySnapshotsQuery,
   pairsQuery,
-  tokenDayDatasQuery,
+  tokenDaySnapshotsQuery,
   tokenPairsQuery,
   tokenPriceQuery,
   tokenQuery,
@@ -35,10 +35,25 @@ export const EXCHANGE = {
   [ChainId.MOONBEAM]: 'sushiswap/exchange-moonbeam',
 }
 
+export const EXCHANGE_NEW = {
+  [ChainId.ETHEREUM]: 'sushi-graph/sushiswap-ethereum',
+  [ChainId.AVALANCHE]: 'sushiswap/sushiswap-avalanche',
+  [ChainId.ARBITRUM]: 'sushiswap/sushiswap-arbitrum',
+  [ChainId.BSC]: 'sushiswap/sushiswap-bsc',
+  [ChainId.CELO]: 'sushiswap/sushiswap-celo',
+  [ChainId.FANTOM]: 'sushiswap/sushiswap-fantom',
+  [ChainId.FUSE]: 'sushiswap/sushiswap-fuse',
+  [ChainId.XDAI]: 'sushiswap/sushiswap-gnosis',
+  [ChainId.MOONBEAM]: 'sushiswap/sushiswap-moonbeam',
+  [ChainId.MOONRIVER]: 'sushiswap/sushiswap-moonriver',
+  [ChainId.HARMONY]: 'sushi-graph/sushiswap-harmony',
+  [ChainId.MATIC]: 'sushiswap/exchange-polygon',
+}
+
 // @ts-ignore TYPE NEEDS FIXING
 export const exchange = async (chainId = ChainId.ETHEREUM, query, variables = {}) =>
   // @ts-ignore TYPE NEEDS FIXING
-  pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
+  pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE_NEW[chainId]}`, query, variables)
 
 export const getPairs = async (chainId = ChainId.ETHEREUM, variables: any = undefined, query = pairsQuery) => {
   const { pairs } = await exchange(chainId, query, variables)
@@ -46,10 +61,10 @@ export const getPairs = async (chainId = ChainId.ETHEREUM, variables: any = unde
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getPairDayData = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getPairDaySnapshots = async (chainId = ChainId.ETHEREUM, variables) => {
   // console.log('getTokens')
-  const { pairDayDatas } = await exchange(chainId, pairDayDatasQuery, variables)
-  return pairDayDatas
+  const { pairDaySnapshots } = await exchange(chainId, pairDaySnapshotsQuery, variables)
+  return pairDaySnapshots
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -74,10 +89,10 @@ export const getToken = async (chainId = ChainId.ETHEREUM, query = tokenQuery, v
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const getTokenDayData = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getTokenDaySnapshots = async (chainId = ChainId.ETHEREUM, variables) => {
   // console.log('getTokens')
-  const { tokenDayDatas } = await exchange(chainId, tokenDayDatasQuery, variables)
-  return tokenDayDatas
+  const { tokenDaySnapshots } = await exchange(chainId, tokenDaySnapshotsQuery, variables)
+  return tokenDaySnapshots
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -85,7 +100,7 @@ export const getTokenPrices = async (chainId = ChainId.ETHEREUM, variables) => {
   // console.log('getTokenPrice')
   const { tokens } = await exchange(chainId, tokensQuery, variables)
   // @ts-ignore TYPE NEEDS FIXING
-  return tokens.map((token) => token?.derivedETH)
+  return tokens.map((token) => token?.price.derivedNative)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -94,13 +109,13 @@ export const getTokenPrice = async (chainId = ChainId.ETHEREUM, query, variables
   const nativePrice = await getNativePrice(chainId)
 
   const { token } = await exchange(chainId, query, variables)
-  return token?.derivedETH * nativePrice
+  return token?.price.derivedNative * nativePrice
 }
 
 export const getNativePrice = async (chainId = ChainId.ETHEREUM, variables: any = undefined) => {
   // console.log('getEthPrice')
   const data = await getBundle(chainId, undefined, variables)
-  return data?.bundles[0]?.ethPrice
+  return data?.bundles[0]?.nativePrice
 }
 
 export const getEthPrice = async (variables = undefined) => {
@@ -252,7 +267,7 @@ export const getFusePrice = async () => {
 
 export const getBundle = async (
   chainId = ChainId.ETHEREUM,
-  query = ethPriceQuery,
+  query = nativePriceQuery,
   variables = {
     id: 1,
   }
@@ -267,7 +282,7 @@ export const getLiquidityPositions = async (chainId = ChainId.ETHEREUM, variable
 }
 
 export const getDayData = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const { dayDatas } = await exchange(chainId, dayDatasQuery, variables)
+  const { factoryDaySnapshots: dayDatas } = await exchange(chainId, factoryDaySnapshotsQuery, variables)
   return dayDatas
 }
 
@@ -282,6 +297,9 @@ export const getTransactions = async (chainId = ChainId.ETHEREUM, variables = un
 }
 
 export const getTokenPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
+  console.log('gettokenpairs')
   const { pairs0, pairs1 } = await exchange(chainId, tokenPairsQuery, variables)
+  console.log(pairs0, pairs1)
+
   return pairs0 || pairs1 ? [...(pairs0 ? pairs0 : []), ...(pairs1 ? pairs1 : [])] : undefined
 }

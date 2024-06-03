@@ -30,13 +30,14 @@ export default async function getAnalyticsBentobox({ chainId }: getAnalyticsBent
   })
 
   // Creating map to easily reference TokenId -> Token
-  const tokenIdToPrice: Map<string, { derivedETH: number; volumeUSD: number; dayData: Array<{ priceUSD: number }> }> =
-    new Map(tokens?.map((token: any) => [token.id, token]))
+  const tokenIdToPrice: Map<string, { price: { derivedNative: number }; volumeUSD: number }> = new Map(
+    tokens?.map((token: any) => [token.id, token])
+  )
 
   const bentoBoxTvl: number = bentoBoxTokens
     .map(({ id, rebase }: any) => {
       const token = tokenIdToPrice.get(id)
-      return (token?.derivedETH ?? 0) * nativePrice * rebase.elastic
+      return (token?.price.derivedNative ?? 0) * nativePrice * rebase.elastic
     })
     .filter(Boolean)
     .reduce((previousValue: any, currentValue: any) => previousValue + currentValue, 0)
@@ -45,8 +46,8 @@ export default async function getAnalyticsBentobox({ chainId }: getAnalyticsBent
     .map(({ id, rebase, decimals, symbol, name }: any) => {
       const token = tokenIdToPrice.get(id)
       const supply = rebase.elastic
-      const tokenDerivedETH = token?.derivedETH
-      const price = (tokenDerivedETH ?? 0) * nativePrice
+      const tokenDerivedNative = token?.price.derivedNative
+      const price = (tokenDerivedNative ?? 0) * nativePrice
       const tvl = price * supply
 
       const strategy = strategies?.find((strategy) => strategy.token === id)

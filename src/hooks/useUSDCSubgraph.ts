@@ -51,12 +51,12 @@ export function useUSDCPricesSubgraph(
 
       if (tokenLegacy && tokenTrident) {
         if (tokenLegacy.liquidity > tokenTrident.kpi.liquidity) {
-          price = ethPrice * tokenLegacy.derivedETH
+          price = ethPrice * tokenLegacy.price.derivedNative
         } else {
           price = tokenTrident.price.derivedUSD
         }
       } else if (ethPrice && tokenLegacy) {
-        price = ethPrice * tokenLegacy.derivedETH
+        price = ethPrice * tokenLegacy.price.derivedNative
       } else if (tokenTrident) {
         price = tokenTrident.price.derivedUSD
       }

@@ -10,7 +10,6 @@ import { useAllTokens } from 'app/hooks/Tokens'
 import {
   useAverageBlockTime,
   useCeloPrice,
-  useEthPrice,
   useFantomPrice,
   useFarmsWithUsers,
   useFusePrice,
@@ -21,6 +20,7 @@ import {
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useMovrPrice,
+  useNativePrice,
   useOneDayBlock,
   useOnePrice,
   useSushiPairs,
@@ -38,7 +38,7 @@ export function getRewards({
   masterChefV1SushiPerBlock,
   masterChefV1TotalAllocPoint,
   sushiPrice,
-  ethPrice,
+  nativePrice,
   maticPrice,
   gnoPrice,
   onePrice,
@@ -57,7 +57,7 @@ export function getRewards({
   masterChefV1SushiPerBlock: any
   masterChefV1TotalAllocPoint: any
   sushiPrice: any
-  ethPrice: any
+  nativePrice: any
   maticPrice: any
   gnoPrice: any
   onePrice: any
@@ -102,7 +102,7 @@ export function getRewards({
       pool.rewarder.rewardToken = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
       pool.rewardToken.id = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
       pool.rewardToken.symbol = 'vestedQUARTZ'
-      pool.rewardToken.derivedETH = pair.token1.derivedETH
+      pool.rewardToken.price.derivedNative = pair.token1.price.derivedNative
       pool.rewardToken.decimals = 18
     }
 
@@ -123,7 +123,7 @@ export function getRewards({
           ? (0 / decimals) * averageBlockTime * blocksPerDay
           : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
 
-      const rewardPrice = pool.rewardToken.derivedETH * ethPrice
+      const rewardPrice = pool.rewardToken.price.derivedNative * nativePrice
 
       const address = getAddress(pool.rewardToken.id)
 
@@ -230,7 +230,7 @@ export function getRewards({
           : ((pool.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
       const rewardPerBlock = rewardPerSecond * averageBlockTime
       const rewardPerDay = rewardPerBlock * blocksPerDay
-      const rewardPrice = pool.rewardToken.derivedETH * ethPrice
+      const rewardPrice = pool.rewardToken.price.derivedNative * nativePrice
 
       const address = getAddress(pool.rewardToken.id)
 
@@ -292,7 +292,7 @@ export function useRewardCalculationData(chainId: number, farmAddresses: any) {
   const { data: masterChefV1SushiPerBlock } = useMasterChefV1SushiPerBlock()
 
   const { data: sushiPrice } = useSushiPrice()
-  const { data: ethPrice } = useEthPrice()
+  const { data: nativePrice } = useNativePrice({ chainId })
   const { data: maticPrice } = useMaticPrice()
   const { data: gnoPrice } = useGnoPrice()
   const { data: onePrice } = useOnePrice()
@@ -314,7 +314,7 @@ export function useRewardCalculationData(chainId: number, farmAddresses: any) {
     masterChefV1TotalAllocPoint,
     masterChefV1SushiPerBlock,
     sushiPrice,
-    ethPrice,
+    nativePrice,
     maticPrice,
     gnoPrice,
     onePrice,
@@ -346,7 +346,7 @@ export default function useFarmRewardsWithUsers({
     masterChefV1TotalAllocPoint,
     masterChefV1SushiPerBlock,
     sushiPrice,
-    ethPrice,
+    nativePrice,
     maticPrice,
     gnoPrice,
     onePrice,
@@ -389,7 +389,7 @@ export default function useFarmRewardsWithUsers({
         masterChefV1SushiPerBlock,
         masterChefV1TotalAllocPoint,
         sushiPrice,
-        ethPrice,
+        nativePrice,
         maticPrice,
         gnoPrice,
         onePrice,
@@ -403,12 +403,13 @@ export default function useFarmRewardsWithUsers({
       const balance = swapPair ? Number(pool.balance / 1e18) : pool.balance / 10 ** kashiPair.token0.decimals
 
       const tvl = swapPair
-        ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
-        : balance * kashiPair.token0.derivedETH * ethPrice
+        ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.liquidityUSD)
+        : balance * kashiPair.token0.price.derivedNative * nativePrice
 
       const feeApyPerYear =
         swapPair && swapPair1d
-          ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.0025 * 365) / pair?.reserveUSD) * 100, 3650) / 100
+          ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.0025 * 365) / pair?.liquidityUSD) * 100, 3650) /
+            100
           : 0
 
       const feeApyPerMonth = feeApyPerYear / 12
@@ -440,8 +441,8 @@ export default function useFarmRewardsWithUsers({
           share: (amount * 100) / balance,
           amount,
           amountUSD: swapPair
-            ? (amount / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
-            : amount * kashiPair.token0.derivedETH * ethPrice,
+            ? (amount / Number(swapPair.liquidity)) * Number(swapPair.liquidityUSD)
+            : amount * kashiPair.token0.price.derivedNative * nativePrice,
         }
       })
 
@@ -478,7 +479,6 @@ export default function useFarmRewardsWithUsers({
       blocksPerDay,
       celoPrice,
       chainId,
-      ethPrice,
       fantomPrice,
       fusePrice,
       glimmerPrice,
@@ -488,6 +488,7 @@ export default function useFarmRewardsWithUsers({
       masterChefV1TotalAllocPoint,
       maticPrice,
       movrPrice,
+      nativePrice,
       onePrice,
       positions,
       sushiPrice,

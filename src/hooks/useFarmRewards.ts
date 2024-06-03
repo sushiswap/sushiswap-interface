@@ -9,7 +9,6 @@ import { aprToApy } from 'app/functions/convert'
 import {
   useAverageBlockTime,
   useCeloPrice,
-  useEthPrice,
   useFantomPrice,
   useFarms,
   useFusePrice,
@@ -85,7 +84,6 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
   const { data: masterChefV1SushiPerBlock } = useMasterChefV1SushiPerBlock()
 
   const { data: sushiPrice } = useSushiPrice()
-  const { data: ethPrice } = useEthPrice()
   const { data: nativePrice } = useNativePrice({ chainId })
   const { data: maticPrice } = useMaticPrice()
   const { data: gnoPrice } = useGnoPrice()
@@ -158,7 +156,7 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
             pool.rewarder.rewardToken = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
             pool.rewardToken.id = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
             pool.rewardToken.symbol = 'vestedQUARTZ'
-            pool.rewardToken.derivedETH = pair.token1.derivedETH
+            pool.rewardToken.price = { derivedNative: pair.token1.price.derivedNative }
             pool.rewardToken.decimals = 18
           }
 
@@ -179,7 +177,9 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
                 ? (0 / decimals) * averageBlockTime * blocksPerDay
                 : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
 
-            const rewardPrice = pool.rewardToken.derivedETH * ethPrice
+            console.log(pool.rewardToken)
+
+            const rewardPrice = pool.rewardToken.price.derivedNative * nativePrice
 
             const address = getAddress(pool.rewardToken.id)
 
@@ -306,7 +306,8 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
                 : ((pool.allocPoint / pool.rewarder.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
             const rewardPerBlock = rewardPerSecond * averageBlockTime
             const rewardPerDay = rewardPerBlock * blocksPerDay
-            const rewardPrice = pool.rewardToken.derivedETH * nativePrice
+
+            const rewardPrice = pool.rewardToken.price.derivedNative * nativePrice
 
             const address = getAddress(pool.rewardToken.id)
 
@@ -335,14 +336,15 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       const balance = kashiPair ? pool.balance / 10 ** kashiPair.token0.decimals : Number(pool.balance / 1e18)
 
       const tvl = kashiPair
-        ? balance * kashiPair.token0.derivedETH * ethPrice
+        ? balance * kashiPair.token0.price.derivedNative * nativePrice
         : swapPair
-        ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
+        ? (balance / Number(swapPair.liquidity / 1e18)) * Number(swapPair.liquidityUSD)
         : (balance / (Number(tridentPair?.liquidity) / 1e18)) * Number(tridentPair?.liquidityUSD)
 
       const feeApyPerYear =
         swapPair && swapPair1d
-          ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.0025 * 365) / pair?.reserveUSD) * 100, 3650) / 100
+          ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.0025 * 365) / pair?.liquidityUSD) * 100, 3650) /
+            100
           : 0
 
       const feeApyPerMonth = feeApyPerYear / 12
@@ -417,7 +419,6 @@ export default function useFarmRewards({ chainId = ChainId.ETHEREUM }) {
       blocksPerDay,
       celoPrice,
       chainId,
-      ethPrice,
       fantomPrice,
       fusePrice,
       glimmerPrice,
